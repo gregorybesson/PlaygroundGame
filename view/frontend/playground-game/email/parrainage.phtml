@@ -1,0 +1,123 @@
+<html>
+<head></head>
+<body>
+
+
+<center>
+
+    <style>
+        .mail{
+            width:500px;background:rgb(250,250,250);
+            font-family:'helvetica';
+            font-weight:lighter;
+        }
+        .titre-newsletter{
+            text-align:left;background:#000000;color:#ffffff;padding:10px 10px 10px 110px;
+            font-size:16pt;
+        }
+        .logo{
+            text-align:left;
+            height:75px;
+            width:75px;
+            margin:0 0 -65px -385px;
+        }
+        .green{
+            color:#ffffff;
+            background:#8dc63f;
+            font-size:16pt;
+            padding:5px;
+            line-height:30px;
+        }
+        h1{
+            font-size:19pt;
+        }
+        .photo{
+            height:115px;
+            /*background:#AB1F23;*/
+            background:url('<?php echo $this->frontendAssetPath('images/content/email/parrainage-qooq.png'); ?>') center no-repeat;
+            border-radius:6px;
+        }
+        .jouer{
+            float:right;
+        }
+        .playground{
+            border-top:1px dotted #F0AB25;
+            border-bottom:1px dotted #F0AB25;
+            padding:20px 0 20px 0;
+            margin:20px 0 20px 0;
+        }
+        .playground img{
+            display:inline-block;
+            vertical-align:top;
+            height:100px;
+            width:100px;
+        }
+        .col1, .col2{
+            display:inline-block;
+            vertical-align:top;
+        }
+        .col1{
+            width:110px;
+            margin-right:5px;
+        }
+        .col2{
+            width:340px;
+        }
+        .playground h1{
+            font-size:16pt;
+        }
+        .playground p{
+            text-align:justify;
+            font-size:12pt;
+        }
+        .playground a{
+            color:#017F40;
+        }
+    </style>
+
+    <div class="mail">
+
+        <img src="<?php echo $this->frontendAssetPath('images/common/logo.png'); ?>" width="75" height="75" class="logo">
+        <div class="titre-newsletter">La newsletter du Club Playground</div>
+
+        <div style="text-align: left;padding:20px">
+            <br>
+            <span class="green">Bonjour,</span><br>
+            <span class="green">Alexandre M. vous invite à participer au jeu :</span>
+
+            <h1>Gagnez les 20 livres de cuisines numériques QOOQ</h1>
+
+            <div class="photo"></div>
+
+            <br>
+            <span><img src="<?php echo $this->frontendAssetPath('images/common/icon-quiz.png') ?>"><strong> Quizz offert par QOOQ</strong></span>
+            <a href="#" class="jouer"><img src="<?php echo $this->frontendAssetPath('images/common/btn-jouer.png'); ?>"></a>
+
+            <div class="playground">
+                <div class="col1">
+                    <img src="<?php echo $this->frontendAssetPath('images/common/logo-hd.png'); ?>" width="100" height="100">
+                </div>
+                <div class="col2">
+                    <h1>Connaissez-vous le Club Playground ?</h1>
+                    <p>
+                        Participez à nos jeux et tentez de remporter un max de cadeaux !
+                        High tech, culture, voyages... Il y en a pour tous les goûts !
+                    </p>
+                    <a href="#">> Voir les jeux en cours</a>
+                </div>
+            </div>
+
+            <center>
+                <span><strong>Merci et à très vite sur le Club Playground !</strong></span>
+                <p>L'équipe Club Playground</p>
+            </center>
+
+        </div>
+
+    </div>
+
+</center>
+
+
+</body>
+</html>

@@ -1,0 +1,18 @@
+<?php $this->plugin('translate')->setTranslatorTextDomain('playgroundgame');// Pour le texte ?>
+
+<!-- THEMATIQUES -->
+<div id="jeux-concours" class="thematique">
+    <div class="row-fluid">
+        <h1><?php echo $this->prizeCategory->getTitle();?></h1>
+    </div>
+	<?php
+		if(count($this->flashMessages)>0):
+			echo $this->flashMessages[0];
+		else :
+			$this->partialLoop()->setObjectKey('game');
+    		echo $this->partialLoop('playground-game/partial/game.phtml', $this->games);
+		endif;
+		
+	?>
+</div><!-- END THEMATIQUES -->
+<?php echo $this->paginationControl($this->games, 'Sliding', 'playground-game/prize-category/pagination.phtml', array('id' => $this->identifier)); ?>

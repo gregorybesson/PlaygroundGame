@@ -1,0 +1,53 @@
+<?php $this->plugin('translate')->setTranslatorTextDomain('playgroundgame');// Pour le texte ?>
+<?php $downloadLink = $this->url('admin/'. $this->game->getClassType() .'/download', array('gameId' => $this->game->getId()));?>
+<?php
+/*$fm = $this->flashMessenger()->setNamespace('playgroundgame')->getMessages();
+if (isset($fm[0]))
+{
+    print '<span class=>' . $fm[0] . '</span>';
+}*/
+?>
+<h1><a href="<?php echo $this->url('admin/playgroundgame/edit-postvote', array('gameId' => $this->gameId)) ?>"><?php echo $this->game->getTitle(); ?></a></h1>
+
+<h3><?php echo $this->translate('Liste des Participants'); ?></h3>
+
+<a href='<?php echo $downloadLink ?>'>Export CSV</a>
+<table class="table">
+    <tr>
+        <th><?php echo $this->translate('Id'); ?></th>
+        <th><?php echo $this->translate('Pseudo'); ?></th>
+        <th><?php echo $this->translate('Nom'); ?></th>
+        <th><?php echo $this->translate('Prenom'); ?></th>
+        <th><?php echo $this->translate('E-mail'); ?></th>
+        <th><?php echo $this->translate('Modération'); ?></th>
+        <th><?php echo $this->translate('Nombre de votes'); ?></th>
+        <th></th>
+        <th></th>
+    </tr>
+    <?php foreach ($this->posts as $post): ?>
+        <tr>
+            <td><?php echo $post->getUser()->getId(); ?></td>
+            <td><?php echo $post->getUser()->getUsername(); ?></td>
+            <td><?php echo $post->getUser()->getLastname(); ?></td>
+            <td><?php echo $post->getUser()->getFirstname(); ?></td>
+            <td><?php echo $post->getUser()->getEmail(); ?></td>
+            <td>
+            <?php if($post->getStatus() == 0): ?>
+                En cours de création
+            <?php elseif($post->getStatus() == 1):?>
+                En attente de modération
+            <?php elseif($post->getStatus() == 2):?>
+                Accepté
+            <?php else:?>
+                Refusé
+            <?php endif;?>
+            </td>
+            <td><?php echo count($post->getVotes()) ?>
+            </td>
+            <?php $editLink = $this->url('admin/playgroundgame/postvote-moderation-edit', array('postId' => $post->getId()));?>
+            <td><a href='<?php echo $editLink ?>'><?php echo $this->translate('Modérer'); ?></a></td>
+            <td></td>
+        </tr>
+    <?php endforeach; ?>
+</table>
+<?php echo (count($this->posts)>1)?$this->paginationControl($this->posts, 'Sliding', 'pagination_entrylist', array('classType' => $this->game->getClassType()  ,'gameId' => $this->gameId)):''; ?>

@@ -1,0 +1,16 @@
+<?php $this->plugin('translate')->setTranslatorTextDomain('playgroundgame');// Pour le texte ?>
+
+<div class="backgrey row-fluid rounded looser">
+	<div class="span2">
+		<img src="<?php echo $this->frontendAssetPath('images/common/round-wrong.png')?>" alt="Perdu" />
+	</div>
+	<div class="span10">
+		<?php if(count($this->flashMessages)>0):?>
+			<p class="already-play"><?php echo $this->flashMessages[0];?></p>
+	    <?php endif;?>
+        <p id="valid-text">
+            <?php echo $this->userCorrectAnswers ?>/<?php echo $this->maxCorrectAnswers?> bonnes réponses. <br/>
+            Merci d'avoir joué, malheureusement vous n'avez pas les bonnes réponses...<br/>
+	    </p>
+	</div>
+</div>

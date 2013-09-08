@@ -1,0 +1,5 @@
+<?php
+if(isset($this->headParams) && $this->headParams['headDescription'] != '') :
+    $this->headMeta()->setName('description','Discover the game '. $this->headParams['headDescription'] .' on Playground and try to win!');
+endif;
+?>

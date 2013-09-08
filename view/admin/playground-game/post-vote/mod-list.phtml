@@ -1,0 +1,37 @@
+<?php $this->plugin('translate')->setTranslatorTextDomain('playgroundgame'); ?>
+<?php
+$fm = $this->flashMessenger()->setNamespace('playgroundgame')->getMessages();
+if (isset($fm[0]))
+{
+    print '<span class=>' . $fm[0] . '</span>';
+}
+?>
+
+<ul class="liste-buttons">
+	<li class="btn-admin"></li>
+</ul>
+
+<h1>Posts en attente de modération</h1>
+
+<table class="table">
+    <tr>
+        <th><?php echo $this->translate('Id'); ?></th>
+        <th><?php echo $this->translate('Game'); ?></th>
+        <th><?php echo $this->translate('Player'); ?></th>
+        <th><?php echo $this->translate('Post Date'); ?></th>
+        <th></th>
+    </tr>
+    <?php foreach ($this->posts as $post): ?>
+        <tr>
+            <td><?php echo $post->getId() ?></td>
+            <td><?php echo $post->getPostvote()->getTitle(); ?></td>
+            <td><?php echo $post->getUser()->getFirstname() . ' ' . $post->getUser()->getLastname() ?></td>
+            <td><?php echo $post->getCreatedAt()->format('d/m/Y h:i:s'); ?></td>
+            <?php $editLink = $this->url('admin/playgroundgame/postvote-moderation-edit', array('postId' => $post->getId()));?>
+            <td>
+                <a href='<?php echo $editLink ?>'><?php echo $this->translate('Moderate'); ?></a>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+</table>
+<?php //echo $this->paginationControl($this->games, 'Sliding', 'pagination_gamelist.phtml'); ?>

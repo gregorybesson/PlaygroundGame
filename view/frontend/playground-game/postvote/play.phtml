@@ -1,0 +1,145 @@
+<?php $this->plugin('translate')->setTranslatorTextDomain('playgroundgame');// Pour le texte ?>
+<?php
+$form = $this->form;
+$form->prepare();
+$form->setAttribute('action', $this->url('postvote/play', array('id' => $this->game->getIdentifier())));
+?>
+
+<?php $totalQuestions = count($this->questions);?>
+<!-- GAME QUIZ - FERME QUESTIONS -->
+<div class="row-fluid game-postvote play">
+	<h1><?php echo $this->game->getTitle(); ?></h1>
+
+	<!-- BLOCK GAME START -->
+	<div class="block-game game-play">
+		<div class="img-content">
+			<img class="rounded" src="<?php echo $this->basePath($this->game->getSecondImage()); ?>" border="0" />
+			
+			<?php if($this->game->getPartner()):?>
+				<?php if( ($this->game->getPartner()->getLogo() != '')) : ?>
+					<div class="logo-sponsor">
+						<img src="<?php echo $this->basePath($this->game->getPartner()->getLogo());?>" width="120" border="0" alt="<?php echo $this->game->getPartner()->getName();?>" />
+					</div>
+				<?php endif;?>
+			<?php else :?>
+				<div class="logo-sponsor">		
+					<img src="<?php echo $this->frontendAssetPath('images/common/logo-game-start.png')?>" width="83" height="81" border="0" alt="logo" />
+				</div>
+			<?php endif;?>
+			
+			<div class="dark-overlay row-fluid">
+				<div class="postvote"><?php echo $this->translate('Post & Vote'); ?> offert par <?php if($this->game->getPartner()): echo $this->game->getPartner()->getName(); else:?>Club Playground<?php endif;?></div>
+			</div>
+		</div>
+	</div>
+	<!-- END BLOCK GAME START -->
+
+	<!-- Content -->
+	<div class="row-fluid buttons">
+		<div class="span2">
+			<a href="<?php echo $this->url('postvote', array('id' => $this->game->getIdentifier()))?>"><button class="btn btn-inverse active">Accueil</button></a>
+		</div>
+		<div class="span4">
+			<a href="<?php echo $this->url('postvote/list', array('id' => $this->game->getIdentifier(), 'filter' => $this->game->getPostDisplayMode()))?>"><button class="btn btn-inverse">Voir les participations</button></a>
+		</div>
+		<div class="span3">
+			<a href="<?php echo $this->url('postvote/play', array('id' => $this->game->getIdentifier()))?>"><button class="btn btn-warning">Participer</button></a>
+		</div>
+	</div>
+	
+	
+	<div id="content-article" class="row-fluid rounded backgrey">
+	    <h2 class="green"><?php echo $this->game->getForm()->getTitle(); ?></h2>
+        <p><?php echo $this->game->getForm()->getDescription(); ?></p>
+		<div class="row-fluid">
+			
+			<div class="form-horizontal row-fluid">
+				<?php echo $this->form()->openTag($form); ?>
+		            <?php foreach ($this->form as $element): ?>
+		            	
+		            	<?php 
+		            		$attributes = $element->getAttributes();
+		            		$required = $attributes['required'];
+		            		$requiredContent = '';
+							(!empty($required)) ? $requiredContent = '<span class="text-error">*</span>' : '';
+						?>
+		            	
+		    			<?php if ($element instanceof Zend\Form\Element\Text): ?>
+		        			
+	    					<div class="form-input">
+	    						 <label class="span4">
+	    						 	<b><?php echo ($element->getLabel())? $this->formLabel($element) . ' ' . $requiredContent : ''; ?></b>
+	    						 </label>
+	    						 <div class="span7">
+	    						 	<?php echo $this->formText($element) ?>
+	    							<?php echo $this->formElementErrors($element) ?>
+	    						 </div>
+	    					</div>
+	    		
+		    				
+		                <?php elseif ($element instanceof Zend\Form\Element\Textarea): ?>
+			                <div class="form-textarea">
+					               <label class="span4">
+					               <b><?php echo ($element->getLabel()) ? $this->formLabel($element) . ' ' . $requiredContent : ''; ?></b>
+					               	</label>
+					               	<div class="span7">
+					               		<?php echo $this->formTextarea($element);?>
+			    						<?php echo $this->formElementErrors($element) ?>
+					               	</div>
+					               <div class="caracteres-restants">
+						               <span class="character-left"> </span> caractères restants
+						           </div>
+
+					         </div>
+		                	
+
+		                <?php elseif ($element instanceof Zend\Form\Element\File): ?>
+		                    <div class="photo-file" data-url="<?php echo $this->url('postvote/play/ajaxupload', array('id' => $this->game->getIdentifier()))?>" data-canonical="<?php echo $this->url('frontend', array(), array('force_canonical' => true)) ?>">
+		                    	
+		    					<label class="span4">
+		    						<b><?php echo ($element->getLabel()) ? $this->formLabel($element) . ' ' . $requiredContent :''; ?></b><br/>
+		    						<span class="annotation">500ko maximum</span>
+		    					</label>
+		    					<div class="span7">
+		                            <div class="preview-img">
+		                            <?php if($element->getValue() != ''):?>
+		                               <img class="preview" src="<?php echo $this->basePath($element->getValue());?>"/>
+		                               <ul class="picto">
+		                                	<!--<li class="star">
+		                                		<img src="<?php echo $this->frontendAssetPath('images/common/star.png');?>" alt="" height="35" width="37" />
+		                                	</li>-->
+		                                	<li class="trash" data-delete="<?php echo $this->url('postvote/play/ajaxdelete', array('id' => $this->game->getIdentifier()))?>" data-name="<?php echo $element->getName() ?>">
+		                                		
+		                                		<a href="#"><img src="<?php echo $this->frontendAssetPath('images/common/trash.png');?>" alt="Supprimer" height="35" width="37" /></a>
+		                                	</li>
+		                                </ul>
+		                            <?php endif;?>
+		                            </div>
+		                            
+		                            <div class="wrap-progress">
+			                            <div class="progress">
+			    							<div class="bar rounded"></div>
+			                            </div>
+			                            <span class="percent"><p><b>0%</b></p></span>
+		                            </div>
+		                            <?php echo $this->formFile($element); ?>
+		                            <?php echo $this->formElementErrors($element) ?>
+		    					</div>
+		    				</div>
+		                <?php endif;?>
+		    	    <?php endforeach;?> 
+    	    </div>
+    	    <!--<progress min="0" max="100" value="0">0% complete</progress>-->
+    	    <div class="center">
+                <button type="submit" name="submitPost" value="" class="btn btn-warning"><span class="arrow-right">Prévisualiser</span></button>
+    	    </div>
+    	    
+			<?php echo $this->form()->closeTag() ?>
+			<!-- FORM HANDLER LIVE UPLOAD PHOTO -->
+	        <form id="uploadform" method="post" enctype="multipart/form-data" action="<?php echo $this->url('photocontestcreate') ?>" target="upload_iframe" style="display:none;"></form>
+
+		</div>
+		<p class="champs-obligatoitres">*champs obligatoires</p>
+	</div>
+</div>
+<!-- END GAME QUIZ - FERME QUESTIONS-->

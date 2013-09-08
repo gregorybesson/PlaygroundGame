@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+    <head>
+        <title>easyXDM</title>
+        <script type="text/javascript" src="../json2.js">
+        </script>
+        <script type="text/javascript" src="../easyXDM.debug.js">
+        </script>
+        <script type="text/javascript">
+            var transport = new easyXDM.Rpc(/** The configuration */
+               {
+                    local: "http://secure.livedemo.fr/easyxdm/name.html",
+                    remoteHelper: "http://livedemo.fr/easyxdm/name.html",
+                    swf: "http://secure.livedemo.fr/easyxdm/easyxdm.swf"
+                },
+                {
+                    local: {
+                        post:  function(message, origin)
+                        {
+                            alert(message.test)
+                        }
+                    }
+                }
+            );
+        </script>
+    </head>
+    <body>
+    </body>
+</html>

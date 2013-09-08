@@ -1,0 +1,59 @@
+<?php $this->plugin('translate')->setTranslatorTextDomain('playgroundgame');// Pour le texte ?>
+<?php
+$form = $this->form;
+$form->prepare();
+?>
+
+<h1><?php echo $this->translate($this->title); ?></h1>
+
+<?php echo $this->form()->openTag($form) ?>
+<?php echo $this->formButton($form->get('submit')) ?>
+
+<div id="content" class="tabbable tabs-left">
+    <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
+        <li class="active"><a href="#general" data-toggle="tab"><?php echo $this->translate('General'); ?></a></li>
+        <li><a href="#mechanics" data-toggle="tab"><?php echo $this->translate('Game Mechanics'); ?></a></li>
+        <li><a href="#prizes" data-toggle="tab"><?php echo $this->translate('Lots'); ?></a></li>
+        <li><a href="#platform" data-toggle="tab"><?php echo $this->translate('Plateforme'); ?></a></li>
+        <li><a href="#facebook" data-toggle="tab"><?php echo $this->translate('Facebook'); ?></a></li>
+        <li><a href="#design" data-toggle="tab"><?php echo $this->translate('Design'); ?></a></li>
+        <li><a href="#column" data-toggle="tab"><?php echo $this->translate('Colonne de droite'); ?></a></li>
+        <li><a href="#share" data-toggle="tab"><?php echo $this->translate('Partage'); ?></a></li>
+        <li><a href="#welcome_page" data-toggle="tab"><?php echo $this->translate('Bloc de bienvenue'); ?></a></li>
+        <li><a href="#terms_page" data-toggle="tab"><?php echo $this->translate('Page de règlement'); ?></a></li>
+    </ul>
+    <div id="my-tab-content" class="tab-content">
+        <?php echo $this->game_form;?>
+
+        <div class="tab-pane" id="mechanics">
+        	<div class="label-input">
+	            <?php echo $this->formLabel($form->get('drawAuto')); ?>
+	            <?php echo $this->formSelect($form->get('drawAuto')); ?>
+	            <?php echo $this->formElementErrors($form->get('drawAuto')) ?>
+			</div>
+	        	<?php //echo $this->formLabel($form->get('drawDate')); ?>
+	        	<?php //echo $this->formDateTime($form->get('drawDate')); ?>
+	            <?php //echo $this->formElementErrors($form->get('drawDate')); ?>
+			<div class="label-input">
+	            <?php echo $this->formLabel($form->get('winners')); ?>
+	            <?php echo $this->formInput($form->get('winners')); ?>
+	            <?php echo $this->formElementErrors($form->get('winners')) ?>
+			</div>
+			<div class="label-input">
+	            <?php echo $this->formLabel($form->get('substitutes')); ?>
+	            <?php echo $this->formInput($form->get('substitutes')); ?>
+	            <?php echo $this->formElementErrors($form->get('substitutes')) ?>
+	        </div>
+        </div>
+    </div>
+</div>
+<?php echo $this->form()->closeTag() ?>
+
+<script type="text/javascript">
+    jQuery(document).ready(function ($) {
+        $('#tabs').tab();
+        $('.datepicker').datepicker({
+            dateFormat : 'dd/mm/yy'
+        });
+    });
+</script>

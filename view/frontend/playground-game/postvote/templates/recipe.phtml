@@ -1,0 +1,24 @@
+<?php if(isset($this->data[1])):?>
+	<h2 class="green"><?php echo $this->data[1];?></h2>
+<?php endif; ?>
+	
+<?php if(isset($this->data[2])):?>
+	<div class="picture-kitchen">
+	    <img src="<?php echo $this->basePath($this->data[2])?>" border="0" />
+	</div>
+<?php endif; ?>
+
+<?php if(isset($this->data[3])):?>
+	<h3 class="green">Ingrédients</h3>
+	<p><?php echo  nl2br($this->data[3]);?></p>
+<?php endif; ?>
+
+<?php if(isset($this->data[4])):?>
+	<h3 class="green">Préparation</h3>
+	<p><?php echo nl2br($this->data[4]);?></p>
+<?php endif ?>
+
+<?php if(isset($this->data[5])):?>
+	<h3 class="green">Service</h3>
+	<p><?php echo nl2br($this->data[5]);?></p>
+<?php endif; ?>

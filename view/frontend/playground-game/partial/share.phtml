@@ -1,0 +1,10 @@
+<?php $fbShareMsg = ($this->game->getFbShareMessage()) ? $this->game->getFbShareMessage() : 'Venez jouez au jeu : ' . $this->game->getTitle() . ' du Club Playground '; ?>
+<?php $fbShareImg = ($this->game->getFbShareImage()) ? $this->url('frontend', array(), array('force_canonical' => true)). $this->game->getFbShareImage() : $this->url('frontend', array(), array('force_canonical' => true)) . $this->game->getMainImage(); ?> 
+<?php $twShareMsg = ($this->game->getTwShareMessage()) ? $this->game->getTwShareMessage() : 'Venez jouez au jeu : ' . $game->getTitle() . ' du Club Playground '; ?>
+<?php $color = ($this->color) ? $this->color : 'grey'; ?>
+
+<div class="social-share">
+	<a href="#" data-link="<?php echo $this->url; ?>" data-picture="<?php echo $fbShareImg; ?>" data-caption="<?php echo $fbShareMsg; ?>" class="<?php echo $this->color; ?>-fb" target="_blank"></a>
+	<a href="https://twitter.com/intent/tweet?text=<?php echo urlencode($twShareMsg); ?>&url=<?php echo urlencode($this->url); ?>" data-txt="<?php echo $twShareMsg; ?>" data-url="<?php echo $this->url; ?>" class="<?php echo $this->color; ?>-tw shorturl" target="_blank"></a>
+	<a href="https://plus.google.com/share?url=<?php echo urlencode($this->url); ?>" class="<?php echo $this->color; ?>-gl" target="_blank"></a>
+</div>

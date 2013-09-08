@@ -1,0 +1,87 @@
+<?php $this->plugin('translate')->setTranslatorTextDomain('playgroundgame');// Pour le texte ?>
+
+<?php
+	$playLimitScale = $game->getPlayLimitScale();
+	$playLimitValue = '';
+	if ($playLimitScale == 'day') : $playLimitValue = 'tous les jours';
+	elseif ($playLimitScale == 'week') : $playLimitValue = 'toutes les semaines';
+	elseif ($playLimitScale == 'month') : $playLimitValue = 'tous les mois';
+	elseif ($playLimitScale == 'year') : $playLimitValue = 'tous les ans';
+	else : $playLimitValue = 'à tout moment';
+	endif;
+?>
+
+<div class="game-instantwin row-fluid">
+
+	<h1><?php echo $this->game->getTitle(); ?></h1>
+
+	<div id="play-instantwin">
+		<p class="instructions">Grattez <?php echo $playLimitValue; ?> et découvrez immédiatement si vous avez gagné :</p>
+		<!-- BLOCK GAME START -->
+		<div class="block-game game-play">
+			<div class="game-infos">
+    	        <?php if ($this->game->getStartDate() && $this->game->getEndDate()):?>
+    			    <div class="instantwin">Instant gagnant : Jouez du <?php echo strftime("%d %B", $this->game->getStartDate()->format('U'));?> au <?php echo strftime("%d %B", $this->game->getEndDate()->format('U'));?> avec </div>
+    			<?php elseif ($this->game->getStartDate()):?>
+    			    <div class="instantwin">Instant gagnant : Jouez à partir du <?php echo strftime("%d %B", $this->game->getStartDate()->format('U'));?> avec </div>
+    			<?php elseif ($this->game->getEndDate()):?>
+    			    <div class="instantwin">Instant gagnant : Jouez jusqu'au <?php echo strftime("%d %B", $this->game->getEndDate()->format('U'));?> avec </div>
+    			<?php else:?>
+    			    <div class="instantwin">Instant gagnant : Jouez avec </div>
+    			<?php endif; ?>
+    			
+				<div class="logo-partner">
+					<?php if($this->game->getPartner()):?>
+						<?php if( ($this->game->getPartner()->getLogo() != '') || ($this->game->getPartner()->getSmallLogo() !='')) : ?>
+							<img src="<?php if($this->game->getPartner()->getSmallLogo() !=''): echo $this->basePath($this->game->getPartner()->getSmallLogo()); else : echo $this->basePath($this->game->getPartner()->getLogo()); endif;?>" height="33" border="0" alt="<?php echo $this->game->getPartner()->getName();?>" />
+						<?php else:?>
+							<span><?php echo $this->game->getPartner()->getName();?></span>
+						<?php endif;?>
+					<?php else :?>
+						<img src="<?php echo $this->frontendAssetPath('images/common/logo-game-start.png');?>" height="33" border="0" alt="Logo" />
+					<?php endif;?>
+				</div>
+			</div>
+			<div class="img-content">
+				<img class="rounded" src="<?php echo $this->basePath($this->game->getScratchcardImage()); ?>" border="0" />
+				<div id="wScratchgame" data-scratchthis="<?php echo $this->frontendAssetPath('images/content/games/instantwin-scratch.jpg')?>" data-scratchthismobile="<?php echo $this->frontendAssetPath('images/content/games/instantwin-scratchmobile.jpg')?>" data-percentscratched="">
+					<?php if($this->winner):?>
+						<div class="wScratchwin" data-firsttxt="Félicitations, vous avez" data-middletxt="Gagné!" data-lasttxt="Continuer"></div>
+					<?php else:?>
+						<div class="wScratchlose" data-firsttxt="Désolé, vous avez" data-middletxt="Perdu..." data-lasttxt="Continuer"></div>
+					<?php endif;?>
+				</div>
+			</div>
+		</div><!-- END BLOCK GAME START -->
+
+		<div class="row-fluid">
+			<div class="center">
+				<div class="btn btn-warning-inactive <?php if($this->winner):?>success<?php endif;?>"><a href="<?php echo ($this->winner) ? '#': $this->url('frontend/instantwin/result', array('id' => $this->game->getIdentifier()));?>" class="arrow-right">Continuer</a></div>
+			</div>
+		</div>
+	</div>
+	<div id="result-instantwin">
+		<?php if($this->winner):?>
+			<div class="backgrey row-fluid rounded win">
+				<div class="span2">
+					<img src="<?php echo $this->frontendAssetPath('images/common/round-valid.png')?>" width="50" height="54" alt="" />
+				</div>
+				<div class="span10">
+					<p id="valid-text">Félicitations, vous avez gagné !</p>
+				</div>
+			</div>
+			<!-- contenu form address -->
+			<?php echo $this->form ?>
+
+		<?php else:?>
+			<div class="backgrey row-fluid rounded win">
+				<div class="span2">
+					<img src="<?php echo $this->frontendAssetPath('images/common/round-wrong.png')?>" width="50" height="54" alt="" />
+				</div>
+				<div class="span10">
+					<p id="valid-text">Retentez votre chance dès demain!</p>
+				</div>
+			</div>
+		<?php endif;?>
+	</div>
+</div>

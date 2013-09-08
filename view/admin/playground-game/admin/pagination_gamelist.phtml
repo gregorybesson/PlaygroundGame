@@ -1,0 +1,45 @@
+<?php if ($this->pageCount): ?>
+<div class="pagination pagination-centered pagination-small">
+    <ul>
+
+        <!-- First page link -->
+        <li<?php echo (isset($this->previous)) ? '' : ' class="disabled"'; ?>>
+            <a href="<?php echo $this->url('admin/playgroundgame/list', array('type' => $this->type, 'filter' => $this->filter, 'p' => $this->first)); ?>">&lt;&lt; <?php echo $this->translate('First'); ?></a>
+        </li>
+
+        <!-- Previous page link -->
+        <li<?php echo (isset($this->previous)) ? '' : ' class="disabled"'; ?>>
+            <a href="<?php echo $this->url('admin/playgroundgame/list', array('type' => $this->type, 'filter' => $this->filter, 'p' => $this->previous)); ?>">&lt; <?php echo $this->translate('Previous'); ?></a>
+        </li>
+
+        <!-- Numbered page links -->
+        <?php foreach ($this->pagesInRange as $page): ?>
+        <li<?php echo ($page == $this->current) ? ' class="active"' : ''; ?>>
+            <a href="<?php echo $this->url('admin/playgroundgame/list', array('type' => $this->type, 'filter' => $this->filter, 'p' => $page)); ?>"><?php echo $page; ?></a>
+        </li>
+        <?php endforeach; ?>
+
+        <!-- Next page link -->
+        <li<?php echo (isset($this->next)) ? '' : ' class="disabled"'; ?>>
+            <a href="<?php echo $this->url('admin/playgroundgame/list', array('type' => $this->type, 'filter' => $this->filter, 'p' => $this->next)); ?>"><?php echo $this->translate('Next'); ?> &gt;</a>
+        </li>
+
+        <!-- Last page link -->
+        <li<?php echo (isset($this->next)) ? '' : ' class="disabled"'; ?>>
+            <a href="<?php echo $this->url('admin/playgroundgame/list', array('type' => $this->type, 'filter' => $this->filter, 'p' => $this->last)); ?>"><?php echo $this->translate('Last'); ?> &gt;&gt;</a>
+        </li>
+
+    </ul>
+</div>
+<?php endif; ?>
+
+<?php
+$script = $this->inlineScript();
+$script->appendScript(<<<'EOT'
+    
+$(".pagination .disabled a").click(function() {
+  return false;
+});
+
+EOT
+);

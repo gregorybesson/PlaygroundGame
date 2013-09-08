@@ -1,0 +1,379 @@
+<?php $this->plugin('translate')->setTranslatorTextDomain('playgroundgame');// Pour le texte ?>
+<?php
+$form = $this->form;
+$form->prepare();
+?>
+<div class="tab-pane active" id="general">
+    <?php echo $this->formHidden($form->get('id')); ?>
+	<div class="label-input">
+        <?php echo $this->formLabel($form->get('title')); ?>
+        <?php echo $this->formInput($form->get('title')); ?>
+        <?php echo $this->formElementErrors($form->get('title')) ?>
+	</div>
+	<div class="label-input">
+        <?php echo $this->formLabel($form->get('identifier')); ?>
+        <?php echo $this->formInput($form->get('identifier')); ?>
+        <?php echo $this->formElementErrors($form->get('identifier')); ?>
+	</div>
+	<div class="label-input">
+        <?php if(($form->get('partner') instanceof Zend\Form\Element\Select )):?>
+            <?php echo $this->formLabel($form->get('partner')); ?>
+            <?php echo $this->formSelect($form->get('partner')); ?>
+            <?php echo $this->formElementErrors($form->get('partner')) ?>
+        <?php else:?>
+            <?php echo $this->formHidden($form->get('partner')); ?>
+        <?php endif;?>
+	</div>
+	<div class="label-input">
+        <?php $today = new \DateTime('now');?>
+        <?php $today = $today->format('d/m/Y');?>
+    	<?php echo $this->formLabel($form->get('publicationDate')); ?>
+        <?php echo $this->formDateTime($form->get('publicationDate')); ?>
+        <?php echo $this->formElementErrors($form->get('publicationDate')); ?>
+	</div>
+	<div class="label-input">
+    	<?php echo $this->formLabel($form->get('startDate')); ?>
+        <?php echo $this->formDateTime($form->get('startDate')); ?>
+        <?php echo $this->formElementErrors($form->get('startDate')); ?>
+	</div>
+	<div class="label-input">
+    	<?php echo $this->formLabel($form->get('endDate')); ?>
+    	<?php echo $this->formDateTime($form->get('endDate')); ?>
+        <?php echo $this->formElementErrors($form->get('endDate')); ?>
+	</div>
+	<div class="label-input">
+        <?php echo $this->formLabel($form->get('closeDate')); ?>
+    	<?php echo $this->formDateTime($form->get('closeDate')); ?>
+        <?php echo $this->formElementErrors($form->get('closeDate')); ?>
+	</div>
+	<div class="label-input">
+        <?php echo $this->formLabel($form->get('active')); ?>
+        <?php echo $this->formSelect($form->get('active')); ?>
+        <?php echo $this->formElementErrors($form->get('active')) ?>
+	</div>
+    <?php //echo $this->formLabel($form->get('canal')); ?>
+    <?php //echo $this->formInput($form->get('canal')); ?>
+    <?php //echo $this->formElementErrors($form->get('canal')) ?>
+	<div class="label-input">
+        <?php echo $this->formLabel($form->get('prizeCategory')); ?>
+        <?php echo $this->formSelect($form->get('prizeCategory')); ?>
+        <?php echo $this->formElementErrors($form->get('prizeCategory')) ?>
+	</div>
+	<div class="label-input">
+        <?php echo $this->formLabel($form->get('playLimit')); ?>
+        <?php echo $this->formInput($form->get('playLimit')); ?>
+        <?php echo $this->formElementErrors($form->get('playLimit')) ?>
+	</div>
+	<div class="label-input">
+        <?php echo $this->formLabel($form->get('playLimitScale')); ?>
+        <?php echo $this->formSelect($form->get('playLimitScale')); ?>
+        <?php echo $this->formElementErrors($form->get('playLimitScale')) ?>
+	</div>
+	<div class="label-input">
+        <?php echo $this->formLabel($form->get('playBonus')); ?>
+        <?php echo $this->formSelect($form->get('playBonus')); ?>
+        <?php echo $this->formElementErrors($form->get('playBonus')) ?>
+	</div>
+</div>
+
+<div class="tab-pane" id="facebook">
+    <?php //echo $this->formLabel($form->get('broadcastFacebook')); ?>
+    <?php //echo $this->formCheckbox($form->get('broadcastFacebook')); ?>
+    <?php //echo $this->formElementErrors($form->get('broadcastFacebook')) ?>
+	<div class="label-input">
+        <?php if($form->get('fbAppId')->getValue() && $form->get('fbAppId')->getValue() != 0):?>
+           <br/> Ce jeu est associé à l'app_id <?php echo $form->get('fbAppId')->getValue();?>
+        <?php endif;?>
+        <?php if(($form->get('fbAppId') instanceof Zend\Form\Element\Select )):?>
+            <?php echo $this->formLabel($form->get('fbAppId')); ?>
+            <?php echo $this->formSelect($form->get('fbAppId')); ?>
+            <?php echo $this->formElementErrors($form->get('fbAppId')) ?>
+        <?php else:?>
+            <?php echo $this->formHidden($form->get('fbAppId')); ?>
+        <?php endif;?>
+	</div>
+	<div class="label-input">
+        <?php echo $this->formLabel($form->get('fbFan')); ?>
+        <?php echo $this->formSelect($form->get('fbFan')); ?>
+        <?php echo $this->formElementErrors($form->get('fbFan')) ?>
+	</div>
+	<div class="label-input">
+        <?php echo $this->formLabel($form->get('fbPageTabTitle')); ?>
+        <?php echo $this->formInput($form->get('fbPageTabTitle')); ?>
+        <?php echo $this->formElementErrors($form->get('fbPageTabTitle')) ?>
+	</div>
+	<div class="label-input file">
+        <?php echo $this->formLabel($form->get('uploadFbPageTabImage')); ?>
+        <?php echo $this->formFile($form->get('uploadFbPageTabImage')); ?>
+	    <p class="recommandation">Taille recommandée : 111x74 pixels</p>
+        <?php if($form->get('fbPageTabImage')->getValue() != ''):?>
+        	<img src="<?php echo $this->basePath($form->get('fbPageTabImage')->getValue()); ?>" />
+        <?php endif;?>
+    </div>
+</div>
+
+<div class="tab-pane" id="platform">
+    <div class="label-input checkbox">
+        <?php echo $this->formLabel($form->get('broadcastPlatform')); ?>
+        <?php echo $this->formCheckbox($form->get('broadcastPlatform')); ?>
+        <?php echo $this->formElementErrors($form->get('broadcastPlatform')) ?>
+	</div>
+	<div class="label-input checkbox">
+        <?php echo $this->formLabel($form->get('displayHome')); ?>
+        <?php echo $this->formCheckbox($form->get('displayHome')); ?>
+        <?php echo $this->formElementErrors($form->get('displayHome')) ?>
+	</div>
+	<div class="label-input checkbox">
+        <?php echo $this->formLabel($form->get('pushHome')); ?>
+        <?php echo $this->formCheckbox($form->get('pushHome')); ?>
+        <?php echo $this->formElementErrors($form->get('pushHome')) ?>
+    </div>
+    <div class="label-input layout">
+        <?php echo $this->formLabel($form->get('layout')); ?>
+        <?php echo $this->formSelect($form->get('layout')); ?>
+        <?php echo $this->formElementErrors($form->get('layout')); ?>
+	</div>
+</div>
+
+<div class="tab-pane" id="share">
+	<div class="label-input">
+	    <?php echo $this->formLabel($form->get('fbShareMessage')); ?>
+	    <?php echo $this->formTextarea($form->get('fbShareMessage')) . $this->formElementErrors($form->get('fbShareMessage')) ?>
+   	</div>
+	<div class="label-input file">
+	    <?php echo $this->formLabel($form->get('uploadFbShareImage')); ?>
+	    <?php echo $this->formFile($form->get('uploadFbShareImage')); ?>
+	    <p class="recommandation">Taille recommandée : 75x75 pixels</p>
+	    <?php if($form->get('fbShareImage')->getValue() != ''):?>
+	    	<img src="<?php echo $this->basePath($form->get('fbShareImage')->getValue()); ?>" />
+	    <?php endif;?>
+    </div>
+	<div class="label-input twshare-msg">
+	    <?php echo $this->formLabel($form->get('twShareMessage')); ?>
+	    <?php echo $this->formTextarea($form->get('twShareMessage')) . $this->formElementErrors($form->get('twShareMessage')) ?>
+    </div>
+</div>
+
+<div class="tab-pane" id="design">
+	<div class="label-input file">
+	    <?php echo $this->formLabel($form->get('uploadMainImage')); ?>
+	    <?php echo $this->formFile($form->get('uploadMainImage')); ?>
+	    <?php if($form->get('mainImage')->getValue() != ''):?>
+	    	<img src="<?php echo $this->basePath($form->get('mainImage')->getValue()); ?>" />
+	    <?php endif;?>
+    </div>
+	<div class="label-input file">
+	    <?php echo $this->formLabel($form->get('uploadSecondImage')); ?>
+	    <?php echo $this->formFile($form->get('uploadSecondImage')); ?>
+	    <?php if($form->get('secondImage')->getValue() != ''):?>
+	    	<img src="<?php echo $this->basePath($form->get('secondImage')->getValue()); ?>" />
+	    <?php endif;?>
+    </div>
+	<div class="label-input">
+	    <?php echo $this->formLabel($form->get('stylesheet')); ?>
+	    <?php echo $this->formSelect($form->get('stylesheet')); ?>
+	    <?php echo $this->formElementErrors($form->get('stylesheet')); ?>
+	</div>
+	<div class="label-input file">
+	    <?php echo $this->formLabel($form->get('uploadStylesheet')); ?>
+	    <?php echo $this->formFile($form->get('uploadStylesheet')); ?>
+    </div>
+</div>
+
+<div class="tab-pane" id="column">
+    <div>
+        <?php echo $this->formTextarea($form->get('columnBlock1')) . $this->formElementErrors($form->get('columnBlock1')) ?>
+        <?php $this->QgCKEditor(
+            'columnBlock1',
+                array(
+                	'BasePath' => $this->basePath('js/lib/ckeditor'),
+                	'Width' => "50%",
+                    'Height' => "100",
+                    'filebrowserBrowseUrl' => '/elfinder', // eg. 'includes/elFinder/elfinder.html'
+                    'uiColor' => '#9AB8F3',
+                    //'Color' => "#000",
+                    'stylesSet' => 'custom_styles:/js/ckeditor-styles.js',
+                    'Toolbar'=> array(
+                         array('Source','Maximize'),
+                         array('Templates','Styles','Format'),
+                         array('Bold','Italic','Underline','Subscript','Superscript'),
+                         array('NumberedList','BulletedList','Outdent','Indent'),
+                         array('JustifyLeft','JustifyCenter','JustifyRight'),
+                         array('Link','Unlink'),
+                         array('Image','Table')
+                     )
+                )
+            );
+        ?>
+
+        <?php echo $this->formTextarea($form->get('columnBlock2')) . $this->formElementErrors($form->get('columnBlock2')) ?>
+        <?php $this->QgCKEditor(
+            'columnBlock2',
+                array(
+                	'BasePath' => $this->basePath('js/lib/ckeditor'),
+                	'Width' => "50%",
+                    'Height' => "100",
+                    'filebrowserBrowseUrl' => '/elfinder', // eg. 'includes/elFinder/elfinder.html'
+                    'uiColor' => '#9AB8F3',
+                    //'Color' => "#000",
+                    'Toolbar'=> array(
+                         array('Source','Maximize'),
+                         array('Templates','Styles','Format'),
+                         array('Bold','Italic','Underline','Subscript','Superscript'),
+                         array('NumberedList','BulletedList','Outdent','Indent'),
+                         array('JustifyLeft','JustifyCenter','JustifyRight'),
+                         array('Link','Unlink'),
+                         array('Image','Table')
+                     )
+                )
+            );
+        ?>
+
+        <?php echo $this->formTextarea($form->get('columnBlock3')) . $this->formElementErrors($form->get('columnBlock3')) ?>
+        <?php $this->QgCKEditor(
+            'columnBlock3',
+                array(
+                	'BasePath' => $this->basePath('js/lib/ckeditor'),
+                	'Width' => "50%",
+                    'Height' => "100",
+                    'filebrowserBrowseUrl' => '/elfinder', // eg. 'includes/elFinder/elfinder.html'
+                    'uiColor' => '#9AB8F3',
+                    //'Color' => "#000",
+                    'Toolbar'=> array(
+                         array('Source','Maximize'),
+                         array('Templates','Styles','Format'),
+                         array('Bold','Italic','Underline','Subscript','Superscript'),
+                         array('NumberedList','BulletedList','Outdent','Indent'),
+                         array('JustifyLeft','JustifyCenter','JustifyRight'),
+                         array('Link','Unlink'),
+                         array('Image','Table')
+                     )
+                )
+            );
+        ?>
+    </div>
+</div>
+<div class="tab-pane" id="prizes">
+	<ul class="liste-buttons">
+		<li class="btn-admin"><a href="#" onclick="add_prize()"><?php echo $this->translate('Ajouter un lot'); ?></a></li>
+	</ul>
+			
+    <div id="prize_entry" class="control-group">
+        <?php //echo $this->formCollection($form->get('prizes'));?>
+        
+        <?php foreach($form->get('prizes') as $element):?>
+        <fieldset>
+        	<div class="label-input">
+        		<?php echo $this->formLabel($element->get('title')); ?>
+        		<?php echo $this->formInput($element->get('title')); ?>
+        	</div>
+        	<div class="label-input">
+        		<?php echo $this->formLabel($element->get('identifier')); ?>
+        		<?php echo $this->formInput($element->get('identifier')); ?>
+        	</div>
+        	<div class="label-input">
+        		<?php echo $this->formLabel($element->get('content')); ?>
+        		<?php echo $this->formTextarea($element->get('content')); ?>
+        	</div>
+        	<div class="label-input">
+        		<?php echo $this->formLabel($element->get('qty')); ?>
+        		<?php echo $this->formInput($element->get('qty')); ?>
+        	</div>
+        	<div class="label-input">
+        		<?php echo $this->formLabel($element->get('unitPrice')); ?>
+        		<?php echo $this->formInput($element->get('unitPrice')); ?>
+        	</div>
+        	<div class="label-input">
+        		<?php echo $this->formLabel($element->get('currency')); ?>
+        		<?php echo $this->formSelect($element->get('currency')); ?>
+        	</div>
+        	<?php echo $this->formButton($element->get('remove')); ?>
+        	<hr/>
+        </fieldset>
+        <?php endforeach;?>
+        <span data-template='<fieldset><input type="hidden" name="prizes[__index__][id]" value=""/><div class="label-input"><label>Titre</label><input name="prizes[__index__][title]" type="text" placeholder="Titre" value=""/></div><div class="label-input"><label>Lien</label><input name="prizes[__index__][identifier]" type="text" value=""/></div><div class="label-input"><label for="prize_content">Description</label><textarea name="prizes[__index__][content]" cols="10" rows="10" id="prize_content"></textarea></div><div class="label-input"><label>Quantity</label><input name="prizes[__index__][qty]" type="text" placeholder="Quantity" value=""/></div><div class="label-input"><label>Prix</label><input name="prizes[__index__][unitPrice]" type="text" placeholder="Prix" value=""/></div><div class="label-input"><label for="currency">Devise utilisée</label><select name="prizes[__index__][currency]" id="currency"><option value="">Choisir la devise</option><option value="EU">Euro</option><option value="DO">Dollar</option></select></div><button type="button" name="prizes[__index__][remove]" class="delete-button" value="">Supprimer</button><hr/></fieldset>'></span>
+    </div>
+    <ul class="liste-buttons">
+		<li class="btn-admin"><a href="#" onclick="add_prize()"><?php echo $this->translate('Ajouter un lot'); ?></a></li>
+	</ul>
+</div>
+<div class="tab-pane" id="welcome_page">
+    <div>
+    <?php echo $this->formTextarea($form->get('welcomeBlock')) . $this->formElementErrors($form->get('welcomeBlock')) ?>
+    <?php $this->QgCKEditor(
+        'welcomeBlock',
+            array(
+            	'BasePath' => $this->basePath('js/lib/ckeditor'),
+            	'Width' => "100%",
+                'Height' => "340",
+                'filebrowserBrowseUrl' => '/elfinder', // eg. 'includes/elFinder/elfinder.html'
+                'uiColor' => '#9AB8F3',
+                //'Color' => "#000",
+                'Toolbar'=> array(
+                     array('Source','Maximize'),
+                     array('Templates','Styles','Format'),
+                     array('Bold','Italic','Underline','Subscript','Superscript'),
+                     array('NumberedList','BulletedList','Outdent','Indent'),
+                     array('JustifyLeft','JustifyCenter','JustifyRight'),
+                     array('Link','Unlink'),
+                     array('Image','Table')
+                 )
+            )
+        );
+    ?>
+    </div>
+</div>
+<div class="tab-pane" id="terms_page">
+    <div>
+    <div class="label-input">
+        <?php echo $this->formLabel($form->get('termsOptin')); ?>
+        <?php echo $this->formSelect($form->get('termsOptin')); ?>
+        <?php echo $this->formElementErrors($form->get('termsOptin')) ?>
+	</div>
+    <?php echo $this->formTextarea($form->get('termsBlock')) . $this->formElementErrors($form->get('termsBlock')) ?>
+    <?php $this->QgCKEditor(
+        'termsBlock',
+            array(
+            	'BasePath' => $this->basePath('js/lib/ckeditor'),
+            	'Width' => "100%",
+                'Height' => "340",
+                'filebrowserBrowseUrl' => '/elfinder', // eg. 'includes/elFinder/elfinder.html'
+                'uiColor' => '#9AB8F3',
+                //'Color' => "#000",
+                'Toolbar'=> array(
+                     array('Source','Maximize'),
+                     array('Templates','Styles','Format'),
+                     array('Bold','Italic','Underline','Subscript','Superscript'),
+                     array('NumberedList','BulletedList','Outdent','Indent'),
+                     array('JustifyLeft','JustifyCenter','JustifyRight'),
+                     array('Link','Unlink'),
+                     array('Image','Table')
+                 )
+            )
+        );
+    ?>
+    </div>
+</div>
+<script>
+	
+    var template = $('#prize_entry > fieldset > span');
+    var datatemplate = $('#prize_entry > fieldset > span').data('template');
+    template.data('template', '<fieldset id="prizes__index__">'+datatemplate+'</fieldset>');
+    
+    function add_prize() {
+        var currentCount = $('#prize_entry textarea').length;
+        var template = $('#prize_entry > span').data('template');
+        template = template.replace(/__index__/g, currentCount);
+        $('#prize_entry').append(template);
+
+        return false;
+    }
+</script>
+<script type="text/javascript">
+    jQuery(document).ready(function ($) {
+        $(document).on('click','#prize_entry button',function(){
+        	$(this).parent().empty();
+        	return false;
+        });
+    });
+</script>

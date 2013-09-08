@@ -1,0 +1,160 @@
+<?php $this->plugin('translate')->setTranslatorTextDomain('playgroundgame');// Pour le texte ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 4.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title></title>
+</head>
+<body>
+<table width="100%" cellpadding="0" cellspacing="5" border="0" bgcolor="#F3F3F3">
+	<tr>
+		<td align="center">
+			<table width="516" cellpadding="0" cellspacing="0" border="0">
+				<tr>
+					<td height="952" align="left">
+							<table width="516" cellpadding="0" cellspacing="0" border="0" bgcolor="#FFFFFF">
+								<tr height="952">
+									<td height="952" width="18" style="font-size:0" valign="top">
+										<img border="0" src="<?php echo $this->skinUrl.'images/content/email/email1-big.jpg';?>" alt="" height="952" width="18"/>
+									</td>
+									<td height="952" width="480" style="font-size:0">
+										<table width="480" cellpadding="0" cellspacing="0" border="0">
+											<tr height="102">
+												<td height="102" width="480" valign="top">
+													<table width="480" cellpadding="0" cellspacing="0" border="0">
+														<tr height="102">
+															<td height="102" width="417" style="font-size:0"><img border="0" src="<?php echo $this->skinUrl.'images/content/email/email3.jpg';?>" alt="" height="102" width="417"/></td>
+															<td height="102" width="63" style="font-size:0"><a href="http://facebook.com/playground/"><img border="0" src="<?php echo $this->skinUrl.'images/content/email/email4.jpg';?>" alt="" height="102" width="63"/></a></td>
+														</tr>
+													</table>
+												</td>
+											</tr>
+											<tr height="487">
+												<td height="487" width="480" style="font-size:0">
+													<table width="480" cellpadding="0" cellspacing="0" border="0">
+														<td height="487" width="15" valign="bottom" style="font-size:0"><img border="0" src="<?php echo $this->skinUrl.'images/content/email/email5.jpg';?>" alt="" height="487" width="15"/></td>
+														<td height="487" width="450">
+															<table width="450" cellpadding="0" cellspacing="0" border="0">
+																<tr height="487">
+																	<td height="487" width="450">
+																		<table width="450" cellpadding="0" cellspacing="0" border="0">
+																			<tr height="115">
+																				<td height="115" width="450" style="font-size:0px;">
+																					<img border="0" src="<?php echo $this->skinUrl.$this->game->getMainImage(); ?>" alt="" height="115" width="450"/>
+																				</td>
+																			</tr>
+																			<tr height="85">
+																				<td height="85" width="450" style="font-size:18px;">
+																					<font face="Arial" color="#FFFFFF" style="line-height:35px;background-color:#8DC63F;padding-left:5px;padding-top:5px;padding-bottom:5px;padding-right:5px;">Bonjour <?php echo $this->zfcUserIdentity()->getFirstname(); ?>,</font><br/>
+																					<font face="Arial" color="#565656" style="font-size:14px;">Vous avez particip&eacute; au concours :</font><br/>
+																				</td>
+																			</tr>
+																			<tr height="77">
+																				<td height="77" width="450" bgcolor="F3F3F3" style="font-size:14px;" align="center">
+																					<font face="Arial" color="#565656"><b><?php echo $this->game->getTitle(); ?></b><br/>et vous avez <b style="color:#8DC63F;">0 vote</b></font>
+																				</td>
+																			</tr>
+																			<tr height="65">
+																				<td height="65" width="450" valign="top" style="font-size:14px;padding-top:10px;">
+																					<font face="Arial" color="#565656">Maximisez vos chances de gagner en invitant vos amis pour votre message!</font>
+																				</td>
+																			</tr>
+																			<tr height="77">
+																				<td height="77" width="450" valign="top" style="font-size:14px;">
+																					<font face="Arial" color="#F0AB25" style="padding-right:10px;"><b>1.</b></font>
+																					<font face="Arial" color="#565656">Cliquez sur le bouton <b>Invitez vos amis,</b> vous serez dirig&eacute; vers votre participation.</font>
+																				</td>
+																			</tr>
+																			<tr height="87">
+																				<td height="77" width="450" valign="top" style="font-size:14px;">
+																					<font face="Arial" color="#F0AB25" style="padding-right:10px;"><b>2.</b></font>
+																					<font face="Arial" color="#565656">Une fois sur votre participation, partager &agrave; vos amis sur les r&eacute;seaux sociaux.</font>
+																				</td>
+																			</tr>
+																			<tr height="42">
+																				<td height="42" width="450" style="font-size:22px;" align="center">
+																					<a href="<?php echo $this->skinUrl.'post-vote/'.$this->game->getIdentifier().'/post/'.$this->post->getId();?>" style="text-decoration:none;"><font face="Arial" color="#FFFFFF" style="background-color:#F0AB25;padding-left:20px;padding-top:10px;padding-bottom:10px;padding-right:20px;"><b>	&gt; Invitez vos amis</b></font></a>
+																				</td>
+																			</tr>
+																			<tr height="62">
+																				<td height="62" width="450" style="font-size:0">
+																					<img border="0" src="<?php echo $this->skinUrl.'images/content/email/email7.jpg';?>" alt="" height="62" width="450"/>
+																				</td>
+																			</tr>
+																			<tr height="77">
+																				<td height="77" width="450" style="font-size:14px;">
+																					<table width="450" cellpadding="0" cellspacing="0" border="0">
+																						<tr height="77">
+																							<td height="77" width="90" style="font-size:0">
+																								<img border="0" src="<?php echo $this->skinUrl.'images/content/email/cup.jpg';?>" alt="" height="77" width="76"/>
+																							</td>
+																							<td height="77" style="font-size:14px">
+																								<font face="Arial" color="#565656">Comme toujours, chaque nouvel ami inscrit vous permet de gagner <b style="color:#8DC63F">250 points</b> et de faire progresser votre badge Parrain!</font>
+																							</td>
+																						</tr>
+																					</table>
+																				</td>
+																			</tr>
+																			<tr height="35">
+																				<td height="35" width="450" style="font-size:0">
+																					<img border="0" src="<?php echo $this->skinUrl.'images/content/email/email7.jpg';?>" alt="" height="35" width="450"/>
+																				</td>
+																			</tr>
+																			<tr height="70">
+																				<td height="70" width="450" style="font-size:14px;" align="center">
+																					<font face="Arial" color="#565656"><b>Merci et &agrave; tr&egrave;s vite sur Playground !</b><br/>L'&eacute;quipe Playground</font>
+																				</td>
+																			</tr>
+																			<tr height="20">
+																				<td height="20" width="450" style="font-size:0">
+																					<img border="0" src="<?php echo $this->skinUrl.'images/content/email/email8.jpg';?>" alt="" height="20" width="450"/>
+																				</td>
+																			</tr>
+																			<tr height="38">
+																				<td height="38" width="450" bgcolor="#F3F3F3">
+																					<table width="450" cellpadding="0" cellspacing="0" border="0">
+																						<tr height="38">
+																							<td height="38" width="124" style="font-size:0">&nbsp;</td>
+																							<td height="38" width="208" style="font-size:0">
+																								<table width="208" cellpadding="0" cellspacing="0" border="0">
+																									<tr height="38">
+																										<td height="38" width="34" style="font-size:0">
+																											<img border="0" src="<?php echo $this->skinUrl.'images/content/email/email9.jpg';?>" alt="" height="38" width="34"/>
+																										</td>
+																										<td height="38" width="174" style="font-size:14px">
+																											<a href="http://facebook.com/playground/" style="color:#3B5A99;"><font face="Arial" color="#3B5A99">Suivez-nous sur Facebook</font></a>
+																										</td>
+																									</tr>
+																								</table>
+																							</td>
+																							<td height="38" width="118" style="font-size:0">&nbsp;</td>
+																						</tr>
+																					</table>
+																				</td>
+																			</tr>
+																		</table>
+																	</td>
+																</tr>
+															</table>
+														</td>
+														<td height="487" width="15" valign="bottom" style="font-size:0"><img border="0" src="<?php echo $this->skinUrl.'images/content/email/email5.jpg';?>" alt="" height="487" width="15"/></td>
+													</table>
+												</td>
+											</tr>
+										</table>
+									</td>
+									<td height="952" width="18" style="font-size:0" valign="top">
+										<img border="0" src="<?php echo $this->skinUrl.'images/content/email/email2-big.jpg';?>" alt="" height="952" width="18"/>
+									</td>	
+								</tr>	
+							</table>
+					</td>					
+				</tr>	
+			</table>		
+		</td>
+	</tr>
+</table>
+		
+</body>
+</html>

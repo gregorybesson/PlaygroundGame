@@ -1,0 +1,151 @@
+<?php $this->plugin('translate')->setTranslatorTextDomain('playgroundgame');// Pour le texte ?>
+<?php
+$form = $this->form;
+$form->prepare();
+
+//$form->setAttribute('action', $this->url('admin/playgroundgame/quiz-question-add', array('quizId' => $this->quiz_id, 'questionId' => $this->question_id)));
+?>
+
+<h1><?php echo $this->translate('Questions'); ?></h1>
+
+<?php echo $this->form()->openTag($form) ?>
+<?php echo $this->formButton($form->get('submit')) ?>
+
+<div id="content" class="tabbable tabs-left">
+    <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
+        <li class="active"><a href="#general" data-toggle="tab"><?php echo $this->translate('General'); ?></a></li>
+        <li><a href="#answers" data-toggle="tab"><?php echo $this->translate('Réponses'); ?></a></li>
+    </ul>
+    <div id="my-tab-content" class="tab-content">
+        <div class="tab-pane active" id="general">
+
+            <?php echo $this->formInput($form->get('quiz_id')); ?>
+
+            <div class="control-group">
+                <?php echo $this->formLabel($form->get('prediction')); ?>
+                <div class="controls"><?php echo $this->formCheckbox($form->get('prediction')); ?></div>
+                <?php echo $this->formElementErrors($form->get('prediction')); ?>
+            </div>
+
+            <div class="control-group">
+                <?php echo $this->formLabel($form->get('type')); ?>
+                <div class="controls"><?php echo $this->formRadio($form->get('type')); ?></div>
+                <div class="controls"><?php echo $this->formElementErrors($form->get('type')); ?></div>
+            </div>
+
+            <div class="control-group">
+                <?php echo $this->formLabel($form->get('question')); ?>
+                <div class="controls">
+                    <?php echo $this->formTextarea($form->get('question')); ?>
+                    <?php echo $this->formElementErrors($form->get('question')) ?>
+                </div>
+            <?php $this->QgCKEditor(
+                'question',
+                    array(
+                    	'BasePath' => $this->basePath('js/lib/ckeditor'),
+                    	'Width' => "450",
+                        'Height' => "100",
+                        //'Color' => "#000",
+                        'Toolbar'=> array(
+    	                     array('Bold','Italic','Underline','Link','Unlink'),
+                         )
+                    )
+                );
+            ?>
+            </div>
+
+            <div class="control-group">
+                <?php echo $this->formLabel($form->get('hint')); ?>
+                <div class="controls">
+                    <?php echo $this->formTextarea($form->get('hint')); ?>
+                    <?php echo $this->formElementErrors($form->get('hint')) ?>
+                </div>
+                <?php $this->QgCKEditor(
+                    'hint',
+                        array(
+                        	'BasePath' => $this->basePath('js/lib/ckeditor'),
+                        	'Width' => "450",
+                            'Height' => "100",
+                            //'Color' => "#000",
+                            /*'Toolbar'=> array(
+        	                     array('Bold','Italic','Underline','Link','Unlink'),
+                             )*/
+							 'Toolbar'=> array(
+        	                     array('Link','Unlink'),
+                             )
+                        )
+                    );
+                ?>
+            </div>
+            
+            <?php echo $this->formHidden($form->get('timer')); ?>
+            <?php echo $this->formHidden($form->get('timer_duration')); ?>
+
+            <div class="control-group">
+                <?php echo $this->formLabel($form->get('position')); ?>
+                <div class="controls"><?php echo $this->formInput($form->get('position')); ?></div>
+                <?php echo $this->formElementErrors($form->get('position')) ?>
+            </div>
+
+            <div class="control-group">
+                <?php echo $this->formLabel($form->get('video')); ?>
+                <div class="controls"><?php echo $this->formInput($form->get('video')); ?></div>
+                <?php echo $this->formElementErrors($form->get('video')) ?>
+            </div>
+
+            <div class="control-group">
+                <?php echo $this->formLabel($form->get('upload_image')); ?>
+                <div class="controls"><?php echo $this->formFile($form->get('upload_image')); ?></div>
+            </div>
+            <?php if($form->get('image')->getValue() != ''):?>
+            	<img src="<?php echo $this->basePath($form->get('image')->getValue()); ?>" />
+            <?php endif;?>
+            
+        </div>
+        <div class="tab-pane" id="answers">
+			<ul class="liste-buttons">
+				<li class="btn-admin"><a href="#" onclick="add_answer()"><?php echo $this->translate('Ajouter une réponse'); ?></a></li>
+			</ul>
+			
+            <div id="answer_entry" class="control-group">
+            <?php echo $this->formCollection($form->get('answers'));?>
+            </div>
+            
+            <ul class="liste-buttons">
+				<li class="btn-admin"><a href="#" onclick="add_answer()"><?php echo $this->translate('Ajouter une réponse'); ?></a></li>
+			</ul>
+        </div>
+    </div>
+</div>
+<?php echo $this->form()->closeTag() ?>
+<script type="text/javascript">
+    jQuery(document).ready(function ($) {
+        $('#tabs').tab();
+        $('.datepicker').datepicker();
+    });
+</script>
+<script>
+	
+    var template = $('#answer_entry > fieldset > span');
+    var datatemplate = $('#answer_entry > fieldset > span').data('template');
+    template.data('template', '<fieldset id="answers__index__">'+datatemplate+'</fieldset>');
+    
+    function add_answer() {
+        var currentCount = $('#answer_entry textarea').length;
+        var template = $('#answer_entry > fieldset > span').data('template');
+        template = template.replace(/__index__/g, currentCount);
+        $('#answer_entry').append(template);
+        $('#answer_entry').append('<hr/>');
+
+        return false;
+    }
+	
+
+    $('#answer_entry button').live('click',function(){
+    	$(this).parent().parent().empty();
+    	return false;
+    });
+
+     
+    
+</script>

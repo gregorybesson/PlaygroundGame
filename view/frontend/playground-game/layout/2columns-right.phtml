@@ -1,0 +1,77 @@
+<?php $this->doctype(Zend\View\Helper\Doctype::XHTML5);?>
+<?php echo $this->doctype(); ?>
+<?php $this->plugin('translate')->setTranslatorTextDomain('default');// Pour le texte ?>
+<?php 
+$children = $this->viewModel()
+    ->getCurrent()
+    ->getChildren();
+
+$ourView  = $children[0];
+?>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:og="http://opengraphprotocol.org/schema/" lang="fr">
+    <head>
+        <?php //echo $this->partial('playground-game/partial/meta.phtml', array('headParams' => $this->headParams)) ?>
+        <?php //echo $this->head();?>
+    </head>
+    <body>
+    	<div id="container">
+        	<div id="fb-root"></div>
+			<div id="content" class="row-fluid">
+				
+            	<!-- HEADER WRAPPER -->
+	            <?php //echo $this->header(array('adserving' => $this->adserving, 'currentPage' => $this->currentPage));?>
+	            <!-- END HEADER WRAPPER -->
+	                
+	            <!-- CONTENT PAGE -->
+	            <div id="containerpage">
+	            	<?php if (isset($ourView->flashMessages) && count($ourView->flashMessages)) : ?>
+	                    <ul class="flashMessages">
+	                        <?php foreach ($ourView->flashMessages as $fMessage) : ?>
+	                        <li><?php echo $this->translate($fMessage); ?></li>
+	                        <?php endforeach; ?>
+	                    </ul>
+	                <?php endif; ?>
+
+	                <?php 
+	                // TODO : Positionner ça dans un listener des modules concernés (PlaygroundGame & PlaygroundCms)
+	                    /*$container = $this->navigation()
+    	                    ->breadcrumbs('nav')
+    	                    ->setMaxDepth(3)
+                    		->setMinDepth(0)
+    	                    ->setPartial(array(
+                		        'application/common/breadcrumbs.phtml', 
+                		        'default', 
+                    		));
+	                    $active = $container->findActive($container->getContainer());
+	                    if($active && $this->breadcrumbTitle){
+    	                    $active = $active['page'];
+    	                    $active->setLabel($this->breadcrumbTitle);
+	                    }*/
+	                ?>
+	                
+    	            <?php //echo $container; ?>
+	                <div class="row-fluid">
+	                	<!-- CONTENT-INNER -->
+	                	<div class="content-inner span8">
+	                		<?php echo $this->content; ?>
+	                	</div><!-- END CONTENT-INNER -->
+	                		
+	                	<!-- SIDEBAR -->
+	                	
+	                	<?php //echo $this->column_right?>
+	                	
+	                	<!-- END SIDEBAR -->
+	                </div>
+	                	
+	            </div><!-- END CONTENT PAGE -->
+	            
+                <!-- FOOTER WRAPPER -->
+                <?php //echo $this->footer();?>
+                <!-- END FOOTER WRAPPER -->
+                
+            </div> <!-- END CONTENT -->
+        </div>
+        <?php echo $this->inlineScript() ?>
+    </body>
+</html>

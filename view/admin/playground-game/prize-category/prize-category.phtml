@@ -1,0 +1,39 @@
+<?php $this->plugin('translate')->setTranslatorTextDomain('playgroundgame');// Pour le texte ?>
+<?php
+$form = $this->form;
+$form->prepare();
+?>
+<?php echo $this->form()->openTag($form) ?>
+<?php echo $this->formButton($form->get('submit')) ?>
+<div class="tab-pane active" id="general">
+    <div>
+
+        <?php echo $this->formHidden($form->get('id')); ?>
+
+        <?php echo $this->formLabel($form->get('title')); ?>
+        <?php echo $this->formInput($form->get('title')); ?>
+        <?php echo $this->formElementErrors($form->get('title')) ?>
+        
+        <?php echo $this->formLabel($form->get('identifier')); ?>
+        <?php echo $this->formInput($form->get('identifier')); ?>
+        <?php echo $this->formElementErrors($form->get('identifier')); ?>
+
+        <?php echo $this->formLabel($form->get('active')); ?>
+        <?php echo $this->formSelect($form->get('active')); ?>
+        <?php echo $this->formElementErrors($form->get('active')) ?>
+
+    </div>
+</div>
+<div class="tab-pane" id="images">
+    <div>
+    <?php echo $this->formLabel($form->get('upload_picto')); ?>
+    <?php echo $this->formFile($form->get('upload_picto')); ?>
+    </div>
+    <?php if($form->get('picto')->getValue() != ''):?>
+    	<img src="<?php echo $this->basePath($form->get('picto')->getValue()); ?>" />
+    <?php endif;?>
+</div>
+<div class="tab-pane" id="welcome_page">
+    <div></div>
+</div>
+<?php echo $this->form()->closeTag() ?>

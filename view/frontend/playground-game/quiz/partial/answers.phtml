@@ -1,0 +1,24 @@
+<?php $this->plugin('translate')->setTranslatorTextDomain('playgroundgame');// Pour le texte ?>
+
+<div class="corrections row-fluid">
+	<div class="span10 offset2">
+		<ul>
+			<?php $i=0;foreach($this->gameCorrectAnswers as $q):?>
+			    <li class="question<?php if($this->layout()->facebooktemplate): echo ' fb-target'; endif ?>"><b>Question <?php echo $i+1; ?> :</b> <?php echo $q['question'];?>
+				    <ul>
+    				<?php foreach ($q['answers'] as $k => $a):?>			
+        				<li class="response">
+	        				<?php if($a['found']): ?>
+	        					<span class="right-answer">Bonne réponse! </span>
+	        				<?php else:?>
+	        					<span class="your-answer">Vous n'avez pas trouvé  </span>
+	        				<?php endif;?>
+        					<?php  echo $a['answer']?>
+        				</li>
+    				<?php endforeach;?>
+    				</ul>
+    			</li>
+			<?php ++$i;endforeach;?>
+		</ul>
+	</div>
+</div>

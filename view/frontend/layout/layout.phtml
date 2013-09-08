@@ -1,0 +1,124 @@
+<?php
+$children = $this->viewModel()
+->getCurrent()
+->getChildren();
+if(isset($children[0])){
+    $ourView  = $children[0];
+}
+
+?>
+<?php echo $this->doctype(); ?>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<?php echo $this->headTitle('Playground')->setSeparator(' - ')->setAutoEscape(false) ?>
+
+<?php echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0') ?>
+
+<!-- Le styles -->
+<?php /*echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/images/favicon.ico'))*/
+?>
+
+<!-- Scripts -->
+<?php /*echo $this->headScript()->prependFile($this->basePath() . '/js/html5.js', 'text/javascript', array('conditional' => 'lt IE 9',))*/
+
+?>
+<?php
+	echo $this->plugin('HeadLink');
+    echo $this->plugin('HeadStyle');
+    echo $this->plugin('HeadScript');
+?>
+<style>
+.column {
+	width: 250px;
+	float: left;
+	border-style: solid;
+	border-width: 1px;
+	margin: 15px;
+	padding: 5px;
+	min-height: 140px
+}
+
+.portlet {
+	margin: 0 0 1em 0;
+}
+
+.portlet-header {
+	margin: 0.3em;
+	padding-bottom: 4px;
+	padding-left: 0.2em;
+}
+
+.portlet-header .ui-icon {
+	float: right;
+}
+
+.portlet-content {
+	padding: 0.4em;
+}
+
+.ui-sortable-placeholder {
+	border: 1px dotted black;
+	visibility: visible !important;
+	height: 50px !important;
+}
+
+.ui-sortable-placeholder * {
+	visibility: hidden;
+}
+</style>
+
+</head>
+
+<body>
+
+	<div class="userbar">
+		<div class="inner">
+			<div class="left">
+				<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</a>
+				<a href="<?php echo $this->url('admin') ?>">
+					<img src="<?php echo $this->adminAssetPath('images/common/logo.png'); ?>" alt="Administration" border="0" width="80" /> <?php echo $this->translate('Admin'); ?>
+				</a>
+			</div>
+			<div class="right">
+				<div></div>
+				<div class="btn-website"><a href="<?php echo $this->url('frontend') ?>" class="home" target="_blank">Accéder au site</a></div>
+			</div>
+		</div>
+	</div>
+
+	<!-- <div class="navbar navbar-fixed-top"> -->
+	<div class="navbar">
+		<ul class='nav'>
+			<?php echo $this->adminMenu()->setPartial(array('application/menu.phtml', 'default'));
+			?>
+		</ul>
+	</div>
+
+	<div class="container">
+		<?php if (isset($ourView->flashMessages) && count($ourView->flashMessages)) : ?>
+		<ul class="flashMessages">
+			<?php foreach ($ourView->flashMessages as $fMessage) : ?>
+			<li><?php echo $fMessage; ?></li>
+			<?php endforeach; ?>
+		</ul>
+		<?php endif; ?>
+		<?php echo $this->navigation()
+		->breadcrumbs('admin_navigation')
+		->setMaxDepth(3)
+		->setPartial(array('application/breadcrumbs.phtml', 'default'));
+		?>
+		<?php echo $this->content; ?>
+
+		<footer>
+			<p>&copy; 2013 by Playground. All rights reserved.</p>
+		</footer>
+	</div>
+	<!-- /container -->
+	<?php echo $this->inlineScript() ?>
+</body>
+</html>

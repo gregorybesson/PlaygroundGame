@@ -1,0 +1,29 @@
+<div class="sliders">
+	
+	<?php if(isset($this->data[1])):?>
+		<h2 class="green"><?php echo $this->data[1];?></h2>
+	<?php endif; ?>
+	
+	<div <?php if(isset($this->data[3]) || isset($this->data[4]) || isset($this->data[5]) || isset($this->data[6])) : echo 'class="nivoSlider"'; endif ?>>
+	    <?php if(isset($this->data[2])):?>
+	        <img src="<?php echo $this->basePath($this->data[2])?>" alt="" />
+	    <?php endif;?>
+	    <?php if(isset($this->data[3])):?>
+	        <img src="<?php echo $this->basePath($this->data[3])?>" alt="" />
+	    <?php endif;?>
+	    <?php if(isset($this->data[4])):?>
+	        <img src="<?php echo $this->basePath($this->data[4])?>" alt="" />
+	    <?php endif;?>
+	    <?php if(isset($this->data[5])):?>
+	        <img src="<?php echo $this->basePath($this->data[5])?>" alt="" />
+	    <?php endif;?>
+	    <?php if(isset($this->data[6])):?>
+	        <img src="<?php echo $this->basePath($this->data[6])?>" alt="" />
+	    <?php endif;?>
+	</div>
+	
+	<?php if(isset($this->data[7])): ?>
+		<p><?php echo nl2br($this->data[7]);?></p>
+	<?php endif ?>
+
+</div>

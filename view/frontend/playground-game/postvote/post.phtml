@@ -1,0 +1,111 @@
+<?php $this->plugin('translate')->setTranslatorTextDomain('playgroundgame');// Pour le texte ?>
+
+<?php $data = array();foreach($this->post->getPostElements() as $element):?>
+<?php $data[$element->getPosition()] = $element->getValue();?>
+<?php endforeach;?>
+<div class="game-postvote post row-fluid">
+	<h1><?php echo $this->game->getTitle(); ?></h1>
+	<!-- BLOCK GAME START -->
+	<!--
+    <?php echo $this->partial('playground-game/partial/game-header', array('game'=>$this->game));?>
+   -->
+   <!-- BLOCK GAME START -->
+	<div class="block-game game-play">
+		<div class="img-content">
+			<img class="rounded" src="<?php echo $this->basePath($this->game->getSecondImage()); ?>" border="0" />
+			
+			<?php if($this->game->getPartner()):?>
+				<?php if( ($this->game->getPartner()->getLogo() != '')) : ?>
+					<div class="logo-sponsor">
+						<img src="<?php echo $this->basePath($this->game->getPartner()->getLogo());?>" width="120" border="0" alt="<?php echo $this->game->getPartner()->getName();?>" />
+					</div>
+				<?php endif;?>
+			<?php else :?>
+				<div class="logo-sponsor">		
+					<img src="<?php echo $this->frontendAssetPath('images/common/logo-game-start.png')?>" width="83" height="81" border="0" alt="logo" />
+				</div>
+			<?php endif;?>
+			
+			<div class="dark-overlay row-fluid">
+				<div class="postvote"><?php echo $this->translate('Post & Vote'); ?> offert par <?php if($this->game->getPartner()): echo $this->game->getPartner()->getName(); else:?>Club Playground<?php endif;?></div>
+			</div>
+		</div>
+	</div>
+	<!-- END BLOCK GAME START -->
+    <!-- END BLOCK GAME START -->
+    <!-- BLOCK CONTENT -->
+    <div class="row-fluid buttons">
+		<div class="span2">
+			<a href="<?php echo $this->url('postvote', array('id' => $this->game->getIdentifier()))?>"><button class="btn btn-inverse active">Accueil</button></a>
+		</div>
+		<div class="span4">
+			<a href="<?php echo $this->url('postvote/list', array('id' => $this->game->getIdentifier(), 'filter' => $this->game->getPostDisplayMode()))?>"><button class="btn btn-inverse">Voir les participations</button></a>
+		</div>
+		<?php if($game->isStarted()):?>
+		<div class="span3">
+			<a href="<?php echo $this->url('postvote/play', array('id' => $this->game->getIdentifier()))?>"><button class="btn btn-warning">Participer</button></a>
+		</div>
+		<?php endif ?>
+	</div>
+
+    <!-- BLOCK CONTENT -->
+    <div class="row-fluid posts">
+        <div class="span10">
+            <div class="row-fluid rounded backgrey">
+            	<?php if(count($this->flashMessages)>0):?>
+					<p class="already-play"><?php echo $this->flashMessages[0];?></p>
+			    <?php endif;?>
+           		<?php echo $this->partial('playground-game/postvote/templates/' . $this->game->getTemplate(), array('data'=>$data, 'post' => $post->getId()));?>
+				<?php echo $this->partial('playground-game/partial/name.phtml', array('post' => $post->getUser(), 'game' => $game, 'urlPost' => $this->url('postvote/post', array('id' => $this->game->getIdentifier(),  'post' => $post->getId()), array('force_canonical' => true)), 'postTitle' => $data[1]));?>
+       		</div>
+       		<?php if($game->isStarted()):?>
+	       		<?php if($this->statusMail && ($post->getId() == $this->reportId )) : ?>
+					<p class="report-result">Merci d'avoir signalé.</p>
+				<?php else : ?>
+		       		<?php $formModeration = $this->formModeration;?>
+					<?php $formModeration->prepare();?>
+		       		<?php echo $this->form()->openTag($formModeration) ?>
+						<?php echo $this->formInput($formModeration->get('moderation')); ?>
+						<input type="hidden" name="link" value="<?php echo $this->url('postvote/post', array('id' => $this->game->getIdentifier(), 'post' => $post->getId()))?>" />
+						<input type="hidden" name="reportid" value="<?php echo $post->getId() ?>" />
+						<p class="alert-link"><a href="#">Signaler</a></p>
+					<?php echo $this->form()->closeTag($formModeration) ?>
+				<?php endif; ?>
+			<?php endif ?>
+       </div>
+       
+       <?php if($game->isStarted()):?>
+       <div class="span2">
+           <?php 
+                $form = $this->form;
+                $form->setAttribute('action', $this->url('postvote/post', array('id' => $this->game->getIdentifier(),  'post' => $post->getId())));
+                $form->prepare();
+                 
+                echo $this->form()->openTag($form);
+            ?>
+            <?php if(!$this->zfcUserIdentity() && ! $this->voted): ?>
+                <div class="vote"><?php echo $this->formRow($form->get('captcha')); ?></div>
+            <?php endif ?>
+            <?php if ($this->post->getStatus() == 2) : ?>
+	            <div class="row-fluid <?php if($this->zfcUserIdentity()): ?>logged<?php endif ?> nb-votes<?php echo ($this->voted)?'-check':'';?>">
+	            	<?php if($this->alreadyVoted) : ?><div class="already-voted"><?php echo $this->alreadyVoted; ?></div><?php endif; ?>
+	                <?php if($this->voted):?>
+	                    <img src="<?php echo $this->frontendAssetPath('images/common/icon-check.png');?>" />
+	                <?php else:?>
+	                    <input type="image" src="<?php echo $this->frontendAssetPath('images/common/round-vote.png');?>" alt="Voter">
+	                <?php endif;?>
+	
+	                <div class="bn-votes text-warning"><span class="nb-post-vote-number"><?php echo count($this->post->getVotes())?></span> <?php echo (count($this->post->getVotes()) > 1) ? 'votes' : 'vote'; ?></div>
+	            </div>
+            <?php endif ?>
+                
+            <?php echo $this->form()->closeTag();?>
+        </div>
+        <div class="span12 humain">
+            <?php if(!$this->zfcUserIdentity()): ?>
+                <span class="text-error">*</span> Pour prendre en compte votre vote, nous devons vérifer que vous êtes bien un être humain ;-)
+            <?php endif ?>
+        </div>
+        <?php endif ?>
+    </div>
+</div>

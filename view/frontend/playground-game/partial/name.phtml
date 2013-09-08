@@ -1,0 +1,31 @@
+<div class="row-fluid">
+    <div class="avatar span4">
+    	<?php if($this->post->getAvatar()):?>
+	        <img src="<?php echo $this->basePath($this->post->getAvatar()) ?>" width="24" height="24" alt="<?php echo $this->post->getFirstname(); ?> <?php echo $this->post->getLastname(); ?>" />
+	    <?php else:?>
+    		<?php if($this->post->getTitle() && $this->post->getTitle() == 'M'): ?>
+        		<img src="<?php echo $this->frontendAssetPath('images/user/no-avatar-small-h.png'); ?>" alt="no avatar" width="24" height="24" />
+    		<?php else: ?>
+    			<img src="<?php echo $this->frontendAssetPath('images/user/no-avatar-small-f.png'); ?>" alt="no avatar" width="24" height="24" />
+    		<?php endif; ?>
+	    <?php endif;?>
+	    <?php echo $this->post->getUsername(); ?>
+    </div>
+    
+    <?php if($game->isStarted()):?>
+    <div class="span3 offset5">
+    	<?php //echo $this->partial('playground-game/partial/share.phtml', array( 'color' => 'grey', 'game'=>$this->game, 'url'=>$this->url('frontend/' . $game->getClassType(), array('id' => $this->game->getIdentifier()), array('force_canonical' => true)), 'urlPost' => $this->urlPost));?>
+    
+	    <?php $fbShareMsg = 'Votez pour mon post sur le Club Playground : '.$this->postTitle; ?>
+		<?php $fbShareImg = ($this->game->getFbShareImage()) ? $this->url('frontend', array(), array('force_canonical' => true)). $this->game->getFbShareImage() : $this->url('frontend', array(), array('force_canonical' => true)) . $this->game->getMainImage(); ?> 
+		<?php $twShareMsg = 'Votez pour mon post sur le Club Playground : '.$this->postTitle; ?>
+		
+		<div class="social-share">
+			<a href="#" data-link="<?php echo $this->urlPost; ?>" data-picture="<?php echo $fbShareImg; ?>" data-caption="<?php echo $fbShareMsg; ?>" class="grey-fb" target="_blank"></a>
+			<a href="https://twitter.com/intent/tweet?text=<?php echo urlencode($twShareMsg); ?>&url=<?php echo urlencode($this->urlPost); ?>" data-txt="<?php echo $twShareMsg; ?>" data-url="<?php echo $this->urlPost; ?>" class="grey-tw shorturl" target="_blank"></a>
+			<a href="https://plus.google.com/share?url=<?php echo urlencode($this->urlPost); ?>" class="grey-gl" target="_blank"></a>
+		</div>
+    
+    </div>
+    <?php endif ?>
+</div>

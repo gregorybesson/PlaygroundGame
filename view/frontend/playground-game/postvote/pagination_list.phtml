@@ -1,0 +1,40 @@
+<?php $this->plugin('translate')->setTranslatorTextDomain('playgroundgame'); ?>
+
+<?php if ($this->pageCount && $this->pageCount>1): ?>
+<div class="pagination">
+	<ul class="paginate-first span2">
+		<li<?php echo ($this->first != $this->current) ? '' : ' class="disabled"'; ?>>
+		    <a class="first<?php echo (isset($this->previous)) ? '' : ' inactive'; ?>" href="<?php echo $this->url('postvote/list/pagination', array('id' => $this->id, 'filter' => $this->filter, 'p' => $this->first)); ?>"><?php echo $this->translate('Premier'); ?></a>
+		</li>
+		<li<?php echo (isset($this->previous)) ? '' : ' class="disabled"'; ?>>
+            <a class="prev<?php echo (isset($this->previous)) ? '' : ' inactive'; ?>" href="<?php echo $this->url('postvote/list/pagination', array('id' => $this->id, 'filter' => $this->filter, 'p' => $this->previous)); ?>"><?php echo $this->translate('Précédent'); ?></a>
+        </li>
+	</ul>
+	<ul class="paginate-nb span8">
+		<?php foreach ($this->pagesInRange as $page): ?>
+        <li<?php echo ($page == $this->current) ? ' class="active"' : ''; ?>>
+            <a href="<?php echo $this->url('postvote/list/pagination', array('id' => $this->id, 'filter' => $this->filter, 'p' => $page)); ?>"><?php echo $page; ?></a>
+        </li>
+        <?php endforeach; ?>
+	</ul>
+	<ul class="paginate-last span2">
+		<li<?php echo ($this->last != $this->current) ? '' : ' class="disabled"'; ?>>
+            <a class="last<?php echo (isset($this->next)) ? '' : ' inactive'; ?>" href="<?php echo $this->url('postvote/list/pagination', array('id' => $this->id, 'filter' => $this->filter, 'p' => $this->last)); ?>"><?php echo $this->translate('Dernier'); ?></a>
+        </li>
+        <li<?php echo (isset($this->next)) ? '' : ' class="disabled"'; ?>>
+            <a class="next<?php echo (isset($this->next)) ? '' : ' inactive'; ?>" href="<?php echo $this->url('postvote/list/pagination', array('id' => $this->id, 'filter' => $this->filter, 'p' => $this->next)); ?>"><?php echo $this->translate('Suivant'); ?></a>
+        </li>
+	</ul>    
+</div>
+<?php endif; ?>
+
+<?php
+$script = $this->inlineScript();
+$script->appendScript(<<<'EOT'
+    
+$(".pagination .disabled a").click(function() {
+  return false;
+});
+
+EOT
+);

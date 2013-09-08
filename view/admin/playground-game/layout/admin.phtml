@@ -1,0 +1,134 @@
+<?php
+$children = $this->viewModel()
+->getCurrent()
+->getChildren();
+if(isset($children[0])){
+    $ourView  = $children[0];
+}
+
+?>
+<?php echo $this->doctype(); ?>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<?php echo $this->headTitle('ZfcAdmin - Zend Framework 2 Admin Interface')->setSeparator(' - ')->setAutoEscape(false) ?>
+
+<?php echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0') ?>
+
+<!-- Le styles -->
+<?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/images/favicon.ico'))
+->prependStylesheet($this->basePath() . '/css/bootstrap-responsive.min.css')
+->prependStylesheet($this->basePath() . '/css/administration.css')
+->prependStylesheet($this->basePath() . '/css/style.css')
+->prependStylesheet('http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css')
+->prependStylesheet($this->basePath() . '/css/bootstrap.min.css')
+->prependStylesheet($this->basePath() . '/css/lib/datepicker.css')
+->prependStylesheet($this->basePath() . '/css/lib/jquery-ui-timepicker-addon.css')
+?>
+
+<!-- Scripts -->
+<?php echo $this->headScript()->prependFile($this->basePath() . '/js/html5.js', 'text/javascript', array('conditional' => 'lt IE 9',))
+->prependFile($this->basePath() . '/js/lib/jquery-ui-timepicker-addon.js')
+//->prependFile($this->basePath() . '/js/lib/bootstrap-datepicker.js')
+->prependFile($this->basePath() . '/js/bootstrap.min.js')
+->prependFile($this->basePath() . '/js/lib/json.js')
+->prependFile('http://code.jquery.com/ui/1.10.2/jquery-ui.js')
+->prependFile($this->basePath() . '/js/admin/admin.js')
+->prependFile($this->basePath() . '/js/admin/drag.js')
+->prependFile($this->basePath() . '/js/jquery.min.js')
+
+?>
+<style>
+.column {
+	width: 250px;
+	float: left;
+	border-style: solid;
+	border-width: 1px;
+	margin: 15px;
+	padding: 5px;
+	min-height: 140px
+}
+
+.portlet {
+	margin: 0 0 1em 0;
+}
+
+.portlet-header {
+	margin: 0.3em;
+	padding-bottom: 4px;
+	padding-left: 0.2em;
+}
+
+.portlet-header .ui-icon {
+	float: right;
+}
+
+.portlet-content {
+	padding: 0.4em;
+}
+
+.ui-sortable-placeholder {
+	border: 1px dotted black;
+	visibility: visible !important;
+	height: 50px !important;
+}
+
+.ui-sortable-placeholder * {
+	visibility: hidden;
+}
+</style>
+
+</head>
+
+<body>
+
+	<div class="userbar">
+		<div class="inner">
+			<div class="left">
+				<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</a>
+				<a href="<?php echo $this->url('admin') ?>">
+					<img src="<?php echo $this->frontendAssetPath('images/common/logo.png'); ?>" alt="Administration" border="0" width="80" /> <?php echo $this->translate('Admin'); ?>
+				</a>
+			</div>
+			<div class="right">
+				<div><span class="user"><?php echo $this->zfcUserIdentity()->getFirstname(); ?> <?php echo $this->zfcUserIdentity()->getLastname(); ?></span>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="<?php echo $this->url('frontend/zfcuser/logout') ?>" class="logout">Se déconnecter</a></div>
+				<div class="btn-website"><a href="<?php echo $this->url('frontend') ?>" class="home" target="_blank">Accéder au site</a></div>
+			</div>
+		</div>
+	</div>
+
+	<!-- <div class="navbar navbar-fixed-top"> -->
+	<div class="navbar">
+		<ul class='nav'>
+			<?php echo $this->adminMenu()->setPartial(array('application/menu.phtml', 'default'));
+			?>
+		</ul>
+	</div>
+
+	<div class="container">
+		<?php if (isset($ourView->flashMessages) && count($ourView->flashMessages)) : ?>
+		<ul class="flashMessages">
+			<?php foreach ($ourView->flashMessages as $fMessage) : ?>
+			<li><?php echo $fMessage; ?></li>
+			<?php endforeach; ?>
+		</ul>
+		<?php endif; ?>
+		<?php echo $this->navigation()
+		->breadcrumbs('admin_navigation')
+		->setMaxDepth(3)
+		->setPartial(array('application/breadcrumbs.phtml', 'default'));
+		?>
+		<?php echo $this->content; ?>
+
+		<footer>
+			<p>&copy; 2013 by Playground. All rights reserved.</p>
+		</footer>
+	</div>
+	<!-- /container -->
+	<?php echo $this->inlineScript() ?>
+</body>
+</html>

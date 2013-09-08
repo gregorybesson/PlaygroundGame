@@ -1,0 +1,73 @@
+<?php $this->plugin('translate')->setTranslatorTextDomain('playgroundgame');// Pour le texte ?>
+
+<?php
+$defaultMsg = (isset($this->userTimer['timer'])) ? 'J\'ai eu '.$this->userTimer['ratio'].'% de bonnes réponses en '.$this->userTimer['timer'].' secondes au jeu '.$this->game->getTitle().'. Venez faire mieux ! ' : 'Venez jouer au jeu : ' . $this->game->getTitle() . ' du Club Playground ';
+
+$twShareMsg = ($this->game->getTwShareMessage()) ? $this->game->getTwShareMessage() : $defaultMsg;
+$fbShareMsg = ($this->game->getFbShareMessage()) ? $this->game->getFbShareMessage() : $defaultMsg;
+
+$fbRequestMsg = ($this->game->getFbRequestMessage()) ? $this->game->getFbRequestMessage() : $defaultMsg;
+?>
+
+<div id="datas-result" data-url="<?php echo $this->url('frontend/' . $this->gameType, array("id" => $this->game->getIdentifier()), array('force_canonical' => true)); ?>" data-secretkey="<?php echo $this->secretKey; ?>" data-fbmsg="<?php echo $fbShareMsg; ?>" data-twmsg="<?php echo $twShareMsg; ?>" data-fbrequest="<?php echo $fbRequestMsg; ?>" data-sociallink="<?php echo $this->socialLinkUrl; ?>"></div>
+
+<!-- invitations sociales -->
+<div id="invit-social" class="row-fluid bg-arrow-left">
+	<div class="span7 center">
+		<p class="orange">Sur les réseaux sociaux</p>
+		<p class="peppo f-left"></p>
+		<ul id="round-social" class="f-right">
+			<li><a id="fb-share" href="javascript:void(0)"><img src="<?php echo $this->frontendAssetPath('images/common/round-facebook.png'); ?>" alt="" /></a></li>
+			<li><a href="https://twitter.com/intent/tweet?text=<?php echo urlencode($twShareMsg); ?>&url=<?php echo urlencode($this->socialLinkUrl); ?>" data-txt="<?php echo $twShareMsg; ?>" target="_blank"><img src="<?php echo $this->frontendAssetPath('images/common/round-twitter.png'); ?>" alt="" /></a></li>
+			<!--<li><a href="https://plus.google.com/share?url=<?php echo urlencode($this->url('frontend/' . $this->gameType, array('id' => $this->game->getIdentifier()), array('force_canonical' => true))); ?>" target="_blank"><img src="<?php echo $this->frontendAssetPath('images/common/round-google.png'); ?>" target="_blank" alt="" /></a></li>-->
+			<li><a id='google-plus' href="https://plus.google.com/share?url=<?php echo urlencode($this->socialLinkUrl); ?>"><img src="<?php echo $this->frontendAssetPath('images/common/round-google.png'); ?>" alt="Share on Google+"/></a></li>
+		</ul>
+	</div>
+</div>
+
+<!-- Par mail -->
+<div id="invit-mail" class="row-fluid bg-arrow-right">
+	<div class="span8 center">
+		<div class="row-fluid">
+			<div class="span3">
+				<img src="<?php echo $this->frontendAssetPath('images/common/round-mail.png'); ?>" alt="" />
+			</div>
+			<div class="span8">
+				<p class="orange">Par mail</p>
+				<?php if ($this->statusMail === true) : ?>
+					<div id="mail-sended">
+						<p class="a-left">Merci,<br/> Vos invitations ont bien été envoyées !</p>
+
+						<div class="btn btn-warning more-invit">
+							Inviter + d'amis
+						</div>
+					</div>
+				<?php endif; ?>
+
+				<div id="mail-send" <?php if($this->statusMail): echo 'class="none"'; endif; ?>>
+					<?php $form = $this->form;?>
+					<?php $form->prepare();?>
+                    <?php echo $this->form()->openTag($form) ?>
+                    	<?php echo $this->formInput($form->get('email1')); ?>
+                        <?php echo $this->formElementErrors($form->get('email1')); ?>
+                        <?php echo $this->formInput($form->get('email2')); ?>
+                        <?php echo $this->formElementErrors($form->get('email2')); ?>
+                        <?php echo $this->formInput($form->get('email3')); ?>
+                        <?php echo $this->formElementErrors($form->get('email3')); ?>
+						<p class="peppo f-left"></p>
+                        <?php echo $this->formButton($form->get('submit')) ?>
+					<?php echo $this->form()->closeTag() ?>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- terminer -->
+<div id="terminer" class="row-fluid">
+	<div class="span4 center">
+		<span class="btn btn-warning">
+			<span class="arrow-right"><a href="<?php echo $this->url('frontend/' . $this->gameType.'/bounce', array('id' => $this->game->getIdentifier()));?>"><?php echo $this->translate('Terminer'); ?></a></span>
+		</span>
+	</div>
+</div>

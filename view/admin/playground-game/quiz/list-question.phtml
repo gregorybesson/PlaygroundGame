@@ -1,0 +1,50 @@
+<?php
+/*$fm = $this->flashMessenger()->setNamespace('playgroundgame')->getMessages();
+if (isset($fm[0]))
+{
+    print '<span class=>' . $fm[0] . '</span>';
+}*/
+?>
+<?php $this->plugin('translate')->setTranslatorTextDomain('playgroundgame'); ?>
+<?php $addLink = $this->url('admin/playgroundgame/quiz-question-add', array('quizId' => $this->quiz_id)); ?>
+
+
+<ul class="liste-buttons">
+	<li class="btn-admin"><a href="<?php echo $addLink;?>"><?php echo $this->translate('Add new question'); ?></a></li>
+	<!--<li class="btn-admin"><a href="<?php echo $this->url('admin/playgroundgame/list');?>"><?php echo $this->translate('Retour'); ?></a></li>-->
+</ul>
+
+<h1><a href="<?php echo $this->url('admin/playgroundgame/edit-quiz', array('gameId' => $this->quiz_id)) ?>"><?php echo $this->quiz->getTitle(); ?></a></h1>
+
+<h3><?php echo $this->translate('Liste des questions'); ?></h3>
+
+<table class="table">
+    <tr>
+        <!--<th><?php echo $this->translate('Id'); ?></th>-->
+        <th><?php echo $this->translate('Question'); ?></th>
+        <th><?php echo $this->translate('Answers'); ?></th>
+        <th></th>
+    </tr>
+    <tbody>
+    <?php foreach ($this->questions as $question): ?>
+    	<?php $editLink   = $this->url('admin/playgroundgame/quiz-question-edit', array('questionId' => $question->getId()));?>
+        <?php $deleteLink = $this->url('admin/playgroundgame/quiz-question-remove', array('questionId' => $question->getId()));?>
+    	<tr class="sortable" id="<?php echo $question->getId() ?>" 
+    		data-url="<?php echo $editLink; ?>">
+            <!--<td><?php echo $question->getId() ?></td>-->
+            <td><?php echo $question->getQuestion() ?></td>
+            <td><?php echo count($question->getAnswers()); ?></td>
+            
+            <td>
+                <a href='<?php echo $editLink ?>'><?php echo $this->translate('Edit'); ?></a> | <a href='<?php echo $deleteLink ?>'><?php echo $this->translate('Delete'); ?></a>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+
+<ul class="liste-buttons bottom">
+	<li class="btn-admin bottom"><a href="<?php echo $addLink;?>"><?php echo $this->translate('Add new question'); ?></a></li>
+</ul>
+
+<?php //echo $this->paginationControl($this->pages, 'Sliding', 'playground-game/page/pagination_pagelist.phtml'); ?>

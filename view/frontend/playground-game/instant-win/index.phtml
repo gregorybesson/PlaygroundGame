@@ -1,0 +1,23 @@
+<?php $this->plugin('translate')->setTranslatorTextDomain('playgroundgame');// Pour le texte ?>
+ 
+<div class="game-instantwin row-fluid welcome">
+	<h1><?php echo $this->game->getTitle(); ?></h1>
+
+	<!-- BLOCK GAME START -->
+    <?php echo $this->partial('playground-game/partial/game-header', array('game'=>$this->game));?>
+    <!-- END BLOCK GAME START -->
+
+	<!-- contenu article -->
+	<div id="content-article" class="row-fluid rounded backgrey">
+		<div class="welcome-block<?php if($this->layout()->facebooktemplate): echo ' fb-target'; endif ?>"><?php echo $this->game->getWelcomeBlock(); ?></div>
+		<?php if($game->isStarted()):?>
+		<div class="center">
+			<?php if($game->getTermsOptin):?>
+				J'accepte le règlement
+			<?php endif;?>
+			<div class="btn btn-warning"><a href="<?php echo $this->url('frontend/instantwin/play', array('id' => $this->game->getIdentifier()))?>" class="arrow-right">Participer</a></div>
+		</div>
+		<?php endif;?>
+	</div>
+	<p id="reglement"><a href="<?php echo $this->url('frontend/instantwin/terms', array('id' => $this->game->getIdentifier()))?>" target="_blank"><?php echo $this->translate('Règlement'); ?></a></p>
+</div>

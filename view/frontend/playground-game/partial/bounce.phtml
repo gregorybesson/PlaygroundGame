@@ -1,0 +1,82 @@
+<?php $this->plugin('translate')->setTranslatorTextDomain('playgroundgame');// Pour le texte ?>
+
+<?php $game = $this->game ?>
+<?php $user = $this->user ?>
+<?php $isSubscriber = $this->isSubscriber ?>
+
+<?php if(!$game->getPartner() || !$game->getPartner()->getBouncePage()):?>
+	<div class="mobile">
+		<img src="<?php echo $this->frontendAssetPath('images/common/logo-hd.png')?>" border="0" width="137" alt="Club Playground" />
+	</div>
+    <h1><?php echo $this->gameType ?> vous a été offert par <span class="mobile name-partner">Club Playground</span></h1>
+    
+    <div class="row-fluid offer">
+    	<div class="span3 no-mobile">
+			<img src="<?php echo $this->frontendAssetPath('images/common/logo-hd.png')?>" border="0" width="137" alt="Logo" />
+		</div>
+		<?php if(!$user->getAvatar() || !$user->getAddress() || !$user->getCity() || !$user->getTelephone() || !$user->getChildren()):?>
+			<div class="span3<?php if($this->facebooktemplate): echo ' fb-target'; endif ?>">
+		    	<a href="<?php if(!$this->facebooktemplate) : echo $this->url('frontend/zfcuser/profile'); else : echo 'http://'.$this->channel['platform'].$this->url('frontend/zfcuser/profile'); endif; ?>">
+			        <img src="<?php echo $this->frontendAssetPath('images/common/round-pencil.png')?>" border="0" width="70" height="70" />
+	                <div>Remplir mes <br> coordonnées<br><span class="points">et gagnez des points</span></div>
+	           	</a>
+		    </div>
+	    <?php endif;?>
+	    <?php if(!$user->getOptin()):?>
+	    	<div class="span3">
+	    		<div class="bounce-newsform">
+				    <form action="<?php echo $this->url('frontend/zfcuser/ajax_newsletter');?>" method="POST" id="ajax-newsletter">
+				        <input type="hidden" value="1" name="optin" />
+				    	<input class="bounce-newssubscribe" type="submit" value="S'inscrire à la newsletter"/>
+				    </form>
+				</div>
+				<div class="bounce-newssuccess">Inscription prise <br/>en compte!</div>
+			</div>
+	    <?php endif;?>
+	    <div class="span3">
+	    	<a href="http://www.facebook.com/playground" target="_blank" class="facebook">
+                <img src="<?php echo $this->frontendAssetPath('images/common/round-facebook-circle.png')?>" border="0" width="70" height="70" />
+                <div>Devenir fan <br/>sur Facebook</div>
+            </a>
+	    </div>
+    </div>
+    
+<?php else:?>
+	
+	<h1><?php echo $this->gameType ?> vous a été offert par <?php echo $game->getPartner()->getName();?></h1>
+	
+    <div class="row-fluid offer partner">
+    	<?php if($game->getPartner()->getLogo()):?>
+			<div class="span3">
+				<img src="<?php echo $this->basePath($game->getPartner()->getLogo())?>" border="0" width="137" alt="<?php echo $game->getPartner()->getName();?>" />
+			</div>
+		<?php endif;?>
+		<?php if($game->getPartner()->getNewsletter() && !$isSubscriber):?>
+		    <div class="span3">
+	    		<div class="bounce-newsform">
+				    <form action="<?php echo $this->url('frontend/partnership/ajax_newsletter', array('id' => $game->getPartner()->getId()));?>" method="POST" id="ajax-newsletter">
+				        <input type="hidden" value="1" name="optin" />
+				        <input type="hidden" value="<?php echo $game->getId();?>" name="gameId" />
+				    	<input class="bounce-newssubscribe" type="submit" value="S'inscrire à la newsletter"/>
+				    </form>
+				</div>
+				<div class="bounce-newssuccess">Inscription prise <br/>en compte!</div>
+			</div>
+		<?php endif;?>
+		<?php if($game->getPartner()->getWebsite()):?>
+			<div class="span3">
+		    	<a href="<?php echo $game->getPartner()->getWebsite()?>" target="_blank" class="website">
+					<div>Voir le <br/>site Internet</div>
+				</a>
+			</div>
+		<?php endif;?>
+		<?php if($game->getPartner()->getFacebook()):?>
+			<div class="span3">
+		        <a href="<?php echo $game->getPartner()->getFacebook()?>" target="_blank" class="facebook">
+					<div>Devenir fan <br/>sur Facebook</div>
+				</a>
+			</div> 
+		<?php endif;?>
+	</div>    
+    
+<?php endif;?>

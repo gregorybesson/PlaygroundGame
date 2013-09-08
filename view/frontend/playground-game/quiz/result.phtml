@@ -1,0 +1,52 @@
+<?php $this->plugin('translate')->setTranslatorTextDomain('playgroundgame');// Pour le texte ?>
+
+<div class="game-quiz row-fluid result">
+	<h1><?php echo $this->game->getTitle(); ?></h1>
+	
+	<?php if($this->winner || $this->prediction):?>
+	    <?php echo $this->partial('playground-game/quiz/partial/winner', array(
+            'game'               =>$this->game,
+            'userCorrectAnswers' =>$this->userCorrectAnswers,
+            'maxCorrectAnswers'  =>$this->maxCorrectAnswers,
+            'ratioCorrectAnswers'=>$this->ratioCorrectAnswers,
+	        'prediction'         =>$this->prediction,
+	        'flashMessages'		 =>$this->flashMessages
+        ));?>
+	<?php else:?>
+    	<?php echo $this->partial('playground-game/quiz/partial/looser', array(
+            'game'               =>$this->game,
+    	    'userCorrectAnswers' =>$this->userCorrectAnswers,
+	        'maxCorrectAnswers'  =>$this->maxCorrectAnswers,
+	        'ratioCorrectAnswers'=>$this->ratioCorrectAnswers,
+	        'flashMessages'		 =>$this->flashMessages
+        ));?>
+	<?php endif;?>
+	
+	<?php if($this->userCorrectAnswers < $this->maxCorrectAnswers && $this->game->getVictoryConditions()>0):?>
+        <?php echo $this->partial('playground-game/quiz/partial/answers', array(
+	        'gameCorrectAnswers' =>$this->gameCorrectAnswers
+        ));?>
+	<?php endif;?>
+	
+	<div id="heading" class="row-fluid">
+    	<div class="span1"><img src="<?php echo $this->frontendAssetPath('images/common/hand-star-orange.png')?>" alt=""/></div>
+    	<div class="span11">
+    		<h2>Cumulez des chances supplémentaires au tirage au sort en partageant le jeu! <span>et gagnez 250 points par ami parrainé</span></h2>
+    	</div>
+    </div>
+	
+	<!-- SPONSOR (parrainer) -->
+	<div id="parrainer" class="row-fluid">
+		<?php echo $this->partial('playground-game/partial/result-share', array(
+	            'game'			=> $this->game,
+	            'secretKey'		=> $this->secretKey,
+	            'socialLinkUrl' => $socialLinkUrl,
+	            'form'			=> $this->form,
+	            'statusMail'    => $statusMail,
+	            'gameType'		=> 'quiz',
+	            'userTimer'		=> $userTimer,
+	    )); ?>
+	</div>
+	<!-- END SPONSOR (parrainer) -->
+
+</div>

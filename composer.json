@@ -1,0 +1,40 @@
+{
+	"name" : "playground/game",
+	"description" : "The Game module !",
+	"type" : "library",
+	"authors" : [{
+			"name" : "Greg Besson",
+			"email" : "gregory.besson@playground.gg",
+			"homepage" : "http://www.playground.gg"
+		}
+	],
+	"keywords" : [
+		"zf2",
+		"playground",
+		"game"
+	],
+	"homepage" : "https://github.com/gregorybesson/PlaygroundGame",
+	"license" : [
+		"BSD-3-Clause"
+	],
+	"minimum-stability": "dev",
+	"require" : {
+		"zendframework/zend-stdlib" : "~2.1",
+		"php" : ">=5.3.3",
+		"zendframework/zend-mvc" : "~2.1",
+		"zendframework/zend-form" : "~2.1",
+		"zendframework/zend-loader" : "~2.1",
+		"zendframework/zend-servicemanager" : "~2.1",
+		"adfab/core" : "0.*",
+		"playground/user" : "dev-master",
+		"zendframework/zend-modulemanager" : "~2.1"
+	},
+	"require-dev" : {
+		"phpunit/phpunit" : "3.7.*"
+	},
+	"autoload" : {
+		"psr-0" : {
+			"PlaygroundGame" : "src/"
+		}
+	}
+}

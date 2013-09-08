@@ -1,0 +1,26 @@
+<?php $this->plugin('translate')->setTranslatorTextDomain('playgroundgame');// Pour le texte ?>
+			
+<div class="backgrey row-fluid rounded <?php if($this->prediction):?>prediction<?php endif; ?>">
+	<div class="span2">
+		<img src="<?php echo $this->frontendAssetPath('images/common/round-valid.png')?>" alt="Gagné" />
+	</div>
+	<div class="span10">
+		<?php if(count($this->flashMessages)>0):?>
+			<p class="already-play"><?php echo $this->flashMessages[0];?></p>
+	    <?php endif;?>
+        <p id="valid-text">
+        <?php if(! $this->prediction):?>
+            <?php if($this->userCorrectAnswers >= $this->maxCorrectAnswers && $this->game->getVictoryConditions() > 0):?>
+    			Félicitations vous avez toutes les bonnes réponses!<br/>
+    	    <?php elseif($this->game->getVictoryConditions() > 0):?>
+    	        Félicitations vous avez <?php echo $this->userCorrectAnswers;?> bonnes réponses sur <?php echo $this->maxCorrectAnswers;?>!<br/>
+    	    <?php else:?>
+    	        Merci d'avoir participé,<br/>
+    	    <?php endif;?>
+            Votre participation au tirage au sort a bien été prise en compte!
+       <?php else:?> 
+            Merci, votre participation a bien été prise en compte!
+       <?php endif;?>
+	   </p>
+	</div>
+</div>

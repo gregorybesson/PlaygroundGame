@@ -1,0 +1,43 @@
+<?php $this->plugin('translate')->setTranslatorTextDomain('playgroundgame');// Pour le texte ?>
+<div class="block-game game-play">
+	<div class="img-content">
+		<img class="rounded" src="<?php echo $this->basePath($this->game->getMainImage()); ?>" border="0"/>
+		
+		<?php if($this->game->getPartner() && $this->game->getPartner()->getLogo()):?>
+			<div class="logo-sponsor">
+				<img src="<?php echo $this->basePath($this->game->getPartner()->getLogo());?>" border="0" alt="<?php echo $this->game->getPartner()->getName();?>" />
+			</div>
+		<?php else :?>
+			<div class="logo-sponsor">		
+				<img src="<?php echo $this->frontendAssetPath('images/common/logo-game-start.png')?>" width="83" height="81" border="0" alt="logo" />
+			</div>
+		<?php endif;?>
+		
+	</div>
+	<div class="game-infos">
+        <?php if ($this->game->getStartDate() && $this->game->getEndDate()):?>
+		    <div class="<?php echo $this->game->getClassType();?>"><?php echo $this->translate($this->game->getClassType());?> : Jouez du <?php echo strftime("%d %B", $this->game->getStartDate()->format('U'));?> au <?php echo strftime("%d %B", $this->game->getEndDate()->format('U'));?> avec </div>
+		<?php elseif ($this->game->getStartDate()):?>
+		    <div class="<?php echo $this->game->getClassType();?>"><?php echo $this->translate($this->game->getClassType());?> : Jouez à partir du <?php echo strftime("%d %B", $this->game->getStartDate()->format('U'));?> avec </div>
+		<?php elseif ($this->game->getEndDate()):?>
+		    <div class="<?php echo $this->game->getClassType();?>"><?php echo $this->translate($this->game->getClassType());?> : Jouez jusqu'au <?php echo strftime("%d %B", $this->game->getEndDate()->format('U'));?> avec </div>
+		<?php else:?>
+		    <div class="<?php echo $this->game->getClassType();?>"><?php echo $this->translate($this->game->getClassType());?> : Jouez avec </div>
+		<?php endif; ?>
+		
+		<div class="logo-partner">
+			<?php if($this->game->getPartner()):?>
+				<?php if($this->game->getPartner()->getSmallLogo()) : ?>
+					<img src="<?php echo $this->basePath($this->game->getPartner()->getSmallLogo());?>" border="0" alt="<?php echo $this->game->getPartner()->getName();?>" />
+				<?php else:?>
+					<span><?php echo $this->game->getPartner()->getName();?></span>
+				<?php endif;?>
+			<?php else :?>
+				<img src="<?php echo $this->frontendAssetPath('images/common/logo-game-start.png');?>" height="33" border="0" alt="Logo" />
+			<?php endif;?>
+		</div>
+
+		<?php echo $this->partial('playground-game/partial/share.phtml', array( 'color' => 'grey', 'game'=>$this->game,'url'=>$this->url('frontend/' . $game->getClassType(), array('id' => $this->game->getIdentifier()), array('force_canonical' => true))));?>
+
+	</div>
+</div>

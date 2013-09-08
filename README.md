@@ -1,4 +1,4 @@
-PlaygroundGame
-==============
+AdfabGame
+=========
 
-Playground Game Module
+Module central de la plateforme de jeux

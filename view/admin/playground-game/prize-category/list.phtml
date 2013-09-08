@@ -1,0 +1,34 @@
+<?php $this->plugin('translate')->setTranslatorTextDomain('playgroundgame'); ?>
+
+<ul class="liste-buttons">
+	<li class="btn-admin"><a href="<?php echo $this->url('admin/playgroundgame/prize-category-add');?>"><?php echo $this->translate('Ajouter une nouvelle catégorie de gain'); ?></a></li>
+</ul>
+
+<h1>Liste des catégories de gain</h1>
+
+<table class="table">
+    <tr>
+        <th><?php echo $this->translate('Id'); ?></th>
+        <th><?php echo $this->translate('Titre'); ?></th>
+        <th><?php echo $this->translate('Picto'); ?></th>
+        <th><?php echo $this->translate('Actif'); ?></th>
+        <th></th>
+    </tr>
+    <?php foreach ($this->categories as $category): ?>
+        <?php $editLink = $this->url('admin/playgroundgame/prize-category-edit', array('prizeCategoryId' => $category->getId()));?>
+        <?php $deleteLink = $this->url('admin/playgroundgame/remove', array('prizeCategoryId' => $category->getId()));?>
+        <tr>
+            <td><?php echo $category->getId() ?></td>
+            <td><?php echo $category->getTitle() ?></td>
+            <td><?php if($category->getPicto() != ''):?><img src="<?php echo $this->basePath($category->getPicto()); ?>" width="20" /><?php endif;?></td>
+            <td><?php echo ($category->getActive())? $this->translate('Actif'):$this->translate('inactif')?></td>
+            <td><a href='<?php echo $editLink ?>'><?php echo $this->translate('Edit'); ?></a></td>
+        </tr>
+    <?php endforeach; ?>
+</table>
+
+<ul class="liste-buttons bottom">
+	<li class="btn-admin bottom"><a href="<?php echo $this->url('admin/playgroundgame/prize-category-add');?>"><?php echo $this->translate('Ajouter une nouvelle catégorie de gain'); ?></a></li>
+</ul>
+
+<?php //echo $this->paginationControl($this->partners, 'Sliding', 'playground-partnership/admin/pagination_partnerlist.phtml'); ?>

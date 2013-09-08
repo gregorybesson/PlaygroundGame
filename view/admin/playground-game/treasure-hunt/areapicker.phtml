@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>HTML5 area picker</title>
+        <meta name="description" content="HTML5 area picker" />
+        
+        <!-- CSSs -->
+        <?php echo $this->headLink()->prependStylesheet($this->basePath() . '/css/areapicker/style.min.css?v=1.0') ?>
+        
+        <?php echo $this->headScript()->prependFile($this->basePath() . '/js/areapicker/app.js')
+        							  ->prependFile($this->basePath() . '/js/areapicker/config.js')
+                                      ->prependFile($this->basePath() . '/js/areapicker/selection.js')
+                                      ->prependFile($this->basePath() . '/js/jquery.min.js')
+        							  ->prependFile($this->basePath() . '/js/lib/easyxdm/easyxdm.min.js') ?>
+                                      
+    </head>
+    <body>
+        
+        <section id="menu-wrapper">
+            <a href="#" id="prev-step" class="btn" title="Selected an area">&lt; PREV</a>
+            <a href="#" id="next-step" class="btn" title="Selected an area">NEXT &gt;</a>
+        </section>
+        
+        <section id="iframe-wrapper">
+        </section>
+        
+        <section id="popin-wrapper">
+            <header>
+                HTML5 Area Picker
+            </header>
+            <div id="popin-middle">
+                
+                <div id="tip1">
+                    <label>Cross domain file url into your domain</label>
+                    <input type="text" name="iframe-xdm" id="iframe-xdm" value="http://senseo.local/cors.html" placeholder="http://" />
+                    <label>Domain url</label>
+                    <input type="text" name="iframe-url" value="http://senseo.local/" id="iframe-url" placeholder="http://" />
+                </div>
+                
+                <div id="tip2">
+                    <div class="info">Select part of the "text" or "image"</div>
+                    <div class="dyna-content"></div>
+                    <div class="info">Result</div>
+                    <div class="result-content"></div>
+                </div>
+                
+                <div id="tip3">
+                </div>
+            </div>
+            <footer>
+                
+            </footer>
+        </section>
+        
+        <!-- SCRIPTs -->
+        <!-- script src="easyxdm/easyxdm.min.js"></script-->
+        <!-- script src="js/jquery-2.0.0.min.js"></script-->
+        <!-- script src="js/selection.js"></script-->
+        <!-- script src="js/config.js"></script-->
+        <!-- script src="js/app.js"></script-->
+    </body>
+</html>

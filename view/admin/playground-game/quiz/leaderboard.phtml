@@ -1,0 +1,48 @@
+<?php $this->plugin('translate')->setTranslatorTextDomain('playgroundgame');// Pour le texte ?>
+<?php $downloadLink = $this->url('admin/'. $this->game->getClassType() .'/download', array('gameId' => $this->game->getId()));?>
+<?php $drawLink = $this->url('admin/'. $this->game->getClassType() .'/draw', array('gameId' => $this->game->getId()));?>
+<?php
+/*$fm = $this->flashMessenger()->setNamespace('playgroundgame')->getMessages();
+if (isset($fm[0]))
+{
+    print '<span class=>' . $fm[0] . '</span>';
+}*/
+?>
+
+<h1><a href="<?php echo $this->url('admin/playgroundgame/edit-quiz', array('gameId' => $this->gameId)) ?>"><?php echo $this->game->getTitle(); ?></a></h1>
+
+<h3><?php echo $this->translate('Liste des Participants'); ?></h3>
+
+<a href='<?php echo $downloadLink ?>'>Export CSV</a>
+<?php if($this->game->getDrawAuto()): ?>
+| <a href='<?php echo $drawLink ?>'>Tirage au sort automatique</a>
+<?php endif;?>
+<table class="table">
+    <tr>
+        <th><?php echo $this->translate('Id'); ?></th>
+        <th><?php echo $this->translate('Pseudo'); ?></th>
+        <th><?php echo $this->translate('Nom'); ?></th>
+        <th><?php echo $this->translate('Prenom'); ?></th>
+        <th><?php echo $this->translate('E-mail'); ?></th>
+        <th><?php echo $this->translate('Optin partenaire'); ?></th>
+        <th><?php echo $this->translate('Eligible TAS'); ?></th>
+        <th></th>
+    </tr>
+    <?php foreach ($this->entries as $entry): ?>
+        <tr>
+            <td><?php echo $entry->getUser()->getId(); ?></td>
+            <td><?php echo $entry->getUser()->getUsername(); ?></td>
+            <td><?php echo $entry->getUser()->getLastname(); ?></td>
+            <td><?php echo $entry->getUser()->getFirstname(); ?></td>
+            <td><?php echo $entry->getUser()->getEmail(); ?></td>
+            <td><?php echo $entry->getUser()->getOptinPartner(); ?></td>
+            <td><?php echo $entry->getWinner(); ?></td>
+
+            <?php //$editLink = $this->url('admin/playgroundgame/edit', array('gameId' => $game->getId()));?>
+            <?php //$deleteLink = $this->url('admin/playgroundgame/remove', array('gameId' => $game->getId()));?>
+
+            <td></td>
+        </tr>
+    <?php endforeach; ?>
+</table>
+<?php echo (count($this->entries)>1)?$this->paginationControl($this->entries, 'Sliding', 'pagination_entrylist', array('classType' => $this->game->getClassType()  ,'gameId' => $this->gameId)):''; ?>
