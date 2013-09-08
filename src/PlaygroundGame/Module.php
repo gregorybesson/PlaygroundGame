@@ -18,13 +18,13 @@ class Module
         $serviceManager = $e->getApplication()->getServiceManager();
 
         /* Set the translator for default validation messages
-         * I've copy/paste the Validator messages from ZF2 and placed them in a correct path : AdfabCore
+         * I've copy/paste the Validator messages from ZF2 and placed them in a correct path : PlaygroundCore
          * TODO : Centraliser la trad pour les Helper et les Plugins
          */
         $translator = $serviceManager->get('translator');
         //$translator->setLocale(\Locale::acceptFromHttp($_SERVER['HTTP_ACCEPT_LANGUAGE']));
 
-        AbstractValidator::setDefaultTranslator($translator,'adfabcore');
+        AbstractValidator::setDefaultTranslator($translator,'playgroundcore');
 
         $eventManager        = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
@@ -42,7 +42,7 @@ class Module
             return;
         }
 
-        // the Facebook Container is created and updated through AdfabCore which detects a call from Facebook
+        // the Facebook Container is created and updated through PlaygroundCore which detects a call from Facebook
         $eventManager->attach("dispatch", function($e) {
         	$session = new Container('facebook');
         	if ($session->offsetExists('signed_request')){
@@ -143,7 +143,7 @@ class Module
             'aliases' => array(
                 // An alias for linking a partner service with PlaygroundGame without adherence
                 'playgroundgame_partner_service' => 'playgroundpartnership_partner_service',
-                'playgroundgame_message'         => 'adfabcore_message',
+                'playgroundgame_message'         => 'playgroundcore_message',
 
             ),
 

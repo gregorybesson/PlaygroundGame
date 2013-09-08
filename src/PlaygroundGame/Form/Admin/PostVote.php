@@ -4,7 +4,7 @@ namespace PlaygroundGame\Form\Admin;
 
 use Zend\Form\Form;
 use Zend\Form\Element;
-use AdfabCore\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
+use PlaygroundCore\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Zend\I18n\Translator\Translator;
 use Zend\ServiceManager\ServiceManager;
 
@@ -19,7 +19,7 @@ class PostVote extends Game
         // Mapping of an Entity to get value by getId()... Should be taken in charge by Doctrine Hydrator Strategy...
         // having to fix a DoctrineModule bug :( https://github.com/doctrine/DoctrineModule/issues/180
         $hydrator = new DoctrineHydrator($entityManager, 'PlaygroundGame\Entity\PostVote');
-        $hydrator->addStrategy('partner', new \AdfabCore\Stdlib\Hydrator\Strategy\ObjectStrategy());
+        $hydrator->addStrategy('partner', new \PlaygroundCore\Stdlib\Hydrator\Strategy\ObjectStrategy());
         $this->setHydrator($hydrator);
 
         parent::__construct($name, $sm, $translator);

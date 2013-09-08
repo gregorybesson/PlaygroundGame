@@ -496,7 +496,7 @@ class GameController extends AbstractActionController
     {
         $sg = $this->getGameService();
         $ga = $this->getServiceLocator()->get('google-analytics');
-        $event = new \AdfabCore\Analytics\Event($game->getClassType(), $this->params('action'));
+        $event = new \PlaygroundCore\Analytics\Event($game->getClassType(), $this->params('action'));
         $event->setLabel($game->getTitle());
         //$event->setValue(5);
 
@@ -810,7 +810,7 @@ class GameController extends AbstractActionController
     public function getOptions()
     {
         if (!$this->options) {
-            $this->setOptions($this->getServiceLocator()->get('adfabcore_module_options'));
+            $this->setOptions($this->getServiceLocator()->get('playgroundcore_module_options'));
         }
 
         return $this->options;

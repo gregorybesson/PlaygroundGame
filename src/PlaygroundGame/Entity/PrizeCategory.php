@@ -245,7 +245,7 @@ class PrizeCategory
                         'name' => 'StringTrim'
                     ),
                     array(
-                        'name' => 'AdfabCore\Filter\Slugify'
+                        'name' => 'PlaygroundCore\Filter\Slugify'
                     )
                 ),
                 'validators' => array(

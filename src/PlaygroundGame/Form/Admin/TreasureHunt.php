@@ -3,7 +3,7 @@
 namespace PlaygroundGame\Form\Admin;
 
 use Zend\Form\Form;
-use AdfabCore\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
+use PlaygroundCore\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Zend\Form\Element;
 use Zend\I18n\Translator\Translator;
 use Zend\ServiceManager\ServiceManager;
@@ -17,7 +17,7 @@ class TreasureHunt extends Game
 
         // having to fix a Doctrine-module bug :( https://github.com/doctrine/DoctrineModule/issues/180
         $hydrator = new DoctrineHydrator($entityManager, 'PlaygroundGame\Entity\TreasureHunt');
-        $hydrator->addStrategy('partner', new \AdfabCore\Stdlib\Hydrator\Strategy\ObjectStrategy());
+        $hydrator->addStrategy('partner', new \PlaygroundCore\Stdlib\Hydrator\Strategy\ObjectStrategy());
         $this->setHydrator($hydrator);
 
         parent::__construct($name, $sm, $translator);

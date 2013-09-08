@@ -8,7 +8,7 @@ return array(
    		'Jhu\ZdtLoggerModule',
     	'AsseticBundle',
     	'ZfcBase',
-   		'AdfabCore',
+   		'PlaygroundCore',
         'PlaygroundUser',
    		'PlaygroundGame',
         'PlaygroundPartnership',

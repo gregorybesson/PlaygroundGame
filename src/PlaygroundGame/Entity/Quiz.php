@@ -355,7 +355,7 @@ class Quiz extends Game implements InputFilterAwareInterface
                 'filters'  => array(
                     array('name' => 'StripTags'),
                     array('name' => 'StringTrim'),
-                    array('name' => 'AdfabCore\Filter\Slugify'),
+                    array('name' => 'PlaygroundCore\Filter\Slugify'),
                 ),
                 'validators' => array(
                     array(

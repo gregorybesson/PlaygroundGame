@@ -1294,7 +1294,7 @@ class Game implements InputFilterAwareInterface
                         'name' => 'StringTrim'
                     ),
                     array(
-                        'name' => 'AdfabCore\Filter\Slugify'
+                        'name' => 'PlaygroundCore\Filter\Slugify'
                     )
                 ),
                 'validators' => array(

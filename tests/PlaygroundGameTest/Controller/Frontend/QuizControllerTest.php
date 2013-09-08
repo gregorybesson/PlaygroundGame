@@ -354,7 +354,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
     	->method('getId')
     	->will($this->returnValue('1'));
     	
-    	$bitlyMock = $this->getMock('AdfabCore\Controller\Plugin\ShortenUrl');
+    	$bitlyMock = $this->getMock('PlaygroundCore\Controller\Plugin\ShortenUrl');
     	
     	$bitlyMock->expects($this->any())
     	->method('shortenUrl')

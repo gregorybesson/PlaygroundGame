@@ -22,7 +22,7 @@ class InstantWinOccurrence extends ProvidesEventsForm
         // (+ add'Collection'() and remove'Collection'() and "cascade" in corresponding Entity
         // https://github.com/doctrine/DoctrineModule/blob/master/docs/hydrator.md
         /*$hydrator = new DoctrineHydrator($entityManager, 'PlaygroundGame\Entity\InstantWinOccurrence');
-        $hydrator->addStrategy('prize', new \AdfabCore\Stdlib\Hydrator\Strategy\ObjectStrategy());
+        $hydrator->addStrategy('prize', new \PlaygroundCore\Stdlib\Hydrator\Strategy\ObjectStrategy());
         $this->setHydrator($hydrator);*/
 
         $this->setAttribute('method', 'post');

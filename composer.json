@@ -25,7 +25,7 @@
 		"zendframework/zend-form" : "~2.1",
 		"zendframework/zend-loader" : "~2.1",
 		"zendframework/zend-servicemanager" : "~2.1",
-		"adfab/core" : "0.*",
+		"playground/core" : "dev-master",
 		"playground/user" : "dev-master",
 		"zendframework/zend-modulemanager" : "~2.1"
 	},

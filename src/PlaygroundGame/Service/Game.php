@@ -17,7 +17,7 @@ use Zend\File\Transfer\Adapter\Http;
 use Zend\Validator\File\Size;
 use Zend\Validator\File\IsImage;
 use Zend\Stdlib\ErrorHandler;
-use AdfabCore\Filter\Sanitize;
+use PlaygroundCore\Filter\Sanitize;
 
 class Game extends EventProvider implements ServiceManagerAwareInterface
 {
@@ -782,7 +782,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         return false;
     }
 
-    //TODO : Terminer et Refactorer afin de le mettre dans AdfabCore
+    //TODO : Terminer et Refactorer afin de le mettre dans PlaygroundCore
     public static function cronMail()
     {
         //TODO : factoriser la config

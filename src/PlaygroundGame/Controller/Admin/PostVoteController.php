@@ -28,7 +28,7 @@ class PostVoteController extends AbstractActionController
         $form = $service->getPostVoteFormMapper()->findByGame($game);
 
         // I use the wonderful Form Generator to create the Post & Vote form
-        $formgen = $this->forward()->dispatch('AdfabCore\Controller\Formgen', array('action' => 'create'));
+        $formgen = $this->forward()->dispatch('PlaygroundCore\Controller\Formgen', array('action' => 'create'));
 
         if ($this->getRequest()->isPost()) {
             $data = $this->getRequest()->getPost()->toArray();

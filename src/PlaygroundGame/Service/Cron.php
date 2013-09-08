@@ -35,7 +35,7 @@ class Cron extends EventProvider implements ServiceManagerAwareInterface
      */
     protected $options;
 
-    //TODO : Terminer et Refactorer afin de le mettre dans AdfabCore
+    //TODO : Terminer et Refactorer afin de le mettre dans PlaygroundCore
     public static function cronMail()
     {
         //TODO : factoriser la config
