@@ -154,6 +154,14 @@ class Game extends ProvidesEventsForm
                 'label' => 'Publier ce jeu sur la Plateforme',
             ),
         ));
+        
+        $this->add(array(
+        	'type' => 'Zend\Form\Element\Checkbox',
+        	'name' => 'broadcastEmbed',
+       		'options' => array(
+       			'label' => 'Publier ce jeu en mode Embed',
+       		),
+        ));
 
         $this->add(array(
                 'type' => 'Zend\Form\Element\Checkbox',

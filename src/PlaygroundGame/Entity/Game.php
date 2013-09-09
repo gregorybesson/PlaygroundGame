@@ -78,6 +78,11 @@ class Game implements InputFilterAwareInterface
      * @ORM\Column(name="broadcast_platform",type="boolean", nullable=true)
      */
     protected $broadcastPlatform = 0;
+    
+    /**
+     * @ORM\Column(name="broadcast_embed",type="boolean", nullable=true)
+     */
+    protected $broadcastEmbed = 0;
 
     /**
      * @ORM\Column(name="push_home",type="boolean", nullable=true)
@@ -459,6 +464,20 @@ class Game implements InputFilterAwareInterface
     }
 
     /**
+	 * @return the $broadcastEmbed
+	 */
+	public function getBroadcastEmbed() {
+		return $this->broadcastEmbed;
+	}
+
+	/**
+	 * @param number $broadcastEmbed
+	 */
+	public function setBroadcastEmbed($broadcastEmbed) {
+		$this->broadcastEmbed = $broadcastEmbed;
+	}
+
+	/**
      *
      * @return the $pushHome
      */
