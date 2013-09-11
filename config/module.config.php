@@ -203,9 +203,9 @@ return array(
 		        				'controller' => 'playgroundgame_easyxdm',
 		        				'action'     => 'index',
 		        			),
-		   				),     				
+		   				),
 		        	),
-		        		
+
 		        	'easyxdmname' => array(
 		       			'type' => 'Zend\Mvc\Router\Http\Segment',
 		   				'options' => array(
@@ -216,7 +216,7 @@ return array(
 		 					),
 		        		),
 		        	),
-       				
+
      				/*'game' => array(
        					'type' => 'Zend\Mvc\Router\Http\Regex',
        					'options' => array(
@@ -228,7 +228,7 @@ return array(
        						'spec' => 'game/%controller%_%id%_%channel%_%action%.html',
        					),
        				),*/
-		
+
 		            'quiz' => array(
 		                'type' => 'Segment',
 		                'options' => array(
@@ -347,7 +347,7 @@ return array(
 		                    ),
 		                ),
 		            ),
-		
+
 		            'lottery' => array(
 		                'type' => 'Segment',
 		                'options' => array(
@@ -464,7 +464,7 @@ return array(
 		                    ),
 		                ),
 		            ),
-		
+
 		            'instantwin' => array(
 		                'type' => 'Segment',
 		                'options' => array(
@@ -581,7 +581,7 @@ return array(
 		                	),
 		                ),
 		            ),
-		
+
 		            'postvote' => array(
 		                'type' => 'Segment',
 		                'options' => array(
@@ -931,6 +931,76 @@ return array(
 		                    ),
 		                ),
 		            ),
+       					'photocontestconsultation' => array(
+       							'type' => 'Literal',
+       							'options' => array(
+       									'route' => '/photo-contest-consultation',
+       									'defaults' => array(
+       											'controller' => 'adfabgame',
+       											'action'     => 'photocontestconsultation'
+       									),
+       							),
+       					),
+       					'photocontestcreate' => array(
+       							'type' => 'Literal',
+       							'options' => array(
+       									'route' => '/photo-contest-create',
+       									'defaults' => array(
+       											'controller' => 'adfabgame',
+       											'action'     => 'photocontestcreate'
+       									),
+       							),
+       					),
+       					'photocontestoverview' => array(
+       							'type' => 'Literal',
+       							'options' => array(
+       									'route' => '/photo-contest-overview',
+       									'defaults' => array(
+       											'controller' => 'adfabgame',
+       											'action'     => 'photocontestoverview'
+       									),
+       							),
+       					),
+       					'photokitchenconsultation' => array(
+       							'type' => 'Literal',
+       							'options' => array(
+       									'route' => '/photo-kitchen-consultation',
+       									'defaults' => array(
+       											'controller' => 'adfabgame',
+       											'action'     => 'photokitchenconsultation'
+       									),
+       							),
+       					),
+       					'photokitchenparticipate' => array(
+       							'type' => 'Literal',
+       							'options' => array(
+       									'route' => '/photo-kitchen-participate',
+       									'defaults' => array(
+       											'controller' => 'adfabgame',
+       											'action'     => 'photokitchenparticipate'
+       									),
+       							),
+       					),
+       					'postvoteconsultation' => array(
+       							'type' => 'Literal',
+       							'options' => array(
+       									'route' => '/post-vote-consultation',
+       									'defaults' => array(
+       											'controller' => 'adfabgame',
+       											'action'     => 'postvoteconsultation'
+       									),
+       							),
+       					),
+       					'postvotenotlogged' => array(
+       							'type' => 'Literal',
+       							'options' => array(
+       									'route' => '/post-vote-not-logged',
+       									'defaults' => array(
+       											'controller' => 'adfabgame',
+       											'action'     => 'postvotenotlogged'
+       									),
+       							),
+       					),
        			),
         	),
 
@@ -1460,7 +1530,7 @@ return array(
                                     ),
                                 ),
                             ),
-                        		
+
                         	'create-treasurehunt' => array(
                        			'type' => 'Segment',
                    				'options' => array(
@@ -1778,7 +1848,7 @@ return array(
                         'route'     => 'admin/playgroundgame/postvote-form',
                         'privilege' => 'list',
                     ),
-                		
+
                 	'create-treasurehunt' => array(
                			'label'     => 'Créer une chasse au trésor',
            				'route'     => 'admin/playgroundgame/create-treasurehunt',
