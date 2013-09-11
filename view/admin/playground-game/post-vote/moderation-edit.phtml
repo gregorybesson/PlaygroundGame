@@ -8,7 +8,7 @@
 <p><?php echo $this->game->getForm()->getDescription(); ?></p>
 <div class="span12 message">
    <div class="row-fluid">
-       <?php echo $this->partial('playground-game/frontend/postvote/templates/' . $this->game->getTemplate(), array('data'=>$data));?>
+       <?php echo $this->partial('playground-game/frontend/post-vote/templates/' . $this->game->getTemplate(), array('data'=>$data));?>
    </div>
    <div>
         <a href='<?php echo $rejection ?>'><?php echo $this->translate('Reject'); ?></a>

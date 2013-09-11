@@ -53,7 +53,7 @@
        <div class="span11 message rounded">
            <div class="row-fluid posts">
 				<div class="span12 postvote-preview">
-               		<?php echo $this->partial('playground-game/postvote/templates/' . $this->game->getTemplate(), array('data'=>$data, 'post'=>$this->post));?>
+               		<?php echo $this->partial('playground-game/post-vote/templates/' . $this->game->getTemplate(), array('data'=>$data, 'post'=>$this->post));?>
 					<?php //echo $this->partial('playground-game/partial/name.phtml', array('post' => $this->post->getUser(), 'game' => $this->game));?>
 					
 					<div class="row-fluid">

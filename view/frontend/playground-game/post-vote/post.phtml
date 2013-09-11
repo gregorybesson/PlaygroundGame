@@ -55,7 +55,7 @@
             	<?php if(count($this->flashMessages)>0):?>
 					<p class="already-play"><?php echo $this->flashMessages[0];?></p>
 			    <?php endif;?>
-           		<?php echo $this->partial('playground-game/postvote/templates/' . $this->game->getTemplate(), array('data'=>$data, 'post' => $post->getId()));?>
+           		<?php echo $this->partial('playground-game/post-vote/templates/' . $this->game->getTemplate(), array('data'=>$data, 'post' => $post->getId()));?>
 				<?php echo $this->partial('playground-game/partial/name.phtml', array('post' => $post->getUser(), 'game' => $game, 'urlPost' => $this->url('postvote/post', array('id' => $this->game->getIdentifier(),  'post' => $post->getId()), array('force_canonical' => true)), 'postTitle' => $data[1]));?>
        		</div>
        		<?php if($game->isStarted()):?>

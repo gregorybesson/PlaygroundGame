@@ -96,7 +96,7 @@
 								<p><?php if(isset($post['data'][7])): echo substr(nl2br($post['data'][7]), 0, 200); endif;?>...</p>
 							</div>
 							
-							<?php //echo $this->partial('playground-game/postvote/templates/' . $this->game->getTemplate(), array('data'=> $post['data'])) ?>
+							<?php //echo $this->partial('playground-game/post-vote/templates/' . $this->game->getTemplate(), array('data'=> $post['data'])) ?>
 							
 						<?php elseif($this->game->getTemplate() == 'recipe'): ?>
 							
