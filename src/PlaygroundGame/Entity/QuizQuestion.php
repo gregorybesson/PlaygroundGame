@@ -549,7 +549,8 @@ class QuizQuestion implements InputFilterAwareInterface
 
             $inputFilter->add($factory->createInput(array(
                 'name'       => 'id',
-                'required'   => true,
+                'required'   => false,
+            	'allowEmpty' => true,
                 'filters'    => array(
                     array('name' => 'Int'),
                 ),
