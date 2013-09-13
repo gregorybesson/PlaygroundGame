@@ -284,7 +284,7 @@ class QuizController extends AbstractActionController
         $entries = $this->getAdminGameService()->getEntryMapper()->findBy(array('game' => $game));
 
         $content        = "\xEF\xBB\xBF"; // UTF-8 BOM
-        $content       .= "ID;Pseudo;Civilité;Nom;Prénom;E-mail;Optin Metro;Optin partenaire;Eligible TAS ?" . $label . ";Date - H;Adresse;CP;Ville;Téléphone;Mobile;Date d'inscription;Date de naissance;\n";
+        $content       .= "ID;Pseudo;Civilité;Nom;Prénom;E-mail;Optin Newsletter;Optin partenaire;Eligible TAS ?" . $label . ";Date - H;Adresse;CP;Ville;Téléphone;Mobile;Date d'inscription;Date de naissance;\n";
         foreach ($entries as $e) {
 
             $replies   = $sg->getQuizReplyMapper()->getLastGameReply($e);

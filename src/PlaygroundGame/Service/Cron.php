@@ -85,7 +85,7 @@ class Cron extends EventProvider implements ServiceManagerAwareInterface
         $options = $sm->get('playgroundgame_module_options');
 
         $from    = "admin@playground.fr";//$options->getEmailFromAddress();
-        $subject = "Votre jeu Instant gagnant ClubMetro"; //$options->getResetEmailSubjectLine();
+        $subject = "Votre jeu Instant gagnant"; //$options->getResetEmailSubjectLine();
 
         // Je recherche les jeux instantwin en cours
         $games = $gameService->getActiveGames(false, 'instantwin');
