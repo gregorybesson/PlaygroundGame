@@ -74,6 +74,9 @@ return array(
         			'facebook' => array(
         				'default_layout' => 'playground-game/layout/1column-facebook',
         			),
+       				'embed' => array(
+       					'default_layout' => 'playground-game/layout/1column-facebook',
+       				),
         		),
             'controllers' => array(
             	'playgroundgameadmin' => array(
