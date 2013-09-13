@@ -292,18 +292,18 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
         $form->setData($data);
 
         $instantwin = $this->getGameMapper()->findById($data['instant_win_id']);
-        $prize = $this->getPrizeMapper()->findById($data['prize_id']);
+        $prize = null;
+        if(isset($data['prize_id'])){
+        	$prize = $this->getPrizeMapper()->findById($data['prize_id']);
+        }
 
         if (!$form->isValid()) {
             return false;
         }
 
         $occurrence->setInstantWin($instantwin);
-        if($prize){
-            $occurrence->setPrize($prize);
-        } else {
-            $occurrence->setPrize(null);
-        }
+        $occurrence->setPrize($prize);
+
         $this->getInstantWinOccurrenceMapper()->insert($occurrence);
 
         return $occurrence;
@@ -322,17 +322,16 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
         $form->bind($occurrence);
         $form->setData($data);
 
-        $prize = $this->getPrizeMapper()->findById($data['prize']);
+        $prize = null;
+        if(isset($data['prize'])){
+        	$prize = $this->getPrizeMapper()->findById($data['prize']);
+        }
 
         if (!$form->isValid()) {
             return false;
         }
 
-        if($prize){
-            $occurrence->setPrize($prize);
-        } else {
-            $occurrence->setPrize(null);
-        }
+        $occurrence->setPrize($prize);
 
         $this->getInstantWinOccurrenceMapper()->update($occurrence);
 
