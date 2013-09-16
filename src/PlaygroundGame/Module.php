@@ -46,7 +46,7 @@ class Module
         $eventManager->attach("dispatch", function($e) {
         	$session = new Container('facebook');
         	if ($session->offsetExists('signed_request')){
-        		$viewModel = $e->getViewModel()->setTemplate('application/layout/facebook');
+        		$viewModel = $e->getViewModel()->setTemplate('layout/facebook');
         		$viewModel->facebooktemplate = true;
         	}
         });
