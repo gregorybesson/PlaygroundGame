@@ -68,7 +68,7 @@ class Prize extends EventProvider implements ServiceManagerAwareInterface
      */
     public function edit(array $data, $prize, $formClass)
     {
-
+        $entityManager = $this->getServiceManager()->get('zfcuser_doctrine_em');
         $form  = $this->getServiceManager()->get($formClass);
         $form->bind($prize);
         
@@ -79,7 +79,7 @@ class Prize extends EventProvider implements ServiceManagerAwareInterface
             'messages'          => array('objectFound' => 'This url already exists !')
         ));
         
-        if($game->getIdentifier() != $data['identifier']){
+        if($prize->getIdentifier() != $data['identifier']){
             $identifierInput->getValidatorChain()->addValidator($noObjectExistsValidator);
         }
 
