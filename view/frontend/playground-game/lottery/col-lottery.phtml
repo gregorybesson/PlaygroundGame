@@ -1,0 +1,64 @@
+<?php $this->plugin('translate')->setTranslatorTextDomain('playgroundgame');// Pour le texte ?>
+
+<div class="span4 mobile sidebar game-sidebar">
+	<div class="row-fluid">
+
+		<!-- COLUMNBLOCK1 (if not null) -->
+		<?php if($this->game->getColumnBlock1() != ''):?>
+			<div class="sd-block block-custom">
+				<?php echo $this->game->getColumnBlock1();?>
+			</div>
+		<?php endif; ?>
+		<!-- END COLUMNBLOCK1 -->
+
+		<!-- ADSERVING SIDEBAR -->
+
+		<?php //echo $this->partial('application/index/partial/col-adserving.phtml', array('cat2' => 'game', 'cat3' => '&EASTgameid='.$this->game->getId())); ?>
+		<!-- END ADSERVING SIDEBAR -->
+
+		<!-- COLUMNBLOCK2 (if not null) -->
+		<?php if($this->game->getColumnBlock2() != ''):?>
+		<div class="sd-block block-custom">
+			<?php echo $this->game->getColumnBlock2();?>
+		</div>
+		<?php endif;?>
+		<!-- END COLUMNBLOCK2 -->
+
+		<?php //if(($this->playgroundDynablock('game'.$this->game->getId())) != ''):?>
+	    	<?php //foreach($this->playgroundDynablock('game'.$this->game->getId()) as $block): ?>
+	    		<!-- div class="sd-block ad"><?php //echo $block ?></div-->
+	    	<?php //endforeach; ?>
+    	<?php //endif; ?>
+
+
+		<div id="sidebar-game" class="sd-block">
+			<p class="green"><?php echo $this->translate('Comment participer ?'); ?></p>
+			<div id="reply" class="row-fluid">
+				<div class="span2">
+					<img src="<?php echo $this->basePath('images/common/btn-reply.png') ?>" alt="" />
+				</div>
+				<div class="span10">
+					<p>Cliquez sur participer</p>
+				</div>
+			</div>
+			<div id="ecusson" class="row-fluid">
+				<div class="span2">
+					<img src="<?php echo $this->basePath('images/common/btn-ecusson.png') ?>" alt="" />
+				</div>
+				<div class="span10">
+					<p>Votre participation au tirage au sort sera prise en compte !<br/>
+					Vous pourrez cumuler plus de chances en invitant vos amis à jouer</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- COLUMNBLOCK3 (if not null) -->
+		<?php if($this->game->getColumnBlock3() != ''):?>
+			<div class="sd-block block-custom">
+				<?php echo $this->game->getColumnBlock3();?>
+			</div>
+		<?php endif;?>
+		<!-- END COLUMNBLOCK3 -->
+
+	</div>
+</div>

@@ -1,0 +1,49 @@
+<?php $this->doctype(Zend\View\Helper\Doctype::XHTML5);?>
+<?php echo $this->doctype(); ?>
+<?php $this->plugin('translate')->setTranslatorTextDomain('default');// Pour le texte ?>
+<?php
+$children = $this->viewModel()
+    ->getCurrent()
+    ->getChildren();
+
+$ourView  = $children[0];
+?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:og="http://opengraphprotocol.org/schema/" lang="fr">
+    <head>
+        <?php echo $this->partial('playground-game/partial/meta.phtml', array('headParams' => $this->headParams, 'channel' => $this->channel)) ?>
+        <?php echo $this->head();?>
+    </head>
+    <body>
+    	<div id="container">
+        	<div id="fb-root"></div>
+			<div id="content" class="row-fluid">
+
+	            <!-- CONTENT PAGE -->
+	            <div id="containerpage">
+	            	<?php if (isset($ourView->flashMessages) && count($ourView->flashMessages)) : ?>
+	                    <ul class="flashMessages">
+	                        <?php foreach ($ourView->flashMessages as $fMessage) : ?>
+	                        <li><?php echo $this->translate($fMessage); ?></li>
+	                        <?php endforeach; ?>
+	                    </ul>
+	                <?php endif; ?>
+
+	                <div class="row-fluid">
+	                	<!-- CONTENT-INNER -->
+	                	<div class="content-inner span8 one-column-game">
+	                		<?php echo $this->content; ?>
+	                	</div><!-- END CONTENT-INNER -->
+
+	                </div>
+
+	            </div><!-- END CONTENT PAGE -->
+            </div> <!-- END CONTENT -->
+        </div>
+        <?php echo $this->inlineScript() ?>
+    </body>
+</html>
+
+<!-- iframe src="http://playground.local/embed/quiz/quiz-grg" width="320" height="210" frameborder="0" border="0" style="border:0;">
+		<p>Play the game !</p>
+</iframe-->
