@@ -1,5 +1,5 @@
 <?php echo $this->doctype(); ?>
-<?php 
+<?php
 $children = $this->viewModel()
     ->getCurrent()
     ->getChildren();
@@ -8,7 +8,7 @@ $ourView  = $children[0];
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
     <head>
-        <?php echo $this->head();?>
+        <?php //echo $this->head();?>
     </head>
     <body>
 		<div id="container">
@@ -33,7 +33,7 @@ $ourView  = $children[0];
                 		<?php echo $this->column_right; ?>
                 	</div>
                 </div>
-                <?php echo $this->footer(array('channel' => $this->channel));?>
+                <?php //echo $this->footer(array('channel' => $this->channel));?>
             </div>
         </div>
         <?php echo $this->inlineScript() ?>
