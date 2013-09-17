@@ -56,96 +56,63 @@ return array(
 		),
 	),
     'core_layout' => array(
-        'PlaygroundGame' => array(
-            'default_layout' => 'playground-game/layout/2columns-right',
-            'children_views' => array(),
-            // Models can be described in this section for being able to use it in the back-office
-            'models' => array(
-                'one_column' => array(
-                    'layout' => 'playground-game/layout/1column-custom',
-                    'description' => 'layout à 1 seule colonne'
-                ),
-                /*'two_columns_right' => array(
-                    'layout' => 'playground-game/layout/2columns-right-custom',
-                    'description' => 'layout à 2 colonnes à droite'
-                ),*/
-            ),
-       		'channel' => array(
-        			'facebook' => array(
-        				'default_layout' => 'playground-game/layout/1column-facebook',
-        			),
-       				'embed' => array(
-       					'default_layout' => 'playground-game/layout/1column-embed',
-       				),
-        		),
-            'controllers' => array(
-            	'playgroundgameadmin' => array(
-            		'default_layout' => 'layout/admin',
-            	),
-            	'playgroundgame_admin_lottery' => array(
-           			'default_layout' => 'layout/admin',
-           		),
-           		'playgroundgame_admin_postvote' => array(
-           			'default_layout' => 'layout/admin',
-           		),
-           		'playgroundgame_admin_quiz' => array(
-           			'default_layout' => 'layout/admin',
-           		),
-           		'playgroundgame_admin_instantwin' => array(
-           			'default_layout' => 'layout/admin',
-           		),
-           		'playgroundgame_admin_treasurehunt' => array(
-       				'default_layout' => 'layout/admin',
-           		),
-            	'playgroundgame_admin_prizecategory' => array(
-           			'default_layout' => 'layout/admin',
-           		),
-                'playgroundgame_lottery'   => array(
-                    'children_views' => array(
-                        'col_right'  => 'playground-game/layout/col-lottery.phtml',
-                    ),
-                ),
-                'playgroundgame_quiz'   => array(
-                    'children_views' => array(
-                        'col_right'  => 'playground-game/layout/col-quiz.phtml',
-                    ),
-                ),
-                'playgroundgame_instantwin'   => array(
-                    'children_views' => array(
-                        'col_right'  => 'playground-game/layout/col-instantwin.phtml',
-                    ),
-                ),
-                'playgroundgame_postvote'   => array(
-                    'children_views' => array(
-                        'col_right'  => 'playground-game/layout/col-postvote.phtml',
-                    ),
-                ),
-            	'playgroundgame_treasurehunt'   => array(
-            		'children_views' => array(
-           				'col_right'  => 'playground-game/layout/col-lottery.phtml',
-           			),
-           		),
-                'playgroundgame_prizecategory'   => array(
-                    'default_layout' => 'layout/2columns-right',
-                    'actions' => array(
-                        'index' => array(
-                            'default_layout' => 'layout/2columns-right',
-                            'children_views' => array(
-                                'col_right'  => 'application/common/column_right.phtml',
-                            ),
+        'frontend' => array(
+            'modules' => array(
+                'playgroundgame' => array(
+                	'layout' => 'layout/game-2columns-right.phtml',
+                    'channel' => array(
+                        'facebook' => array(
+                            'layout' => 'layout/1column-facebook.phtml'
                         ),
+                        'embed' => array(
+                            'layout' => 'layout/1column-embed.phtml'
+                        )
                     ),
-                ),
-                'playgroundgame'   => array(
-                    'default_layout' => 'playground-game/layout/1column-custom.phtml',
-                    'children_views' => array(
-                        'col_right'  => 'playground-game/layout/col-quiz.phtml',
-                    ),
-                    'actions' => array(
-                        'index' => array(
-                            'default_layout' => 'playground-game/layout/2columns-right',
+                    'controllers' => array(
+                        'playgroundgame_lottery' => array(
                             'children_views' => array(
-                                'col_right'  => 'playground-game/layout/col-quiz.phtml',
+                                'col_right' => 'playground-game/lottery/col-lottery.phtml'
+                            )
+                        ),
+                        'playgroundgame_quiz' => array(
+                            //'layout' => 'layout/game-2columns-right.phtml',
+                            'children_views' => array(
+                                'col_right' => 'playground-game/quiz/col-quiz.phtml'
+                            )
+                        ),
+                        'playgroundgame_instantwin' => array(
+                            'children_views' => array(
+                                'col_right' => 'playground-game/instant-win/col-instantwin.phtml'
+                            )
+                        ),
+                        'playgroundgame_postvote' => array(
+                            'children_views' => array(
+                                'col_right' => 'playground-game/post-vote/col-postvote.phtml'
+                            )
+                        ),
+                        'playgroundgame_treasurehunt' => array(
+                            'children_views' => array(
+                                'col_right' => 'playground-game/lottery/col-lottery.phtml'
+                            )
+                        ),
+                        'playgroundgame_prizecategory' => array(
+                            'actions' => array(
+                                'index' => array(
+                                    'children_views' => array(
+                                        'col_right' => 'application/common/column_right.phtml'
+                                    )
+                                )
+                            )
+                        ),
+                        'playgroundgame' => array(
+                            'layout' => 'layout/1column-custom.phtml',
+                            'children_views' => array(
+                                'col_right' => 'playground-game/quiz/col-quiz.phtml.phtml'
+                            ),
+                            'actions' => array(
+                                'index' => array(
+                                    'layout' => 'layout/game-2columns-right.phtml'
+                                ),
                             ),
                         ),
                     ),
