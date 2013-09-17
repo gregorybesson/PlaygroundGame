@@ -299,6 +299,32 @@ class Prize {
             $inputFilter = new InputFilter();
             $factory = new InputFactory();
 
+            $inputFilter->add($factory->createInput(array(
+                'name' => 'identifier',
+                'required' => true,
+                'filters' => array(
+                    array(
+                        'name' => 'StripTags'
+                    ),
+                    array(
+                        'name' => 'StringTrim'
+                    ),
+                    array(
+                        'name' => 'PlaygroundCore\Filter\Slugify'
+                    )
+                ),
+                'validators' => array(
+                    array(
+                        'name' => 'StringLength',
+                        'options' => array(
+                            'encoding' => 'UTF-8',
+                            'min' => 3,
+                            'max' => 255
+                        )
+                    )
+                )
+            )));
+            
             $this->inputFilter = $inputFilter;
         }
 

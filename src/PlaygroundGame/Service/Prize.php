@@ -43,6 +43,11 @@ class Prize extends EventProvider implements ServiceManagerAwareInterface
         $form  = $this->getServiceManager()->get($formClass);
         $form->bind($prize);
 
+        // If the identifier has not been set, I use the title to create one.
+        if (empty($data['identifier']) && !empty($data['title'])) {
+            $data['identifier'] = $data['title'];
+        }
+        
         $form->setData($data);
 
         if (!$form->isValid()) {
@@ -66,6 +71,17 @@ class Prize extends EventProvider implements ServiceManagerAwareInterface
 
         $form  = $this->getServiceManager()->get($formClass);
         $form->bind($prize);
+        
+        $identifierInput = $form->getInputFilter()->get('identifier');
+        $noObjectExistsValidator = new NoObjectExistsValidator(array(
+            'object_repository' => $entityManager->getRepository('PlaygroundGame\Entity\Prize'),
+            'fields'            => 'identifier',
+            'messages'          => array('objectFound' => 'This url already exists !')
+        ));
+        
+        if($game->getIdentifier() != $data['identifier']){
+            $identifierInput->getValidatorChain()->addValidator($noObjectExistsValidator);
+        }
 
         $form->setData($data);
 
