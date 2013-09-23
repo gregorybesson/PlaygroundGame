@@ -1990,6 +1990,111 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
     	$this->assertMatchedRouteName('frontend/quiz/terms');
     }
     
+    public function testConditionsActionNonExistentGame()
+    {
+        $serviceManager = $this->getApplicationServiceLocator();
+        $serviceManager->setAllowOverride(true);
+    
+        $pluginManager    = $this->getApplicationServiceLocator()->get('ControllerPluginManager');
+    
+        $game = new GameEntity();
+    
+        $f = $this->getMockBuilder('PlaygroundGame\Service\Game')
+        ->setMethods(array('checkGame', 'checkIsFan', 'checkExistingEntry', 'getServiceManager'))
+        ->disableOriginalConstructor()
+        ->getMock();
+    
+        $serviceManager->setService('playgroundgame_quiz_service', $f);
+    
+        // I check that the array in findOneBy contains the parameter 'active' = 1
+        $f->expects($this->once())
+        ->method('checkGame')
+        ->will($this->returnValue(false));
+    
+        $ZfcUserMock = $this->getMock('PlaygroundUser\Entity\User');
+    
+        $ZfcUserMock->expects($this->any())
+        ->method('getId')
+        ->will($this->returnValue('1'));
+    
+        $authMock = $this->getMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+    
+        $authMock->expects($this->any())
+        ->method('hasIdentity')
+        -> will($this->returnValue(true));
+    
+        $authMock->expects($this->any())
+        ->method('getIdentity')
+        ->will($this->returnValue($ZfcUserMock));
+    
+        $pluginManager->setService('zfcUserAuthentication', $authMock);
+    
+        $this->dispatch('/quiz/gameid/mentions-legales');
+    
+        $this->assertModuleName('playgroundgame');
+        $this->assertControllerName('playgroundgame_quiz');
+        $this->assertControllerClass('QuizController');
+        $this->assertActionName('not-found');
+        $this->assertMatchedRouteName('frontend/quiz/conditions');
+        $this->assertResponseStatusCode(404);
+    }
+
+    public function testConditionsActionRender()
+    {
+        $serviceManager = $this->getApplicationServiceLocator();
+        $serviceManager->setAllowOverride(true);
+    
+        $pluginManager    = $this->getApplicationServiceLocator()->get('ControllerPluginManager');
+    
+        $game = new GameEntity();
+        $game->setBroadcastPlatform(true);
+        $game->setActive(true);
+        $game->setIdentifier('gameid');
+        $game->setClassType('quiz');
+        $game->setStylesheet('skin');
+        $game->setConditionsBlock('<h2 id="subtitle-test">Ut placerat lorem sed quam luctus, in egestas diam pretium.</h2><p>Pellentesque pellentesque eros sit amet mi egestas malesuada. Nunc pellentesque libero in felis tristique molestie. Aliquam dolor libero, consectetur at neque quis, egestas tempor nulla. Pellentesque massa ante, imperdiet vulputate mauris id, dignissim dapibus urna.</p>');
+        $game->setTitle('title');
+         
+        $f = $this->getMockBuilder('PlaygroundGame\Service\Game')
+        ->setMethods(array('checkGame', 'checkIsFan', 'checkExistingEntry', 'getServiceManager'))
+        ->disableOriginalConstructor()
+        ->getMock();
+    
+        $serviceManager->setService('playgroundgame_quiz_service', $f);
+    
+        // I check that the array in findOneBy contains the parameter 'active' = 1
+        $f->expects($this->once())
+        ->method('checkGame')
+        ->will($this->returnValue($game));
+        
+        $ZfcUserMock = $this->getMock('PlaygroundUser\Entity\User');
+    
+        $ZfcUserMock->expects($this->any())
+        ->method('getId')
+        ->will($this->returnValue('1'));
+    
+        $authMock = $this->getMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+    
+        $authMock->expects($this->any())
+        ->method('hasIdentity')
+        -> will($this->returnValue(true));
+    
+        $authMock->expects($this->any())
+        ->method('getIdentity')
+        ->will($this->returnValue($ZfcUserMock));
+    
+        $pluginManager->setService('zfcUserAuthentication', $authMock);
+        
+        $this->dispatch('/quiz/gameid/mentions-legales');
+    
+        $this->assertModuleName('playgroundgame');
+        $this->assertControllerName('playgroundgame_quiz');
+        $this->assertControllerClass('QuizController');
+        $this->assertActionName('conditions');
+        $this->assertMatchedRouteName('frontend/quiz/conditions');
+        $this->assertQuery('#subtitle-test');
+    }
+    
     public function testFangateAction()
     {
 

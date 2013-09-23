@@ -176,7 +176,12 @@ class Game implements InputFilterAwareInterface
      * @ORM\Column(name="terms_optin", type="boolean", nullable=true)
      */
     protected $termsOptin = 0;
-
+    
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $conditionsBlock;
+    
     // TODO : Adherence CMS de ces blocs à revoir
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -776,6 +781,24 @@ class Game implements InputFilterAwareInterface
     {
     	$this->termsOptin = $termsOptin;
     }
+    
+    /**
+     *
+     * @return the $conditionsBlock
+     */
+    public function getConditionsBlock ()
+    {
+        return $this->conditionsBlock;
+    }
+
+    /**
+     *
+     * @param text $conditionsBlock
+     */
+    public function setConditionsBlock ($conditionsBlock)
+    {
+        $this->conditionsBlock = $conditionsBlock;
+    }
 
     /**
      *
@@ -1178,6 +1201,7 @@ class Game implements InputFilterAwareInterface
         $this->identifier       = (isset($data['identifier'])) ? $data['identifier'] : null;
         $this->welcomeBlock    = (isset($data['welcomeBlock'])) ? $data['welcomeBlock'] : null;
         $this->termsBlock       = (isset($data['termsBlock'])) ? $data['termsBlock'] : null;
+        $this->conditionsBlock  = (isset($data['conditionsBlock'])) ? $data['conditionsBlock'] : null;
         $this->columnBlock1     = (isset($data['columnBlock1'])) ? $data['columnBlock1'] : null;
         $this->columnBlock2     = (isset($data['columnBlock2'])) ? $data['columnBlock2'] : null;
         $this->columnBlock3     = (isset($data['columnBlock3'])) ? $data['columnBlock3'] : null;

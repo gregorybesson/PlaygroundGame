@@ -420,6 +420,19 @@ class Game extends ProvidesEventsForm
         				'label' => $translator->translate('Le joueur doit accepter le règlement pour jouer', 'playgroundgame'),
         		),
         ));
+        
+        $this->add(array(
+                'type' => 'Zend\Form\Element\Textarea',
+                'name' => 'conditionsBlock',
+                'options' => array(
+                        'label' => $translator->translate('Mentions légales', 'playgroundgame')
+                ),
+                'attributes' => array(
+                        'cols' => '10',
+                        'rows' => '10',
+                        'id' => 'conditionsBlock'
+                )
+        ));
 
         $this->add(array(
                 'type' => 'Zend\Form\Element\Textarea',

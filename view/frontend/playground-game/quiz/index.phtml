@@ -16,6 +16,7 @@
 		</div>
 		<?php endif;?>
 	</div>
+    <p id="conditions"><a href="<?php echo $this->url('frontend/quiz/conditions', array('id' => $this->game->getIdentifier()))?>" target="_blank"><?php echo $this->translate('Mentions légales'); ?></a></p>
 	<p id="reglement"><a href="<?php echo $this->url('frontend/quiz/terms', array('id' => $this->game->getIdentifier()))?>" target="_blank"><?php echo $this->translate('Règlement'); ?></a></p>
 
 </div>
