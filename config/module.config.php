@@ -282,6 +282,16 @@ return array(
 		                            ),
 		                        ),
 		                    ),
+		                    'conditions' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/mentions-legales',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_quiz',
+                                        'action'     => 'conditions'
+                                    ),
+                                ),
+                            ),
 		                	'fangate' => array(
 		               			'type' => 'Literal',
 		           				'options' => array(
@@ -399,6 +409,16 @@ return array(
 		                            ),
 		                        ),
 		                    ),
+		                    'conditions' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/mentions-legales',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_lottery',
+                                        'action'     => 'conditions'
+                                    ),
+                                ),
+                            ),
 		                	'fangate' => array(
 		           				'type' => 'Literal',
 		           				'options' => array(
@@ -516,6 +536,16 @@ return array(
 		                            ),
 		                        ),
 		                    ),
+		                    'conditions' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/mentions-legales',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_instantwin',
+                                        'action'     => 'conditions'
+                                    ),
+                                ),
+                            ),
 		                	'fangate' => array(
 		               			'type' => 'Literal',
 		           				'options' => array(
@@ -723,6 +753,16 @@ return array(
 		                            ),
 		                        ),
 		                    ),
+		                    'conditions' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/mentions-legales',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_postvote',
+                                        'action'     => 'conditions'
+                                    ),
+                                ),
+                            ),
 		                	'fangate' => array(
 		                		'type' => 'Literal',
 		               			'options' => array(
@@ -839,6 +879,16 @@ return array(
        													),
        											),
        									),
+       									'conditions' => array(
+                                                'type' => 'Literal',
+                                                'options' => array(
+                                                        'route' => '/mentions-legales',
+                                                        'defaults' => array(
+                                                                'controller' => 'playgroundgame_treasurehunt',
+                                                                'action'     => 'conditions'
+                                                        ),
+                                                ),
+                                        ),
        									'fangate' => array(
        										'type' => 'Literal',
        										'options' => array(
@@ -1615,6 +1665,10 @@ return array(
                         'label' => 'Quiz',
                         'route' => 'quiz/terms',
                     ),
+                    'quiz_conditions' => array(
+                        'label' => 'Quiz',
+                        'route' => 'quiz/conditions',
+                    ),
                     'lottery' => array(
                         'label' => 'Tirage au sort',
                         'route' => 'lottery',
@@ -1630,6 +1684,10 @@ return array(
                     'lottery_terms' => array(
                         'label' => 'Tirage au sort',
                         'route' => 'lottery/terms',
+                    ),
+                    'lottery_conditions' => array(
+                        'label' => 'Tirage au sort',
+                        'route' => 'lottery/conditions',
                     ),
                     'instanwin' => array(
                         'label' => 'Instant gagnant',
@@ -1650,6 +1708,10 @@ return array(
                     'instanwin_terms' => array(
                         'label' => 'Instant gagnant',
                         'route' => 'instantwin/terms',
+                    ),
+                    'instanwin_conditions' => array(
+                        'label' => 'Instant gagnant',
+                        'route' => 'instantwin/conditions',
                     ),
                     'postvote' => array(
                         'label' => 'Post & vote',
