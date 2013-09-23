@@ -18,5 +18,6 @@
 		</div>
 		<?php endif;?>
 	</div>
+    <p id="conditions"><a href="<?php echo $this->url('frontend/lottery/conditions', array('id' => $this->game->getIdentifier()))?>" target="_blank">Mentions légales</a></p>
 	<p id="reglement"><a href="<?php echo $this->url('frontend/lottery/terms', array('id' => $this->game->getIdentifier()))?>" target="_blank">Règlement</a></p>
 </div>

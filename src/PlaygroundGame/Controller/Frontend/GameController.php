@@ -420,6 +420,61 @@ class GameController extends AbstractActionController
         return $viewModel;
     }
 
+    public function conditionsAction()
+    {
+        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
+        $user = $this->zfcUserAuthentication()->getIdentity();
+        $sg = $this->getGameService();
+
+        $game = $sg->checkGame($identifier, false);
+        if (!$game) {
+            return $this->notFoundAction();
+        }
+
+        // If this game has a specific layout...
+        if ($game->getLayout()) {
+            $layoutViewModel = $this->layout();
+            $layoutViewModel->setTemplate($game->getLayout());
+        }
+
+        // If this game has a specific stylesheet...
+        if ($game->getStylesheet()) {
+            $this->getViewHelper('HeadLink')->appendStylesheet($this->getRequest()->getBaseUrl(). '/' . $game->getStylesheet());
+        }
+
+        $adserving = $this->getOptions()->getAdServing();
+        $adserving['cat2'] = 'game';
+        $adserving['cat3'] = '&EASTgameid='.$game->getId();
+
+        // I change the label of the quiz in the breadcrumb ...
+        $this->layout()->setVariables(
+            array(
+                'breadcrumbTitle' => $game->getTitle(),
+                'adserving'       => $adserving,
+                'currentPage' => array(
+                    'pageGames' => 'games',
+                    'pageWinners' => ''
+                ),
+            )
+        );
+
+        // right column
+        $column = new ViewModel();
+        $column->setTemplate($this->layout()->col_right);
+        $column->setVariables(array('game' => $game));
+
+        $this->layout()->addChild($column, 'column_right');
+
+        $viewModel = new ViewModel(
+            array(
+                'game' => $game,
+                'flashMessages' => $this->flashMessenger()->getMessages(),
+            )
+        );
+
+        return $viewModel;
+    }
+
     public function bounceAction()
     {
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
