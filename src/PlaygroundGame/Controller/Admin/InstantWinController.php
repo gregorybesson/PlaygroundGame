@@ -31,7 +31,7 @@ class InstantWinController extends AbstractActionController
 
         $game = $service->getGameMapper()->findById($gameId);
         $service->getGameMapper()->remove($game);
-        $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The game has been edited');
+        $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The game has been removed');
 
         return $this->redirect()->toRoute('admin/playgroundgame/list');
     }
@@ -66,7 +66,7 @@ class InstantWinController extends AbstractActionController
                 return $this->redirect()->toRoute('admin/playgroundgame/list');
             }
         }
-        $gameForm->setVariables(array('form' => $form));
+        $gameForm->setVariables(array('form' => $form, 'game' => $instantwin));
         $viewModel->addChild($gameForm, 'game_form');
 
         return $viewModel->setVariables(
@@ -127,7 +127,7 @@ class InstantWinController extends AbstractActionController
             }
         }
 
-        $gameForm->setVariables(array('form' => $form));
+        $gameForm->setVariables(array('form' => $form, 'game' => $game));
         $viewModel->addChild($gameForm, 'game_form');
 
         return $viewModel->setVariables(

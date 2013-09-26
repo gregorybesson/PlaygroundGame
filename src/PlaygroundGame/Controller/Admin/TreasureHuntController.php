@@ -46,7 +46,7 @@ class TreasureHuntController extends AbstractActionController
                 return $this->redirect()->toRoute('admin/playgroundgame/list');
             }
         }
-        $gameForm->setVariables(array('form' => $form));
+        $gameForm->setVariables(array('form' => $form, 'game' => $treasurehunt));
         $viewModel->addChild($gameForm, 'game_form');
 
         return $viewModel->setVariables(array('form' => $form, 'title' => 'Create treasurehunt'));
@@ -110,7 +110,7 @@ class TreasureHuntController extends AbstractActionController
             }
         }
 
-        $gameForm->setVariables(array('form' => $form));
+        $gameForm->setVariables(array('form' => $form, 'game' => $game));
         $viewModel->addChild($gameForm, 'game_form');
 
         return $viewModel->setVariables(array('form' => $form, 'title' => 'Edit treasurehunt'));

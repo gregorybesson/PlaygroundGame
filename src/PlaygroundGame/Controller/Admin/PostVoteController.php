@@ -80,7 +80,7 @@ class PostVoteController extends AbstractActionController
                 return $this->redirect()->toRoute('admin/playgroundgame/list');
             }
         }
-        $gameForm->setVariables(array('form' => $form));
+        $gameForm->setVariables(array('form' => $form, 'game' => $postVote));
         $viewModel->addChild($gameForm, 'game_form');
 
         return $viewModel->setVariables(array('form' => $form, 'title' => 'Create Post & Vote'));
@@ -136,7 +136,7 @@ class PostVoteController extends AbstractActionController
             }
         }
 
-        $gameForm->setVariables(array('form' => $form));
+        $gameForm->setVariables(array('form' => $form, 'game' => $game));
         $viewModel->addChild($gameForm, 'game_form');
 
         return $viewModel->setVariables(array('form' => $form, 'title' => 'Edit Post & Vote'));
