@@ -49,7 +49,6 @@ class InstantWinController extends AbstractActionController
 
         $form = $this->getServiceLocator()->get('playgroundgame_instantwin_form');
         $form->bind($instantwin);
-        $form->get('submit')->setLabel('Add');
         $form->setAttribute('action', $this->url()->fromRoute('admin/playgroundgame/create-instantwin', array('gameId' => 0)));
         $form->setAttribute('method', 'post');
 
@@ -96,7 +95,6 @@ class InstantWinController extends AbstractActionController
         $form   = $this->getServiceLocator()->get('playgroundgame_instantwin_form');
         $form->setAttribute('action', $this->url()->fromRoute('admin/playgroundgame/edit-instantwin', array('gameId' => $gameId)));
         $form->setAttribute('method', 'post');
-        $form->get('submit')->setLabel('Edit');
 		
 		if ($game->getFbAppId()) {
             $appIds = $form->get('fbAppId')->getOption('value_options');

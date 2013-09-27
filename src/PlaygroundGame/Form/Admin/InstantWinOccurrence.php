@@ -83,7 +83,6 @@ class InstantWinOccurrence extends ProvidesEventsForm
 
         $submitElement = new Element\Button('submit');
         $submitElement
-        ->setLabel($translator->translate('Create', 'playgroundgame'))
         ->setAttributes(array(
             'type'  => 'submit',
             'class' => 'btn btn-primary',

@@ -74,7 +74,6 @@ class LotteryController extends AbstractActionController
         $form   = $this->getServiceLocator()->get('playgroundgame_lottery_form');
         $form->setAttribute('action', $this->url()->fromRoute('admin/playgroundgame/edit-lottery', array('gameId' => $gameId)));
         $form->setAttribute('method', 'post');
-        $form->get('submit')->setLabel('Edit');
         if ($game->getFbAppId()) {
             $appIds = $form->get('fbAppId')->getOption('value_options');
             $appIds[$game->getFbAppId()] = $game->getFbAppId();

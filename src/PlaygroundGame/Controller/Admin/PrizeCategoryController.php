@@ -37,7 +37,6 @@ class PrizeCategoryController extends AbstractActionController
     public function addAction()
     {
         $form = $this->getServiceLocator()->get('playgroundgame_prizecategory_form');
-        $form->get('submit')->setLabel('Créer');
         $request = $this->getRequest();
 
         $category = new PrizeCategory();
@@ -68,7 +67,6 @@ class PrizeCategoryController extends AbstractActionController
         $category = $this->getPrizeCategoryService()->getPrizeCategoryMapper()->findById($prizeCategoryId);
 
         $form = $this->getServiceLocator()->get('playgroundgame_prizecategory_form');
-        $form->get('submit')->setLabel('Mettre à jour');
 
         $request = $this->getRequest();
 

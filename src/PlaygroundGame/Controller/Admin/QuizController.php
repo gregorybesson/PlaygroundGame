@@ -190,7 +190,6 @@ class QuizController extends AbstractActionController
         $form   = $this->getServiceLocator()->get('playgroundgame_quiz_form');
         $form->setAttribute('action', $this->url()->fromRoute('admin/playgroundgame/edit-quiz', array('gameId' => $gameId)));
         $form->setAttribute('method', 'post');
-        $form->get('submit')->setLabel('Edit');
 		
 		if ($game->getFbAppId()) {
             $appIds = $form->get('fbAppId')->getOption('value_options');

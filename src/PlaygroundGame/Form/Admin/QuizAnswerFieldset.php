@@ -20,8 +20,6 @@ class QuizAnswerFieldset extends Fieldset
         $this->setHydrator(new DoctrineHydrator($entityManager, 'PlaygroundGame\Entity\QuizAnswer'))
         ->setObject(new QuizAnswer());
 
-        //$this->setLabel('Answer');
-
         $this->add(array(
             'type' => 'Zend\Form\Element\Hidden',
             'name' => 'id'

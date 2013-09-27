@@ -105,7 +105,6 @@ class PostVoteController extends AbstractActionController
         $form   = $this->getServiceLocator()->get('playgroundgame_postvote_form');
         $form->setAttribute('action', $this->url()->fromRoute('admin/playgroundgame/edit-postvote', array('gameId' => $gameId)));
         $form->setAttribute('method', 'post');
-        $form->get('submit')->setLabel('Mettre à jour');
 		
 		if ($game->getFbAppId()) {
             $appIds = $form->get('fbAppId')->getOption('value_options');
