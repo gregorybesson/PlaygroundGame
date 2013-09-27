@@ -571,7 +571,7 @@ class Game extends ProvidesEventsForm
         ));
 
         $submitElement = new Element\Button('submit');
-            ->setAttributes(array(
+        $submitElement->setAttributes(array(
             'type' => 'submit'
         ));
 
