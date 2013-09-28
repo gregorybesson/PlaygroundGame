@@ -116,17 +116,23 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
 
         if ($game->getEndDate()) {
             $end = $game->getEndDate();
+            // DateInterval takes the day @ 00:00 to calculate the difference between the dates, so 1 day is always missing
+            // as we consider the last day @ 23:59:59 in Playground :)
+            if($end->format('His') == 0){
+                $end->add(new \DateInterval('P1D'));
+            }
         } else {
             $end->add(new \DateInterval($interval));
         }
         $dateInterval = $end->diff($beginning);
+        //echo "date end : " . $end->format('d/m/Y') ."<br>";
 
         switch ($f) {
             case null:
             case 'game':
                 // Je recherche tous les IG non gagnés
-                $occurences = $this->getInstantWinOccurrenceMapper()->findBy(array('instantwin' => $game));
-                $nbOccurencesToCreate = $game->getOccurrenceNumber() - count($occurences);
+                $occurrences = $this->getInstantWinOccurrenceMapper()->findBy(array('instantwin' => $game));
+                $nbOccurencesToCreate = $game->getOccurrenceNumber() - count($occurrences);
                 if ($nbOccurencesToCreate > 0) {
                     for ($i=1;$i<=$nbOccurencesToCreate;$i++) {
                         $randomDate = $this->getRandomDate($beginning->format('U'), $end->format('U'));
@@ -142,16 +148,28 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
 
                 break;
             case 'hour':
-                // TODO : Je recherche tous les IG non gagnés pour chaque jour puis soustrais à ceux à créer
-                $occurences = $this->getInstantWinOccurrenceMapper()->findBy(array('instantwin' => $game));
-                $nbOccurencesToCreate = $game->getOccurrenceNumber() - count($occurences);
-                $nbHoursInterval = $dateInterval->format('%a')*24 + $dateInterval->format('%h');
+                
+                $occurrences = $this->getInstantWinOccurrenceMapper()->findBy(array('instantwin' => $game));
+                $nbExistingOccurrences = count($occurrences);
+                $nbInterval = $dateInterval->format('%a')*24 + $dateInterval->format('%h');
+                // If a hour don't last 60min, I consider it as a hour anyway.
+                if($dateInterval->format('%i') > 0){
+                    ++$nbInterval;
+                }
+                $nbOccurencesToCreate = $game->getOccurrenceNumber() - floor($nbExistingOccurrences/$nbInterval);
 
-                $beginningDrawDate = \DateTime::createFromFormat('m/d/Y H:i:s', $beginning->format('m/d/Y'). ' 00:00:00');
-                $endDrawDate = \DateTime::createFromFormat('m/d/Y H:i:s', $beginning->format('m/d/Y'). ' 00:59:59');
+                /*echo "nb d'intervalles : " . $nbInterval . "<br>";
+                echo "a creer par intervalle : " . $nbOccurencesToCreate . " existe deja : " . count($occurrences) . "<br>";
+                
+                echo "debut du jeu : " . $beginning->format('d/m/Y') . "<br>";
+                echo "fin du jeu : " . $end->format('d/m/Y') . "<br>";*/
+
+                $beginningDrawDate = \DateTime::createFromFormat('m/d/Y H:i:s', $beginning->format('m/d/Y H:i:s'));
+                $endDrawDate = \DateTime::createFromFormat('m/d/Y H:i:s', $beginning->format('m/d/Y H'). ':59:59');
 
                 if ($nbOccurencesToCreate > 0) {
-                    for ($d=1;$d<=$nbHoursInterval;$d++){
+                    for ($d=1;$d<=$nbInterval;$d++){
+                        //echo "groupe : " . $d . " du " . $beginningDrawDate->format('d/m/Y H:i:s') ." au " . $endDrawDate->format('d/m/Y H:i:s') . "<br>";
                         for ($i=1;$i<=$nbOccurencesToCreate;$i++) {
                             $randomDate = $this->getRandomDate($beginningDrawDate->format('U'), $endDrawDate->format('U'));
                             $randomDate = \DateTime::createFromFormat('Y-m-d H:i:s', $randomDate);
@@ -161,7 +179,9 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                             $occurrence->setActive(1);
 
                             $this->getInstantWinOccurrenceMapper()->insert($occurrence);
+                            //echo $randomDate->format('d/m/Y H:i:s') . "<br>";
                         }
+                        $beginningDrawDate = \DateTime::createFromFormat('m/d/Y H:i:s', $beginningDrawDate->format('m/d/Y H'). ':00:00');
                         $beginningDrawDate->add(new \DateInterval('PT1H'));
                         $endDrawDate->add(new \DateInterval('PT1H'));
                     }
@@ -169,15 +189,29 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
 
                 break;
             case 'day':
-                // TODO : Je recherche tous les IG non gagnés pour chaque jour puis soustrais à ceux à créer
-                $occurences = $this->getInstantWinOccurrenceMapper()->findBy(array('instantwin' => $game));
-                $nbOccurencesToCreate = $game->getOccurrenceNumber() - count($occurences);
-                $nbDaysInterval = $dateInterval->format('%a');
-                $beginningDrawDate = \DateTime::createFromFormat('m/d/Y H:i:s', $beginning->format('m/d/Y'). ' 00:00:00');
+
+                $occurrences = $this->getInstantWinOccurrenceMapper()->findBy(array('instantwin' => $game));
+                $nbExistingOccurrences = count($occurrences);
+
+                $nbInterval = $dateInterval->format('%a');
+                // If a day don't last 24h, I consider it as a day anyway.
+                if($dateInterval->format('%h') > 0){
+                    ++$nbInterval;
+                }
+                
+                $nbOccurencesToCreate = $game->getOccurrenceNumber() - floor($nbExistingOccurrences/$nbInterval);
+                
+                /*echo "nb d'intervalles : " . $nbInterval . "<br>";
+                echo "a creer par intervalle : " . $nbOccurencesToCreate . " existe deja : " . count($occurrences) . "<br>";
+                
+                echo "debut du jeu : " . $beginning->format('d/m/Y H:i:s') . "<br>";
+                echo "fin du jeu : " . $end->format('d/m/Y H:i:s') . "<br>";*/
+                
+                $beginningDrawDate = \DateTime::createFromFormat('m/d/Y H:i:s', $beginning->format('m/d/Y H:i:s'));
                 $endDrawDate = \DateTime::createFromFormat('m/d/Y H:i:s', $beginning->format('m/d/Y'). ' 23:59:59');
 
                 if ($nbOccurencesToCreate > 0) {
-                    for ($d=1;$d<=$nbDaysInterval;$d++){
+                    for ($d=1;$d<=$nbInterval;$d++){
                         for ($i=1;$i<=$nbOccurencesToCreate;$i++) {
                             $randomDate = $this->getRandomDate($beginningDrawDate->format('U'), $endDrawDate->format('U'));
                             $randomDate = \DateTime::createFromFormat('Y-m-d H:i:s', $randomDate);
@@ -187,7 +221,11 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                             $occurrence->setActive(1);
 
                             $this->getInstantWinOccurrenceMapper()->insert($occurrence);
+                            //echo $randomDate->format('d/m/Y H:i:s') . "<br>";
                         }
+                        // As the first beginning date was not @ midnight, 
+                        // I recreate the beginning date
+                        $beginningDrawDate = \DateTime::createFromFormat('m/d/Y H:i:s', $beginningDrawDate->format('m/d/Y'). ' 00:00:00');
                         $beginningDrawDate->add(new \DateInterval('P1D'));
                         $endDrawDate->add(new \DateInterval('P1D'));
                     }
