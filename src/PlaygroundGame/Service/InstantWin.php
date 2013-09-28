@@ -192,14 +192,17 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
 
                 $occurrences = $this->getInstantWinOccurrenceMapper()->findBy(array('instantwin' => $game));
                 $nbExistingOccurrences = count($occurrences);
+                $nbOccurencesToCreate = 0;
 
                 $nbInterval = $dateInterval->format('%a');
                 // If a day don't last 24h, I consider it as a day anyway.
-                if($dateInterval->format('%h') > 0){
+                if($dateInterval->format('%h')+$dateInterval->format('%i') > 0){
                     ++$nbInterval;
                 }
                 
-                $nbOccurencesToCreate = $game->getOccurrenceNumber() - floor($nbExistingOccurrences/$nbInterval);
+                if($nbInterval > 0){
+                    $nbOccurencesToCreate = $game->getOccurrenceNumber() - floor($nbExistingOccurrences/$nbInterval);
+                }
                 
                 /*echo "nb d'intervalles : " . $nbInterval . "<br>";
                 echo "a creer par intervalle : " . $nbOccurencesToCreate . " existe deja : " . count($occurrences) . "<br>";
