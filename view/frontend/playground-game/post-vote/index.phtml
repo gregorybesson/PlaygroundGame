@@ -14,7 +14,7 @@
 			<p class="already-play"><?php echo $this->flashMessages[0];?></p>
 	    <?php endif;?>
 	    
-		<div class="welcome-block<?php if($this->layout()->facebooktemplate): echo ' fb-target'; endif ?>"><?php echo $this->game->getWelcomeBlock(); ?></div>
+		<div class="welcome-block<?php if($this->channel === 'facebook'): echo ' fb-target'; endif ?>"><?php echo $this->game->getWelcomeBlock(); ?></div>
 		<div class="center">
 			<div class="btn btn-inverse seeparticipants">
 				<a href="<?php echo $this->url('postvote/list', array('id' => $this->game->getIdentifier(), 'filter' => $this->game->getPostDisplayMode()))?>" class="arrow-right">Voir les participants</a>

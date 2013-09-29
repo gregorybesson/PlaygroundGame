@@ -43,13 +43,14 @@ class Module
         }
 
         // the Facebook Container is created and updated through PlaygroundCore which detects a call from Facebook
-        $eventManager->attach("dispatch", function($e) {
+        // DEPRECATED : REPLACED BY channel route !
+        /*$eventManager->attach("dispatch", function($e) {
         	$session = new Container('facebook');
         	if ($session->offsetExists('signed_request')){
         		$viewModel = $e->getViewModel()->setTemplate('layout/facebook');
         		$viewModel->facebooktemplate = true;
         	}
-        });
+        });*/
 
     }
 

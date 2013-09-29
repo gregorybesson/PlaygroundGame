@@ -25,13 +25,12 @@
 		'game' => $game,
 		'user' => $user,
 		'gameType' => 'Ce post &amp; vote',
-		'facebooktemplate' => $this->layout()->facebooktemplate,
 		'channel' => $this->channel,
 		'isSubscriber' => $this->partnerSubscriber($game->getPartner(), $user) )
 	);?>
 	
 	<!-- OTHER GAMES -->
-	<?php if(!$this->layout()->facebooktemplate){?>
+	<?php if($this->channel === ''){?>
 	<div class="row-fluid other-games">
 		<h2 class="title">
 			<?php if($availableGames): ?>

@@ -9,7 +9,7 @@
 
 	<!-- contenu article -->
 	<div id="content-article" class="row-fluid rounded backgrey">
-		<div class="welcome-block<?php if($this->layout()->facebooktemplate): echo ' fb-target'; endif ?>"><?php echo $this->game->getWelcomeBlock(); ?></div>
+		<div class="welcome-block<?php if($this->channel === 'facebook'): echo ' fb-target'; endif ?>"><?php echo $this->game->getWelcomeBlock(); ?></div>
 		<?php if($game->isStarted()):?>
 		<div class="center">
 			<div class="btn btn-warning">

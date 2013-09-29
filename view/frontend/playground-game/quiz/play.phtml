@@ -44,9 +44,9 @@ $form->setAttribute('action', $this->url('frontend/quiz/play', array('id' => $th
     			<div class="query-block">
     				<div class="heading"><span>Question <?php echo $i+1; ?></span></div>
     				<div class="orange-dot"></div>
-    				<div class="question<?php if($this->layout()->facebooktemplate): echo ' fb-target'; endif ?>"><?php echo $question->getQuestion();?></div>
+    				<div class="question<?php if($this->channel === 'facebook'): echo ' fb-target'; endif ?>"><?php echo $question->getQuestion();?></div>
     				<?php if($question->getHint()):?>
-				    <div class="clue<?php if($this->layout()->facebooktemplate): echo ' fb-target'; endif ?>">Indice : <?php echo $question->getHint();?></div>
+				    <div class="clue<?php if($this->channel === 'facebook'): echo ' fb-target'; endif ?>">Indice : <?php echo $question->getHint();?></div>
     				<?php endif;?>
     				<?php if($question->getImage()):?>
         				<div class="row-fluid">
