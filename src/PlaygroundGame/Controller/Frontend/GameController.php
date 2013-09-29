@@ -74,17 +74,10 @@ class GameController extends AbstractActionController
             )
         );
 
-        $fbAppId = '';
-        $config = $sg->getServiceManager()->get('config');
-        if (isset($config['facebook']['fb_appid'])) {
-            $fbAppId = $config['facebook']['fb_appid'];
-        }
-
         $bitlyclient = $this->getOptions()->getBitlyUrl();
         $bitlyuser = $this->getOptions()->getBitlyUsername();
         $bitlykey = $this->getOptions()->getBitlyApiKey();
-
-        $this->getViewHelper('HeadMeta')->setProperty('fb:app', $fbAppId);
+        
         $this->getViewHelper('HeadMeta')->setProperty('bt:client', $bitlyclient);
         $this->getViewHelper('HeadMeta')->setProperty('bt:user', $bitlyuser);
         $this->getViewHelper('HeadMeta')->setProperty('bt:key', $bitlykey);
@@ -114,11 +107,6 @@ class GameController extends AbstractActionController
         $user = $this->zfcUserAuthentication()->getIdentity();
         $sg = $this->getGameService();
         $statusMail = null;
-        $fbAppId = '';
-        $config = $sg->getServiceManager()->get('config');
-        if (isset($config['facebook']['fb_appid'])) {
-            $fbAppId = $config['facebook']['fb_appid'];
-        }
 
         $game = $sg->checkGame($identifier);
         if (!$game || $game->isClosed()) {
@@ -250,7 +238,6 @@ class GameController extends AbstractActionController
                 'fbShareImage'     => $fbShareImage,
                 'fbRequestMessage' => $fbRequestMessage,
                 'twShareMessage'   => $twShareMessage,
-                'fbAppId'          => $fbAppId
             )
         );
 
@@ -586,14 +573,10 @@ class GameController extends AbstractActionController
                 ),
             )
         );
-		$fbAppId = '';
-		$config = $sg->getServiceManager()->get('config');
-        $basePath = $this->getRequest()->getUri()->getHost();
-
-		if($basePath == $config['channel']['facebook']){
-			$fbAppId = $game->getFbAppId();
-		} elseif (isset($config['facebook']['fb_appid'])) {
-            $fbAppId = $config['facebook']['fb_appid'];
+        
+        if($this->getEvent()->getRouteMatch()->getParam('channel') === 'facebook'){
+            $fo = $this->getServiceLocator()->get('facebook-opengraph');
+            $fo->setId($game->getFbAppId());
         }
 
         if ($game->getFbShareMessage()) {
@@ -635,7 +618,6 @@ class GameController extends AbstractActionController
 
         $this->getViewHelper('HeadMeta')->setProperty('og:title', $fbShareMessage);
         $this->getViewHelper('HeadMeta')->setProperty('og:image', $fbShareImage);
-        $this->getViewHelper('HeadMeta')->setProperty('fb:app', $fbAppId);
         $this->getViewHelper('HeadMeta')->setProperty('bt:client', $bitlyclient);
         $this->getViewHelper('HeadMeta')->setProperty('bt:user', $bitlyuser);
         $this->getViewHelper('HeadMeta')->setProperty('bt:key', $bitlykey);
@@ -655,7 +637,6 @@ class GameController extends AbstractActionController
                 'fbShareImage'        => $fbShareImage,
                 'fbRequestMessage'    => $fbRequestMessage,
                 'twShareMessage'      => $twShareMessage,
-                'fbAppId'             => $fbAppId,
             )
         );
     }
@@ -705,17 +686,10 @@ class GameController extends AbstractActionController
     			)
     	);
 
-    	$fbAppId = '';
-    	$config = $sg->getServiceManager()->get('config');
-    	if (isset($config['facebook']['fb_appid'])) {
-    		$fbAppId = $config['facebook']['fb_appid'];
-    	}
-
     	$bitlyclient = $this->getOptions()->getBitlyUrl();
     	$bitlyuser = $this->getOptions()->getBitlyUsername();
     	$bitlykey = $this->getOptions()->getBitlyApiKey();
 
-    	$this->getViewHelper('HeadMeta')->setProperty('fb:app', $fbAppId);
     	$this->getViewHelper('HeadMeta')->setProperty('bt:client', $bitlyclient);
     	$this->getViewHelper('HeadMeta')->setProperty('bt:user', $bitlyuser);
     	$this->getViewHelper('HeadMeta')->setProperty('bt:key', $bitlykey);
@@ -786,17 +760,10 @@ class GameController extends AbstractActionController
     			)
     	);
 
-    	$fbAppId = '';
-    	$config = $sg->getServiceManager()->get('config');
-    	if (isset($config['facebook']['fb_appid'])) {
-    		$fbAppId = $config['facebook']['fb_appid'];
-    	}
-
     	$bitlyclient = $this->getOptions()->getBitlyUrl();
     	$bitlyuser = $this->getOptions()->getBitlyUsername();
     	$bitlykey = $this->getOptions()->getBitlyApiKey();
 
-    	$this->getViewHelper('HeadMeta')->setProperty('fb:app', $fbAppId);
     	$this->getViewHelper('HeadMeta')->setProperty('bt:client', $bitlyclient);
     	$this->getViewHelper('HeadMeta')->setProperty('bt:user', $bitlyuser);
     	$this->getViewHelper('HeadMeta')->setProperty('bt:key', $bitlykey);

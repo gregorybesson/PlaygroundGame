@@ -37,17 +37,10 @@ class PrizeCategoryController extends GameController
             $paginator = $games;
         }
 
-        $fbAppId = '';
-        $config = $this->getGameService()->getServiceManager()->get('config');
-        if (isset($config['facebook']['fb_appid'])) {
-            $fbAppId = $config['facebook']['fb_appid'];
-        }
-
         $bitlyclient = $this->getOptions()->getBitlyUrl();
         $bitlyuser = $this->getOptions()->getBitlyUsername();
         $bitlykey = $this->getOptions()->getBitlyApiKey();
 
-        $this->getViewHelper('HeadMeta')->setProperty('fb:app', $fbAppId);
         $this->getViewHelper('HeadMeta')->setProperty('bt:client', $bitlyclient);
         $this->getViewHelper('HeadMeta')->setProperty('bt:user', $bitlyuser);
         $this->getViewHelper('HeadMeta')->setProperty('bt:key', $bitlykey);
