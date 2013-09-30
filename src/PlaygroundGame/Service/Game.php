@@ -528,14 +528,28 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         if (!$game) {
             return false;
         }
-
-        // The game is inactive
-        if (!$game->getActive()) {
+        
+        // the game is not of the right type
+        if (!$game instanceof $gameEntity) {
             return false;
         }
 
-        // the game is not of the right type
-        if (!$game instanceof $gameEntity) {
+        if ( $this->getServiceManager()->get('Application')->getMvcEvent()->getRouteMatch()->getParam('channel') === 'preview' 
+             && $this->isAllowed('game', 'edit')){
+            
+            $game->setActive(true);
+            $game->setStartDate(null);
+            $game->setEndDate(null);
+            $game->setPublicationDate(null);
+            $game->setBroadcastPlatform(true);
+            
+            // I don't want the game to be updated through any update during the preview mode. I mark it as readonly for Doctrine
+            $this->getServiceManager()->get('doctrine.entitymanager.orm_default')->getUnitOfWork()->markReadOnly($game);
+            return $game;
+        }
+        
+        // The game is inactive
+        if (!$game->getActive()) {
             return false;
         }
 
@@ -1169,5 +1183,12 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
     public function getGameEntity()
     {
         return new \PlaygroundGame\Entity\Game;
+    }
+    
+    public function isAllowed($resource, $privilege = null){
+        
+        $auth = $this->getServiceManager()->get('BjyAuthorize\Service\Authorize');
+        
+        return $auth->isAllowed($resource, $privilege);
     }
 }
