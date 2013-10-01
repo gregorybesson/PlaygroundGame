@@ -187,12 +187,6 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
     	->method('checkExistingEntry')
     	->will($this->returnValue(false));
 
-    	$f->expects($this->once())
-    	->method('getServiceManager')
-    	->will($this->returnValue($serviceManager));
-
-    	$serviceManager->setService('playgroundgame_quiz_service', $f);
-
     	$this->dispatch('/quiz/gameid');
 
     	$this->assertModuleName('playgroundgame');
@@ -259,12 +253,6 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
     	$f->expects($this->once())
     	->method('checkExistingEntry')
     	->will($this->returnValue($entry));
-
-    	$f->expects($this->once())
-    	->method('getServiceManager')
-    	->will($this->returnValue($serviceManager));
-
-    	$serviceManager->setService('playgroundgame_quiz_service', $f);
 
     	$this->dispatch('/quiz/gameid');
 
@@ -2239,10 +2227,6 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
     	$f->expects($this->once())
     	->method('checkGame')
     	->will($this->returnValue($game));
-    	
-    	$f->expects($this->once())
-    	->method('getServiceManager')
-    	->will($this->returnValue($serviceManager));
     
     	$ZfcUserMock = $this->getMock('PlaygroundUser\Entity\User');
     
@@ -2434,10 +2418,6 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
     	$f->expects($this->once())
     	->method('checkGame')
     	->will($this->returnValue($game));
-    	
-    	$f->expects($this->once())
-    	->method('getServiceManager')
-    	->will($this->returnValue($serviceManager));
     
     	$ZfcUserMock = $this->getMock('PlaygroundUser\Entity\User');
     

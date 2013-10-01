@@ -185,12 +185,6 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     	->method('checkExistingEntry')
     	->will($this->returnValue(false));
 
-    	$f->expects($this->once())
-    	->method('getServiceManager')
-    	->will($this->returnValue($serviceManager));
-
-    	$serviceManager->setService('playgroundgame_lottery_service', $f);
-
     	$this->dispatch('/loterie/gameid');
 
     	$this->assertModuleName('playgroundgame');
@@ -198,10 +192,6 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     	$this->assertControllerClass('LotteryController');
     	$this->assertActionName('index');
     	$this->assertMatchedRouteName('frontend/lottery');
-
-    	//$postData = array('title' => 'Led Zeppelin III', 'artist' => 'Led Zeppelin');
-    	//$this->dispatch('/album/add', 'POST', $postData);
-    	//$this->assertResponseStatusCode(302);
     }
 
     public function testIndexActionCustomizedLayoutWithEntry()
@@ -261,12 +251,6 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     	->method('checkExistingEntry')
     	->will($this->returnValue($entry));
 
-    	$f->expects($this->once())
-    	->method('getServiceManager')
-    	->will($this->returnValue($serviceManager));
-
-    	$serviceManager->setService('playgroundgame_lottery_service', $f);
-
     	$this->dispatch('/loterie/gameid');
 
     	$this->assertModuleName('playgroundgame');
@@ -274,10 +258,6 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     	$this->assertControllerClass('LotteryController');
     	$this->assertActionName('index');
     	$this->assertMatchedRouteName('frontend/lottery');
-
-    	//$postData = array('title' => 'Led Zeppelin III', 'artist' => 'Led Zeppelin');
-    	//$this->dispatch('/album/add', 'POST', $postData);
-    	//$this->assertResponseStatusCode(302);
     }
 
     public function testResultActionNonExistentGame()
@@ -1966,10 +1946,6 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     	$f->expects($this->once())
     	->method('checkGame')
     	->will($this->returnValue($game));
-    	
-    	$f->expects($this->once())
-    	->method('getServiceManager')
-    	->will($this->returnValue($serviceManager));
     
     	$ZfcUserMock = $this->getMock('PlaygroundUser\Entity\User');
     
@@ -2161,10 +2137,6 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     	$f->expects($this->once())
     	->method('checkGame')
     	->will($this->returnValue($game));
-    	
-    	$f->expects($this->once())
-    	->method('getServiceManager')
-    	->will($this->returnValue($serviceManager));
     
     	$ZfcUserMock = $this->getMock('PlaygroundUser\Entity\User');
     
