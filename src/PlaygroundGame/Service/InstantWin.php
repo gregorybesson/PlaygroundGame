@@ -124,7 +124,8 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
         } else {
             $end->add(new \DateInterval($interval));
         }
-        $dateInterval = $end->diff($beginning);
+        //$dateInterval = $end->diff($beginning);
+        $dateInterval = (int)(($end->getTimestamp() - $beginning->getTimestamp())/60);
         //echo "date end : " . $end->format('d/m/Y') ."<br>";
 
         switch ($f) {
@@ -151,9 +152,10 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                 
                 $occurrences = $this->getInstantWinOccurrenceMapper()->findBy(array('instantwin' => $game));
                 $nbExistingOccurrences = count($occurrences);
-                $nbInterval = $dateInterval->format('%a')*24 + $dateInterval->format('%h');
+                $nbInterval = (int) ($dateInterval/60);
+                //$dateInterval->format('%a')*24 + $dateInterval->format('%h');
                 // If a hour don't last 60min, I consider it as a hour anyway.
-                if($dateInterval->format('%i') > 0){
+                if($dateInterval%60 > 0){
                     ++$nbInterval;
                 }
                 $nbOccurencesToCreate = $game->getOccurrenceNumber() - floor($nbExistingOccurrences/$nbInterval);
@@ -194,9 +196,10 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                 $nbExistingOccurrences = count($occurrences);
                 $nbOccurencesToCreate = 0;
 
-                $nbInterval = $dateInterval->format('%a');
+                $nbInterval = (int) ($dateInterval/(60*24));
+                //$nbInterval = $dateInterval->format('%a');
                 // If a day don't last 24h, I consider it as a day anyway.
-                if($dateInterval->format('%h')+$dateInterval->format('%i') > 0){
+                if(($dateInterval%(60*24)) > 0){
                     ++$nbInterval;
                 }
                 
@@ -239,7 +242,12 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                 // TODO : Je recherche tous les IG non gagnés pour chaque jour puis soustrais à ceux à créer
                 $occurences = $this->getInstantWinOccurrenceMapper()->findBy(array('instantwin' => $game));
                 $nbOccurencesToCreate = $game->getOccurrenceNumber() - count($occurences);
-                $nbWeeksInterval = ceil($dateInterval->format('%a')/7);
+                //$nbWeeksInterval = ceil($dateInterval->format('%a')/7);
+                $nbWeeksInterval = (int) ($dateInterval/(60*24*7));
+                // If a week don't last 7d, I consider it as a week anyway.
+                if(($dateInterval%(60*24*7)) > 0){
+                    ++$nbWeeksInterval;
+                }
                 $beginningDrawDate = \DateTime::createFromFormat('m/d/Y H:i:s', $beginning->format('m/d/Y'). ' 00:00:00');
                 $endDrawDate = \DateTime::createFromFormat('m/d/Y H:i:s', $beginning->format('m/d/Y'). ' 23:59:59');
                 $endDrawDate->add(new \DateInterval('P6D'));
@@ -273,7 +281,12 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                 // TODO : Je recherche tous les IG non gagnés pour chaque jour puis soustrais à ceux à créer
                 $occurences = $this->getInstantWinOccurrenceMapper()->findBy(array('instantwin' => $game));
                 $nbOccurencesToCreate = $game->getOccurrenceNumber() - count($occurences);
-                $nbMonthsInterval = $dateInterval->format('%m') + ceil($dateInterval->format('%d')/31);
+                //$nbMonthsInterval = $dateInterval->format('%m') + ceil($dateInterval->format('%d')/31);
+                $nbMonthsInterval = (int) ($dateInterval/(60*24*30));
+                // If a week don't last 30d, I consider it as a month anyway.
+                if(($dateInterval%(60*24*30)) > 0){
+                    ++$nbMonthsInterval;
+                }
                 $beginningDrawDate = \DateTime::createFromFormat('m/d/Y H:i:s', $beginning->format('m/d/Y'). ' 00:00:00');
                 $endDrawDate = \DateTime::createFromFormat('m/d/Y H:i:s', $beginning->format('m/d/Y'). ' 23:59:59');
                 $endDrawDate->add(new \DateInterval('P1M'));
