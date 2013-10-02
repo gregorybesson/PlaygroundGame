@@ -9,6 +9,7 @@ $form->prepare();
 <h1><?php echo $this->translate('Questions'); ?></h1>
 
 <?php echo $this->form()->openTag($form) ?>
+<?php $form->get('submit')->setLabel($this->translate('Validate')); ?>
 <?php echo $this->formButton($form->get('submit')) ?>
 
 <div id="content" class="tabbable tabs-left">
