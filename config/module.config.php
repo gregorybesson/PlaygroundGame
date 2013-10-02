@@ -1515,6 +1515,18 @@ return array(
                                     ),
                                 ),
                             ),
+                            'set-active' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/set-active/:gameId',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgameadmin',
+                                        'action'     => 'setActive',
+                                        'gameId'     => 0
+                                    ),
+                                ),
+                            ),
+
 
                             'prize-category-list' => array(
                                 'type' => 'Segment',
