@@ -1519,6 +1519,9 @@ return array(
                                 'type' => 'Segment',
                                 'options' => array(
                                     'route' => '/set-active/:gameId',
+                                    'constraints' => array(
+					                    'gameId' => '[0-9]+',
+					                ),
                                     'defaults' => array(
                                         'controller' => 'playgroundgameadmin',
                                         'action'     => 'setActive',

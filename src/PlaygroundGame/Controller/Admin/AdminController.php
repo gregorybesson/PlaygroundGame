@@ -151,7 +151,7 @@ class AdminController extends AbstractActionController
     public function setActiveAction()
     {
         $service = $this->getAdminGameService();
-        $gameId = $this->getEvent()->getRouteMatch()->getParam('gameId');
+        $gameId = (int)$this->getEvent()->getRouteMatch()->getParam('gameId');
         if (!$gameId) {
             return $this->redirect()->toRoute('admin/playgroundgame/list');
         }
