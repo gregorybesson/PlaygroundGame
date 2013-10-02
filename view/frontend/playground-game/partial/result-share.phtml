@@ -55,6 +55,7 @@ $fbRequestMsg = ($this->game->getFbRequestMessage()) ? $this->game->getFbRequest
                         <?php echo $this->formInput($form->get('email3')); ?>
                         <?php echo $this->formElementErrors($form->get('email3')); ?>
 						<p class="peppo f-left"></p>
+						<?php $form->get('submit')->setLabel($this->translate('Validate')); ?>
                         <?php echo $this->formButton($form->get('submit')) ?>
 					<?php echo $this->form()->closeTag() ?>
 				</div>
