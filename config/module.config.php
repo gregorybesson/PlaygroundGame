@@ -145,13 +145,14 @@ return array(
     'controllers' => array(
         'invokables' => array(
             'playgroundgame'                     => 'PlaygroundGame\Controller\IndexController',
+            'playgroundgame_game'                => 'PlaygroundGame\Controller\Frontend\GameController',
             'playgroundgame_lottery'             => 'PlaygroundGame\Controller\Frontend\LotteryController',
             'playgroundgame_quiz'                => 'PlaygroundGame\Controller\Frontend\QuizController',
             'playgroundgame_instantwin'          => 'PlaygroundGame\Controller\Frontend\InstantWinController',
             'playgroundgame_postvote'            => 'PlaygroundGame\Controller\Frontend\PostVoteController',
-        	'playgroundgame_treasurehunt'  		=> 'PlaygroundGame\Controller\Frontend\TreasureHuntController',
+        	'playgroundgame_treasurehunt'  		 => 'PlaygroundGame\Controller\Frontend\TreasureHuntController',
             'playgroundgame_prizecategory'       => 'PlaygroundGame\Controller\Frontend\PrizeCategoryController',
-        	'playgroundgame_easyxdm'       		=> 'PlaygroundGame\Controller\Frontend\EasyXDMController',
+        	'playgroundgame_easyxdm'       		 => 'PlaygroundGame\Controller\Frontend\EasyXDMController',
             'playgroundgameadmin'                => 'PlaygroundGame\Controller\Admin\AdminController',
             'playgroundgame_admin_lottery'       => 'PlaygroundGame\Controller\Admin\LotteryController',
             'playgroundgame_admin_instantwin'    => 'PlaygroundGame\Controller\Admin\InstantWinController',
@@ -186,6 +187,31 @@ return array(
 		 					),
 		        		),
 		        	),
+
+                    'jeuxconcours' => array(
+                        'type'    => 'Zend\Mvc\Router\Http\Literal',
+                        'options' => array(
+                            'route'    => 'jeux-concours',
+                            'defaults' => array(
+                                'controller'    => 'playgroundgame_game',
+                                'action'        => 'jeuxconcours',
+                            ),
+                        ),
+                        'may_terminate' => true,
+                        'child_routes' => array(
+                            'pagination' => array(
+                                'type'    => 'Segment',
+                                'options' => array(
+                                    'route'    => '[/:p]',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_game',
+                                        'action'     => 'jeuxconcours',
+                                    ),
+                                    'constraints' => array('p' => '[0-9]*'),
+                                ),
+                            ),
+                        ),
+                    ),
 
      				/*'game' => array(
        					'type' => 'Zend\Mvc\Router\Http\Regex',
