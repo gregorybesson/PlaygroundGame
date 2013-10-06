@@ -711,7 +711,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             $topic = $game->getTitle();
         }
 
-        $this->getEventManager()->trigger(__FUNCTION__.'.post', $this, array('user' => $user, 'secretKey' => $secretKey, 'topic' => $topic));
+        $this->getEventManager()->trigger(__FUNCTION__.'.post', $this, array('user' => $user, 'game' => $game, 'secretKey' => $secretKey, 'topic' => $topic));
 
         return true;
     }
@@ -729,7 +729,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             $topic = $game->getTitle();
         }
 
-        $this->getEventManager()->trigger(__FUNCTION__.'.post', $this, array('user' => $user, 'secretKey' => $secretKey, 'topic' => $topic));
+        $this->getEventManager()->trigger(__FUNCTION__.'.post', $this, array('user' => $user, 'game' => $game, 'secretKey' => $secretKey, 'topic' => $topic));
 
         return true;
     }
@@ -740,7 +740,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             $topic = $game->getTitle();
         }
 
-        $this->getEventManager()->trigger(__FUNCTION__.'.post', $this, array('user' => $user, 'secretKey' => $secretKey, 'topic' => $topic));
+        $this->getEventManager()->trigger(__FUNCTION__.'.post', $this, array('user' => $user, 'game' => $game, 'secretKey' => $secretKey, 'topic' => $topic));
 
         return true;
     }
