@@ -320,10 +320,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
         $entry->setActive(false);
         $entry = $entryMapper->update($entry);
 
-        // event used to trigger the points won by customer (PlaygroundReward is listening !)
-        if ($quizCorrectAnswers > 0) {
-            $this->getEventManager()->trigger(__FUNCTION__.'.post', $this, array('user' => $user, 'game' => $game, 'data' => $quizCorrectAnswers));
-        }
+        $this->getEventManager()->trigger(__FUNCTION__.'.post', $this, array('user' => $user, 'winner' => $winner, 'game' => $game, 'correctAnswers' => $quizCorrectAnswers));
 
         return $entry;
     }
