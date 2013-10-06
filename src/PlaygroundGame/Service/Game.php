@@ -683,8 +683,8 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             $mailService->send($message);
         }
         if ($mailSent) {
-            $this->getEventManager()->trigger(__FUNCTION__.'.post', $this, array('user' => $user, 'topic' => $topic, 'secretKey' => $secretKey));
-
+            $this->getEventManager()->trigger(__FUNCTION__.'.post', $this, array('user' => $user, 'topic' => $topic, 'secretKey' => $secretKey, 'game' => $game));
+            
             return true;
         }
 
