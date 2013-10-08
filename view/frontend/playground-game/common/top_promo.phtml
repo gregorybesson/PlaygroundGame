@@ -1,0 +1,27 @@
+<?php
+    $first = true;
+    $nb = count($this->sliderItems);
+?>
+<div id="top-promo" class="row-fluid">
+    <?php if($nb > 1):?>
+    <div id="homepage-carousel" class="carousel slide">
+        <!-- Carousel items -->
+        <div class="carousel-inner">
+    <?php endif;?>
+        <?php foreach($this->sliderItems as $item):?>
+            <?php if(! $item instanceof PlaygroundCms\Entity\Page):?>
+                <?php $this->partial()->setObjectKey('game')?>
+                <?php echo $this->partial('playground-game/partial/slider-game.phtml', $item) ?>
+            <?php else:?>
+                <?php $this->partial()->setObjectKey('page')?>
+                <?php echo $this->partial('playground-cms/page/partial/slider-page.phtml', $item) ?>
+            <?php endif;?>
+        <?php endforeach;?>
+    <?php if($nb > 1):?>
+        </div>
+        <!-- Carousel nav -->
+        <a class="carousel-control left" href="#homepage-carousel" data-slide="prev">&lsaquo;</a>
+        <a class="carousel-control right" href="#homepage-carousel" data-slide="next">&rsaquo;</a>
+    </div>
+    <?php endif;?>
+</div>
