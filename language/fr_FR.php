@@ -19,6 +19,8 @@ return array(
         'Add new Instant Win' => 'Ajouter un instant gagnant',
         'Add new Post & Vote' => 'Ajouter un Post & Vote',
         'Active' 			=> 'Actif',
+        'Activate the game'             => 'Activer le jeu',
+        'Desactivate the game'             => 'Desactiver le jeu',
         'Yes' 				=> 'Oui',
         'No' 				=> 'Non',
         'Leader Board' 		=> 'Participants',

@@ -1,0 +1,13 @@
+<?php $this->plugin('translate')->setTranslatorTextDomain('playgroundgame');// Pour le texte ?>
+
+<!-- JEUX CONCOURS -->
+<div id="jeux-concours">
+    <div class="row-fluid">
+        <h1>Participez aux jeux concours !</h1>
+    </div>
+
+    <?php $this->partialLoop()->setObjectKey('game')?>
+    <?php echo $this->partialLoop('playground-game/partial/game.phtml', $this->games) ?>
+   
+</div><!-- END JEUX CONCOURS -->
+<?php echo $this->paginationControl($this->games, 'Sliding', 'application/index/partial/pagination.phtml', array('url' => 'jeuxconcours/pagination')); ?>
