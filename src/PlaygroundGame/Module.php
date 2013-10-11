@@ -17,12 +17,17 @@ class Module
     {
         $serviceManager = $e->getApplication()->getServiceManager();
 
-        /* Set the translator for default validation messages
-         * I've copy/paste the Validator messages from ZF2 and placed them in a correct path : PlaygroundCore
-         * TODO : Centraliser la trad pour les Helper et les Plugins
-         */
-        $translator = $serviceManager->get('translator');
-        //$translator->setLocale(\Locale::acceptFromHttp($_SERVER['HTTP_ACCEPT_LANGUAGE']));
+        $options = $serviceManager->get('playgroundcore_module_options');
+        $locale = $options->getLocale();
+        if (!empty($locale)) {
+            //translator
+            $translator = $serviceManager->get('translator');
+            $translator->setLocale($locale);
+
+            // plugins
+            $translate = $serviceManager->get('viewhelpermanager')->get('translate');
+            $translate->getTranslator()->setLocale($locale);
+        }
 
         AbstractValidator::setDefaultTranslator($translator,'playgroundcore');
 
