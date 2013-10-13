@@ -176,9 +176,11 @@ class QuizController extends GameController
         $correctAnswers = array();
 
         foreach ($replies as $reply) {
-            if ($reply->getCorrect()) {
-                $correctAnswers[$reply->getQuestionId()][$reply->getAnswerId()] = true;
-                ++$userCorrectAnswers;
+            foreach ($reply->getAnswers() as $answer) {
+                if ($answer->getCorrect()) {
+                    $correctAnswers[$answer->getQuestionId()][$answer->getAnswerId()] = true;
+                    ++$userCorrectAnswers;
+                }
             }
         }
 

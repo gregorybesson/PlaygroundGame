@@ -2,12 +2,12 @@
 <html>
     <head>
         <title>easyXDM cross-domain XHMLHttpRequest provider</title>
-        <script type="text/javascript" src="<?php echo $this->basePath() . '/js/lib/easyxdm/easyxdm.min.js' ?>">
+        <script type="text/javascript" src="<?php echo $this->frontendAssetPath() . '/js/lib/easyxdm/easyxdm.min.js' ?>">
             // This should be changed so that it points to the minified version before use in production.
         </script>
         <script type="text/javascript">
             // Update to point to your copy
-            easyXDM.DomHelper.requiresJSON("<?php echo $this->basePath() . '/js/lib/easyxdm/json2.js' ?>");
+            easyXDM.DomHelper.requiresJSON("<?php echo $this->frontendAssetPath() . '/js/lib/easyxdm/json2.js' ?>");
         </script>
         <script type="text/javascript">
         
@@ -61,7 +61,7 @@
         // instantiate a new easyXDM object which will handle the request 
         var remote = new easyXDM.Rpc({
             local: "<?php echo $this->basePath() . 'easyxdm/name'?>",
-            swf: "<?php echo $this->basePath() . 'js/lib/easyxdm/easyxdm.swf'?>"
+            swf: "<?php echo $this->frontendAssetPath() . 'js/lib/easyxdm/easyxdm.swf'?>"
         }, {
             local: {
                 // define the exposed method

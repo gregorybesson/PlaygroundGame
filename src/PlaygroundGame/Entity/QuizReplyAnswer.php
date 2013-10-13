@@ -14,9 +14,9 @@ use Zend\InputFilter\InputFilterInterface;
 
 /**
  * @ORM\Entity @HasLifecycleCallbacks
- * @ORM\Table(name="game_quiz_reply")
+ * @ORM\Table(name="game_quiz_reply_answer")
  */
-class QuizReply implements InputFilterAwareInterface
+class QuizReplyAnswer implements InputFilterAwareInterface
 {
     protected $inputFilter;
 
@@ -28,30 +28,40 @@ class QuizReply implements InputFilterAwareInterface
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Entry")
-     * @ORM\JoinColumn(name="entry_id", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\ManyToOne(targetEntity="QuizReply", inversedBy="answers")
+     * @ORM\JoinColumn(name="reply_id", referencedColumnName="id", onDelete="CASCADE")
      **/
-    protected $entry;
-    
-    /**
-     * @ORM\Column(type="integer")
-     **/
-    protected $totalCorrectAnswers;
-    
-    /**
-     * @ORM\Column(type="integer")
-     **/
-    protected $maxCorrectAnswers;
-    
-    /**
-     * @ORM\Column(type="integer")
-     **/
-    protected $totalQuestions;
+    protected $reply;
 
     /**
-     * @ORM\OneToMany(targetEntity="QuizReplyAnswer", mappedBy="reply", cascade={"persist","remove"})
+     * @ORM\Column(type="integer")
+     **/
+    protected $question_id;
+
+    /**
+     * @ORM\Column(type="string")
+     **/
+    protected $question;
+
+    /**
+     * @ORM\Column(type="integer")
+     **/
+    protected $answer_id;
+
+    /**
+     * @ORM\Column(type="string")
+     **/
+    protected $answer;
+
+    /**
+     * @ORM\Column(type="integer")
+     **/
+    protected $points;
+
+    /**
+     * @ORM\Column(type="boolean", length=255, nullable=false)
      */
-    private $answers;
+    protected $correct;
 
     /**
      * @ORM\Column(type="datetime")
@@ -104,117 +114,127 @@ class QuizReply implements InputFilterAwareInterface
     }
 
     /**
-     * @return PlaygroundGame\Entity\Entry
+     * @return PlaygroundGame\Entity\Reply
      */
-    public function getEntry()
+    public function getReply()
     {
-        return $this->entry;
+        return $this->reply;
     }
 
     /**
-     * @param PlaygroundGame\Entity\Entry $entry
+     * @param PlaygroundGame\Entity\Reply $reply
      */
-    public function setEntry($entry)
+    public function setReply($reply)
     {
-        $this->entry = $entry;
+        $this->reply = $reply;
 
         return $this;
     }
 
-	/**
-     * @return the $totalCorrectAnswers
+    /**
+     * @return string
      */
-    public function getTotalCorrectAnswers()
+    public function getQuestion()
     {
-        return $this->totalCorrectAnswers;
+        return $this->question;
     }
 
-	/**
-     * @param field_type $totalCorrectAnswers
+    /**
+     * @param string $question
      */
-    public function setTotalCorrectAnswers($totalCorrectAnswers)
+    public function setQuestion($question)
     {
-        $this->totalCorrectAnswers = $totalCorrectAnswers;
-    }
-
-	/**
-     * @return the $maxCorrectAnswers
-     */
-    public function getMaxCorrectAnswers()
-    {
-        return $this->maxCorrectAnswers;
-    }
-
-	/**
-     * @param field_type $maxCorrectAnswers
-     */
-    public function setMaxCorrectAnswers($maxCorrectAnswers)
-    {
-        $this->maxCorrectAnswers = $maxCorrectAnswers;
-    }
-
-	/**
-     * @return the $totalQuestions
-     */
-    public function getTotalQuestions()
-    {
-        return $this->totalQuestions;
-    }
-
-	/**
-     * @param field_type $totalQuestions
-     */
-    public function setTotalQuestions($totalQuestions)
-    {
-        $this->totalQuestions = $totalQuestions;
-    }
-
-	/**
-     * @return the $answers
-     */
-    public function getAnswers()
-    {
-        return $this->answers;
-    }
-
-	/**
-     * frm collection solution
-     * @param unknown_type $answers
-     */
-    public function setAnswers(ArrayCollection $answers)
-    {
-        $this->answers = $answers;
+        $this->question = $question;
 
         return $this;
     }
 
-    public function addAnswers(ArrayCollection $answers)
+    /**
+     * @return string
+     */
+    public function getQuestionId()
     {
-        foreach ($answers as $answer) {
-            $answer->setReply($this);
-            $this->answers->add($answer);
-        }
-    }
-
-    public function removeAnswers(ArrayCollection $answers)
-    {
-        foreach ($answers as $answer) {
-            $answer->setReply(null);
-            $this->answers->removeElement($answer);
-        }
+        return $this->question_id;
     }
 
     /**
-     * Add an answer to the quiz.
-     *
-     * @param QuizAnswer $answer
-     *
-     * @return void
+     * @param string $questionId
      */
-    public function addAnswer(QuizReplyAnswer $answer)
+    public function setQuestionId($questionId)
     {
-        $answer->setReply($this);
-        $this->answers[] = $answer;
+        $this->question_id = $questionId;
+
+        return $this;
+    }
+
+    /**
+     * @return the unknown_type
+     */
+    public function getAnswer()
+    {
+        return $this->answer;
+    }
+
+    /**
+     * @param unknown_type $answer
+     */
+    public function setAnswer($answer)
+    {
+        $this->answer = $answer;
+
+        return $this;
+    }
+
+    /**
+     * @return the unknown_type
+     */
+    public function getAnswerId()
+    {
+        return $this->answer_id;
+    }
+
+    /**
+     * @param unknown_type $answer
+     */
+    public function setAnswerId($answerId)
+    {
+        $this->answer_id = $answerId;
+
+        return $this;
+    }
+
+    /**
+     * @return the $points
+     */
+    public function getPoints()
+    {
+        return $this->points;
+    }
+
+    /**
+     * @param field_type $points
+     */
+    public function setPoints($points)
+    {
+        $this->points = $points;
+    }
+
+    /**
+     * @return the unknown_type
+     */
+    public function getCorrect()
+    {
+        return $this->correct;
+    }
+
+    /**
+     * @param unknown_type $correct
+     */
+    public function setCorrect($correct)
+    {
+        $this->correct = $correct;
+
+        return $this;
     }
 
     /**

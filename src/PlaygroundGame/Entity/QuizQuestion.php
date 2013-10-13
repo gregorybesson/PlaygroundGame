@@ -203,7 +203,7 @@ class QuizQuestion implements InputFilterAwareInterface
     public function removeAnswers(ArrayCollection $answers)
     {
         foreach ($answers as $answer) {
-            $answer->setQuiz(null);
+            $answer->setQuestion(null);
             $this->answers->removeElement($answer);
         }
     }

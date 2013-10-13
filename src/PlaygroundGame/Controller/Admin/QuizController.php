@@ -291,7 +291,7 @@ class QuizController extends AbstractActionController
             foreach ($questionArray as $q) {
                 $found = false;
                 if ($q['open'] == false) {
-                    foreach ($replies as $reply) {
+                    foreach ($replies->getAnswers() as $reply) {
                        if ($q['q'] == $reply->getQuestionId() && $q['a'] == $reply->getAnswerId()) {
                            $replyText .= ";1";
                            $found = true;
@@ -302,7 +302,7 @@ class QuizController extends AbstractActionController
                         $replyText .= ";0";
                     }
                 } else {
-                    foreach ($replies as $reply) {
+                    foreach ($replies->getAnswers() as $reply) {
                         if ($q['q'] == $reply->getQuestionId()) {
                             $replyText .= ";" . strip_tags(str_replace("\r\n","",$reply->getAnswer()));
                             $found = true;
