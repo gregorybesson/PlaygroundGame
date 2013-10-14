@@ -104,7 +104,7 @@ if(isset($children[0])){
 	<!-- <div class="navbar navbar-fixed-top"> -->
 	<div class="navbar">
 		<ul class='nav'>
-			<?php echo $this->adminMenu()->setPartial(array('playground-core/menu.phtml', 'default'));
+			<?php echo $this->adminMenu()->setPartial(array('playground-design/common/menu.phtml', 'default'));
 			?>
 		</ul>
 	</div>
@@ -120,7 +120,7 @@ if(isset($children[0])){
 		<?php echo $this->navigation()
 		->breadcrumbs('admin_navigation')
 		->setMaxDepth(3)
-		->setPartial(array('playground-core/breadcrumbs.phtml', 'default'));
+		->setPartial(array('playground-design/common/breadcrumbs.phtml', 'default'));
 		?>
 		<?php echo $this->content; ?>
 
