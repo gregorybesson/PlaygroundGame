@@ -152,7 +152,6 @@ return array(
             'playgroundgame_postvote'            => 'PlaygroundGame\Controller\Frontend\PostVoteController',
         	'playgroundgame_treasurehunt'  		 => 'PlaygroundGame\Controller\Frontend\TreasureHuntController',
             'playgroundgame_prizecategory'       => 'PlaygroundGame\Controller\Frontend\PrizeCategoryController',
-        	'playgroundgame_easyxdm'       		 => 'PlaygroundGame\Controller\Frontend\EasyXDMController',
             'playgroundgameadmin'                => 'PlaygroundGame\Controller\Admin\AdminController',
             'playgroundgame_admin_lottery'       => 'PlaygroundGame\Controller\Admin\LotteryController',
             'playgroundgame_admin_instantwin'    => 'PlaygroundGame\Controller\Admin\InstantWinController',
@@ -166,28 +165,6 @@ return array(
         'routes' => array(
         	'frontend' => array(
        			'child_routes' => array(
-		        	'easyxdmindex' => array(
-		        		'type' => 'Zend\Mvc\Router\Http\Segment',
-		   				'options' => array(
-		        			'route'    => 'easyxdm/index',
-		        			'defaults' => array(
-		        				'controller' => 'playgroundgame_easyxdm',
-		        				'action'     => 'index',
-		        			),
-		   				),
-		        	),
-
-		        	'easyxdmname' => array(
-		       			'type' => 'Zend\Mvc\Router\Http\Segment',
-		   				'options' => array(
-		        			'route'    => 'easyxdm/name',
-		        			'defaults' => array(
-		        				'controller' => 'playgroundgame_easyxdm',
-		        				'action'     => 'name',
-		 					),
-		        		),
-		        	),
-
                     'jeuxconcours' => array(
                         'type'    => 'Zend\Mvc\Router\Http\Literal',
                         'options' => array(
