@@ -24,6 +24,10 @@ use Zend\InputFilter\InputFilterInterface;
 class Game implements InputFilterAwareInterface
 {
 
+    const GAME_LAUNCHING  = 'launching';
+    const GAME_INPROGRESS = 'in progress';
+    const GAME_FINISHED   = 'finished';
+
     protected $inputFilter;
 
     /**
@@ -636,6 +640,18 @@ class Game implements InputFilterAwareInterface
         }
 
         return false;
+    }
+
+    public function getState()
+    {
+        if ($this->isStarted()) {
+            return self::GAME_INPROGRESS;
+        }
+        if ($this->isFinished()) {
+            return self::GAME_FINISHED;
+        }
+
+        return self::GAME_LAUNCHING;
     }
 
     /**
