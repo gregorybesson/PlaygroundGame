@@ -23,10 +23,11 @@ use Zend\InputFilter\InputFilterInterface;
  */
 class Game implements InputFilterAwareInterface
 {
-
+    const GAME_SCHEDULE  = 'schedule';
     const GAME_LAUNCHING  = 'launching';
-    const GAME_INPROGRESS = 'in progress';
+    const GAME_IN_PROGRESS = 'in progress';
     const GAME_FINISHED   = 'finished';
+    const GAME_CLOSED = 'closed';
 
     protected $inputFilter;
 
@@ -644,14 +645,26 @@ class Game implements InputFilterAwareInterface
 
     public function getState()
     {
-        if ($this->isStarted()) {
-            return self::GAME_INPROGRESS;
-        }
-        if ($this->isFinished()) {
-            return self::GAME_FINISHED;
+        $today = new DateTime('now');
+        if ($this->getPublicationDate() < $today->setTime(0,0,0)) {
+            return self::GAME_SCHEDULE;
         }
 
-        return self::GAME_LAUNCHING;
+        if ($this->getCloseDate() > $today->setTime(0,0,0)) {
+            return self::GAME_SCHEDULE;
+        }
+
+        if ($this->isOpen() && !$this->isStarted()) {
+            return self::GAME_LAUNCHING;
+        }
+
+        if ($this->isStarted()) {
+            return self::GAME_IN_PROGRESS;
+        }
+
+        if ($this->isFinished()) {
+            return self::GAME_FINISHED;
+        }        
     }
 
     /**

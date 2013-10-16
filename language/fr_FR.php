@@ -131,8 +131,10 @@ return array(
 	'Edit lottery' 	=> 'Editer un tirage au sort',
 
     // State
+    'schedule' => '<span class="label label-important">Programmé</span>',
     'launching' => '<span class="label label-warning">Lancement</span>',
     'in progress' => '<span class="label label-success">En cours</span>',
-    'finished' => '<span class="label label-inverse">Terminé</span>',
+    'finished' => '<span class="label label-info">Terminé</span>',
+    'closed' => '<span class="label label-inverse">Fermé</span>',
 
 );
