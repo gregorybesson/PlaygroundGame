@@ -651,7 +651,7 @@ class Game implements InputFilterAwareInterface
         }
 
         if ($this->getCloseDate() > $today->setTime(0,0,0)) {
-            return self::GAME_SCHEDULE;
+            return self::GAME_CLOSED;
         }
 
         if ($this->isOpen() && !$this->isStarted()) {
