@@ -646,11 +646,11 @@ class Game implements InputFilterAwareInterface
     public function getState()
     {
         $today = new DateTime('now');
-        if ($this->getPublicationDate() < $today->setTime(0,0,0)) {
+        if ($this->getPublicationDate() > $today->setTime(0,0,0)) {
             return self::GAME_SCHEDULE;
         }
 
-        if ($this->getCloseDate() > $today->setTime(0,0,0)) {
+        if ($this->getCloseDate() < $today->setTime(0,0,0)) {
             return self::GAME_CLOSED;
         }
 
