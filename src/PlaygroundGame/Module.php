@@ -255,6 +255,16 @@ class Module
                     return $mapper;
                 },
 
+                'playgroundgame_quizreplyanswer_mapper' => function ($sm) {
+                    $mapper = new \PlaygroundGame\Mapper\QuizReplyAnswer(
+                        $sm->get('doctrine.entitymanager.orm_default'),
+                        $sm->get('playgroundgame_module_options')
+                    );
+
+                    return $mapper;
+                },
+
+
                 'playgroundgame_entry_mapper' => function ($sm) {
                     $mapper = new \PlaygroundGame\Mapper\Entry(
                         $sm->get('doctrine.entitymanager.orm_default'),
