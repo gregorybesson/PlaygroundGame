@@ -487,4 +487,31 @@ class Quiz extends Game implements ServiceManagerAwareInterface
 
         return $this;
     }
+
+    /**
+     * getQuizReplyAnswerMapper
+     *
+     * @return QuizReplyAnswerMapper
+     */
+    public function getQuizReplyAnswerMapper()
+    {
+        if (null === $this->quizReplyAnswerMapper) {
+            $this->quizReplyAnswerMapper = $this->getServiceManager()->get('playgroundgame_quizreplyanswer_mapper');
+        }
+
+        return $this->quizReplyAnswerMapper;
+    }
+
+     /**
+     * setQuizReplyAnswerMapper
+     *
+     * @param  QuizReplyAnswerMapper $quizReplyAnswerMapper
+     * @return QuizReply
+     */
+    public function setQuizReplyAnswerMapper($quizReplyAnswerMapper)
+    {
+        $this->quizReplyAnswerMapper = $quizReplyAnswerMapper;
+
+        return $this;
+    }
 }
