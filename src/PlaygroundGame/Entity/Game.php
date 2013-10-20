@@ -23,10 +23,15 @@ use Zend\InputFilter\InputFilterInterface;
  */
 class Game implements InputFilterAwareInterface
 {
-    const GAME_SCHEDULE  = 'schedule';
-    const GAME_LAUNCHING  = 'launching';
+    // not yet published
+    const GAME_SCHEDULE  = 'scheduled';
+    // published and not yet started
+    const GAME_PUBLISHED  = 'published';
+    // published and game in progress
     const GAME_IN_PROGRESS = 'in progress';
+    // published and game finished
     const GAME_FINISHED   = 'finished';
+    // closed
     const GAME_CLOSED = 'closed';
 
     protected $inputFilter;
@@ -602,10 +607,6 @@ class Game implements InputFilterAwareInterface
             ($this->getCloseDate() && $this->getCloseDate()->setTime(0,0,0) < $today->setTime(0,0,0))
             ||
             ($this->getPublicationDate() && $this->getPublicationDate()->setTime(0,0,0) > $today->setTime(0,0,0))
-            ||
-            !$this->getActive()
-			||
-			!$this->getBroadcastPlatform()
         ){
             return true;
         }
@@ -621,11 +622,9 @@ class Game implements InputFilterAwareInterface
     public function isStarted ()
     {
         $today = new DateTime('now');
-        if(($this->isOpen() && (!$this->getStartDate() || $this->getStartDate()->setTime(0,0,0) <= $today->setTime(0,0,0)))
+        if(((!$this->getStartDate() || $this->getStartDate()->setTime(0,0,0) <= $today->setTime(0,0,0)))
                 &&
                 (!$this->getEndDate() || $this->getEndDate()->setTime(0,0,0) > $today->setTime(0,0,0))
-                &&
-                $this->getActive()
         ){
             return true;
         }
@@ -636,35 +635,43 @@ class Game implements InputFilterAwareInterface
     public function isFinished ()
     {
         $today = new DateTime('now');
-        if ($this->getEndDate() && $this->getEndDate()->setTime(0,0,0) <= $today->setTime(0,0,0) && $this->getActive() ) {
+        if ($this->getEndDate() && $this->getEndDate()->setTime(0,0,0) <= $today->setTime(0,0,0)
+            || 
+            ($this->getCloseDate() && $this->getCloseDate()->setTime(0,0,0) <= $today->setTime(0,0,0))
+        ) {
             return true;
         }
 
         return false;
     }
+    
+    public function isOnline ()
+    {
+        if($this->getActive() && $this->getBroadcastPlatform()){
+            return true;
+        }
+        
+        return false;
+    }
 
     public function getState()
     {
-        $today = new DateTime('now');
-        if ($this->getPublicationDate() > $today->setTime(0,0,0)) {
-            return self::GAME_SCHEDULE;
-        }
-
-        if ($this->getCloseDate() < $today->setTime(0,0,0)) {
-            return self::GAME_CLOSED;
-        }
-
-        if ($this->isOpen() && !$this->isStarted()) {
-            return self::GAME_LAUNCHING;
-        }
-
-        if ($this->isStarted()) {
-            return self::GAME_IN_PROGRESS;
-        }
-
-        if ($this->isFinished()) {
-            return self::GAME_FINISHED;
-        }        
+        
+        if ($this->isOpen()){
+            if (!$this->isStarted() && !$this->isFinished()) {
+                return self::GAME_PUBLISHED;
+            } elseif ($this->isStarted()) {
+                return self::GAME_IN_PROGRESS;
+            } elseif ($this->isFinished()) {
+                return self::GAME_FINISHED;
+            }
+        }else{            
+            if ($this->isFinished()) {
+                return self::GAME_CLOSED;
+            } else{
+                return self::GAME_SCHEDULE;
+            }
+        }  
     }
 
     /**
