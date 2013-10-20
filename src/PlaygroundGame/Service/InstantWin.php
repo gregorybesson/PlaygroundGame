@@ -423,6 +423,7 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
         }
 
         $entry = $entryMapper->update($entry);
+        $this->getEventManager()->trigger('complete_instantwin.post', $this, array('user' => $user, 'game' => $game, 'entry' => $entry));
 
         return $winner;
     }

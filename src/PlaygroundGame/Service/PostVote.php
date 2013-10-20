@@ -215,7 +215,9 @@ class PostVote extends Game implements ServiceManagerAwareInterface
 
         $entry->setActive(0);
         $entryMapper->update($entry);
-
+        
+        $this->getEventManager()->trigger('complete_postvote.post', $this, array('user' => $user, 'game' => $game, 'entry' => $entry, 'post' => $post));
+        
         return $post;
     }
 
@@ -337,7 +339,9 @@ class PostVote extends Game implements ServiceManagerAwareInterface
             }
 
             $postvoteVoteMapper->insert($vote);
-
+            $game = $post->getPostvote();
+            $this->getEventManager()->trigger('vote_postvote.post', $this, array('user' => $user, 'game' => $game, 'post' => $post,'vote' => $vote));
+            
             return true;
         }
     }

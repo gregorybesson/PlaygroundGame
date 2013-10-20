@@ -343,7 +343,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
         
         $quizReplyMapper->insert($quizReply);
 
-        $this->getEventManager()->trigger(__FUNCTION__.'.post', $this, array('user' => $user, 'entry' => $entry, 'quizReply' => $quizReply, 'winner' => $winner, 'game' => $game, 'correctAnswers' => $quizCorrectAnswers));
+        $this->getEventManager()->trigger('complete_quiz.post', $this, array('user' => $user, 'entry' => $entry, 'reply' => $quizReply, 'game' => $game));
 
         return $entry;
     }
