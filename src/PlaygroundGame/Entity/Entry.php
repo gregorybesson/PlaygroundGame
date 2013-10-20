@@ -61,6 +61,12 @@ class Entry
      * @ORM\Column(name="terms_optin", type="boolean", nullable=true)
      */
     protected $termsOptin;
+    
+    /**
+     * Is this entry eligible to draw ?
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    protected $drawable = 0;
 
     /**
      * @ORM\Column(type="datetime")
@@ -205,6 +211,22 @@ class Entry
     }
     
     /**
+     * @return the $drawable
+     */
+    public function getDrawable()
+    {
+        return $this->drawable;
+    }
+
+	/**
+     * @param number $drawable
+     */
+    public function setDrawable($drawable)
+    {
+        $this->drawable = $drawable;
+    }
+
+	/**
      * @return the termsOptin
      */
     public function getTermsOptin()

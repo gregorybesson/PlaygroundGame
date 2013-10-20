@@ -332,6 +332,9 @@ class Quiz extends Game implements ServiceManagerAwareInterface
         $winner = $this->isWinner($game, $quizCorrectAnswers);
 
         $entry->setWinner($winner);
+        // Every winning participation is eligible to draw
+        // TODO : Make this modifiable in the admin (choose who can participate to draw)
+        $entry->setDrawable($winner);
         $entry->setPoints($quizPoints);
         $entry->setActive(false);
         $entry = $entryMapper->update($entry);

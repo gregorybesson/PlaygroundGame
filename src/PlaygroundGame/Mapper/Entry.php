@@ -52,15 +52,9 @@ class Entry implements ServiceLocatorAwareInterface
         return $query->getSingleScalarResult();
     }
 
-    public function draw($game)
+    public function draw($game, $userClass, $total)
     {
-        $total = $game->getWinners() + $game->getSubstitutes();
-        
-        // I Have to know what is the User Class used
-        $sm = $this->getServiceLocator();
-        $zfcUserOptions = $sm->get('zfcuser_module_options');
-        $userClass = $zfcUserOptions->getUserEntityClass();
-        
+       /* 
         $rsm = new \Doctrine\ORM\Query\ResultSetMapping;
         //$rsm->addEntityResult('\PlaygroundGame\Entity\Entry', 'e');
         $rsm->addEntityResult($userClass, 'u');
@@ -75,7 +69,7 @@ class Entry implements ServiceLocatorAwareInterface
             'SELECT distinct u.user_id, u.username, u.firstname, u.lastname, u.email, u.optin_partner FROM game_entry as e
             INNER JOIN user AS u ON e.user_id = u.user_id
             WHERE e.game_id = :game_id
-            AND e.winner = 1
+            #AND e.winner = 1
             ORDER BY RAND()
             LIMIT ' . $total,
             $rsm
@@ -84,7 +78,22 @@ class Entry implements ServiceLocatorAwareInterface
 
         $result = $query->getResult();
 
-        return $result;
+        return $result;*/
+        
+        $sql ='SELECT u.user_id uid, u.username, u.firstname, u.lastname, u.email, u.optin_partner, e.created_at ecreated_at, e.updated_at eupdated_at, e.* FROM game_entry as e
+            INNER JOIN user AS u ON e.user_id = u.user_id
+            WHERE e.game_id = :game_id
+            AND e.drawable = 1
+            GROUP BY u.user_id
+            ORDER BY RAND()
+            LIMIT ' . $total;
+        
+        $rsm = new \Doctrine\ORM\Query\ResultSetMappingBuilder($this->em);
+        $rsm->addRootEntityFromClassMetadata('\PlaygroundGame\Entity\Entry',  'e',  array('id' => 'id', 'created_at' => 'ecreated_at', 'updated_at' => 'eupdated_at'));
+        $query = $this->em->createNativeQuery($sql,  $rsm);
+        $query->setParameter('game_id', $game->getId());
+        
+        return $query->getResult();
     }
 
     public function queryByGame(\PlaygroundGame\Entity\Game $game)

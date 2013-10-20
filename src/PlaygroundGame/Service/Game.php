@@ -1009,6 +1009,29 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $result = $query->getResult();
         return $result;
     }
+    
+    public function draw($game)
+    {
+        $total = $game->getWinners();
+    
+        // I Have to know what is the User Class used
+        $zfcUserOptions = $this->getServiceManager()->get('zfcuser_module_options');
+        $userClass = $zfcUserOptions->getUserEntityClass();
+    
+        //$entry = $this->getEntryMapper()->findById(180);
+        //echo 'updated : ' . $entry->getId() . $entry->getWinner() . " p : " . $entry->getPoints();
+        
+        $result = $this->getEntryMapper()->draw($game, $userClass, $total);
+
+        $entries=array();
+        foreach($result as $e){
+            $e->setWinner(1);
+            $e = $this->getEntryMapper()->update($e);
+            $this->getEventManager()->trigger('win_lottery.post', $this, array('user' => $e->getUser(), 'game' => $game, 'entry' =>$e));
+        }
+
+        return $result;
+    }
 
     /**
      * getGameMapper

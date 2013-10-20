@@ -39,8 +39,8 @@ class LotteryController extends GameController
             return $this->redirect()->toUrl($this->url()->fromRoute('frontend/lottery/result',array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
         }
 
-        // Every participation is a winning one !
-        $entry->setWinner(true);
+        // Every participation is eligible to draw
+        $entry->setDrawable(true);
         $entry->setActive(false);
         $sg->getEntryMapper()->update($entry);
 

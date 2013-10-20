@@ -199,26 +199,20 @@ class LotteryController extends AbstractActionController
         //$service        = $this->getLeaderBoardService();
         //$leaderboards   = $service->getLeaderBoardMapper()->findBy(array('game' => $game));
 
-        $winners = $this->getAdminGameService()->getEntryMapper()->draw($game);
-        $nbWinners = $game->getWinners();
+        $winningEntries = $this->getAdminGameService()->draw($game);
 
         $content        = "\xEF\xBB\xBF"; // UTF-8 BOM
         $content       .= "ID;Pseudo;Nom;Prenom;E-mail;Etat\n";
-        $i=1;
-        foreach ($winners as $w) {
-            if ($i<=$nbWinners) {
-                $etat = 'gagnant';
-            } else {
-                $etat = 'remplacant';
-            }
-            $content   .= $w->getId()
-            . ";" . $w->getUsername()
-            . ";" . $w->getLastname()
-            . ";" . $w->getFirstname()
-            . ";" . $w->getEmail()
+
+        foreach ($winningEntries as $e) {
+            $etat = 'gagnant';
+            $content   .= $e->getUser()->getId()
+            . ";" . $e->getUser()->getUsername()
+            . ";" . $e->getUser()->getLastname()
+            . ";" . $e->getUser()->getFirstname()
+            . ";" . $e->getUser()->getEmail()
             . ";" . $etat
             ."\n";
-            $i++;
         }
 
         $response = $this->getResponse();
