@@ -125,8 +125,14 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
             $end->add(new \DateInterval($interval));
         }
         
-        $dateInterval = $end->diff($beginning);
+        //$dateInterval = $end->diff($beginning);
+        
         $dateInterval = (int)(($end->getTimestamp() - $beginning->getTimestamp())/60);
+        
+        // Gestion des changements d'horaires
+        $timezone = new \DateTimeZone('Europe/Paris');
+        $transitions = $timezone->getTransitions($beginning->getTimestamp(), $end->getTimestamp());
+        
         switch ($f) {
             case null:
             case 'game':
@@ -155,8 +161,6 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                 //$dateInterval->format('%a')*24 + $dateInterval->format('%h');
 
                 // If a hour don't last 60min, I consider it as a hour anyway.
-                $timezone = new \DateTimeZone('Europe/Paris');
-                $transitions = $timezone->getTransitions($beginning->getTimestamp(), $end->getTimestamp());
                 if(count($transitions) <= 1 && $dateInterval%60 > 0){
                     ++$nbInterval;
                 }
@@ -199,8 +203,6 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                 $nbOccurencesToCreate = 0;
                 $nbInterval = (int) ($dateInterval/(60*24));
                 
-                $timezone = new \DateTimeZone('Europe/Paris');
-                $transitions = $timezone->getTransitions($beginning->getTimestamp(), $end->getTimestamp());
                 // Prise en compte des changements d'horaires
                 // If a day don't last 24h, I consider it as a day anyway
                 if(count($transitions) <= 1 && ($dateInterval%(60*24)) > 0){
@@ -248,8 +250,6 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                 //$nbWeeksInterval = ceil($dateInterval->format('%a')/7);
                 $nbWeeksInterval = (int) ($dateInterval/(60*24*7));
                 // If a week don't last 7d, I consider it as a week anyway.
-                $timezone = new \DateTimeZone('Europe/Paris');
-                $transitions = $timezone->getTransitions($beginning->getTimestamp(), $end->getTimestamp());
                 if(count($transitions) <= 1 && ($dateInterval%(60*24*7)) > 0){
                     ++$nbWeeksInterval;
                 }
@@ -289,8 +289,6 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                 //$nbMonthsInterval = $dateInterval->format('%m') + ceil($dateInterval->format('%d')/31);
                 $nbMonthsInterval = (int) ($dateInterval/(60*24*30));
                 // If a week don't last 30d, I consider it as a month anyway.
-                $timezone = new \DateTimeZone('Europe/Paris');
-                $transitions = $timezone->getTransitions($beginning->getTimestamp(), $end->getTimestamp());
                 if(count($transitions) <= 1 &&  ($dateInterval%(60*24*30)) > 0){
                     ++$nbMonthsInterval;
                 }
