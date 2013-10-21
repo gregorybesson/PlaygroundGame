@@ -132,7 +132,7 @@ class InstantWinTest extends AbstractHttpControllerTestCase
         $this->assertTrue($result);
     }
     
-    public function testscheduleOccurrencesToday5Day()
+  public function testscheduleOccurrencesToday5Day()
     {
     
         $game = new InstantWinEntity();
@@ -362,6 +362,45 @@ class InstantWinTest extends AbstractHttpControllerTestCase
         $endDate = new \DateTime("now");
         $endDate->add(new \DateInterval('P8D'));
     
+
+        $game->setOccurrenceDrawFrequency('day');
+        $game->setStartDate($startDate);
+        $game->setEndDate($endDate);
+        $game->setOccurrenceNumber(2);
+    
+        $mapper = $this->getMockBuilder('PlaygroundGame\Mapper\InstantWinOccurrence')
+        ->disableOriginalConstructor()
+        ->getMock();
+    
+        $this->getServiceManager()->setService('playgroundgame_instantwinoccurrence_mapper', $mapper);
+    
+        $mapper->expects($this->once())
+        ->method('findBy')
+        ->will($this->returnValue(array()));
+    
+        $mapper->expects($this->exactly(10))
+        ->method('insert')
+        ->will($this->returnValue(true));
+    
+        $gs = $this->getServiceManager()->get('playgroundgame_instantwin_service');
+        $result = $gs->scheduleOccurrences($game);
+    
+        $this->assertTrue($result);
+    
+    }
+
+    /**
+    * Gestion des instants gagnants avec les changements d'horaires
+    */
+    public function testscheduleOccurrencesDaysInTransitions()
+    {
+        $game = new InstantWinEntity();
+        $startDate = new \DateTime("2013-10-21");  
+        $startDate->add(new \DateInterval('P3D'));
+        $endDate = new \DateTime("now");
+        $endDate->add(new \DateInterval('P8D'));
+
+
         $game->setOccurrenceDrawFrequency('day');
         $game->setStartDate($startDate);
         $game->setEndDate($endDate);
