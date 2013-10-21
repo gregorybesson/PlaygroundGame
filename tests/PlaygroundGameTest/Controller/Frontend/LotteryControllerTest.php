@@ -645,7 +645,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
 
     	$this->dispatch('/loterie/gameid/jouer');
 
-    	$this->assertEquals(true, $entry->getWinner());
+    	$this->assertEquals(false, $entry->getWinner());
     	$this->assertEquals(false, $entry->getActive());
     	$this->assertModuleName('playgroundgame');
     	$this->assertControllerName('playgroundgame_lottery');
