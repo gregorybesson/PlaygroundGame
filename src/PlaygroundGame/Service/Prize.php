@@ -68,7 +68,7 @@ class Prize extends EventProvider implements ServiceManagerAwareInterface
      */
     public function edit(array $data, $prize, $formClass)
     {
-        $entityManager = $this->getServiceManager()->get('zfcuser_doctrine_em');
+        $entityManager = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
         $form  = $this->getServiceManager()->get($formClass);
         $form->bind($prize);
         

@@ -56,7 +56,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
     public function create(array $data, $entity, $formClass)
     {
         $game  = new $entity;
-        $entityManager = $this->getServiceManager()->get('zfcuser_doctrine_em');
+        $entityManager = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
 
         $form  = $this->getServiceManager()->get($formClass);
         // I force the following format because this is the only one accepted by new DateTime($value) used by Doctrine when persisting
@@ -201,7 +201,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      */
     public function edit(array $data, $game, $formClass)
     {
-        $entityManager = $this->getServiceManager()->get('zfcuser_doctrine_em');
+        $entityManager = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
         $form  = $this->getServiceManager()->get($formClass);
         $form->get('publicationDate')->setOptions(array('format' => 'Y-m-d'));
         $form->get('startDate')->setOptions(array('format' => 'Y-m-d'));
@@ -371,7 +371,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      */
     public function getActiveGames($displayHome = true, $classType='', $order='')
     {
-        $em = $this->getServiceManager()->get('zfcuser_doctrine_em');
+        $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
         $today = new \DateTime("now");
         //$today->format('Y-m-d H:i:s');
         $today = $today->format('Y-m-d') . ' 23:59:59';
@@ -431,7 +431,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      */
     public function getAvailableGames($user, $maxResults = 2)
     {
-        $em = $this->getServiceManager()->get('zfcuser_doctrine_em');
+        $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
         $today = new \DateTime("now");
         //$today->format('Y-m-d H:i:s');
         $today = $today->format('Y-m-d') . ' 23:59:59';
@@ -460,7 +460,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      */
     public function getActiveSliderGames()
     {
-        $em = $this->getServiceManager()->get('zfcuser_doctrine_em');
+        $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
         $today = new \DateTime("now");
         //$today->format('Y-m-d H:i:s');
         $today = $today->format('Y-m-d') . ' 23:59:59';
@@ -499,7 +499,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      */
     public function getPrizeCategoryGames($categoryid)
     {
-        $em = $this->getServiceManager()->get('zfcuser_doctrine_em');
+        $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
 
         $query = $em->createQuery(
             'SELECT g FROM PlaygroundGame\Entity\Game g
@@ -933,7 +933,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      */
     public function getQueryGamesOrderBy($type='createdAt', $order='DESC')
     {
-        $em = $this->getServiceManager()->get('zfcuser_doctrine_em');
+        $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
         $today = new \DateTime("now");
         $today = $today->format('Y-m-d') . ' 23:59:59';
         
@@ -995,7 +995,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      */
     public function findFirstEntries($game)
     {
-        $em = $this->getServiceManager()->get('zfcuser_doctrine_em');
+        $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
         
         $query = $em->createQuery('
             SELECT e

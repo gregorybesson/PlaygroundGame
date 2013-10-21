@@ -237,7 +237,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
 
     public function getNumberCorrectAnswersQuiz($user, $count='count')
     {
-        $em = $this->getServiceManager()->get('zfcuser_doctrine_em');
+        $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
 
         if ($count == 'count') {
             $aggregate = 'COUNT(e.id)';
