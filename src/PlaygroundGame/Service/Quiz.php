@@ -155,7 +155,6 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                             foreach ($quizReplyAnswers as $quizReplyAnswer) {
                                 if ($answersarray[$quizReplyAnswer->getAnswerId()]) {
                                     $updatedAnswer = $answersarray[$quizReplyAnswer->getAnswerId()];
-                                  
                                     $quizReplyAnswer->setPoints($updatedAnswer->getPoints());
                                     $quizPoints += $updatedAnswer->getPoints();
                                     $quizReplyAnswer->setCorrect($updatedAnswer->getCorrect());
