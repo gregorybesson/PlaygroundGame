@@ -146,9 +146,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                 $quizReplies = $this->getQuizReplyMapper()->findByEntry($entry);
                 if ($quizReplies) {
                     foreach ($quizReplies as $reply) {
-
                         $quizReplyAnswers = $this->getQuizReplyAnswerMapper()->findByReplyAndQuestion($reply, $question->getId());
-
                         $quizPoints = 0;
                         $quizCorrectAnswers = 0;
                         if ($quizReplyAnswers) {
