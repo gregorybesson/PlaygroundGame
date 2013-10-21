@@ -124,10 +124,9 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
         } else {
             $end->add(new \DateInterval($interval));
         }
-        //$dateInterval = $end->diff($beginning);
+        
+        $dateInterval = $end->diff($beginning);
         $dateInterval = (int)(($end->getTimestamp() - $beginning->getTimestamp())/60);
-        //echo "date end : " . $end->format('d/m/Y') ."<br>";
-
         switch ($f) {
             case null:
             case 'game':
@@ -154,8 +153,11 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                 $nbExistingOccurrences = count($occurrences);
                 $nbInterval = (int) ($dateInterval/60);
                 //$dateInterval->format('%a')*24 + $dateInterval->format('%h');
+
                 // If a hour don't last 60min, I consider it as a hour anyway.
-                if($dateInterval%60 > 0){
+                $timezone = new \DateTimeZone('Europe/Paris');
+                $transitions = $timezone->getTransitions($beginning->getTimestamp(), $end->getTimestamp());
+                if(count($transitions) <= 1 && $dateInterval%60 > 0){
                     ++$nbInterval;
                 }
                 $nbOccurencesToCreate = $game->getOccurrenceNumber() - floor($nbExistingOccurrences/$nbInterval);
@@ -195,14 +197,16 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                 $occurrences = $this->getInstantWinOccurrenceMapper()->findBy(array('instantwin' => $game));
                 $nbExistingOccurrences = count($occurrences);
                 $nbOccurencesToCreate = 0;
-
                 $nbInterval = (int) ($dateInterval/(60*24));
-                //$nbInterval = $dateInterval->format('%a');
-                // If a day don't last 24h, I consider it as a day anyway.
-                if(($dateInterval%(60*24)) > 0){
+                
+                $timezone = new \DateTimeZone('Europe/Paris');
+                $transitions = $timezone->getTransitions($beginning->getTimestamp(), $end->getTimestamp());
+                // Prise en compte des changements d'horaires
+                // If a day don't last 24h, I consider it as a day anyway
+                if(count($transitions) <= 1 && ($dateInterval%(60*24)) > 0){
                     ++$nbInterval;
                 }
-                
+
                 if($nbInterval > 0){
                     $nbOccurencesToCreate = $game->getOccurrenceNumber() - floor($nbExistingOccurrences/$nbInterval);
                 }
@@ -215,7 +219,6 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                 
                 $beginningDrawDate = \DateTime::createFromFormat('m/d/Y H:i:s', $beginning->format('m/d/Y H:i:s'));
                 $endDrawDate = \DateTime::createFromFormat('m/d/Y H:i:s', $beginning->format('m/d/Y'). ' 23:59:59');
-
                 if ($nbOccurencesToCreate > 0) {
                     for ($d=1;$d<=$nbInterval;$d++){
                         for ($i=1;$i<=$nbOccurencesToCreate;$i++) {
@@ -245,7 +248,9 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                 //$nbWeeksInterval = ceil($dateInterval->format('%a')/7);
                 $nbWeeksInterval = (int) ($dateInterval/(60*24*7));
                 // If a week don't last 7d, I consider it as a week anyway.
-                if(($dateInterval%(60*24*7)) > 0){
+                $timezone = new \DateTimeZone('Europe/Paris');
+                $transitions = $timezone->getTransitions($beginning->getTimestamp(), $end->getTimestamp());
+                if(count($transitions) <= 1 && ($dateInterval%(60*24*7)) > 0){
                     ++$nbWeeksInterval;
                 }
                 $beginningDrawDate = \DateTime::createFromFormat('m/d/Y H:i:s', $beginning->format('m/d/Y'). ' 00:00:00');
@@ -284,7 +289,9 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                 //$nbMonthsInterval = $dateInterval->format('%m') + ceil($dateInterval->format('%d')/31);
                 $nbMonthsInterval = (int) ($dateInterval/(60*24*30));
                 // If a week don't last 30d, I consider it as a month anyway.
-                if(($dateInterval%(60*24*30)) > 0){
+                $timezone = new \DateTimeZone('Europe/Paris');
+                $transitions = $timezone->getTransitions($beginning->getTimestamp(), $end->getTimestamp());
+                if(count($transitions) <= 1 &&  ($dateInterval%(60*24*30)) > 0){
                     ++$nbMonthsInterval;
                 }
                 $beginningDrawDate = \DateTime::createFromFormat('m/d/Y H:i:s', $beginning->format('m/d/Y'). ' 00:00:00');
