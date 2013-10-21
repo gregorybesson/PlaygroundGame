@@ -37,6 +37,10 @@ class Quiz extends Game implements ServiceManagerAwareInterface
     protected $quizReplyMapper;
 
     /**
+     * @var quizReplyAnswerMapper
+     */
+    protected $quizReplyAnswerMapper;
+    /**
      *
      *
      * @param  array                  $data
@@ -149,7 +153,6 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                             foreach ($quizReplyAnswers as $quizReplyAnswer) {
                                 if ($answersarray[$quizReplyAnswer->getAnswerId()]) {
                                     $updatedAnswer = $answersarray[$quizReplyAnswer->getAnswerId()];
-        
                                     $quizReplyAnswer->setPoints($updatedAnswer->getPoints());
                                     $quizPoints += $updatedAnswer->getPoints();
                                     $quizReplyAnswer->setCorrect($updatedAnswer->getCorrect());
@@ -162,7 +165,6 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                 }
 
                 $winner = $this->isWinner($quiz, $quizCorrectAnswers);
-
                 $entry->setWinner($winner);
                 $entry->setPoints($quizPoints);
                 $entry->setActive(false);
