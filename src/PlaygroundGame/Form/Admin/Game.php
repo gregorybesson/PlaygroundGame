@@ -183,7 +183,7 @@ class Game extends ProvidesEventsForm
             'type' => 'Zend\Form\Element\DateTime',
             'name' => 'publicationDate',
             'options' => array(
-                'label' => $translator->translate('Date de publication', 'playgroundgame'),
+                'label' => $translator->translate('Publishing date', 'playgroundgame'),
                 'format' => 'd/m/Y'
             ),
             'attributes' => array(
@@ -196,7 +196,7 @@ class Game extends ProvidesEventsForm
             'type' => 'Zend\Form\Element\DateTime',
             'name' => 'startDate',
             'options' => array(
-                'label' => $translator->translate('Date de début', 'playgroundgame'),
+                'label' => $translator->translate('Start Date', 'playgroundgame'),
                 'format' => 'd/m/Y'
             ),
             'attributes' => array(
@@ -209,7 +209,7 @@ class Game extends ProvidesEventsForm
             'type' => 'Zend\Form\Element\DateTime',
             'name' => 'endDate',
             'options' => array(
-                'label' => $translator->translate('Date de fin', 'playgroundgame'),
+                'label' => $translator->translate('End Date', 'playgroundgame'),
                 'format' => 'd/m/Y'
             ),
             'attributes' => array(
@@ -222,7 +222,7 @@ class Game extends ProvidesEventsForm
             'type' => 'Zend\Form\Element\DateTime',
             'name' => 'closeDate',
             'options' => array(
-                'label' => $translator->translate('Date de dépublication', 'playgroundgame'),
+                'label' => $translator->translate('Date of close', 'playgroundgame'),
                 'format' => 'd/m/Y'
             ),
             'attributes' => array(
@@ -235,10 +235,10 @@ class Game extends ProvidesEventsForm
                 'name' => 'playLimit',
                 'type' => 'Zend\Form\Element\Text',
                 'attributes' => array(
-                        'placeholder' => 'Nombre d\'essais par joueur',
+                        'placeholder' => $translator->translate('Tries limit per player', 'playgroundgame'),
                 ),
                 'options' => array(
-                        'label' => 'Quel est la limite du nombre d\'essais par joueur ?',
+                        'label' => $translator->translate('What\'s the tries limit per player ?', 'playgroundgame'),
                 ),
         ));
 
@@ -248,16 +248,16 @@ class Game extends ProvidesEventsForm
                 'attributes' =>  array(
                         'id' => 'playLimitScale',
                         'options' => array(
-                                'day' => $translator->translate('Jour', 'playgroundgame'),
-                                'week' => $translator->translate('Semaine', 'playgroundgame'),
-                                'month' => $translator->translate('Mois', 'playgroundgame'),
-                                'year' => $translator->translate('An', 'playgroundgame'),
-                                'always' => $translator->translate('Toujours', 'playgroundgame'),
+                                'day' => $translator->translate('Day', 'playgroundgame'),
+                                'week' => $translator->translate('Week', 'playgroundgame'),
+                                'month' => $translator->translate('Month', 'playgroundgame'),
+                                'year' => $translator->translate('Year', 'playgroundgame'),
+                                'always' => $translator->translate('Always', 'playgroundgame'),
                         ),
                 ),
                 'options' => array(
-                        'empty_option' => $translator->translate('Quelle est la durée de limitation ?', 'playgroundgame'),
-                        'label' => $translator->translate('Durée de la limite', 'playgroundgame'),
+                        'empty_option' => $translator->translate('Limit period', 'playgroundgame'),
+                        'label' => $translator->translate('What\'s the limit period ?', 'playgroundgame'),
                 ),
         ));
 
@@ -267,14 +267,14 @@ class Game extends ProvidesEventsForm
             'attributes' =>  array(
                 'id' => 'playBonus',
                 'options' => array(
-                    'none' => $translator->translate('Aucune participation bonus', 'playgroundgame'),
-                    'per_entry' => $translator->translate('Au max une participation bonus par participation', 'playgroundgame'),
-                    'one' => $translator->translate('Une seule participation bonus pour le jeu', 'playgroundgame'),
+                    'none' => $translator->translate('No bonus entry', 'playgroundgame'),
+                	'one' => $translator->translate('One bonus entry per game', 'playgroundgame'),
+                    'per_entry' => $translator->translate('One bonus entry by entry', 'playgroundgame'),
                 ),
             ),
             'options' => array(
-                'empty_option' => $translator->translate('Des participations bonus peuvent-elles être offertes ?', 'playgroundgame'),
-                'label' => $translator->translate('Participations bonus', 'playgroundgame'),
+                'empty_option' => $translator->translate('Bonus entries', 'playgroundgame'),
+                'label' => $translator->translate('Any bonus entries ?', 'playgroundgame'),
             ),
         ));
 
@@ -283,10 +283,10 @@ class Game extends ProvidesEventsForm
             'name' => 'active',
             'options' => array(
                 'value_options' => array(
-                    '0' => $translator->translate('Non', 'playgroundgame'),
-                    '1' => $translator->translate('Oui', 'playgroundgame')
+                    '0' => $translator->translate('No', 'playgroundgame'),
+                    '1' => $translator->translate('Yes', 'playgroundgame')
                 ),
-                'label' => $translator->translate('Actif', 'playgroundgame')
+                'label' => $translator->translate('Active', 'playgroundgame')
             )
         ));
 
