@@ -116,22 +116,33 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
 
         if ($game->getEndDate()) {
             $end = $game->getEndDate();
-            // DateInterval takes the day @ 00:00 to calculate the difference between the dates, so 1 day is always missing
-            // as we consider the last day @ 23:59:59 in Playground :)
-            if($end->format('His') == 0){
-                $end->add(new \DateInterval('P1D'));
-            }
         } else {
             $end->add(new \DateInterval($interval));
+        }
+        
+        // Summertimes timezone management
+        $timezone = $today->getTimezone();
+        $transitions = $timezone->getTransitions($beginning->getTimestamp(), $end->getTimestamp());
+        
+        // There is a time transition between these datetimes()
+        if(count($transitions) == 2){
+            $shift = $transitions[0]['offset'] - $transitions[1]['offset'];
+            if($shift > 0){
+                $end->sub(new \DateInterval('PT'.$shift.'S'));
+            } else{
+                $end->add(new \DateInterval('PT'.$shift.'S'));
+            }
+        }
+        
+        // DateInterval takes the day @ 00:00 to calculate the difference between the dates, so 1 day is always missing
+        // as we consider the last day @ 23:59:59 in Playground :)
+        if($end->format('His') == 0){
+            $end->add(new \DateInterval('P1D'));
         }
         
         //$dateInterval = $end->diff($beginning);
         
         $dateInterval = (int)(($end->getTimestamp() - $beginning->getTimestamp())/60);
-        
-        // Gestion des changements d'horaires
-        $timezone = new \DateTimeZone('Europe/Paris');
-        $transitions = $timezone->getTransitions($beginning->getTimestamp(), $end->getTimestamp());
         
         switch ($f) {
             case null:
@@ -161,7 +172,7 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                 //$dateInterval->format('%a')*24 + $dateInterval->format('%h');
 
                 // If a hour don't last 60min, I consider it as a hour anyway.
-                if(count($transitions) <= 1 && $dateInterval%60 > 0){
+                if($dateInterval%60 > 0){
                     ++$nbInterval;
                 }
                 $nbOccurencesToCreate = $game->getOccurrenceNumber() - floor($nbExistingOccurrences/$nbInterval);
@@ -205,7 +216,10 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                 
                 // Prise en compte des changements d'horaires
                 // If a day don't last 24h, I consider it as a day anyway
-                if(count($transitions) <= 1 && ($dateInterval%(60*24)) > 0){
+                
+                echo count($transitions) . 'trans';
+                print_r(array_slice($transitions, 0, 3));
+                if($dateInterval%(60*24) > 0){
                     ++$nbInterval;
                 }
 
@@ -250,7 +264,7 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                 //$nbWeeksInterval = ceil($dateInterval->format('%a')/7);
                 $nbWeeksInterval = (int) ($dateInterval/(60*24*7));
                 // If a week don't last 7d, I consider it as a week anyway.
-                if(count($transitions) <= 1 && ($dateInterval%(60*24*7)) > 0){
+                if($dateInterval%(60*24*7) > 0){
                     ++$nbWeeksInterval;
                 }
                 $beginningDrawDate = \DateTime::createFromFormat('m/d/Y H:i:s', $beginning->format('m/d/Y'). ' 00:00:00');
@@ -289,7 +303,7 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                 //$nbMonthsInterval = $dateInterval->format('%m') + ceil($dateInterval->format('%d')/31);
                 $nbMonthsInterval = (int) ($dateInterval/(60*24*30));
                 // If a week don't last 30d, I consider it as a month anyway.
-                if(count($transitions) <= 1 &&  ($dateInterval%(60*24*30)) > 0){
+                if($dateInterval%(60*24*30) > 0){
                     ++$nbMonthsInterval;
                 }
                 $beginningDrawDate = \DateTime::createFromFormat('m/d/Y H:i:s', $beginning->format('m/d/Y'). ' 00:00:00');
