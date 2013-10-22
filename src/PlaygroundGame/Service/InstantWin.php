@@ -217,8 +217,6 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                 // Prise en compte des changements d'horaires
                 // If a day don't last 24h, I consider it as a day anyway
                 
-                echo count($transitions) . 'trans';
-                print_r(array_slice($transitions, 0, 3));
                 if($dateInterval%(60*24) > 0){
                     ++$nbInterval;
                 }
