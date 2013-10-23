@@ -75,18 +75,35 @@ class QuizController extends GameController
             $name = 'q' . $q->getId();
             $fieldsetFilter = new \Zend\InputFilter\InputFilter();
             if ($q->getType() == 0) {
-                $element = new Element\Radio($name);
+            $element = new Element\Radio($name);
                 $values = array();
+                $valuesSortedByPosition = array();
                 foreach ($q->getAnswers() as $a) {
-                    $values[$a->getId()] = $a->getAnswer();
+                    $values[$a->getPosition()] = array(
+                        'answer' => $a->getAnswer(),
+                        'id' => $a->getId()
+                    );
                 }
-                $element->setValueOptions($values);
+                ksort($values);
+                foreach ($values as $key => $value) {
+                    $valuesSortedByPosition[$value['id']] = $value['answer'];
+                }
+                $element->setValueOptions($valuesSortedByPosition);
             } elseif ($q->getType() == 1) {
                 $element = new Element\MultiCheckbox($name);
                 $values = array();
+                $valuesSortedByPosition = array();
                 foreach ($q->getAnswers() as $a) {
-                    $values[$a->getId()] = $a->getAnswer();
+                    $values[$a->getPosition()] = array(
+                        'answer' => $a->getAnswer(),
+                        'id' => $a->getId()
+                    );
                 }
+                ksort($values);
+                foreach ($values as $key => $value) {
+                    $valuesSortedByPosition[$value['id']] = $value['answer'];
+                }
+                $element->setValueOptions($valuesSortedByPosition);
                 $element->setValueOptions($values);
             } elseif ($q->getType() == 2) {
                 $element = new Element\Textarea($name);
