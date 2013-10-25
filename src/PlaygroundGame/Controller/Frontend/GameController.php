@@ -54,14 +54,14 @@ class GameController extends AbstractActionController
             $this->getViewHelper('HeadLink')->appendStylesheet($this->getRequest()->getBaseUrl(). '/' . $game->getStylesheet());
         }
 
-        $adserving = $this->getOptions()->getAdServing();
+        /*$adserving = $this->getOptions()->getAdServing();
         $adserving['cat2'] = 'game';
-        $adserving['cat3'] = '&EASTgameid='.$game->getId();
+        $adserving['cat3'] = '&EASTgameid='.$game->getId();*/
         // I change the label in the breadcrumb ...
         $this->layout()->setVariables(
             array(
                 'breadcrumbTitle' => $game->getTitle(),
-                'adserving'       => $adserving,
+                //'adserving'       => $adserving,
                 'currentPage' => array(
                     'pageGames' => 'games',
                     'pageWinners' => ''
@@ -165,15 +165,15 @@ class GameController extends AbstractActionController
             $this->getViewHelper('HeadLink')->appendStylesheet($this->getRequest()->getBaseUrl(). '/' . $game->getStylesheet());
         }
 
-        $adserving = $this->getOptions()->getAdServing();
+        /*$adserving = $this->getOptions()->getAdServing();
         $adserving['cat2'] = 'game';
-        $adserving['cat3'] = '&EASTgameid='.$game->getId();
+        $adserving['cat3'] = '&EASTgameid='.$game->getId();*/
 
         // I change the label of the quiz in the breadcrumb ...
         $this->layout()->setVariables(
             array(
                 'breadcrumbTitle' => $game->getTitle(),
-                'adserving'       => $adserving,
+                //'adserving'       => $adserving,
                 'currentPage' => array(
                     'pageGames' => 'games',
                     'pageWinners' => ''
@@ -373,15 +373,15 @@ class GameController extends AbstractActionController
             $this->getViewHelper('HeadLink')->appendStylesheet($this->getRequest()->getBaseUrl(). '/' . $game->getStylesheet());
         }
 
-        $adserving = $this->getOptions()->getAdServing();
+        /*$adserving = $this->getOptions()->getAdServing();
         $adserving['cat2'] = 'game';
-        $adserving['cat3'] = '&EASTgameid='.$game->getId();
+        $adserving['cat3'] = '&EASTgameid='.$game->getId();*/
 
         // I change the label of the quiz in the breadcrumb ...
         $this->layout()->setVariables(
             array(
                 'breadcrumbTitle' => $game->getTitle(),
-                'adserving'       => $adserving,
+                //'adserving'       => $adserving,
                 'currentPage' => array(
                     'pageGames' => 'games',
                     'pageWinners' => ''
@@ -428,15 +428,15 @@ class GameController extends AbstractActionController
             $this->getViewHelper('HeadLink')->appendStylesheet($this->getRequest()->getBaseUrl(). '/' . $game->getStylesheet());
         }
 
-        $adserving = $this->getOptions()->getAdServing();
+        /*$adserving = $this->getOptions()->getAdServing();
         $adserving['cat2'] = 'game';
-        $adserving['cat3'] = '&EASTgameid='.$game->getId();
+        $adserving['cat3'] = '&EASTgameid='.$game->getId();*/
 
         // I change the label of the quiz in the breadcrumb ...
         $this->layout()->setVariables(
             array(
                 'breadcrumbTitle' => $game->getTitle(),
-                'adserving'       => $adserving,
+                //'adserving'       => $adserving,
                 'currentPage' => array(
                     'pageGames' => 'games',
                     'pageWinners' => ''
@@ -483,15 +483,15 @@ class GameController extends AbstractActionController
             $this->getViewHelper('HeadLink')->appendStylesheet($this->getRequest()->getBaseUrl(). '/' . $game->getStylesheet());
         }
 
-        $adserving = $this->getOptions()->getAdServing();
+        /*$adserving = $this->getOptions()->getAdServing();
         $adserving['cat2'] = 'game';
-        $adserving['cat3'] = '&EASTgameid='.$game->getId();
+        $adserving['cat3'] = '&EASTgameid='.$game->getId();*/
 
         // I change the label of the quiz in the breadcrumb ...
         $this->layout()->setVariables(
             array(
                 'breadcrumbTitle' => $game->getTitle(),
-                'adserving'       => $adserving,
+                //'adserving'       => $adserving,
                 'currentPage' => array(
                     'pageGames' => 'games',
                     'pageWinners' => ''
@@ -553,15 +553,15 @@ class GameController extends AbstractActionController
             $this->getViewHelper('HeadLink')->appendStylesheet($this->getRequest()->getBaseUrl(). '/' . $game->getStylesheet());
         }
 
-        $adserving = $this->getOptions()->getAdServing();
+        /*$adserving = $this->getOptions()->getAdServing();
         $adserving['cat2'] = 'game';
-        $adserving['cat3'] = '&EASTgameid='.$game->getId();
+        $adserving['cat3'] = '&EASTgameid='.$game->getId();*/
 
         // I change the label of the quiz in the breadcrumb ...
         $this->layout()->setVariables(
             array(
                 'breadcrumbTitle' => $game->getTitle(),
-                'adserving'       => $adserving,
+                //'adserving'       => $adserving,
                 'currentPage' => array(
                     'pageGames' => 'games',
                     'pageWinners' => ''
@@ -666,14 +666,14 @@ class GameController extends AbstractActionController
     		$this->getViewHelper('HeadLink')->appendStylesheet($this->getRequest()->getBaseUrl(). '/' . $game->getStylesheet());
     	}
 
-    	$adserving = $this->getOptions()->getAdServing();
+    	/*$adserving = $this->getOptions()->getAdServing();
     	$adserving['cat2'] = 'game';
-    	$adserving['cat3'] = '&EASTgameid='.$game->getId();
+    	$adserving['cat3'] = '&EASTgameid='.$game->getId();*/
     	// I change the label in the breadcrumb ...
     	$this->layout()->setVariables(
     			array(
     					'breadcrumbTitle' => $game->getTitle(),
-    					'adserving'       => $adserving,
+    					//'adserving'       => $adserving,
     					'currentPage' => array(
     							'pageGames' => 'games',
     							'pageWinners' => ''
@@ -740,9 +740,9 @@ class GameController extends AbstractActionController
     		$this->getViewHelper('HeadLink')->appendStylesheet($this->getRequest()->getBaseUrl(). '/' . $game->getStylesheet());
     	}
 
-    	$adserving = $this->getOptions()->getAdServing();
+    	/*$adserving = $this->getOptions()->getAdServing();
     	$adserving['cat2'] = 'game';
-    	$adserving['cat3'] = '&EASTgameid='.$game->getId();
+    	$adserving['cat3'] = '&EASTgameid='.$game->getId();*/
     	// I change the label in the breadcrumb ...
     	$this->layout()->setVariables(
     			array(
@@ -821,11 +821,11 @@ class GameController extends AbstractActionController
         $this->layout()->setVariables(
            array(
             'sliderItems'   => $sliderItems,
-            'adserving'       => array(
+            /*'adserving'       => array(
                 'cat1' => 'playground',
                 'cat2' => 'game',
                 'cat3' => ''
-            ),
+            ),*/
             'currentPage' => array(
                 'pageGames' => 'games',
                 'pageWinners' => ''

@@ -45,13 +45,13 @@ class PrizeCategoryController extends GameController
         $this->getViewHelper('HeadMeta')->setProperty('bt:user', $bitlyuser);
         $this->getViewHelper('HeadMeta')->setProperty('bt:key', $bitlykey);
 
-        $adserving = $this->getOptions()->getAdServing();
-        $adserving['cat2'] = 'game';
+        /*$adserving = $this->getOptions()->getAdServing();
+        $adserving['cat2'] = 'game';*/
         
         $this->layout()->setVariables(
             array(
                 'breadcrumbTitle' => $prizeCategory->getTitle(),
-                'adserving'       => $adserving,
+                //'adserving'       => $adserving,
                 'currentPage' => array(
                     'pageGames' => 'games',
                     'pageWinners' => ''
