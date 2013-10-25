@@ -31,34 +31,34 @@ class Quiz extends Game
                 'attributes' =>  array(
                         'id' => 'drawAuto',
                         'options' => array(
-                                '0' => $translator->translate('Non', 'playgroundgame'),
-                                '1' => $translator->translate('Oui', 'playgroundgame'),
+                                '0' => $translator->translate('No', 'playgroundgame'),
+                                '1' => $translator->translate('Yes', 'playgroundgame'),
                         ),
                 ),
                 'options' => array(
-                        'label' => $translator->translate('Tirage au sort automatique', 'playgroundgame'),
+                        'label' => $translator->translate('Automatic drawing out', 'playgroundgame'),
                 ),
         ));
 
         $this->add(array(
                 'name' => 'winners',
                 'options' => array(
-                        'label' => $translator->translate('Nombre de gagnants', 'playgroundgame')
+                        'label' => $translator->translate('Winners number', 'playgroundgame')
                 ),
                 'attributes' => array(
                         'type' => 'text',
-                        'placeholder' => $translator->translate('Nombre de gagnants', 'playgroundgame')
+                        'placeholder' => $translator->translate('Winners number', 'playgroundgame')
                 )
         ));
 
         $this->add(array(
                 'name' => 'substitutes',
                 'options' => array(
-                        'label' => $translator->translate('Nombre de remplaçants', 'playgroundgame')
+                        'label' => $translator->translate('Substitutes number', 'playgroundgame')
                 ),
                 'attributes' => array(
                         'type' => 'text',
-                        'placeholder' => $translator->translate('Nombre de remplaçants', 'playgroundgame')
+                        'placeholder' => $translator->translate('Substitutes number', 'playgroundgame')
                 )
         ));
 
@@ -70,7 +70,7 @@ class Quiz extends Game
                 'value' => '0',
             ),
             'options' => array(
-                'label' => 'Use a Timer',
+                'label' => $translator->translate('Use a Timer', 'playgroundgame'),
                 'value_options' => array(
                     '0' => 'No',
                     '1' => 'yes',
@@ -82,10 +82,10 @@ class Quiz extends Game
             'name' => 'timerDuration',
             'type' => 'Zend\Form\Element\Text',
             'attributes' => array(
-                'placeholder' => 'Duration in seconds',
+                'placeholder' => $translator->translate('Duration in seconds', 'playgroundgame'),
             ),
             'options' => array(
-                'label' => 'Timer Duration',
+                'label' => $translator->translate('Timer Duration', 'playgroundgame'),
             ),
         ));
 
@@ -93,11 +93,11 @@ class Quiz extends Game
             'name' => 'victoryConditions',
             'type' => 'Zend\Form\Element\Text',
             'attributes' => array(
-                'placeholder' => '% de bonnes réponses',
+                'placeholder' => $translator->translate('% good answers', 'playgroundgame'),
                 'id' => 'victoryConditions'
             ),
             'options' => array(
-                'label' => 'Conditions de victoire',
+                'label' => $translator->translate('Victory conditions', 'playgroundgame'),
             ),
         ));
 
@@ -108,7 +108,7 @@ class Quiz extends Game
                 'required' => 'required',
             ),
             'options' => array(
-                'label' => 'Group question',
+                'label' => $translator->translate('Group question', 'playgroundgame'),
             ),
         ));
 
