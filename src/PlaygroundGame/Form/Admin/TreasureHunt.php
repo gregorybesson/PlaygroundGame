@@ -25,11 +25,11 @@ class TreasureHunt extends Game
         $this->add(array(
         		'name' => 'winners',
         		'options' => array(
-        				'label' => $translator->translate('Nombre de gagnants', 'playgroundgame')
+        				'label' => $translator->translate('Winners number', 'playgroundgame')
         		),
         		'attributes' => array(
         				'type' => 'text',
-        				'placeholder' => $translator->translate('Nombre de gagnants', 'playgroundgame')
+        				'placeholder' => $translator->translate('Winners number', 'playgroundgame')
         		)
         ));
         
@@ -43,8 +43,8 @@ class TreasureHunt extends Game
         		'options' => array(
         				'label' => 'Use a Timer',
         				'value_options' => array(
-        						'0' => 'No',
-        						'1' => 'yes',
+        						'0' => $translator->translate('No', 'playgroundgame'),
+        						'1' => $translator->translate('yes', 'playgroundgame'),
         				),
         		),
         ));
@@ -53,10 +53,10 @@ class TreasureHunt extends Game
         		'name' => 'timerDuration',
         		'type' => 'Zend\Form\Element\Text',
         		'attributes' => array(
-        				'placeholder' => 'Duration in seconds',
+        				'placeholder' => $translator->translate('Duration in seconds','playgroundgame'),
         		),
         		'options' => array(
-        				'label' => 'Timer Duration',
+        				'label' => $translator->translate('Timer Duration','playgroundgame'),
         		),
         ));
         
@@ -72,8 +72,8 @@ class TreasureHunt extends Game
    				),
        		),
         	'options' => array(
-        		'empty_option' => $translator->translate('Quel type de joueur peut participer', 'playgroundgame'),
-       			'label' => $translator->translate('Type de joueur pouvant participer', 'playgroundgame'),
+        		'empty_option' => $translator->translate('What player type can participate', 'playgroundgame'),
+       			'label' => $translator->translate('Player type who can participate', 'playgroundgame'),
        		),
         ));
     }
