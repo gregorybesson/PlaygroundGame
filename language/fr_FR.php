@@ -129,7 +129,7 @@ return array(
 	'Legal notice'		=> 'Mentions légales',
 	'Rules page'		=> 'Page de règlement',
 	'Publishing date'	=> 'Date de publication',
-	'Date of close' 	=> 'Date de déplublication',
+	'Date of close' 	=> 'Date de dépublication',
 	'What\'s the tries limit per player ?' => 'Quelle est la limite d\'essais par joueur ?',
 	'Tries limit per player' => 'Nombre d\'essai per player',
 	'Limit period'		=> 'Période de la limite',
