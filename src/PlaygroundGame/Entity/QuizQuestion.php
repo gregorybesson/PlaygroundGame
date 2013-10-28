@@ -67,6 +67,16 @@ class QuizQuestion implements InputFilterAwareInterface
      * @ORM\Column(type="string", nullable=true)
      */
     protected $image;
+    
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $audio;
+    
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    protected $autoplay;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -79,7 +89,7 @@ class QuizQuestion implements InputFilterAwareInterface
     protected $prediction = 0;
 
     /**
-     * @ORM\Column(type="boolean", nullable=false)
+     * @ORM\Column(type="boolean", nullable=true)
      */
     protected $timer = 0;
 
@@ -271,6 +281,42 @@ class QuizQuestion implements InputFilterAwareInterface
     {
         $this->image = $image;
 
+        return $this;
+    }
+    
+    /**
+     * @return the unknown_type
+     */
+    public function getAudio()
+    {
+        return $this->audio;
+    }
+    
+    /**
+     * @param unknown_type audio
+     */
+    public function setAudio($audio)
+    {
+        $this->audio = $audio;
+    
+        return $this;
+    }
+    
+    /**
+     * @return the unknown_type
+     */
+    public function getAutoplay()
+    {
+        return $this->autoplay;
+    }
+    
+    /**
+     * @param unknown_type autoplay
+     */
+    public function setAutoplay($autoplay)
+    {
+        $this->autoplay = $autoplay;
+    
         return $this;
     }
 
@@ -595,6 +641,11 @@ class QuizQuestion implements InputFilterAwareInterface
 
             $inputFilter->add($factory->createInput(array(
                 'name'     => 'image',
+                'required' => false,
+            )));
+            
+            $inputFilter->add($factory->createInput(array(
+                'name'     => 'audio',
                 'required' => false,
             )));
 

@@ -168,7 +168,7 @@ class QuizQuestion extends ProvidesEventsForm
             ),
         ));
         
-        /*$this->add(array(
+        $this->add(array(
             'name' => 'audio',
             'type' => 'Zend\Form\Element\Hidden',
             'attributes' => array(
@@ -182,7 +182,7 @@ class QuizQuestion extends ProvidesEventsForm
             'attributes' => array(
                 'value' => 0,
             ),
-        ));*/
+        ));
 
         // Adding an empty upload field to be able to correctly handle this on the service side.
         $this->add(array(

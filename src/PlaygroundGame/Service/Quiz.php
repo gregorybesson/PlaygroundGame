@@ -52,6 +52,10 @@ class Quiz extends Game implements ServiceManagerAwareInterface
     {
         $path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR;
         $media_url = $this->getOptions()->getMediaUrl() . '/';
+        
+        if(empty($data['autoplay'])) {
+            $data['autoplay'] = null;
+        }
 
         $question  = new \PlaygroundGame\Entity\QuizQuestion();
         $form  = $this->getServiceManager()->get('playgroundgame_quizquestion_form');
@@ -100,6 +104,14 @@ class Quiz extends Game implements ServiceManagerAwareInterface
     {
         $path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR;
         $media_url = $this->getOptions()->getMediaUrl() . '/';
+        
+        if(empty($data['timer'])) {
+            $data['timer'] = null;
+        }
+        
+        if(empty($data['autoplay'])) {
+            $data['autoplay'] = null;
+        }
 
         $form  = $this->getServiceManager()->get('playgroundgame_quizquestion_form');
         $form->bind($question);
