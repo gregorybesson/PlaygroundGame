@@ -2,44 +2,38 @@
 return array(
 
     // Breadcrumbs
-    'Home' 					=> 'Home',
+    'Home' 				=> 'Home',
 	'Game list'			=> 'Game list',
 
     // Admin List
-    'Title' 				=> 'Title',
-    'Created at' 			=> 'Created at',
-    'Start Date' 			=> 'Start Date',
-    'End Date' 				=> 'End Date',
-    'Slug'  				=> 'Slug',
-    'Edit' 					=> 'Edit',
-    'Delete' 				=> 'Delete',
-    'Add options' 			=> 'Add options',
-    'Add new game' 			=> 'Add new game',
-    'Add new lottery' 		=> 'Add new lottery',
+    'Title' 			=> 'Title',
+    'Created at' 		=> 'Created at',
+    'Start Date' 		=> 'Start Date',
+    'End Date' 			=> 'End Date',
+    'Slug'  			=> 'Slug',
+    'Edit' 				=> 'Edit',
+    'Delete' 			=> 'Delete',
+    'Add options' 		=> 'Add options',
+    'Add new game' 		=> 'Add new game',
+    'Add new lottery' 	=> 'Add new lottery',
     'Add new Quiz' 		=> 'Add new Quiz',
     'Add new Instant Win'   => 'Add new Instant Win',
     'Add new Post & Vote'   => 'Add new Post & Vote',
 	'Add new Treasure Hunt'	=> 'Add new Treasure Hunt',
-    'Active' 				=> 'Active',
+    'Active' 			    => 'Active',
     'Activate the game'     => 'Activate the game',
-    'Desactivate the game'  => 'Deactivate the game',
-    'Yes' 					=> 'Yes',
-    'No' 					=> 'No',
-    'Add new occurrence'	=> 'Ajouter un instant gagnant',
-	'Leader Board' 		=> 'Leader Board',
+    'Desactivate the game'  => 'Desactivate the game',
+    'Yes' 				=> 'Yes',
+    'No' 				=> 'No',
+    'Leader Board' 		=> 'Leader Board',
     'Add new occurrence'=> 'Add new occurrence',
     'Status'            => 'Status',
-	'Games'					=> 'Games',
-	'State'					=> 'State',
-	'Subscribers'			=> 'Subscribers',
-	'Players'				=> 'Players',
-	'Online'				=> 'Online',
-		
+
     // Paginator
-    'First' 				=> 'First',
-    'Previous' 				=> 'Previous',
-    'Next' 					=> 'Next',
-    'Last' 					=> 'Last',
+    'First' 			=> 'First',
+    'Previous' 			=> 'Previous',
+    'Next' 				=> 'Next',
+    'Last' 				=> 'Last',
 
     // Admin Edition
     'Edit game' 		=> 'Edit game',
@@ -58,10 +52,6 @@ return array(
     'Start date' 		=> 'Start date',
     'End date' 			=> 'End date',
     'Game Mechanics' 	=> 'Game Mechanics',
-
-    'Homepage' 			=> 'Homepage',
-    'General' 			=> 'General',
-
 	'Lots'				=> 'Lots',
 	'Plateform'			=> 'Plateform',
 	'Facebook'			=> 'Facebook',
@@ -142,7 +132,7 @@ return array(
 	'Instant win creation frequency ?' => 'Instant win creation frequency ?',
 	'Creation frequency' => 'Creation frequency',
 	'Game Image scraping' => 'Game Image scraping',
-
+		
     // Admin Leaderboard list
     'User' 				=> 'User',
     'Points' 			=> 'Points',
@@ -171,10 +161,10 @@ return array(
     'Generate Form' 	=> 'Generate Form',
 
     // Front game
-    'Lottery' 			=> 'Lottery',
+    'lottery' 			=> 'Lottery',
     'Quiz' 				=> 'Quiz',
-    'Instantwin' 		=> 'Instantwin',
-    'Quiz' 				=> 'Quizz',
+    'instantwin' 		=> 'Instantwin',
+    'quiz' 				=> 'Quizz',
     'postvote' 			=> 'Post & Vote',
 
     // Front game Quiz
@@ -188,7 +178,6 @@ return array(
     'System' 			=> 'System',
     'Settings' 			=> 'Settings',
     'Edit FAQ' 			=> 'Edit FAQ',
-
     'Add new page' 		=> 'Add new page',
     'Create' 			=> 'Create',
     'title' 			=> 'Title',
@@ -206,27 +195,6 @@ return array(
 	// Admin Instantwin
 	'Create instant win' => 'Create instant win',
 	'Edit instant win' 	=> 'Edit an instant win',
-	'Prize' 			=> 'Prize',
-	'Platform'			=> 'Platform',
-	'Right Column'		=> 'Right Column',
-	'Share'				=> 'Share',
-	'Legal notice'		=> 'Legal notice',
-	'Rules page'		=> 'Rules page',
-	'Publishing date' 	=> 'Publish date',
-	'What\'s the tries limit per player ?' => 'What\'s the tries limit per player ?',
-	'Tries limit per player' => 'Tries limit per player',
-	'Limit period'		=> 'Limit period', 
-	'Day'				=> 'Day',
-	'Week'				=> 'Week',
-	'Month'				=> 'Month',
-	'Year'				=> 'Year',
-	'Always'			=> 'Always',
-	'What\'s the limit period ?' => 'What\'s the period limit ?',
-	'Bonus entries'		=> 'Bonus entries',
-	'Any bonus entries ?' => 'Any bonus entries ?',
-	'No bonus entry'	=> 'No bonus entry',
-	'One bonus entry per game' => 'One bonus entry per game',
-	'One bonus entry by entry' => 'One bonus entry per entry',
 	'All' => 'All',
 	'Prospect' => 'Prospect',
 	'Customer' => 'Customer',
@@ -245,15 +213,15 @@ return array(
     'This field contains more than %s characters' => 'This field contains more than %s characters',
 	
 	// Admin Lottery
-	'Create lottery' 	=> 'Create lottery',
-	'Edit lottery' 		=> 'Edit lottery',
+	'Create lottery' => 'Create lottery',
+	'Edit lottery' 	=> 'Edit lottery',
 
     // State
-    'schedule' 			=> '<span class="label label-important">Scheduled</span>',
-    'launching' 		=> '<span class="label label-warning">Launching</span>',
-    'in progress' 		=> '<span class="label label-success">In progress</span>',
-    'finished' 			=> '<span class="label label-info">Finished</span>',
-    'closed' 			=> '<span class="label label-inverse">Close</span>',
+    'schedule' => '<span class="label label-important">Scheduled</span>',
+    'launching' => '<span class="label label-warning">Launching</span>',
+    'in progress' => '<span class="label label-success">In progress</span>',
+    'finished' => '<span class="label label-info">Finished</span>',
+    'closed' => '<span class="label label-inverse">Closed</span>',
 
 	// Prize category list
 	'Gain category list' => 'Gain category list',

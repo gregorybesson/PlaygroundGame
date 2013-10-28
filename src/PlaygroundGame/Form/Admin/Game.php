@@ -133,9 +133,9 @@ class Game extends ProvidesEventsForm
             'type' => 'Zend\Form\Element\Select',
             'name' => 'prizeCategory',
             'options' => array(
-                'empty_option' => $translator->translate('Ce jeu n\'a pas de catégorie', 'playgroundgame'),
+                'empty_option' => $translator->translate('No category for this game', 'playgroundgame'),
                 'value_options' => $categories,
-                'label' => $translator->translate('Catégorie de gain', 'playgroundgame')
+                'label' => $translator->translate('Category benefit', 'playgroundgame')
             )
         ));
 /*
@@ -151,7 +151,7 @@ class Game extends ProvidesEventsForm
             'type' => 'Zend\Form\Element\Checkbox',
             'name' => 'broadcastPlatform',
             'options' => array(
-                'label' => 'Publier ce jeu sur la Plateforme',
+                'label' => $translator->translate('Publish game on plateform', 'playgroundgame'),
             ),
         ));
         
@@ -159,7 +159,7 @@ class Game extends ProvidesEventsForm
         	'type' => 'Zend\Form\Element\Checkbox',
         	'name' => 'broadcastEmbed',
        		'options' => array(
-       			'label' => 'Publier ce jeu en mode Embed',
+       			'label' => $translator->translate('Publish game on embed mode', 'playgroundgame'),
        		),
         ));
 
@@ -167,7 +167,7 @@ class Game extends ProvidesEventsForm
                 'type' => 'Zend\Form\Element\Checkbox',
                 'name' => 'displayHome',
                 'options' => array(
-                        'label' => 'Publier ce jeu sur la home',
+                        'label' => $translator->translate('Publish game on home page', 'playgroundgame'),
                 ),
         ));
 
@@ -175,7 +175,7 @@ class Game extends ProvidesEventsForm
             'type' => 'Zend\Form\Element\Checkbox',
             'name' => 'pushHome',
             'options' => array(
-                'label' => 'Publier ce jeu sur le slider Home',
+                'label' => $translator->translate('Publish game on home page slider', 'playgroundgame'),
             ),
         ));
 
@@ -183,7 +183,7 @@ class Game extends ProvidesEventsForm
             'type' => 'Zend\Form\Element\DateTime',
             'name' => 'publicationDate',
             'options' => array(
-                'label' => $translator->translate('Publishing date', 'playgroundgame'),
+                'label' => $translator->translate('Publication date', 'playgroundgame'),
                 'format' => 'd/m/Y'
             ),
             'attributes' => array(
@@ -222,7 +222,7 @@ class Game extends ProvidesEventsForm
             'type' => 'Zend\Form\Element\DateTime',
             'name' => 'closeDate',
             'options' => array(
-                'label' => $translator->translate('Date of close', 'playgroundgame'),
+                'label' => $translator->translate('Unpublished date', 'playgroundgame'),
                 'format' => 'd/m/Y'
             ),
             'attributes' => array(
@@ -239,6 +239,7 @@ class Game extends ProvidesEventsForm
                 ),
                 'options' => array(
                         'label' => $translator->translate('What\'s the tries limit per player ?', 'playgroundgame'),
+
                 ),
         ));
 
@@ -252,12 +253,12 @@ class Game extends ProvidesEventsForm
                                 'week' => $translator->translate('Week', 'playgroundgame'),
                                 'month' => $translator->translate('Month', 'playgroundgame'),
                                 'year' => $translator->translate('Year', 'playgroundgame'),
-                                'always' => $translator->translate('Always', 'playgroundgame'),
+                                'always' => $translator->translate('Everytime', 'playgroundgame'),
                         ),
                 ),
                 'options' => array(
-                        'empty_option' => $translator->translate('Limit period', 'playgroundgame'),
-                        'label' => $translator->translate('What\'s the limit period ?', 'playgroundgame'),
+                        'empty_option' => $translator->translate('Limitation time', 'playgroundgame'),
+                        'label' => $translator->translate('Limit time', 'playgroundgame'),
                 ),
         ));
 
@@ -275,6 +276,7 @@ class Game extends ProvidesEventsForm
             'options' => array(
                 'empty_option' => $translator->translate('Bonus entries', 'playgroundgame'),
                 'label' => $translator->translate('Any bonus entries ?', 'playgroundgame'),
+
             ),
         ));
 
@@ -293,7 +295,7 @@ class Game extends ProvidesEventsForm
         $options = $this->getServiceManager()->get('configuration');
 
         $layoutArray = array(
-            '' => $translator->translate('Utiliser le layout par défaut', 'playgroundgame')
+            '' => $translator->translate('Use layout per default', 'playgroundgame')
         );
         if (isset($options['core_layout']) && isset($options['core_layout']['PlaygroundGame']) && isset($options['core_layout']['PlaygroundGame']['models'])) {
             $layoutOptions = array();
@@ -315,7 +317,7 @@ class Game extends ProvidesEventsForm
 
         // The additional Stylesheets are populated by the controllers
         $stylesheetArray = array(
-            '' => $translator->translate('Utiliser la feuille de styles par défaut', 'playgroundgame')
+            '' => $translator->translate('Use default style sheet', 'playgroundgame')
         );
 
         $this->add(array(
@@ -323,7 +325,7 @@ class Game extends ProvidesEventsForm
             'name' => 'stylesheet',
             'options' => array(
                 'value_options' => $stylesheetArray,
-                'label' => $translator->translate('Feuille de style', 'playgroundgame')
+                'label' => $translator->translate('Style sheet', 'playgroundgame')
             )
         ));
 
@@ -333,7 +335,7 @@ class Game extends ProvidesEventsForm
                 'type' => 'file'
             ),
             'options' => array(
-                'label' => $translator->translate('Ajouter une feuille de style', 'playgroundgame')
+                'label' => $translator->translate('Add style sheet', 'playgroundgame')
             )
         ));
 
@@ -358,11 +360,15 @@ class Game extends ProvidesEventsForm
         }
 
         $fbAppIds = $this->getFbAppIds();
+        $fbAppIds_label = array();
+        foreach($fbAppIds as $key => $title){
+        	$fbAppIds_label[$key] = $translator->translate($title, 'playgroundgame');
+        }
         $this->add(array(
             'type' => 'Zend\Form\Element\Select',
             'name' => 'fbAppId',
             'options' => array(
-                'value_options' => $fbAppIds,
+                'value_options' => $fbAppIds_label,
                 'label' => $translator->translate('Facebook Apps', 'playgroundgame')
             )
         ));
@@ -370,11 +376,11 @@ class Game extends ProvidesEventsForm
         $this->add(array(
             'name' => 'fbPageTabTitle',
             'options' => array(
-                'label' => $translator->translate('Titre de l\'onglet du jeu', 'playgroundgame')
+                'label' => $translator->translate('Game tab title', 'playgroundgame')
             ),
             'attributes' => array(
                 'type' => 'text',
-                'placeholder' => $translator->translate('Titre de l\'onglet du jeu', 'playgroundgame')
+                'placeholder' => $translator->translate('Game tab title', 'playgroundgame')
             )
         ));
 
@@ -384,7 +390,7 @@ class Game extends ProvidesEventsForm
                         'type' => 'file'
                 ),
                 'options' => array(
-                        'label' => $translator->translate('Icône de l\'onglet du jeu', 'playgroundgame')
+                        'label' => $translator->translate('Game tab icone', 'playgroundgame')
                 )
         ));
         $this->add(array(
@@ -399,7 +405,7 @@ class Game extends ProvidesEventsForm
             'type' => 'Zend\Form\Element\Textarea',
             'name' => 'welcomeBlock',
             'options' => array(
-                'label' => $translator->translate('Bloc de bienvenue', 'playgroundgame')
+                'label' => $translator->translate('Welcome block', 'playgroundgame')
             ),
             'attributes' => array(
                 'cols' => '10',
@@ -417,7 +423,7 @@ class Game extends ProvidesEventsForm
         						'0' => $translator->translate('No', 'playgroundgame'),
         						'1' => $translator->translate('Yes', 'playgroundgame'),
         				),
-        				'label' => $translator->translate('Le joueur doit accepter le règlement pour jouer', 'playgroundgame'),
+        				'label' => $translator->translate('Player must accept the rules', 'playgroundgame'),
         		),
         ));
         
@@ -425,7 +431,7 @@ class Game extends ProvidesEventsForm
                 'type' => 'Zend\Form\Element\Textarea',
                 'name' => 'conditionsBlock',
                 'options' => array(
-                        'label' => $translator->translate('Mentions légales', 'playgroundgame')
+                        'label' => $translator->translate('Legal status', 'playgroundgame')
                 ),
                 'attributes' => array(
                         'cols' => '10',
@@ -438,7 +444,7 @@ class Game extends ProvidesEventsForm
                 'type' => 'Zend\Form\Element\Textarea',
                 'name' => 'termsBlock',
                 'options' => array(
-                        'label' => $translator->translate('Page de règlement', 'playgroundgame')
+                        'label' => $translator->translate('Payment page', 'playgroundgame')
                 ),
                 'attributes' => array(
                         'cols' => '10',
@@ -451,7 +457,7 @@ class Game extends ProvidesEventsForm
                 'type' => 'Zend\Form\Element\Textarea',
                 'name' => 'columnBlock1',
                 'options' => array(
-                        'label' => $translator->translate('Bloc colonne de droite 1', 'playgroundgame')
+                        'label' => $translator->translate('Right column', 'playgroundgame').' 1'
                 ),
                 'attributes' => array(
                         'cols' => '10',
@@ -464,7 +470,7 @@ class Game extends ProvidesEventsForm
                 'type' => 'Zend\Form\Element\Textarea',
                 'name' => 'columnBlock2',
                 'options' => array(
-                        'label' => $translator->translate('Bloc colonne de droite 2', 'playgroundgame')
+                        'label' => $translator->translate('Right column', 'playgroundgame').' 2'
                 ),
                 'attributes' => array(
                         'cols' => '10',
@@ -477,7 +483,7 @@ class Game extends ProvidesEventsForm
                 'type' => 'Zend\Form\Element\Textarea',
                 'name' => 'columnBlock3',
                 'options' => array(
-                        'label' => $translator->translate('Bloc colonne de droite 3', 'playgroundgame')
+                        'label' => $translator->translate('Right column', 'playgroundgame').' 3'
                 ),
                 'attributes' => array(
                         'cols' => '10',
@@ -495,7 +501,7 @@ class Game extends ProvidesEventsForm
 					'0' => $translator->translate('No', 'playgroundgame'),
        				'1' => $translator->translate('Yes', 'playgroundgame'),
        			),
-       			'label' => $translator->translate('Il faut être fan pour participer', 'playgroundgame'),
+       			'label' => $translator->translate('You must be fan to participate', 'playgroundgame'),
        		),
         ));
 
@@ -503,7 +509,7 @@ class Game extends ProvidesEventsForm
                 'type' => 'Zend\Form\Element\Textarea',
                 'name' => 'fbShareMessage',
                 'options' => array(
-                        'label' => $translator->translate('Message de partage Facebook', 'playgroundgame')
+                        'label' => $translator->translate('Facebook share message', 'playgroundgame')
                 ),
                 'attributes' => array(
                         'cols' => '10',
@@ -518,7 +524,7 @@ class Game extends ProvidesEventsForm
                 'type' => 'file'
             ),
             'options' => array(
-                'label' => $translator->translate('Image de partage Facebook', 'playgroundgame')
+                'label' => $translator->translate('Facebook share image', 'playgroundgame')
             )
         ));
         $this->add(array(
@@ -533,7 +539,7 @@ class Game extends ProvidesEventsForm
                 'type' => 'Zend\Form\Element\Textarea',
                 'name' => 'fbRequestMessage',
                 'options' => array(
-                    'label' => $translator->translate('Message d\'invitation Facebook', 'playgroundgame')
+                    'label' => $translator->translate('Facebook invitation message', 'playgroundgame')
                 ),
                 'attributes' => array(
                         'cols' => '10',
@@ -546,7 +552,7 @@ class Game extends ProvidesEventsForm
                 'type' => 'Zend\Form\Element\Textarea',
                 'name' => 'twShareMessage',
                 'options' => array(
-                    'label' => $translator->translate('Message de partage Twitter', 'playgroundgame')
+                    'label' => $translator->translate('Twitter share message', 'playgroundgame')
                 ),
                 'attributes' => array(
                     'cols' => '10',
@@ -618,7 +624,7 @@ class Game extends ProvidesEventsForm
      */
     public function getFbAppIds ()
     {
-        $apps = array('' => 'Ne pas déployer sur Facebook');
+        $apps = array('' => 'Don\'t deploy on Facebook');
 
         $results = $this->getServiceManager()
             ->get('application')

@@ -30,14 +30,14 @@ class PostVote extends Game
             'attributes' =>  array(
                 'id' => 'template',
                 'options' => array(
-                    'text' => $translator->translate('Texte', 'playgroundgame'),
+                    'text' => $translator->translate('Text', 'playgroundgame'),
                     'photo' => $translator->translate('Photo', 'playgroundgame'),
-                    'recipe' => $translator->translate('Recette de cuisine', 'playgroundgame'),
+                    'recipe' => $translator->translate('Recipe', 'playgroundgame'),
                 ),
             ),
             'options' => array(
-                'empty_option' => $translator->translate('Quel sera le type des Posts ?', 'playgroundgame'),
-                'label' => $translator->translate('Type de Post', 'playgroundgame'),
+                'empty_option' => $translator->translate('What is the posts type ?', 'playgroundgame'),
+                'label' => $translator->translate('Post type', 'playgroundgame'),
             ),
         ));
 
@@ -48,13 +48,13 @@ class PostVote extends Game
                 'id' => 'postDisplayMode',
                 'options' => array(
                     'date' => $translator->translate('Date', 'playgroundgame'),
-                    'vote' => $translator->translate('Nombre de votes', 'playgroundgame'),
-                    'random' => $translator->translate('Au hasard', 'playgroundgame'),
+                    'vote' => $translator->translate('Vote number', 'playgroundgame'),
+                    'random' => $translator->translate('Random', 'playgroundgame'),
                 ),
             ),
             'options' => array(
-                'empty_option' => $translator->translate('Afficher les Posts triés par', 'playgroundgame'),
-                'label' => $translator->translate('Mode d\'affichage des Posts', 'playgroundgame'),
+                'empty_option' => $translator->translate('Display posts orber by', 'playgroundgame'),
+                'label' => $translator->translate('Posts display mode', 'playgroundgame'),
             ),
         ));
 
@@ -62,7 +62,7 @@ class PostVote extends Game
             'type' => 'Zend\Form\Element\Checkbox',
             'name' => 'voteAnonymous',
             'options' => array(
-                'label' => 'Autoriser le vote aux visiteurs anonymes',
+                'label' => $translator->translate('Allow anonymous visitors to vote', 'playgroundgame'),
             ),
         ));
     }

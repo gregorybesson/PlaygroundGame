@@ -1770,19 +1770,19 @@ return array(
         ),
         'admin' => array(
             'playgroundgame'     => array(
-                'label'     => 'Les jeux',
+                'label'     => 'Games',
                 'route'     => 'admin/playgroundgame/list',
                 'resource'  => 'game',
                 'privilege' => 'list',
                 'pages' => array(
                     'list' => array(
-                        'label'     => 'Liste des jeux',
+                        'label'     => 'Games list',
                         'route'     => 'admin/playgroundgame/list',
                         'resource'  => 'game',
                         'privilege' => 'list',
                     ),
                     'create-lottery' => array(
-                        'label'     => 'Créer un tirage au sort',
+                        'label'     => 'Add new lottery',
                         'route'     => 'admin/playgroundgame/create-lottery',
                         'resource'  => 'game',
                         'privilege' => 'add',
@@ -1798,7 +1798,7 @@ return array(
 						'privilege' => 'list',
 					),
                     'create-quiz' => array(
-                        'label'     => 'Créer un quiz',
+                        'label'     => 'Add new quiz',
                         'route'     => 'admin/playgroundgame/create-quiz',
                         'resource'  => 'game',
                         'privilege' => 'add',
@@ -1814,7 +1814,7 @@ return array(
 						'privilege' => 'list',
 					),
                     'create-postvote' => array(
-                        'label'     => 'Créer un Post & Vote',
+                        'label'     => 'Add new post & vote',
                         'route'     => 'admin/playgroundgame/create-postvote',
                         'resource'  => 'game',
                         'privilege' => 'add',
@@ -1830,7 +1830,7 @@ return array(
 						'privilege' => 'list',
 					),
                     'create-instantwin' => array(
-                        'label'     => 'Créer un instant gagnant',
+                        'label'     => 'Add new instant win',
                         'route'     => 'admin/playgroundgame/create-instantwin',
                         'resource'  => 'game',
                         'privilege' => 'add',
@@ -1863,7 +1863,7 @@ return array(
                         ),
                     ),
                     'list-prizecategory' => array(
-                        'label'     => 'Gérer les catégories de gain',
+                        'label'     => 'Manage categories gain',
                         'route'     => 'admin/playgroundgame/prize-category-list',
                         'resource'  => 'game',
                         'privilege' => 'prizecategory_list',
@@ -1882,7 +1882,7 @@ return array(
                         'privilege' => 'list',
                         'pages' 	=> array(
                             'instantwin-occurrence-add' => array(
-                                'label'     => 'Créer un instant gagnant',
+                                'label'     => 'Add new instant win',
                                 'route'     => 'admin/playgroundgame/instantwin-occurrence-add',
                                 'privilege' => 'add',
                             ),
@@ -1900,7 +1900,7 @@ return array(
                     ),
 
                 	'create-treasurehunt' => array(
-               			'label'     => 'Créer une chasse au trésor',
+               			'label'     => 'Add new treasure hunt',
            				'route'     => 'admin/playgroundgame/create-treasurehunt',
            				'resource'  => 'game',
            				'privilege' => 'add',

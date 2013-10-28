@@ -55,12 +55,12 @@ class InstantWin extends Game
             'attributes' =>  array(
                 'id' => 'scheduleOccurrenceAuto',
                 'options' => array(
-                    '0' => $translator->translate('Non', 'playgroundgame'),
-                    '1' => $translator->translate('Oui', 'playgroundgame'),
+                    '0' => $translator->translate('No', 'playgroundgame'),
+                    '1' => $translator->translate('Yes', 'playgroundgame'),
                 ),
             ),
             'options' => array(
-                'label' => $translator->translate('Génération des IG automatique', 'playgroundgame'),
+                'label' => $translator->translate('Auto IG Generation', 'playgroundgame'),
             ),
         ));
 
@@ -68,10 +68,10 @@ class InstantWin extends Game
             'name' => 'occurrenceNumber',
             'type' => 'Zend\Form\Element\Text',
             'attributes' => array(
-                'placeholder' => 'Nombre d\'instants gagnants',
+                'placeholder' => $translator->translate('Number instant win', 'playgroundgame'),
             ),
             'options' => array(
-                'label' => 'Nombre d\'instants gagnants',
+                'label' => $translator->translate('Number instant win', 'playgroundgame'),
             ),
         ));
         
@@ -81,16 +81,16 @@ class InstantWin extends Game
         		'attributes' =>  array(
         				'id' => 'occurrenceDrawFrequency',
         				'options' => array(
-        						'hour' => $translator->translate('heure', 'playgroundgame'),
-        						'day' => $translator->translate('Jour', 'playgroundgame'),
-        						'week' => $translator->translate('Semaine', 'playgroundgame'),
-        						'month' => $translator->translate('Mois', 'playgroundgame'),
-        						'game' => $translator->translate('Jeu', 'playgroundgame'),
+        						'hour' => $translator->translate('Hour', 'playgroundgame'),
+        						'day' => $translator->translate('Day', 'playgroundgame'),
+        						'week' => $translator->translate('Week', 'playgroundgame'),
+        						'month' => $translator->translate('Month', 'playgroundgame'),
+        						'game' => $translator->translate('Game', 'playgroundgame'),
         				),
         		),
         		'options' => array(
-        				'empty_option' => $translator->translate('Création des instants gagnants sur quelle fréquence ?', 'playgroundgame'),
-        				'label' => $translator->translate('Fréquence de création', 'playgroundgame'),
+        				'empty_option' => $translator->translate('Instant win creation frequency ?', 'playgroundgame'),
+        				'label' => $translator->translate('Creation frequency', 'playgroundgame'),
         		),
         ));
 
@@ -102,7 +102,7 @@ class InstantWin extends Game
                     'type' => 'file'
                 ),
                 'options' => array(
-                    'label' => $translator->translate('Image de grattage du jeu', 'playgroundgame')
+                    'label' => $translator->translate('Game Image scraping', 'playgroundgame')
                 )
         ));
         $this->add(array(
