@@ -739,15 +739,11 @@ class GameController extends AbstractActionController
     	if ($game->getStylesheet()) {
     		$this->getViewHelper('HeadLink')->appendStylesheet($this->getRequest()->getBaseUrl(). '/' . $game->getStylesheet());
     	}
-
-    	/*$adserving = $this->getOptions()->getAdServing();
-    	$adserving['cat2'] = 'game';
-    	$adserving['cat3'] = '&EASTgameid='.$game->getId();*/
+        
     	// I change the label in the breadcrumb ...
     	$this->layout()->setVariables(
     			array(
     					'breadcrumbTitle' => $game->getTitle(),
-    					'adserving'       => $adserving,
     					'currentPage' => array(
     							'pageGames' => 'games',
     							'pageWinners' => ''
