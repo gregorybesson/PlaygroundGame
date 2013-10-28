@@ -22,7 +22,7 @@ class InstantWinTest extends AbstractHttpControllerTestCase
         parent::setUp();
     }
 
-    public function testscheduleOccurrencesToday1Game()
+   public function testscheduleOccurrencesToday1Game()
     {
         
 		$game = new InstantWinEntity();
@@ -395,9 +395,9 @@ class InstantWinTest extends AbstractHttpControllerTestCase
     public function testscheduleOccurrencesDaysInTransitions()
     {
         $game = new InstantWinEntity();
-        $startDate = new \DateTime("2013-10-21 00:00:00");  
+        $startDate = new \DateTime((date('Y')+1)."-10-21 00:00:00");  
         $startDate->add(new \DateInterval('P3D'));
-        $endDate = new \DateTime("2013-10-21 00:00:00");
+        $endDate = new \DateTime((date('Y')+1)."-10-21 00:00:00");
         $endDate->add(new \DateInterval('P8D'));
 
 
