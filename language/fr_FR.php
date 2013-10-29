@@ -261,4 +261,19 @@ return array(
 	// Facebook
 	'Don\'t deploy on Facebook' => 'Ne pas déployer sur Facebook',
 		
+	// FRONT
+	'Participate in contests !' => 'Participez aux jeux concours !',
+	'Come play games Playground' => 'Venez jouer aux jeux de Playground',
+	'Sponsor my friends' => 'Parrainer mes amis',
+	'Invite your friends and earn 250 points for each friend who registers on Playground' => 'Invitez vos amis et gagnez 250 points pour chacun de vos amis qui s’inscrira sur Playground',
+	'Friends sponsored' => 'Vos amis parrainés',
+	'less than 1 day' => 'moins d\'1 jour',
+	'1 day' => '1 jour',
+	'days' => 'jours',
+	'month' => 'mois',
+	'year' => 'an',
+	'years' => 'ans',
+	'You sponsored' => 'Vous avez parrainé',
+	'Since' => 'Il y a',
+		
 );

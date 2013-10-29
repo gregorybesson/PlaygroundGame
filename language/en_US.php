@@ -265,4 +265,19 @@ return array(
 	// Facebook
 	'Don\'t deploy on Facebook' => 'Don\'t deploy on Facebook',
 		
+	// FRONT
+	'Participate in contests !' => 'Participate in contests !',
+	'Come play games Playground' => 'Come play games Playground',
+	'Sponsor my friends' => 'Sponsor my friends',
+	'Invite your friends and earn 250 points for each friend who registers on Playground' => 'Invite your friends and earn 250 points for each friend who registers on Playground',
+	'Friends sponsored' => 'Friends sponsored',
+	'less than 1 day' => 'less than 1 day',
+	'1 day' => '1 day',
+	'days' => 'days',
+	'month' => 'month',
+	'year' => 'year',
+	'years' => 'years',
+	'You sponsored' => 'You sponsored',
+	'Since' => 'Since',
+	
 );
