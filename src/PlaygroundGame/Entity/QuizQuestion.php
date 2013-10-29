@@ -76,7 +76,7 @@ class QuizQuestion implements InputFilterAwareInterface
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
-    protected $autoplay;
+    protected $autoplay = false;
 
     /**
      * @ORM\Column(type="text", nullable=true)
