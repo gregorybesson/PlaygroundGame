@@ -22,11 +22,11 @@ class ShareMail extends ProvidesEventsForm
         $this->add(array(
             'name' => 'email1',
             'options' => array(
-                'label' => $translator->translate('Adresse email 1', 'playgroundgame')
+                'label' => $translator->translate('Email address', 'playgroundgame').' 1',
             ),
             'attributes' => array(
                 'type' => 'email',
-                'placeholder' => $translator->translate('Adresse email 1', 'playgroundgame'),
+                'placeholder' => $translator->translate('Email address', 'playgroundgame').' 1',
                 'class' => 'large-input',
                 'autocomplete' => 'off'
             )
@@ -35,11 +35,11 @@ class ShareMail extends ProvidesEventsForm
         $this->add(array(
             'name' => 'email2',
             'options' => array(
-                'label' => $translator->translate('Adresse email 2', 'playgroundgame')
+                'label' => $translator->translate('Email address', 'playgroundgame').' 2',
             ),
             'attributes' => array(
                 'type' => 'email',
-                'placeholder' => $translator->translate('Adresse email 2', 'playgroundgame'),
+                'placeholder' => $translator->translate('Email address', 'playgroundgame').' 2',
                 'class' => 'large-input',
                 'autocomplete' => 'off'
             )
@@ -48,18 +48,18 @@ class ShareMail extends ProvidesEventsForm
         $this->add(array(
             'name' => 'email3',
             'options' => array(
-                'label' => $translator->translate('Adresse email 3', 'playgroundgame')
+                'label' => $translator->translate('Email address', 'playgroundgame').' 3',
             ),
             'attributes' => array(
                 'type' => 'email',
-                'placeholder' => $translator->translate('Adresse email 3', 'playgroundgame'),
+                'placeholder' => $translator->translate('Email address', 'playgroundgame').' 3',
                 'class' => 'large-input',
                 'autocomplete' => 'off'
             )
         ));
 
         $submitElement = new Element\Button('submit');
-        $submitElement->setLabel($translator->translate('Envoyer', 'playgroundgame'))
+        $submitElement->setLabel($translator->translate('Send', 'playgroundgame'))
             ->setAttributes(array(
             'type' => 'submit',
             'class'=> 'btn btn-warning'
