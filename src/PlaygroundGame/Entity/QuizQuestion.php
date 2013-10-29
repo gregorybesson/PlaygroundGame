@@ -91,7 +91,7 @@ class QuizQuestion implements InputFilterAwareInterface
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
-    protected $timer = 0;
+    protected $timer = false;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
@@ -624,6 +624,15 @@ class QuizQuestion implements InputFilterAwareInterface
                     ),
                 ),*/
             )));
+            
+            $inputFilter->add($factory->createInput(array(
+                'name'       => 'timer',
+                'required'   => false,
+                'allowEmpty' => true,
+                'filters'    => array(
+                    array('name' => 'Boolean'),
+                ),
+            )));
 
             $inputFilter->add($factory->createInput(array(
                 'name'     => 'type',
@@ -648,7 +657,16 @@ class QuizQuestion implements InputFilterAwareInterface
                 'name'     => 'audio',
                 'required' => false,
             )));
-
+            
+            $inputFilter->add($factory->createInput(array(
+                'name'       => 'autoplay',
+                'required'   => false,
+                'allowEmpty' => true,
+                'filters'    => array(
+                    array('name' => 'Boolean'),
+                ),
+            )));
+            
             $this->inputFilter = $inputFilter;
         }
 

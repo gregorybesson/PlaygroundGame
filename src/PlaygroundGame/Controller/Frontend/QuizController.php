@@ -79,14 +79,14 @@ class QuizController extends GameController
                 $values = array();
                 $valuesSortedByPosition = array();
                 foreach ($q->getAnswers() as $a) {
-                    $values[$a->getPosition()] = array(
+                    $values[$a->getId()] = array(
+                        'position' => $a->getPosition(),
                         'answer' => $a->getAnswer(),
-                        'id' => $a->getId()
                     );
                 }
-                ksort($values);
+                sort($values);
                 foreach ($values as $key => $value) {
-                    $valuesSortedByPosition[$value['id']] = $value['answer'];
+                    $valuesSortedByPosition[$key] = $value['answer'];
                 }
                 $element->setValueOptions($valuesSortedByPosition);
             } elseif ($q->getType() == 1) {
@@ -94,14 +94,14 @@ class QuizController extends GameController
                 $values = array();
                 $valuesSortedByPosition = array();
                 foreach ($q->getAnswers() as $a) {
-                    $values[$a->getPosition()] = array(
+                    $values[$a->getId()] = array(
+                        'position' => $a->getPosition(),
                         'answer' => $a->getAnswer(),
-                        'id' => $a->getId()
                     );
                 }
-               ksort($values);
+                sort($values);
                 foreach ($values as $key => $value) {
-                    $valuesSortedByPosition[$value['id']] = $value['answer'];
+                    $valuesSortedByPosition[$key] = $value['answer'];
                 }
                 $element->setValueOptions($valuesSortedByPosition);
             } elseif ($q->getType() == 2) {
