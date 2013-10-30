@@ -20,7 +20,7 @@ class GameController extends AbstractActionController
 
     public function indexAction()
     {
-    	
+
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
         $user = $this->zfcUserAuthentication()->getIdentity();
         $sg = $this->getGameService();
@@ -36,6 +36,13 @@ class GameController extends AbstractActionController
         	if(!$isFan){
         		return $this->redirect()->toUrl($this->url()->fromRoute('frontend/' . $game->getClassType().'/fangate',array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
         	}
+        }
+
+        // Determine if the play button should be a CTA button (call to action)
+        $isCtaActive = false;
+        $channel = $this->getEvent()->getRouteMatch()->getParam('channel');
+        if ($channel == 'facebook'){
+            $isCtaActive = true;
         }
 
         $subscription = $sg->checkExistingEntry($game, $user);
@@ -76,7 +83,7 @@ class GameController extends AbstractActionController
         $bitlyclient = $this->getOptions()->getBitlyUrl();
         $bitlyuser = $this->getOptions()->getBitlyUsername();
         $bitlykey = $this->getOptions()->getBitlyApiKey();
-        
+
         $this->getViewHelper('HeadMeta')->setProperty('bt:client', $bitlyclient);
         $this->getViewHelper('HeadMeta')->setProperty('bt:user', $bitlyuser);
         $this->getViewHelper('HeadMeta')->setProperty('bt:key', $bitlykey);
@@ -93,6 +100,7 @@ class GameController extends AbstractActionController
                 'game'             => $game,
                 'isSubscribed'     => $isSubscribed,
                 'flashMessages'    => $this->flashMessenger()->getMessages(),
+                'isCtaActive'      => $isCtaActive,
             )
         );
 
@@ -572,7 +580,7 @@ class GameController extends AbstractActionController
                 ),
             )
         );
-        
+
         if($this->getEvent()->getRouteMatch()->getParam('channel') === 'facebook'){
             $fo = $this->getServiceLocator()->get('facebook-opengraph');
             $fo->setId($game->getFbAppId());
@@ -828,7 +836,7 @@ class GameController extends AbstractActionController
             ),
            )
         );
-        
+
         return new ViewModel(
             array(
                 'games'       => $paginator
@@ -841,7 +849,7 @@ class GameController extends AbstractActionController
     	$viewModel = new ViewModel();
     	return $viewModel;
     }
-    
+
     protected function getViewHelper($helperName)
     {
         return $this->getServiceLocator()->get('viewhelpermanager')->get($helperName);
