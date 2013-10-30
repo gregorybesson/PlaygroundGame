@@ -660,14 +660,14 @@ class QuizQuestion implements InputFilterAwareInterface
                 'name'     => 'image',
                 'required' => false,
                 'allowEmpty' => true,
-                'filters' => array(
-            	   array('name' => 'Int')
-                ),
             )));
             
             $inputFilter->add($factory->createInput(array(
                 'name'     => 'audio',
                 'required' => false,
+                'filters' => array(
+                    array('name' => 'Int')
+                ),
             )));
             
             $inputFilter->add($factory->createInput(array(
