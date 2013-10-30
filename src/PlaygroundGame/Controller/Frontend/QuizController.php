@@ -77,17 +77,33 @@ class QuizController extends GameController
             if ($q->getType() == 0) {
                 $element = new Element\Radio($name);
                 $values = array();
+                $valuesSortedByPosition = array();
                 foreach ($q->getAnswers() as $a) {
-                    $values[$a->getId()] = $a->getAnswer();
+                    $values[$a->getId()] = array(
+                        'position' => $a->getPosition(),
+                        'answer' => $a->getAnswer(),
+                    );
                 }
-                $element->setValueOptions($values);
+                sort($values);
+                foreach ($values as $key => $value) {
+                    $valuesSortedByPosition[$key] = $value['answer'];
+                }
+                $element->setValueOptions($valuesSortedByPosition);
             } elseif ($q->getType() == 1) {
                 $element = new Element\MultiCheckbox($name);
                 $values = array();
+                $valuesSortedByPosition = array();
                 foreach ($q->getAnswers() as $a) {
-                    $values[$a->getId()] = $a->getAnswer();
+                    $values[$a->getId()] = array(
+                        'position' => $a->getPosition(),
+                        'answer' => $a->getAnswer(),
+                    );
                 }
-                $element->setValueOptions($values);
+                sort($values);
+                foreach ($values as $key => $value) {
+                    $valuesSortedByPosition[$key] = $value['answer'];
+                }
+                $element->setValueOptions($valuesSortedByPosition);
             } elseif ($q->getType() == 2) {
                 $element = new Element\Textarea($name);
             }
