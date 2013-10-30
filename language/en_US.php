@@ -376,4 +376,28 @@ return array(
 	'If you find enough good answers, your participation in the draw will be taken into account!' => 'If you find enough good answers, your participation in the draw will be taken into account!',
 	'Indication' => 'Indication',
 		
+		// EMAILS
+		'Good morning' => 'Good morning',
+		'You participated in the contest' => 'You participated in the contest',
+		'and you have' => 'and you have',
+		'Maximize your chances of winning by inviting your friends to your message!' => 'Maximize your chances of winning by inviting your friends to your message!',
+		'Click the button <b> Invite your friends </ b> you will be directed to the homepage of the game' => 'Click the button <b> Invite your friends </ b> you will be directed to the homepage of the game',
+		'Once in the game, click <b> Participate </ b> to see your participation and share to your friends by email or on social networks' => 'Once in the game, click <b> Participate </ b> to see your participation and share to your friends by email or on social networks',
+		'Invite your friends' => 'Invite your friends',
+		'As always, each new friend registered saves you 250 points <b style="color:#8DC63F"> Playground </ b> and advance your Godfather badge!' => 'As always, each new friend registered saves you 250 points <b style="color:#8DC63F"> Playground </ b> and advance your Godfather badge!',
+		'Thank you and see you soon on Playground!' => 'Thank you and see you soon on Playground!',
+		'Playground team' => 'Playground team',
+		'Follow us on Facebook' => 'Follow us on Facebook',
+		'Playground newsletter' => 'Playground newsletter',
+		'invites you to participate in the game' => 'invites you to participate in the game',
+		'Do you know Playground?' => 'Do you know Playground?',
+		'Join our games and try to win loads of freebies! High tech, culture, travel ... There\'s something for everyone!' => 'Join our games and try to win loads of freebies! High tech, culture, travel ... There\'s something for everyone!',
+		'See the games being' => 'See the games being',
+		'Try to win lots of gifts !' => 'Try to win lots of gifts !',
+		'invites you to discover Playground' => 'invites you to discover Playground',
+		'of good answers in' => 'of good answers in',
+		'had' => 'had',
+		'' => '',
+		'' => '',
+		
 );
