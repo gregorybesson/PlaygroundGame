@@ -4,6 +4,7 @@ namespace PlaygroundGame\Controller\Frontend;
 
 use PlaygroundGame\Entity\TreasureHunt;
 use Zend\View\Model\ViewModel;
+use Zend\Session\Container;
 
 class TreasureHuntController extends GameController
 {
