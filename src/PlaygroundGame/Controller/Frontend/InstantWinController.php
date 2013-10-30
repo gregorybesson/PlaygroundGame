@@ -4,6 +4,7 @@ namespace PlaygroundGame\Controller\Frontend;
 
 use PlaygroundGame\Entity\Entry;
 use Zend\View\Model\ViewModel;
+use Zend\Session\Container;
 
 class InstantWinController extends GameController
 {
