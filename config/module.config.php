@@ -18,14 +18,14 @@ return array(
     ),
 	'assetic_configuration' => array(
 		'modules' => array(
-			'game' => array(
+			'lib_game' => array(
 				# module root path for your css and js files
-				'root_path' => __DIR__ . '/../assets',
+				'root_path' => __DIR__ . '/../view/lib',
 				# collection of assets
 				'collections' => array(
-					'admin_treasurehunt_css' => array(
+					'admin_areapicker_css' => array(
 						'assets' => array(
-							__DIR__ . '/../assets/css/areapicker/style.min.css',
+							'css/playground/areapicker/style.min.css',
 						),
 						'filters' => array(
 							'CssRewriteFilter' => array(
@@ -34,12 +34,12 @@ return array(
 						),
 						'options' => array(),
 					),
-					'head_admin_treasurehunt_js' => array(
+					'head_admin_areapicker_js' => array(
 						'assets' => array(
-							__DIR__ . '/../assets/js/areapicker/app.js',
-						    __DIR__ . '/../assets/js/areapicker/config.js',
-						    __DIR__ . '/../assets/js/areapicker/selection.js',
-						    __DIR__ . '/../assets/js/lib/easyxdm/easyxdm.min.js'
+							'js/playground/areapicker/app.js',
+						    'js/playground/areapicker/config.js',
+						    'js/playground/areapicker/selection.js',
+						    'js/easyxdm/easyxdm.min.js'
 						),
 						'filters' => array(),
 						'options' => array(),
@@ -50,8 +50,8 @@ return array(
 
 		'routes' => array(
 			'admin/playgroundgame/treasure(.*)' => array(
-                '@admin_treasurehunt_css',
-				'@head_admin_treasurehunt_js',
+                '@admin_areapicker_css',
+				'@head_admin_areapicker_js',
             ),
 		),
 	),
