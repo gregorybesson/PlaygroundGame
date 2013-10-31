@@ -24,7 +24,7 @@ class TreasureHuntStepTest extends \PHPUnit_Framework_TestCase
     {
         $treasurehuntstep = new TreasureHuntStepEntity();
         $treasurehuntstep->setDomain('domain');
-        $this->tm->insert($treasurehuntstep);
+        $treasurehuntstep = $this->tm->insert($treasurehuntstep);
         $this->assertEquals($treasurehuntstep, $this->tm->findById($treasurehuntstep->getId()));
     }
 
