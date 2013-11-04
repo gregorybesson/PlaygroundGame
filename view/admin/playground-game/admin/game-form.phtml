@@ -110,6 +110,31 @@ $form->prepare();
         	<img src="<?php echo $this->basePath($form->get('fbPageTabImage')->getValue()); ?>" />
         <?php endif;?>
     </div>
+    <div class="label-input">
+    <?php echo $this->formLabel($form->get('fbFanGate')); ?>
+    <?php echo $this->formTextarea($form->get('fbFanGate')) . $this->formElementErrors($form->get('fbFanGate')) ?>
+    <?php $this->QgCKEditor(
+        'fbFanGate',
+            array(
+                'BasePath' => $this->adminAssetPath('js/lib/ckeditor'),
+                'Width' => "100%",
+                'Height' => "340",
+                'filebrowserBrowseUrl' => '/elfinder', // eg. 'includes/elFinder/elfinder.html'
+                'uiColor' => '#9AB8F3',
+                //'Color' => "#000",
+                'Toolbar'=> array(
+                     array('Source','Maximize'),
+                     array('Templates','Styles','Format'),
+                     array('Bold','Italic','Underline','Subscript','Superscript'),
+                     array('NumberedList','BulletedList','Outdent','Indent'),
+                     array('JustifyLeft','JustifyCenter','JustifyRight'),
+                     array('Link','Unlink'),
+                     array('Image','Table')
+                 )
+            )
+        );
+    ?>
+    </div>
 </div>
 
 <div class="tab-pane" id="platform">

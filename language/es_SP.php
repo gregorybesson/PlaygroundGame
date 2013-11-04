@@ -86,7 +86,7 @@ return array(
 	'Category benefit' => 'Category benefit',
 	'Publish game on plateform' => 'Publish game on plateform',
 	'Publish game on embed mode' => 'Publish game on embed mode',
-	'Publish game on home page'	=> 'Publish game on home page',	
+	'Publish game on home page'	=> 'Publish game on home page',
 	'Publish game on home page slider' => 'Publish game on home page slider',
 	'Use default style sheet' => 'Use default style sheet',
 	'Style sheet' => 'Style sheet',
@@ -96,6 +96,7 @@ return array(
 	'Welcome block' => 'Welcome block',
 	'Player must accept the rules' => 'Player must accept the rules',
 	'You must be fan to participate' => 'You must be fan to participate',
+    'Fan gate content' => 'Fan gate content',
 	'Facebook share message' => 'Facebook share message',
 	'Facebook share image' => 'Facebook share image',
 	'Facebook invitation message' => 'Facebook invitation message',
@@ -132,16 +133,16 @@ return array(
 	'Instant win creation frequency ?' => 'Instant win creation frequency ?',
 	'Creation frequency' => 'Creation frequency',
 	'Game Image scraping' => 'Game Image scraping',
-		
+
     // Admin Leaderboard list
     'User' 				=> 'User',
     'Points' 			=> 'Points',
     'Register a new customer' => 'Register a new customer',
-	
+
 	// Admin Quiz
 	'Create quiz' => 'Create quiz',
 	'Edit quiz' 	=> 'Edit quiz',
-	
+
     // Admin Quiz List
     'Add new question' 	=> 'Add new question',
 
@@ -151,11 +152,11 @@ return array(
     'Single response' 	=> 'Single response',
     'Multiple choice' 	=> 'Multiple choice',
     'Input field' 		=> 'Input field',
-	
+
 	// Admin Post & Vote
 	'Create Post & Vote' => 'Create Post & Vote',
 	'Edit Post & Vote' 	=> 'Edit Post & Vote',
-	
+
     // Admin Post & vote Options
     'Edit' 				=> 'Edit',
     'Generate Form' 	=> 'Generate Form',
@@ -191,7 +192,7 @@ return array(
     'Dynarea' 			=> 'Dynarea',
     'Dynablocks' 		=> 'Dynablocks',
     'Available Dynareas' => 'Available Dynareas',
-	
+
 	// Admin Instantwin
 	'Create instant win' => 'Create instant win',
 	'Edit instant win' 	=> 'Edit an instant win',
@@ -200,18 +201,18 @@ return array(
 	'Customer' => 'Customer',
 	'What player type can participate' => 'What player type can participate',
 	'Player type who can participate' => 'Player type who can participate',
-	
+
     // Admin Instantwin occurence
     'Add occurrence'	=> 'Add occurrence',
     'Occurrence Date' 	=> 'Occurrence Date',
     'Edit occurrence'	=> 'Edit occurrence',
-    
+
 	// Front post&vote email moderation
 	'This post has been reported in a game.' => 'This post has been reported in a game.',
-	
+
     // Front post&vote
     'This field contains more than %s characters' => 'This field contains more than %s characters',
-	
+
 	// Admin Lottery
 	'Create lottery' => 'Create lottery',
 	'Edit lottery' 	=> 'Edit lottery',
@@ -229,7 +230,7 @@ return array(
 	'Title' => 'Title',
 	'Picto' => 'Picto',
 	'Add new gain category' => 'Add new gain category',
-		
+
 	// Facebook
 	'Don\'t deploy on Facebook' => 'Don\'t deploy on Facebook',
 
@@ -335,7 +336,7 @@ return array(
 	'Pronostic message' => 'When the answers are known, if you are getting enough correct answers, your participation in the draw will be taken into account! You can already earn more chances for the draw by inviting your friends to play',
 	'If you find enough good answers, your participation in the draw will be taken into account!' => 'If you find enough good answers, your participation in the draw will be taken into account!',
 	'Indication' => 'Indication',
-		
+
 	// EMAILS
 	'Good morning' => 'Good morning',
 	'You participated in the contest' => 'You participated in the contest',
@@ -357,5 +358,5 @@ return array(
 	'invites you to discover Playground' => 'invites you to discover Playground',
 	'of good answers in' => 'of good answers in',
 	'had' => 'had',
-		
+
 );

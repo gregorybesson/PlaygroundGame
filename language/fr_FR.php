@@ -4,7 +4,7 @@ return array(
     // Breadcrumbs
     'Home' 					=> 'Accueil',
 	'Game list'			=> 'Liste des jeux',
-		
+
     // Admin List
     'Title' 				=> 'Titre',
     'Created at' 			=> 'Création',
@@ -102,6 +102,7 @@ return array(
 	'Welcome block' => 'Bloc de bienvenue',
 	'Player must accept the rules' => 'Le joueur doit accepter le règlement pour jouer',
 	'You must be fan to participate' => 'Il faut être fan pour participer',
+    'Fan gate content' => 'Contenu de la fan gate',
 	'Facebook share message' => 'Message de partage Facebook',
 	'Facebook share image' => 'Image de partage Facebook',
 	'Facebook invitation message' => 'Message d\'invitation Facebook',
@@ -138,16 +139,16 @@ return array(
 	'Instant win creation frequency ?' => 'Création des instants gagnants sur quelle fréquence ?',
 	'Creation frequency' => 'Fréquence de création',
 	'Game Image scraping' => 'Image de grattage du jeu',
-				
+
     // Admin Leaderboard list
     'User' 				=> 'Joueur',
     'Points' 			=> 'Points',
     'Register a new customer' => 'Inscrire un nouveau joueur',
-	
+
 	// Admin Quiz
 	'Create quiz' => 'Créer un quizz',
 	'Edit quiz' 	=> 'Editer un quizz',
-	
+
     // Admin Quiz List
     'Add new question' 	=> 'Ajouter une question',
 
@@ -157,11 +158,11 @@ return array(
     'Single response' 	=> 'Réponse unique',
     'Multiple choice' 	=> 'Choix multiple',
     'Input field' 		=> 'Champ de saisie',
-	
+
 	// Admin Post & Vote
 	'Create Post & Vote' => 'Créer un Post & Vote',
 	'Edit Post & Vote' 	=> 'Editer un Post & Vote',
-	
+
     // Admin Post & vote Options
     'Edit' 				=> 'Editer',
     'Generate Form' 	=> 'Générer le formulaire',
@@ -197,7 +198,7 @@ return array(
     'Dynarea' 			=> 'Zone cible',
     'Dynablocks' 		=> 'Blocs dynamiques',
     'Available Dynareas' => 'Zone cible disponible',
-	
+
 	// Admin Instantwin
 	'Create instant win' => 'Créer un instant gagnant',
 	'Edit instant win' 	=> 'Editer un instant gagnant',
@@ -228,18 +229,18 @@ return array(
 	'What player type can participate' => 'Quel type de joueur peut participer',
 	'Player type who can participate' => 'Type de joueur pouvant participer',
 
-	
+
     // Admin Instantwin occurence
     'Add occurrence'	=> 'Ajouter un instant gagnant',
     'Occurrence Date' 	=> 'Date de l\'instant gagnant',
     'Edit occurrence'	=> 'Editer un instant gagnant',
-    
+
 	// Front post&vote email moderation
 	'This post has been reported in a game.' => 'Ce post a été signalé dans un jeu.',
-	
+
     // Front post&vote
     'This field contains more than %s characters' => 'Ce champ contient plus de %s caractères',
-	
+
 	// Admin Lottery
 	'Create lottery' => 'Créer un tirage au sort',
 	'Edit lottery' 	=> 'Editer un tirage au sort',
@@ -260,7 +261,7 @@ return array(
 
 	// Facebook
 	'Don\'t deploy on Facebook' => 'Ne pas déployer sur Facebook',
-		
+
 	// FRONT
 	'Participate in contests !' => 'Participez aux jeux concours !',
 	'Come play games Playground' => 'Venez jouer aux jeux de Playground',
@@ -275,7 +276,7 @@ return array(
 	'years' => 'ans',
 	'You sponsored' => 'Vous avez parrainé',
 	'Since' => 'Il y a',
-	'Try your luck with other games' => 'Tentez votre chance avec d\'autres jeux',	
+	'Try your luck with other games' => 'Tentez votre chance avec d\'autres jeux',
 	'You played all the games' => 'Vous avez joué à tous les jeux',
 	'Come back soon' => 'Revenez très bientôt',
 	'How to participate ?' => 'Comment participer ?',
@@ -398,5 +399,5 @@ return array(
 	'of good answers in' => 'de bonnes r&eacute;ponses en',
 	'had' => 'a eu',
 	'seconds in game' => 'secondes au jeu',
-		
+
 );
