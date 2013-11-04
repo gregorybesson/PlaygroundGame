@@ -161,10 +161,6 @@ Selection.prototype.complete = function ()
     this.rxInfo.remove();
     */
     
-    if(this.ele.width() < 10 || this.ele.height() < 10) {
-        this.destroy();
-    }
-    
     this.ele
         .addClass('complete')
         .attr('data-width', this.ele.width())

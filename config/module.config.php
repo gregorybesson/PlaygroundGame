@@ -36,7 +36,8 @@ return array(
 					),
 					'head_admin_areapicker_js' => array(
 						'assets' => array(
-							'js/playground/areapicker/app.js',
+                            'js/playground/jquery.min.js',
+                            'js/playground/areapicker/app.js',
 						    'js/playground/areapicker/config.js',
 						    'js/playground/areapicker/selection.js',
 						    'js/easyxdm/easyxdm.min.js'
@@ -56,7 +57,7 @@ return array(
 		),
 
 		'routes' => array(
-			'admin/playgroundgame/treasure(.*)' => array(
+			'admin/playgroundgame/treasure-hunt-areapicker' => array(
                 '@admin_areapicker_css',
 				'@head_admin_areapicker_js',
             ),
