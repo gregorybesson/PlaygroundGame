@@ -44,6 +44,13 @@ return array(
 						'filters' => array(),
 						'options' => array(),
 					),
+				    'head_deezer_js' => array(
+				        'assets' => array(
+				            'js/deezer/dz.min.js',
+				        ),
+				        'filters' => array(),
+				        'options' => array(),
+				    ),
 				),
 			),
 		),
@@ -53,6 +60,12 @@ return array(
                 '@admin_areapicker_css',
 				'@head_admin_areapicker_js',
             ),
+		    'admin/playgroundgame/*' => array(
+		        '@head_deezer_js',
+		    ),
+		    'frontend/playgroundgame/*' => array(
+		        '@head_deezer_js',
+		    ),
 		),
 	),
     'core_layout' => array(
