@@ -1,5 +1,5 @@
 <?php $this->plugin('translate')->setTranslatorTextDomain('playgroundgame');// Pour le texte ?>
- 
+
 <div class="game-instantwin row-fluid welcome">
 	<h1><?php echo $this->game->getTitle(); ?></h1>
 
@@ -15,7 +15,7 @@
 			<?php if($game->getTermsOptin):?>
 				J'accepte le règlement
 			<?php endif;?>
-			<div class="btn btn-warning"><a href="<?php echo $this->url('frontend/instantwin/play', array('id' => $this->game->getIdentifier()))?>" class="arrow-right">Participer</a></div>
+			<div class="btn btn-warning"<?php if ($this->isCtaActive) { echo ' id="cta-play"'; } ?>><a href="<?php echo $this->url('frontend/instantwin/play', array('id' => $this->game->getIdentifier()))?>" class="arrow-right">Participer</a></div>
 		</div>
 		<?php endif;?>
 	</div>
