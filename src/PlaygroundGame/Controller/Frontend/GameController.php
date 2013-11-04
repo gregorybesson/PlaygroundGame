@@ -747,7 +747,7 @@ class GameController extends AbstractActionController
     	if ($game->getStylesheet()) {
     		$this->getViewHelper('HeadLink')->appendStylesheet($this->getRequest()->getBaseUrl(). '/' . $game->getStylesheet());
     	}
-        
+
     	// I change the label in the breadcrumb ...
     	$this->layout()->setVariables(
     			array(
@@ -846,7 +846,18 @@ class GameController extends AbstractActionController
 
     public function fangateAction()
     {
-    	$viewModel = new ViewModel();
+
+        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
+        $sg = $this->getGameService();
+
+        $game = $sg->checkGame($identifier, false);
+        if (!$game) {
+            return $this->notFoundAction();
+        }
+
+    	$viewModel = new ViewModel(array(
+    	            'fangateContent' => $game->getFbFanGate(),
+    	        ));
     	return $viewModel;
     }
 

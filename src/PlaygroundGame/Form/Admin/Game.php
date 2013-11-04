@@ -154,7 +154,7 @@ class Game extends ProvidesEventsForm
                 'label' => $translator->translate('Publish game on plateform', 'playgroundgame'),
             ),
         ));
-        
+
         $this->add(array(
         	'type' => 'Zend\Form\Element\Checkbox',
         	'name' => 'broadcastEmbed',
@@ -216,7 +216,7 @@ class Game extends ProvidesEventsForm
                 'type' => 'text',
                 'class'=> 'datepicker'
             )
-        )); 
+        ));
 
         $this->add(array(
             'type' => 'Zend\Form\Element\DateTime',
@@ -413,7 +413,7 @@ class Game extends ProvidesEventsForm
                 'id' => 'welcomeBlock'
             )
         ));
-        
+
         $this->add(array(
         		'type' => 'Zend\Form\Element\Select',
         		'name' => 'termsOptin',
@@ -426,7 +426,7 @@ class Game extends ProvidesEventsForm
         				'label' => $translator->translate('Player must accept the rules', 'playgroundgame'),
         		),
         ));
-        
+
         $this->add(array(
                 'type' => 'Zend\Form\Element\Textarea',
                 'name' => 'conditionsBlock',
@@ -491,7 +491,7 @@ class Game extends ProvidesEventsForm
                         'id' => 'columnBlock3'
                 )
         ));
-        
+
         $this->add(array(
         	'type' => 'Zend\Form\Element\Select',
         	'name' => 'fbFan',
@@ -503,6 +503,19 @@ class Game extends ProvidesEventsForm
        			),
        			'label' => $translator->translate('You must be fan to participate', 'playgroundgame'),
        		),
+        ));
+
+        $this->add(array(
+                'type' => 'Zend\Form\Element\Textarea',
+                'name' => 'fbFanGate',
+                'options' => array(
+                        'label' => $translator->translate('Fan gate content', 'playgroundgame')
+                ),
+                'attributes' => array(
+                        'cols' => '10',
+                        'rows' => '10',
+                        'id' => 'fbFanGate'
+                )
         ));
 
         $this->add(array(
@@ -560,7 +573,7 @@ class Game extends ProvidesEventsForm
                     'id' => 'twShareMessage'
                 )
         ));
-        
+
         $prizeFieldset = new PrizeFieldset(null,$sm,$translator);
         $this->add(array(
         		'type'    => 'Zend\Form\Element\Collection',
