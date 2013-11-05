@@ -50,28 +50,6 @@ class ModuleOptions extends AbstractOptions implements GameEditOptionsInterface
      * @var string
      */
     protected $gameEntityClass = 'PlaygroundGame\Entity\Game';
-    protected $leaderBoardEntityClass = 'PlaygroundGame\Entity\LeaderBoard';
-
-    /**
-     * Set leaderBoard entity class name
-     *
-     * @param $leaderBoardEntityClass
-     * @return ModuleOptions
-     */
-    public function setLeaderBoardEntityClass($leaderBoardEntityClass)
-    {
-        $this->leaderBoardEntityClass = $leaderBoardEntityClass;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getLeaderBoardEntityClass()
-    {
-        return $this->leaderBoardEntityClass;
-    }
 
     /**
      * Set game entity class name
