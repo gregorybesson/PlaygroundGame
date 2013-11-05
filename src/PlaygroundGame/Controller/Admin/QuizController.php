@@ -285,13 +285,19 @@ class QuizController extends AbstractActionController
         $content        = "\xEF\xBB\xBF"; // UTF-8 BOM
         $content       .= "ID;Pseudo;Civilité;Nom;Prénom;E-mail;Optin Newsletter;Optin partenaire;Eligible TAS ?" . $label . ";Date - H;Adresse;CP;Ville;Téléphone;Mobile;Date d'inscription;Date de naissance;\n";
         foreach ($entries as $e) {
-
+            
+            $answers = array();
             $replies   = $sg->getQuizReplyMapper()->getLastGameReply($e);
+
+            if($replies){
+                $answers = $replies[0]->getAnswers();   
+            }
+
             $replyText = "";
             foreach ($questionArray as $q) {
                 $found = false;
                 if ($q['open'] == false) {
-                    foreach ($replies->getAnswers() as $reply) {
+                    foreach ($answers as $reply) {
                        if ($q['q'] == $reply->getQuestionId() && $q['a'] == $reply->getAnswerId()) {
                            $replyText .= ";1";
                            $found = true;
@@ -302,7 +308,7 @@ class QuizController extends AbstractActionController
                         $replyText .= ";0";
                     }
                 } else {
-                    foreach ($replies->getAnswers() as $reply) {
+                    foreach ($answers as $reply) {
                         if ($q['q'] == $reply->getQuestionId()) {
                             $replyText .= ";" . strip_tags(str_replace("\r\n","",$reply->getAnswer()));
                             $found = true;
