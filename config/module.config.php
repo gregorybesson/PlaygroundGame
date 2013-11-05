@@ -45,6 +45,16 @@ return array(
 						'filters' => array(),
 						'options' => array(),
 					),
+				    'head_areapicker_cors_js' => array(
+				        'assets' => array(
+				            'js/playground/areapicker/cors.js',
+				        ),
+				        'filters' => array(),
+				        'options' => array(
+				            'move_raw' => true,
+				            'output' => 'lib',
+				        ),
+				    ),
 				    'head_deezer_js' => array(
 				        'assets' => array(
 				            'js/deezer/dz.min.js',
