@@ -32,7 +32,9 @@ return array(
 								'name' => 'Assetic\Filter\CssRewriteFilter',
 							)
 						),
-						'options' => array(),
+						'options' => array(
+						  'output' => 'zfcadmin/css/admin_areapicker.css',
+						),
 					),
 					'head_admin_areapicker_js' => array(
 						'assets' => array(
@@ -43,7 +45,9 @@ return array(
 						    'js/easyxdm/easyxdm.min.js'
 						),
 						'filters' => array(),
-						'options' => array(),
+						'options' => array(
+						  'output' => 'zfcadmin/js/head_admin_areapicker.js',
+						),
 					),
 				    'head_areapicker_cors_js' => array(
 				        'assets' => array(
@@ -55,12 +59,24 @@ return array(
 				            'output' => 'lib',
 				        ),
 				    ),
-				    'head_deezer_js' => array(
+				    'head_admin_deezer_js' => array(
 				        'assets' => array(
 				            'js/deezer/dz.min.js',
 				        ),
 				        'filters' => array(),
-				        'options' => array(),
+				        'options' => array(
+				            'output' => 'zfcadmin/head_deezer.js',
+				        ),
+				    ),
+				    
+				    'head_frontend_deezer_js' => array(
+				        'assets' => array(
+				            'js/deezer/dz.min.js',
+				        ),
+				        'filters' => array(),
+				        'options' => array(
+				            'output' => 'frontend/head_deezer.js',
+				        ),
 				    ),
 				),
 			),
@@ -71,11 +87,11 @@ return array(
                 '@admin_areapicker_css',
 				'@head_admin_areapicker_js',
             ),
-		    'admin/playgroundgame/*' => array(
-		        '@head_deezer_js',
+		    'admin/playgroundgame.*' => array(
+		        '@head_admin_deezer_js',
 		    ),
-		    'frontend/playgroundgame/*' => array(
-		        '@head_deezer_js',
+		    'frontend/quiz.*' => array(
+		        '@head_frontend_deezer_js',
 		    ),
 		),
 	),
