@@ -849,16 +849,41 @@ class GameController extends AbstractActionController
 
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
         $sg = $this->getGameService();
-
         $game = $sg->checkGame($identifier, false);
         if (!$game) {
             return $this->notFoundAction();
         }
-
-    	$viewModel = new ViewModel(array(
-    	            'fangateContent' => $game->getFbFanGate(),
-    	        ));
-    	return $viewModel;
+        
+        // If this game has a specific layout...
+        if ($game->getLayout()) {
+            $layoutViewModel = $this->layout();
+            $layoutViewModel->setTemplate($game->getLayout());
+        }
+        
+        // If this game has a specific stylesheet...
+        if ($game->getStylesheet()) {
+            $this->getViewHelper('HeadLink')->appendStylesheet($this->getRequest()->getBaseUrl(). '/' . $game->getStylesheet());
+        }
+        
+        // I change the label in the breadcrumb ...
+        $this->layout()->setVariables(
+            array(
+                'breadcrumbTitle' => $game->getTitle(),
+                'headParams' => array(
+                    'headTitle' => $game->getTitle(),
+                    'headDescription' => $game->getTitle(),
+                ),
+            )
+        );
+        
+        $viewModel = new ViewModel(
+            array(
+                'game'             => $game,
+                'flashMessages'    => $this->flashMessenger()->getMessages(),
+            )
+        );
+        
+        return $viewModel;
     }
 
     protected function getViewHelper($helperName)
