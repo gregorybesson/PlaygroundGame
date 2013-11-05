@@ -8,11 +8,7 @@ use Zend\Session\Container;
 
 class InstantWinController extends GameController
 {
-    /**
-     * @var leaderBoardService
-     */
-    protected $leaderBoardService;
-
+    
     /**
      * @var gameService
      */
@@ -281,22 +277,6 @@ class InstantWinController extends GameController
     public function setGameService(GameService $gameService)
     {
         $this->gameService = $gameService;
-
-        return $this;
-    }
-
-    public function getLeaderBoardService()
-    {
-        if (!$this->leaderBoardService) {
-            $this->leaderBoardService = $this->getServiceLocator()->get('playgroundgame_leaderboard_service');
-        }
-
-        return $this->leaderBoardService;
-    }
-
-    public function setLeaderBoardService(LeaderBoardService $leaderBoardService)
-    {
-        $this->leaderBoardService = $leaderBoardService;
 
         return $this;
     }

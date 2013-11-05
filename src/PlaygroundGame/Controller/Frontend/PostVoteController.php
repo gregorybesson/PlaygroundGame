@@ -14,11 +14,6 @@ use Zend\View\Model\ViewModel;
 class PostVoteController extends GameController
 {
     /**
-     * @var leaderBoardService
-     */
-    protected $leaderBoardService;
-
-    /**
      * @var gameService
      */
     protected $gameService;
@@ -493,14 +488,6 @@ class PostVoteController extends GameController
             return $this->notFoundAction();
         }
 
-        // Is the user registered ? If not, I redirect him to the game home
-        /*$mapperLeader = $this->getLeaderBoardService()->getLeaderBoardMapper();
-        /*$leaderBoard = $mapperLeader->findBy(array('user' => $this->zfcUserAuthentication()->getIdentity(), 'game' => $game));
-
-        /*if ($leaderBoard == null) {
-            return $this->redirect()->toUrl($this->url()->fromRoute('frontend/postvote', array('id' => $identifier)));
-        }*/
-
         // Has the user finished the game ?
         $lastEntry = $this->getGameService()->getEntryMapper()->findLastInactiveEntryById($game, $user);
 
@@ -866,21 +853,4 @@ class PostVoteController extends GameController
 
         return $this;
     }
-
-    public function getLeaderBoardService()
-    {
-        if (!$this->leaderBoardService) {
-            $this->leaderBoardService = $this->getServiceLocator()->get('playgroundgame_leaderboard_service');
-        }
-
-        return $this->leaderBoardService;
-    }
-
-    public function setLeaderBoardService(LeaderBoardService $leaderBoardService)
-    {
-        $this->leaderBoardService = $leaderBoardService;
-
-        return $this;
-    }
-
 }
