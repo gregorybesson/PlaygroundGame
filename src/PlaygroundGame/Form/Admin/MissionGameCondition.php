@@ -1,0 +1,96 @@
+<?php
+
+namespace PlaygroundGame\Form\Admin;
+
+use Zend\Form\Element;
+use ZfcBase\Form\ProvidesEventsForm;
+use Zend\I18n\Translator\Translator;
+use Zend\ServiceManager\ServiceManager;
+
+class MissionGameCondition extends ProvidesEventsForm
+{
+    /**
+    * @var Zend\ServiceManager\ServiceManager $serviceManager
+    */
+    protected $serviceManager;
+    protected $mission;
+
+    /**
+    * __construct : permet de construire le formulaire qui peuplera l'entity LeaderboardType
+    *
+    * @param string $name
+    * @param Zend\ServiceManager\ServiceManager $serviceManager 
+    * @param Zend\I18n\Translator\Translator $translator
+    *
+    */
+    public function __construct($name = null, ServiceManager $serviceManager, Translator $translator)
+    {
+        parent::__construct($name);
+
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Hidden',
+            'name' => 'id__index__'
+        ));
+
+        $games = $this->getGames($serviceManager);
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Select',
+            'name' => 'games__index__',
+            'options' => array(
+                'value_options' => $games,
+                'label' => $translator->translate('game', 'playgroundGame')
+            )
+        ));
+
+        $conditions = $this->getConditions();
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Select',
+            'name' => 'conditions__index__',
+            'options' => array(
+                'value_options' => $conditions,
+                'label' => $translator->translate('conditions', 'playgroundGame')
+            )
+        ));
+
+        $this->add(array(
+            'name' => 'points__index__',
+            'options' => array(
+                'label' => $translator->translate('points', 'playgroundgame'),
+            ),
+            'attributes' => array(
+                'type' => 'text',
+                'placeholder' => $translator->translate('points', 'playgroundgame'),
+            ),
+        ));
+
+    }
+
+
+     /**
+     * retrieve all leaderboard type for associate to storyMapping
+     *
+     * @return array $leaderboardTypesArray
+     */
+    public function getGames($serviceManager)
+    {
+        $gamesArray = array();
+        $gameService = $serviceManager->get('playgroundgame_game_service');
+        $games = $gameService->getGameMapper()->findAll();
+    
+        foreach ($games as $game) {
+            $gamesArray[$game->getId()] = $game->getTitle();
+        }
+
+        return $gamesArray;
+    }
+
+
+    public function getConditions()
+    {
+        return array('0' => 'noting',
+                     '1' => 'victory',
+                     '2' => 'defeat',
+                     '3' => 'greater than x points',
+                     '4' => 'less than x points');
+    }
+}

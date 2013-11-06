@@ -160,9 +160,10 @@ class Module
                 'playgroundgame_quiz_service'              => 'PlaygroundGame\Service\Quiz',
             	'playgroundgame_treasurehunt_service'      => 'PlaygroundGame\Service\TreasureHunt',
                 'playgroundgame_instantwin_service'        => 'PlaygroundGame\Service\InstantWin',
-            	'playgroundgame_prize_service'     		  => 'PlaygroundGame\Service\Prize',
+            	'playgroundgame_prize_service'     		   => 'PlaygroundGame\Service\Prize',
             	'playgroundgame_prizecategory_service'     => 'PlaygroundGame\Service\PrizeCategory',
                 'playgroundgame_prizecategoryuser_service' => 'PlaygroundGame\Service\PrizeCategoryUser',
+                'playgroundgame_mission_service'           => 'PlaygroundGame\Service\Mission',
             ),
 
             'factories' => array(
@@ -175,6 +176,15 @@ class Module
 
                 'playgroundgame_game_mapper' => function ($sm) {
                     $mapper = new \PlaygroundGame\Mapper\Game(
+                            $sm->get('doctrine.entitymanager.orm_default'),
+                            $sm->get('playgroundgame_module_options')
+                    );
+
+                    return $mapper;
+                },
+
+                'playgroundgame_mission_mapper' => function ($sm) {
+                    $mapper = new \PlaygroundGame\Mapper\Mission(
                             $sm->get('doctrine.entitymanager.orm_default'),
                             $sm->get('playgroundgame_module_options')
                     );
@@ -360,6 +370,22 @@ class Module
                     $game = new Entity\Game();
                     $form->setInputFilter($game->getInputFilter());
 
+                    return $form;
+                },
+
+                'playgroundgame_mission_form' => function($sm) {
+                    $translator = $sm->get('translator');
+                    $form = new Form\Admin\Mission(null, $sm, $translator);
+                    $mission = new Entity\Mission();
+                    $form->setInputFilter($mission->getInputFilter());
+                    return $form;
+                },
+
+                'playgroundgame_mission_game_form' => function($sm) {
+                    $translator = $sm->get('translator');
+                    $form = new Form\Admin\MissionGame(null, $sm, $translator);
+                    $missionGame = new Entity\MissionGame();
+                    $form->setInputFilter($missionGame->getInputFilter());
                     return $form;
                 },
 
