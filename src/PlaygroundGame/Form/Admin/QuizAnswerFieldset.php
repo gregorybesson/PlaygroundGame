@@ -45,7 +45,6 @@ class QuizAnswerFieldset extends Fieldset
                 'options' => array(
                         //'empty_option' => $translator->translate('Is the answer correct ?', 'playgroundgame'),
                         'value_options' => array(
-                            '0' => $translator->translate('Non', 'playgroundgame'),
                             '1' => $translator->translate('Oui', 'playgroundgame'),
                         ),
                         'label' => $translator->translate('Bonne réponse', 'playgroundgame'),
@@ -69,16 +68,16 @@ class QuizAnswerFieldset extends Fieldset
 				'class' => 'delete-button',
 			)
         ));
-/*
+
         $this->add(array(
-            //'type' => 'Zend\Form\Element\Hidden',
+            'type' => 'Zend\Form\Element\Textarea',
             'name' => 'explanation',
             'options' => array(
                 'label' => 'Explanation'
             ),
         ));
 
-        $this->add(array(
+/*        $this->add(array(
                 //'type' => 'Zend\Form\Element\Hidden',
                 'name' => 'video',
                 'options' => array(
