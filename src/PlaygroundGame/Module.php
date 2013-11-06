@@ -164,6 +164,7 @@ class Module
             	'playgroundgame_prizecategory_service'     => 'PlaygroundGame\Service\PrizeCategory',
                 'playgroundgame_prizecategoryuser_service' => 'PlaygroundGame\Service\PrizeCategoryUser',
                 'playgroundgame_mission_service'           => 'PlaygroundGame\Service\Mission',
+                'playgroundgame_mission_game_service'      => 'PlaygroundGame\Service\MissionGame',
             ),
 
             'factories' => array(
@@ -185,6 +186,24 @@ class Module
 
                 'playgroundgame_mission_mapper' => function ($sm) {
                     $mapper = new \PlaygroundGame\Mapper\Mission(
+                            $sm->get('doctrine.entitymanager.orm_default'),
+                            $sm->get('playgroundgame_module_options')
+                    );
+
+                    return $mapper;
+                },
+
+                'playgroundgame_mission_game_mapper' => function ($sm) {
+                    $mapper = new \PlaygroundGame\Mapper\MissionGame(
+                            $sm->get('doctrine.entitymanager.orm_default'),
+                            $sm->get('playgroundgame_module_options')
+                    );
+
+                    return $mapper;
+                },
+
+                'playgroundgame_mission_game_condition_mapper' => function ($sm) {
+                    $mapper = new \PlaygroundGame\Mapper\MissionGameCondition(
                             $sm->get('doctrine.entitymanager.orm_default'),
                             $sm->get('playgroundgame_module_options')
                     );

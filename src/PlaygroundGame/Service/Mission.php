@@ -7,6 +7,7 @@ use Zend\ServiceManager\ServiceManager;
 use ZfcBase\EventManager\EventProvider;
 use PlaygroundReward\Options\ModuleOptions;
 use PlaygroundGame\Entity\Mission as MissionEntity;
+use PlaygroundGame\Entity\MissionGame as MissionGameEntity;
 
 class Mission extends EventProvider implements ServiceManagerAwareInterface
 {
@@ -14,7 +15,9 @@ class Mission extends EventProvider implements ServiceManagerAwareInterface
     /**
     * @var leaderboardType
     */
-    protected $leaderboardType;
+    protected $missionMapper;
+    protected $missionGameMapper;
+    protected $gameMapper;
 
     protected $options;
 
@@ -71,7 +74,6 @@ class Mission extends EventProvider implements ServiceManagerAwareInterface
 
         return $mission;
     }
-
 
     public function uploadImage($mission, $data)
     {
@@ -167,10 +169,10 @@ class Mission extends EventProvider implements ServiceManagerAwareInterface
      */
     public function getMissionMapper()
     {
-        if (null === $this->leaderboardType) {
-            $this->leaderboardType = $this->getServiceManager()->get('playgroundgame_mission_mapper');
+        if (null === $this->missionMapper) {
+            $this->missionMapper = $this->getServiceManager()->get('playgroundgame_mission_mapper');
         }
 
-        return $this->leaderboardType;
+        return $this->missionMapper;
     }
 }

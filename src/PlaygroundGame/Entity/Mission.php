@@ -62,7 +62,6 @@ class Mission
      * Constructor
      */
     public function __construct() {
-        $this->actions = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /** @PrePersist */

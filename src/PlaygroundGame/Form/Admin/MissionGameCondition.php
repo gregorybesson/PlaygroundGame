@@ -6,6 +6,7 @@ use Zend\Form\Element;
 use ZfcBase\Form\ProvidesEventsForm;
 use Zend\I18n\Translator\Translator;
 use Zend\ServiceManager\ServiceManager;
+use PlaygroundGame\Entity\MissionGameCondition as MissionGameConditionEntity;
 
 class MissionGameCondition extends ProvidesEventsForm
 {
@@ -87,10 +88,6 @@ class MissionGameCondition extends ProvidesEventsForm
 
     public function getConditions()
     {
-        return array('0' => 'noting',
-                     '1' => 'victory',
-                     '2' => 'defeat',
-                     '3' => 'greater than x points',
-                     '4' => 'less than x points');
+        return MissionGameConditionEntity::$conditions;
     }
 }

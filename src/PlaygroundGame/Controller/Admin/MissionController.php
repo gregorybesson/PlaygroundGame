@@ -15,6 +15,8 @@ class MissionController extends AbstractActionController
      */
     protected $missionService;
 
+    protected $missionGameService;
+
     /**
     * listAction : retrieve all leaderboardtype
     *
@@ -129,8 +131,25 @@ class MissionController extends AbstractActionController
         $form = $this->getServiceLocator()->get('playgroundgame_mission_game_form');
         $request = $this->getRequest();
 
+        // Suppression des misssions game pour une mission
+        $this->getMissionGameService()->clear($mission);
+
         if ($request->isPost()) {
-            var_dump($request->getPost()->toArray());
+            $data = $request->getPost()->toArray();
+            $dataGames = array();
+            for ($i=0; $i <= $data['countGame']; $i++) { 
+                if(empty($data["games".$i])){
+                    continue;
+                }
+                $dataGames[$i] = array('games' => $data['games'.$i],
+                                      'conditions' => $data['conditions'.$i],
+                                      'points' => $data['points'.$i],
+                                      'position' => $i);
+            }
+            foreach ($dataGames as $k=>$dataGame) {
+                $missionGame = $this->getMissionGameService()->associate($dataGame, $mission);
+            }
+
         }
 
         $viewModel = new ViewModel();
@@ -151,5 +170,19 @@ class MissionController extends AbstractActionController
         }
 
         return $this->missionService;
+    }
+
+    /**
+     * Retrieve service leaderboardType instance
+     *
+     * @return Service/leaderboardType leaderboardTypeService
+     */
+    public function getMissionGameService()
+    {
+        if (null === $this->missionGameService) {           
+            $this->missionGameService = $this->getServiceLocator()->get('playgroundgame_mission_game_service');
+        }
+
+        return $this->missionGameService;
     }
 }

@@ -15,6 +15,12 @@ use Zend\InputFilter\Factory as InputFactory;
 class MissionGameCondition
 {
 
+
+    public static $conditions = array('0' => 'noting',
+                                     '1' => 'victory',
+                                     '2' => 'defeat',
+                                     '3' => 'greater than x points',
+                                     '4' => 'less than x points');
     protected $inputFilter;
     
     /**
@@ -28,7 +34,7 @@ class MissionGameCondition
      * @ORM\ManyToOne(targetEntity="PlaygroundGame\Entity\MissionGame")
      * @ORM\JoinColumn(name="mission_game_id", referencedColumnName="id", onDelete="CASCADE")
      **/
-    protected $mission_game;
+    protected $missionGame;
     
      /**
      * @ORM\Column(name="attribute", type="string", nullable=true)
@@ -59,7 +65,82 @@ class MissionGameCondition
      * Constructor
      */
     public function __construct() {
-        $this->actions = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+     /**
+     * @param $id
+     * @return Block|mixed
+     */
+    public function setMissionGame($missionGame)
+    {
+        $this->missionGame = $missionGame;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMissionGame()
+    {
+        return $this->missionGame;
+    }
+
+     /**
+     * @param $id
+     * @return Block|mixed
+     */
+    public function setAttribute($attribute)
+    {
+        $this->attribute = $attribute;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAttribute()
+    {
+        return $this->attribute;
+    }
+
+     /**
+     * @param $id
+     * @return Block|mixed
+     */
+    public function setComparison($comparison)
+    {
+        $this->comparison = $comparison;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getComparison()
+    {
+        return $this->comparison;
+    }
+
+     /**
+     * @param $id
+     * @return Block|mixed
+     */
+    public function setValue($value)
+    {
+        $this->value = $value;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getValue()
+    {
+        return $this->value;
     }
 
     /** @PrePersist */
