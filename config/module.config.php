@@ -33,51 +33,51 @@ return array(
 							)
 						),
 						'options' => array(
-			              	'output' => 'zfcadmin/css/admin_areapicker.css',
-			          	),
-					),					
+						  'output' => 'zfcadmin/css/admin_areapicker.css',
+						),
+					),
 					'head_admin_areapicker_js' => array(
 						'assets' => array(
-							'js/playground/jquery.min.js',
-							'js/playground/areapicker/app.js',
+                            'js/playground/jquery.min.js',
+                            'js/playground/areapicker/app.js',
 						    'js/playground/areapicker/config.js',
 						    'js/playground/areapicker/selection.js',
 						    'js/easyxdm/easyxdm.min.js'
 						),
 						'filters' => array(),
 						'options' => array(
-							'output' => 'zfcadmin/js/head_admin_areapicker.js',
+						  'output' => 'zfcadmin/js/head_admin_areapicker.js',
 						),
-						'head_areapicker_cors_js' => array(
-	               			'assets' => array(
-                   	            'js/playground/areapicker/cors.js',
-                 			),
-                			'filters' => array(),
-                 			'options' => array(
-                     			'move_raw' => true,
-                     			'output' => 'lib',
-                 			),
-			            ),
-			            'head_admin_deezer_js' => array(
-			                'assets' => array(
-			                    'js/deezer/dz.min.js',
-			                ),
-			                'filters' => array(),
-			                'options' => array(
-			                    'output' => 'zfcadmin/head_deezer.js',
-			                ),
-			            ),
-			             
-			            'head_frontend_deezer_js' => array(
-			                'assets' => array(
-			                    'js/deezer/dz.min.js',
-			                ),
-			                'filters' => array(),
-			                'options' => array(
-			                    'output' => 'frontend/head_deezer.js',
-			                ),
-			            ),
 					),
+				    'head_areapicker_cors_js' => array(
+				        'assets' => array(
+				            'js/playground/areapicker/cors.js',
+				        ),
+				        'filters' => array(),
+				        'options' => array(
+				            'move_raw' => true,
+				            'output' => 'lib',
+				        ),
+				    ),
+				    'head_admin_deezer_js' => array(
+				        'assets' => array(
+				            'js/deezer/dz.min.js',
+				        ),
+				        'filters' => array(),
+				        'options' => array(
+				            'output' => 'zfcadmin/head_deezer.js',
+				        ),
+				    ),
+				    
+				    'head_frontend_deezer_js' => array(
+				        'assets' => array(
+				            'js/deezer/dz.min.js',
+				        ),
+				        'filters' => array(),
+				        'options' => array(
+				            'output' => 'frontend/head_deezer.js',
+				        ),
+				    ),
 				),
 			),
 		),
@@ -87,12 +87,12 @@ return array(
                 '@admin_areapicker_css',
 				'@head_admin_areapicker_js',
             ),
-            'admin/playgroundgame.*' => array(
-             	'@head_admin_deezer_js',
-         	),
-         	'frontend/quiz.*' => array(
-             	'@head_frontend_deezer_js',
-         	),
+		    'admin/playgroundgame.*' => array(
+		        '@head_admin_deezer_js',
+		    ),
+		    'frontend/quiz.*' => array(
+		        '@head_frontend_deezer_js',
+		    ),
 		),
 	),
     'core_layout' => array(
@@ -1349,28 +1349,28 @@ return array(
                                     ),
                                 ),
                             ),
-                            'instantwin-code-occurrences-add' => array(
-                                'type' => 'Segment',
-                                'options' => array(
-                                    'route' => '/instantwin-code-occurrences-add/:gameId',
-                                    'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_instantwin',
-                                        'action'     => 'addCodeOccurrences',
-                                        'gameId'     => 0
-                                    ),
-                                ),
-                            ),
-                            'instantwin-occurrences-export' => array(
-                                'type' => 'Segment',
-                                'options' => array(
-                                    'route' => '/instantwin-occurrences-export/:gameId',
-                                    'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_instantwin',
-                                        'action'     => 'exportOccurrences',
-                                        'gameId'     => 0
-                                    ),
-                                ),
-                            ),
+		                    'instantwin-code-occurrences-add' => array(
+		                        'type' => 'Segment',
+		                        'options' => array(
+		                            'route' => '/instantwin-code-occurrences-add/:gameId',
+		                            'defaults' => array(
+		                                'controller' => 'playgroundgame_admin_instantwin',
+		                                'action'     => 'addCodeOccurrences',
+		                                'gameId'     => 0,
+		                            ),
+		                        ),
+		                    ),
+		                    'instantwin-occurrences-export' => array(
+		                        'type' => 'Segment',
+		                        'options' => array(
+		                            'route' => '/instantwin-occurrences-export/:gameId',
+		                            'defaults' => array(
+		                                'controller' => 'playgroundgame_admin_instantwin',
+		                                'action'     => 'exportOccurrences',
+		                                'gameId'     => 0,
+		                            ),
+		                        ),
+		                    ),
                             'instantwin-occurrence-add' => array(
                                 'type' => 'Segment',
                                 'options' => array(
@@ -1948,21 +1948,20 @@ return array(
                                 'route'     => 'admin/playgroundgame/instantwin-occurrence-add',
                                 'privilege' => 'add',
                             ),
-                            'instantwin-code-occurrences-add' => array(
-                                'label'     => 'Add new instant win',
-                                'route'     => 'admin/playgroundgame/instantwin-code-occurrences-add',
-                                'privilege' => 'add',
-                            ),
                             'instantwin-occurrence-edit' => array(
                                 'label'     => 'Editer un instant gagnant',
                                 'route'     => 'admin/playgroundgame/instantwin-occurrence-edit',
                                 'privilege' => 'edit',
                             ),
+                            'instantwin-code-occurrences-add' => array(
+                                'label'     => 'Add new instant win',
+                                'route'     => 'admin/playgroundgame/instantwin-code-occurrences-add',
+                                'privilege' => 'add',
+                            ),
                             'instantwin-occurrences-export' => array(
                                 'route' 	=> 'admin/playgroundgame/instantwin-occurrences-export',
                                 'label'     => 'Export to csv',
-                                'privilege' => 'download',
-                                
+                                'privilege' => 'download',                                
                             ),
                         ),
                     ),
