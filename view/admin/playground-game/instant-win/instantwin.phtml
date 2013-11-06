@@ -29,9 +29,9 @@ $form->prepare();
 
         <div class="tab-pane" id="mechanics">
         	<div class="label-input">
-	            <?php //echo $this->formLabel($form->get('occurrenceType')); ?>
-	            <?php echo $this->formInput($form->get('occurrenceType')); ?>
-	            <?php //echo $this->formElementErrors($form->get('occurrenceType')) ?>
+	            <?php echo $this->formLabel($form->get('occurrenceType')); ?>
+	            <?php echo $this->formSelect($form->get('occurrenceType')); ?>
+	            <?php echo $this->formElementErrors($form->get('occurrenceType')) ?>
 	        </div>
 			<div class="label-input">
 	            <?php echo $this->formLabel($form->get('scheduleOccurrenceAuto')); ?>
@@ -64,6 +64,25 @@ $form->prepare();
         $('#tabs').tab();
         $('.datepicker').datepicker({
             dateFormat : 'dd/mm/yy'
+        });
+
+        $('#winningOccurrenceNumberInput').hide();
+        $('#occurrenceValueSizeInput').hide();
+        
+        $('#occurrenceType').change(function() {
+            if ($('#occurrenceType').val() == 'code' ){
+                $('#occurrenceDrawFrequency').val('game');
+                $('#occurrenceDrawFrequency').attr("disabled", "disabled");
+                $('#winningOccurrenceNumberInput').show();
+                $('#occurrenceValueSizeInput').show();
+                $('#occurrenceValueMaskInput').show();
+            }
+            if ($('#occurrenceType').val() == 'datetime' ){
+                $('#occurrenceDrawFrequency').removeAttr("disabled");
+                $('#winningOccurrenceNumberInput').hide();
+                $('#occurrenceValueSizeInput').hide();
+                $('#occurrenceValueMaskInput').hide();
+            }
         });
     });
 </script>

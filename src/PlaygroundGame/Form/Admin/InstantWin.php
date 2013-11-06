@@ -24,29 +24,22 @@ class InstantWin extends Game
 
         parent::__construct($name, $sm, $translator);
 
-        /*$this->add(array(
+        $this->add(array(
             'type' => 'Zend\Form\Element\Select',
             'name' => 'occurrenceType',
             'attributes' =>  array(
                 'id' => 'occurrenceType',
                 'options' => array(
                     'datetime' => $translator->translate('Date', 'playgroundgame'),
-                    'visitor' => $translator->translate('Visitor', 'playgroundgame'),
-                    'random' => $translator->translate('Random', 'playgroundgame'),
+                    'code' => $translator->translate('Code', 'playgroundgame'),
+                    // 'visitor' => $translator->translate('Visitor', 'playgroundgame'),
+                    // 'random' => $translator->translate('Random', 'playgroundgame'),
                 ),
             ),
             'options' => array(
-                'empty_option' => $translator->translate('Type d\'instant gagnant', 'playgroundgame'),
                 'label' => $translator->translate('Type d\'instant gagnant', 'playgroundgame'),
+                // 'empty_option' => $translator->translate('Type d\'instant gagnant', 'playgroundgame'),
             ),
-        ));*/
-
-        $this->add(array(
-            'name' => 'occurrenceType',
-            'type' => 'Zend\Form\Element\Hidden',
-            'attributes' => array(
-                'value' => 'random'
-            )
         ));
 
         $this->add(array(
@@ -68,10 +61,47 @@ class InstantWin extends Game
             'name' => 'occurrenceNumber',
             'type' => 'Zend\Form\Element\Text',
             'attributes' => array(
-                'placeholder' => $translator->translate('Number instant win', 'playgroundgame'),
+                'placeholder' => $translator->translate('Number occurences', 'playgroundgame'),
             ),
             'options' => array(
-                'label' => $translator->translate('Number instant win', 'playgroundgame'),
+                'label' => $translator->translate('Number occurences', 'playgroundgame'),
+            ),
+        ));
+
+        $this->add(array(
+            'name' => 'winningOccurrenceNumber',
+            'type' => 'Zend\Form\Element\Text',
+            'attributes' => array(
+                'placeholder' => $translator->translate('Number winning occurences', 'playgroundgame'),
+            ),
+            'options' => array(
+                'label' => $translator->translate('Number winning occurences', 'playgroundgame'),
+                'desc' => $translator->translate('Only if you don\'t want all the
+                 scheduled occurrences to be winning', 'playgroundgame'),
+            ),
+        ));
+
+        $this->add(array(
+            'name' => 'occurrenceValueMask',
+            'type' => 'Zend\Form\Element\Text',
+            'attributes' => array(
+                'placeholder' => $translator->translate('Value mask', 'playgroundgame'),
+            ),
+            'options' => array(
+                'label' => $translator->translate('Value mask', 'playgroundgame'),
+                'desc' => $translator->translate('Only for "Code" instant win', 'playgroundgame'),
+            ),
+        ));
+
+        $this->add(array(
+            'name' => 'occurrenceValueSize',
+            'type' => 'Zend\Form\Element\Text',
+            'attributes' => array(
+                'placeholder' => $translator->translate('Number of characters', 'playgroundgame'),
+            ),
+            'options' => array(
+                'label' => $translator->translate('Value size', 'playgroundgame'),
+                'desc' => $translator->translate('Only for "Code" instant win', 'playgroundgame'),
             ),
         ));
         

@@ -20,6 +20,7 @@ class InstantWin extends Game implements InputFilterAwareInterface
 
     /**
      * values : datetime - dates of win
+     *          code     - winning and loosing codes are registered for the game
      *          visit    - a winning is triggered every n visits,
      *          random   - Not set by default : The number of wins is set and it's triggered randomly
      *          based on number of visitors + duration of game + number of wins
@@ -39,7 +40,14 @@ class InstantWin extends Game implements InputFilterAwareInterface
      *
      * @ORM\Column(name="occurrence_number", type="integer", nullable=true)
      */
-    protected $occurrenceNumber;
+    protected $occurrenceNumber;    
+
+    /**
+     * Determine how much winning occurrences to create among the occurrences
+     *
+     * @ORM\Column(name="winning_occurrence_number", type="integer", nullable=true)
+     */
+    protected $winningOccurrenceNumber;
     
     /**
      * this field is taken into account only if $occurrenceNumber<>0.
@@ -137,6 +145,23 @@ class InstantWin extends Game implements InputFilterAwareInterface
 
         return $this;
     }
+    /**
+     * @return the unknown_type
+     */
+    public function getWinningOccurrenceNumber()
+    {
+        return $this->winningOccurrenceNumber;
+    }
+
+    /**
+     * @param unknown_type $occurrenceNumber
+     */
+    public function setWinningOccurrenceNumber($winningOccurrenceNumber)
+    {
+        $this->winningOccurrenceNumber = $winningOccurrenceNumber;
+
+        return $this;
+    }
     
     /**
      * @return the unknown_type
@@ -222,6 +247,10 @@ class InstantWin extends Game implements InputFilterAwareInterface
             $this->occurrenceNumber = $data['occurrenceNumber'];
         }
 
+        if (isset($data['winningOccurrenceNumber']) && $data['winningOccurrenceNumber'] != null) {
+            $this->occurrenceNumber = $data['winningOccurrenceNumber'];
+        }
+
         if (isset($data['occurrenceType']) && $data['occurrenceType'] != null) {
             $this->occurrenceType = $data['occurrenceType'];
         }
@@ -244,10 +273,18 @@ class InstantWin extends Game implements InputFilterAwareInterface
 
             $inputFilter->add($factory->createInput(array(
             	'name' => 'occurrenceNumber', 
-            	'required' => true, 
+            	'required' => false, 
             	'validators' => array(
             		array('name' => 'Digits',),
             	),
+            )));
+
+            $inputFilter->add($factory->createInput(array(
+                'name' => 'winningOccurrenceNumber', 
+                'required' => false, 
+                'validators' => array(
+                    array('name' => 'Digits',),
+                ),
             )));
             
             $inputFilter->add($factory->createInput(array(
@@ -270,7 +307,7 @@ class InstantWin extends Game implements InputFilterAwareInterface
                     array(
                         'name' => 'InArray',
                         'options' => array(
-                            'haystack' => array('datetime', 'visitor', 'random'),
+                            'haystack' => array('datetime', 'code', 'visitor', 'random'),
                         ),
                     ),
                 ),

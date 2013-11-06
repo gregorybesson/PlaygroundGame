@@ -33,7 +33,6 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
     public function create(array $data, $entity, $formClass)
     {
         $game = parent::create($data, $entity, $formClass);
-
         if ($game) {
             if (!empty($data['uploadScratchcardImage']['tmp_name'])) {
 
@@ -50,7 +49,11 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
             }
 
             if ($game->getOccurrenceNumber() && $game->getScheduleOccurrenceAuto()) {
-                $this->scheduleOccurrences($game);
+                if ($game->getOccurrenceType()=='datetime') {
+                    $this->scheduleOccurrences($game);
+                }elseif ($game->getOccurrenceType()=='code') {
+                    $this->generateCodeOccurrences($game, $data);
+                }
             }
         }
 
@@ -86,11 +89,50 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
             }
 
             if ($game->getOccurrenceNumber() && $game->getScheduleOccurrenceAuto()) {
-                $this->scheduleOccurrences($game);
+                if ($game->getOccurrenceType()=='datetime') {
+                    $this->scheduleOccurrences($game);
+                }elseif ($game->getOccurrenceType()=='code') {
+                    $this->generateCodeOccurrences($game, $data);
+                }
             }
         }
 
         return $game;
+    }
+
+    public function generateCodeOccurrences($game, $data)
+    {
+        $available_characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-';
+        $available_characters_nb = strlen($available_characters);
+        if(!$game->getWinningOccurrenceNumber())
+        {
+            $game->setWinningOccurrenceNumber($game->getOccurrenceNumber());
+        }
+        if(!$data['occurrenceValueSize'])
+        {
+            $data['occurrenceValueSize'] = 8;   
+        }
+        $created = 0;
+        for ($i=0; $i < $game->getOccurrenceNumber() ; $i++) {             
+            $code = '';
+            while(strlen($code)<$data['occurrenceValueSize']){
+                $code .= $available_characters[rand(0, $available_characters_nb)];
+            }
+            if($this->getInstantWinOccurrenceMapper()->assertNoOther($instantwin, $line[0])){
+                $occurrence = new \PlaygroundGame\Entity\InstantWinOccurrence();
+                $occurrence->setInstantwin($game);
+                $occurrence->setOccurrenceValue($code);
+                $occurrence->setActive(1);
+                $occurrence->setWinning($created < $game->getWinningOccurrenceNumber());
+                $this->getInstantWinOccurrenceMapper()->insert($occurrence);
+                if($this->getInstantWinOccurrenceMapper()->insert($occurrence)){
+                    $created++;
+                }
+            }else{
+                $i--;
+            } 
+        }
+        return true;
     }
 
     /**
@@ -156,7 +198,7 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                         $randomDate = \DateTime::createFromFormat('Y-m-d H:i:s', $randomDate);
                         $occurrence  = new \PlaygroundGame\Entity\InstantWinOccurrence();
                         $occurrence->setInstantwin($game);
-                        $occurrence->setOccurrenceDate($randomDate);
+                        $occurrence->setOccurrenceValue($randomDate->format('d/m/Y H:i:s'));
                         $occurrence->setActive(1);
 
                         $this->getInstantWinOccurrenceMapper()->insert($occurrence);
@@ -194,7 +236,8 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                             $randomDate = \DateTime::createFromFormat('Y-m-d H:i:s', $randomDate);
                             $occurrence  = new \PlaygroundGame\Entity\InstantWinOccurrence();
                             $occurrence->setInstantwin($game);
-                            $occurrence->setOccurrenceDate($randomDate);
+
+                            $occurrence->setOccurrenceValue($randomDate->format('d/m/Y H:i:s'));
                             $occurrence->setActive(1);
 
                             $this->getInstantWinOccurrenceMapper()->insert($occurrence);
@@ -240,7 +283,7 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                             $randomDate = \DateTime::createFromFormat('Y-m-d H:i:s', $randomDate);
                             $occurrence  = new \PlaygroundGame\Entity\InstantWinOccurrence();
                             $occurrence->setInstantwin($game);
-                            $occurrence->setOccurrenceDate($randomDate);
+                            $occurrence->setOccurrenceValue($randomDate->format('d/m/Y H:i:s'));
                             $occurrence->setActive(1);
 
                             $this->getInstantWinOccurrenceMapper()->insert($occurrence);
@@ -280,7 +323,7 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                             $randomDate = \DateTime::createFromFormat('Y-m-d H:i:s', $randomDate);
                             $occurrence  = new \PlaygroundGame\Entity\InstantWinOccurrence();
                             $occurrence->setInstantwin($game);
-                            $occurrence->setOccurrenceDate($randomDate);
+                            $occurrence->setOccurrenceValue($randomDate->format('d/m/Y H:i:s'));
                             $occurrence->setActive(1);
 
                             $this->getInstantWinOccurrenceMapper()->insert($occurrence);
@@ -320,7 +363,7 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                             $randomDate = \DateTime::createFromFormat('Y-m-d H:i:s', $randomDate);
                             $occurrence  = new \PlaygroundGame\Entity\InstantWinOccurrence();
                             $occurrence->setInstantwin($game);
-                            $occurrence->setOccurrenceDate($randomDate);
+                            $occurrence->setOccurrenceValue($randomDate->format('d/m/Y H:i:s'));
                             $occurrence->setActive(1);
 
                             $this->getInstantWinOccurrenceMapper()->insert($occurrence);
@@ -346,6 +389,81 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
         return date('Y-m-d H:i:s', $rand_epoch);
     }
 
+    public function getCodeOccurencesFromCSV($file_name)
+    {
+        if (file_exists($file_name)){
+            $csv_file = fopen($file_name, 'r');
+            if ($csv_file){
+                while (!feof($csv_file) ) 
+                    $csv_content[] = fgetcsv($csv_file);
+                fclose($csv_file);
+                return $csv_content;
+            }
+        }
+        return false;
+    }
+
+    public function setCodeOccurencesToCSV($game)
+    {
+        $path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR;
+        $file_name = $path.'occurences-'.$game->getId().'.csv';
+        $csv_file = fopen($file_name, 'w');
+        if ($csv_file){
+            $occurrences = $this->getInstantWinOccurrenceMapper()->findByGameId($game);
+            foreach ($occurrences as $occurrence) {
+                fputcsv($csv_file, array($occurrence->getOccurrenceValue(), $occurrence->getWinning()));
+            }
+            fclose($csv_file);
+            return $file_name;
+        } 
+        return false;       
+    }
+
+    public function uploadCodeOccurrences($data)
+    {
+        if (!empty($data['occurrences_file']['tmp_name'])) {
+            $path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR;
+            $media_url = $this->getOptions()->getMediaUrl() . '/';
+            $instantwin = $this->getGameMapper()->findById($data['instant_win_id']);
+
+            // upload the csv file
+            ErrorHandler::start();
+            $data['occurrences_file']['name'] = $this->fileNewname($path, $data['instant_win_id'] . "-" . $data['occurrences_file']['name']);
+            move_uploaded_file($data['occurrences_file']['tmp_name'], $path . $data['occurrences_file']['name']);
+            ErrorHandler::stop(true);
+
+            $csv_content = $this->getCodeOccurencesFromCSV(PUBLIC_PATH.$media_url.$data['occurrences_file']['name']);
+            if ($csv_content){
+                $created = 0;
+                $already_in = 0;
+                foreach ($csv_content as $line){
+                    if($line){
+                        if($this->getInstantWinOccurrenceMapper()->assertNoOther($instantwin, $line[0])){
+                            $occurrence = $this->createOccurrence(array(
+                                'id' => $data['id'],
+                                'instant_win_id' => $data['instant_win_id'],
+                                'occurrence_value' => $line[0],
+                                'active' => $data['active'],
+                                'winning' => $line[1],
+                                'prize_id' => $data['prize'],
+                            ));
+                            if($occurrence){
+                                $created++;
+                            }
+                        }  
+                        else {
+                            $already_in++;
+                        }
+                    } 
+                }
+                // remove the csv file from folder
+                unlink(PUBLIC_PATH.$media_url.$data['occurrences_file']['name']);
+                return [$created, $already_in];
+            }
+        }
+        return false;
+    }
+
     /**
      *
      *
@@ -360,20 +478,27 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
         $occurrence  = new \PlaygroundGame\Entity\InstantWinOccurrence();
         $form  = $this->getServiceManager()->get('playgroundgame_instantwinoccurrence_form');
         $form->bind($occurrence);
+
+        // default for datetime instantWin
+        // For the datetime type, we only create the winning occurencies
+        if (!isset($data['winning']))
+            $data['winning'] = 1;
         $form->setData($data);
 
         $instantwin = $this->getGameMapper()->findById($data['instant_win_id']);
         $prize = null;
         if(isset($data['prize_id'])){
-        	$prize = $this->getPrizeMapper()->findById($data['prize_id']);
+            $prize = $this->getPrizeMapper()->findById($data['prize_id']);
         }
 
         if (!$form->isValid()) {
+            var_dump($form->getMessages());
             return false;
         }
 
         $occurrence->setInstantWin($instantwin);
         $occurrence->setPrize($prize);
+        $occurrence->populate($data);
 
         $this->getInstantWinOccurrenceMapper()->insert($occurrence);
 
