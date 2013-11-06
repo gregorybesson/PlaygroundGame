@@ -439,11 +439,12 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                 foreach ($csv_content as $line){
                     if($line){
                         if($this->getInstantWinOccurrenceMapper()->assertNoOther($instantwin, $line[0])){
+                            // set active by default, can be changed by editing
                             $occurrence = $this->createOccurrence(array(
                                 'id' => $data['id'],
                                 'instant_win_id' => $data['instant_win_id'],
                                 'occurrence_value' => $line[0],
-                                'active' => $data['active'],
+                                'active' => 1,
                                 'winning' => $line[1],
                                 'prize_id' => $data['prize'],
                             ));

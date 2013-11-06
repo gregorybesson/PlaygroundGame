@@ -237,6 +237,7 @@ class InstantWinController extends AbstractActionController
         $form = $this->getServiceLocator()->get('playgroundgame_instantwinoccurrence_form');
         $form->remove('occurrence_value');
         $form->remove('winning');
+        $form->remove('active');
 
         $form->get('submit')->setAttribute('label', 'Add');
         $form->setAttribute('action', $this->url()->fromRoute('admin/playgroundgame/instantwin-code-occurrences-add', array('gameId' => $gameId)));
