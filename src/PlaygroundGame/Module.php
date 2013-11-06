@@ -160,8 +160,7 @@ class Module
                 'playgroundgame_quiz_service'              => 'PlaygroundGame\Service\Quiz',
             	'playgroundgame_treasurehunt_service'      => 'PlaygroundGame\Service\TreasureHunt',
                 'playgroundgame_instantwin_service'        => 'PlaygroundGame\Service\InstantWin',
-                'playgroundgame_leaderboard_service'       => 'PlaygroundGame\Service\LeaderBoard',
-            	'playgroundgame_prize_service'     		  => 'PlaygroundGame\Service\Prize',
+                'playgroundgame_prize_service'     		  => 'PlaygroundGame\Service\Prize',
             	'playgroundgame_prizecategory_service'     => 'PlaygroundGame\Service\PrizeCategory',
                 'playgroundgame_prizecategoryuser_service' => 'PlaygroundGame\Service\PrizeCategoryUser',
             ),
@@ -212,15 +211,6 @@ class Module
 
                 'playgroundgame_quiz_mapper' => function ($sm) {
                 $mapper = new \PlaygroundGame\Mapper\Quiz(
-                        $sm->get('doctrine.entitymanager.orm_default'),
-                        $sm->get('playgroundgame_module_options')
-                );
-
-                return $mapper;
-                },
-
-                'playgroundgame_leaderboard_mapper' => function ($sm) {
-                $mapper = new \PlaygroundGame\Mapper\LeaderBoard(
                         $sm->get('doctrine.entitymanager.orm_default'),
                         $sm->get('playgroundgame_module_options')
                 );
