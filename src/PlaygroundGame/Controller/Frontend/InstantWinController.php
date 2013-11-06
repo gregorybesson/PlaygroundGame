@@ -25,12 +25,6 @@ class InstantWinController extends GameController
             return $this->notFoundAction();
         }
 
-
-        $game = $sg->checkGame($identifier);
-        if (!$game || $game->isClosed()) {
-            return $this->notFoundAction();
-        }
-
         $session = new Container('facebook');
         $channel = $this->getEvent()->getRouteMatch()->getParam('channel');
 
