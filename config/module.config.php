@@ -32,27 +32,67 @@ return array(
 								'name' => 'Assetic\Filter\CssRewriteFilter',
 							)
 						),
-						'options' => array(),
-					),
+						'options' => array(
+			              	'output' => 'zfcadmin/css/admin_areapicker.css',
+			          	),
+					),					
 					'head_admin_areapicker_js' => array(
 						'assets' => array(
+							'js/playground/jquery.min.js',
 							'js/playground/areapicker/app.js',
 						    'js/playground/areapicker/config.js',
 						    'js/playground/areapicker/selection.js',
 						    'js/easyxdm/easyxdm.min.js'
 						),
 						'filters' => array(),
-						'options' => array(),
+						'options' => array(
+							'output' => 'zfcadmin/js/head_admin_areapicker.js',
+						),
+						'head_areapicker_cors_js' => array(
+	               			'assets' => array(
+                   	            'js/playground/areapicker/cors.js',
+                 			),
+                			'filters' => array(),
+                 			'options' => array(
+                     			'move_raw' => true,
+                     			'output' => 'lib',
+                 			),
+			            ),
+			            'head_admin_deezer_js' => array(
+			                'assets' => array(
+			                    'js/deezer/dz.min.js',
+			                ),
+			                'filters' => array(),
+			                'options' => array(
+			                    'output' => 'zfcadmin/head_deezer.js',
+			                ),
+			            ),
+			             
+			            'head_frontend_deezer_js' => array(
+			                'assets' => array(
+			                    'js/deezer/dz.min.js',
+			                ),
+			                'filters' => array(),
+			                'options' => array(
+			                    'output' => 'frontend/head_deezer.js',
+			                ),
+			            ),
 					),
 				),
 			),
 		),
 
 		'routes' => array(
-			'admin/playgroundgame/treasure(.*)' => array(
+			'admin/playgroundgame/treasure-hunt-areapicker' => array(
                 '@admin_areapicker_css',
 				'@head_admin_areapicker_js',
             ),
+            'admin/playgroundgame.*' => array(
+             	'@head_admin_deezer_js',
+         	),
+         	'frontend/quiz.*' => array(
+             	'@head_frontend_deezer_js',
+         	),
 		),
 	),
     'core_layout' => array(
