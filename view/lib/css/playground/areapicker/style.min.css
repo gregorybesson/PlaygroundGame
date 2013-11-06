@@ -229,6 +229,7 @@ body #popin-wrapper #popin-middle #tip2 .info {
 }
 
 body #popin-wrapper #popin-middle #tip2 img {
+    max-width: inherit;
     background-color: #aaa;
     border: #ddd;
 }
