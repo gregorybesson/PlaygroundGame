@@ -59,10 +59,12 @@ if (isset($fm[0]))
             <?php endif;?>
             <?php $deleteLink = $this->url('admin/playgroundgame/remove', array('gameId' => $game->getId()));?>
             <?php $leaderboardLink = $this->url('admin/'. $game->getClassType() .'/leaderboard', array('gameId' => $game->getId()));?>
+            <?php $optionLinkName = $this->translate('Add options'); ?>
             <?php if($game->getClassType() == 'quiz'):?>
                 <?php $optionLink = $this->url('admin/playgroundgame/quiz-question-list', array('quizId' => $game->getId())); ?>
             <?php elseif($game->getClassType() == 'instantwin'):?>
-                <?php $optionLink = $this->url('admin/playgroundgame/instantwin-occurrence-list', array('gameId' => $game->getId())); ?>
+                <?php $optionLink = $this->url('admin/playgroundgame/instantwin-occurrence-list', array('gameId' => $game->getId())); 
+                    $optionLinkName = $this->translate('Handle occurrences'); ?>
             <?php elseif($game->getClassType() == 'treasurehunt'):?>
                 <?php $optionLink = $this->url('admin/playgroundgame/treasurehunt-step-list', array('gameId' => $game->getId())); ?>
             <?php elseif($game->getClassType() == 'postvote'):?>
@@ -71,7 +73,7 @@ if (isset($fm[0]))
                 <?php $optionLink = ''; ?>
             <?php endif; ?>
             <td>
-                <a href='<?php echo $leaderboardLink ?>'><?php echo $this->translate('Leader Board'); ?></a> | <a href='<?php echo $editLink ?>'><?php echo $this->translate('Edit'); ?></a> | <a href='<?php echo $deleteLink ?>'><?php echo $this->translate('Delete'); ?></a><?php if($optionLink != ''):?> | <a href='<?php echo $optionLink ?>'><?php echo $this->translate('Add options'); ?></a><?php endif;?> | <a target="_blank" href='<?php echo $this->url('frontend/' . $game->getClassType(), array('id' => $game->getIdentifier(), 'channel' => 'preview'), array('force_canonical' => true));?>'><?php echo $this->translate('Preview'); ?></a>
+                <a href='<?php echo $leaderboardLink ?>'><?php echo $this->translate('Leader Board'); ?></a> | <a href='<?php echo $editLink ?>'><?php echo $this->translate('Edit'); ?></a> | <a href='<?php echo $deleteLink ?>'><?php echo $this->translate('Delete'); ?></a><?php if($optionLink != ''):?> | <a href='<?php echo $optionLink ?>'><?php echo $optionLinkName ?></a><?php endif;?> | <a target="_blank" href='<?php echo $this->url('frontend/' . $game->getClassType(), array('id' => $game->getIdentifier(), 'channel' => 'preview'), array('force_canonical' => true));?>'><?php echo $this->translate('Preview'); ?></a>
             </td>
             <td><?php echo $game->leaderboard; ?></td>
             <td><?php echo count($this->partnerSubscriber($game->getPartner(), false));?></td>

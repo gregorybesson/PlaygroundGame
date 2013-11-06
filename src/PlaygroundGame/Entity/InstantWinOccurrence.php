@@ -35,14 +35,19 @@ class InstantWinOccurrence implements InputFilterAwareInterface
     protected $instantwin;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="string")
      */
-    protected $occurrence_date;
+    protected $occurrence_value;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
     protected $active = 1;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    protected $winning = 1;
 
     /**
      * @ORM\ManyToOne(targetEntity="PlaygroundUser\Entity\User")
@@ -151,17 +156,17 @@ class InstantWinOccurrence implements InputFilterAwareInterface
     /**
      * @return the unknown_type
      */
-    public function getOccurrenceDate()
+    public function getOccurrenceValue()
     {
-        return $this->occurrence_date;
+        return $this->occurrence_value;
     }
 
     /**
-     * @param Datetime $occurrence_date
+     * @param Datetime $occurrence_value
      */
-    public function setOccurrenceDate($occurrence_date)
+    public function setOccurrenceValue($occurrence_value)
     {
-        $this->occurrence_date = $occurrence_date;
+        $this->occurrence_value = $occurrence_value;
 
         return $this;
     }
@@ -180,6 +185,24 @@ class InstantWinOccurrence implements InputFilterAwareInterface
     public function setActive($active)
     {
         $this->active = $active;
+
+        return $this;
+    }
+
+    /**
+     * @return the unknown_type
+     */
+    public function getWinning()
+    {
+        return $this->winning;
+    }
+
+    /**
+     * @param unknown_type $winning
+     */
+    public function setWinning($winning)
+    {
+        $this->winning = $winning;
 
         return $this;
     }
@@ -263,9 +286,9 @@ class InstantWinOccurrence implements InputFilterAwareInterface
     {
         $obj_vars = get_object_vars($this);
 
-        if (isset($obj_vars['occurrence_date']) && $obj_vars['occurrence_date'] != null) {
-            $obj_vars['occurrence_date'] = $obj_vars['occurrence_date']->format('d/m/Y H:i');
-        }
+        // if (isset($obj_vars['occurrence_date']) && $obj_vars['occurrence_date'] != null) {
+        //     $obj_vars['occurrence_date'] = $obj_vars['occurrence_date']->format('d/m/Y H:i');
+        // }
 
         return $obj_vars;
     }
@@ -277,8 +300,9 @@ class InstantWinOccurrence implements InputFilterAwareInterface
      */
     public function populate($data = array())
     {
-        $this->occurrence_date = (isset($data['occurrence_date']) && $data['occurrence_date'] != null) ? DateTime::createFromFormat('d/m/Y H:i', $data['occurrence_date']) : null;
+        $this->occurrence_value = (isset($data['occurrence_value']) && $data['occurrence_value'] != null) ? $data['occurrence_value'] : null;
         $this->active = (isset($data['active']) && $data['active'] != null) ? $data['active'] : null;
+        $this->winning = (isset($data['winning']) && $data['winning'] != null) ? $data['winning'] : null;
     }
 
     public function setInputFilter(InputFilterInterface $inputFilter)
@@ -302,6 +326,11 @@ class InstantWinOccurrence implements InputFilterAwareInterface
 
             $inputFilter->add($factory->createInput(array(
                 'name' => 'active',
+                'required' => true,
+            )));
+
+            $inputFilter->add($factory->createInput(array(
+                'name' => 'winning',
                 'required' => true,
             )));
 

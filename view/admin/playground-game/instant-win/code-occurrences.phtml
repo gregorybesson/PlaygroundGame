@@ -25,20 +25,20 @@ $form->prepare();
             <?php $today = $today->format('d/m/Y H:i:s');?>
 
             <div class="label-input">
-	        	<?php echo $this->formLabel($form->get('occurrence_value')); ?>
-	            <?php echo $this->formInput($form->get('occurrence_value')); ?>
-	            <?php echo $this->formElementErrors($form->get('occurrence_value')); ?>
-	        </div>
-	        <div class="label-input">
-	            <?php echo $this->formLabel($form->get('active')); ?>
-	            <?php echo $this->formSelect($form->get('active')); ?>
-	            <?php echo $this->formElementErrors($form->get('active')) ?>
-	        </div>
-	        <div class="label-input">
-		        <?php echo $this->formLabel($form->get('prize')); ?>
-		        <?php echo $this->formSelect($form->get('prize')); ?>
-		        <?php echo $this->formElementErrors($form->get('prize')) ?>
-			</div>
+                <?php echo $this->formLabel($form->get('occurrences_file')); ?>
+                <?php echo $this->formFile($form->get('occurrences_file')); ?>
+                <?php echo $this->formElementErrors($form->get('occurrences_file')); ?>
+            </div>
+            <div class="label-input">
+                <?php echo $this->formLabel($form->get('active')); ?>
+                <?php echo $this->formSelect($form->get('active')); ?>
+                <?php echo $this->formElementErrors($form->get('active')) ?>
+            </div>
+            <div class="label-input">
+                <?php echo $this->formLabel($form->get('prize')); ?>
+                <?php echo $this->formSelect($form->get('prize')); ?>
+                <?php echo $this->formElementErrors($form->get('prize')) ?>
+            </div>
         </div>
     </div>
 </div>
@@ -46,8 +46,5 @@ $form->prepare();
 <script type="text/javascript">
     jQuery(document).ready(function ($) {
         $('#tabs').tab();
-        $('#occurrence_value').datetimepicker({
-        	dateFormat : 'dd/mm/yy'
-        });
-    });
+    }
 </script>

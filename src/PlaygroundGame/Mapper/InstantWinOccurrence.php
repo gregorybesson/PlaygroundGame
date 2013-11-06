@@ -71,8 +71,8 @@ class InstantWinOccurrence
                 'SELECT i FROM PlaygroundGame\Entity\InstantWinOccurrence i
                 WHERE i.instantwin = :game
                 AND i.active = 1
-                AND i.occurrence_date <= :now
-                ORDER BY i.occurrence_date DESC
+                AND i.occurrence_value <= :now
+                ORDER BY i.occurrence_value DESC
                 '
         );
         $query->setParameter('game', $instant_win);
@@ -129,5 +129,18 @@ class InstantWinOccurrence
         }
 
         return $this->er;
+    }
+
+    public function assertNoOther($instantwin, $occurrence_value){
+        $query = $this->em->createQuery(
+                'SELECT i FROM PlaygroundGame\Entity\InstantWinOccurrence i
+                WHERE i.instantwin = :game
+                AND i.occurrence_value = :value'
+        );
+        $query->setParameter('game', $instantwin);
+        $query->setParameter('value', $occurrence_value);
+        if ($query->getResult())
+            return false;
+        return true;
     }
 }
