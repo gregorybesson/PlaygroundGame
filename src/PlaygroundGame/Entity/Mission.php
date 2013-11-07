@@ -78,8 +78,10 @@ class Mission
     }
 
     /**
+     * Setter for Id
+     *
      * @param $id
-     * @return Block|mixed
+     * @return Mission $mision
      */
     public function setId($id)
     {
@@ -89,19 +91,19 @@ class Mission
     }
 
     /**
-     * @return mixed
+     * Getter for id
+     *
+     * @return int $id
      */
     public function getId()
     {
         return $this->id;
     }
 
-
-  
     /**
      * Getter for title
      *
-     * @return mixed
+     * @return string $title
      */
     public function getTitle()
     {
@@ -111,8 +113,8 @@ class Mission
     /**
      * Setter for title
      *
-     * @param mixed $title Value to set
-     * @return self
+     * @param string $title Value to set
+     * @return Mission $mission
      */
     public function setTitle($title)
     {
@@ -123,7 +125,7 @@ class Mission
      /**
      * Getter for image
      *
-     * @return mixed
+     * @return string $image
      */
     public function getImage()
     {
@@ -133,8 +135,8 @@ class Mission
     /**
      * Setter for image
      *
-     * @param mixed $image Value to set
-     * @return self
+     * @param string $image Value to set
+     * @return Mission $mission
      */
     public function setImage($image)
     {
@@ -142,11 +144,10 @@ class Mission
         return $this;
     }
     
-
      /**
      * Getter for description
      *
-     * @return mixed
+     * @return string $description
      */
     public function getDescription()
     {
@@ -156,8 +157,8 @@ class Mission
     /**
      * Setter for description
      *
-     * @param mixed $description Value to set
-     * @return self
+     * @param string $description Value to set
+     * @return Mission $mission
      */
     public function setDescription($description)
     {
@@ -168,7 +169,7 @@ class Mission
     /**
      * Getter for hidden
      *
-     * @return mixed
+     * @return int $hidden
      */
     public function getHidden()
     {

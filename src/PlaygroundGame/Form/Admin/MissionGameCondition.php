@@ -17,7 +17,7 @@ class MissionGameCondition extends ProvidesEventsForm
     protected $mission;
 
     /**
-    * __construct : permet de construire le formulaire qui peuplera l'entity LeaderboardType
+    * __construct : permet de construire le formulaire qui gerera l'entity MissionGameCondition
     *
     * @param string $name
     * @param Zend\ServiceManager\ServiceManager $serviceManager 
@@ -68,9 +68,10 @@ class MissionGameCondition extends ProvidesEventsForm
 
 
      /**
-     * retrieve all leaderboard type for associate to storyMapping
+     * retrieve all games for associate to a missionGame
+     * @param ServiceManager $serviceManager
      *
-     * @return array $leaderboardTypesArray
+     * @return array $gamesArray
      */
     public function getGames($serviceManager)
     {
@@ -86,6 +87,11 @@ class MissionGameCondition extends ProvidesEventsForm
     }
 
 
+    /**
+     * retrieve all conditions 
+     *
+     * @return array $conditions
+     */
     public function getConditions()
     {
         return MissionGameConditionEntity::$conditions;

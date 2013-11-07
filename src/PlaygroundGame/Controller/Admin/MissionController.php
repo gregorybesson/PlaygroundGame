@@ -15,10 +15,13 @@ class MissionController extends AbstractActionController
      */
     protected $missionService;
 
+    /**
+     * @var missionGameService
+     */
     protected $missionGameService;
 
     /**
-    * listAction : retrieve all leaderboardtype
+    * listAction : retrieve all missions
     *
     * @return array $return 
     */
@@ -36,7 +39,7 @@ class MissionController extends AbstractActionController
     }
 
     /**
-    * createAction : create a leaderboardtype
+    * createAction : create a mission
     *
     * @return viewModel $viewModel 
     */
@@ -76,7 +79,7 @@ class MissionController extends AbstractActionController
 
 
     /**
-    * editAction : edit a leaderboardtype
+    * editAction : edit a mission
     *
     * @return viewModel $viewModel 
     */
@@ -118,7 +121,7 @@ class MissionController extends AbstractActionController
     }
 
     /**
-    * deleteAction : delete a leaderboardtype
+    * deleteAction : delete a mission
     *
     * @return redirect 
     */
@@ -139,13 +142,13 @@ class MissionController extends AbstractActionController
         $form = $this->getServiceLocator()->get('playgroundgame_mission_game_form');
         $request = $this->getRequest();
         if ($request->isPost()) {
-            // Suppression des misssions game pour une mission
+
             $this->getMissionGameService()->clear($mission);
 
             $data = $request->getPost()->toArray();
             $dataGames = array();
             for ($i=0; $i <= $data['countGame']; $i++) { 
-                if(empty($data["games".$i])){
+                if (empty($data["games".$i])) {
                     continue;
                 }
                 $dataGames[$i] = array('games' => $data['games'.$i],
@@ -162,6 +165,7 @@ class MissionController extends AbstractActionController
 
         $missionGamesArray = array();
         $missionGames = $this->getMissionGameService()->findMissionGameByMission($mission);
+
         foreach ($missionGames as $missionGame) {
             foreach ($this->getMissionGameService()->findMissionGameConditionByMissionGame($missionGame) as $missionGameCondition) {
                 $missionGamesArray[] = array('games' => $missionGame->getGame()->getId(),
@@ -170,8 +174,6 @@ class MissionController extends AbstractActionController
             }
              
         }
-       
-
 
         $viewModel = new ViewModel();
         $viewModel->setTemplate('playground-game/mission/associateGame');
@@ -182,9 +184,9 @@ class MissionController extends AbstractActionController
     }
 
      /**
-     * Retrieve service leaderboardType instance
+     * Retrieve service mission instance
      *
-     * @return Service/leaderboardType leaderboardTypeService
+     * @return Service/Mission missionService
      */
     public function getMissionService()
     {
@@ -196,9 +198,9 @@ class MissionController extends AbstractActionController
     }
 
     /**
-     * Retrieve service leaderboardType instance
+     * Retrieve service MissionGame instance
      *
-     * @return Service/leaderboardType leaderboardTypeService
+     * @return Service/MissionGame missionGameService
      */
     public function getMissionGameService()
     {

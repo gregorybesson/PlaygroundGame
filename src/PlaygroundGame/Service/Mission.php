@@ -13,20 +13,28 @@ class Mission extends EventProvider implements ServiceManagerAwareInterface
 {
 
     /**
-    * @var leaderboardType
+    * @var missionMapper
     */
     protected $missionMapper;
+    /**
+    * @var missionGameMapper
+    */
     protected $missionGameMapper;
+    /**
+    * @var gameMapper
+    */
     protected $gameMapper;
-
+    /**
+    * @var options
+    */
     protected $options;
 
     /**
-    * create : ajout de leaderBoardType
+    * create : ajout de Mission
     * @param array $data 
     * @param string $formClass
     *
-    * @return LeaderBoardType $leaderboardType
+    * @return Mission $mission
     */
     public function create(array $data, $formClass)
     {
@@ -40,6 +48,7 @@ class Mission extends EventProvider implements ServiceManagerAwareInterface
         $form->setData($data);
 
         if (!$form->isValid()) {
+            
             return false;
         }
         
@@ -52,12 +61,12 @@ class Mission extends EventProvider implements ServiceManagerAwareInterface
     }
 
     /**
-    * edit : mise ajour de leaderBoardType
+    * edit : mise ajour de mission
     * @param array $data 
-    * @param LeaderBoardType $leaderboardType
+    * @param Mission $mission
     * @param string $formClass
     *
-    * @return LeaderBoardType  $leaderboardType
+    * @return Mission  $mission
     */
     public function edit(array $data, $mission, $formClass)
     {
@@ -67,14 +76,23 @@ class Mission extends EventProvider implements ServiceManagerAwareInterface
 
         $form->setData($data);
         if (!$form->isValid()) {
+            
             return false;
         }
+
         $this->uploadImage($mission, $data);
         $mission = $this->getMissionMapper()->update($mission);
 
         return $mission;
     }
 
+    /**
+    * uploadImage : upload de l'image de la mission
+    * @param Mission $mission
+    * @param array $data 
+    *
+    * @return Mission $mission
+    */
     public function uploadImage($mission, $data)
     {
          if (!empty($data['uploadImage']['tmp_name'])) {
@@ -91,10 +109,11 @@ class Mission extends EventProvider implements ServiceManagerAwareInterface
     }
 
 
-    /* findById : recupere l'entite en fonction de son id
-    * @param int $id id du leaderboardType
+    /** 
+    * findById : recupere l'entite en fonction de son id
+    * @param int $id id du mission
     *
-    * @return PlaygroundFlow\Entity\leaderboardType $leaderboardType
+    * @return PlaygroundGame\Entity\Mission $mission
     */
     public function findById($id)
     {
@@ -102,8 +121,8 @@ class Mission extends EventProvider implements ServiceManagerAwareInterface
     }
 
     /**
-    * remove : supprimer une entite leaderboardType
-    * @return PlaygroundFlow\Entity\leaderboardType $entity leaderboardType
+    * remove : supprimer une entite mission
+    * @return PlaygroundGame\Entity\Mission  $entity mission
     *
     */
     public function remove($entity)
@@ -126,10 +145,10 @@ class Mission extends EventProvider implements ServiceManagerAwareInterface
     }
 
     /**
-     * Set service manager instance
+     * Set options instance
      *
-     * @param  ServiceManager $locator
-     * @return Event
+     * @param  Option $options
+     * @return Mission
      */
     public function setOptions($options)
     {
@@ -152,7 +171,7 @@ class Mission extends EventProvider implements ServiceManagerAwareInterface
      * Set service manager instance
      *
      * @param  ServiceManager $locator
-     * @return Event
+     * @return Mission
      */
     public function setServiceManager(ServiceManager $serviceManager)
     {
@@ -163,9 +182,9 @@ class Mission extends EventProvider implements ServiceManagerAwareInterface
 
 
      /**
-     * getLeaderboardTypeMapper : retrieve LeaderBoardType mapper instance
+     * getMissionMapper : retrieve Mission mapper instance
      *
-     * @return Mapper/LeaderBoardType $leaderboardType
+     * @return Mapper/Mission $missionMapper
      */
     public function getMissionMapper()
     {

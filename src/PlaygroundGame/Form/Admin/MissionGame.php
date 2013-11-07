@@ -10,12 +10,6 @@ use Zend\ServiceManager\ServiceManager;
 class MissionGame extends ProvidesEventsForm
 {
     /**
-    * @var Zend\ServiceManager\ServiceManager $serviceManager
-    */
-    protected $serviceManager;
-    protected $mission;
-
-    /**
     * __construct : permet de construire le formulaire qui peuplera l'entity LeaderboardType
     *
     * @param string $name

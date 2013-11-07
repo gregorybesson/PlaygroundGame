@@ -38,9 +38,9 @@ class MissionGameCondition
 
     /**
     * findById : recupere l'entite en fonction de son id
-    * @param int $id id du leaderBoardType
+    * @param int $id id du missionGameCondition
     *
-    * @return PlaygroundReward\Entity\LeaderBoardType $leaderBoardType
+    * @return PlaygroundGame\Entity\MissionGameCondition $missionGameCondition
     */
     public function findById($id)
     {
@@ -51,7 +51,7 @@ class MissionGameCondition
     * findOneBy : recupere l'entite en fonction de filtres
     * @param array $filters tableau de filtres
     *
-    * @return PlaygroundReward\Entity\LeaderBoardType $leaderBoardType
+    * @return PlaygroundGame\Entity\MissionGameCondition $missionGameCondition
     */
     public function findOneBy($filters)
     {
@@ -62,7 +62,7 @@ class MissionGameCondition
     * findBy : recupere des entites en fonction de filtre
     * @param array $array tableau de filtre
     *
-    * @return collection $leaderBoardTypes collection de PlaygroundReward\Entity\LeaderBoardType
+    * @return collection $missionGameConditions collection de PlaygroundGame\Entity\MissionGameCondition
     */
     public function findBy($array)
     {
@@ -70,10 +70,10 @@ class MissionGameCondition
     }
 
     /**
-    * insert : insert en base une entité leaderBoardType
-    * @param PlaygroundReward\Entity\LeaderBoardType $entity leaderBoardType
+    * insert : insert en base une entité missionGameCondition
+    * @param PlaygroundGame\Entity\MissionGameCondition $entity missionGameCondition
     *
-    * @return PlaygroundReward\Entity\LeaderBoardType $leaderBoardType
+    * @return PlaygroundGame\Entity\MissionGameCondition $missionGameCondition
     */
     public function insert($entity)
     {
@@ -81,10 +81,10 @@ class MissionGameCondition
     }
 
     /**
-    * insert : met a jour en base une entité leaderBoardType
-    * @param PlaygroundReward\Entity\LeaderBoardType $entity leaderBoardType
+    * insert : met a jour en base une entité missionGameCondition
+    * @param PlaygroundGame\Entity\MissionGameCondition $entity missionGameCondition
     *
-    * @return PlaygroundReward\Entity\LeaderBoardType $leaderBoardType
+    * @return PlaygroundGame\Entity\MissionGameCondition $missionGameCondition
     */
     public function update($entity)
     {
@@ -92,10 +92,10 @@ class MissionGameCondition
     }
 
     /**
-    * insert : met a jour en base une entité leaderBoardType et persiste en base
-    * @param PlaygroundDesign\Entity\Theme $entity leaderBoardType
+    * insert : met a jour en base une entité missionGameCondition et persiste en base
+    * @param PlaygroundGame\Entity\MissionGameCondition $entity missionGameCondition
     *
-    * @return PlaygroundReward\Entity\LeaderBoardType $leaderBoardType
+    * @return PlaygroundGame\Entity\MissionGameCondition $missionGameCondition
     */
     public function persist($entity)
     {
@@ -108,7 +108,7 @@ class MissionGameCondition
     /**
     * findAll : recupere toutes les entites 
     *
-    * @return collection $leaderBoardTypes collection de PlaygroundReward\Entity\LeaderBoardType
+    * @return collection $missionGameConditions collection de PlaygroundGame\Entity\MissionGameCondition
     */
     public function findAll()
     {
@@ -116,8 +116,8 @@ class MissionGameCondition
     }
 
      /**
-    * remove : supprimer une entite theme
-    * @param PlaygroundReward\Entity\LeaderBoardType $entity leaderBoardType
+    * remove : supprimer une entite missionGameCondition
+    * @param PlaygroundGame\Entity\MissionGameCondition $entity missionGameCondition
     *
     */
     public function remove($entity)
@@ -127,8 +127,8 @@ class MissionGameCondition
     }
 
     /**
-    * refresh : supprimer une entite theme
-    * @param PlaygroundReward\Entity\LeaderBoardType $entity leaderBoardType
+    * refresh : supprimer une entite missionGameCondition
+    * @param PlaygroundGame\Entity\MissionGameCondition $entity missionGameCondition
     *
     */
     public function refresh($entity)
@@ -137,9 +137,9 @@ class MissionGameCondition
     }
 
     /**
-    * getEntityRepository : recupere l'entite leaderBoardType
+    * getEntityRepository : recupere l'entite missionGameCondition
     *
-    * @return PlaygroundReward\Entity\LeaderBoardType $leaderBoardType
+    * @return PlaygroundGame\Entity\MissionGameCondition $missionGameCondition
     */
     public function getEntityRepository()
     {

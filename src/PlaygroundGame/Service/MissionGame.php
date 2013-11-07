@@ -14,15 +14,34 @@ class MissionGame extends EventProvider implements ServiceManagerAwareInterface
 {
 
     /**
-    * @var leaderboardType
+    * @var missionMapper
     */
     protected $missionMapper;
+     /**
+    * @var missionGameMapper
+    */
     protected $missionGameMapper;
+     /**
+    * @var missionGameConditionMapper
+    */
     protected $missionGameConditionMapper;
+     /**
+    * @var gameMapper
+    */
     protected $gameMapper;
-
+     /**
+    * @var options
+    */
     protected $options;
 
+
+    /**
+    * associate : Permet d'associer des jeux et des conditions à une mission
+    * @param array $data 
+    * @param Mission $mission
+    *
+    * @return MissionGameEntity $missionGameEntity
+    */
     public function associate($data, $mission)
     {
         $missionGameEntity = new MissionGameEntity();
@@ -41,6 +60,10 @@ class MissionGame extends EventProvider implements ServiceManagerAwareInterface
         return $missionGameEntity;
     }
 
+    /**
+    * clear : Permet de supprimer l'association des jeux et des conditions à une mission
+    * @param Mission $mission
+    */
     public function clear($mission)
     {
         $missionGames = $this->findMissionGameByMission($mission);
@@ -49,10 +72,22 @@ class MissionGame extends EventProvider implements ServiceManagerAwareInterface
         }
     }
 
+    /**
+    * findMissionGameByMission : Permet de recuperer les missionsGame à partir d'une mission
+    * @param Mission $mission
+    *
+    * @return Collection de MissionGame $missionGames
+    */
     public function findMissionGameByMission($mission){
         return $this->getMissionGameMapper()->findBy(array('mission'=>$mission));
     }
 
+    /**
+    * findMissionGameConditionByMissionGame : Permet de recuperer les missionsGameCondition à partir d'une missionGame
+    * @param MissionGame $missionGame
+    *
+    * @return Collection de MissionGameCondition $missionGameConditions
+    */
     public function findMissionGameConditionByMissionGame($missionGame)
     {
         return $this->getMissionGameConditionMapper()->findBy(array('missionGame'=>$missionGame));
@@ -81,6 +116,11 @@ class MissionGame extends EventProvider implements ServiceManagerAwareInterface
         return $this;
     }
 
+     /**
+    * getMissionGameConditionMapper : retrieve missionGameCondition mapper instance
+    *
+    * @return Mapper/missionGameCondition $missionGameConditionMapper
+    */
     public function getMissionGameConditionMapper()
     {
         if (null === $this->missionGameConditionMapper) {
@@ -90,11 +130,11 @@ class MissionGame extends EventProvider implements ServiceManagerAwareInterface
         return $this->missionGameConditionMapper;   
     }
 
-     /**
-     * getLeaderboardTypeMapper : retrieve LeaderBoardType mapper instance
-     *
-     * @return Mapper/LeaderBoardType $leaderboardType
-     */
+    /**
+    * getMissionGameMapper : retrieve missionGame mapper instance
+    *
+    * @return Mapper/MissionGameMapper $missionGameMapper
+    */
     public function getMissionGameMapper()
     {
         if (null === $this->missionGameMapper) {
@@ -104,7 +144,11 @@ class MissionGame extends EventProvider implements ServiceManagerAwareInterface
         return $this->missionGameMapper;
     }
 
-
+    /**
+    * getGameMapper : retrieve game mapper instance
+    *
+    * @return Mapper/GameMapper $gameMapper
+    */
     public function getGameMapper()
     {
         if (null === $this->gameMapper) {

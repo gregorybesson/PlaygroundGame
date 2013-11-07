@@ -180,25 +180,6 @@ class MissionGame
         $this->updatedAt = $updatedAt;
     }
 
-    /**
-     * Convert the object to an array.
-     *
-     * @return array
-     */
-    public function getArrayCopy()
-    {
-        return get_object_vars($this);
-    }
-
-    /**
-     * Populate from an array.
-     *
-     * @param array $data
-     */
-    public function populate($data = array())
-    {
-    }
-
     public function getInputFilter ()
     {
         if (! $this->inputFilter) {

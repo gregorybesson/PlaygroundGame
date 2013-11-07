@@ -123,9 +123,9 @@ class ModuleOptions extends AbstractOptions implements GameEditOptionsInterface
      * @param  string                           $media_path
      * @return \PlaygroundGame\Options\ModuleOptions
      */
-    public function setMediaPathMission($media_path)
+    public function setMediaPathMission($media_path_mission)
     {
-        $this->media_path = $media_path;
+        $this->media_path_mission = $media_path_mission;
 
         return $this;
     }
@@ -135,7 +135,7 @@ class ModuleOptions extends AbstractOptions implements GameEditOptionsInterface
      */
     public function getMediaPathMission()
     {
-        return $this->media_path;
+        return $this->media_path_mission;
     }
 
     /**
@@ -143,9 +143,9 @@ class ModuleOptions extends AbstractOptions implements GameEditOptionsInterface
      * @param  string                           $media_url
      * @return \PlaygroundGame\Options\ModuleOptions
      */
-    public function setMediaUrlMission($media_url)
+    public function setMediaUrlMission($media_url_mission)
     {
-        $this->media_url = $media_url;
+        $this->media_url_mission = $media_url_mission;
 
         return $this;
     }
@@ -155,7 +155,7 @@ class ModuleOptions extends AbstractOptions implements GameEditOptionsInterface
      */
     public function getMediaUrlMission()
     {
-        return $this->media_url;
+        return $this->media_url_mission;
     }
 
 	

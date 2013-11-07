@@ -38,9 +38,9 @@ class Mission
 
     /**
     * findById : recupere l'entite en fonction de son id
-    * @param int $id id du leaderBoardType
+    * @param int $id id de mission
     *
-    * @return PlaygroundReward\Entity\LeaderBoardType $leaderBoardType
+    * @return PlaygroundGame\Entity\Mission $mission
     */
     public function findById($id)
     {
@@ -51,7 +51,7 @@ class Mission
     * findOneBy : recupere l'entite en fonction de filtres
     * @param array $filters tableau de filtres
     *
-    * @return PlaygroundReward\Entity\LeaderBoardType $leaderBoardType
+    * @return PlaygroundGame\Entity\Mission $mission
     */
     public function findOneBy($filters)
     {
@@ -62,7 +62,7 @@ class Mission
     * findBy : recupere des entites en fonction de filtre
     * @param array $array tableau de filtre
     *
-    * @return collection $leaderBoardTypes collection de PlaygroundReward\Entity\LeaderBoardType
+    * @return collection $missions collection de PlaygroundGame\Entity\Mission 
     */
     public function findBy($array)
     {
@@ -70,10 +70,10 @@ class Mission
     }
 
     /**
-    * insert : insert en base une entité leaderBoardType
-    * @param PlaygroundReward\Entity\LeaderBoardType $entity leaderBoardType
+    * insert : insert en base une entité mission
+    * @param PlaygroundGame\Entity\Mission  $entity mission
     *
-    * @return PlaygroundReward\Entity\LeaderBoardType $leaderBoardType
+    * @return PlaygroundGame\Entity\Mission  $mission
     */
     public function insert($entity)
     {
@@ -81,10 +81,10 @@ class Mission
     }
 
     /**
-    * insert : met a jour en base une entité leaderBoardType
-    * @param PlaygroundReward\Entity\LeaderBoardType $entity leaderBoardType
+    * update : met a jour en base une entité mission
+    * @param PlaygroundGame\Entity\Mission $entity mission
     *
-    * @return PlaygroundReward\Entity\LeaderBoardType $leaderBoardType
+    * @return PlaygroundGame\Entity\Mission $mission
     */
     public function update($entity)
     {
@@ -92,10 +92,10 @@ class Mission
     }
 
     /**
-    * insert : met a jour en base une entité leaderBoardType et persiste en base
-    * @param PlaygroundDesign\Entity\Theme $entity leaderBoardType
+    * persist : met a jour en base une entité mission et persiste en base
+    * @param PlaygroundGame\Entity\Mission $entity mission
     *
-    * @return PlaygroundReward\Entity\LeaderBoardType $leaderBoardType
+    * @return PlaygroundGame\Entity\Mission $mission
     */
     public function persist($entity)
     {
@@ -108,7 +108,7 @@ class Mission
     /**
     * findAll : recupere toutes les entites 
     *
-    * @return collection $leaderBoardTypes collection de PlaygroundReward\Entity\LeaderBoardType
+    * @return collection $missions collections de PlaygroundGame\Entity\Mission 
     */
     public function findAll()
     {
@@ -116,8 +116,8 @@ class Mission
     }
 
      /**
-    * remove : supprimer une entite theme
-    * @param PlaygroundReward\Entity\LeaderBoardType $entity leaderBoardType
+    * remove : supprimer une entite mission
+    * @param PlaygroundGame\Entity\Mission  $entity mission
     *
     */
     public function remove($entity)
@@ -127,8 +127,8 @@ class Mission
     }
 
     /**
-    * refresh : supprimer une entite theme
-    * @param PlaygroundReward\Entity\LeaderBoardType $entity leaderBoardType
+    * refresh : supprimer une entite mission
+    * @param PlaygroundGame\Entity\Mission  $entity mission
     *
     */
     public function refresh($entity)
@@ -137,9 +137,9 @@ class Mission
     }
 
     /**
-    * getEntityRepository : recupere l'entite leaderBoardType
+    * getEntityRepository : recupere l'entite mission
     *
-    * @return PlaygroundReward\Entity\LeaderBoardType $leaderBoardType
+    * @return PlaygroundGame\Entity\Mission mission
     */
     public function getEntityRepository()
     {

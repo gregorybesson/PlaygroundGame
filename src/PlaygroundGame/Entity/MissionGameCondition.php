@@ -15,12 +15,15 @@ use Zend\InputFilter\Factory as InputFactory;
 class MissionGameCondition
 {
 
-
-    public static $conditions = array('0' => 'noting',
-                                     '1' => 'victory',
-                                     '2' => 'defeat',
-                                     '3' => 'greater than x points',
-                                     '4' => 'less than x points');
+    /**
+    * var $conditions
+    * Tableau des types de conditions du jeu précendant pour passer au suivant.
+    */
+    public static $conditions = array('0' => 'noting', // On passe directement au jeu suivant
+                                     '1' => 'victory', // Il faut une victoire pour passer au suivant
+                                     '2' => 'defeat', // Il  faut une defaite pour passer au suivant
+                                     '3' => 'greater than x points', // Il faut un nombre de points supérieur à x points pour passer au suivant 
+                                     '4' => 'less than x points'); // Il faut un nombre de points inférieur à x points pour passer au suivant 
     protected $inputFilter;
     
     /**
@@ -156,136 +159,7 @@ class MissionGameCondition
         $this->updatedAt = new \DateTime("now");
     }
 
-    /**
-     * @param $id
-     * @return Block|mixed
-     */
-    public function setId($id)
-    {
-        $this->id = (int) $id;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-     /**
-     * @param $id
-     * @return Block|mixed
-     */
-    public function setPosition($position)
-    {
-        $this->position = (int) $position;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPosition()
-    {
-        return $this->position;
-    }
-
-    /**
-     * @return the $game
-     */
-    public function getGame()
-    {
-        return $this->game;
-    }
-
-    /**
-     * @param field_type $game
-     */
-    public function setGame($game)
-    {
-        $this->game = $game;
-
-        return $this;
-    }
-
-    /**
-     * @return the $game
-     */
-    public function getMission()
-    {
-        return $this->mission;
-    }
-
-    /**
-     * @param field_type $mission
-     */
-    public function setMission($mission)
-    {
-        $this->mission = $mission;
-
-        return $this;
-    }
-  
-    /**
-     *
-     * @return the $createdAt
-     */
-    public function getCreatedAt ()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     *
-     * @param \DateTime $createdAt
-     */
-    public function setCreatedAt ($createdAt)
-    {
-        $this->createdAt = $createdAt;
-    }
-
-    /**
-     *
-     * @return the $updatedAt
-     */
-    public function getUpdatedAt ()
-    {
-        return $this->updatedAt;
-    }
-
-    /**
-     *
-     * @param \DateTime $updatedAt
-     */
-    public function setUpdatedAt ($updatedAt)
-    {
-        $this->updatedAt = $updatedAt;
-    }
-
-    /**
-     * Convert the object to an array.
-     *
-     * @return array
-     */
-    public function getArrayCopy()
-    {
-        return get_object_vars($this);
-    }
-
-
-    /**
-     * Populate from an array.
-     *
-     * @param array $data
-     */
-    public function populate($data = array())
-    {
-    }
-
+   
     public function getInputFilter ()
     {
         if (! $this->inputFilter) {
