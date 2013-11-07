@@ -107,6 +107,7 @@ class QuizController extends GameController
 
         $i = 0;
         $j = 0;
+        $explanations = array();
         foreach ($questions as $q) {
             if (($game->getQuestionGrouping() > 0 && $i % $game->getQuestionGrouping() == 0) || ($i == 0 && $game->getQuestionGrouping() == 0)) {
             	$fieldsetName = 'questionGroup' . ++ $j;
@@ -122,7 +123,8 @@ class QuizController extends GameController
                     $values[$a->getId()] = array(
                         'position' => $a->getPosition(),
                         'answer' => $a->getAnswer(),
-                    );
+                        );
+                        $explanations[$a->getAnswer()] = $a->getExplanation();
                 }
                 sort($values);
                 foreach ($values as $key => $value) {
@@ -134,10 +136,12 @@ class QuizController extends GameController
                 $values = array();
                 $valuesSortedByPosition = array();
                 foreach ($q->getAnswers() as $a) {
+
                     $values[$a->getId()] = array(
                         'position' => $a->getPosition(),
                         'answer' => $a->getAnswer(),
                     );
+                    $explanations[$a->getAnswer()] = $a->getExplanation();
                 }
                 sort($values);
                 foreach ($values as $key => $value) {
@@ -193,6 +197,7 @@ class QuizController extends GameController
             'game' => $game,
             'questions' => $questions,
             'form' => $form,
+            'explanations' => $explanations,
             'flashMessages' => $this->flashMessenger()->getMessages(),
         ));
 
@@ -265,6 +270,7 @@ class QuizController extends GameController
                 if ($a->getCorrect()) {
                     $gameCorrectAnswers[$q->getId()]['question'] = $q->getQuestion();
                     $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['answer'] = $a->getAnswer();
+                    $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['explanation'] = $a->getExplanation();
                     if (isset($correctAnswers[$q->getId()]) && isset($correctAnswers[$q->getId()][$a->getId()])) {
                         $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['found'] = true;
                     } else {

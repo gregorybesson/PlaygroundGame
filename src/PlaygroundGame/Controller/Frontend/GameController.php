@@ -37,6 +37,11 @@ class GameController extends AbstractActionController
         		return $this->redirect()->toUrl($this->url()->fromRoute('frontend/' . $game->getClassType().'/fangate',array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
         	}
         }
+        
+        // If there is no welcome block, I don't display the welcome page
+        if($game->getWelcomeBlock()===''){
+            return $this->forward()->dispatch('playgroundgame_'.$game->getClassType(), array('action' => 'play', 'id' => $identifier));
+        }
 
         // Determine if the play button should be a CTA button (call to action)
         $isCtaActive = false;

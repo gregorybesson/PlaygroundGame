@@ -60,25 +60,30 @@ class QuizAnswerFieldset extends Fieldset
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Button',
-            'name' => 'remove',
-            'options' => array(
-                'label' => $translator->translate('Supprimer', 'playgroundgame'),
-            ),
-			'attributes' => array(
-				'class' => 'delete-button',
-			)
-        ));
-/*
-        $this->add(array(
-            //'type' => 'Zend\Form\Element\Hidden',
+            'type' => 'Zend\Form\Element\Textarea',
             'name' => 'explanation',
             'options' => array(
-                'label' => 'Explanation'
+                'label' => $translator->translate('Explanation', 'playgroundgame'),
             ),
+            'attributes' => array(
+                'cols' => '10',
+                'rows' => '10',
+                'id' => 'explanation'
+            )
         ));
 
         $this->add(array(
+            'type' => 'Zend\Form\Element\Button',
+            'name' => 'remove',
+            'options' => array(
+                'label' => $translator->translate('Remove', 'playgroundgame'),
+            ),
+            'attributes' => array(
+                'class' => 'delete-button',
+            )
+        ));
+
+/*        $this->add(array(
                 //'type' => 'Zend\Form\Element\Hidden',
                 'name' => 'video',
                 'options' => array(
