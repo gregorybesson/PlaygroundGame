@@ -93,6 +93,72 @@ class MissionGame extends EventProvider implements ServiceManagerAwareInterface
         }
     }
 
+
+    public function checkCondition($game, $winner, $prediction, $entry)
+    {
+        $missionGame = $this->findMissionGameByGame($game);
+        if(empty($missionGame)){
+            return false;
+        }
+
+        $nextMissionGames = $this->getMissionGameMapper()->findBy(array('mission'=> $missionGame->getMission(), 'position'=> ($missionGame->getPosition() + 1 )));
+        
+        if(empty($nextMissionGames)){
+            return false;
+        }
+
+        $nextMissionGame = $nextMissionGames[0];
+
+        $missionGameConditions = $this->findMissionGameConditionByMissionGame($nextMissionGame);
+        
+        if(empty($missionGameConditions)){
+            return false;
+        }
+
+        foreach ($missionGameConditions as $missionGameCondition) {
+
+            if ($missionGameCondition->getAttribute() == MissionGameConditionEntity::NOTHING) {
+                continue;
+            }
+
+            // On passe au suivant si on a gagné
+            if ($missionGameCondition->getAttribute() == MissionGameConditionEntity::VICTORY) {
+                if(!($winner || $prediction)){
+                    return false;
+                }
+            }
+
+            // On passe au suivant si on a perdu
+            if ($missionGameCondition->getAttribute() == MissionGameConditionEntity::DEFEAT) {
+                if($winner || $prediction){
+                    return false;
+                }
+            }
+
+            // On passe au suivant si on a perdu
+            if ($missionGameCondition->getAttribute() == MissionGameConditionEntity::GREATER) {
+                if (!$entry) {
+                    return false;
+                }
+                if(!($entry->getPoints() > $missionGameCondition->getValue())){
+                    return false;
+                }
+            }
+
+            // On passe au suivant si on a perdu
+            if ($missionGameCondition->getAttribute() == MissionGameConditionEntity::LESS) {
+                if (!$entry) {
+                    return false;
+                }
+                if(!($entry->getPoints() < $missionGameCondition->getValue())){
+                    return false;
+                }
+            }
+        }
+
+        return $nextMissionGame->getGame();
+    }
+
     /**
     * findMissionGameByMission : Permet de recuperer les missionsGame à partir d'une mission
     * @param Mission $mission
@@ -101,6 +167,16 @@ class MissionGame extends EventProvider implements ServiceManagerAwareInterface
     */
     public function findMissionGameByMission($mission){
         return $this->getMissionGameMapper()->findBy(array('mission'=>$mission));
+    }
+
+    /**
+    * findMissionGameByMission : Permet de recuperer les missionsGame à partir d'une mission
+    * @param Mission $mission
+    *
+    * @return Collection de MissionGame $missionGames
+    */
+    public function findMissionGameByGame($game){
+        return $this->getMissionGameMapper()->findOneBy(array('game'=>$game));
     }
 
     /**

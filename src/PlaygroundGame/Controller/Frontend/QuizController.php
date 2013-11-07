@@ -301,6 +301,8 @@ class QuizController extends GameController
             }
 
         }
+        
+        $nextGame = parent::getMissionGameService()->checkCondition($game, $winner, $prediction, $lastEntry);
 
         $viewModel = $this->buildView($game);
         $viewModel->setVariables(array(
@@ -317,6 +319,7 @@ class QuizController extends GameController
             'socialLinkUrl' 	  => $socialLinkUrl,
             'secretKey'		  	  => $secretKey,
             'userTimer' 		  => $userTimer,
+            'nextGame'            => $nextGame
         ));
 
         return $viewModel;
