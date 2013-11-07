@@ -459,7 +459,7 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                 }
                 // remove the csv file from folder
                 unlink(PUBLIC_PATH.$media_url.$data['occurrences_file']['name']);
-                return [$created, $already_in];
+                return array($created, $already_in);
             }
         }
         return false;
