@@ -130,11 +130,10 @@ class MissionController extends AbstractActionController
 
         $form = $this->getServiceLocator()->get('playgroundgame_mission_game_form');
         $request = $this->getRequest();
-
-        // Suppression des misssions game pour une mission
-        $this->getMissionGameService()->clear($mission);
-
         if ($request->isPost()) {
+            // Suppression des misssions game pour une mission
+            $this->getMissionGameService()->clear($mission);
+
             $data = $request->getPost()->toArray();
             $dataGames = array();
             for ($i=0; $i <= $data['countGame']; $i++) { 
@@ -152,10 +151,25 @@ class MissionController extends AbstractActionController
 
         }
 
+        $missionGamesArray = array();
+        $missionGames = $this->getMissionGameService()->findMissionGameByMission($mission);
+        foreach ($missionGames as $missionGame) {
+            foreach ($this->getMissionGameService()->findMissionGameConditionByMissionGame($missionGame) as $missionGameCondition) {
+                $missionGamesArray[] = array('games' => $missionGame->getGame()->getId(),
+                                            'conditions' => $missionGameCondition->getAttribute(),
+                                            'points' => ($missionGameCondition->getValue() ? $missionGameCondition->getValue() : 0));
+            }
+             
+        }
+       
+
+
         $viewModel = new ViewModel();
         $viewModel->setTemplate('playground-game/mission/associateGame');
 
-        return $viewModel->setVariables(array('mission' => $mission, 'form' => $form));
+        return $viewModel->setVariables(array('mission' => $mission, 
+                                              'form' => $form,
+                                              'missionGames' => $missionGamesArray));
     }
 
      /**

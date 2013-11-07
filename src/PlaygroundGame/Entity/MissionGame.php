@@ -148,7 +148,7 @@ class MissionGame
      *
      * @return the $createdAt
      */
-    public function getCreatedAt ()
+    public function getCreatedAt()
     {
         return $this->createdAt;
     }
@@ -157,7 +157,7 @@ class MissionGame
      *
      * @param \DateTime $createdAt
      */
-    public function setCreatedAt ($createdAt)
+    public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
     }
@@ -166,7 +166,7 @@ class MissionGame
      *
      * @return the $updatedAt
      */
-    public function getUpdatedAt ()
+    public function getUpdatedAt()
     {
         return $this->updatedAt;
     }
@@ -175,7 +175,7 @@ class MissionGame
      *
      * @param \DateTime $updatedAt
      */
-    public function setUpdatedAt ($updatedAt)
+    public function setUpdatedAt($updatedAt)
     {
         $this->updatedAt = $updatedAt;
     }
@@ -189,7 +189,6 @@ class MissionGame
     {
         return get_object_vars($this);
     }
-
 
     /**
      * Populate from an array.

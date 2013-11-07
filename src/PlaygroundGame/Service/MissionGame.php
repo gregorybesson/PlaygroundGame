@@ -43,11 +43,20 @@ class MissionGame extends EventProvider implements ServiceManagerAwareInterface
 
     public function clear($mission)
     {
-        $missionGames = $this->getMissionGameMapper()->findBy(array('mission'=>$mission));
+        $missionGames = $this->findMissionGameByMission($mission);
         foreach ($missionGames as $missionGames) {
             $this->getMissionGameMapper()->remove($missionGames); 
         }
     }
+
+    public function findMissionGameByMission($mission){
+        return $this->getMissionGameMapper()->findBy(array('mission'=>$mission));
+    }
+
+    public function findMissionGameConditionByMissionGame($missionGame)
+    {
+        return $this->getMissionGameConditionMapper()->findBy(array('missionGame'=>$missionGame));
+    } 
 
     /**
      * Retrieve service manager instance
