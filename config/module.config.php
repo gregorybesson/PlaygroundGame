@@ -2014,7 +2014,7 @@ return array(
                		),
 
                     'mission_list' => array(
-                        'label'     => 'Mission list',
+                        'label'     => 'Missions Management',
                         'route'     => 'admin/mission/list',
                         'resource'  => 'game',
                         'privilege' => 'list',

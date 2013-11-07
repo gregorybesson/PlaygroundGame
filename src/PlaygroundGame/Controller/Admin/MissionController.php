@@ -25,7 +25,14 @@ class MissionController extends AbstractActionController
     public function listAction()
     {
         $missions = $this->getMissionService()->getMissionMapper()->findAll();
-        return array("missions" => $missions);
+        $missionsHasGames = array();
+        
+        foreach ($missions as $mission) {
+            $missionsHasGames[$mission->getId()] = count($this->getMissionGameService()->findMissionGameByMission($mission));
+        }
+
+        return array("missions" => $missions,
+                     "missionsHasGames" => $missionsHasGames);
     }
 
     /**
@@ -48,12 +55,13 @@ class MissionController extends AbstractActionController
             );
 
             $mission = $this->getMissionService()->create($data, 'playgroundgame_mission_form');
+            
             if ($mission) {
-                $this->flashMessenger()->addMessage('The mission "'.$mission->getTitle().'" was created');
+                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The mission "'.$mission->getTitle().'" was created');
 
                 return $this->redirect()->toRoute('admin/mission/list');
             } else {
-                 $this->flashMessenger()->addMessage('The mission was not created');
+                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The mission was not created');
 
                 return $this->redirect()->toRoute('admin/mission/list');
             }
@@ -93,11 +101,11 @@ class MissionController extends AbstractActionController
             $mission = $this->getMissionService()->edit($data, $mission, 'playgroundgame_mission_form');
 
             if ($mission) {
-                $this->flashMessenger()->addMessage('The mission "'.$mission->getTitle().'" was updated');
+                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The mission "'.$mission->getTitle().'" was updated');
 
                 return $this->redirect()->toRoute('admin/mission/list');
             } else {
-                 $this->flashMessenger()->addMessage('The mission was not updated');
+                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The mission was not updated');
 
                 return $this->redirect()->toRoute('admin/mission/list');
             }
@@ -149,6 +157,7 @@ class MissionController extends AbstractActionController
                 $missionGame = $this->getMissionGameService()->associate($dataGame, $mission);
             }
 
+            return $this->redirect()->toRoute('admin/mission/list');
         }
 
         $missionGamesArray = array();

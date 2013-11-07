@@ -48,7 +48,7 @@ class Mission extends EventProvider implements ServiceManagerAwareInterface
         $this->uploadImage($mission, $data);
         $mission = $this->getMissionMapper()->update($mission);
 
-        return $leaderboardType;
+        return $mission;
     }
 
     /**
