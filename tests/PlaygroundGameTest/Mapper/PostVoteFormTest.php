@@ -50,21 +50,22 @@ class PostVoteFormTest extends \PHPUnit_Framework_TestCase
 
     public function testFindAll()
     {
+        $titles = array('Ceci est un titre 1', 'Ceci est un titre 2', 'Ceci est un titre 3');
+
         $postvoteform = new PostVoteFormEntity();
-        $postvoteform->setTitle('Ceci est un titre 1');
+        $postvoteform->setTitle($titles[0]);
         $postvoteform = $this->tm->insert($postvoteform);
         $postvoteform = new PostVoteFormEntity();
-        $postvoteform->setTitle('Ceci est un titre 2');
+        $postvoteform->setTitle($titles[0]);
         $postvoteform = $this->tm->insert($postvoteform);
         $postvoteform = new PostVoteFormEntity();
-        $postvoteform->setTitle('Ceci est un titre 3');
+        $postvoteform->setTitle($titles[0]);
         $postvoteform = $this->tm->insert($postvoteform);
 
         $postvoteforms = $this->tm->findAll();
-        $this->assertEquals('Ceci est un titre 1', $postvoteforms[0]->getTitle());
-        $this->assertEquals('Ceci est un titre 2', $postvoteforms[1]->getTitle());
-        $this->assertEquals('Ceci est un titre 3', $postvoteforms[2]->getTitle());
-
+        $this->assertTrue(in_array($postvoteforms[0]->getTitle(), $titles));
+        $this->assertTrue(in_array($postvoteforms[1]->getTitle(), $titles));
+        $this->assertTrue(in_array($postvoteforms[2]->getTitle(), $titles));
     }
 
     public function tearDown()
