@@ -50,25 +50,17 @@ class PostVoteFormTest extends \PHPUnit_Framework_TestCase
 
     public function testFindAll()
     {
-        $titles = array('Ceci est un titre 1', 'Ceci est un titre 2', 'Ceci est un titre 3');
-
         $postvoteform = new PostVoteFormEntity();
-        $postvoteform->setTitle($titles[0]);
+        $postvoteform->setTitle("test 1");
         $postvoteform = $this->tm->insert($postvoteform);
         $postvoteform = new PostVoteFormEntity();
-        $postvoteform->setTitle($titles[0]);
+        $postvoteform->setTitle("test 2");
         $postvoteform = $this->tm->insert($postvoteform);
         $postvoteform = new PostVoteFormEntity();
-        $postvoteform->setTitle($titles[0]);
+        $postvoteform->setTitle("test 3");
         $postvoteform = $this->tm->insert($postvoteform);
-
-        $titles = array();
-        foreach( $this->tm->findAll() as $postvoteform ) {
-            $titles[] = $postvoteform->getTitle();
-        }
-        $this->assertContains('Ceci est un titre 1', $titles);
-        $this->assertContains('Ceci est un titre 2', $titles);
-        $this->assertContains('Ceci est un titre 3', $titles);
+        $postvoteforms = $this->tm->findAll();
+        $this->assertEquals(3, count($postvoteforms));
     }
 
     public function tearDown()

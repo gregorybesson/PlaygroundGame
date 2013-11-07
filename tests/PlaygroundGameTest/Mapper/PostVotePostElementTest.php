@@ -61,9 +61,7 @@ class PostVotePostElementTest extends \PHPUnit_Framework_TestCase
         $postvotepostelement = $this->tm->insert($postvotepostelement);
 
         $postvotepostelements = $this->tm->findAll();
-        $this->assertEquals('Name 1', $postvotepostelements[0]->getName());
-        $this->assertEquals('Name 2', $postvotepostelements[1]->getName());
-        $this->assertEquals('Name 3', $postvotepostelements[2]->getName());
+        $this->assertEquals(3, count($postvotepostelements));
 
     }
 

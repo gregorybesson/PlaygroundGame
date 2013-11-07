@@ -127,9 +127,7 @@ class EntryTest extends \PHPUnit_Framework_TestCase
         $entry->setPoints('DesPoints3');
         $entry = $this->tm->insert($entry);
         $entries = $this->tm->findAll();
-        $this->assertEquals('DesPoints1', $entries[0]->getPoints());
-        $this->assertEquals('DesPoints2', $entries[1]->getPoints());
-        $this->assertEquals('DesPoints3', $entries[2]->getPoints());
+        $this->assertEquals(3, count($entries));
     }
 
     

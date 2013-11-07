@@ -72,10 +72,8 @@ class QuizReplyTest extends \PHPUnit_Framework_TestCase
         $quizreply->setTotalCorrectAnswers(1);
         $quizreply = $this->tm->insert($quizreply);
 
-        $quizreplys = $this->tm->findAll();
-        $this->assertEquals(1, $quizreplys[0]->getTotalQuestions());
-        $this->assertEquals(2, $quizreplys[1]->getTotalQuestions());
-        $this->assertEquals(3, $quizreplys[2]->getTotalQuestions());
+        $quizreplies = $this->tm->findAll();
+        $this->assertEquals(3, count($quizreplies));
 
     }
 
