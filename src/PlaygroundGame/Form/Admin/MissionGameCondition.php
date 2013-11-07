@@ -64,6 +64,12 @@ class MissionGameCondition extends ProvidesEventsForm
             ),
         ));
 
+        $submitElement = new Element\Button('delete__index__');
+        $submitElement->setAttributes(array('type'  => 'button', 'class' => 'delete'));
+        $submitElement->setLabel($translator->translate('delete', 'playgroundgame'));
+
+        $this->add($submitElement, array('priority' => -100));
+
     }
 
 

@@ -35,6 +35,27 @@ class MissionGame extends EventProvider implements ServiceManagerAwareInterface
     protected $options;
 
 
+    public function checkGames($dataGames)
+    {
+
+        for ($i=0; $i < count($dataGames); $i++) { 
+            if(!empty($dataGames[$i+1])){
+                $game1 = $this->getGameMapper()->findById($dataGames[$i]['games']); 
+                $game2 = $this->getGameMapper()->findById($dataGames[$i+1]['games']); 
+
+                if ($game2->getEndDate() == null) {
+                    continue;
+                }
+
+                // Si la date de fin du jeu 2 est inférieur a la date du jeu 1
+                if($game2->getEndDate()->getTimestamp() < $game1->getStartDate()->getTimestamp()){            
+                    return false;
+                }
+            }   
+        }
+
+        return true;
+    }
     /**
     * associate : Permet d'associer des jeux et des conditions à une mission
     * @param array $data 
