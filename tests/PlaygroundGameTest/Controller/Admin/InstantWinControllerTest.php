@@ -16,5 +16,10 @@ class InstantWinControllerTest extends AbstractHttpControllerTestCase
         );  
         parent::setUp();
     }
+
+    public function testFoo() 
+    {
+        $this->assertTrue(true);
+    }
     
 }
