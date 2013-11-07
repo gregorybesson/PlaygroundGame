@@ -270,6 +270,7 @@ class QuizController extends GameController
                 if ($a->getCorrect()) {
                     $gameCorrectAnswers[$q->getId()]['question'] = $q->getQuestion();
                     $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['answer'] = $a->getAnswer();
+                    $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['explanation'] = $a->getExplanation();
                     if (isset($correctAnswers[$q->getId()]) && isset($correctAnswers[$q->getId()][$a->getId()])) {
                         $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['found'] = true;
                     } else {
