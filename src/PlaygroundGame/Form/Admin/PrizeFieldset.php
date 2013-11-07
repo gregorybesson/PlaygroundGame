@@ -22,7 +22,7 @@ class PrizeFieldset extends Fieldset
         $this->setHydrator(new DoctrineHydrator($entityManager, 'PlaygroundGame\Entity\Prize'))
         ->setObject(new Prize());
 
-        //$this->setAttribute('enctype','multipart/form-data');
+        $this->setAttribute('enctype','multipart/form-data');
 
         $this->add(array(
             'name' => 'id',
@@ -30,7 +30,7 @@ class PrizeFieldset extends Fieldset
         ));
 
         $this->add(array(
-            'name' => 'title',
+            'name' => 'prize_title',
             'options' => array(
                 'label' => $translator->translate('Title', 'playgroundgame'),
             ),
@@ -41,7 +41,7 @@ class PrizeFieldset extends Fieldset
         ));
 
         $this->add(array(
-            'name' => 'identifier',
+            'name' => 'prize_identifier',
             'options' => array(
                 'label' => $translator->translate('Slug', 'playgroundgame')
             ),
@@ -101,6 +101,23 @@ class PrizeFieldset extends Fieldset
        		),
         ));
         
+        $this->add(array(
+          'name' => 'picture_file',
+          'options' => array(
+            'label' => $translator->translate('Picture', 'playgroundgame')
+          ),
+          'attributes' => array(
+            'type' => 'file',
+          )
+        ));
+        $this->add(array(
+                'name' => 'picture',
+                'type' => 'Zend\Form\Element\Hidden',
+                'attributes' => array(
+                    'value' => ''
+                )
+        ));
+
         $this->add(array(
         		'type' => 'Zend\Form\Element\Button',
         		'name' => 'remove',
