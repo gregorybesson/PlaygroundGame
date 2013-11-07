@@ -447,8 +447,8 @@ class Module
                 'playgroundgame_instantwinoccurrence_form' => function($sm) {
                     $translator = $sm->get('translator');
                     $form = new Form\Admin\InstantWinOccurrence(null, $sm, $translator);
-                    $instantwinOccurrence = new Entity\InstantWinOccurrence();
-                    $form->setInputFilter($instantwinOccurrence->getInputFilter());
+                    // $instantwinOccurrence = new Entity\InstantWinOccurrence();
+                    // $form->setInputFilter($instantwinOccurrence->getInputFilter());
 
                     return $form;
                 },
@@ -507,3 +507,5 @@ class Module
         );
     }
 }
+
+?>

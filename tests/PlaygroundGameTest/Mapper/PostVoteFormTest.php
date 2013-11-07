@@ -59,7 +59,6 @@ class PostVoteFormTest extends \PHPUnit_Framework_TestCase
         $postvoteform = new PostVoteFormEntity();
         $postvoteform->setTitle("test 3");
         $postvoteform = $this->tm->insert($postvoteform);
-
         $postvoteforms = $this->tm->findAll();
         $this->assertEquals(3, count($postvoteforms));
     }
