@@ -61,9 +61,7 @@ class TreasureHuntStepTest extends \PHPUnit_Framework_TestCase
         $treasurehuntstep = $this->tm->insert($treasurehuntstep);
 
         $treasurehuntsteps = $this->tm->findAll();
-        $this->assertEquals('domain 1', $treasurehuntsteps[0]->getDomain());
-        $this->assertEquals('domain 2', $treasurehuntsteps[1]->getDomain());
-        $this->assertEquals('domain 3', $treasurehuntsteps[2]->getDomain());
+        $this->assertEquals(3, count($treasurehuntsteps));
 
     }
 

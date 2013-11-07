@@ -61,9 +61,7 @@ class QuizQuestionTest extends \PHPUnit_Framework_TestCase
         $quizquestion = $this->tm->insert($quizquestion);
 
         $quizquestions = $this->tm->findAll();
-        $this->assertEquals('Ceci est une question ? 1', $quizquestions[0]->getQuestion());
-        $this->assertEquals('Ceci est une question ? 2', $quizquestions[1]->getQuestion());
-        $this->assertEquals('Ceci est une question ? 3', $quizquestions[2]->getQuestion());
+        $this->assertEquals(3, count($quizquestions));
 
     }
 

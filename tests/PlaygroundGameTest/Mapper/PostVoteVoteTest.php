@@ -61,9 +61,7 @@ class postvotevoteTest extends \PHPUnit_Framework_TestCase
         $postvotevote = $this->tm->insert($postvotevote);
 
         $postvotevotes = $this->tm->findAll();
-        $this->assertEquals(1, $postvotevotes[0]->getUserId());
-        $this->assertEquals(2, $postvotevotes[1]->getUserId());
-        $this->assertEquals(3, $postvotevotes[2]->getUserId());
+        $this->assertEquals(3, count($postvotevotes));
 
     }
 

@@ -61,9 +61,7 @@ class QuizAnswerTest extends \PHPUnit_Framework_TestCase
         $quizanswer = $this->tm->insert($quizanswer);
 
         $quizanswers = $this->tm->findAll();
-        $this->assertEquals('Ceci est une réponse. 1', $quizanswers[0]->getAnswer());
-        $this->assertEquals('Ceci est une réponse. 2', $quizanswers[1]->getAnswer());
-        $this->assertEquals('Ceci est une réponse. 3', $quizanswers[2]->getAnswer());
+        $this->assertEquals(3, count($quizanswers));
 
     }
 
