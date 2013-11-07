@@ -1323,6 +1323,28 @@ return array(
                                         ),
                                     ),
                                 ),
+                                'activate' => array(
+                                    'type' => 'Segment',
+                                    'options' => array(
+                                        'route' => '/activate/:missionId',
+                                        'defaults' => array(
+                                            'controller' => 'playgroundgame_admin_mission',
+                                            'action'     => 'activate',
+                                            'missionId'     => 0
+                                        ),
+                                    ),
+                                ),
+                                'desactivate' => array(
+                                    'type' => 'Segment',
+                                    'options' => array(
+                                        'route' => '/desactivate/:missionId',
+                                        'defaults' => array(
+                                            'controller' => 'playgroundgame_admin_mission',
+                                            'action'     => 'desactivate',
+                                            'missionId'     => 0
+                                        ),
+                                    ),
+                                ),
                             ),
                         ),
 
