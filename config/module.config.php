@@ -1349,6 +1349,28 @@ return array(
                                     ),
                                 ),
                             ),
+		                    'instantwin-code-occurrences-add' => array(
+		                        'type' => 'Segment',
+		                        'options' => array(
+		                            'route' => '/instantwin-code-occurrences-add/:gameId',
+		                            'defaults' => array(
+		                                'controller' => 'playgroundgame_admin_instantwin',
+		                                'action'     => 'addCodeOccurrences',
+		                                'gameId'     => 0,
+		                            ),
+		                        ),
+		                    ),
+		                    'instantwin-occurrences-export' => array(
+		                        'type' => 'Segment',
+		                        'options' => array(
+		                            'route' => '/instantwin-occurrences-export/:gameId',
+		                            'defaults' => array(
+		                                'controller' => 'playgroundgame_admin_instantwin',
+		                                'action'     => 'exportOccurrences',
+		                                'gameId'     => 0,
+		                            ),
+		                        ),
+		                    ),
                             'instantwin-occurrence-add' => array(
                                 'type' => 'Segment',
                                 'options' => array(
@@ -1930,6 +1952,16 @@ return array(
                                 'label'     => 'Editer un instant gagnant',
                                 'route'     => 'admin/playgroundgame/instantwin-occurrence-edit',
                                 'privilege' => 'edit',
+                            ),
+                            'instantwin-code-occurrences-add' => array(
+                                'label'     => 'Add new instant win',
+                                'route'     => 'admin/playgroundgame/instantwin-code-occurrences-add',
+                                'privilege' => 'add',
+                            ),
+                            'instantwin-occurrences-export' => array(
+                                'route' 	=> 'admin/playgroundgame/instantwin-occurrences-export',
+                                'label'     => 'Export to csv',
+                                'privilege' => 'download',                                
                             ),
                         ),
                     ),

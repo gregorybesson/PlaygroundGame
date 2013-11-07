@@ -160,7 +160,7 @@ class Module
                 'playgroundgame_quiz_service'              => 'PlaygroundGame\Service\Quiz',
             	'playgroundgame_treasurehunt_service'      => 'PlaygroundGame\Service\TreasureHunt',
                 'playgroundgame_instantwin_service'        => 'PlaygroundGame\Service\InstantWin',
-            	'playgroundgame_prize_service'     		  => 'PlaygroundGame\Service\Prize',
+                'playgroundgame_prize_service'     		  => 'PlaygroundGame\Service\Prize',
             	'playgroundgame_prizecategory_service'     => 'PlaygroundGame\Service\PrizeCategory',
                 'playgroundgame_prizecategoryuser_service' => 'PlaygroundGame\Service\PrizeCategoryUser',
             ),
@@ -402,8 +402,8 @@ class Module
                 'playgroundgame_instantwinoccurrence_form' => function($sm) {
                     $translator = $sm->get('translator');
                     $form = new Form\Admin\InstantWinOccurrence(null, $sm, $translator);
-                    $instantwinOccurrence = new Entity\InstantWinOccurrence();
-                    $form->setInputFilter($instantwinOccurrence->getInputFilter());
+                    // $instantwinOccurrence = new Entity\InstantWinOccurrence();
+                    // $form->setInputFilter($instantwinOccurrence->getInputFilter());
 
                     return $form;
                 },
