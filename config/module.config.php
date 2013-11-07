@@ -199,6 +199,7 @@ return array(
             'playgroundgame_admin_quiz'          => 'PlaygroundGame\Controller\Admin\QuizController',
         	'playgroundgame_admin_treasurehunt'  => 'PlaygroundGame\Controller\Admin\TreasureHuntController',
             'playgroundgame_admin_prizecategory' => 'PlaygroundGame\Controller\Admin\PrizeCategoryController',
+            'playgroundgame_admin_mission'       => 'PlaygroundGame\Controller\Admin\MissionController',
         ),
     ),
     'router' => array(
@@ -1259,6 +1260,72 @@ return array(
                 						),
                 				),
                 		),
+                        'mission' =>  array(
+                            'type' => 'Literal',
+                            'options' => array(
+                                'route' => '/mission',
+                                'defaults' => array(
+                                    'controller' => 'playgroundgame_admin_mission',
+                                    'action'     => 'list',
+                                ),
+                            ),
+                            'child_routes' =>array(
+                                'list' => array(
+                                    'type' => 'Segment',
+                                    'options' => array(
+                                        'route' => '/list[/:p]',
+                                        'defaults' => array(
+                                            'controller' => 'playgroundgame_admin_mission',
+                                            'action'     => 'list',
+                                        ),
+                                    ),
+                                ),
+                                'create' => array(
+                                    'type' => 'Literal',
+                                    'options' => array(
+                                        'route' => '/create',
+                                        'defaults' => array(
+                                            'controller' => 'playgroundgame_admin_mission',
+                                            'action'     => 'create'
+                                        ), 
+                                    ), 
+                                ),
+                                'edit' => array(
+                                    'type' => 'Segment',
+                                    'options' => array(
+                                        'route' => '/edit/:missionId',
+                                        'defaults' => array(
+                                            'controller' => 'playgroundgame_admin_mission',
+                                            'action'     => 'edit',
+                                            'missionId'     => 0
+                                        ),
+                                    ),
+                                ),
+                                'delete' => array(
+                                    'type' => 'Segment',
+                                    'options' => array(
+                                        'route' => '/delete/:missionId',
+                                        'defaults' => array(
+                                            'controller' => 'playgroundgame_admin_mission',
+                                            'action'     => 'delete',
+                                            'missionId'     => 0
+                                        ),
+                                    ),
+                                ),
+                                'associate' => array(
+                                    'type' => 'Segment',
+                                    'options' => array(
+                                        'route' => '/associate/:missionId',
+                                        'defaults' => array(
+                                            'controller' => 'playgroundgame_admin_mission',
+                                            'action'     => 'associate',
+                                            'missionId'     => 0
+                                        ),
+                                    ),
+                                ),
+                            ),
+                        ),
+
                     'playgroundgame' => array(
                         'type' => 'Literal',
                         'priority' => 1000,
@@ -1945,6 +2012,13 @@ return array(
            				'resource'  => 'game',
            				'privilege' => 'add',
                		),
+
+                    'mission_list' => array(
+                        'label'     => 'Missions Management',
+                        'route'     => 'admin/mission/list',
+                        'resource'  => 'game',
+                        'privilege' => 'list',
+                    ),
                 ),
             ),
         ),
