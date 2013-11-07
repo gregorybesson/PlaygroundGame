@@ -19,7 +19,6 @@ class InstantWinController extends GameController
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
         $user = $this->zfcUserAuthentication()->getIdentity();
         $sg = $this->getGameService();
-        $lastEntry = null;
 
         $game = $sg->checkGame($identifier);
         if (!$game || $game->isClosed()) {
