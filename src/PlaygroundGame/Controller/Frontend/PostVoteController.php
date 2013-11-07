@@ -509,12 +509,15 @@ class PostVoteController extends GameController
             }
         }
 
+        $nextGame = parent::getMissionGameService()->checkCondition($game, $lastEntry->getWinner(), true, $lastEntry);
+
         $viewModel = $this->buildView($game);
         $viewModel->setVariables(array(
                 'statusMail'       => $statusMail,
                 'game'             => $game,
                 'flashMessages'    => $this->flashMessenger()->getMessages(),
-                'form'             => $form
+                'form'             => $form,
+                'nextGame'         => $nextGame,
             )
         );
 

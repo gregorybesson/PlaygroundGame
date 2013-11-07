@@ -125,6 +125,8 @@ class TreasureHuntController extends GameController
             }
         }
 
+        $nextGame = parent::getMissionGameService()->checkCondition($game, $lastEntry->getWinner(), true, $lastEntry);
+
         $viewModel = $this->buildView($game);
         $viewModel->setVariables(array(
                 'statusMail'       => $statusMail,
@@ -132,7 +134,8 @@ class TreasureHuntController extends GameController
                 'flashMessages'    => $this->flashMessenger()->getMessages(),
                 'form'             => $form,
                 'socialLinkUrl'    => $socialLinkUrl,
-                'secretKey'		   => $secretKey
+                'secretKey'		   => $secretKey,
+                'nextGame'         => $nextGame,
             )
         );
 

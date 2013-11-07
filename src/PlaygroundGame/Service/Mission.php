@@ -21,6 +21,10 @@ class Mission extends EventProvider implements ServiceManagerAwareInterface
     */
     protected $missionGameMapper;
     /**
+    * @var missionGameService
+    */
+    protected $missionGameService;
+    /**
     * @var gameMapper
     */
     protected $gameMapper;
@@ -108,7 +112,35 @@ class Mission extends EventProvider implements ServiceManagerAwareInterface
         return $mission;
     }
 
+    public function getMissions()
+    {
+        
+        $missionsArray = array();
 
+        $missions = $this->getMissionMapper()->findAll();
+        foreach ($missions as $mission) {
+            $games = $this->getGames($mission);
+            if (count($games) == 0) {
+                continue;
+            }
+            $missionsArray[] = array('mission' => $mission,
+                                     'games' => $games);
+        }
+
+        return $missionsArray;
+    }
+
+    public function getGames($mission)
+    {
+        $games = array();
+        $missionGames = $this->getMissionGameService()->findMissionGameByMission($mission);
+        foreach ($missionGames as $missionGame) {
+            $games[] = $missionGame->getGame();
+        }
+
+        return $games;
+    }
+    
     /** 
     * findById : recupere l'entite en fonction de son id
     * @param int $id id du mission
@@ -194,4 +226,19 @@ class Mission extends EventProvider implements ServiceManagerAwareInterface
 
         return $this->missionMapper;
     }
+
+    /**
+     * getMissionGameService : retrieve Mission game service instance
+     *
+     * @return Service/MissionGame $missionGameService
+     */
+    public function getMissionGameService()
+    {
+        if (null === $this->missionGameService) {
+            $this->missionGameService = $this->getServiceManager()->get('playgroundgame_mission_game_service');
+        }
+
+        return $this->missionGameService;
+    }
+
 }

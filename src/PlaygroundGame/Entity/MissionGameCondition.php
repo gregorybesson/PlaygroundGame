@@ -15,15 +15,20 @@ use Zend\InputFilter\Factory as InputFactory;
 class MissionGameCondition
 {
 
+    const NOTHING = 0;
+    const VICTORY = 1;
+    const DEFEAT  = 2;
+    const GREATER = 3;
+    const LESS    = 4;
     /**
     * var $conditions
     * Tableau des types de conditions du jeu précendant pour passer au suivant.
     */
-    public static $conditions = array('0' => 'noting', // On passe directement au jeu suivant
-                                     '1' => 'victory', // Il faut une victoire pour passer au suivant
-                                     '2' => 'defeat', // Il  faut une defaite pour passer au suivant
-                                     '3' => 'greater than x points', // Il faut un nombre de points supérieur à x points pour passer au suivant 
-                                     '4' => 'less than x points'); // Il faut un nombre de points inférieur à x points pour passer au suivant 
+    public static $conditions = array(self::NOTHING => 'noting', // On passe directement au jeu suivant
+                                      self::VICTORY  => 'victory', // Il faut une victoire pour passer au suivant
+                                      self::DEFEAT  => 'defeat', // Il  faut une defaite pour passer au suivant
+                                      self::GREATER  => 'greater than x points', // Il faut un nombre de points supérieur à x points pour passer au suivant 
+                                      self::LESS  => 'less than x points'); // Il faut un nombre de points inférieur à x points pour passer au suivant 
     protected $inputFilter;
     
     /**

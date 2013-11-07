@@ -16,6 +16,8 @@ class GameController extends AbstractActionController
 
     protected $prizeService;
 
+    protected $missionGameService;
+    
     protected $options;
 
     public function indexAction()
@@ -129,24 +131,6 @@ class GameController extends AbstractActionController
             return $this->redirect()->toUrl($this->url()->fromRoute('frontend/zfcuser/register', array('channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))) . '?redirect='.$redirect);
         }
 
-        /*
-        // Has the user finished the game ?
-        $lastEntry = $this->getGameService()
-        ->getEntryMapper()
-        ->findBy(array(
-                'game' => $game,
-                'user' => $user
-        ), array(
-                'created_at' => 'DESC'
-        ), 1, 0);
-
-        if ($lastEntry == null) {
-            return $this->redirect()->toUrl($this->url()
-                    ->fromRoute('frontend/quiz', array(
-                            'id' => $identifier
-                    )));
-        }*/
-
         $form = $this->getServiceLocator()->get('playgroundgame_sharemail_form');
         $form->setAttribute('method', 'post');
 
@@ -172,10 +156,6 @@ class GameController extends AbstractActionController
         if ($game->getStylesheet()) {
             $this->getViewHelper('HeadLink')->appendStylesheet($this->getRequest()->getBaseUrl(). '/' . $game->getStylesheet());
         }
-
-        /*$adserving = $this->getOptions()->getAdServing();
-        $adserving['cat2'] = 'game';
-        $adserving['cat3'] = '&EASTgameid='.$game->getId();*/
 
         // I change the label of the quiz in the breadcrumb ...
         $this->layout()->setVariables(
@@ -232,7 +212,6 @@ class GameController extends AbstractActionController
         $column->setVariables(array('game' => $game));
 
         $this->layout()->addChild($column, 'column_right');
-
         $viewModel = new ViewModel(
             array(
                 'statusMail'       => $statusMail,
@@ -898,6 +877,22 @@ class GameController extends AbstractActionController
         }
 
         return $this->gameService;
+    }
+
+    public function getMissionGameService()
+    {
+        if (!$this->missionGameService) {
+            $this->missionGameService = $this->getServiceLocator()->get('playgroundgame_mission_game_service');
+        }
+
+        return $this->missionGameService;
+    }
+
+    public function setMissionGameService(GameService $missionGameService)
+    {
+        $this->missionGameService = $missionGameService;
+
+        return $this;
     }
 
     public function setGameService(GameService $gameService)

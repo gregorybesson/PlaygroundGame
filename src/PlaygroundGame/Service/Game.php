@@ -545,7 +545,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             $this->getServiceManager()->get('doctrine.entitymanager.orm_default')->getUnitOfWork()->markReadOnly($game);
             return $game;
         }
-        
+   
         // The game is inactive
         if (!$game->getActive()) {
             return false;

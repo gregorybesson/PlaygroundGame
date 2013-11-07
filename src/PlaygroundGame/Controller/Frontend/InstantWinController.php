@@ -19,6 +19,7 @@ class InstantWinController extends GameController
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
         $user = $this->zfcUserAuthentication()->getIdentity();
         $sg = $this->getGameService();
+        $lastEntry = null;
 
         $game = $sg->checkGame($identifier);
         if (!$game || $game->isClosed()) {
@@ -115,10 +116,12 @@ class InstantWinController extends GameController
             $winner = $sg->IsInstantWinner($game, $user);
         }
 
+       
+
         $viewModel->setVariables(array(
             'game' => $game,
             'winner' => $winner,
-            'flashMessages' => $this->flashMessenger()->getMessages(),
+            'flashMessages' => $this->flashMessenger()->getMessages()
         ));
         $viewModel->addChild($form, 'form');
 
@@ -170,6 +173,8 @@ class InstantWinController extends GameController
             }
         }
 
+        $nextGame = parent::getMissionGameService()->checkCondition($game, $winner, true, $lastEntry);
+
         $viewModel = $this->buildView($game);
         $viewModel->setVariables(array(
             'statusMail'       => $statusMail,
@@ -178,7 +183,8 @@ class InstantWinController extends GameController
             'flashMessages'    => $this->flashMessenger()->getMessages(),
             'form'             => $form,
             'socialLinkUrl'    => $socialLinkUrl,
-            'secretKey'		   => $secretKey
+            'secretKey'		   => $secretKey,
+            'nextGame'         => $nextGame
         ));
 
         return $viewModel;
