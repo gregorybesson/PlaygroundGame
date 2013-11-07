@@ -376,6 +376,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
         $classClause='';
         $displayHomeClause='';
+        $displayWithoutMission='';
         $orderBy ='publicationDate';
 
         if ($classType != '') {
