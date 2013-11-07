@@ -29,8 +29,8 @@ class InstantWinOccurrence implements InputFilterAwareInterface
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="InstantWin", inversedBy="occurrences", cascade={"persist", "remove"})
-	 * @ORM\JoinColumn(name="instantwin_id", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\ManyToOne(targetEntity="InstantWin", inversedBy="occurrences", cascade={"persist","remove"})
+     * @ORM\JoinColumn(name="instantwin_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $instantwin;
 

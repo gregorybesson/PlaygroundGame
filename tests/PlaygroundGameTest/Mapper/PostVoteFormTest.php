@@ -62,10 +62,13 @@ class PostVoteFormTest extends \PHPUnit_Framework_TestCase
         $postvoteform->setTitle($titles[0]);
         $postvoteform = $this->tm->insert($postvoteform);
 
-        $postvoteforms = $this->tm->findAll();
-        $this->assertTrue(in_array($postvoteforms[0]->getTitle(), $titles));
-        $this->assertTrue(in_array($postvoteforms[1]->getTitle(), $titles));
-        $this->assertTrue(in_array($postvoteforms[2]->getTitle(), $titles));
+        $titles = array();
+        foreach( $this->tm->findAll() as $postvoteform ) {
+            $titles[] = $postvoteform->getTitle();
+        }
+        $this->assertContains('Ceci est un titre 1', $titles);
+        $this->assertContains('Ceci est un titre 2', $titles);
+        $this->assertContains('Ceci est un titre 3', $titles);
     }
 
     public function tearDown()
