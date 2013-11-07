@@ -367,7 +367,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      *
      * @return Array of PlaygroundGame\Entity\Game
      */
-    public function getActiveGames($displayHome = true, $classType='', $order='')
+    public function getActiveGames($displayHome = true, $classType='', $order='', $withoutGameInMission = false)
     {
         $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
         $today = new \DateTime("now");
@@ -385,6 +385,13 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             $displayHomeClause = " AND g.displayHome = true";
         }
 
+        if ($withoutGameInMission){
+            $displayWithoutMission = " AND g.id NOT IN (SELECT IDENTITY(mg.game) 
+                                 FROM PlaygroundGame\Entity\MissionGame mg, PlaygroundGame\Entity\Mission m 
+                                 WHERE mg.mission = m.id
+                                 AND m.active = 1 ) "; 
+        }
+
         if ($order != '') {
             $orderBy = $order;
         }
@@ -398,6 +405,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                 AND g.broadcastPlatform = 1'
                 . $displayHomeClause
                 . $classClause
+                . $displayWithoutMission
                 .' ORDER BY g.'
                 . $orderBy
                 . ' DESC'
@@ -423,57 +431,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
     }
 
 
-    public function getActiveGamesWithoutGamesInMission(){
-
-        $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
-        $today = new \DateTime("now");
-        //$today->format('Y-m-d H:i:s');
-        $today = $today->format('Y-m-d') . ' 23:59:59';
-
-        $classClause='';
-        $displayHomeClause='';
-        $orderBy ='publicationDate';
-
-        
-        $displayHomeClause = " AND g.displayHome = true";
-        
-        // Game active with a startDate before today (or without startDate) and closeDate after today (or without closeDate)
-        $query = $em->createQuery(
-            'SELECT g FROM PlaygroundGame\Entity\Game g
-                WHERE (g.publicationDate <= :date OR g.publicationDate IS NULL)
-                AND (g.closeDate >= :date OR g.closeDate IS NULL)
-                AND g.active = 1
-                AND g.broadcastPlatform = 1
-                AND g.id NOT IN (SELECT IDENTITY(mg.game) 
-                                 FROM PlaygroundGame\Entity\MissionGame mg, PlaygroundGame\Entity\Mission m 
-                                 WHERE mg.mission = m.id
-                                 AND m.active = 1 ) '
-                . $displayHomeClause
-                . $classClause
-                .' ORDER BY g.'
-                . $orderBy
-                . ' DESC'
-        );
-        $query->setParameter('date', $today);
-        $games = $query->getResult();
-
-        //je les classe par date de publication (date comme clé dans le tableau afin de pouvoir merger les objets
-        // de type article avec le même procédé en les classant naturellement par date asc ou desc
-       $arrayGames = array();
-       foreach ($games as $game) {
-           if ($game->getPublicationDate()) {
-               $key = $game->getPublicationDate()->format('Ymd').$game->getUpdatedAt()->format('Ymd').'-'.$game->getId();
-           } elseif ($game->getStartDate()) {
-               $key = $game->getStartDate()->format('Ymd') . $game->getUpdatedAt()->format('Ymd').'-'.$game->getId();
-           } else {
-               $key = $game->getUpdatedAt()->format('Ymd') . $game->getUpdatedAt()->format('Ymd').'-'.$game->getId();
-           }
-           $arrayGames[$key] = $game;
-       }
-
-        return $arrayGames;
-
-    }
 
     /**
      * getAvailableGames : Games OnLine and not already played by $user
