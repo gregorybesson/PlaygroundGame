@@ -56,6 +56,30 @@ class MissionGame extends EventProvider implements ServiceManagerAwareInterface
 
         return true;
     }
+
+
+    public function checkGamesInMission($dataGames)
+    {
+        $gamesId = array();
+        for ($i=0; $i < count($dataGames); $i++) { 
+            $gamesId[] = $dataGames[$i]['games']; 
+        }        
+
+        $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
+
+        $query = $em->createQuery('SELECT mg 
+                                   FROM PlaygroundGame\Entity\MissionGame mg
+                                   WHERE mg.game IN (:gamesId)'
+        );
+        $query->setParameter('gamesId', $gamesId);
+        $games = $query->getResult();
+
+        if(count($games) > 0) {
+            return false;
+        }
+
+        return true;
+    }
     /**
     * associate : Permet d'associer des jeux et des conditions à une mission
     * @param array $data 
