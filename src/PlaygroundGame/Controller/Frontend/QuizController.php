@@ -121,6 +121,7 @@ class QuizController extends GameController
                 $valuesSortedByPosition = array();
                 foreach ($q->getAnswers() as $a) {
                     $values[$a->getId()] = array(
+                        'id' => $a->getId(),
                         'position' => $a->getPosition(),
                         'answer' => $a->getAnswer(),
                         );
@@ -128,7 +129,7 @@ class QuizController extends GameController
                 }
                 sort($values);
                 foreach ($values as $key => $value) {
-                    $valuesSortedByPosition[$key] = $value['answer'];
+                    $valuesSortedByPosition[$value['id']] = $value['answer'];
                 }
                 $element->setValueOptions($valuesSortedByPosition);
             } elseif ($q->getType() == 1) {
@@ -136,17 +137,18 @@ class QuizController extends GameController
                 $values = array();
                 $valuesSortedByPosition = array();
                 foreach ($q->getAnswers() as $a) {
-
                     $values[$a->getId()] = array(
+                        'id' => $a->getId(),
                         'position' => $a->getPosition(),
                         'answer' => $a->getAnswer(),
                     );
                     $explanations[$a->getAnswer()] = $a->getExplanation();
                 }
-                sort($values);
+
                 foreach ($values as $key => $value) {
-                    $valuesSortedByPosition[$key] = $value['answer'];
+                    $valuesSortedByPosition[$value['id']] = $value['answer'];
                 }
+
                 $element->setValueOptions($valuesSortedByPosition);
             } elseif ($q->getType() == 2) {
                 $element = new Element\Textarea($name);
@@ -235,6 +237,8 @@ class QuizController extends GameController
         $replies    = $sg->getQuizReplyMapper()->getLastGameReply($lastEntry);
         $userCorrectAnswers = 0;
         $correctAnswers = array();
+        $userAnswers = array();
+
 
         foreach ($replies as $reply) {
             foreach ($reply->getAnswers() as $answer) {
@@ -242,6 +246,7 @@ class QuizController extends GameController
                     $correctAnswers[$answer->getQuestionId()][$answer->getAnswerId()] = true;
                     ++$userCorrectAnswers;
                 }
+                $userAnswers[$answer->getQuestionId()][$answer->getAnswerId()] = true;
             }
         }
 
@@ -271,12 +276,27 @@ class QuizController extends GameController
                     $gameCorrectAnswers[$q->getId()]['question'] = $q->getQuestion();
                     $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['answer'] = $a->getAnswer();
                     $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['explanation'] = $a->getExplanation();
+                    
                     if (isset($correctAnswers[$q->getId()]) && isset($correctAnswers[$q->getId()][$a->getId()])) {
                         $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['found'] = true;
                     } else {
                         $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['found'] = false;
                     }
+
+                    $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['correctAnswers'] = true;
+                } else {
+                    $gameCorrectAnswers[$q->getId()]['question'] = $q->getQuestion();
+                    $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['answer'] = $a->getAnswer();
+                    $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['explanation'] = $a->getExplanation();
+                    $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['correctAnswers'] = false;
+
+                    if (isset($userAnswers[$q->getId()]) && isset($userAnswers[$q->getId()][$a->getId()])) {
+                        $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['yourChoice'] = true;
+                    }else {
+                        $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['yourChoice'] = false;
+                    }
                 }
+
             }
             // if only one question is a prediction, we can't determine if it's a winner or looser
             if ($q->getPrediction()) {
