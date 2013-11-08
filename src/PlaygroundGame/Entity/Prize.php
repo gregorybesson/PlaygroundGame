@@ -33,12 +33,12 @@ class Prize {
 	/**
 	 * @ORM\Column(type="string", length=255, nullable=false)
 	 */
-	protected $prize_title;
+	protected $title;
 
 	/**
 	 * @ORM\Column(type="string", length=255, nullable=false)
 	 */
-	protected $prize_identifier;
+	protected $identifier;
 
 	/**
      * @ORM\ManyToOne(targetEntity="PrizeCategory")
@@ -49,7 +49,7 @@ class Prize {
 	/**
 	 * @ORM\Column(type="text", nullable=true)
 	 */
-	protected $prize_content;
+	protected $content;
 
 	/**
 	 * @ORM\Column(type="integer", nullable=false)
@@ -127,31 +127,31 @@ class Prize {
 	}
 
 	/**
-	 * @return the $prize_title
+	 * @return the $title
 	 */
-	public function getPrize_title() {
-		return $this->prize_title;
+	public function getTitle() {
+		return $this->title;
 	}
 
 	/**
-	 * @param field_type $Prize_title
+	 * @param field_type $Title
 	 */
-	public function setPrize_title($prize_title) {
-		$this->prize_title = $prize_title;
+	public function setTitle($title) {
+		$this->title = $title;
 	}
 
 	/**
-	 * @return the $prize_identifier
+	 * @return the $identifier
 	 */
-	public function getPrize_identifier() {
-		return $this->prize_identifier;
+	public function getIdentifier() {
+		return $this->identifier;
 	}
 
 	/**
-	 * @param field_type $prize_identifier
+	 * @param field_type $identifier
 	 */
-	public function setPrize_identifier($prize_identifier) {
-		$this->prize_identifier = $prize_identifier;
+	public function setIdentifier($identifier) {
+		$this->identifier = $identifier;
 	}
 
 	/**
@@ -169,17 +169,17 @@ class Prize {
 	}
 
 	/**
-	 * @return the $prize_content
+	 * @return the $content
 	 */
-	public function getPrize_content() {
-		return $this->prize_content;
+	public function getContent() {
+		return $this->content;
 	}
 
 	/**
-	 * @param field_type $prize_content
+	 * @param field_type $content
 	 */
-	public function setPrize_content($prize_content) {
-		$this->prize_content = $prize_content;
+	public function setContent($content) {
+		$this->content = $content;
 	}
 
 	/**
@@ -285,20 +285,20 @@ class Prize {
 	 */
 	public function populate($data = array())
 	{
-		if (isset($data['prize_content']) && $data['prize_content'] != null) {
-			$this->prize_content = $data['prize_content'];
+		if (isset($data['content']) && $data['content'] != null) {
+			$this->content = $data['content'];
 		}
 	
-		if (isset($data['prize_title']) && $data['prize_title'] != null) {
-			$this->prize_title = $data['prize_title'];
+		if (isset($data['title']) && $data['title'] != null) {
+			$this->title = $data['title'];
 		}
 	
 		if (isset($data['qty']) && $data['qty'] != null) {
 			$this->qty = $data['qty'];
 		}
 	
-		if (isset($data['prize_identifier']) && $data['prize_identifier'] != null) {
-			$this->prize_identifier = $data['prize_identifier'];
+		if (isset($data['identifier']) && $data['identifier'] != null) {
+			$this->identifier = $data['identifier'];
 		}
 	
 		if (isset($data['unitPrice']) && $data['unitPrice'] != null) {
@@ -323,7 +323,7 @@ class Prize {
             $factory = new InputFactory();
 
             $inputFilter->add($factory->createInput(array(
-                'name' => 'prize_identifier',
+                'name' => 'identifier',
                 'required' => true,
                 'filters' => array(
                     array(

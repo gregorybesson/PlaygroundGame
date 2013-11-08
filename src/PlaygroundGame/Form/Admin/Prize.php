@@ -30,7 +30,7 @@ class Prize extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'name' => 'prize_title',
+            'name' => 'title',
             'options' => array(
                 'label' => $translator->translate('Title', 'playgroundgame'),
             ),
@@ -41,7 +41,7 @@ class Prize extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'name' => 'prize_identifier',
+            'name' => 'identifier',
             'options' => array(
                 'label' => $translator->translate('Slug', 'playgroundgame')
             ),
@@ -52,14 +52,14 @@ class Prize extends ProvidesEventsForm
 
         $this->add(array(
         	'type' => 'Zend\Form\Element\Textarea',
-        	'name' => 'prize_content',
+        	'name' => 'content',
        		'options' => array(
        			'label' => $translator->translate('Description', 'playgroundgame')
        		),
        		'attributes' => array(
        			'cols' => '10',
        			'rows' => '10',
-       			'id' => 'prize_content'
+       			'id' => 'content'
        		)
         ));
         

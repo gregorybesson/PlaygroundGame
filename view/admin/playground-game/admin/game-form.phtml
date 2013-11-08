@@ -300,17 +300,17 @@ $form->prepare();
                 <?php echo $this->formHidden($element->get('id')); ?>
             </div>
             <div class="label-input">
-                <?php echo $this->formLabel($element->get('prize_title')); ?>
-                <?php echo $this->formInput($element->get('prize_title')); ?>
+                <?php echo $this->formLabel($element->get('title')); ?>
+                <?php echo $this->formInput($element->get('title')); ?>
             </div>
             <div class="label-input">
-                <?php echo $this->formLabel($element->get('prize_identifier')); ?>
-                <?php echo $this->formInput($element->get('prize_identifier')); ?>
+                <?php echo $this->formLabel($element->get('identifier')); ?>
+                <?php echo $this->formInput($element->get('identifier')); ?>
             </div>
             <div class="label-input">
-                <?php echo $this->formTextarea($element->get('prize_content')) . $this->formElementErrors($element->get('prize_content')) ?>
+                <?php echo $this->formTextarea($element->get('content')) . $this->formElementErrors($element->get('content')) ?>
                 <?php $this->QgCKEditor(
-                    'prize_content',
+                    'content',
                         array(
                             'BasePath' => $this->adminAssetPath('js/lib/ckeditor'),
                             'Width' => "99%",
@@ -350,10 +350,10 @@ $form->prepare();
         <?php endforeach;?>        
 
 
-        <span data-template='<fieldset><input type="hidden" name="prizes[__index__][id]" value=""/><div class="label-input"><label>Titre</label><input name="prizes[__index__][prize_title]" type="text" placeholder="Titre" value=""/></div><div class="label-input"><label>Lien</label><input name="prizes[__index__][prize_identifier]" type="text" value=""/></div>
+        <span data-template='<fieldset><input type="hidden" name="prizes[__index__][id]" value=""/><div class="label-input"><label>Titre</label><input name="prizes[__index__][title]" type="text" placeholder="Titre" value=""/></div><div class="label-input"><label>Lien</label><input name="prizes[__index__][identifier]" type="text" value=""/></div>
         <div class="label-input">
-        <textarea name="prizes[__index__][prize_content]" cols="10" rows="10" id="prize_content"></textarea>
-        <script type="text/javascript"><![CDATA[CKEDITOR.replace("prizes[__index__][prize_content]", {"toolbar":[["Bold","Italic","Underline","Subscript","Superscript"],["NumberedList","BulletedList","Outdent","Indent"],["JustifyLeft","JustifyCenter","JustifyRight"],["Link","Unlink"]],"width":"99%","height":"300","language":"fr","uiColor":"#F7F7F7","stylesSet":"custom_styles:\/lib\/js\/ckeditor-custom\/ckeditor-styles.js","contentsCss":["\/lib\/css\/ckeditor-custom\/ckeditor-css.css"],"templates_files":["\/lib\/js\/ckeditor-custom\/ckeditor-templates.js"]});
+        <textarea name="prizes[__index__][content]" cols="10" rows="10" id="content"></textarea>
+        <script type="text/javascript"><![CDATA[CKEDITOR.replace("prizes[__index__][content]", {"toolbar":[["Bold","Italic","Underline","Subscript","Superscript"],["NumberedList","BulletedList","Outdent","Indent"],["JustifyLeft","JustifyCenter","JustifyRight"],["Link","Unlink"]],"width":"99%","height":"300","language":"fr","uiColor":"#F7F7F7","stylesSet":"custom_styles:\/lib\/js\/ckeditor-custom\/ckeditor-styles.js","contentsCss":["\/lib\/css\/ckeditor-custom\/ckeditor-css.css"],"templates_files":["\/lib\/js\/ckeditor-custom\/ckeditor-templates.js"]});
         ]]></script></div>
         <div class="label-input"><label>Quantity</label><input name="prizes[__index__][qty]" type="text" placeholder="Quantity" value=""/></div><div class="label-input"><label>Prix</label><input name="prizes[__index__][unitPrice]" type="text" placeholder="Prix" value=""/></div><div class="label-input"><label for="currency">Devise utilisée</label><select name="prizes[__index__][currency]" id="currency"><option value="">Choisir la devise</option><option value="EU">Euro</option><option value="DO">Dollar</option></select></div><div class="label-input"><label>Picture</label><input name="prizes[__index__][picture_file]" type="file" /></div><button type="button" name="prizes[__index__][remove]" class="delete-button" value="">Supprimer</button><hr/></fieldset>'></span>
     </div>
