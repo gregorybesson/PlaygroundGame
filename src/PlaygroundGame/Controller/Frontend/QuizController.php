@@ -34,7 +34,7 @@ class QuizController extends GameController
         $user       = $this->zfcUserAuthentication()->getIdentity();
         $sg         = $this->getGameService();
         $formUser = '';
-        $state = 'quizz';
+        $state = 'quiz';
 
         $game = $sg->checkGame($identifier);
         if (! $game || $game->isClosed()) {
