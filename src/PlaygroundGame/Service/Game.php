@@ -367,7 +367,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      *
      * @return Array of PlaygroundGame\Entity\Game
      */
-    public function getActiveGames($displayHome = true, $classType='', $order='')
+    public function getActiveGames($displayHome = true, $classType='', $order='', $withoutGameInMission = false)
     {
         $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
         $today = new \DateTime("now");
@@ -376,6 +376,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
         $classClause='';
         $displayHomeClause='';
+        $displayWithoutMission='';
         $orderBy ='publicationDate';
 
         if ($classType != '') {
@@ -383,6 +384,13 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         }
         if ($displayHome) {
             $displayHomeClause = " AND g.displayHome = true";
+        }
+
+        if ($withoutGameInMission){
+            $displayWithoutMission = " AND g.id NOT IN (SELECT IDENTITY(mg.game) 
+                                 FROM PlaygroundGame\Entity\MissionGame mg, PlaygroundGame\Entity\Mission m 
+                                 WHERE mg.mission = m.id
+                                 AND m.active = 1 ) "; 
         }
 
         if ($order != '') {
@@ -398,6 +406,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                 AND g.broadcastPlatform = 1'
                 . $displayHomeClause
                 . $classClause
+                . $displayWithoutMission
                 .' ORDER BY g.'
                 . $orderBy
                 . ' DESC'
@@ -421,6 +430,8 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
         return $arrayGames;
     }
+
+
 
     /**
      * getAvailableGames : Games OnLine and not already played by $user

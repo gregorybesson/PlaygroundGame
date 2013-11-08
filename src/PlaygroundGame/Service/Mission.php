@@ -112,12 +112,12 @@ class Mission extends EventProvider implements ServiceManagerAwareInterface
         return $mission;
     }
 
-    public function getMissions()
+    public function getActiveMissions()
     {
         
         $missionsArray = array();
 
-        $missions = $this->getMissionMapper()->findAll();
+        $missions = $this->getMissionMapper()->findBy(array('active'=>true));
         foreach ($missions as $mission) {
             $games = $this->getGames($mission);
             if (count($games) == 0) {
@@ -160,6 +160,16 @@ class Mission extends EventProvider implements ServiceManagerAwareInterface
     public function remove($entity)
     {
         return $this->getMissionMapper()->remove($entity);
+    }
+
+    /**
+    * update : met a jour  une entite mission
+    * @return PlaygroundGame\Entity\Mission  $entity mission
+    *
+    */
+    public function update($entity)
+    {
+        return $this->getMissionMapper()->update($entity);
     }
 
       /**

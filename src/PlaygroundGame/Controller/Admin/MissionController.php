@@ -134,6 +134,26 @@ class MissionController extends AbstractActionController
         return $this->redirect()->toRoute('admin/mission/list');
     }
 
+    public function desactivateAction()
+    {
+        $missionId = $this->getEvent()->getRouteMatch()->getParam('missionId');
+        $mission = $this->getMissionService()->findById($missionId);
+        $mission->setActive(false);
+        $this->getMissionService()->update($mission);
+
+        return $this->redirect()->toRoute('admin/mission/list');
+    }
+
+    public function activateAction()
+    {
+        $missionId = $this->getEvent()->getRouteMatch()->getParam('missionId');
+        $mission = $this->getMissionService()->findById($missionId);
+        $mission->setActive(true);
+        $this->getMissionService()->update($mission);
+
+        return $this->redirect()->toRoute('admin/mission/list');
+    }
+
     public function associateAction()
     {
         $missionId = $this->getEvent()->getRouteMatch()->getParam('missionId');

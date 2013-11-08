@@ -49,6 +49,11 @@ class Mission
     protected $hidden;
 
     /**
+     * @ORM\Column(type="boolean", nullable=false)
+     */
+    protected $active = 0;
+
+    /**
      * @ORM\Column(name="created_at", type="datetime", nullable=true)
      */
     protected $createdAt;
@@ -187,6 +192,27 @@ class Mission
         $this->hidden = $hidden;
         return $this;
     }
+
+    /**
+     *
+     * @return the unknown_type
+     */
+    public function getActive ()
+    {
+        return $this->active;
+    }
+
+    /**
+     *
+     * @param unknown_type $active
+     */
+    public function setActive ($active)
+    {
+        $this->active = $active;
+
+        return $this;
+    }
+    
 
     /**
      *
