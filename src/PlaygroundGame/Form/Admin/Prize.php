@@ -52,7 +52,7 @@ class Prize extends ProvidesEventsForm
 
         $this->add(array(
         	'type' => 'Zend\Form\Element\Textarea',
-        	'name' => 'content',
+        	'name' => 'prize_content',
        		'options' => array(
        			'label' => $translator->translate('Description', 'playgroundgame')
        		),
