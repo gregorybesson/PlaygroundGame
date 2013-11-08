@@ -296,13 +296,16 @@ $form->prepare();
 
         <?php foreach($form->get('prizes') as $element):?>
         <fieldset>
+            <div class="label-input">
+                <?php echo $this->formHidden($element->get('id')); ?>
+            </div>
         	<div class="label-input">
-        		<?php echo $this->formLabel($element->get('title')); ?>
-        		<?php echo $this->formInput($element->get('title')); ?>
+        		<?php echo $this->formLabel($element->get('prize_title')); ?>
+        		<?php echo $this->formInput($element->get('prize_title')); ?>
         	</div>
         	<div class="label-input">
-        		<?php echo $this->formLabel($element->get('identifier')); ?>
-        		<?php echo $this->formInput($element->get('identifier')); ?>
+        		<?php echo $this->formLabel($element->get('prize_identifier')); ?>
+        		<?php echo $this->formInput($element->get('prize_identifier')); ?>
         	</div>
         	<div class="label-input">
         		<?php echo $this->formLabel($element->get('content')); ?>
@@ -320,11 +323,18 @@ $form->prepare();
         		<?php echo $this->formLabel($element->get('currency')); ?>
         		<?php echo $this->formSelect($element->get('currency')); ?>
         	</div>
+            <div class="label-input">
+                <?php echo $this->formLabel($element->get('picture_file')); ?>
+                <?php echo $this->formFile($element->get('picture_file')); ?>
+                <?php if($element->get('picture')->getValue() != ''):?>
+                    <img src="<?php echo $this->basePath($element->get('picture')->getValue()); ?>" />
+                <?php endif;?>
+            </div>
         	<?php echo $this->formButton($element->get('remove')); ?>
         	<hr/>
         </fieldset>
         <?php endforeach;?>
-        <span data-template='<fieldset><input type="hidden" name="prizes[__index__][id]" value=""/><div class="label-input"><label>Titre</label><input name="prizes[__index__][title]" type="text" placeholder="Titre" value=""/></div><div class="label-input"><label>Lien</label><input name="prizes[__index__][identifier]" type="text" value=""/></div><div class="label-input"><label for="prize_content">Description</label><textarea name="prizes[__index__][content]" cols="10" rows="10" id="prize_content"></textarea></div><div class="label-input"><label>Quantity</label><input name="prizes[__index__][qty]" type="text" placeholder="Quantity" value=""/></div><div class="label-input"><label>Prix</label><input name="prizes[__index__][unitPrice]" type="text" placeholder="Prix" value=""/></div><div class="label-input"><label for="currency">Devise utilisée</label><select name="prizes[__index__][currency]" id="currency"><option value="">Choisir la devise</option><option value="EU">Euro</option><option value="DO">Dollar</option></select></div><button type="button" name="prizes[__index__][remove]" class="delete-button" value="">Supprimer</button><hr/></fieldset>'></span>
+        <span data-template='<fieldset><input type="hidden" name="prizes[__index__][id]" value=""/><div class="label-input"><label>Titre</label><input name="prizes[__index__][prize_title]" type="text" placeholder="Titre" value=""/></div><div class="label-input"><label>Lien</label><input name="prizes[__index__][prize_identifier]" type="text" value=""/></div><div class="label-input"><label for="prize_content">Description</label><textarea name="prizes[__index__][content]" cols="10" rows="10" id="prize_content"></textarea></div><div class="label-input"><label>Quantity</label><input name="prizes[__index__][qty]" type="text" placeholder="Quantity" value=""/></div><div class="label-input"><label>Prix</label><input name="prizes[__index__][unitPrice]" type="text" placeholder="Prix" value=""/></div><div class="label-input"><label for="currency">Devise utilisée</label><select name="prizes[__index__][currency]" id="currency"><option value="">Choisir la devise</option><option value="EU">Euro</option><option value="DO">Dollar</option></select></div><div class="label-input"><label>Picture</label><input name="prizes[__index__][picture_file]" type="file" /></div><button type="button" name="prizes[__index__][remove]" class="delete-button" value="">Supprimer</button><hr/></fieldset>'></span>
     </div>
     <ul class="liste-buttons">
 		<li class="btn-admin"><a href="#" onclick="add_prize()"><?php echo $this->translate('Ajouter un lot'); ?></a></li>

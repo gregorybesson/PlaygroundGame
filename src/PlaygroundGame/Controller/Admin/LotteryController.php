@@ -35,10 +35,13 @@ class LotteryController extends AbstractActionController
 
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $data = array_merge(
+            $data = $service->array_merge_recursive_num_keys(
                 $this->getRequest()->getPost()->toArray(),
                 $this->getRequest()->getFiles()->toArray()
             );
+            if(empty($data['prizes'])){
+                $data['prizes'] = array();
+            }
             if (isset($data['drawDate']) && $data['drawDate']) {
                 $data['drawDate'] = \DateTime::createFromFormat('d/m/Y', $data['drawDate']);
             }
@@ -92,10 +95,13 @@ class LotteryController extends AbstractActionController
         $form->bind($game);
 
         if ($this->getRequest()->isPost()) {
-            $data = array_merge(
+            $data = $service->array_merge_recursive_num_keys(
                 $this->getRequest()->getPost()->toArray(),
                 $this->getRequest()->getFiles()->toArray()
             );
+            if(empty($data['prizes'])){
+                $data['prizes'] = array();
+            }
             if (isset($data['drawDate']) && $data['drawDate']) {
                 $data['drawDate'] = \DateTime::createFromFormat('d/m/Y', $data['drawDate']);
             }

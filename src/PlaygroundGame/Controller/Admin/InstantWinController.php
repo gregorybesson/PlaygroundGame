@@ -56,10 +56,13 @@ class InstantWinController extends AbstractActionController
 
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $data = array_merge(
+            $data = $service->array_merge_recursive_num_keys(
                     $this->getRequest()->getPost()->toArray(),
                     $this->getRequest()->getFiles()->toArray()
             );
+            if(empty($data['prizes'])){
+                $data['prizes'] = array();
+            }
             $game = $service->create($data, $instantwin, 'playgroundgame_instantwin_form');
             if ($game) {
                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The game was created');
@@ -71,11 +74,11 @@ class InstantWinController extends AbstractActionController
         $viewModel->addChild($gameForm, 'game_form');
 
         return $viewModel->setVariables(
-        	array(
-        		'form' => $form,
-        		'title' => 'Create instant win',
-			)
-		);
+            array(
+                'form' => $form,
+                'title' => 'Create instant win',
+            )
+        );
     }
 
     public function editInstantWinAction()
@@ -97,8 +100,8 @@ class InstantWinController extends AbstractActionController
         $form   = $this->getServiceLocator()->get('playgroundgame_instantwin_form');
         $form->setAttribute('action', $this->url()->fromRoute('admin/playgroundgame/edit-instantwin', array('gameId' => $gameId)));
         $form->setAttribute('method', 'post');
-		
-		if ($game->getFbAppId()) {
+        
+        if ($game->getFbAppId()) {
             $appIds = $form->get('fbAppId')->getOption('value_options');
             $appIds[$game->getFbAppId()] = $game->getFbAppId();
             $form->get('fbAppId')->setAttribute('options', $appIds);
@@ -112,14 +115,17 @@ class InstantWinController extends AbstractActionController
 
             $form->get('stylesheet')->setAttribute('options', $values);
         }
-
+        
         $form->bind($game);
 
         if ($this->getRequest()->isPost()) {
-            $data = array_merge(
-                    $this->getRequest()->getPost()->toArray(),
+            $data = $service->array_merge_recursive_num_keys(
+                    $this->getRequest()->getPost()->toArray(), 
                     $this->getRequest()->getFiles()->toArray()
             );
+            if(empty($data['prizes'])){
+                $data['prizes'] = array();
+            }
             $result = $service->edit($data, $game, 'playgroundgame_instantwin_form');
 
             if ($result) {
@@ -129,26 +135,26 @@ class InstantWinController extends AbstractActionController
 
         $gameForm->setVariables(array('form' => $form, 'game' => $game));
         $viewModel->addChild($gameForm, 'game_form');
-
+        
         return $viewModel->setVariables(
-        	array(
-        		'form' => $form,
-        		'title' => 'Edit instant win',
-			)
-		);
+            array(
+                'form' => $form,
+                'title' => 'Edit instant win',
+            )
+        );
     }
 
     public function listOccurrenceAction()
     {
-        $service 	= $this->getAdminGameService();
-        $gameId 	= $this->getEvent()->getRouteMatch()->getParam('gameId');
+        $service    = $this->getAdminGameService();
+        $gameId     = $this->getEvent()->getRouteMatch()->getParam('gameId');
 
         if (!$gameId) {
             return $this->redirect()->toRoute('admin/playgroundgame/list');
         }
 
         //$instantwin = $service->getGameMapper()->findById($gameId);
-		$game = $service->getGameMapper()->findById($gameId);
+        $game = $service->getGameMapper()->findById($gameId);
 
         $query_result = $service->getInstantWinOccurrenceMapper()->findByGameId($game);
         if(is_array($query_result)){
@@ -170,9 +176,9 @@ class InstantWinController extends AbstractActionController
         return new ViewModel(
             array(
                 'occurrences' => $paginator,
-                'gameId' 	  => $gameId,
-                'filter'	  => $filter,
-                'game' 		  => $game,
+                'gameId'      => $gameId,
+                'filter'      => $filter,
+                'game'        => $game,
                 'addLink'     => $addLink,
                 'exportLink'  => $exportLink,
             )
@@ -342,8 +348,8 @@ class InstantWinController extends AbstractActionController
         }
         $occurrence   = $service->getInstantWinOccurrenceMapper()->findById($occurrenceId);
         $instantwinId = $occurrence->getInstantWin()->getId();
-		
-		if($occurrence->getActive()){
+        
+        if($occurrence->getActive()){
             $service->getInstantWinOccurrenceMapper()->remove($occurrence);
             $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The occurrence was deleted');
         } else {
@@ -383,20 +389,20 @@ class InstantWinController extends AbstractActionController
         $content        = "\xEF\xBB\xBF"; // UTF-8 BOM
         $content       .= "ID;Pseudo;Civilité;Nom;Prénom;E-mail;Optin Newsletter;Optin partenaire;A Gagné ?;Date - H;Adresse;CP;Ville;Téléphone;Mobile;Date d'inscription;Date de naissance;\n";
         foreach ($entries as $e) {
-        	if($e->getUser()->getAddress2() != '') {
-        		$adress2 = ' - ' . $e->getUser()->getAddress2();
-			} else {
-				$adress2 = '';
-			}
-			if($e->getUser()->getDob() != NULL) {
-				$dob = $e->getUser()->getDob()->format('Y-m-d');
-			} else {
-				$dob = '';
-			}
-			
+            if($e->getUser()->getAddress2() != '') {
+                $adress2 = ' - ' . $e->getUser()->getAddress2();
+            } else {
+                $adress2 = '';
+            }
+            if($e->getUser()->getDob() != NULL) {
+                $dob = $e->getUser()->getDob()->format('Y-m-d');
+            } else {
+                $dob = '';
+            }
+            
             $content   .= $e->getUser()->getId()
             . ";" . $e->getUser()->getUsername()
-			. ";" . $e->getUser()->getTitle()
+            . ";" . $e->getUser()->getTitle()
             . ";" . $e->getUser()->getLastname()
             . ";" . $e->getUser()->getFirstname()
             . ";" . $e->getUser()->getEmail()
@@ -404,13 +410,13 @@ class InstantWinController extends AbstractActionController
             . ";" . $e->getUser()->getOptinPartner()
             . ";" . $e->getWinner()
             . ";" . $e->getCreatedAt()->format('Y-m-d H:i:s')
-			. ";" . $e->getUser()->getAddress() . $adress2
-			. ";" . $e->getUser()->getPostalCode()
-			. ";" . $e->getUser()->getCity()
-			. ";" . $e->getUser()->getTelephone()
-			. ";" . $e->getUser()->getMobile()
-			. ";" . $e->getUser()->getCreatedAt()->format('Y-m-d')
-			. ";" . $dob
+            . ";" . $e->getUser()->getAddress() . $adress2
+            . ";" . $e->getUser()->getPostalCode()
+            . ";" . $e->getUser()->getCity()
+            . ";" . $e->getUser()->getTelephone()
+            . ";" . $e->getUser()->getMobile()
+            . ";" . $e->getUser()->getCreatedAt()->format('Y-m-d')
+            . ";" . $dob
             . "\n";
         }
 
