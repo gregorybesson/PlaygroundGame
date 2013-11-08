@@ -177,7 +177,7 @@ class MissionController extends AbstractActionController
                                       'position' => $i);
             }
             if(!$this->getMissionGameService()->checkGamesInMission($dataGames)){
-                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The association game-mission was not created : one of the game in already in mission');
+                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The association game-mission was not created : one of the game is already in mission');
                 return $this->redirect()->toRoute('admin/mission/list');
             }
 
