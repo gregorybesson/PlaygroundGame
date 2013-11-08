@@ -44,8 +44,8 @@ class Prize extends EventProvider implements ServiceManagerAwareInterface
         $form->bind($prize);
 
         // If the identifier has not been set, I use the title to create one.
-        if (empty($data['identifier']) && !empty($data['title'])) {
-            $data['identifier'] = $data['title'];
+        if (empty($data['prize_identifier']) && !empty($data['prize_title'])) {
+            $data['prize_identifier'] = $data['prize_title'];
         }
         
         $form->setData($data);
@@ -72,14 +72,14 @@ class Prize extends EventProvider implements ServiceManagerAwareInterface
         $form  = $this->getServiceManager()->get($formClass);
         $form->bind($prize);
         
-        $identifierInput = $form->getInputFilter()->get('identifier');
+        $identifierInput = $form->getInputFilter()->get('prize_identifier');
         $noObjectExistsValidator = new NoObjectExistsValidator(array(
             'object_repository' => $entityManager->getRepository('PlaygroundGame\Entity\Prize'),
-            'fields'            => 'identifier',
+            'fields'            => 'prize_identifier',
             'messages'          => array('objectFound' => 'This url already exists !')
         ));
         
-        if($prize->getIdentifier() != $data['identifier']){
+        if($prize->getIdentifier() != $data['prize_identifier']){
             $identifierInput->getValidatorChain()->addValidator($noObjectExistsValidator);
         }
 

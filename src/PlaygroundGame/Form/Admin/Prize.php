@@ -30,7 +30,7 @@ class Prize extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'name' => 'title',
+            'name' => 'prize_title',
             'options' => array(
                 'label' => $translator->translate('Title', 'playgroundgame'),
             ),
@@ -41,7 +41,7 @@ class Prize extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'name' => 'identifier',
+            'name' => 'prize_identifier',
             'options' => array(
                 'label' => $translator->translate('Slug', 'playgroundgame')
             ),
@@ -52,7 +52,7 @@ class Prize extends ProvidesEventsForm
 
         $this->add(array(
         	'type' => 'Zend\Form\Element\Textarea',
-        	'name' => 'content',
+        	'name' => 'prize_content',
        		'options' => array(
        			'label' => $translator->translate('Description', 'playgroundgame')
        		),
@@ -100,7 +100,24 @@ class Prize extends ProvidesEventsForm
     			'label' => $translator->translate('Mode d\'affichage des Posts', 'playgroundgame'),
        		),
         ));
-        
+         
+        $this->add(array(
+          'name' => 'picture_file',
+          'options' => array(
+            'label' => $translator->translate('Picture', 'playgroundgame')
+          ),
+          'attributes' => array(
+            'type' => 'file',
+          )
+        ));
+        $this->add(array(
+                'name' => 'picture',
+                'type' => 'Zend\Form\Element\Hidden',
+                'attributes' => array(
+                    'value' => ''
+                )
+        ));
+               
         $submitElement = new Element\Button('submit');
         $submitElement
         ->setAttributes(array(

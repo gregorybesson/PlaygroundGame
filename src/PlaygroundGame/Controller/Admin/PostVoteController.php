@@ -69,10 +69,13 @@ class PostVoteController extends AbstractActionController
 
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $data = array_merge(
+            $data = $service->array_merge_recursive_num_keys(
                     $this->getRequest()->getPost()->toArray(),
                     $this->getRequest()->getFiles()->toArray()
             );
+            if(empty($data['prizes'])){
+                $data['prizes'] = array();
+            }
             $game = $service->create($data, $postVote, 'playgroundgame_postvote_form');
             if ($game) {
                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The game was created');
@@ -124,10 +127,13 @@ class PostVoteController extends AbstractActionController
         $form->bind($game);
 
         if ($this->getRequest()->isPost()) {
-            $data = array_merge(
+            $data = $service->array_merge_recursive_num_keys(
                     $this->getRequest()->getPost()->toArray(),
                     $this->getRequest()->getFiles()->toArray()
             );
+            if(empty($data['prizes'])){
+                $data['prizes'] = array();
+            }
             $result = $service->edit($data, $game, 'playgroundgame_postvote_form');
 
             if ($result) {

@@ -33,12 +33,12 @@ class Prize {
 	/**
 	 * @ORM\Column(type="string", length=255, nullable=false)
 	 */
-	protected $title;
+	protected $prize_title;
 
 	/**
 	 * @ORM\Column(type="string", length=255, nullable=false)
 	 */
-	protected $identifier;
+	protected $prize_identifier;
 
 	/**
      * @ORM\ManyToOne(targetEntity="PrizeCategory")
@@ -49,7 +49,7 @@ class Prize {
 	/**
 	 * @ORM\Column(type="text", nullable=true)
 	 */
-	protected $content;
+	protected $prize_content;
 
 	/**
 	 * @ORM\Column(type="integer", nullable=false)
@@ -75,6 +75,11 @@ class Prize {
 	 * @ORM\Column(type="datetime")
 	 */
 	protected $updated_at;
+
+	/**
+	 * @ORM\Column(type="string", length=255, nullable=true)
+	 */
+	protected $picture;
 
 	/** @PrePersist */
 	public function createChrono()
@@ -122,31 +127,31 @@ class Prize {
 	}
 
 	/**
-	 * @return the $title
+	 * @return the $prize_title
 	 */
-	public function getTitle() {
-		return $this->title;
+	public function getPrize_title() {
+		return $this->prize_title;
 	}
 
 	/**
-	 * @param field_type $title
+	 * @param field_type $Prize_title
 	 */
-	public function setTitle($title) {
-		$this->title = $title;
+	public function setPrize_title($prize_title) {
+		$this->prize_title = $prize_title;
 	}
 
 	/**
-	 * @return the $identifier
+	 * @return the $prize_identifier
 	 */
-	public function getIdentifier() {
-		return $this->identifier;
+	public function getPrize_identifier() {
+		return $this->prize_identifier;
 	}
 
 	/**
-	 * @param field_type $identifier
+	 * @param field_type $prize_identifier
 	 */
-	public function setIdentifier($identifier) {
-		$this->identifier = $identifier;
+	public function setPrize_identifier($prize_identifier) {
+		$this->prize_identifier = $prize_identifier;
 	}
 
 	/**
@@ -164,17 +169,17 @@ class Prize {
 	}
 
 	/**
-	 * @return the $content
+	 * @return the $prize_content
 	 */
-	public function getContent() {
-		return $this->content;
+	public function getPrize_content() {
+		return $this->prize_content;
 	}
 
 	/**
-	 * @param field_type $content
+	 * @param field_type $prize_content
 	 */
-	public function setContent($content) {
-		$this->content = $content;
+	public function setPrize_content($prize_content) {
+		$this->prize_content = $prize_content;
 	}
 
 	/**
@@ -246,6 +251,20 @@ class Prize {
 	public function setUpdated_at($updated_at) {
 		$this->updated_at = $updated_at;
 	}
+
+	/**
+	 * @return the $picture
+	 */
+	public function getPicture() {
+		return $this->picture;
+	}
+
+	/**
+	 * @param field_type $picture
+	 */
+	public function setPicture($picture) {
+		$this->picture = $picture;
+	}
 	
 	/**
 	 * Convert the object to an array.
@@ -266,20 +285,20 @@ class Prize {
 	 */
 	public function populate($data = array())
 	{
-		if (isset($data['content']) && $data['content'] != null) {
-			$this->content = $data['content'];
+		if (isset($data['prize_content']) && $data['prize_content'] != null) {
+			$this->prize_content = $data['prize_content'];
 		}
 	
-		if (isset($data['title']) && $data['title'] != null) {
-			$this->title = $data['title'];
+		if (isset($data['prize_title']) && $data['prize_title'] != null) {
+			$this->prize_title = $data['prize_title'];
 		}
 	
 		if (isset($data['qty']) && $data['qty'] != null) {
 			$this->qty = $data['qty'];
 		}
 	
-		if (isset($data['identifier']) && $data['identifier'] != null) {
-			$this->identifier = $data['identifier'];
+		if (isset($data['prize_identifier']) && $data['prize_identifier'] != null) {
+			$this->prize_identifier = $data['prize_identifier'];
 		}
 	
 		if (isset($data['unitPrice']) && $data['unitPrice'] != null) {
@@ -288,6 +307,10 @@ class Prize {
 	
 		if (isset($data['currency']) && $data['currency'] != null) {
 			$this->currency = $data['currency'];
+		}
+
+		if (isset($data['picture']) && $data['picture'] != null) {
+			$this->picture = $data['picture'];
 		}
 	}
 
@@ -300,7 +323,7 @@ class Prize {
             $factory = new InputFactory();
 
             $inputFilter->add($factory->createInput(array(
-                'name' => 'identifier',
+                'name' => 'prize_identifier',
                 'required' => true,
                 'filters' => array(
                     array(

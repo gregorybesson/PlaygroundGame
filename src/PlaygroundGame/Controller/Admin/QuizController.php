@@ -65,10 +65,13 @@ class QuizController extends AbstractActionController
         $form->bind($question);
 
         if ($this->getRequest()->isPost()) {
-            $data = array_merge(
+            $data = $service->array_merge_recursive_num_keys(
                 $this->getRequest()->getPost()->toArray(),
                 $this->getRequest()->getFiles()->toArray()
             );
+            if(empty($data['prizes'])){
+                $data['prizes'] = array();
+            }
                $question = $service->createQuestion($data);
                if ($question) {
                    // Redirect to list of games
@@ -103,10 +106,13 @@ class QuizController extends AbstractActionController
         $form->bind($question);
 
         if ($this->getRequest()->isPost()) {
-            $data = array_merge(
+            $data = $service->array_merge_recursive_num_keys(
                 $this->getRequest()->getPost()->toArray(),
                 $this->getRequest()->getFiles()->toArray()
             );
+            if(empty($data['prizes'])){
+                $data['prizes'] = array();
+            }
             $question = $service->updateQuestion($data, $question);
             if ($question) {
                 // Redirect to list of games
