@@ -33,6 +33,8 @@ class QuizController extends GameController
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
         $user       = $this->zfcUserAuthentication()->getIdentity();
         $sg         = $this->getGameService();
+        $formUser = '';
+        $state = 'quizz';
 
         $game = $sg->checkGame($identifier);
         if (! $game || $game->isClosed()) {
@@ -188,18 +190,35 @@ class QuizController extends GameController
             	unset($data['submitForm']);
                 $entry = $this->getGameService()->createQuizReply($data, $game, $this->zfcUserAuthentication()->getIdentity());
 
-                return $this->redirect()->toUrl($this->url()->fromRoute('frontend/quiz/result', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+                $beforeLayout = $this->layout()->getTemplate();
+                // je délègue la responsabilité du formulaire à PlaygroundUser, y compris dans sa gestion des erreurs
+                $formUser = $this->forward()->dispatch('playgrounduser_user', array('action' => 'address'));
+
+                // TODO : suite au forward, le template de layout a changé, je dois le rétablir...
+                $this->layout()->setTemplate($beforeLayout);
+                $state = 'info';
+
             }
+            if(empty($data['questionGroup1'])){
+                return $this->redirect()->toUrl($this->url()->fromRoute('frontend/quiz/result', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')))); 
+            
+            }            
         }
 
         $viewModel = $this->buildView($game);
         $viewModel->setVariables(array(
-            'game' => $game,
+            'game'      => $game,
             'questions' => $questions,
-            'form' => $form,
+            'form'      => $form,
+            'state'     => $state,
             'explanations' => $explanations,
             'flashMessages' => $this->flashMessenger()->getMessages(),
         ));
+
+        if($state == 'info') {
+            $viewModel->addChild($formUser, 'formUser');  
+        }
+       
 
         return $viewModel;
     }
