@@ -42,7 +42,7 @@ class GameController extends AbstractActionController
         
         // If there is no welcome block, I don't display the welcome page
         if($game->getWelcomeBlock()===''){
-            return $this->forward()->dispatch('playgroundgame_'.$game->getClassType(), array('action' => 'play', 'id' => $identifier));
+            return $this->forward()->dispatch('playgroundgame_'.$game->getClassType(), array('action' => 'play', 'id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')));
         }
 
         // Determine if the play button should be a CTA button (call to action)
