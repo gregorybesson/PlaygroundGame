@@ -194,7 +194,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                 }else{
                     $some_prizes = $prize_mapper->findBy(array(
                             'game' => $game,
-                            'prize_title' => $prize_data['prize_title'],
+                            'title' => $prize_data['title'],
                         ));
                     if (count($some_prizes)==1){
                         $prize=$some_prizes[0];
@@ -392,7 +392,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                 }else{
                     $some_prizes = $prize_mapper->findBy(array(
                             'game' => $game,
-                            'prize_title' => $prize_data['prize_title'],
+                            'title' => $prize_data['title'],
                         ));
                     if (count($some_prizes)==1){
                         $prize=$some_prizes[0];
