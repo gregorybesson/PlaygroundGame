@@ -65,7 +65,7 @@ class QuizController extends AbstractActionController
         $form->bind($question);
 
         if ($this->getRequest()->isPost()) {
-            $data = $service->array_merge_recursive_num_keys(
+            $data = array_replace_recursive(
                 $this->getRequest()->getPost()->toArray(),
                 $this->getRequest()->getFiles()->toArray()
             );
@@ -106,7 +106,7 @@ class QuizController extends AbstractActionController
         $form->bind($question);
 
         if ($this->getRequest()->isPost()) {
-            $data = $service->array_merge_recursive_num_keys(
+            $data = array_replace_recursive(
                 $this->getRequest()->getPost()->toArray(),
                 $this->getRequest()->getFiles()->toArray()
             );

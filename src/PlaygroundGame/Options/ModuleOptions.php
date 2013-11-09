@@ -228,6 +228,3 @@ class ModuleOptions extends AbstractOptions implements GameEditOptionsInterface
     }
 
 }
-
-?>
-

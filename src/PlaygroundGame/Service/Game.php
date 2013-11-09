@@ -401,7 +401,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                     }               
                 }
                 // Remove if existing image
-                if ($prize->getPicture()){
+                if ($prize->getPicture() && file_exists($prize->getPicture())){
                     unlink($prize->getPicture());
                     $prize->getPicture(null);
                 }
