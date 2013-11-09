@@ -35,7 +35,7 @@ class TreasureHuntController extends AbstractActionController
 
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $data = $service->array_merge_recursive_num_keys(
+            $data = array_replace_recursive(
                 $this->getRequest()->getPost()->toArray(),
                 $this->getRequest()->getFiles()->toArray()
             );
@@ -100,7 +100,7 @@ class TreasureHuntController extends AbstractActionController
         $form->bind($game);
 
         if ($this->getRequest()->isPost()) {
-            $data = $service->array_merge_recursive_num_keys(
+            $data = array_replace_recursive(
                 $this->getRequest()->getPost()->toArray(),
                 $this->getRequest()->getFiles()->toArray()
             );
