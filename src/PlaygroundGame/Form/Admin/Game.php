@@ -232,15 +232,14 @@ class Game extends ProvidesEventsForm
         ));
 
         $this->add(array(
-                'name' => 'playLimit',
-                'type' => 'Zend\Form\Element\Text',
-                'attributes' => array(
-                        'placeholder' => $translator->translate('Tries limit per player', 'playgroundgame'),
-                ),
-                'options' => array(
-                        'label' => $translator->translate('What\'s the tries limit per player ?', 'playgroundgame'),
-
-                ),
+            'name' => 'playLimit',
+            'type' => 'Zend\Form\Element\Text',
+            'attributes' => array(
+                'placeholder' => $translator->translate('Tries limit per player', 'playgroundgame'),
+            ),
+            'options' => array(
+                'label' => $translator->translate('What\'s the tries limit per player ?', 'playgroundgame'),
+            ),
         ));
 
         $this->add(array(
@@ -587,6 +586,18 @@ class Game extends ProvidesEventsForm
         				'allow_remove' => true,
         				'target_element' => $prizeFieldset
         		)
+        ));
+        
+        $this->add(array(
+            'name' => 'steps',
+            'type' => 'Zend\Form\Element\Text',
+            'attributes' => array(
+                'placeholder' => $translator->translate('Game steps', 'playgroundgame'),
+                'value' => 'index,play,result,bounce',
+            ),
+            'options' => array(
+                'label' => $translator->translate('The steps of the game', 'playgroundgame'),
+            ),
         ));
 
         $submitElement = new Element\Button('submit');

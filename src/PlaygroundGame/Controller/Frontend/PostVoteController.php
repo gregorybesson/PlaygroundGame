@@ -38,7 +38,6 @@ class PostVoteController extends GameController
             return $this->notFoundAction();
         }
 
-
         $session = new Container('facebook');
         $channel = $this->getEvent()->getRouteMatch()->getParam('channel');
 
@@ -63,7 +62,7 @@ class PostVoteController extends GameController
                 $viewModel = $this->buildView($game);
                 $beforeLayout = $this->layout()->getTemplate();
 
-                $view = $this->forward()->dispatch('playgrounduser_user', array('action' => 'registerFacebookUser'));
+                $view = $this->forward()->dispatch('playgrounduser_user', array('controller' => 'playgrounduser_user','action' => 'registerFacebookUser'));
 
                 $this->layout()->setTemplate($beforeLayout);
                 $user = $view->user;
@@ -83,7 +82,6 @@ class PostVoteController extends GameController
 
         }
 
-
         $entry = $sg->play($game, $user);
 
         if (!$entry) {
@@ -97,11 +95,11 @@ class PostVoteController extends GameController
             $postId = $lastPost->getId();
             if ($lastPost->getStatus() == 2) {
                 // the user has already taken part of this game and the participation limit has been reached
-                $this->flashMessenger()->addMessage('Vous avez déjà participé!');
+                $this->flashMessenger()->addMessage($this->getServiceLocator()->get('translator')->translate('You have already a Post'));
 
                 return $this->redirect()->toUrl($this->url()->fromRoute('frontend/postvote/post',array('id' => $identifier, 'post' => $postId, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
             } else {
-                $this->flashMessenger()->addMessage('Votre participation est en cours de validation.');
+                $this->flashMessenger()->addMessage($this->getServiceLocator()->get('translator')->translate('Your Post is waiting for validation'));
 
                 return $this->redirect()->toUrl($this->url()->fromRoute('frontend/postvote/post', array('id' => $identifier, 'post' => $postId, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
             }
@@ -279,8 +277,6 @@ class PostVoteController extends GameController
             }
         }
 
-
-
         if ($this->getRequest()->isPost()) {
             // POST Request: Process form
             $data = array_merge_recursive(
@@ -297,7 +293,7 @@ class PostVoteController extends GameController
 
                 if ($post) {
                     // determine the route where the user should go
-                    $redirectUrl = $this->url()->fromRoute('frontend/postvote/play/preview', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')));
+                    $redirectUrl = $this->url()->fromRoute('frontend/postvote/preview', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')));
 
                     return $this->redirect()->toUrl($redirectUrl);
                 }

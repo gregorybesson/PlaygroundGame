@@ -28,7 +28,7 @@ class PostVoteController extends AbstractActionController
         $form = $service->getPostVoteFormMapper()->findByGame($game);
 
         // I use the wonderful Form Generator to create the Post & Vote form
-        $formgen = $this->forward()->dispatch('PlaygroundCore\Controller\Formgen', array('action' => 'create'));
+        $formgen = $this->forward()->dispatch('PlaygroundCore\Controller\Formgen', array('controller' => 'PlaygroundCore\Controller\Formgen', 'action' => 'create'));
 
         if ($this->getRequest()->isPost()) {
             $data = $this->getRequest()->getPost()->toArray();
@@ -222,8 +222,6 @@ class PostVoteController extends AbstractActionController
         // magically create $content as a string containing CSV data
         $gameId         = $this->getEvent()->getRouteMatch()->getParam('gameId');
         $game           = $this->getAdminGameService()->getGameMapper()->findById($gameId);
-        //$service        = $this->getLeaderBoardService();
-        //$leaderboards   = $service->getLeaderBoardMapper()->findBy(array('game' => $game));
 
         $entries = $this->getAdminGameService()->getEntryMapper()->findBy(array('game' => $game,'winner' => 1));
 		$posts   = $this->getAdminGameService()->getPostVotePostMapper()->findBy(array('postvote' => $game));

@@ -15,9 +15,9 @@ use Zend\InputFilter\InputFilterInterface;
 
 /**
  * @ORM\Entity @HasLifecycleCallbacks
- * @ORM\Table(name="game_treasurehunt_step")
+ * @ORM\Table(name="game_treasurehunt_puzzle")
  */
-class TreasureHuntStep implements InputFilterAwareInterface
+class TreasureHuntPuzzle implements InputFilterAwareInterface
 {
     protected $inputFilter;
 
@@ -29,7 +29,7 @@ class TreasureHuntStep implements InputFilterAwareInterface
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="TreasureHunt", inversedBy="steps")
+     * @ORM\ManyToOne(targetEntity="TreasureHunt", inversedBy="puzzles")
 	 * @ORM\JoinColumn(name="treasurehunt_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $treasurehunt;

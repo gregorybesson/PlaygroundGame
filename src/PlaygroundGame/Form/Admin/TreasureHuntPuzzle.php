@@ -9,7 +9,7 @@ use Zend\I18n\Translator\Translator;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Zend\ServiceManager\ServiceManager;
 
-class TreasureHuntStep extends ProvidesEventsForm
+class TreasureHuntPuzzle extends ProvidesEventsForm
 {
     public function __construct($name = null, ServiceManager $serviceManager, Translator $translator)
     {

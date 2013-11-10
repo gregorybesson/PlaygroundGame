@@ -50,7 +50,7 @@ class TreasureHuntController extends GameController
                 $viewModel = $this->buildView($game);
                 $beforeLayout = $this->layout()->getTemplate();
 
-                $view = $this->forward()->dispatch('playgrounduser_user', array('action' => 'registerFacebookUser'));
+                $view = $this->forward()->dispatch('playgrounduser_user', array('controller' => 'playgrounduser_user','action' => 'registerFacebookUser'));
 
                 $this->layout()->setTemplate($beforeLayout);
                 $user = $view->user;

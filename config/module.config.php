@@ -276,6 +276,16 @@ return array(
 		                            ),
 		                        ),
 		                    ),
+		                    'register' => array(
+		                        'type' => 'Literal',
+		                        'options' => array(
+		                            'route' => '/register',
+		                            'defaults' => array(
+		                                'controller' => 'playgroundgame_quiz',
+		                                'action'     => 'register',
+		                            ),
+		                        ),
+		                    ),
 		                    'fbshare' => array(
 		                        'type' => 'Literal',
 		                        'options' => array(
@@ -347,27 +357,27 @@ return array(
 		                		),
 		               		),
 		                    'prizes' => array(
-		                    		'type' => 'Literal',
-		                    		'options' => array(
-		                    				'route' => '/lots',
-		                    				'defaults' => array(
-		                    						'controller' => 'playgroundgame_quiz',
-		                    						'action'     => 'prizes',
-		                    				),
-		                    		),
-		                    		'may_terminate' => true,
-		                    		'child_routes' => array(
-		                    				'prize' => array(
-		                    						'type' => 'Segment',
-		                    						'options' => array(
-		                    								'route' => '/:prize',
-		                    								'defaults' => array(
-		                    										'controller' => 'playgroundgame_quiz',
-		                    										'action'     => 'prize',
-		                    								),
-		                    						),
-		                    				),
-		                    		),
+	                    		'type' => 'Literal',
+	                    		'options' => array(
+                    				'route' => '/lots',
+                    				'defaults' => array(
+                						'controller' => 'playgroundgame_quiz',
+                						'action'     => 'prizes',
+                    				),
+	                    		),
+	                    		'may_terminate' => true,
+	                    		'child_routes' => array(
+                    				'prize' => array(
+                						'type' => 'Segment',
+                						'options' => array(
+            								'route' => '/:prize',
+            								'defaults' => array(
+        										'controller' => 'playgroundgame_quiz',
+        										'action'     => 'prize',
+            								),
+                						),
+                    				),
+	                    		),
 		                    ),
 		                ),
 		            ),
@@ -400,6 +410,16 @@ return array(
 		                            'defaults' => array(
 		                                'controller' => 'playgroundgame_lottery',
 		                                'action'     => 'result',
+		                            ),
+		                        ),
+		                    ),
+		                    'register' => array(
+		                        'type' => 'Literal',
+		                        'options' => array(
+		                            'route' => '/register',
+		                            'defaults' => array(
+		                                'controller' => 'playgroundgame_lottery',
+		                                'action'     => 'register',
 		                            ),
 		                        ),
 		                    ),
@@ -527,6 +547,16 @@ return array(
 		                            'defaults' => array(
 		                                'controller' => 'playgroundgame_instantwin',
 		                                'action'     => 'result',
+		                            ),
+		                        ),
+		                    ),
+		                    'register' => array(
+		                        'type' => 'Literal',
+		                        'options' => array(
+		                            'route' => '/register',
+		                            'defaults' => array(
+		                                'controller' => 'playgroundgame_instantwin',
+		                                'action'     => 'register',
 		                            ),
 		                        ),
 		                    ),
@@ -672,16 +702,6 @@ return array(
 		                        ),
 		                        'may_terminate' => true,
 		                        'child_routes' => array(
-		                            'preview' => array(
-		                                'type' => 'Literal',
-		                                'options' => array(
-		                                    'route' => '/previsualiser',
-		                                    'defaults' => array(
-		                                        'controller' => 'playgroundgame_postvote',
-		                                        'action'     => 'preview',
-		                                    ),
-		                                ),
-		                            ),
 		                            'ajaxupload' => array(
 		                                'type' => 'Literal',
 		                                'options' => array(
@@ -701,6 +721,16 @@ return array(
 		                                        'action'     => 'ajaxdelete',
 		                                    ),
 		                                ),
+		                            ),
+		                        ),
+		                    ),
+		                    'preview' => array(
+		                        'type' => 'Literal',
+		                        'options' => array(
+		                            'route' => '/previsualiser',
+		                            'defaults' => array(
+		                                'controller' => 'playgroundgame_postvote',
+		                                'action'     => 'preview',
 		                            ),
 		                        ),
 		                    ),
@@ -744,6 +774,16 @@ return array(
 		                            'defaults' => array(
 		                                'controller' => 'playgroundgame_postvote',
 		                                'action'     => 'result',
+		                            ),
+		                        ),
+		                    ),
+		                    'register' => array(
+		                        'type' => 'Literal',
+		                        'options' => array(
+		                            'route' => '/register',
+		                            'defaults' => array(
+		                                'controller' => 'playgroundgame_postvote',
+		                                'action'     => 'register',
 		                            ),
 		                        ),
 		                    ),
@@ -873,16 +913,26 @@ return array(
      									),
        								),
        							),
-       								'fbshare' => array(
-       									'type' => 'Literal',
-       									'options' => array(
-       										'route' => '/fbshare',
-       										'defaults' => array(
-       											'controller' => 'playgroundgame_treasurehunt',
-       											'action'     => 'fbshare',
-       										),
-       									),
+       						    'register' => array(
+       						        'type' => 'Literal',
+       						        'options' => array(
+       						            'route' => '/register',
+       						            'defaults' => array(
+       						                'controller' => 'playgroundgame_treasurehunt',
+       						                'action'     => 'register',
+       						            ),
+       						        ),
+       						    ),
+   								'fbshare' => array(
+   									'type' => 'Literal',
+   									'options' => array(
+   										'route' => '/fbshare',
+   										'defaults' => array(
+   											'controller' => 'playgroundgame_treasurehunt',
+   											'action'     => 'fbshare',
+   										),
    									),
+								),
        									'tweet' => array(
        											'type' => 'Literal',
        											'options' => array(
@@ -1742,13 +1792,13 @@ return array(
                         			),
                    				),
                        		),
-                        		'treasurehunt-step-list' => array(
+                        		'treasurehunt-puzzle-list' => array(
                         			'type' => 'Segment',
                         			'options' => array(
-                        				'route' => '/treasurehunt-step-list/:gameId[/:filter][/:p]',
+                        				'route' => '/treasurehpuzzlepuzzle-list/:gameId[/:filter][/:p]',
                         				'defaults' => array(
                        						'controller'   => 'playgroundgame_admin_treasurehunt',
-                       						'action'       => 'listStep',
+                       						'action'       => 'listPuzzle',
                        						'gameId'	   => 0,
                        						'filter'	   => 'DESC'
                    						),
@@ -1757,37 +1807,37 @@ return array(
                    						),
                        				),
                         		),
-                        		'treasurehunt-step-add' => array(
+                        		'treasurehunt-puzzle-add' => array(
                         			'type' => 'Segment',
                         			'options' => array(
-                       					'route' => '/treasurehunt-step-add/:gameId',
+                       					'route' => '/treasurehunt-puzzle-add/:gameId',
                    						'defaults' => array(
                    							'controller' => 'playgroundgame_admin_treasurehunt',
-                   							'action'     => 'addStep',
+                   							'action'     => 'addPuzzle',
                    							'gameId'     => 0
                         				),
                         			),
                         		),
-                        		'treasurehunt-step-edit' => array(
+                        		'treasurehunt-puzzle-edit' => array(
                         			'type' => 'Segment',
                         			'options' => array(
-                        				'route' => '/treasurehunt-step-edit/:gameId/:stepId',
+                        				'route' => '/treasurehunt-puzzle-edit/:gameId/:puzzleId',
                    						'defaults' => array(
                								'controller' => 'playgroundgame_admin_treasurehunt',
-               								'action'     => 'editStep',
+               								'action'     => 'editPuzzle',
                         					'gameId'     => 0,
-                   							'stepId'     => 0
+                   							'puzzleId'     => 0
                    						),
                        				),
                         		),
-                        		'treasurehunt-step-remove' => array(
+                        		'treasurehunt-puzzle-remove' => array(
                         			'type' => 'Segment',
                         			'options' => array(
-                        				'route' => '/treasurehunt-step-remove/:stepId',
+                        				'route' => '/treasurehunt-puzzle-remove/:puzzleId',
                    						'defaults' => array(
                								'controller' => 'playgroundgame_admin_treasurehunt',
-               								'action'     => 'removeStep',
-                        					'stepId'     => 0
+               								'action'     => 'removePuzzle',
+                        					'puzzleId'     => 0
                         				),
                         			),
                         		),
@@ -1892,7 +1942,7 @@ return array(
                     ),
                     'postvote_preview' => array(
                         'label' => 'Post & vote',
-                        'route' => 'postvote/play/preview',
+                        'route' => 'postvote/preview',
                     ),
                     'postvote_result' => array(
                         'label' => 'Post & vote',

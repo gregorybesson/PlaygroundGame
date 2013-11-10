@@ -21,11 +21,11 @@ if (isset($fm[0]))
         <!--<th><?php echo $this->translate('Id'); ?></th>-->
         <th>
         	<?php if($this->filter == 'ASC'): ?>
-        	    <a href="<?php echo $this->url('admin/playgroundgame/treasurehunt-step-list', array('gameId' => $this->gameId, 'filter' => 'DESC')); ?>">
+        	    <a href="<?php echo $this->url('admin/playgroundgame/treasurehunt-puzzle-list', array('gameId' => $this->gameId, 'filter' => 'DESC')); ?>">
         	    	<img src="/images/admin/arrow-down.png" alt="" />
         	    </a>
 			<?php else : ?>
-				<a href="<?php echo $this->url('admin/playgroundgame/treasurehunt-step-list', array('gameId' => $this->gameId, 'filter' => 'ASC')); ?>">
+				<a href="<?php echo $this->url('admin/playgroundgame/treasurehunt-puzzle-list', array('gameId' => $this->gameId, 'filter' => 'ASC')); ?>">
 					<img src="/images/admin/arrow-up.png" alt="" />
 				</a>
         	<?php endif; ?>

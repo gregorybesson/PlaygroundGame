@@ -257,6 +257,11 @@ class Game implements InputFilterAwareInterface
      * @ORM\Column(name="tw_share_message", type="string", length=255, nullable=true)
      */
     protected $twShareMessage;
+    
+    /**
+     * @ORM\Column(name="steps", type="string", length=255, nullable=false)
+     */
+    protected $steps = 'index,play,result,bounce';
 
     /**
      * Doctrine accessible value of discriminator (field 'type' is not
@@ -658,10 +663,90 @@ class Game implements InputFilterAwareInterface
 
         return false;
     }
+    
+    public function getStepsArray()
+    {
+        $steps = null;
+        if($this->getSteps()){
+            $steps = explode(",", $this->getSteps());
+        }
+        if(!$steps){
+            $steps = array('index','play','result','bounce');
+        }
+        return $steps;
+    }
+    
+    public function getSteps()
+    {
+        return $this->steps;
+    }
+    
+    public function setSteps($steps)
+    {
+        $this->steps = $steps;
+    }
+    
+    /**
+     * This method returns the first step in the game workflow
+     * @param string $step
+     * @return string
+     */
+    public function firstStep()
+    {
+        $steps = $this->getStepsArray();
+    
+        return $steps[0];
+    }
+    
+    /**
+     * This method returns the last step in the game workflow
+     * @param string $step
+     * @return string
+     */
+    public function lastStep()
+    {
+        $steps = $this->getStepsArray();
+        $nbSteps = count($steps);
+    
+        return $steps[$nbSteps-1];
+    }
+    
+    /**
+     * This method returns the previous step in the game workflow
+     * @param string $step
+     * @return string
+     */
+    public function previousStep($step = null)
+    {
+        $steps = $this->getStepsArray();
+        $key = array_search($step, $steps);
+    
+        if(is_int($key) && $key > 0 ){
+            return $steps[$key-1];
+        }
+    
+        return false;
+    }
+    
+    /**
+     * This method returns the next step in the game workflow
+     * @param string $step
+     * @return string
+     */
+    public function nextStep($step = null)
+    {
+        $steps = $this->getStepsArray();
+        $key = array_search($step, $steps);
+        
+        if(is_int($key) && $key < count($steps)-1 ){
+            return $steps[$key+1];
+        }
+        
+        return false;
+    }
 
     public function getState()
     {
-
         if ($this->isOpen()){
             if (!$this->isStarted() && !$this->isFinished()) {
                 return self::GAME_PUBLISHED;

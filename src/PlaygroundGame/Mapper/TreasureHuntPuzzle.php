@@ -5,7 +5,7 @@ namespace PlaygroundGame\Mapper;
 use Doctrine\ORM\EntityManager;
 use PlaygroundGame\Options\ModuleOptions;
 
-class TreasureHuntStep
+class TreasureHuntPuzzle
 {
     /**
      * @var \Doctrine\ORM\EntityManager
@@ -75,7 +75,7 @@ class TreasureHuntStep
     public function getEntityRepository()
     {
         if (null === $this->er) {
-            $this->er = $this->em->getRepository('PlaygroundGame\Entity\TreasureHuntStep');
+            $this->er = $this->em->getRepository('PlaygroundGame\Entity\TreasureHuntPuzzle');
         }
 
         return $this->er;
