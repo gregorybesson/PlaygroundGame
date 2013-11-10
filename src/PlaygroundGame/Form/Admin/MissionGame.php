@@ -24,10 +24,10 @@ class MissionGame extends ProvidesEventsForm
         $missionGameCondition = new MissionGameCondition(null, $serviceManager, $translator);
         $this->add(array(
             'type'    => 'Zend\Form\Element\Collection',
-            'name'    => 'missionGameCondition',
+            'name'    => 'missionGameCondition', 
             'options' => array(
                 'id'    => 'missionGameCondition',
-                'label' => $translator->translate('List of MissionGameCondition', 'playgroundgame'),
+                'label' => $translator->translate('Games', 'playgroundgame'),
                 'count' => 0,
                 'should_create_template' => true,
                 'allow_add' => true,

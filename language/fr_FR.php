@@ -16,9 +16,10 @@ return array(
     'Add options' 			=> 'Ajouter des options',
     'Add new game' 			=> 'Ajouter un jeu',
     'Add new lottery' 		=> 'Ajouter un tirage au sort',
+    'Add new sweepstake'    => 'Ajouter un tirage au sort',
     'Add new Quiz' 			=> 'Ajouter un quizz',
     'Add new Instant Win'   => 'Ajouter un instant gagnant',
-    'Add new Post & Vote'   => 'Ajouter un Post & Vote',
+    'Add new Post&Vote'     => 'Ajouter un Post&Vote',
 	'Add new Treasure Hunt' => 'Ajouter une chasse au trésor',
     'Active' 			    => 'Actif',
     'Activate the game'     => 'Activer le jeu',
@@ -28,7 +29,7 @@ return array(
     'Entries'               => 'Participations',
     'Add new occurrence'	=> 'Ajouter un instant gagnant',
     'Status'            	=> 'Statut',
-	'Participants'			=> 'Participants',
+	'Entries'			    => 'Participants',
 	'Gamers'				=> 'Joueurs',
 	'State'					=> 'Etat',
 	'Subscribers'			=> 'Abonnés',
@@ -231,10 +232,23 @@ return array(
 	'Player type who can participate' => 'Type de joueur pouvant participer',
 
 
-    // Admin Instantwin occurence
+    // Admin Instantwin occurrence
     'Add occurrence'	=> 'Ajouter un instant gagnant',
     'Occurrence Date' 	=> 'Date de l\'instant gagnant',
     'Edit occurrence'	=> 'Editer un instant gagnant',
+    
+    // Admin Mission
+    'Mission Management' => 'Gestion des missions',
+    'Missions'           => 'Missions',
+    'Add new mission'    => 'Ajouter une nouvelle mission',
+    'Linked games'       => 'Jeux associés',
+    'Link games'         => 'Associer des jeux',
+    'Activate mission'   => 'Activer la mission',
+    'Deactivate mission' => 'Désactiver la mission',
+    'Add a game'         => 'Ajouter un jeu',
+    'Game'               => 'Jeu',
+    
+    'Hide Mission header' => 'Cacher l\'en-tête de mission',
 
 	// Front post&vote email moderation
 	'This post has been reported in a game.' => 'Ce post a été signalé dans un jeu.',
