@@ -381,8 +381,6 @@ class InstantWinController extends AbstractActionController
         // magically create $content as a string containing CSV data
         $gameId         = $this->getEvent()->getRouteMatch()->getParam('gameId');
         $game           = $this->getAdminGameService()->getGameMapper()->findById($gameId);
-        //$service        = $this->getLeaderBoardService();
-        //$leaderboards   = $service->getLeaderBoardMapper()->findBy(array('game' => $game));
 
         $entries = $this->getAdminGameService()->getEntryMapper()->findBy(array('game' => $game,'winner' => 1));
 

@@ -15,9 +15,9 @@ class TreasureHunt extends Game implements ServiceManagerAwareInterface
     protected $treasurehuntMapper;
     
     /**
-     * @var TreasurehuntStepMapper
+     * @var TreasurehuntPuzzleMapper
      */
-    protected $treasureHuntStepMapper;
+    protected $treasureHuntPuzzleMapper;
 
     public function getGameEntity()
     {
@@ -32,12 +32,12 @@ class TreasureHunt extends Game implements ServiceManagerAwareInterface
      * @param  string                 $formClass
      * @return \PlaygroundGame\Entity\Game
      */
-    public function createStep(array $data)
+    public function createPuzzle(array $data)
     {
     
-    	$step  = new \PlaygroundGame\Entity\TreasureHuntStep();
-    	$form  = $this->getServiceManager()->get('playgroundgame_treasurehuntstep_form');
-    	$form->bind($step);
+    	$puzzle  = new \PlaygroundGame\Entity\TreasureHuntPuzzle();
+    	$form  = $this->getServiceManager()->get('playgroundgame_treasurehuntpuzzle_form');
+    	$form->bind($puzzle);
     	$form->setData($data);
     
     	$treasurehunt = $this->getGameMapper()->findById($data['treasurehunt_id']);
@@ -46,13 +46,13 @@ class TreasureHunt extends Game implements ServiceManagerAwareInterface
     		return false;
     	}
     
-    	$step->setTreasurehunt($treasurehunt);
+    	$puzzle->setTreasurehunt($treasurehunt);
     
     	$this->getEventManager()->trigger(__FUNCTION__, $this, array('game' => $treasurehunt, 'data' => $data));
-    	$this->getTreasureHuntStepMapper()->insert($step);
+    	$this->getTreasureHuntPuzzleMapper()->insert($puzzle);
     	$this->getEventManager()->trigger(__FUNCTION__.'.post', $this, array('game' => $treasurehunt, 'data' => $data));
     
-    	return $step;
+    	return $puzzle;
     }
     
     /**
@@ -61,24 +61,24 @@ class TreasureHunt extends Game implements ServiceManagerAwareInterface
      * @param  string                 $formClass
      * @return \PlaygroundGame\Entity\Game
      */
-    public function updateStep(array $data, $step)
+    public function updatePuzzle(array $data, $puzzle)
     {
     
-    	$form  = $this->getServiceManager()->get('playgroundgame_treasurehuntstep_form');
-    	$form->bind($step);
+    	$form  = $this->getServiceManager()->get('playgroundgame_treasurehuntpuzzle_form');
+    	$form->bind($puzzle);
     	$form->setData($data);
     
     	if (!$form->isValid()) {
     		return false;
     	}
     
-    	$treasurehunt = $step->getTreasurehunt();
+    	$treasurehunt = $puzzle->getTreasurehunt();
     
-    	$this->getEventManager()->trigger(__FUNCTION__, $this, array('step' => $step, 'data' => $data));
-    	$this->getTreasureHuntStepMapper()->update($step);
-    	$this->getEventManager()->trigger(__FUNCTION__.'.post', $this, array('step' => $step, 'data' => $data));
+    	$this->getEventManager()->trigger(__FUNCTION__, $this, array('puzzle' => $puzzle, 'data' => $data));
+    	$this->getTreasureHuntPuzzleMapper()->update($puzzle);
+    	$this->getEventManager()->trigger(__FUNCTION__.'.post', $this, array('puzzle' => $puzzle, 'data' => $data));
     
-    	return $step;
+    	return $puzzle;
     }
 
     /**
@@ -109,28 +109,28 @@ class TreasureHunt extends Game implements ServiceManagerAwareInterface
     }
     
     /**
-     * getTreasureHuntStepMapper
+     * getTreasureHuntPuzzleMapper
      *
-     * @return TreasureHuntStepMapperInterface
+     * @return TreasureHuntPuzzleMapperInterface
      */
-    public function getTreasureHuntStepMapper()
+    public function getTreasureHuntPuzzleMapper()
     {
-    	if (null === $this->treasureHuntStepMapper) {
-    		$this->treasureHuntStepMapper = $this->getServiceManager()->get('playgroundgame_treasurehuntstep_mapper');
+    	if (null === $this->treasureHuntPuzzleMapper) {
+    		$this->treasureHuntPuzzleMapper = $this->getServiceManager()->get('playgroundgame_treasurehuntpuzzle_mapper');
     	}
     
-    	return $this->treasureHuntStepMapper;
+    	return $this->treasureHuntPuzzleMapper;
     }
     
     /**
-     * setTreasureHuntStepMapper
+     * setTreasureHuntPuzzleMapper
      *
-     * @param  TreasureHuntStepMapperInterface $quizquestionMapper
-     * @return TreasureHuntStep
+     * @param  TreasureHuntPuzzleMapperInterface $quizquestionMapper
+     * @return TreasureHuntPuzzle
      */
-    public function setTreasureHuntStepMapper($treasureHuntStepMapper)
+    public function setTreasureHuntPuzzleMapper($treasureHuntPuzzleMapper)
     {
-    	$this->treasureHuntStepMapper = $treasureHuntStepMapper;
+    	$this->treasureHuntPuzzleMapper = $treasureHuntPuzzleMapper;
     
     	return $this;
     }

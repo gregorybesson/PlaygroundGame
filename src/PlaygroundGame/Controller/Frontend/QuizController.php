@@ -33,8 +33,6 @@ class QuizController extends GameController
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
         $user       = $this->zfcUserAuthentication()->getIdentity();
         $sg         = $this->getGameService();
-        $formUser = '';
-        $state = 'quiz';
 
         $game = $sg->checkGame($identifier);
         if (! $game || $game->isClosed()) {
@@ -50,7 +48,7 @@ class QuizController extends GameController
         if ($channel == 'facebook' && $session->offsetExists('signed_request')) {
             if($game->getFbFan()){
                 if ($sg->checkIsFan($game) === false){
-                    return $this->redirect()->toRoute($game->getClassType().'/fangate',array('id' => $game->getIdentifier()));
+                    return $this->redirect()->toRoute('frontend/' . $game->getClassType().'/fangate',array('id' => $game->getIdentifier()));
                 }
             }
         }
@@ -66,21 +64,21 @@ class QuizController extends GameController
                 $viewModel = $this->buildView($game);
                 $beforeLayout = $this->layout()->getTemplate();
 
-                $view = $this->forward()->dispatch('playgrounduser_user', array('action' => 'registerFacebookUser'));
+                $view = $this->forward()->dispatch('playgrounduser_user', array('controller' => 'playgrounduser_user','action' => 'registerFacebookUser'));
 
                 $this->layout()->setTemplate($beforeLayout);
                 $user = $view->user;
 
                 // If the user can not be created/retrieved from Facebook info, redirect to login/register form
                 if (!$user){
-                    $redirect = urlencode($this->url()->fromRoute('frontend/quiz/play', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)));
+                    $redirect = urlencode($this->url()->fromRoute('frontend/'. $game->getClassType() . '/play', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)));
                 return $this->redirect()->toUrl($this->url()->fromRoute('frontend/zfcuser/register', array('channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))) . '?redirect='.$redirect);
                 }
 
                 // The game is not played from Facebook : redirect to login/register form
 
             } else {
-                $redirect = urlencode($this->url()->fromRoute('frontend/quiz/play', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)));
+                $redirect = urlencode($this->url()->fromRoute('frontend/'. $game->getClassType() . '/play', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)));
                 return $this->redirect()->toUrl($this->url()->fromRoute('frontend/zfcuser/register', array('channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))) . '?redirect='.$redirect);
             }
 
@@ -92,7 +90,7 @@ class QuizController extends GameController
             // the user has already taken part of this game and the participation limit has been reached
             $this->flashMessenger()->addMessage('Vous avez déjà participé!');
 
-            return $this->redirect()->toUrl($this->url()->fromRoute('frontend/quiz/result',array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+            return $this->redirect()->toUrl($this->url()->fromRoute('frontend/'. $game->getClassType() . '/result',array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
         }
 
         $questions = $game->getQuestions();
@@ -191,20 +189,9 @@ class QuizController extends GameController
             if ($game->getTimer() || $form->isValid()) {
             	unset($data['submitForm']);
                 $entry = $this->getGameService()->createQuizReply($data, $game, $this->zfcUserAuthentication()->getIdentity());
-
-                $beforeLayout = $this->layout()->getTemplate();
-                // je délègue la responsabilité du formulaire à PlaygroundUser, y compris dans sa gestion des erreurs
-                $formUser = $this->forward()->dispatch('playgrounduser_user', array('action' => 'address'));
-
-                // TODO : suite au forward, le template de layout a changé, je dois le rétablir...
-                $this->layout()->setTemplate($beforeLayout);
-                $state = 'info';
-
             }
-            if(empty($data['questionGroup1'])){
-                return $this->redirect()->toUrl($this->url()->fromRoute('frontend/quiz/result', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')))); 
-            
-            }            
+                
+            return $this->redirect()->toUrl($this->url()->fromRoute('frontend/'. $game->getClassType() . '/'. $game->nextStep($this->params('action')), array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));          
         }
 
         $viewModel = $this->buildView($game);
@@ -212,15 +199,9 @@ class QuizController extends GameController
             'game'      => $game,
             'questions' => $questions,
             'form'      => $form,
-            'state'     => $state,
             'explanations' => $explanations,
             'flashMessages' => $this->flashMessenger()->getMessages(),
         ));
-
-        if($state == 'info') {
-            $viewModel->addChild($formUser, 'formUser');  
-        }
-       
 
         return $viewModel;
     }

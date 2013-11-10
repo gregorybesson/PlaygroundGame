@@ -593,6 +593,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     	$game = new GameEntity();
     	$game->setBroadcastPlatform(true);
     	$game->setActive(true);
+    	$game->setClassType('lottery');
     	$game->setIdentifier('gameid');
 
     	$entry = new \PlaygroundGame\Entity\Entry();

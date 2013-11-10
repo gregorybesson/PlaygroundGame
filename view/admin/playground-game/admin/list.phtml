@@ -66,7 +66,7 @@ if (isset($fm[0]))
                 <?php $optionLink = $this->url('admin/playgroundgame/instantwin-occurrence-list', array('gameId' => $game->getId())); 
                     $optionLinkName = $this->translate('Handle occurrences'); ?>
             <?php elseif($game->getClassType() == 'treasurehunt'):?>
-                <?php $optionLink = $this->url('admin/playgroundgame/treasurehunt-step-list', array('gameId' => $game->getId())); ?>
+                <?php $optionLink = $this->url('admin/playgroundgame/treasurehunt-puzzle-list', array('gameId' => $game->getId())); ?>
             <?php elseif($game->getClassType() == 'postvote'):?>
                 <?php $optionLink = $this->url('admin/playgroundgame/postvote-form', array('gameId' => $game->getId())); ?>
             <?php else: ?>

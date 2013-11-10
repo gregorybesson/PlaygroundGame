@@ -50,7 +50,7 @@ class LotteryController extends GameController
                 $viewModel = $this->buildView($game);
                 $beforeLayout = $this->layout()->getTemplate();
 
-                $view = $this->forward()->dispatch('playgrounduser_user', array('action' => 'registerFacebookUser'));
+                $view = $this->forward()->dispatch('playgrounduser_user', array('controller' => 'playgrounduser_user', 'action' => 'registerFacebookUser'));
 
                 $this->layout()->setTemplate($beforeLayout);
                 $user = $view->user;
@@ -73,18 +73,18 @@ class LotteryController extends GameController
 
         $entry = $sg->play($game, $user);
         if (!$entry) {
-            // the user has already taken part of this game and the participation limit has been reache
+            // the user has already taken part of this game and the participation limit has been reached
             $this->flashMessenger()->addMessage('Vous avez déjà participé');
 
             return $this->redirect()->toUrl($this->url()->fromRoute('frontend/lottery/result',array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
         }
 
-        // Every participation is eligible to draw
+        // Every entry is eligible to draw
         $entry->setDrawable(true);
         $entry->setActive(false);
         $sg->getEntryMapper()->update($entry);
 
-        return $this->redirect()->toUrl($this->url()->fromRoute('frontend/lottery/result', array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+        return $this->redirect()->toUrl($this->url()->fromRoute('frontend/'. $game->getClassType() . '/'. $game->nextStep($this->params('action')), array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
     }
 
     public function resultAction()

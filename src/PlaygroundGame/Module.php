@@ -374,8 +374,8 @@ class Module
                 	return $mapper;
                 },
                 
-                'playgroundgame_treasurehuntstep_mapper' => function ($sm) {
-                	$mapper = new \PlaygroundGame\Mapper\TreasureHuntStep(
+                'playgroundgame_treasurehuntPuzzle_mapper' => function ($sm) {
+                	$mapper = new \PlaygroundGame\Mapper\TreasureHuntPuzzle(
                 			$sm->get('doctrine.entitymanager.orm_default'),
                 			$sm->get('playgroundgame_module_options')
                 	);
@@ -495,11 +495,11 @@ class Module
                 	return $form;
                 },
                 
-                'playgroundgame_treasurehuntstep_form' => function($sm) {
+                'playgroundgame_treasurehuntpuzzle_form' => function($sm) {
                 	$translator = $sm->get('translator');
-                	$form = new Form\Admin\TreasureHuntStep(null, $sm, $translator);
-                	$treasurehuntStep = new Entity\TreasureHuntStep();
-                	$form->setInputFilter($treasurehuntStep->getInputFilter());
+                	$form = new Form\Admin\TreasureHuntPuzzle(null, $sm, $translator);
+                	$treasurehuntPuzzle = new Entity\TreasureHuntPuzzle();
+                	$form->setInputFilter($treasurehuntPuzzle->getInputFilter());
                 
                 	return $form;
                 },
