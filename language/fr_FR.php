@@ -25,6 +25,7 @@ return array(
     'Desactivate the game'  => 'Désactiver le jeu',
     'Yes' 					=> 'Oui',
     'No' 					=> 'Non',
+    'Entries'               => 'Participations',
     'Add new occurrence'	=> 'Ajouter un instant gagnant',
     'Status'            	=> 'Statut',
 	'Participants'			=> 'Participants',
@@ -140,7 +141,7 @@ return array(
 	'Creation frequency' => 'Fréquence de création',
 	'Game Image scraping' => 'Image de grattage du jeu',
 
-    // Admin Leaderboard list
+    // Admin Entry list
     'User' 				=> 'Joueur',
     'Points' 			=> 'Points',
     'Register a new customer' => 'Inscrire un nouveau joueur',

@@ -25,7 +25,7 @@ return array(
     'Desactivate the game'  => 'Desactivate the game',
     'Yes' 				=> 'Yes',
     'No' 				=> 'No',
-    'Leader Board' 		=> 'Leader Board',
+    'Entries' 		    => 'Entries',
     'Add new occurrence'=> 'Add new occurrence',
     'Status'            => 'Status',
 
@@ -134,7 +134,7 @@ return array(
 	'Creation frequency' => 'Creation frequency',
 	'Game Image scraping' => 'Game Image scraping',
 
-    // Admin Leaderboard list
+    // Admin Entry list
     'User' 				=> 'User',
     'Points' 			=> 'Points',
     'Register a new customer' => 'Register a new customer',
