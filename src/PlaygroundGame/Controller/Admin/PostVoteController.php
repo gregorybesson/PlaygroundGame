@@ -170,12 +170,12 @@ class PostVoteController extends AbstractActionController
         $status = $this->getEvent()->getRouteMatch()->getParam('status');
 
         if (!$postId) {
-            return $this->redirect()->toUrl($this->url()->fromRoute('admin/postvote/leaderboard', array('gameId' => 0)));
+            return $this->redirect()->toUrl($this->url()->fromRoute('admin/postvote/entry', array('gameId' => 0)));
         }
         $post = $service->getPostVotePostMapper()->findById($postId);
 
         if (! $post) {
-            return $this->redirect()->toUrl($this->url()->fromRoute('admin/postvote/leaderboard', array('gameId' => 0)));
+            return $this->redirect()->toUrl($this->url()->fromRoute('admin/postvote/entry', array('gameId' => 0)));
         }
         $game = $post->getPostvote();
 
@@ -183,18 +183,18 @@ class PostVoteController extends AbstractActionController
             $post->setStatus(2);
             $service->getPostVotePostMapper()->update($post);
 
-            return $this->redirect()->toUrl($this->url()->fromRoute('admin/postvote/leaderboard', array('gameId' => $game->getId())));
+            return $this->redirect()->toUrl($this->url()->fromRoute('admin/postvote/entry', array('gameId' => $game->getId())));
         } elseif ($status && $status=='rejection') {
             $post->setStatus(9);
             $service->getPostVotePostMapper()->update($post);
 
-            return $this->redirect()->toUrl($this->url()->fromRoute('admin/postvote/leaderboard', array('gameId' => $game->getId())));
+            return $this->redirect()->toUrl($this->url()->fromRoute('admin/postvote/entry', array('gameId' => $game->getId())));
         }
 
         return array('game' => $game, 'post' => $post);
     }
 
-    public function leaderboardAction()
+    public function entryAction()
     {
         $gameId         = $this->getEvent()->getRouteMatch()->getParam('gameId');
         $game           = $this->getAdminGameService()->getGameMapper()->findById($gameId);
@@ -264,7 +264,7 @@ class PostVoteController extends AbstractActionController
         $headers = $response->getHeaders();
         $headers->addHeaderLine('Content-Encoding: UTF-8');
         $headers->addHeaderLine('Content-Type', 'text/csv; charset=UTF-8');
-        $headers->addHeaderLine('Content-Disposition', "attachment; filename=\"leaderboard.csv\"");
+        $headers->addHeaderLine('Content-Disposition', "attachment; filename=\"entry.csv\"");
         $headers->addHeaderLine('Accept-Ranges', 'bytes');
         $headers->addHeaderLine('Content-Length', strlen($content));
 

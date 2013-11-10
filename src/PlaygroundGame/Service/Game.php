@@ -2,7 +2,6 @@
 
 namespace PlaygroundGame\Service;
 
-use PlaygroundGame\Entity\LeaderBoard;
 use PlaygroundGame\Entity\Entry;
 
 use Zend\Session\Container;

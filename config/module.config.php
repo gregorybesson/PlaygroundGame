@@ -1131,13 +1131,13 @@ return array(
                             ),
                         ),
                         'child_routes' =>array(
-                            'leaderboard' => array(
+                            'entry' => array(
                                 'type' => 'Segment',
                                 'options' => array(
-                                    'route' => '/leaderboard/:gameId[/:p]',
+                                    'route' => '/entry/:gameId[/:p]',
                                     'defaults' => array(
                                         'controller' => 'playgroundgame_admin_quiz',
-                                        'action'     => 'leaderboard',
+                                        'action'     => 'entry',
                                         'gameId'     => 0
                                     ),
                                 ),
@@ -1175,13 +1175,13 @@ return array(
                             ),
                         ),
                         'child_routes' =>array(
-                            'leaderboard' => array(
+                            'entry' => array(
                                 'type' => 'Segment',
                                 'options' => array(
-                                    'route' => '/leaderboard/:gameId[/:p]',
+                                    'route' => '/entry/:gameId[/:p]',
                                     'defaults' => array(
                                         'controller' => 'playgroundgame_admin_lottery',
-                                        'action'     => 'leaderboard',
+                                        'action'     => 'entry',
                                         'gameId'     => 0
                                     ),
                                 ),
@@ -1219,13 +1219,13 @@ return array(
                             ),
                         ),
                         'child_routes' =>array(
-                            'leaderboard' => array(
+                            'entry' => array(
                                 'type' => 'Segment',
                                 'options' => array(
-                                    'route' => '/leaderboard/:gameId[/:p]',
+                                    'route' => '/entry/:gameId[/:p]',
                                     'defaults' => array(
                                     	'controller' => 'playgroundgame_admin_instantwin',
-                                        'action'     => 'leaderboard',
+                                        'action'     => 'entry',
                                         'gameId'     => 0
                                     ),
                                 ),
@@ -1253,13 +1253,13 @@ return array(
                                     ),
                             ),
                             'child_routes' =>array(
-                                    'leaderboard' => array(
+                                    'entry' => array(
                                         'type' => 'Segment',
                                         'options' => array(
-                                            'route' => '/leaderboard/:gameId[/:p]',
+                                            'route' => '/entry/:gameId[/:p]',
                                             'defaults' => array(
                                                 'controller' => 'playgroundgame_admin_postvote',
-                                                'action'     => 'leaderboard',
+                                                'action'     => 'entry',
                                                 'gameId'     => 0
                                             ),
                                         ),
@@ -1287,13 +1287,13 @@ return array(
                 						),
                 				),
                 				'child_routes' =>array(
-                						'leaderboard' => array(
+                						'entry' => array(
                 								'type' => 'Segment',
                 								'options' => array(
-                										'route' => '/leaderboard/:gameId[/:p]',
+                										'route' => '/entry/:gameId[/:p]',
                 										'defaults' => array(
                 												'controller' => 'playgroundgame_admin_treasurehunt',
-                												'action'     => 'leaderboard',
+                												'action'     => 'entry',
                 												'gameId'     => 0
                 										),
                 								),
@@ -1618,13 +1618,13 @@ return array(
                                 ),
                             ),
 
-                            'leaderboard' => array(
+                            'entry' => array(
                                 'type' => 'Segment',
                                 'options' => array(
-                                    'route' => '/leaderboard/:gameId',
+                                    'route' => '/entry/:gameId',
                                     'defaults' => array(
                                         'controller' => 'playgroundgameadmin',
-                                        'action'     => 'leaderboard',
+                                        'action'     => 'entry',
                                         'gameId'     => 0
                                     ),
                                 ),
@@ -1636,7 +1636,7 @@ return array(
                                             'route'    => '[:p]',
                                             'defaults' => array(
                                                 'controller' => 'playgroundgameadmin',
-                                                'action'     => 'leaderboard',
+                                                'action'     => 'entry',
                                             ),
                                         ),
                                     ),
@@ -1993,9 +1993,9 @@ return array(
                         'route'     => 'admin/playgroundgame/edit-lottery',
                         'privilege' => 'edit',
                     ),
-                    'leaderboard-lottery' => array(
+                    'entry-lottery' => array(
 						'label' 	=> 'Participants',
-						'route' 	=> 'admin/lottery/leaderboard',
+						'route' 	=> 'admin/lottery/entry',
 						'privilege' => 'list',
 					),
                     'create-quiz' => array(
@@ -2009,9 +2009,9 @@ return array(
                         'route'     => 'admin/playgroundgame/edit-quiz',
                         'privilege' => 'edit',
                     ),
-                    'leaderboard-quiz' => array(
+                    'entry-quiz' => array(
 						'label' 	=> 'Participants',
-						'route' 	=> 'admin/quiz/leaderboard',
+						'route' 	=> 'admin/quiz/entry',
 						'privilege' => 'list',
 					),
                     'create-postvote' => array(
@@ -2025,9 +2025,9 @@ return array(
                         'route'     => 'admin/playgroundgame/edit-postvote',
                         'privilege' => 'edit',
                     ),
-                    'leaderboard-postvote' => array(
+                    'entry-postvote' => array(
 						'label' 	=> 'Participants',
-						'route' 	=> 'admin/postvote/leaderboard',
+						'route' 	=> 'admin/postvote/entry',
 						'privilege' => 'list',
 					),
                     'create-instantwin' => array(
@@ -2041,9 +2041,9 @@ return array(
                         'route'     => 'admin/playgroundgame/edit-instantwin',
                         'privilege' => 'edit',
                     ),
-                    'leaderboard-instantwin' => array(
+                    'entry-instantwin' => array(
 						'label' 	=> 'Participants',
-						'route' 	=> 'admin/instantwin/leaderboard',
+						'route' 	=> 'admin/instantwin/entry',
 						'privilege' => 'list',
 					),
                     'quiz-question-list' => array(
