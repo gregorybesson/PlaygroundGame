@@ -39,7 +39,7 @@ class MissionGameCondition extends ProvidesEventsForm
             'name' => 'games__index__',
             'options' => array(
                 'value_options' => $games,
-                'label' => $translator->translate('game', 'playgroundGame')
+                'label' => $translator->translate('Game', 'playgroundGame')
             )
         ));
 
@@ -71,7 +71,6 @@ class MissionGameCondition extends ProvidesEventsForm
         $this->add($submitElement, array('priority' => -100));
 
     }
-
 
      /**
      * retrieve all games for associate to a missionGame

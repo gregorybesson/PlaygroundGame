@@ -2118,7 +2118,7 @@ return array(
                		),
 
                     'mission_list' => array(
-                        'label'     => 'Missions Management',
+                        'label'     => 'Mission Management',
                         'route'     => 'admin/mission/list',
                         'resource'  => 'game',
                         'privilege' => 'list',
