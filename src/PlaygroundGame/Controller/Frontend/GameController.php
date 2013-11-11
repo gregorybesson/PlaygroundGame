@@ -20,6 +20,31 @@ class GameController extends AbstractActionController
     
     protected $options;
 
+    public function homeAction()
+    {
+    
+        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
+        
+        $sg = $this->getGameService();
+        $isSubscribed = false;
+    
+        $game = $sg->checkGame($identifier, false);
+        if (!$game) {
+            return $this->notFoundAction();
+        }
+    
+        // If on Facebook, check if you have to be a FB fan to play the game
+        if($game->getFbFan()){
+            $isFan = $sg->checkIsFan($game);
+            if(!$isFan){
+                return $this->redirect()->toUrl($this->url()->fromRoute('frontend/' . $game->getClassType().'/fangate',array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+            }
+        }
+    
+        return $this->forward()->dispatch('playgroundgame_'.$game->getClassType(), array('controller' => 'playgroundgame_'.$game->getClassType(), 'action' => $game->firstStep(), 'id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')));
+        
+    }
+    
     public function indexAction()
     {
 
@@ -39,12 +64,6 @@ class GameController extends AbstractActionController
         	if(!$isFan){
         		return $this->redirect()->toUrl($this->url()->fromRoute('frontend/' . $game->getClassType().'/fangate',array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
         	}
-        }
-
-        // If there is no welcome block, I don't display the welcome page
-        if($game->firstStep()!=='index'){
-
-            return $this->forward()->dispatch('playgroundgame_'.$game->getClassType(), array('controller' => 'playgroundgame_'.$game->getClassType(), 'action' => $game->firstStep(), 'id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')));
         }
 
         // Determine if the play button should be a CTA button (call to action)
@@ -134,6 +153,7 @@ class GameController extends AbstractActionController
         
         // Le formulaire est validé, il renvoie true et non un ViewModel
         if (!($formRegister instanceof \Zend\View\Model\ViewModel)) {
+            
             return $this->redirect()->toUrl($this->url()->fromRoute('frontend/'. $game->getClassType() . '/'. $game->nextStep($this->params('action')), array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
         }
         
