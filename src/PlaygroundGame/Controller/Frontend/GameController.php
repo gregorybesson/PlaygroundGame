@@ -26,19 +26,10 @@ class GameController extends AbstractActionController
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
         
         $sg = $this->getGameService();
-        $isSubscribed = false;
     
         $game = $sg->checkGame($identifier, false);
         if (!$game) {
             return $this->notFoundAction();
-        }
-    
-        // If on Facebook, check if you have to be a FB fan to play the game
-        if($game->getFbFan()){
-            $isFan = $sg->checkIsFan($game);
-            if(!$isFan){
-                return $this->redirect()->toUrl($this->url()->fromRoute('frontend/' . $game->getClassType().'/fangate',array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
-            }
         }
     
         return $this->forward()->dispatch('playgroundgame_'.$game->getClassType(), array('controller' => 'playgroundgame_'.$game->getClassType(), 'action' => $game->firstStep(), 'id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')));

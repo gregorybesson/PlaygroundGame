@@ -103,7 +103,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         $pluginManager->setService('zfcUserAuthentication', $authMock);
 
     	// I check that the array in findOneBy contains the parameter 'active' = 1
-    	$f->expects($this->once())
+    	$f->expects($this->exactly(2))
     	->method('checkGame')
     	->will($this->returnValue($game));
 
@@ -122,7 +122,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     	$this->assertModuleName('playgroundgame');
     	$this->assertControllerName('playgroundgame_lottery');
     	$this->assertControllerClass('LotteryController');
-    	$this->assertActionName('index');
+    	$this->assertActionName('home');
     	$this->assertMatchedRouteName('frontend/lottery');
 
     	$this->assertRedirectTo('/loterie/gameid/fangate');
@@ -172,7 +172,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     	$pluginManager->setService('zfcUserAuthentication', $authMock);
 
     	// I check that the array in findOneBy contains the parameter 'active' = 1
-    	$f->expects($this->once())
+    	$f->expects($this->exactly(2))
     	->method('checkGame')
     	->will($this->returnValue($game));
 
@@ -190,7 +190,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     	$this->assertModuleName('playgroundgame');
     	$this->assertControllerName('playgroundgame_lottery');
     	$this->assertControllerClass('LotteryController');
-    	$this->assertActionName('index');
+    	$this->assertActionName('home');
     	$this->assertMatchedRouteName('frontend/lottery');
     }
 
@@ -238,7 +238,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     	$pluginManager->setService('zfcUserAuthentication', $authMock);
 
     	// I check that the array in findOneBy contains the parameter 'active' = 1
-    	$f->expects($this->once())
+    	$f->expects($this->exactly(2))
     	->method('checkGame')
     	->will($this->returnValue($game));
 
@@ -256,7 +256,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     	$this->assertModuleName('playgroundgame');
     	$this->assertControllerName('playgroundgame_lottery');
     	$this->assertControllerClass('LotteryController');
-    	$this->assertActionName('index');
+    	$this->assertActionName('home');
     	$this->assertMatchedRouteName('frontend/lottery');
     }
 
