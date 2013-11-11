@@ -39,9 +39,9 @@ class MissionGameCondition
      */
     protected $id;
 
-     /**
-     * @ORM\ManyToOne(targetEntity="PlaygroundGame\Entity\MissionGame")
-     * @ORM\JoinColumn(name="mission_game_id", referencedColumnName="id", onDelete="CASCADE")
+    /**
+     * @ORM\ManyToOne(targetEntity="MissionGame", inversedBy="conditions")
+     * 
      **/
     protected $missionGame;
     
@@ -77,6 +77,22 @@ class MissionGameCondition
     }
 
      /**
+     * @return the $id
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+	/**
+     * @param field_type $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+	/**
      * @param $id
      * @return Block|mixed
      */

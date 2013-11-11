@@ -1,6 +1,7 @@
 <?php
 namespace PlaygroundGame\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping\PrePersist;
@@ -25,15 +26,21 @@ class MissionGame
     protected $id;
 
      /**
-     * @ORM\ManyToOne(targetEntity="PlaygroundGame\Entity\Game")
+     * @ORM\ManyToOne(targetEntity="Game")
      * @ORM\JoinColumn(name="game_id", referencedColumnName="id", onDelete="CASCADE")
      **/
     protected $game;
-     /**
-     * @ORM\ManyToOne(targetEntity="PlaygroundGame\Entity\Mission")
-     * @ORM\JoinColumn(name="mission_id", referencedColumnName="id", onDelete="CASCADE")
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Mission", inversedBy="missionGames")
+     *
      **/
     protected $mission;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="MissionGameCondition", mappedBy="missionGame", cascade={"persist","remove"})
+     */
+    protected $conditions;
 
     /**
      * position
@@ -54,7 +61,9 @@ class MissionGame
     /**
      * Constructor
      */
-    public function __construct() {
+    public function __construct()
+    {
+        $this->conditions = new ArrayCollection();
     }
 
     /** @PrePersist */
@@ -145,6 +154,50 @@ class MissionGame
     }
   
     /**
+     * @return the $conditions
+     */
+    public function getConditions()
+    {
+        return $this->conditions;
+    }
+
+	/**
+     * @param field_type $conditions
+     */
+    public function setConditions($conditions)
+    {
+        $this->conditions = $conditions;
+    }
+    
+    public function addConditions(ArrayCollection $conditions)
+    {
+        foreach ($conditions as $condition) {
+            $condition->setMissionGame($this);
+            $this->conditions->add($condition);
+        }
+    }
+    
+    public function removeConditions(ArrayCollection $conditions)
+    {
+        foreach ($conditions as $condition) {
+            //$condition->setMissionGame(null);
+            $this->conditions->removeElement($condition);
+        }
+    }
+    
+    /**
+     * Add a condition to the mission game.
+     *
+     * @param MisionGameCondition $condition
+     *
+     * @return void
+     */
+    public function addCondition($condition)
+    {
+        $this->conditions[] = $condition;
+    }
+
+	/**
      *
      * @return the $createdAt
      */
