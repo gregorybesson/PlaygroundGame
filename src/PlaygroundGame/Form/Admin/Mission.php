@@ -6,6 +6,7 @@ use Zend\Form\Element;
 use ZfcBase\Form\ProvidesEventsForm;
 use Zend\I18n\Translator\Translator;
 use Zend\ServiceManager\ServiceManager;
+use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 
 class Mission extends ProvidesEventsForm
 {
@@ -25,7 +26,13 @@ class Mission extends ProvidesEventsForm
     public function __construct($name = null, ServiceManager $serviceManager, Translator $translator)
     {
         parent::__construct($name);
+        
+        $entityManager = $serviceManager->get('doctrine.entitymanager.orm_default');
+        $this->setHydrator(new DoctrineHydrator($entityManager, 'PlaygroundGame\Entity\Mission'));
+
+        $this->setAttribute('method', 'post');
         $this->setAttribute('enctype','multipart/form-data');
+        //$this->setAttribute('class','form-horizontal');
 
         $this->add(array(
             'name' => 'id',
@@ -84,11 +91,26 @@ class Mission extends ProvidesEventsForm
             'type' => 'Zend\Form\Element\Checkbox',
             'name' => 'hidden',
             'options' => array(
-                'label' => $translator->translate('cache', 'playgroundgame'),
+                'label' => $translator->translate('Hide Mission header', 'playgroundgame'),
                 'label_attributes' => array(
                     'class' => 'control-label',
                 ),
             ),
+        ));
+        
+        $gameMissionFieldset = new MissionGameFieldset(null,$serviceManager,$translator);
+        $this->add(array(
+            'type'    => 'Zend\Form\Element\Collection',
+            'name'    => 'missionGames',
+            'options' => array(
+                'id'    => 'missionGames',
+                'label' => $translator->translate('List of games', 'playgroundgame'),
+                'count' => 0,
+                'should_create_template' => true,
+                'allow_add' => true,
+                'allow_remove' => true,
+                'target_element' => $gameMissionFieldset
+            )
         ));
 
         $submitElement = new Element\Button('submit');

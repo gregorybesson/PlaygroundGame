@@ -72,17 +72,8 @@ class Mission extends EventProvider implements ServiceManagerAwareInterface
     *
     * @return Mission  $mission
     */
-    public function edit(array $data, $mission, $formClass)
+    public function edit($mission, $data)
     {
-        $form  = $this->getServiceManager()->get($formClass);
-
-        $form->bind($mission);
-
-        $form->setData($data);
-        if (!$form->isValid()) {
-            
-            return false;
-        }
 
         $this->uploadImage($mission, $data);
         $mission = $this->getMissionMapper()->update($mission);

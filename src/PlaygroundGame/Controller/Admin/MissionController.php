@@ -101,17 +101,22 @@ class MissionController extends AbstractActionController
                     $request->getFiles()->toArray()
             );
 
-            $mission = $this->getMissionService()->edit($data, $mission, 'playgroundgame_mission_form');
+            $form->setData($data);
+            
+            if ($form->isValid()) {
+
+                $mission = $this->getMissionService()->edit($mission, $data);
+            }else{
+                $mission = null;
+            }
 
             if ($mission) {
                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The mission "'.$mission->getTitle().'" was updated');
-
-                return $this->redirect()->toRoute('admin/mission/list');
             } else {
                  $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The mission was not updated');
-
-                return $this->redirect()->toRoute('admin/mission/list');
             }
+            
+            return $this->redirect()->toRoute('admin/mission/list');
         }
 
         $viewModel = new ViewModel();
@@ -152,64 +157,6 @@ class MissionController extends AbstractActionController
         $this->getMissionService()->update($mission);
 
         return $this->redirect()->toRoute('admin/mission/list');
-    }
-
-    public function associateAction()
-    {
-        $missionId = $this->getEvent()->getRouteMatch()->getParam('missionId');
-        $mission = $this->getMissionService()->findById($missionId);
-
-        $form = $this->getServiceLocator()->get('playgroundgame_mission_game_form');
-        $request = $this->getRequest();
-        if ($request->isPost()) {
-
-            $this->getMissionGameService()->clear($mission);
-
-            $data = $request->getPost()->toArray();
-            $dataGames = array();
-            for ($i=0; $i <= $data['countGame']; $i++) { 
-                if (empty($data["games".$i])) {
-                    continue;
-                }
-                $dataGames[$i] = array('games' => $data['games'.$i],
-                                      'conditions' => $data['conditions'.$i],
-                                      'points' => $data['points'.$i],
-                                      'position' => $i);
-            }
-            if(!$this->getMissionGameService()->checkGamesInMission($dataGames)){
-                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The association game-mission was not created : one of the game is already in mission');
-                return $this->redirect()->toRoute('admin/mission/list');
-            }
-
-            if(!$this->getMissionGameService()->checkGames($dataGames)){
-                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The association game-mission was not created : error in the date and position of the game');
-                return $this->redirect()->toRoute('admin/mission/list');
-            }
-            foreach ($dataGames as $k=>$dataGame) {
-                $missionGame = $this->getMissionGameService()->associate($dataGame, $mission);
-            }
-            $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The association game-mission was created');
-            return $this->redirect()->toRoute('admin/mission/list');
-        }
-
-        $missionGamesArray = array();
-        $missionGames = $this->getMissionGameService()->findMissionGameByMission($mission);
-
-        foreach ($missionGames as $missionGame) {
-            foreach ($this->getMissionGameService()->findMissionGameConditionByMissionGame($missionGame) as $missionGameCondition) {
-                $missionGamesArray[] = array('games' => $missionGame->getGame()->getId(),
-                                            'conditions' => $missionGameCondition->getAttribute(),
-                                            'points' => ($missionGameCondition->getValue() ? $missionGameCondition->getValue() : 0));
-            }
-             
-        }
-
-        $viewModel = new ViewModel();
-        $viewModel->setTemplate('playground-game/mission/associateGame');
-
-        return $viewModel->setVariables(array('mission' => $mission, 
-                                              'form' => $form,
-                                              'missionGames' => $missionGamesArray));
     }
 
      /**

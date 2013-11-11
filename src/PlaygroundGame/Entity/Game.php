@@ -398,7 +398,7 @@ class Game implements InputFilterAwareInterface
         $this->identifier = $identifier;
     }
 
-    /**
+	/**
      *
      * @return the $mainImage
      */

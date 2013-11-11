@@ -1,6 +1,7 @@
 <?php
 namespace PlaygroundGame\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping\PrePersist;
@@ -23,6 +24,11 @@ class Mission
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="MissionGame", mappedBy="mission", cascade={"persist","remove"})
+     */
+    private $missionGames;
 
     /**
      * titre
@@ -66,7 +72,9 @@ class Mission
     /**
      * Constructor
      */
-    public function __construct() {
+    public function __construct()
+    {
+        $this->missionGames = new ArrayCollection();
     }
 
     /** @PrePersist */
@@ -128,6 +136,50 @@ class Mission
     }
 
      /**
+     * @return the $missionGames
+     */
+    public function getMissionGames()
+    {
+        return $this->missionGames;
+    }
+
+	/**
+     * @param \PlaygroundGame\Entity\ArrayCollection $missionGames
+     */
+    public function setMissionGames($missionGames)
+    {
+        $this->missionGames = $missionGames;
+    }
+    
+    public function addMissionGames(ArrayCollection $missionGames)
+    {
+        foreach ($missionGames as $missionGame) {
+            $missionGame->setMission($this);
+            $this->missionGames->add($missionGame);
+        }
+    }
+    
+    public function removeMissionGames(ArrayCollection $missionGames)
+    {
+        foreach ($missionGames as $missionGame) {
+            $missionGame->setMission(null);
+            $this->missionGames->removeElement($missionGame);
+        }
+    }
+    
+    /**
+     * Add a game to the mission.
+     *
+     * @param MissionGame $missionGame
+     *
+     * @return void
+     */
+    public function addMissionGame($missionGame)
+    {
+        $this->missionGames[] = $missionGame;
+    }
+
+	/**
      * Getter for image
      *
      * @return string $image
