@@ -186,28 +186,30 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $game = $this->getGameMapper()->update($game);
 
         $prize_mapper = $this->getServiceManager()->get('playgroundgame_prize_mapper');
-        foreach($data['prizes'] as $prize_data ){          
-            if (!empty($prize_data['picture']['tmp_name'])){
-                if ($prize_data['id']){
-                    $prize = $prize_mapper->findById($prize_data['id']);
-                }else{
-                    $some_prizes = $prize_mapper->findBy(array(
-                            'game' => $game,
-                            'title' => $prize_data['title'],
-                        ));
-                    if (count($some_prizes)==1){
-                        $prize=$some_prizes[0];
+        if(isset($data['prizes'])){
+            foreach($data['prizes'] as $prize_data ){          
+                if (!empty($prize_data['picture']['tmp_name'])){
+                    if ($prize_data['id']){
+                        $prize = $prize_mapper->findById($prize_data['id']);
                     }else{
-                        return false;
-                    }               
+                        $some_prizes = $prize_mapper->findBy(array(
+                                'game' => $game,
+                                'title' => $prize_data['title'],
+                            ));
+                        if (count($some_prizes)==1){
+                            $prize=$some_prizes[0];
+                        }else{
+                            return false;
+                        }               
+                    }
+                    ErrorHandler::start();
+                    $filename = "game-".$game->getId()."-prize-" . $prize->getId()."-".$prize_data['picture']['name'];
+                    $filepath = $this->fileNewname($path, $filename);
+                    move_uploaded_file($prize_data['picture']['tmp_name'], $path.$filename);
+                    $prize->setPicture($media_url.$filename);
+                    ErrorHandler::stop(true);
+                    $prize = $prize_mapper->update($prize);
                 }
-                ErrorHandler::start();
-                $filename = "game-".$game->getId()."-prize-" . $prize->getId()."-".$prize_data['picture']['name'];
-                $filepath = $this->fileNewname($path, $filename);
-                move_uploaded_file($prize_data['picture']['tmp_name'], $path.$filename);
-                $prize->setPicture($media_url.$filename);
-                ErrorHandler::stop(true);
-                $prize = $prize_mapper->update($prize);
             }
         }
 
@@ -384,34 +386,36 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $game = $this->getGameMapper()->update($game);
         
         $prize_mapper = $this->getServiceManager()->get('playgroundgame_prize_mapper');
-        foreach($data['prizes'] as $prize_data ){  
-            if (!empty($prize_data['picture_file']['tmp_name']) && !$prize_data['picture_file']['error']){
-                if ($prize_data['id']){
-                    $prize = $prize_mapper->findById($prize_data['id']);
-                }else{
-                    $some_prizes = $prize_mapper->findBy(array(
-                            'game' => $game,
-                            'title' => $prize_data['title'],
-                        ));
-                    if (count($some_prizes)==1){
-                        $prize=$some_prizes[0];
+        if(isset($data['prizes'])){
+            foreach($data['prizes'] as $prize_data ){  
+                if (!empty($prize_data['picture_file']['tmp_name']) && !$prize_data['picture_file']['error']){
+                    if ($prize_data['id']){
+                        $prize = $prize_mapper->findById($prize_data['id']);
                     }else{
-                        return false;
-                    }               
+                        $some_prizes = $prize_mapper->findBy(array(
+                                'game' => $game,
+                                'title' => $prize_data['title'],
+                            ));
+                        if (count($some_prizes)==1){
+                            $prize=$some_prizes[0];
+                        }else{
+                            return false;
+                        }               
+                    }
+                    // Remove if existing image
+                    if ($prize->getPicture() && file_exists($prize->getPicture())){
+                        unlink($prize->getPicture());
+                        $prize->getPicture(null);
+                    }
+                    // Upload and set new 
+                    ErrorHandler::start();
+                    $filename = "game-".$game->getId()."-prize-" . $prize->getId()."-".$prize_data['picture_file']['name'];
+                    $filepath = $this->fileNewname($path, $filename);
+                    move_uploaded_file($prize_data['picture_file']['tmp_name'], $path.$filename);
+                    $prize->setPicture($media_url.$filename);
+                    ErrorHandler::stop(true);
+                    $prize = $prize_mapper->update($prize);
                 }
-                // Remove if existing image
-                if ($prize->getPicture() && file_exists($prize->getPicture())){
-                    unlink($prize->getPicture());
-                    $prize->getPicture(null);
-                }
-                // Upload and set new 
-                ErrorHandler::start();
-                $filename = "game-".$game->getId()."-prize-" . $prize->getId()."-".$prize_data['picture_file']['name'];
-                $filepath = $this->fileNewname($path, $filename);
-                move_uploaded_file($prize_data['picture_file']['tmp_name'], $path.$filename);
-                $prize->setPicture($media_url.$filename);
-                ErrorHandler::stop(true);
-                $prize = $prize_mapper->update($prize);
             }
         }
         // If I receive false, it means that the FB Id was not available anymore
