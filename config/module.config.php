@@ -18,19 +18,9 @@ return array(
     'assetic_configuration' => array(
         'modules' => array(
             'lib_game' => array(
-                // module
-                // root
-                // path
-                // for
-                // your
-                // css
-                // and
-                // js
-                // files
+                // module root path for your css and js files
                 'root_path' => __DIR__ . '/../view/lib',
-                // collection
-                // of
-                // assets
+                // collection of assets
                 'collections' => array(
                     'admin_areapicker_css' => array(
                         'assets' => array(
@@ -74,7 +64,16 @@ return array(
                         ),
                         'filters' => array(),
                         'options' => array(
-                            'output' => 'zfcadmin/head_deezer.js'
+                            'output' => 'zfcadmin/js/head_deezer.js'
+                        )
+                    ),
+                    'admin_deezer_js' => array(
+                        'assets' => array(
+                            'js/deezer/api-deezer.js'
+                        ),
+                        'filters' => array(),
+                        'options' => array(
+                            'output' => 'zfcadmin/js/deezer.js'
                         )
                     ),
                     
@@ -84,7 +83,16 @@ return array(
                         ),
                         'filters' => array(),
                         'options' => array(
-                            'output' => 'frontend/head_deezer.js'
+                            'output' => 'frontend/js/head_deezer.js'
+                        )
+                    ),
+                    'frontend_deezer_js' => array(
+                        'assets' => array(
+                            'js/deezer/api-deezer.js'
+                        ),
+                        'filters' => array(),
+                        'options' => array(
+                            'output' => 'frontend/js/deezer.js'
                         )
                     )
                 )
@@ -97,10 +105,12 @@ return array(
                 '@head_admin_areapicker_js'
             ),
             'admin/playgroundgame.*' => array(
-                '@head_admin_deezer_js'
+                '@head_admin_deezer_js',
+                '@admin_deezer_js',
             ),
             'frontend/quiz.*' => array(
-                '@head_frontend_deezer_js'
+                '@head_frontend_deezer_js',
+                '@frontend_deezer_js',
             )
         )
     ),
