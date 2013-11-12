@@ -1269,22 +1269,4 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         
         return $auth->isAllowed($resource, $privilege);
     }
-
-    public function array_merge_recursive_num_keys() {
-        $arrays = func_get_args();
-        $base = array_shift($arrays);
-
-        foreach ($arrays as $array) {
-            reset($base); 
-            while (list($key, $value) = @each($array)) {
-                if (is_array($value) && @is_array($base[$key])) {
-                    $base[$key] = $this->array_merge_recursive_num_keys($base[$key], $value);
-                } else {
-                    $base[$key] = $value;
-                }
-            }
-        }
-
-        return $base;
-    }
 }

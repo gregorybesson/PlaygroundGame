@@ -569,6 +569,29 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
 
         return $winner;
     }
+    
+    public function isCodeInstantWinner($game, $user, $code_occurrence)
+    {
+        $entryMapper = $this->getEntryMapper();
+        $entry = $entryMapper->findLastActiveEntryById($game, $user);
+        if (!$entry) {
+            return false;
+        }
+    
+        $entry->setActive(false);
+        $winner = $code_occurrence->getWinning();
+        if ($winner) {
+            $entry->setWinner(true);
+        } else {
+            $entry->setPoints(0);
+            $entry->setWinner(false);
+        }
+    
+        $entry = $entryMapper->update($entry);
+        $this->getEventManager()->trigger('complete_instantwin.post', $this, array('user' => $user, 'game' => $game, 'entry' => $entry));
+    
+        return $winner;
+    }
 
     public function getGameEntity()
     {
