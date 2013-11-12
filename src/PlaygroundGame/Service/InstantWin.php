@@ -493,7 +493,6 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
         }
 
         if (!$form->isValid()) {
-            var_dump($form->getMessages());
             return false;
         }
 

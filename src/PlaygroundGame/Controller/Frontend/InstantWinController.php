@@ -5,6 +5,7 @@ namespace PlaygroundGame\Controller\Frontend;
 use PlaygroundGame\Entity\Entry;
 use Zend\View\Model\ViewModel;
 use Zend\Session\Container;
+use Zend\Form\Form;
 
 class InstantWinController extends GameController
 {
@@ -29,7 +30,6 @@ class InstantWinController extends GameController
         $channel = $this->getEvent()->getRouteMatch()->getParam('channel');
 
         // Redirect to fan gate if the game require to 'like' the page before playing
-
         if ($channel == 'facebook' && $session->offsetExists('signed_request')) {
             if($game->getFbFan()){
                 if ($sg->checkIsFan($game) === false){
@@ -37,6 +37,17 @@ class InstantWinController extends GameController
                 }
             }
         }
+
+        if($game->getOccurrenceType()=='datetime'){
+            return $this->playDatetime($identifier, $user, $game, $session, $channel);
+        }elseif($game->getOccurrenceType()=='code'){
+            return $this->playCode($identifier, $game, $session, $channel);
+        }
+    }
+
+    public function playDatetime($identifier, $user, $game, $session, $channel)
+    {
+        $sg = $this->getGameService();
 
         if (!$user) {
 
@@ -68,8 +79,9 @@ class InstantWinController extends GameController
             }
 
         }
+        
+        $viewModel = $this->buildView($game);        
 
-        $viewModel = $this->buildView($game);
         $beforeLayout = $this->layout()->getTemplate();
         // je délègue la responsabilité du formulaire à PlaygroundUser, y compris dans sa gestion des erreurs
         $form = $this->forward()->dispatch('playgrounduser_user', array('controller' => 'playgrounduser_user', 'action' => 'address'));
@@ -115,37 +127,154 @@ class InstantWinController extends GameController
             'flashMessages' => $this->flashMessenger()->getMessages()
         ));
         $viewModel->addChild($form, 'form');
+            
+        return $viewModel;
+    }
 
+    public function playCode($identifier, $game, $session, $channel)
+    {
+        $sg = $this->getGameService();
+
+        $viewModel = $this->buildView($game);
+        
+        $viewModel->setTemplate('playground-game/instant-win/play-code');
+        $form = new Form('CodeForm');
+        $form->setAttribute('method', 'post');
+        $form->setAttribute('action', '');
+        $form->add(array(
+            'type' => 'Zend\Form\Element\Text',
+            'name' => 'code-input',
+            'options' => array(
+                'label' => 'Entrez votre code',
+                ),
+            'attributes' => array(
+                'placeholder' => 'Code', 
+                )
+            ));
+
+        $form->add(array(
+            'name' => 'submit',
+            'attributes' => array(
+                'type'  => 'submit',
+                'value' => 'Participer',
+            ),
+        ));
+        
+        if ($this->getRequest()->isPost()){
+            $form->setData($this->getRequest()->getPost());
+            if($form->isValid()){
+                $code = $form->getData()['code-input'];
+                if (empty($code)) {
+                    $this->flashMessenger()->addMessage('Vous devez entrer un code avant de valider !');
+                    return $this->redirect()->toUrl($this->url()->fromRoute('frontend/instantwin/play', array('id' => $game->getIdentifier(), 'channel' => $channel), array('force_canonical' => true)));
+                }
+                $code = trim($code);
+                $occurrence_mapper = $sg->getInstantWinOccurrenceMapper();
+                $matching_occurrences = $occurrence_mapper->findBy(array(
+                    'instantwin' => $game,
+                    'occurrence_value' => $code,
+                ));
+                if (empty($matching_occurrences)) {
+                    $this->flashMessenger()->addMessage('Désolé mais le code entré est invalide !');
+                    return $this->redirect()->toUrl($this->url()->fromRoute('frontend/instantwin/play', array('id' => $game->getIdentifier(), 'channel' => $channel), array('force_canonical' => true)));
+                }
+                elseif (count($matching_occurrences)==1) {
+                    $occurrence = array_shift($matching_occurrences);
+                    if ($occurrence->getEntry()) {
+                        $this->flashMessenger()->addMessage('Le code entré a déjà été utilisé, vous ne pouvez pas rejouer avec le même code !');
+                        return $this->redirect()->toUrl($this->url()->fromRoute('frontend/instantwin/play', array('id' => $game->getIdentifier(), 'channel' => $channel), array('force_canonical' => true)));
+                    }
+                    $session = new \Zend\Session\Container('zfcuser');
+                    $session->offsetSet('occurrence',$occurrence->getId());
+                    return $this->redirect()->toUrl($this->url()->fromRoute('frontend/instantwin/result',array('id' => $identifier, 'channel' => $channel)));
+                }
+            }
+        }
+        $viewModel->setVariables(array(
+            'game' => $game,
+            'form' => $form,
+            'flashMessages' => $this->flashMessenger()->getMessages()
+        ));
         return $viewModel;
     }
 
     public function resultAction()
     {
-    	$identifier = $this->getEvent()->getRouteMatch()->getParam('id');
+        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
+        $channel = $this->getEvent()->getRouteMatch()->getParam('channel');
         $user   = $this->zfcUserAuthentication()->getIdentity();
         $sg     = $this->getGameService();
-
-        $statusMail = null;
 
         $game = $sg->checkGame($identifier);
         if (!$game || $game->isClosed()) {
             return $this->notFoundAction();
         }
+        
+        $lastEntry = $sg->getEntryMapper()->findLastInactiveEntryById($game, $user);
+        if ($lastEntry || $game->getOccurrenceType()=='datetime') {
+            return $this->resultDatetime($user, $game, $channel, $lastEntry);
+        } elseif ($game->getOccurrenceType()=='code') {
+            return $this->resultCode($user, $game, $channel);
+        } else{
+            return $this->redirect()->toUrl($this->url()->fromRoute('frontend/instantwin', array('id' => $game->getIdentifier(), 'channel' => $channel), array('force_canonical' => true)));
+        }
+    }
+
+    public function resultCode($user, $game, $channel)
+    {
+        $sg     = $this->getGameService();
+        $session = new \Zend\Session\Container('zfcuser');
+        if (!$session->offsetExists('occurrence')){
+            return $this->redirect()->toUrl($this->url()->fromRoute('frontend/instantwin/play', array('id' => $game->getIdentifier(), 'channel' => $channel), array('force_canonical' => true)));
+        }
+        
+        $viewModel = $this->buildView($game);
+        $occurrence_mapper = $sg->getInstantWinOccurrenceMapper();
+        $occurrence = $occurrence_mapper->findById($session->offsetGet('occurrence'));
+        $winner = $occurrence->getWinning();
+        if(!$user){
+            $redirect = urlencode($this->url()->fromRoute('frontend/instantwin/result', array('id' => $game->getIdentifier(), 'channel' => $channel)));
+            return $this->redirect()->toUrl($this->url()->fromRoute('frontend/zfcuser/register', array('channel' => $channel)) . '?redirect='.$redirect);
+        }
+        $beforeLayout = $this->layout()->getTemplate();
+        $form_register = $this->forward()->dispatch('playgrounduser_user', array('action' => 'address'));
+        $this->layout()->setTemplate($beforeLayout);
+        
+        $viewModel->setTemplate('playground-game/instant-win/result-code');
+        if ($form_register instanceof \Zend\View\Model\ViewModel) {
+            $viewModel->addChild($form_register, 'form_register');
+            $viewModel->setVariables(array(
+                'game'             => $game,
+                'flashMessages'    => $this->flashMessenger()->getMessages(),
+                'winner'           => $winner,
+            ));
+            return $viewModel;
+        }
+        $entry = $sg->play($game, $user);
+        if (!$entry){
+            $this->flashMessenger()->addMessage('Vous avez déjà participé !');
+            return $this->resultDatetime($user, $game, $channel);
+        }
+        $occurrence->setEntry($entry);
+        $occurrence_mapper->update($occurrence);
+        $winner = $sg->isCodeInstantWinner($game, $user, $occurrence);
+        return $this->resultDatetime($user, $game, $channel);
+    }
+
+    public function resultDatetime($user, $game, $channel, $lastEntry){
+        $sg     = $this->getGameService();
+
+        $statusMail = null;
 
         $secretKey = strtoupper(substr(sha1($user->getId().'####'.time()),0,15));
-        $socialLinkUrl = $this->url()->fromRoute('frontend/instantwin', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)).'?key='.$secretKey;
+        $socialLinkUrl = $this->url()->fromRoute('frontend/instantwin', array('id' => $game->getIdentifier(), 'channel' => $channel), array('force_canonical' => true)).'?key='.$secretKey;
         // With core shortener helper
         $socialLinkUrl = $this->shortenUrl()->shortenUrl($socialLinkUrl);
 
         if (!$user) {
-            $redirect = urlencode($this->url()->fromRoute('frontend/instantwin', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)));
+            $redirect = urlencode($this->url()->fromRoute('frontend/instantwin', array('id' => $game->getIdentifier(), 'channel' => $channel), array('force_canonical' => true)));
 
             return $this->redirect()->toUrl($this->url()->fromRoute('frontend/zfcuser/register') . '?redirect='.$redirect);
-        }
-
-        $lastEntry = $sg->getEntryMapper()->findLastInactiveEntryById($game, $user);
-        if (!$lastEntry) {
-            return $this->redirect()->toUrl($this->url()->fromRoute('frontend/instantwin', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)));
         }
 
         $winner = $lastEntry->getWinner();
@@ -174,10 +303,9 @@ class InstantWinController extends GameController
             'flashMessages'    => $this->flashMessenger()->getMessages(),
             'form'             => $form,
             'socialLinkUrl'    => $socialLinkUrl,
-            'secretKey'		   => $secretKey,
+            'secretKey'        => $secretKey,
             'nextGame'         => $nextGame
         ));
-
         return $viewModel;
     }
 
