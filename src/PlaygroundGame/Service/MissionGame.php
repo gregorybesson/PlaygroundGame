@@ -145,7 +145,7 @@ class MissionGame extends EventProvider implements ServiceManagerAwareInterface
 
         foreach ($missionGameConditions as $missionGameCondition) {
 
-            if ($missionGameCondition->getAttribute() == MissionGameConditionEntity::NOTHING) {
+            if ($missionGameCondition->getAttribute() == MissionGameConditionEntity::NONE) {
                 continue;
             }
 
