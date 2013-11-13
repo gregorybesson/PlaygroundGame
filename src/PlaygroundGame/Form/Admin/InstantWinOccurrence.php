@@ -76,12 +76,24 @@ class InstantWinOccurrence extends ProvidesEventsForm
             'type' => 'Zend\Form\Element\Select',
             'name' => 'active',
             'options' => array(
-            //'empty_option' => $translator->translate('Is the answer correct ?', 'playgroundgame'),
                 'value_options' => array(
                     '0' => $translator->translate('No', 'playgroundgame'),
                     '1' => $translator->translate('Yes', 'playgroundgame'),
                 ),
                 'label' => $translator->translate('Active', 'playgroundgame'),
+            ),
+        ));
+        
+
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Select',
+            'name' => 'winning',
+            'options' => array(
+                'value_options' => array(
+                    '0' => $translator->translate('No', 'playgroundgame'),
+                    '1' => $translator->translate('Yes', 'playgroundgame'),
+                ),
+                'label' => $translator->translate('Winning', 'playgroundgame'),
             ),
         ));
 
@@ -90,7 +102,7 @@ class InstantWinOccurrence extends ProvidesEventsForm
         	'type' => 'Zend\Form\Element\Select',
         	'name' => 'prize',
         	'options' => array(
-        		'empty_option' => $translator->translate('Ce jeu n\'a pas lot associé', 'playgroundgame'),
+        		'empty_option' => $translator->translate('Ce jeu n\'a pas de lot associé', 'playgroundgame'),
         		'value_options' => $prizes,
         		'label' => $translator->translate('Lots', 'playgroundgame')
         	)

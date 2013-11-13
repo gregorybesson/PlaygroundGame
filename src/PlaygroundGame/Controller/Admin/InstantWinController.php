@@ -157,18 +157,19 @@ class InstantWinController extends AbstractActionController
         $game = $service->getGameMapper()->findById($gameId);
 
         $query_result = $service->getInstantWinOccurrenceMapper()->findByGameId($game);
-        if(is_array($query_result)){
+        if (is_array($query_result)) {
             $paginator = new Paginator( new \Zend\Paginator\Adapter\ArrayAdapter($query_result));
-        }else{
+        } else {
             $paginator = $query_result;
         }
 
         $paginator->setItemCountPerPage(25);
         $paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
 
-        if ($game->getOccurrenceType()=='datetime')
+        if ($game->getOccurrenceType()=='datetime') {
             $addLink = $this->url()->fromRoute('admin/playgroundgame/instantwin-occurrence-add', array('gameId' => $gameId));
-        elseif  ($game->getOccurrenceType()=='code'){
+            $exportLink = null;
+        } elseif  ($game->getOccurrenceType()=='code') {
             $addLink = $this->url()->fromRoute('admin/playgroundgame/instantwin-code-occurrences-add', array('gameId' => $gameId));
             $exportLink = $this->url()->fromRoute('admin/playgroundgame/instantwin-occurrences-export', array('gameId' => $gameId));;
         }
@@ -177,7 +178,6 @@ class InstantWinController extends AbstractActionController
             array(
                 'occurrences' => $paginator,
                 'gameId'      => $gameId,
-                'filter'      => $filter,
                 'game'        => $game,
                 'addLink'     => $addLink,
                 'exportLink'  => $exportLink,
@@ -197,11 +197,13 @@ class InstantWinController extends AbstractActionController
 
         $form = $this->getServiceLocator()->get('playgroundgame_instantwinoccurrence_form');
         $form->remove('occurrences_file');
+        if ($game->getOccurrenceType()=='datetime'){
+            $form->remove('winning');
+        }
         $form->get('submit')->setAttribute('label', 'Add');
         $form->setAttribute('action', $this->url()->fromRoute('admin/playgroundgame/instantwin-occurrence-add', array('gameId' => $gameId)));
         $form->setAttribute('method', 'post');
         $form->get('instant_win_id')->setAttribute('value', $gameId);
-
         $occurrence = new InstantWinOccurrence();
         $form->bind($occurrence);
 
@@ -210,17 +212,13 @@ class InstantWinController extends AbstractActionController
                     $this->getRequest()->getPost()->toArray(),
                     $this->getRequest()->getFiles()->toArray()
             );
-
             $occurrence = $service->createOccurrence($data);
             if ($occurrence) {
                 // Redirect to list of games
                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The occurrence was created');
-
                 return $this->redirect()->toRoute('admin/playgroundgame/instantwin-occurrence-list', array('gameId'=>$gameId));
-
             }
         }
-
         return $viewModel->setVariables(
             array(
                 'form' => $form,
@@ -292,52 +290,56 @@ class InstantWinController extends AbstractActionController
 
     public function editOccurrenceAction()
     {
-        $service = $this->getAdminGameService();
         $viewModel = new ViewModel();
         $viewModel->setTemplate('playground-game/instant-win/occurrence');
-
-        $gameId = $this->getEvent()->getRouteMatch()->getParam('gameId');
-        /*if (!$gameId) {
-            return $this->redirect()->toRoute('admin/playgroundgame/list');
-        }*/
+        $service = $this->getAdminGameService();
 
         $occurrenceId = $this->getEvent()->getRouteMatch()->getParam('occurrenceId');
-        if (!$occurrenceId) {
+        $gameId = $this->getEvent()->getRouteMatch()->getParam('gameId');
+        if (!$gameId) {
             return $this->redirect()->toRoute('admin/playgroundgame/list');
         }
-        $occurrence   = $service->getInstantWinOccurrenceMapper()->findById($occurrenceId);
-        $instantwinId     = $occurrence->getInstantWin()->getId();
-
+        $game = $service->getGameMapper()->findById($gameId);
+        $occurrence = $service->getInstantWinOccurrenceMapper()->findById($occurrenceId);
+        // Si l'occurrence a été utilisée, on ne peut plus la modifier
+        if($occurrence->getUser()){
+            $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('This occurrence has a winner, you can not update it.');
+            return $this->redirect()->toRoute('admin/playgroundgame/instantwin-occurrence-list', array('gameId'=>$gameId));
+        }
         $form = $this->getServiceLocator()->get('playgroundgame_instantwinoccurrence_form');
-        $form->get('submit')->setAttribute('label', 'Add');
-        $form->get('instant_win_id')->setAttribute('value', $instantwinId);
-
+        $form->remove('occurrences_file');
+        if ($game->getOccurrenceType()=='datetime'){
+            $form->remove('winning');
+        }
+        $form->get('submit')->setAttribute('label', 'Edit');
+        $form->setAttribute('action', '');
+        $form->setAttribute('method', 'post');
+        $form->get('instant_win_id')->setAttribute('value', $gameId);
+        
         $form->bind($occurrence);
-
+        
         if ($this->getRequest()->isPost()) {
             $data = array_merge(
-                    $this->getRequest()->getPost()->toArray(),
-                    $this->getRequest()->getFiles()->toArray()
+                $this->getRequest()->getPost()->toArray(),
+                $this->getRequest()->getFiles()->toArray()
             );
             $occurrence = $service->updateOccurrence($data, $occurrence);
             if ($occurrence) {
                 // Redirect to list of games
-                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The occurrence was created');
-
-                return $this->redirect()->toRoute('admin/playgroundgame/instantwin-occurrence-list', array('gameId'=>$instantwinId));
+                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The occurrence was edited');
+                return $this->redirect()->toRoute('admin/playgroundgame/instantwin-occurrence-list', array('gameId'=>$gameId));
             }
         }
-
         return $viewModel->setVariables(
             array(
                 'form' => $form,
-                'gameId' => $instantwinId,
+                'gameId' => $gameId,
                 'occurrence_id' => $occurrenceId,
                 'title' => 'Edit occurrence',
-                'gameId' => $gameId,
             )
         );
     }
+
 
     public function removeOccurrenceAction()
     {
@@ -363,16 +365,15 @@ class InstantWinController extends AbstractActionController
     {
         $gameId         = $this->getEvent()->getRouteMatch()->getParam('gameId');
         $game           = $this->getAdminGameService()->getGameMapper()->findById($gameId);
-        
         $adapter = new DoctrineAdapter(new ORMPaginator( $this->getAdminGameService()->getEntryMapper()->queryByGame($game)));
         $paginator = new Paginator($adapter);
         $paginator->setItemCountPerPage(10);
         $paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
 
         return array(
-                'entries' => $paginator,
-                'game' => $game,
-                'gameId' => $gameId
+            'entries' => $paginator,
+            'game' => $game,
+            'gameId' => $gameId
         );
     }
 
@@ -449,7 +450,6 @@ class InstantWinController extends AbstractActionController
                 ->addHeaderLine('Content-Length', filesize($file));
 
         $response->setHeaders($headers);
-        fclose($file);
         unlink($file);
         return $response;
 

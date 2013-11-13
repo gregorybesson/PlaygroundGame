@@ -103,7 +103,7 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
     public function generateCodeOccurrences($game, $data)
     {
         $available_characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-';
-        $available_characters_nb = strlen($available_characters);
+        $last_character_index = strlen($available_characters)-1;
         if(!$game->getWinningOccurrenceNumber())
         {
             $game->setWinningOccurrenceNumber($game->getOccurrenceNumber());
@@ -116,9 +116,9 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
         for ($i=0; $i < $game->getOccurrenceNumber() ; $i++) {             
             $code = '';
             while(strlen($code)<$data['occurrenceValueSize']){
-                $code .= $available_characters[rand(0, $available_characters_nb)];
+                $code .= $available_characters[rand(0, $last_character_index)];
             }
-            if($this->getInstantWinOccurrenceMapper()->assertNoOther($instantwin, $line[0])){
+            if($this->getInstantWinOccurrenceMapper()->assertNoOther($game, $code)){
                 $occurrence = new \PlaygroundGame\Entity\InstantWinOccurrence();
                 $occurrence->setInstantwin($game);
                 $occurrence->setOccurrenceValue($code);
@@ -423,7 +423,7 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
     {
         if (!empty($data['occurrences_file']['tmp_name'])) {
             $path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR;
-            $media_url = $this->getOptions()->getMediaUrl() . '/';
+            $real_media_path = realpath($path) . DIRECTORY_SEPARATOR;
             $instantwin = $this->getGameMapper()->findById($data['instant_win_id']);
 
             // upload the csv file
@@ -431,8 +431,7 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
             $data['occurrences_file']['name'] = $this->fileNewname($path, $data['instant_win_id'] . "-" . $data['occurrences_file']['name']);
             move_uploaded_file($data['occurrences_file']['tmp_name'], $path . $data['occurrences_file']['name']);
             ErrorHandler::stop(true);
-
-            $csv_content = $this->getCodeOccurencesFromCSV(PUBLIC_PATH.$media_url.$data['occurrences_file']['name']);
+            $csv_content = $this->getCodeOccurencesFromCSV($real_media_path.$data['occurrences_file']['name']);
             if ($csv_content){
                 $created = 0;
                 $already_in = 0;
@@ -458,7 +457,7 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                     } 
                 }
                 // remove the csv file from folder
-                unlink(PUBLIC_PATH.$media_url.$data['occurrences_file']['name']);
+                unlink($real_media_path.$data['occurrences_file']['name']);
                 return array($created, $already_in);
             }
         }
@@ -475,7 +474,6 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
      */
     public function createOccurrence(array $data)
     {
-
         $occurrence  = new \PlaygroundGame\Entity\InstantWinOccurrence();
         $form  = $this->getServiceManager()->get('playgroundgame_instantwinoccurrence_form');
         $form->bind($occurrence);
@@ -508,26 +506,21 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
     /**
      * @param  array                  $data
      * @param  string                 $entityClass
-     * @param  string                 $formClass
      * @return \PlaygroundGame\Entity\Game
      */
     public function updateOccurrence(array $data, $occurrence)
     {
-
         $form  = $this->getServiceManager()->get('playgroundgame_instantwinoccurrence_form');
         $form->bind($occurrence);
+        if (!isset($data['winning']))
+            $data['winning'] = 1;
         $form->setData($data);
-
         $prize = null;
         if(isset($data['prize'])){
-        	$prize = $this->getPrizeMapper()->findById($data['prize']);
+            $prize = $this->getPrizeMapper()->findById($data['prize']);
         }
-
-        if (!$form->isValid()) {
-            return false;
-        }
-
         $occurrence->setPrize($prize);
+        $occurrence->populate($data);
 
         $this->getInstantWinOccurrenceMapper()->update($occurrence);
 
