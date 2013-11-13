@@ -49,7 +49,7 @@ if (isset($fm[0]))
             <td>
                 <?php echo $occurrence->getOccurrenceValue();?>
             </td>
-            <td><?php echo (! $occurrence->getActive())? $occurrence->getUser()->getEmail() :''; ?></td>
+            <td><?php echo ($occurrence->getUser())? $occurrence->getUser()->getEmail() :''; ?></td>
             <?php $editLink   = $this->url('admin/playgroundgame/instantwin-occurrence-edit', array('gameId' => $gameId, 'occurrenceId' => $occurrence->getId()));?>
             <?php $deleteLink = $this->url('admin/playgroundgame/instantwin-occurrence-remove', array('occurrenceId' => $occurrence->getId()));?>
             <td><?php echo ($occurrence->getPrize())? $occurrence->getPrize()->getTitle():''; ?></td>
