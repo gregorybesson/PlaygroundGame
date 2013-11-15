@@ -7,7 +7,7 @@ return array(
                 'cache' => 'array',
                 'paths' => __DIR__ . '/../src/PlaygroundGame/Entity'
             ),
-            
+
             'orm_default' => array(
                 'drivers' => array(
                     'PlaygroundGame\Entity' => 'playgroundgame_entity'
@@ -76,7 +76,7 @@ return array(
                             'output' => 'zfcadmin/js/deezer.js'
                         )
                     ),
-                    
+
                     'head_frontend_deezer_js' => array(
                         'assets' => array(
                             'js/deezer/dz.min.js'
@@ -98,7 +98,7 @@ return array(
                 )
             )
         ),
-        
+
         'routes' => array(
             'admin/playgroundgame/treasure-hunt-areapicker' => array(
                 '@admin_areapicker_css',
@@ -181,7 +181,7 @@ return array(
             )
         )
     ),
-    
+
     'view_manager' => array(
         'template_map' => array(),
         'template_path_stack' => array(
@@ -189,7 +189,7 @@ return array(
             __DIR__ . '/../view/frontend'
         )
     ),
-    
+
     'translator' => array(
         'locale' => 'fr_FR',
         'translation_file_patterns' => array(
@@ -201,7 +201,7 @@ return array(
             )
         )
     ),
-    
+
     'controllers' => array(
         'invokables' => array(
             'playgroundgame' => 'PlaygroundGame\Controller\IndexController',
@@ -417,7 +417,7 @@ return array(
                             )
                         )
                     ),
-                    
+
                     'lottery' => array(
                         'type' => 'Segment',
                         'options' => array(
@@ -564,7 +564,7 @@ return array(
                             )
                         )
                     ),
-                    
+
                     'instantwin' => array(
                         'type' => 'Segment',
                         'options' => array(
@@ -711,7 +711,7 @@ return array(
                             )
                         )
                     ),
-                    
+
                     'postvote' => array(
                         'type' => 'Segment',
                         'options' => array(
@@ -1193,7 +1193,7 @@ return array(
                     )
                 )
             ),
-            
+
             'admin' => array(
                 'child_routes' => array(
                     'quiz' => array(
@@ -1473,7 +1473,7 @@ return array(
                             )
                         )
                     ),
-                    
+
                     'playgroundgame' => array(
                         'type' => 'Literal',
                         'priority' => 1000,
@@ -1564,13 +1564,13 @@ return array(
                                     )
                                 )
                             ),
-                            'instantwin-code-occurrences-add' => array(
+                            'instantwin-occurrences-import' => array(
                                 'type' => 'Segment',
                                 'options' => array(
-                                    'route' => '/instantwin-code-occurrences-add/:gameId',
+                                    'route' => '/instantwin-occurrences-import/:gameId',
                                     'defaults' => array(
                                         'controller' => 'playgroundgame_admin_instantwin',
-                                        'action' => 'addCodeOccurrences',
+                                        'action' => 'importOccurrences',
                                         'gameId' => 0
                                     )
                                 )
@@ -1693,7 +1693,7 @@ return array(
                                     )
                                 )
                             ),
-                            
+
                             'entry' => array(
                                 'type' => 'Segment',
                                 'options' => array(
@@ -1809,7 +1809,7 @@ return array(
                                     )
                                 )
                             ),
-                            
+
                             'prize-category-list' => array(
                                 'type' => 'Segment',
                                 'options' => array(
@@ -1820,7 +1820,7 @@ return array(
                                     )
                                 )
                             ),
-                            
+
                             'prize-category-add' => array(
                                 'type' => 'Segment',
                                 'options' => array(
@@ -1832,7 +1832,7 @@ return array(
                                     )
                                 )
                             ),
-                            
+
                             'prize-category-edit' => array(
                                 'type' => 'Segment',
                                 'options' => array(
@@ -1844,7 +1844,7 @@ return array(
                                     )
                                 )
                             ),
-                            
+
                             'create-treasurehunt' => array(
                                 'type' => 'Segment',
                                 'options' => array(
@@ -1932,7 +1932,7 @@ return array(
             )
         )
     ),
-    
+
     'navigation' => array(
         'default' => array(
             'playgroundgame' => array(
@@ -2184,14 +2184,14 @@ return array(
                         'route' => 'admin/playgroundgame/postvote-form',
                         'privilege' => 'list'
                     ),
-                    
+
                     'create-treasurehunt' => array(
                         'label' => 'Add new treasure hunt',
                         'route' => 'admin/playgroundgame/create-treasurehunt',
                         'resource' => 'game',
                         'privilege' => 'add'
                     ),
-                    
+
                     'mission_list' => array(
                         'label' => 'Mission Management',
                         'route' => 'admin/mission/list',

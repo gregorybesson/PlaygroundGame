@@ -37,7 +37,7 @@ class InstantWinOccurrence implements InputFilterAwareInterface
     /**
      * @ORM\Column(type="string")
      */
-    protected $occurrence_value;
+    protected $value;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
@@ -68,14 +68,14 @@ class InstantWinOccurrence implements InputFilterAwareInterface
     protected $prize;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", name="created_at")
      */
-    protected $created_at;
+    protected $createdAt;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", name="updated_at")
      */
-    protected $updated_at;
+    protected $updatedAt;
 
     public function __construct()
     {
@@ -87,8 +87,8 @@ class InstantWinOccurrence implements InputFilterAwareInterface
      */
     public function createChrono()
     {
-        $this->created_at = new \DateTime("now");
-        $this->updated_at = new \DateTime("now");
+        $this->createdAt = new \DateTime("now");
+        $this->updatedAt = new \DateTime("now");
     }
 
     /**
@@ -96,7 +96,7 @@ class InstantWinOccurrence implements InputFilterAwareInterface
      */
     public function updateChrono()
     {
-        $this->updated_at = new \DateTime("now");
+        $this->updatedAt = new \DateTime("now");
     }
 
     /**
@@ -156,17 +156,17 @@ class InstantWinOccurrence implements InputFilterAwareInterface
     /**
      * @return the unknown_type
      */
-    public function getOccurrenceValue()
+    public function getValue()
     {
-        return $this->occurrence_value;
+        return $this->value;
     }
 
     /**
-     * @param Datetime $occurrence_value
+     * @param Datetime $value
      */
-    public function setOccurrenceValue($occurrence_value)
+    public function setValue($value)
     {
-        $this->occurrence_value = $occurrence_value;
+        $this->value = $value;
 
         return $this;
     }
@@ -246,15 +246,15 @@ class InstantWinOccurrence implements InputFilterAwareInterface
      */
     public function getCreatedAt()
     {
-        return $this->created_at;
+        return $this->createdAt;
     }
 
     /**
-     * @param unknown_type $created_at
+     * @param unknown_type $createdAt
      */
-    public function setCreatedAt($created_at)
+    public function setCreatedAt($createdAt)
     {
-        $this->created_at = $created_at;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
@@ -264,15 +264,15 @@ class InstantWinOccurrence implements InputFilterAwareInterface
      */
     public function getUpdatedAt()
     {
-        return $this->updated_at;
+        return $this->updatedAt;
     }
 
     /**
-     * @param unknown_type $updated_at
+     * @param unknown_type $updatedAt
      */
-    public function setUpdatedAt($updated_at)
+    public function setUpdatedAt($updatedAt)
     {
-        $this->updated_at = $updated_at;
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }
@@ -285,11 +285,6 @@ class InstantWinOccurrence implements InputFilterAwareInterface
     public function getArrayCopy()
     {
         $obj_vars = get_object_vars($this);
-
-        // if (isset($obj_vars['occurrence_date']) && $obj_vars['occurrence_date'] != null) {
-        //     $obj_vars['occurrence_date'] = $obj_vars['occurrence_date']->format('d/m/Y H:i');
-        // }
-
         return $obj_vars;
     }
 
@@ -300,7 +295,7 @@ class InstantWinOccurrence implements InputFilterAwareInterface
      */
     public function populate($data = array())
     {
-        $this->occurrence_value = (isset($data['occurrence_value']) && $data['occurrence_value'] != null) ? $data['occurrence_value'] : null;
+        $this->value = (isset($data['value']) && $data['value'] != null) ? $data['value'] : null;
         $this->active = (isset($data['active']) && $data['active'] != null) ? $data['active'] : null;
         $this->winning = (isset($data['winning']) && $data['winning'] != null) ? $data['winning'] : null;
     }

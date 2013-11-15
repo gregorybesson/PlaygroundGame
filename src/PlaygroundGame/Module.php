@@ -364,22 +364,22 @@ class Module
 
                     return $mapper;
                 },
-                
+
                 'playgroundgame_treasurehunt_mapper' => function ($sm) {
                 	$mapper = new \PlaygroundGame\Mapper\TreasureHunt(
                 			$sm->get('doctrine.entitymanager.orm_default'),
                 			$sm->get('playgroundgame_module_options')
                 	);
-                
+
                 	return $mapper;
                 },
-                
+
                 'playgroundgame_treasurehuntPuzzle_mapper' => function ($sm) {
                 	$mapper = new \PlaygroundGame\Mapper\TreasureHuntPuzzle(
                 			$sm->get('doctrine.entitymanager.orm_default'),
                 			$sm->get('playgroundgame_module_options')
                 	);
-                
+
                 	return $mapper;
                 },
 
@@ -447,8 +447,21 @@ class Module
                 'playgroundgame_instantwinoccurrence_form' => function($sm) {
                     $translator = $sm->get('translator');
                     $form = new Form\Admin\InstantWinOccurrence(null, $sm, $translator);
-                    // $instantwinOccurrence = new Entity\InstantWinOccurrence();
-                    // $form->setInputFilter($instantwinOccurrence->getInputFilter());
+                    $instantwinOccurrence = new Entity\InstantWinOccurrence();
+                    $form->setInputFilter($instantwinOccurrence->getInputFilter());
+
+                    return $form;
+                },
+
+                'playgroundgame_instantwinoccurrenceimport_form' => function($sm) {
+                    $translator = $sm->get('translator');
+                    $form = new Form\Admin\InstantWinOccurrenceImport(null, $sm, $translator);
+                    return $form;
+                },
+
+                'playgroundgame_instantwinoccurrencecode_form' => function($sm) {
+                    $translator = $sm->get('translator');
+                    $form = new Form\Frontend\InstantWinOccurrenceCode(null, $translator);
 
                     return $form;
                 },
@@ -485,22 +498,22 @@ class Module
 
                     return $form;
                 },
-                
+
                 'playgroundgame_treasurehunt_form' => function($sm) {
                 	$translator = $sm->get('translator');
                 	$form = new Form\Admin\TreasureHunt(null, $sm, $translator);
                 	$treasurehunt = new Entity\TreasureHunt();
                 	$form->setInputFilter($treasurehunt->getInputFilter());
-                
+
                 	return $form;
                 },
-                
+
                 'playgroundgame_treasurehuntpuzzle_form' => function($sm) {
                 	$translator = $sm->get('translator');
                 	$form = new Form\Admin\TreasureHuntPuzzle(null, $sm, $translator);
                 	$treasurehuntPuzzle = new Entity\TreasureHuntPuzzle();
                 	$form->setInputFilter($treasurehuntPuzzle->getInputFilter());
-                
+
                 	return $form;
                 },
             ),

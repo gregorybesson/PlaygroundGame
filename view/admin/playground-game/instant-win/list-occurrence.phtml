@@ -8,10 +8,9 @@ if (isset($fm[0]))
 <?php $this->plugin('translate')->setTranslatorTextDomain('playgroundgame'); ?>
 
 <ul class="liste-buttons">
-    <li class="btn-admin"><a href="<?php echo $this->addLink;?>"><?php echo $this->translate('Add new occurrence'); ?></a></li>    
-    <?php if($this->exportLink): ?>
-        <li class="btn-admin"><a href="<?php echo $this->exportLink; ?>"><?php echo $this->translate('Export to csv'); ?></a></li>
-    <? endif; ?>
+    <li class="btn-admin"><a href="<?php echo $this->url('admin/playgroundgame/instantwin-occurrence-add', array('gameId' => $this->gameId)) ?>"><?php echo $this->translate('Add new occurrence'); ?></a></li>
+    <li class="btn-admin"><a href="<?php echo $this->url('admin/playgroundgame/instantwin-occurrences-export', array('gameId' => $this->gameId)) ?>"><?php echo $this->translate('Export to csv'); ?></a></li>
+    <li class="btn-admin"><a href="<?php echo $this->url('admin/playgroundgame/instantwin-occurrences-import', array('gameId' => $this->gameId)) ?>"><?php echo $this->translate('Import from csv'); ?></a></li>
 </ul>
 
 <h1><a href="<?php echo $this->url('admin/playgroundgame/edit-instantwin', array('gameId' => $this->gameId)) ?>"><?php echo $this->game->getTitle(); ?></a></h1>
@@ -40,14 +39,14 @@ if (isset($fm[0]))
         <?php if ($this->game->getOccurrenceType()=='code'): ?>
             <th><?php echo $this->translate('Statut'); ?></th>
         <?php endif; ?>
-        <th></th> 
+        <th></th>
         <th></th>
     </tr>
     <?php foreach ($this->occurrences as $occurrence): ?>
         <tr>
             <!--<td><?php // echo $occurrence->getId() ?></td>-->
             <td>
-                <?php echo $occurrence->getOccurrenceValue();?>
+                <?php echo $occurrence->getValue();?>
             </td>
             <td><?php echo ($occurrence->getUser())? $occurrence->getUser()->getEmail() :''; ?></td>
             <?php $editLink   = $this->url('admin/playgroundgame/instantwin-occurrence-edit', array('gameId' => $gameId, 'occurrenceId' => $occurrence->getId()));?>
@@ -64,8 +63,10 @@ if (isset($fm[0]))
     <?php endforeach; ?>
 </table>
 
-<ul class="liste-buttons bottom">
-    <li class="btn-admin bottom"><a href="<?php echo $addLink;?>"><?php echo $this->translate('Add new occurrence'); ?></a></li>
+<ul class="liste-buttons">
+    <li class="btn-admin"><a href="<?php echo $this->url('admin/playgroundgame/instantwin-occurrence-add', array('gameId' => $this->gameId)) ?>"><?php echo $this->translate('Add new occurrence'); ?></a></li>
+    <li class="btn-admin"><a href="<?php echo $this->url('admin/playgroundgame/instantwin-occurrences-export', array('gameId' => $this->gameId)) ?>"><?php echo $this->translate('Export to csv'); ?></a></li>
+    <li class="btn-admin"><a href="<?php echo $this->url('admin/playgroundgame/instantwin-occurrences-import', array('gameId' => $this->gameId)) ?>"><?php echo $this->translate('Import from csv'); ?></a></li>
 </ul>
 
 <?php echo $this->paginationControl($this->occurrences, 'Sliding', 'playground-game/instant-win/pagination_occurencelist', array('gameId' => $this->gameId, 'filter' => $this->filter)); ?>
