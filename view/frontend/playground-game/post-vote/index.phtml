@@ -20,7 +20,7 @@
 				<a href="<?php echo $this->url('postvote/list', array('id' => $this->game->getIdentifier(), 'filter' => $this->game->getPostDisplayMode()))?>" class="arrow-right">Voir les participants</a>
 			</div>
 			<?php if($game->isStarted()):?>
-			<div class="btn btn-warning"<?php if ($this->isCtaActive) { echo ' id="cta-play"'; } ?>>
+			<div class="btn btn-warning"<?php if ($this->isCtaActive) { echo ' id="fb-play"'; } ?>>
 				<a href="<?php echo $this->url('postvote/play', array('id' => $this->game->getIdentifier()))?>" class="arrow-right">Participer</a>
 			</div>
 			<?php endif;?>
