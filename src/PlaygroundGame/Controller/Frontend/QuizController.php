@@ -6,6 +6,7 @@ use Zend\Form\Fieldset;
 use Zend\Form\Form;
 use Zend\InputFilter\Factory as InputFactory;
 use Zend\View\Model\ViewModel;
+use Zend\Session\Container;
 
 class QuizController extends GameController
 {
@@ -38,19 +39,58 @@ class QuizController extends GameController
             return $this->notFoundAction();
         }
 
-        if (! $user) {
-            // the user is not registered yet.
-            $redirect = urlencode($this->url()->fromRoute('frontend/quiz/play', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)));
 
-            return $this->redirect()->toUrl($this->url()->fromRoute('frontend/zfcuser/register', array('channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))) . '?redirect='.$redirect);
+        $session = new Container('facebook');
+        $channel = $this->getEvent()->getRouteMatch()->getParam('channel');
+
+        // Redirect to fan gate if the game require to 'like' the page before playing
+
+        if ($channel == 'facebook' && $session->offsetExists('signed_request')) {
+            if($game->getFbFan()){
+                if ($sg->checkIsFan($game) === false){
+                    return $this->redirect()->toRoute('frontend/' . $game->getClassType().'/fangate',array('id' => $game->getIdentifier()));
+                }
+            }
         }
+
+        if (!$user) {
+
+            // The game is deployed on Facebook, and played from Facebook : retrieve/register user
+
+            if ($channel == 'facebook' && $session->offsetExists('signed_request')) {
+
+                // Get Playground user from Facebook info
+
+                $viewModel = $this->buildView($game);
+                $beforeLayout = $this->layout()->getTemplate();
+
+                $view = $this->forward()->dispatch('playgrounduser_user', array('controller' => 'playgrounduser_user','action' => 'registerFacebookUser', 'provider' => $channel));
+
+                $this->layout()->setTemplate($beforeLayout);
+                $user = $view->user;
+
+                // If the user can not be created/retrieved from Facebook info, redirect to login/register form
+                if (!$user){
+                    $redirect = urlencode($this->url()->fromRoute('frontend/'. $game->getClassType() . '/play', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)));
+                return $this->redirect()->toUrl($this->url()->fromRoute('frontend/zfcuser/register', array('channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))) . '?redirect='.$redirect);
+                }
+
+                // The game is not played from Facebook : redirect to login/register form
+
+            } else {
+                $redirect = urlencode($this->url()->fromRoute('frontend/'. $game->getClassType() . '/play', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)));
+                return $this->redirect()->toUrl($this->url()->fromRoute('frontend/zfcuser/register', array('channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))) . '?redirect='.$redirect);
+            }
+
+        }
+
 
         $entry = $sg->play($game, $user);
         if (!$entry) {
             // the user has already taken part of this game and the participation limit has been reached
             $this->flashMessenger()->addMessage('Vous avez déjà participé!');
 
-            return $this->redirect()->toUrl($this->url()->fromRoute('frontend/quiz/result',array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+            return $this->redirect()->toUrl($this->url()->fromRoute('frontend/'. $game->getClassType() . '/result',array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
         }
 
         $questions = $game->getQuestions();
@@ -64,9 +104,10 @@ class QuizController extends GameController
 
         $inputFilter = new \Zend\InputFilter\InputFilter();
         $factory = new InputFactory();
-        
+
         $i = 0;
         $j = 0;
+        $explanations = array();
         foreach ($questions as $q) {
             if (($game->getQuestionGrouping() > 0 && $i % $game->getQuestionGrouping() == 0) || ($i == 0 && $game->getQuestionGrouping() == 0)) {
             	$fieldsetName = 'questionGroup' . ++ $j;
@@ -77,17 +118,44 @@ class QuizController extends GameController
             if ($q->getType() == 0) {
                 $element = new Element\Radio($name);
                 $values = array();
+                $valuesSortedByPosition = array();
                 foreach ($q->getAnswers() as $a) {
-                    $values[$a->getId()] = $a->getAnswer();
+                    $values[$a->getId()] = array(
+                        'id' => $a->getId(),
+                        'position' => $a->getPosition(),
+                        'answer' => $a->getAnswer(),
+                        );
+                        $explanations[$a->getAnswer()] = $a->getExplanation();
                 }
-                $element->setValueOptions($values);
+                sort($values);
+                foreach ($values as $key => $value) {
+                    $valuesSortedByPosition[$value['id']] = $value['answer'];
+                }
+                $element->setValueOptions($valuesSortedByPosition);
+                // TODO : Attendre la nouvelle version de Zend pour desactiver le html escape sur les labels
+                //$element->setLabelOptions(array("disable_html_escape"=>true));
+
             } elseif ($q->getType() == 1) {
                 $element = new Element\MultiCheckbox($name);
                 $values = array();
+                $valuesSortedByPosition = array();
                 foreach ($q->getAnswers() as $a) {
-                    $values[$a->getId()] = $a->getAnswer();
+                    $values[$a->getId()] = array(
+                        'id' => $a->getId(),
+                        'position' => $a->getPosition(),
+                        'answer' => $a->getAnswer(),
+                    );
+                    $explanations[$a->getAnswer()] = $a->getExplanation();
                 }
-                $element->setValueOptions($values);
+
+                foreach ($values as $key => $value) {
+                    $valuesSortedByPosition[$value['id']] = $value['answer'];
+                }
+
+                $element->setValueOptions($valuesSortedByPosition);
+                // TODO : Attendre la nouvelle version de Zend pour desactiver le html escape sur les labels
+                //$element->setLabelOptions(array("disable_html_escape"=>true));
+
             } elseif ($q->getType() == 2) {
                 $element = new Element\Textarea($name);
             }
@@ -103,13 +171,13 @@ class QuizController extends GameController
             			'name'=>'NotEmpty',
             			'options'=>array(
             				'messages'=>array(
-            					'isEmpty' => 'Merci de répondre à la question.',	
+            					'isEmpty' => 'Merci de répondre à la question.',
             				),
             			),
             		),
             	)
             )));
-            
+
             $i ++;
             if (($game->getQuestionGrouping() > 0 && $i % $game->getQuestionGrouping() == 0 && $i > 0) || $i == $totalQuestions) {
                 $form->add($fieldset);
@@ -127,16 +195,17 @@ class QuizController extends GameController
             if ($game->getTimer() || $form->isValid()) {
             	unset($data['submitForm']);
                 $entry = $this->getGameService()->createQuizReply($data, $game, $this->zfcUserAuthentication()->getIdentity());
-
-                return $this->redirect()->toUrl($this->url()->fromRoute('frontend/quiz/result', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
             }
+                
+            return $this->redirect()->toUrl($this->url()->fromRoute('frontend/'. $game->getClassType() . '/'. $game->nextStep($this->params('action')), array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));          
         }
 
         $viewModel = $this->buildView($game);
         $viewModel->setVariables(array(
-            'game' => $game,
+            'game'      => $game,
             'questions' => $questions,
-            'form' => $form,
+            'form'      => $form,
+            'explanations' => $explanations,
             'flashMessages' => $this->flashMessenger()->getMessages(),
         ));
 
@@ -174,6 +243,8 @@ class QuizController extends GameController
         $replies    = $sg->getQuizReplyMapper()->getLastGameReply($lastEntry);
         $userCorrectAnswers = 0;
         $correctAnswers = array();
+        $userAnswers = array();
+
 
         foreach ($replies as $reply) {
             foreach ($reply->getAnswers() as $answer) {
@@ -181,6 +252,7 @@ class QuizController extends GameController
                     $correctAnswers[$answer->getQuestionId()][$answer->getAnswerId()] = true;
                     ++$userCorrectAnswers;
                 }
+                $userAnswers[$answer->getQuestionId()][$answer->getAnswerId()] = true;
             }
         }
 
@@ -190,14 +262,14 @@ class QuizController extends GameController
         } else {
             $ratioCorrectAnswers = 100;
         }
-		
+
 		if($game->getTimer()){
 			$timer = $sg->getEntryMapper()->findOneBy(array('game' => $game , 'user'=> $user));
 			$start = $timer->getCreatedAt()->format('U');
 			$end = $timer->getUpdatedAt()->format('U');
 			$userTimer = array(
 								'ratio' 	=> $ratioCorrectAnswers,
-								'timer' 	=> $end - $start, 
+								'timer' 	=> $end - $start,
 								);
 		}
 
@@ -209,12 +281,28 @@ class QuizController extends GameController
                 if ($a->getCorrect()) {
                     $gameCorrectAnswers[$q->getId()]['question'] = $q->getQuestion();
                     $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['answer'] = $a->getAnswer();
+                    $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['explanation'] = $a->getExplanation();
+                    
                     if (isset($correctAnswers[$q->getId()]) && isset($correctAnswers[$q->getId()][$a->getId()])) {
                         $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['found'] = true;
                     } else {
                         $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['found'] = false;
                     }
+
+                    $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['correctAnswers'] = true;
+                } else {
+                    $gameCorrectAnswers[$q->getId()]['question'] = $q->getQuestion();
+                    $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['answer'] = $a->getAnswer();
+                    $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['explanation'] = $a->getExplanation();
+                    $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['correctAnswers'] = false;
+
+                    if (isset($userAnswers[$q->getId()]) && isset($userAnswers[$q->getId()][$a->getId()])) {
+                        $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['yourChoice'] = true;
+                    }else {
+                        $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['yourChoice'] = false;
+                    }
                 }
+
             }
             // if only one question is a prediction, we can't determine if it's a winner or looser
             if ($q->getPrediction()) {
@@ -239,6 +327,8 @@ class QuizController extends GameController
             }
 
         }
+        
+        $nextGame = parent::getMissionGameService()->checkCondition($game, $winner, $prediction, $lastEntry);
 
         $viewModel = $this->buildView($game);
         $viewModel->setVariables(array(
@@ -255,6 +345,7 @@ class QuizController extends GameController
             'socialLinkUrl' 	  => $socialLinkUrl,
             'secretKey'		  	  => $secretKey,
             'userTimer' 		  => $userTimer,
+            'nextGame'            => $nextGame
         ));
 
         return $viewModel;

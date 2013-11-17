@@ -88,7 +88,7 @@ class Game implements InputFilterAwareInterface
      * @ORM\Column(name="broadcast_platform",type="boolean", nullable=true)
      */
     protected $broadcastPlatform = 0;
-    
+
     /**
      * @ORM\Column(name="broadcast_embed",type="boolean", nullable=true)
      */
@@ -181,17 +181,17 @@ class Game implements InputFilterAwareInterface
      * @ORM\Column(type="text", nullable=true)
      */
     protected $termsBlock;
-    
+
     /**
      * @ORM\Column(name="terms_optin", type="boolean", nullable=true)
      */
     protected $termsOptin = 0;
-    
+
     /**
      * @ORM\Column(type="text", nullable=true)
      */
     protected $conditionsBlock;
-    
+
     // TODO : Adherence CMS de ces blocs à revoir
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -207,7 +207,7 @@ class Game implements InputFilterAwareInterface
      * @ORM\Column(type="text", nullable=true)
      */
     protected $columnBlock3;
-    
+
     /**
      * @ORM\OneToMany(targetEntity="Prize", mappedBy="game", cascade={"persist","remove"}, orphanRemoval=true)
      */
@@ -242,16 +242,26 @@ class Game implements InputFilterAwareInterface
      * @ORM\Column(name="fb_request_message", type="text", nullable=true)
      */
     protected $fbRequestMessage;
-    
+
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
     protected $fbFan = 0;
 
     /**
+     * @ORM\Column(name="fb_fan_gate", type="text", nullable=true)
+     */
+    protected $fbFanGate;
+
+    /**
      * @ORM\Column(name="tw_share_message", type="string", length=255, nullable=true)
      */
     protected $twShareMessage;
+    
+    /**
+     * @ORM\Column(name="steps", type="string", length=255, nullable=false)
+     */
+    protected $steps = 'index,play,result,bounce';
 
     /**
      * Doctrine accessible value of discriminator (field 'type' is not
@@ -271,7 +281,7 @@ class Game implements InputFilterAwareInterface
      * @ORM\Column(name="updated_at", type="datetime")
      */
     protected $updatedAt;
-    
+
     public function __construct()
     {
     	$this->prizes = new ArrayCollection();
@@ -388,7 +398,7 @@ class Game implements InputFilterAwareInterface
         $this->identifier = $identifier;
     }
 
-    /**
+	/**
      *
      * @return the $mainImage
      */
@@ -636,7 +646,7 @@ class Game implements InputFilterAwareInterface
     {
         $today = new DateTime('now');
         if ($this->getEndDate() && $this->getEndDate()->setTime(0,0,0) <= $today->setTime(0,0,0)
-            || 
+            ||
             ($this->getCloseDate() && $this->getCloseDate()->setTime(0,0,0) <= $today->setTime(0,0,0))
         ) {
             return true;
@@ -644,11 +654,92 @@ class Game implements InputFilterAwareInterface
 
         return false;
     }
-    
+
     public function isOnline ()
     {
         if($this->getActive() && $this->getBroadcastPlatform()){
             return true;
+        }
+
+        return false;
+    }
+    
+    public function getStepsArray()
+    {
+        $steps = null;
+        if($this->getSteps()){
+            $steps = explode(",", $this->getSteps());
+        }
+        if(!$steps){
+            $steps = array('index','play','result','bounce');
+        }
+        return $steps;
+    }
+    
+    public function getSteps()
+    {
+        return $this->steps;
+    }
+    
+    public function setSteps($steps)
+    {
+        $this->steps = $steps;
+    }
+    
+    /**
+     * This method returns the first step in the game workflow
+     * @param string $step
+     * @return string
+     */
+    public function firstStep()
+    {
+        $steps = $this->getStepsArray();
+    
+        return $steps[0];
+    }
+    
+    /**
+     * This method returns the last step in the game workflow
+     * @param string $step
+     * @return string
+     */
+    public function lastStep()
+    {
+        $steps = $this->getStepsArray();
+        $nbSteps = count($steps);
+    
+        return $steps[$nbSteps-1];
+    }
+    
+    /**
+     * This method returns the previous step in the game workflow
+     * @param string $step
+     * @return string
+     */
+    public function previousStep($step = null)
+    {
+        $steps = $this->getStepsArray();
+        $key = array_search($step, $steps);
+    
+        if(is_int($key) && $key > 0 ){
+            return $steps[$key-1];
+        }
+    
+        return false;
+    }
+    
+    /**
+     * This method returns the next step in the game workflow
+     * @param string $step
+     * @return string
+     */
+    public function nextStep($step = null)
+    {
+        $steps = $this->getStepsArray();
+        $key = array_search($step, $steps);
+        
+        if(is_int($key) && $key < count($steps)-1 ){
+            return $steps[$key+1];
         }
         
         return false;
@@ -656,7 +747,6 @@ class Game implements InputFilterAwareInterface
 
     public function getState()
     {
-        
         if ($this->isOpen()){
             if (!$this->isStarted() && !$this->isFinished()) {
                 return self::GAME_PUBLISHED;
@@ -665,13 +755,13 @@ class Game implements InputFilterAwareInterface
             } elseif ($this->isFinished()) {
                 return self::GAME_FINISHED;
             }
-        }else{            
+        }else{
             if ($this->isFinished()) {
                 return self::GAME_CLOSED;
             } else{
                 return self::GAME_SCHEDULE;
             }
-        }  
+        }
     }
 
     /**
@@ -799,7 +889,7 @@ class Game implements InputFilterAwareInterface
     {
         $this->termsBlock = $termsBlock;
     }
-    
+
     /**
      *
      * @return the $termsOptin
@@ -808,7 +898,7 @@ class Game implements InputFilterAwareInterface
     {
     	return $this->termsOptin;
     }
-    
+
     /**
      *
      * @param text $termsOptin
@@ -817,7 +907,7 @@ class Game implements InputFilterAwareInterface
     {
     	$this->termsOptin = $termsOptin;
     }
-    
+
     /**
      *
      * @return the $conditionsBlock
@@ -889,7 +979,7 @@ class Game implements InputFilterAwareInterface
     {
         $this->columnBlock3 = $columnBlock3;
     }
-    
+
     /**
      * @return the unknown_type
      */
@@ -897,7 +987,7 @@ class Game implements InputFilterAwareInterface
     {
     	return $this->prizes;
     }
-    
+
     /**
      * frm collection solution
      * @param unknown_type $prizes
@@ -905,10 +995,10 @@ class Game implements InputFilterAwareInterface
     public function setPrizes(ArrayCollection $prizes)
     {
     	$this->prizes = $prizes;
-    
+
     	return $this;
     }
-    
+
     public function addPrizes(ArrayCollection $prizes)
     {
     	foreach ($prizes as $prize) {
@@ -916,8 +1006,8 @@ class Game implements InputFilterAwareInterface
     		$this->prizes->add($prize);
     	}
     }
-    
-    
+
+
     public function removePrizes(ArrayCollection $prizes)
     {
     	foreach ($prizes as $prize) {
@@ -925,7 +1015,7 @@ class Game implements InputFilterAwareInterface
     		$this->prizes->removeElement($prize);
     	}
     }
-    
+
     /**
      * Add a prize to the game.
      *
@@ -1095,7 +1185,7 @@ class Game implements InputFilterAwareInterface
 
         return $this;
     }
-    
+
     /**
      *
      * @return the fbFan
@@ -1104,7 +1194,7 @@ class Game implements InputFilterAwareInterface
     {
     	return $this->fbFan;
     }
-    
+
     /**
      *
      * @param unknown_type $fbFan
@@ -1112,8 +1202,28 @@ class Game implements InputFilterAwareInterface
     public function setFbFan ($fbFan)
     {
     	$this->fbFan = $fbFan;
-    
+
     	return $this;
+    }
+
+    /**
+     *
+     * @return the fbFanGate
+     */
+    public function getFbFanGate ()
+    {
+        return $this->fbFanGate;
+    }
+
+    /**
+     *
+     * @param unknown_type $fbFanGate
+     */
+    public function setFbFanGate ($fbFanGate)
+    {
+        $this->fbFanGate = $fbFanGate;
+
+        return $this;
     }
 
     /**
@@ -1278,12 +1388,17 @@ class Game implements InputFilterAwareInterface
                 'name' => 'fbAppId',
                 'required' => false
             )));
-            
+
             $inputFilter->add($factory->createInput(array(
            		'name' => 'fbFan',
            		'required' => false
             )));
-            
+
+            $inputFilter->add($factory->createInput(array(
+                    'name' => 'fbFanGate',
+                    'required' => false
+            )));
+
             $inputFilter->add($factory->createInput(array(
             	'name' => 'prizes',
             	'required' => false
@@ -1331,7 +1446,7 @@ class Game implements InputFilterAwareInterface
                'name' => 'closeDate',
                'required' => false,
             )));
-            
+
             $inputFilter->add($factory->createInput(array(
             	'name' => 'termsOptin',
             	'required' => false,

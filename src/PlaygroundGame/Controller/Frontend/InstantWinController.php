@@ -4,19 +4,16 @@ namespace PlaygroundGame\Controller\Frontend;
 
 use PlaygroundGame\Entity\Entry;
 use Zend\View\Model\ViewModel;
+use Zend\Session\Container;
 
 class InstantWinController extends GameController
 {
-    /**
-     * @var leaderBoardService
-     */
-    protected $leaderBoardService;
-
+    
     /**
      * @var gameService
      */
     protected $gameService;
-
+    
     public function playAction()
     {
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
@@ -28,34 +25,72 @@ class InstantWinController extends GameController
             return $this->notFoundAction();
         }
 
-        if (!$user) {
-            $redirect = urlencode($this->url()->fromRoute('frontend/instantwin/play', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)));
+        $session = new Container('facebook');
+        $channel = $this->getEvent()->getRouteMatch()->getParam('channel');
 
-            return $this->redirect()->toUrl($this->url()->fromRoute('frontend/zfcuser/register', array('channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))) . '?redirect='.$redirect);
+        // Redirect to fan gate if the game require to 'like' the page before playing
+
+        if ($channel == 'facebook' && $session->offsetExists('signed_request')) {
+            if($game->getFbFan()){
+                if ($sg->checkIsFan($game) === false){
+                    return $this->redirect()->toRoute($game->getClassType().'/fangate',array('id' => $game->getIdentifier()));
+                }
+            }
+        }
+
+        if (!$user) {
+
+            // The game is deployed on Facebook, and played from Facebook : retrieve/register user
+
+            if ($channel == 'facebook' && $session->offsetExists('signed_request')) {
+
+                // Get Playground user from Facebook info
+
+                $viewModel = $this->buildView($game);
+                $beforeLayout = $this->layout()->getTemplate();
+
+                $view = $this->forward()->dispatch('playgrounduser_user', array('controller' => 'playgrounduser_user', 'action' => 'registerFacebookUser', 'provider' => $channel));
+
+                $this->layout()->setTemplate($beforeLayout);
+                $user = $view->user;
+
+                // If the user can not be created/retrieved from Facebook info, redirect to login/register form
+                if (!$user){
+                    $redirect = urlencode($this->url()->fromRoute('frontend/instantwin/play', array('id' => $game->getIdentifier(), 'channel' => $channel), array('force_canonical' => true)));
+                    return $this->redirect()->toUrl($this->url()->fromRoute('frontend/zfcuser/register', array('channel' => $channel)) . '?redirect='.$redirect);
+                }
+
+            // The game is not played from Facebook : redirect to login/register form
+
+            } else {
+                $redirect = urlencode($this->url()->fromRoute('frontend/instantwin/play', array('id' => $game->getIdentifier(), 'channel' => $channel), array('force_canonical' => true)));
+                return $this->redirect()->toUrl($this->url()->fromRoute('frontend/zfcuser/register', array('channel' => $channel)) . '?redirect='.$redirect);
+            }
+
         }
 
         $viewModel = $this->buildView($game);
         $beforeLayout = $this->layout()->getTemplate();
         // je délègue la responsabilité du formulaire à PlaygroundUser, y compris dans sa gestion des erreurs
-        $form = $this->forward()->dispatch('playgrounduser_user', array('action' => 'address'));
+        $form = $this->forward()->dispatch('playgrounduser_user', array('controller' => 'playgrounduser_user', 'action' => 'address'));
 
         // TODO : suite au forward, le template de layout a changé, je dois le rétablir...
         $this->layout()->setTemplate($beforeLayout);
         // Le formulaire est validé, il renvoie true et non un ViewModel
         if (!($form instanceof \Zend\View\Model\ViewModel)) {
-            return $this->redirect()->toUrl($this->url()->fromRoute('frontend/instantwin/result', array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+            return $this->redirect()->toUrl($this->url()->fromRoute('frontend/instantwin/result', array('id' => $identifier, 'channel' => $channel)));
         }
 
         if ($this->getRequest()->isPost()) {
             // En post, je reçois la maj du form pour les gagnants. Je n'ai pas à créer une nouvelle participation mais vérifier la précédente
             $lastEntry = $sg->getEntryMapper()->findLastInactiveEntryById($game, $user);
             if (!$lastEntry) {
-                return $this->redirect()->toUrl($this->url()->fromRoute('frontend/instantwin', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)));
+                return $this->redirect()->toUrl($this->url()->fromRoute('frontend/instantwin', array('id' => $game->getIdentifier(), 'channel' => $channel), array('force_canonical' => true)));
             }
             $winner = $lastEntry->getWinner();
             // if not winner, I'm not authorized to call this page in POST mode.
             if (!$winner) {
-                return $this->redirect()->toUrl($this->url()->fromRoute('frontend/instantwin', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)));
+                return $this->redirect()->toUrl($this->url()->fromRoute('frontend/instantwin', array('id' => $game->getIdentifier(), 'channel' => $channel), array('force_canonical' => true)));
             }
 
             // si la requete est POST et que j'arrive ici, c'est que le formulaire contient une erreur. Donc je prépare la vue formulaire sans le grattage
@@ -67,7 +102,7 @@ class InstantWinController extends GameController
                 // the user has already taken part of this game and the participation limit has been reached
                 $this->flashMessenger()->addMessage('Vous avez déjà participé');
 
-                return $this->redirect()->toUrl($this->url()->fromRoute('frontend/instantwin/result',array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+                return $this->redirect()->toUrl($this->url()->fromRoute('frontend/instantwin/result',array('id' => $identifier, 'channel' => $channel)));
             }
 
             // update the winner attribute in entry.
@@ -77,7 +112,7 @@ class InstantWinController extends GameController
         $viewModel->setVariables(array(
             'game' => $game,
             'winner' => $winner,
-            'flashMessages' => $this->flashMessenger()->getMessages(),
+            'flashMessages' => $this->flashMessenger()->getMessages()
         ));
         $viewModel->addChild($form, 'form');
 
@@ -129,6 +164,8 @@ class InstantWinController extends GameController
             }
         }
 
+        $nextGame = parent::getMissionGameService()->checkCondition($game, $winner, true, $lastEntry);
+
         $viewModel = $this->buildView($game);
         $viewModel->setVariables(array(
             'statusMail'       => $statusMail,
@@ -137,7 +174,8 @@ class InstantWinController extends GameController
             'flashMessages'    => $this->flashMessenger()->getMessages(),
             'form'             => $form,
             'socialLinkUrl'    => $socialLinkUrl,
-            'secretKey'		   => $secretKey
+            'secretKey'		   => $secretKey,
+            'nextGame'         => $nextGame
         ));
 
         return $viewModel;
@@ -236,22 +274,6 @@ class InstantWinController extends GameController
     public function setGameService(GameService $gameService)
     {
         $this->gameService = $gameService;
-
-        return $this;
-    }
-
-    public function getLeaderBoardService()
-    {
-        if (!$this->leaderBoardService) {
-            $this->leaderBoardService = $this->getServiceLocator()->get('playgroundgame_leaderboard_service');
-        }
-
-        return $this->leaderBoardService;
-    }
-
-    public function setLeaderBoardService(LeaderBoardService $leaderBoardService)
-    {
-        $this->leaderBoardService = $leaderBoardService;
 
         return $this;
     }

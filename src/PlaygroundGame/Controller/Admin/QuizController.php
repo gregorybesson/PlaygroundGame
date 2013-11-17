@@ -65,10 +65,13 @@ class QuizController extends AbstractActionController
         $form->bind($question);
 
         if ($this->getRequest()->isPost()) {
-            $data = array_merge(
+            $data = array_replace_recursive(
                 $this->getRequest()->getPost()->toArray(),
                 $this->getRequest()->getFiles()->toArray()
             );
+            if(empty($data['prizes'])){
+                $data['prizes'] = array();
+            }
                $question = $service->createQuestion($data);
                if ($question) {
                    // Redirect to list of games
@@ -103,10 +106,13 @@ class QuizController extends AbstractActionController
         $form->bind($question);
 
         if ($this->getRequest()->isPost()) {
-            $data = array_merge(
+            $data = array_replace_recursive(
                 $this->getRequest()->getPost()->toArray(),
                 $this->getRequest()->getFiles()->toArray()
             );
+            if(empty($data['prizes'])){
+                $data['prizes'] = array();
+            }
             $question = $service->updateQuestion($data, $question);
             if ($question) {
                 // Redirect to list of games
@@ -226,7 +232,7 @@ class QuizController extends AbstractActionController
         return $viewModel->setVariables(array('form' => $form, 'title' => 'Edit quiz'));
     }
 
-    public function leaderboardAction()
+    public function entryAction()
     {
         $gameId         = $this->getEvent()->getRouteMatch()->getParam('gameId');
         $game           = $this->getAdminGameService()->getGameMapper()->findById($gameId);
@@ -285,13 +291,19 @@ class QuizController extends AbstractActionController
         $content        = "\xEF\xBB\xBF"; // UTF-8 BOM
         $content       .= "ID;Pseudo;Civilité;Nom;Prénom;E-mail;Optin Newsletter;Optin partenaire;Eligible TAS ?" . $label . ";Date - H;Adresse;CP;Ville;Téléphone;Mobile;Date d'inscription;Date de naissance;\n";
         foreach ($entries as $e) {
-
+            
+            $answers = array();
             $replies   = $sg->getQuizReplyMapper()->getLastGameReply($e);
+
+            if($replies){
+                $answers = $replies[0]->getAnswers();   
+            }
+
             $replyText = "";
             foreach ($questionArray as $q) {
                 $found = false;
                 if ($q['open'] == false) {
-                    foreach ($replies->getAnswers() as $reply) {
+                    foreach ($answers as $reply) {
                        if ($q['q'] == $reply->getQuestionId() && $q['a'] == $reply->getAnswerId()) {
                            $replyText .= ";1";
                            $found = true;
@@ -302,7 +314,7 @@ class QuizController extends AbstractActionController
                         $replyText .= ";0";
                     }
                 } else {
-                    foreach ($replies->getAnswers() as $reply) {
+                    foreach ($answers as $reply) {
                         if ($q['q'] == $reply->getQuestionId()) {
                             $replyText .= ";" . strip_tags(str_replace("\r\n","",$reply->getAnswer()));
                             $found = true;
@@ -351,7 +363,7 @@ class QuizController extends AbstractActionController
         $headers = $response->getHeaders();
         $headers->addHeaderLine('Content-Encoding: UTF-8');
         $headers->addHeaderLine('Content-Type', 'text/csv; charset=UTF-8');
-        $headers->addHeaderLine('Content-Disposition', "attachment; filename=\"leaderboard.csv\"");
+        $headers->addHeaderLine('Content-Disposition', "attachment; filename=\"entry.csv\"");
         $headers->addHeaderLine('Accept-Ranges', 'bytes');
         $headers->addHeaderLine('Content-Length', strlen($content));
 
@@ -365,8 +377,6 @@ class QuizController extends AbstractActionController
         // magically create $content as a string containing CSV data
         $gameId         = $this->getEvent()->getRouteMatch()->getParam('gameId');
         $game           = $this->getAdminGameService()->getGameMapper()->findById($gameId);
-        //$service        = $this->getLeaderBoardService();
-        //$leaderboards   = $service->getLeaderBoardMapper()->findBy(array('game' => $game));
 
         $winningEntries = $this->getAdminGameService()->draw($game);
 

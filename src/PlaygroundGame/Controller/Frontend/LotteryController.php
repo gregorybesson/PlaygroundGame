@@ -4,6 +4,7 @@ namespace PlaygroundGame\Controller\Frontend;
 
 use PlaygroundGame\Entity\Lottery;
 use Zend\View\Model\ViewModel;
+use Zend\Session\Container;
 
 class LotteryController extends GameController
 {
@@ -24,27 +25,66 @@ class LotteryController extends GameController
             return $this->notFoundAction();
         }
 
-        if (!$user) {
-            // the user is not registered yet.
-            $redirect = urlencode($this->url()->fromRoute('frontend/lottery/play', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)));
 
-            return $this->redirect()->toUrl($this->url()->fromRoute('frontend/zfcuser/register', array('channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))) . '?redirect='.$redirect);
+        $session = new Container('facebook');
+        $channel = $this->getEvent()->getRouteMatch()->getParam('channel');
+
+        // Redirect to fan gate if the game require to 'like' the page before playing
+
+        if ($channel == 'facebook' && $session->offsetExists('signed_request')) {
+            if($game->getFbFan()){
+                if ($sg->checkIsFan($game) === false){
+                    return $this->redirect()->toRoute($game->getClassType().'/fangate',array('id' => $game->getIdentifier()));
+                }
+            }
         }
+
+        if (!$user) {
+
+            // The game is deployed on Facebook, and played from Facebook : retrieve/register user
+
+            if ($channel == 'facebook' && $session->offsetExists('signed_request')) {
+
+                // Get Playground user from Facebook info
+
+                $viewModel = $this->buildView($game);
+                $beforeLayout = $this->layout()->getTemplate();
+
+                $view = $this->forward()->dispatch('playgrounduser_user', array('controller' => 'playgrounduser_user', 'action' => 'registerFacebookUser', 'provider' => $channel));
+
+                $this->layout()->setTemplate($beforeLayout);
+                $user = $view->user;
+
+                // If the user can not be created/retrieved from Facebook info, redirect to login/register form
+                if (!$user){
+                    $redirect = urlencode($this->url()->fromRoute('frontend/lottery/play', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)));
+                    return $this->redirect()->toUrl($this->url()->fromRoute('frontend/zfcuser/register', array('channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))) . '?redirect='.$redirect);
+                }
+
+                // The game is not played from Facebook : redirect to login/register form
+
+            } else {
+                $redirect = urlencode($this->url()->fromRoute('frontend/lottery/play', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)));
+                return $this->redirect()->toUrl($this->url()->fromRoute('frontend/zfcuser/register', array('channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))) . '?redirect='.$redirect);
+            }
+
+        }
+
 
         $entry = $sg->play($game, $user);
         if (!$entry) {
-            // the user has already taken part of this game and the participation limit has been reache
+            // the user has already taken part of this game and the participation limit has been reached
             $this->flashMessenger()->addMessage('Vous avez déjà participé');
 
             return $this->redirect()->toUrl($this->url()->fromRoute('frontend/lottery/result',array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
         }
 
-        // Every participation is eligible to draw
+        // Every entry is eligible to draw
         $entry->setDrawable(true);
         $entry->setActive(false);
         $sg->getEntryMapper()->update($entry);
 
-        return $this->redirect()->toUrl($this->url()->fromRoute('frontend/lottery/result', array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+        return $this->redirect()->toUrl($this->url()->fromRoute('frontend/'. $game->getClassType() . '/'. $game->nextStep($this->params('action')), array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
     }
 
     public function resultAction()
@@ -85,6 +125,8 @@ class LotteryController extends GameController
             }
         }
 
+        $nextGame = parent::getMissionGameService()->checkCondition($game, $lastEntry->getWinner(), true, $lastEntry);
+
         $viewModel = $this->buildView($game);
         $viewModel->setVariables(array(
                 'statusMail'       => $statusMail,
@@ -92,7 +134,8 @@ class LotteryController extends GameController
                 'flashMessages'    => $this->flashMessenger()->getMessages(),
                 'form'             => $form,
                 'socialLinkUrl'    => $socialLinkUrl,
-                'secretKey'		   => $secretKey
+                'secretKey'		   => $secretKey,
+                'nextGame'         => $nextGame
             )
         );
 

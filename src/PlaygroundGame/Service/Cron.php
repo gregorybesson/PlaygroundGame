@@ -12,9 +12,6 @@ use PlaygroundGame\Mapper\GameInterface as GameMapperInterface;
 
 class Cron extends EventProvider implements ServiceManagerAwareInterface
 {
-
-    protected $leaderBoardService;
-
     /**
      * @var GameMapperInterface
      */
@@ -177,22 +174,6 @@ class Cron extends EventProvider implements ServiceManagerAwareInterface
         }
 
         return $this->options;
-    }
-
-    public function getLeaderBoardService()
-    {
-        if (!$this->leaderBoardService) {
-            $this->leaderBoardService = $this->getServiceManager()->get('playgroundgame_leaderboard_service');
-        }
-
-        return $this->leaderBoardService;
-    }
-
-    public function setLeaderBoardService(LeaderBoardService $leaderBoardService)
-    {
-        $this->leaderBoardService = $leaderBoardService;
-
-        return $this;
     }
 
     /**

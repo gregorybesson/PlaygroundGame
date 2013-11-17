@@ -67,6 +67,16 @@ class QuizQuestion implements InputFilterAwareInterface
      * @ORM\Column(type="string", nullable=true)
      */
     protected $image;
+    
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $audio = 0;
+    
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    protected $autoplay = false;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -79,9 +89,9 @@ class QuizQuestion implements InputFilterAwareInterface
     protected $prediction = 0;
 
     /**
-     * @ORM\Column(type="boolean", nullable=false)
+     * @ORM\Column(type="boolean", nullable=true)
      */
-    protected $timer = 0;
+    protected $timer = false;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
@@ -271,6 +281,42 @@ class QuizQuestion implements InputFilterAwareInterface
     {
         $this->image = $image;
 
+        return $this;
+    }
+    
+    /**
+     * @return the unknown_type
+     */
+    public function getAudio()
+    {
+        return $this->audio;
+    }
+    
+    /**
+     * @param unknown_type audio
+     */
+    public function setAudio($audio)
+    {
+        $this->audio = $audio;
+    
+        return $this;
+    }
+    
+    /**
+     * @return the unknown_type
+     */
+    public function getAutoplay()
+    {
+        return $this->autoplay;
+    }
+    
+    /**
+     * @param unknown_type autoplay
+     */
+    public function setAutoplay($autoplay)
+    {
+        $this->autoplay = $autoplay;
+    
         return $this;
     }
 
@@ -518,6 +564,14 @@ class QuizQuestion implements InputFilterAwareInterface
         if (isset($data['video']) && $data['video'] != null) {
             $this->video = $data['video'];
         }
+        
+        if (isset($data['audio']) && $data['audio'] != null) {
+            $this->audio = $data['audio'];
+        }
+        
+        if (isset($data['autoplay']) && $data['autoplay'] != null) {
+            $this->autoplay = $data['autoplay'];
+        }
 
         if (isset($data['timer']) && $data['timer'] != null) {
             $this->timer = $data['timer'];
@@ -578,6 +632,15 @@ class QuizQuestion implements InputFilterAwareInterface
                     ),
                 ),*/
             )));
+            
+            $inputFilter->add($factory->createInput(array(
+                'name'       => 'timer',
+                'required'   => false,
+                'allowEmpty' => true,
+                'filters'    => array(
+                    array('name' => 'Boolean'),
+                ),
+            )));
 
             $inputFilter->add($factory->createInput(array(
                 'name'     => 'type',
@@ -597,7 +660,24 @@ class QuizQuestion implements InputFilterAwareInterface
                 'name'     => 'image',
                 'required' => false,
             )));
-
+            
+            $inputFilter->add($factory->createInput(array(
+                'name'     => 'audio',
+                'required' => false,
+                'filters' => array(
+                    array('name' => 'Int')
+                ),
+            )));
+            
+            $inputFilter->add($factory->createInput(array(
+                'name'       => 'autoplay',
+                'required'   => false,
+                'allowEmpty' => true,
+                'filters'    => array(
+                    array('name' => 'Boolean'),
+                ),
+            )));
+            
             $this->inputFilter = $inputFilter;
         }
 

@@ -5,18 +5,13 @@ namespace PlaygroundGame\Controller\Frontend;
 use Zend\Form\Element;
 use Zend\Form\Form;
 use Zend\InputFilter\Factory as InputFactory;
-
-use PlaygroundGame\Entity\LeaderBoard;
+use Zend\Session\Container;
 use PlaygroundGame\Form\Frontend\PostVoteVote;
 use Zend\View\Model\ViewModel;
 
+
 class PostVoteController extends GameController
 {
-    /**
-     * @var leaderBoardService
-     */
-    protected $leaderBoardService;
-
     /**
      * @var gameService
      */
@@ -42,11 +37,48 @@ class PostVoteController extends GameController
             return $this->notFoundAction();
         }
 
-        if (! $user) {
-            // the user is not registered yet.
-            $redirect = urlencode($this->url()->fromRoute('frontend/postvote/play', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)));
+        $session = new Container('facebook');
+        $channel = $this->getEvent()->getRouteMatch()->getParam('channel');
 
-            return $this->redirect()->toUrl($this->url()->fromRoute('frontend/zfcuser/register', array('channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))) . '?redirect='.$redirect);
+        // Redirect to fan gate if the game require to 'like' the page before playing
+
+        if ($channel == 'facebook' && $session->offsetExists('signed_request')) {
+            if($game->getFbFan()){
+                if ($sg->checkIsFan($game) === false){
+                    return $this->redirect()->toRoute($game->getClassType().'/fangate',array('id' => $game->getIdentifier()));
+                }
+            }
+        }
+
+        if (!$user) {
+
+            // The game is deployed on Facebook, and played from Facebook : retrieve/register user
+
+            if ($channel == 'facebook' && $session->offsetExists('signed_request')) {
+
+                // Get Playground user from Facebook info
+
+                $viewModel = $this->buildView($game);
+                $beforeLayout = $this->layout()->getTemplate();
+
+                $view = $this->forward()->dispatch('playgrounduser_user', array('controller' => 'playgrounduser_user','action' => 'registerFacebookUser', 'provider' => $channel));
+
+                $this->layout()->setTemplate($beforeLayout);
+                $user = $view->user;
+
+                // If the user can not be created/retrieved from Facebook info, redirect to login/register form
+                if (!$user){
+                    $redirect = urlencode($this->url()->fromRoute('frontend/postvote/play', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)));
+                    return $this->redirect()->toUrl($this->url()->fromRoute('frontend/zfcuser/register', array('channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))) . '?redirect='.$redirect);
+                }
+
+                // The game is not played from Facebook : redirect to login/register form
+
+            } else {
+                $redirect = urlencode($this->url()->fromRoute('frontend/postvote/play', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)));
+                return $this->redirect()->toUrl($this->url()->fromRoute('frontend/zfcuser/register', array('channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))) . '?redirect='.$redirect);
+            }
+
         }
 
         $entry = $sg->play($game, $user);
@@ -62,11 +94,11 @@ class PostVoteController extends GameController
             $postId = $lastPost->getId();
             if ($lastPost->getStatus() == 2) {
                 // the user has already taken part of this game and the participation limit has been reached
-                $this->flashMessenger()->addMessage('Vous avez déjà participé!');
+                $this->flashMessenger()->addMessage($this->getServiceLocator()->get('translator')->translate('You have already a Post'));
 
                 return $this->redirect()->toUrl($this->url()->fromRoute('frontend/postvote/post',array('id' => $identifier, 'post' => $postId, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
             } else {
-                $this->flashMessenger()->addMessage('Votre participation est en cours de validation.');
+                $this->flashMessenger()->addMessage($this->getServiceLocator()->get('translator')->translate('Your Post is waiting for validation'));
 
                 return $this->redirect()->toUrl($this->url()->fromRoute('frontend/postvote/post', array('id' => $identifier, 'post' => $postId, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
             }
@@ -225,14 +257,14 @@ class PostVoteController extends GameController
         }
 
 		$form->setInputFilter($inputFilter);
-		
+
         // Je recherche le post associé à entry + status == 0. Si non trouvé, je redirige vers home du jeu.
         $post = $sg->getPostVotePostMapper()->findOneBy(array('entry' => $entry, 'status' => 0));
         if ($post) {
             foreach ($post->getPostElements() as $element) {
                 if ($form->get($element->getName())) {
                     $form->get($element->getName())->setValue($element->getValue());
-					
+
 					$elementType = $form->get($element->getName())->getAttribute('type');
 					if($elementType == 'file' && $element->getValue() != ''){
 						$filter = $form->getInputFilter();
@@ -243,8 +275,6 @@ class PostVoteController extends GameController
                 }
             }
         }
-
-        
 
         if ($this->getRequest()->isPost()) {
             // POST Request: Process form
@@ -262,7 +292,7 @@ class PostVoteController extends GameController
 
                 if ($post) {
                     // determine the route where the user should go
-                    $redirectUrl = $this->url()->fromRoute('frontend/postvote/play/preview', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')));
+                    $redirectUrl = $this->url()->fromRoute('frontend/postvote/preview', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')));
 
                     return $this->redirect()->toUrl($redirectUrl);
                 }
@@ -453,14 +483,6 @@ class PostVoteController extends GameController
             return $this->notFoundAction();
         }
 
-        // Is the user registered ? If not, I redirect him to the game home
-        /*$mapperLeader = $this->getLeaderBoardService()->getLeaderBoardMapper();
-        /*$leaderBoard = $mapperLeader->findBy(array('user' => $this->zfcUserAuthentication()->getIdentity(), 'game' => $game));
-
-        /*if ($leaderBoard == null) {
-            return $this->redirect()->toUrl($this->url()->fromRoute('frontend/postvote', array('id' => $identifier)));
-        }*/
-
         // Has the user finished the game ?
         $lastEntry = $this->getGameService()->getEntryMapper()->findLastInactiveEntryById($game, $user);
 
@@ -482,12 +504,15 @@ class PostVoteController extends GameController
             }
         }
 
+        $nextGame = parent::getMissionGameService()->checkCondition($game, $lastEntry->getWinner(), true, $lastEntry);
+
         $viewModel = $this->buildView($game);
         $viewModel->setVariables(array(
                 'statusMail'       => $statusMail,
                 'game'             => $game,
                 'flashMessages'    => $this->flashMessenger()->getMessages(),
-                'form'             => $form
+                'form'             => $form,
+                'nextGame'         => $nextGame,
             )
         );
 
@@ -704,9 +729,9 @@ class PostVoteController extends GameController
                 'value' => '1'
             ),
         ));
-		
+
 		$reportId ='';
-		
+
         if ($request->isPost()) {
             $data = $request->getPost()->toArray();
 
@@ -826,21 +851,4 @@ class PostVoteController extends GameController
 
         return $this;
     }
-
-    public function getLeaderBoardService()
-    {
-        if (!$this->leaderBoardService) {
-            $this->leaderBoardService = $this->getServiceLocator()->get('playgroundgame_leaderboard_service');
-        }
-
-        return $this->leaderBoardService;
-    }
-
-    public function setLeaderBoardService(LeaderBoardService $leaderBoardService)
-    {
-        $this->leaderBoardService = $leaderBoardService;
-
-        return $this;
-    }
-
 }

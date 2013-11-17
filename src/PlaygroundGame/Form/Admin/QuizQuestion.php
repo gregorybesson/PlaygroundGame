@@ -167,6 +167,22 @@ class QuizQuestion extends ProvidesEventsForm
                 ),
             ),
         ));
+        
+        $this->add(array(
+            'name' => 'audio',
+            'type' => 'Zend\Form\Element\Hidden',
+            'attributes' => array(
+                'value' => 0,
+            ),
+        ));
+        
+        $this->add(array(
+            'name' => 'autoplay',
+            'type' => 'Zend\Form\Element\Hidden',
+            'attributes' => array(
+                'value' => 0,
+            ),
+        ));
 
         // Adding an empty upload field to be able to correctly handle this on the service side.
         $this->add(array(

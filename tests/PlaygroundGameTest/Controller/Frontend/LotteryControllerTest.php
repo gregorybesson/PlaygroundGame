@@ -103,7 +103,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         $pluginManager->setService('zfcUserAuthentication', $authMock);
 
     	// I check that the array in findOneBy contains the parameter 'active' = 1
-    	$f->expects($this->once())
+    	$f->expects($this->exactly(2))
     	->method('checkGame')
     	->will($this->returnValue($game));
 
@@ -122,7 +122,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     	$this->assertModuleName('playgroundgame');
     	$this->assertControllerName('playgroundgame_lottery');
     	$this->assertControllerClass('LotteryController');
-    	$this->assertActionName('index');
+    	$this->assertActionName('home');
     	$this->assertMatchedRouteName('frontend/lottery');
 
     	$this->assertRedirectTo('/loterie/gameid/fangate');
@@ -172,7 +172,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     	$pluginManager->setService('zfcUserAuthentication', $authMock);
 
     	// I check that the array in findOneBy contains the parameter 'active' = 1
-    	$f->expects($this->once())
+    	$f->expects($this->exactly(2))
     	->method('checkGame')
     	->will($this->returnValue($game));
 
@@ -190,7 +190,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     	$this->assertModuleName('playgroundgame');
     	$this->assertControllerName('playgroundgame_lottery');
     	$this->assertControllerClass('LotteryController');
-    	$this->assertActionName('index');
+    	$this->assertActionName('home');
     	$this->assertMatchedRouteName('frontend/lottery');
     }
 
@@ -238,7 +238,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     	$pluginManager->setService('zfcUserAuthentication', $authMock);
 
     	// I check that the array in findOneBy contains the parameter 'active' = 1
-    	$f->expects($this->once())
+    	$f->expects($this->exactly(2))
     	->method('checkGame')
     	->will($this->returnValue($game));
 
@@ -256,7 +256,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     	$this->assertModuleName('playgroundgame');
     	$this->assertControllerName('playgroundgame_lottery');
     	$this->assertControllerClass('LotteryController');
-    	$this->assertActionName('index');
+    	$this->assertActionName('home');
     	$this->assertMatchedRouteName('frontend/lottery');
     }
 
@@ -593,6 +593,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     	$game = new GameEntity();
     	$game->setBroadcastPlatform(true);
     	$game->setActive(true);
+    	$game->setClassType('lottery');
     	$game->setIdentifier('gameid');
 
     	$entry = new \PlaygroundGame\Entity\Entry();
@@ -1797,6 +1798,25 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     public function testFangateAction()
     {
 
+        $serviceManager = $this->getApplicationServiceLocator();
+        $serviceManager->setAllowOverride(true);
+        
+        $pluginManager    = $this->getApplicationServiceLocator()->get('ControllerPluginManager');
+        
+        $game = new GameEntity();
+        
+        $f = $this->getMockBuilder('PlaygroundGame\Service\Game')
+        ->setMethods(array('checkGame', 'checkIsFan', 'checkExistingEntry', 'getServiceManager'))
+        ->disableOriginalConstructor()
+        ->getMock();
+        
+        $serviceManager->setService('playgroundgame_lottery_service', $f);
+        
+        // I check that the array in findOneBy contains the parameter 'active' = 1
+        $f->expects($this->once())
+        ->method('checkGame')
+        ->will($this->returnValue($game));
+        
     	$this->dispatch('/loterie/gameid/fangate');
 
     	$this->assertModuleName('playgroundgame');

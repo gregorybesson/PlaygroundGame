@@ -35,10 +35,13 @@ class TreasureHuntController extends AbstractActionController
 
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $data = array_merge(
+            $data = array_replace_recursive(
                 $this->getRequest()->getPost()->toArray(),
                 $this->getRequest()->getFiles()->toArray()
             );
+            if(empty($data['prizes'])){
+                $data['prizes'] = array();
+            }
             $game = $service->create($data, $treasurehunt, 'playgroundgame_treasurehunt_form');
             if ($game) {
                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The game was created');
@@ -97,10 +100,13 @@ class TreasureHuntController extends AbstractActionController
         $form->bind($game);
 
         if ($this->getRequest()->isPost()) {
-            $data = array_merge(
+            $data = array_replace_recursive(
                 $this->getRequest()->getPost()->toArray(),
                 $this->getRequest()->getFiles()->toArray()
             );
+            if(empty($data['prizes'])){
+                $data['prizes'] = array();
+            }
             
             $result = $service->edit($data, $game, 'playgroundgame_treasurehunt_form');
 
@@ -116,7 +122,7 @@ class TreasureHuntController extends AbstractActionController
     }
 
 
-    public function listStepAction()
+    public function listPuzzleAction()
     {
     	$service 	= $this->getAdminGameService();
     	$gameId 	= $this->getEvent()->getRouteMatch()->getParam('gameId');
@@ -127,20 +133,20 @@ class TreasureHuntController extends AbstractActionController
     	}
     
     	//$treasurehunt = $service->getGameMapper()->findById($gameId);
-    	$steps = $service->getTreasureHuntStepMapper()->findByGameId($gameId);
+    	$puzzles = $service->getTreasureHuntPuzzleMapper()->findByGameId($gameId);
     	$game = $service->getGameMapper()->findById($gameId);
     
-    	if (is_array($steps)) {
-    		$paginator = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\ArrayAdapter($steps));
+    	if (is_array($puzzles)) {
+    		$paginator = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\ArrayAdapter($puzzles));
     		$paginator->setItemCountPerPage(50);
     		$paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
     	} else {
-    		$paginator = $steps;
+    		$paginator = $puzzles;
     	}
     
     	return new ViewModel(
     			array(
-    					'steps' => $paginator,
+    					'puzzles' => $paginator,
     					'gameId' 	  => $gameId,
     					'filter'	  => $filter,
     					'game' 		  => $game,
@@ -148,24 +154,24 @@ class TreasureHuntController extends AbstractActionController
     	);
     }
     
-    public function addStepAction()
+    public function addPuzzleAction()
     {
     	$viewModel = new ViewModel();
-    	$viewModel->setTemplate('playground-game/treasure-hunt/step');
+    	$viewModel->setTemplate('playground-game/treasure-hunt/puzzle');
     	$service = $this->getAdminGameService();
     	$gameId = $this->getEvent()->getRouteMatch()->getParam('gameId');
     	if (!$gameId) {
     		return $this->redirect()->toRoute('admin/playgroundgame/list');
     	}
     
-    	$form = $this->getServiceLocator()->get('playgroundgame_treasurehuntstep_form');
+    	$form = $this->getServiceLocator()->get('playgroundgame_treasurehuntpuzzle_form');
     	$form->get('submit')->setAttribute('label', 'Add');
-    	$form->setAttribute('action', $this->url()->fromRoute('admin/playgroundgame/treasurehunt-step-add', array('gameId' => $gameId)));
+    	$form->setAttribute('action', $this->url()->fromRoute('admin/playgroundgame/treasurehunt-puzzle-add', array('gameId' => $gameId)));
     	$form->setAttribute('method', 'post');
     	$form->get('treasurehunt_id')->setAttribute('value', $gameId);
     
-    	$step = new \PlaygroundGame\Entity\TreasureHuntStep();
-    	$form->bind($step);
+    	$puzzle = new \PlaygroundGame\Entity\TreasureHuntPuzzle();
+    	$form->bind($puzzle);
     
     	if ($this->getRequest()->isPost()) {
     		$data = array_merge(
@@ -173,12 +179,12 @@ class TreasureHuntController extends AbstractActionController
     			$this->getRequest()->getFiles()->toArray()
     		);
     
-    		$step = $service->createStep($data);
-    		if ($step) {
+    		$puzzle = $service->createPuzzle($data);
+    		if ($puzzle) {
     			// Redirect to list of games
-    			$this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The step was created');
+    			$this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The puzzle was created');
     
-    			return $this->redirect()->toRoute('admin/playgroundgame/treasurehunt-step-list', array('gameId'=>$gameId));
+    			return $this->redirect()->toRoute('admin/playgroundgame/treasurehunt-puzzle-list', array('gameId'=>$gameId));
     		}
     	}
     
@@ -186,47 +192,47 @@ class TreasureHuntController extends AbstractActionController
     		array(
     			'form' => $form,
    				'gameId' => $gameId,
-   				'step_id' => 0,
-   				'title' => 'Add step',
+   				'puzzle_id' => 0,
+   				'title' => 'Add puzzle',
     		)
     	);
     }
     
-    public function editStepAction()
+    public function editPuzzleAction()
     {
     	$service = $this->getAdminGameService();
     	$viewModel = new ViewModel();
-    	$viewModel->setTemplate('playground-game/treasure-hunt/step');
+    	$viewModel->setTemplate('playground-game/treasure-hunt/puzzle');
     
     	$gameId = $this->getEvent()->getRouteMatch()->getParam('gameId');
     	/*if (!$gameId) {
     	 return $this->redirect()->toRoute('admin/playgroundgame/list');
     	}*/
     
-    	$stepId = $this->getEvent()->getRouteMatch()->getParam('stepId');
-    	if (!$stepId) {
+    	$puzzleId = $this->getEvent()->getRouteMatch()->getParam('puzzleId');
+    	if (!$puzzleId) {
     		return $this->redirect()->toRoute('admin/playgroundgame/list');
     	}
-    	$step   = $service->getTreasureHuntStepMapper()->findById($stepId);
-    	$treasurehuntId     = $step->getTreasureHunt()->getId();
+    	$puzzle   = $service->getTreasureHuntPuzzleMapper()->findById($puzzleId);
+    	$treasurehuntId     = $puzzle->getTreasureHunt()->getId();
     
-    	$form = $this->getServiceLocator()->get('playgroundgame_treasurehuntstep_form');
+    	$form = $this->getServiceLocator()->get('playgroundgame_treasurehuntpuzzle_form');
     	$form->get('submit')->setAttribute('label', 'Add');
     	$form->get('treasurehunt_id')->setAttribute('value', $treasurehuntId);
     
-    	$form->bind($step);
+    	$form->bind($puzzle);
     
     	if ($this->getRequest()->isPost()) {
     		$data = array_merge(
     				$this->getRequest()->getPost()->toArray(),
     				$this->getRequest()->getFiles()->toArray()
     		);
-    		$step = $service->updateStep($data, $step);
-    		if ($step) {
+    		$puzzle = $service->updatePuzzle($data, $puzzle);
+    		if ($puzzle) {
     			// Redirect to list of games
-    			$this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The step was updated');
+    			$this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The puzzle was updated');
     
-    			return $this->redirect()->toRoute('admin/playgroundgame/treasurehunt-step-list', array('gameId'=>$treasurehuntId));
+    			return $this->redirect()->toRoute('admin/playgroundgame/treasurehunt-puzzle-list', array('gameId'=>$treasurehuntId));
     		}
     	}
     
@@ -234,30 +240,30 @@ class TreasureHuntController extends AbstractActionController
     		array(
     			'form' => $form,
     			'gameId' => $treasurehuntId,
-   				'step_id' => $stepId,
-   				'title' => 'Edit step',
+   				'puzzle_id' => $puzzleId,
+   				'title' => 'Edit puzzle',
    				'gameId' => $gameId,
    			)
     	);
     }
     
-    public function removeStepAction()
+    public function removePuzzleAction()
     {
     	$service = $this->getAdminGameService();
-    	$stepId = $this->getEvent()->getRouteMatch()->getParam('stepId');
-    	if (!$stepId) {
+    	$puzzleId = $this->getEvent()->getRouteMatch()->getParam('puzzleId');
+    	if (!$puzzleId) {
     		return $this->redirect()->toRoute('admin/playgroundgame/list');
     	}
-    	$step   = $service->getTreasureHuntStepMapper()->findById($stepId);
-    	$treasurehuntId = $step->getTreasureHunt()->getId();
+    	$puzzle   = $service->getTreasureHuntPuzzleMapper()->findById($puzzleId);
+    	$treasurehuntId = $puzzle->getTreasureHunt()->getId();
     
-    	$service->getTreasureHuntStepMapper()->remove($step);
-    	$this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The step was deleted');
+    	$service->getTreasureHuntPuzzleMapper()->remove($puzzle);
+    	$this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The puzzle was deleted');
     
-    	return $this->redirect()->toRoute('admin/playgroundgame/treasurehunt-step-list', array('gameId'=>$treasurehuntId));
+    	return $this->redirect()->toRoute('admin/playgroundgame/treasurehunt-puzzle-list', array('gameId'=>$treasurehuntId));
     }
     
-    public function leaderboardAction()
+    public function entryAction()
     {
         $gameId         = $this->getEvent()->getRouteMatch()->getParam('gameId');
         $game           = $this->getAdminGameService()->getGameMapper()->findById($gameId);
@@ -284,8 +290,6 @@ class TreasureHuntController extends AbstractActionController
         // magically create $content as a string containing CSV data
         $gameId         = $this->getEvent()->getRouteMatch()->getParam('gameId');
         $game           = $this->getAdminGameService()->getGameMapper()->findById($gameId);
-        //$service        = $this->getLeaderBoardService();
-        //$leaderboards   = $service->getLeaderBoardMapper()->findBy(array('game' => $game));
 
         $entries = $this->getAdminGameService()->getEntryMapper()->findBy(array('game' => $game,'winner' => 1));
 
@@ -327,7 +331,7 @@ class TreasureHuntController extends AbstractActionController
         $headers = $response->getHeaders();
         $headers->addHeaderLine('Content-Encoding: UTF-8');
         $headers->addHeaderLine('Content-Type', 'text/csv; charset=UTF-8');
-        $headers->addHeaderLine('Content-Disposition', "attachment; filename=\"leaderboard.csv\"");
+        $headers->addHeaderLine('Content-Disposition', "attachment; filename=\"entry.csv\"");
         $headers->addHeaderLine('Accept-Ranges', 'bytes');
         $headers->addHeaderLine('Content-Length', strlen($content));
 

@@ -16,10 +16,14 @@ class ModuleOptions extends AbstractOptions implements GameEditOptionsInterface
      */
     protected $media_path = 'public/media/game';
 
+    protected $media_path_mission = 'public/media/mission';
+
     /**
      * url path to game media files
      */
     protected $media_url = 'media/game';
+
+    protected $media_url_mission = 'media/mission';
 
     /**
      * core_layout config
@@ -50,28 +54,6 @@ class ModuleOptions extends AbstractOptions implements GameEditOptionsInterface
      * @var string
      */
     protected $gameEntityClass = 'PlaygroundGame\Entity\Game';
-    protected $leaderBoardEntityClass = 'PlaygroundGame\Entity\LeaderBoard';
-
-    /**
-     * Set leaderBoard entity class name
-     *
-     * @param $leaderBoardEntityClass
-     * @return ModuleOptions
-     */
-    public function setLeaderBoardEntityClass($leaderBoardEntityClass)
-    {
-        $this->leaderBoardEntityClass = $leaderBoardEntityClass;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getLeaderBoardEntityClass()
-    {
-        return $this->leaderBoardEntityClass;
-    }
 
     /**
      * Set game entity class name
@@ -134,6 +116,48 @@ class ModuleOptions extends AbstractOptions implements GameEditOptionsInterface
     {
         return $this->media_url;
     }
+    
+    /**
+     * Set media path
+     *
+     * @param  string                           $media_path
+     * @return \PlaygroundGame\Options\ModuleOptions
+     */
+    public function setMediaPathMission($media_path_mission)
+    {
+        $this->media_path_mission = $media_path_mission;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMediaPathMission()
+    {
+        return $this->media_path_mission;
+    }
+
+    /**
+     *
+     * @param  string                           $media_url
+     * @return \PlaygroundGame\Options\ModuleOptions
+     */
+    public function setMediaUrlMission($media_url_mission)
+    {
+        $this->media_url_mission = $media_url_mission;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMediaUrlMission()
+    {
+        return $this->media_url_mission;
+    }
+
 	
 	public function setEmailFromAddress($emailFromAddress)
     {

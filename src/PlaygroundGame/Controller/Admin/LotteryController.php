@@ -35,10 +35,13 @@ class LotteryController extends AbstractActionController
 
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $data = array_merge(
+            $data = array_replace_recursive(
                 $this->getRequest()->getPost()->toArray(),
                 $this->getRequest()->getFiles()->toArray()
             );
+            if(empty($data['prizes'])){
+                $data['prizes'] = array();
+            }
             if (isset($data['drawDate']) && $data['drawDate']) {
                 $data['drawDate'] = \DateTime::createFromFormat('d/m/Y', $data['drawDate']);
             }
@@ -92,10 +95,13 @@ class LotteryController extends AbstractActionController
         $form->bind($game);
 
         if ($this->getRequest()->isPost()) {
-            $data = array_merge(
+            $data = array_replace_recursive(
                 $this->getRequest()->getPost()->toArray(),
                 $this->getRequest()->getFiles()->toArray()
             );
+            if(empty($data['prizes'])){
+                $data['prizes'] = array();
+            }
             if (isset($data['drawDate']) && $data['drawDate']) {
                 $data['drawDate'] = \DateTime::createFromFormat('d/m/Y', $data['drawDate']);
             }
@@ -112,7 +118,7 @@ class LotteryController extends AbstractActionController
         return $viewModel->setVariables(array('form' => $form, 'title' => 'Edit lottery'));
     }
 
-    public function leaderboardAction()
+    public function entryAction()
     {
         $gameId         = $this->getEvent()->getRouteMatch()->getParam('gameId');
         $game           = $this->getAdminGameService()->getGameMapper()->findById($gameId);
@@ -139,8 +145,6 @@ class LotteryController extends AbstractActionController
         // magically create $content as a string containing CSV data
         $gameId         = $this->getEvent()->getRouteMatch()->getParam('gameId');
         $game           = $this->getAdminGameService()->getGameMapper()->findById($gameId);
-        //$service        = $this->getLeaderBoardService();
-        //$leaderboards   = $service->getLeaderBoardMapper()->findBy(array('game' => $game));
 
         $entries = $this->getAdminGameService()->getEntryMapper()->findBy(array('game' => $game,'winner' => 1));
 
@@ -182,7 +186,7 @@ class LotteryController extends AbstractActionController
         $headers = $response->getHeaders();
         $headers->addHeaderLine('Content-Encoding: UTF-8');
         $headers->addHeaderLine('Content-Type', 'text/csv; charset=UTF-8');
-        $headers->addHeaderLine('Content-Disposition', "attachment; filename=\"leaderboard.csv\"");
+        $headers->addHeaderLine('Content-Disposition', "attachment; filename=\"entry.csv\"");
         $headers->addHeaderLine('Accept-Ranges', 'bytes');
         $headers->addHeaderLine('Content-Length', strlen($content));
 
@@ -196,8 +200,6 @@ class LotteryController extends AbstractActionController
         // magically create $content as a string containing CSV data
         $gameId         = $this->getEvent()->getRouteMatch()->getParam('gameId');
         $game           = $this->getAdminGameService()->getGameMapper()->findById($gameId);
-        //$service        = $this->getLeaderBoardService();
-        //$leaderboards   = $service->getLeaderBoardMapper()->findBy(array('game' => $game));
 
         $winningEntries = $this->getAdminGameService()->draw($game);
 

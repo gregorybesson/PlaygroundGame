@@ -28,12 +28,12 @@ class Lottery extends Game
             'attributes' =>  array(
                 'id' => 'drawAuto',
                 'options' => array(
-                    '0' => $translator->translate('Non', 'playgroundgame'),
-                    '1' => $translator->translate('Oui', 'playgroundgame'),
+                    '0' => $translator->translate('No', 'playgroundgame'),
+                    '1' => $translator->translate('Yes', 'playgroundgame'),
                 ),
             ),
             'options' => array(
-                'label' => $translator->translate('Tirage au sort automatique', 'playgroundgame'),
+                'label' => $translator->translate('Automatic drawing out', 'playgroundgame'),
             ),
         ));
 
@@ -53,22 +53,22 @@ class Lottery extends Game
         $this->add(array(
             'name' => 'winners',
             'options' => array(
-                'label' => $translator->translate('Nombre de gagnants', 'playgroundgame')
+                'label' => $translator->translate('Winners number', 'playgroundgame')
             ),
             'attributes' => array(
                 'type' => 'text',
-                'placeholder' => $translator->translate('Nombre de gagnants', 'playgroundgame')
+                'placeholder' => $translator->translate('Winners number', 'playgroundgame')
             )
         ));
 
         $this->add(array(
             'name' => 'substitutes',
             'options' => array(
-                'label' => $translator->translate('Nombre de remplaçants', 'playgroundgame')
+                'label' => $translator->translate('Substitutes number', 'playgroundgame')
             ),
             'attributes' => array(
                 'type' => 'text',
-                'placeholder' => $translator->translate('Nombre de remplaçants', 'playgroundgame')
+                'placeholder' => $translator->translate('Substitutes number', 'playgroundgame')
             )
         ));
 

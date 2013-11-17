@@ -28,33 +28,48 @@ $form->prepare();
         <?php echo $this->game_form;?>
 
         <div class="tab-pane" id="mechanics">
-        	<div class="label-input">
-	            <?php //echo $this->formLabel($form->get('occurrenceType')); ?>
-	            <?php echo $this->formInput($form->get('occurrenceType')); ?>
-	            <?php //echo $this->formElementErrors($form->get('occurrenceType')) ?>
-	        </div>
-			<div class="label-input">
-	            <?php echo $this->formLabel($form->get('scheduleOccurrenceAuto')); ?>
-	            <?php echo $this->formSelect($form->get('scheduleOccurrenceAuto')); ?>
-	            <?php echo $this->formElementErrors($form->get('scheduleOccurrenceAuto')) ?>
-			</div>
-			<div class="label-input">
-	            <?php echo $this->formLabel($form->get('occurrenceNumber')); ?>
-	            <?php echo $this->formInput($form->get('occurrenceNumber')); ?>
-	            <?php echo $this->formElementErrors($form->get('occurrenceNumber')) ?>
-			</div>
-			<div class="label-input">
-	            <?php echo $this->formLabel($form->get('occurrenceDrawFrequency')); ?>
-	            <?php echo $this->formSelect($form->get('occurrenceDrawFrequency')); ?>
-	            <?php echo $this->formElementErrors($form->get('occurrenceDrawFrequency')) ?>
-			</div>
-			<div class="label-input">
-	            <?php echo $this->formLabel($form->get('uploadScratchcardImage')); ?>
-	            <?php echo $this->formFile($form->get('uploadScratchcardImage')); ?>
-	            <?php if($form->get('scratchcardImage')->getValue() != ''):?>
-	            	<img src="<?php echo $this->basePath($form->get('scratchcardImage')->getValue()); ?>" />
-	            <?php endif;?>
-	        </div>
+            <div class="label-input">
+                <?php echo $this->formLabel($form->get('occurrenceType')); ?>
+                <?php echo $this->formSelect($form->get('occurrenceType')); ?>
+                <?php echo $this->formElementErrors($form->get('occurrenceType')) ?>
+            </div>
+            <div class="label-input">
+                <?php echo $this->formLabel($form->get('scheduleOccurrenceAuto')); ?>
+                <?php echo $this->formSelect($form->get('scheduleOccurrenceAuto')); ?>
+                <?php echo $this->formElementErrors($form->get('scheduleOccurrenceAuto')) ?>
+            </div>
+            <div class="label-input">
+                <?php echo $this->formLabel($form->get('occurrenceNumber')); ?>
+                <?php echo $this->formInput($form->get('occurrenceNumber')); ?>
+                <?php echo $this->formElementErrors($form->get('occurrenceNumber')) ?>
+            </div>
+            <div class="label-input" id="winningOccurrenceNumberInput">
+                <?php echo $this->formLabel($form->get('winningOccurrenceNumber')); ?>
+                <?php echo $this->formInput($form->get('winningOccurrenceNumber')); ?>
+                <?php echo $this->formElementErrors($form->get('winningOccurrenceNumber')) ?>
+            </div>
+            <div class="label-input" id="occurrenceValueMaskInput">
+                <?php echo $this->formLabel($form->get('occurrenceValueMask')); ?>
+                <?php echo $this->formInput($form->get('occurrenceValueMask')); ?>
+                <?php echo $this->formElementErrors($form->get('occurrenceValueMask')) ?>
+            </div>
+            <div class="label-input" id="occurrenceValueSizeInput">
+                <?php echo $this->formLabel($form->get('occurrenceValueSize')); ?>
+                <?php echo $this->formInput($form->get('occurrenceValueSize')); ?>
+                <?php echo $this->formElementErrors($form->get('occurrenceValueSize')) ?>
+            </div>
+            <div class="label-input">
+                <?php echo $this->formLabel($form->get('occurrenceDrawFrequency')); ?>
+                <?php echo $this->formSelect($form->get('occurrenceDrawFrequency')); ?>
+                <?php echo $this->formElementErrors($form->get('occurrenceDrawFrequency')) ?>
+            </div>
+            <div class="label-input">
+                <?php echo $this->formLabel($form->get('uploadScratchcardImage')); ?>
+                <?php echo $this->formFile($form->get('uploadScratchcardImage')); ?>
+                <?php if($form->get('scratchcardImage')->getValue() != ''):?>
+                    <img src="<?php echo $this->basePath($form->get('scratchcardImage')->getValue()); ?>" />
+                <?php endif;?>
+            </div>
     </div>
 </div>
 <?php echo $this->form()->closeTag() ?>
@@ -64,6 +79,27 @@ $form->prepare();
         $('#tabs').tab();
         $('.datepicker').datepicker({
             dateFormat : 'dd/mm/yy'
+        });
+
+        $('#winningOccurrenceNumberInput').hide();
+        $('#occurrenceValueSizeInput').hide();
+        $('#occurrenceValueMaskInput').hide();
+        
+        $('#occurrenceType').change(function() {
+            if ($('#occurrenceType').val() == 'code' ){
+                $('#occurrenceDrawFrequency').val('game');
+                $('#occurrenceDrawFrequency').attr("disabled", "disabled");
+                $('#winningOccurrenceNumberInput').show();
+                $('#occurrenceValueSizeInput').show();
+                $('#occurrenceValueMaskInput').show();
+                $('#occurrenceValueMaskInput').hide();
+            }
+            if ($('#occurrenceType').val() == 'datetime' ){
+                $('#occurrenceDrawFrequency').removeAttr("disabled");
+                $('#winningOccurrenceNumberInput').hide();
+                $('#occurrenceValueSizeInput').hide();
+                $('#occurrenceValueMaskInput').hide();
+            }
         });
     });
 </script>

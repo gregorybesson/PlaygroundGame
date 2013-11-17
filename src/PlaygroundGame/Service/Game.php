@@ -2,7 +2,6 @@
 
 namespace PlaygroundGame\Service;
 
-use PlaygroundGame\Entity\LeaderBoard;
 use PlaygroundGame\Entity\Entry;
 
 use Zend\Session\Container;
@@ -21,8 +20,6 @@ use PlaygroundCore\Filter\Sanitize;
 
 class Game extends EventProvider implements ServiceManagerAwareInterface
 {
-
-    protected $leaderBoardService;
 
     /**
      * @var GameMapperInterface
@@ -135,12 +132,13 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             }
             return false;
         }
-
+        
         $game = $this->getGameMapper()->insert($game);
 
         // If I receive false, it means that the FB Id was not available anymore
         $result = $this->getEventManager()->trigger(__FUNCTION__, $this, array('game' => $game));
         if(!$result) return false;
+
 
         // I wait for the game to be saved to obtain its ID.
         if (!empty($data['uploadStylesheet']['tmp_name'])) {
@@ -186,6 +184,34 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             ErrorHandler::stop(true);
         }
         $game = $this->getGameMapper()->update($game);
+
+        $prize_mapper = $this->getServiceManager()->get('playgroundgame_prize_mapper');
+        if(isset($data['prizes'])){
+            foreach($data['prizes'] as $prize_data ){          
+                if (!empty($prize_data['picture']['tmp_name'])){
+                    if ($prize_data['id']){
+                        $prize = $prize_mapper->findById($prize_data['id']);
+                    }else{
+                        $some_prizes = $prize_mapper->findBy(array(
+                                'game' => $game,
+                                'title' => $prize_data['title'],
+                            ));
+                        if (count($some_prizes)==1){
+                            $prize=$some_prizes[0];
+                        }else{
+                            return false;
+                        }               
+                    }
+                    ErrorHandler::start();
+                    $filename = "game-".$game->getId()."-prize-" . $prize->getId()."-".$prize_data['picture']['name'];
+                    $filepath = $this->fileNewname($path, $filename);
+                    move_uploaded_file($prize_data['picture']['tmp_name'], $path.$filename);
+                    $prize->setPicture($media_url.$filename);
+                    ErrorHandler::stop(true);
+                    $prize = $prize_mapper->update($prize);
+                }
+            }
+        }
 
         return $game;
     }
@@ -264,7 +290,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             return false;
         }
 
-        if (!$form->isValid()) {
+        if (!$form->isValid()) {            
             if (isset($data['publicationDate']) && $data['publicationDate']) {
                 $tmpDate = \DateTime::createFromFormat('Y-m-d', $data['publicationDate']);
                 $data['publicationDate'] = $tmpDate->format('d/m/Y');
@@ -358,6 +384,40 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         }*/
 
         $game = $this->getGameMapper()->update($game);
+        
+        $prize_mapper = $this->getServiceManager()->get('playgroundgame_prize_mapper');
+        if(isset($data['prizes'])){
+            foreach($data['prizes'] as $prize_data ){  
+                if (!empty($prize_data['picture_file']['tmp_name']) && !$prize_data['picture_file']['error']){
+                    if ($prize_data['id']){
+                        $prize = $prize_mapper->findById($prize_data['id']);
+                    }else{
+                        $some_prizes = $prize_mapper->findBy(array(
+                                'game' => $game,
+                                'title' => $prize_data['title'],
+                            ));
+                        if (count($some_prizes)==1){
+                            $prize=$some_prizes[0];
+                        }else{
+                            return false;
+                        }               
+                    }
+                    // Remove if existing image
+                    if ($prize->getPicture() && file_exists($prize->getPicture())){
+                        unlink($prize->getPicture());
+                        $prize->getPicture(null);
+                    }
+                    // Upload and set new 
+                    ErrorHandler::start();
+                    $filename = "game-".$game->getId()."-prize-" . $prize->getId()."-".$prize_data['picture_file']['name'];
+                    $filepath = $this->fileNewname($path, $filename);
+                    move_uploaded_file($prize_data['picture_file']['tmp_name'], $path.$filename);
+                    $prize->setPicture($media_url.$filename);
+                    ErrorHandler::stop(true);
+                    $prize = $prize_mapper->update($prize);
+                }
+            }
+        }
         // If I receive false, it means that the FB Id was not available anymore
         $result = $this->getEventManager()->trigger(__FUNCTION__.'.post', $this, array('game' => $game));
 
@@ -369,7 +429,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      *
      * @return Array of PlaygroundGame\Entity\Game
      */
-    public function getActiveGames($displayHome = true, $classType='', $order='')
+    public function getActiveGames($displayHome = true, $classType='', $order='', $withoutGameInMission = false)
     {
         $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
         $today = new \DateTime("now");
@@ -378,6 +438,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
         $classClause='';
         $displayHomeClause='';
+        $displayWithoutMission='';
         $orderBy ='publicationDate';
 
         if ($classType != '') {
@@ -385,6 +446,13 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         }
         if ($displayHome) {
             $displayHomeClause = " AND g.displayHome = true";
+        }
+
+        if ($withoutGameInMission){
+            $displayWithoutMission = " AND g.id NOT IN (SELECT IDENTITY(mg.game) 
+                                 FROM PlaygroundGame\Entity\MissionGame mg, PlaygroundGame\Entity\Mission m 
+                                 WHERE mg.mission = m.id
+                                 AND m.active = 1 ) "; 
         }
 
         if ($order != '') {
@@ -400,6 +468,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                 AND g.broadcastPlatform = 1'
                 . $displayHomeClause
                 . $classClause
+                . $displayWithoutMission
                 .' ORDER BY g.'
                 . $orderBy
                 . ' DESC'
@@ -423,6 +492,8 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
         return $arrayGames;
     }
+
+
 
     /**
      * getAvailableGames : Games OnLine and not already played by $user
@@ -547,7 +618,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             $this->getServiceManager()->get('doctrine.entitymanager.orm_default')->getUnitOfWork()->markReadOnly($game);
             return $game;
         }
-        
+   
         // The game is inactive
         if (!$game->getActive()) {
             return false;
@@ -1103,22 +1174,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         return $this->options;
     }
 
-    public function getLeaderBoardService()
-    {
-        if (!$this->leaderBoardService) {
-            $this->leaderBoardService = $this->getServiceManager()->get('playgroundgame_leaderboard_service');
-        }
-
-        return $this->leaderBoardService;
-    }
-
-    public function setLeaderBoardService(LeaderBoardService $leaderBoardService)
-    {
-        $this->leaderBoardService = $leaderBoardService;
-
-        return $this;
-    }
-
     /**
      * Retrieve service manager instance
      *
@@ -1213,5 +1268,23 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $auth = $this->getServiceManager()->get('BjyAuthorize\Service\Authorize');
         
         return $auth->isAllowed($resource, $privilege);
+    }
+
+    public function array_merge_recursive_num_keys() {
+        $arrays = func_get_args();
+        $base = array_shift($arrays);
+
+        foreach ($arrays as $array) {
+            reset($base); 
+            while (list($key, $value) = @each($array)) {
+                if (is_array($value) && @is_array($base[$key])) {
+                    $base[$key] = $this->array_merge_recursive_num_keys($base[$key], $value);
+                } else {
+                    $base[$key] = $value;
+                }
+            }
+        }
+
+        return $base;
     }
 }

@@ -160,10 +160,11 @@ class Module
                 'playgroundgame_quiz_service'              => 'PlaygroundGame\Service\Quiz',
             	'playgroundgame_treasurehunt_service'      => 'PlaygroundGame\Service\TreasureHunt',
                 'playgroundgame_instantwin_service'        => 'PlaygroundGame\Service\InstantWin',
-                'playgroundgame_leaderboard_service'       => 'PlaygroundGame\Service\LeaderBoard',
-            	'playgroundgame_prize_service'     		  => 'PlaygroundGame\Service\Prize',
+            	'playgroundgame_prize_service'     		   => 'PlaygroundGame\Service\Prize',
             	'playgroundgame_prizecategory_service'     => 'PlaygroundGame\Service\PrizeCategory',
                 'playgroundgame_prizecategoryuser_service' => 'PlaygroundGame\Service\PrizeCategoryUser',
+                'playgroundgame_mission_service'           => 'PlaygroundGame\Service\Mission',
+                'playgroundgame_mission_game_service'      => 'PlaygroundGame\Service\MissionGame',
             ),
 
             'factories' => array(
@@ -176,6 +177,33 @@ class Module
 
                 'playgroundgame_game_mapper' => function ($sm) {
                     $mapper = new \PlaygroundGame\Mapper\Game(
+                            $sm->get('doctrine.entitymanager.orm_default'),
+                            $sm->get('playgroundgame_module_options')
+                    );
+
+                    return $mapper;
+                },
+
+                'playgroundgame_mission_mapper' => function ($sm) {
+                    $mapper = new \PlaygroundGame\Mapper\Mission(
+                            $sm->get('doctrine.entitymanager.orm_default'),
+                            $sm->get('playgroundgame_module_options')
+                    );
+
+                    return $mapper;
+                },
+
+                'playgroundgame_mission_game_mapper' => function ($sm) {
+                    $mapper = new \PlaygroundGame\Mapper\MissionGame(
+                            $sm->get('doctrine.entitymanager.orm_default'),
+                            $sm->get('playgroundgame_module_options')
+                    );
+
+                    return $mapper;
+                },
+
+                'playgroundgame_mission_game_condition_mapper' => function ($sm) {
+                    $mapper = new \PlaygroundGame\Mapper\MissionGameCondition(
                             $sm->get('doctrine.entitymanager.orm_default'),
                             $sm->get('playgroundgame_module_options')
                     );
@@ -212,15 +240,6 @@ class Module
 
                 'playgroundgame_quiz_mapper' => function ($sm) {
                 $mapper = new \PlaygroundGame\Mapper\Quiz(
-                        $sm->get('doctrine.entitymanager.orm_default'),
-                        $sm->get('playgroundgame_module_options')
-                );
-
-                return $mapper;
-                },
-
-                'playgroundgame_leaderboard_mapper' => function ($sm) {
-                $mapper = new \PlaygroundGame\Mapper\LeaderBoard(
                         $sm->get('doctrine.entitymanager.orm_default'),
                         $sm->get('playgroundgame_module_options')
                 );
@@ -355,8 +374,8 @@ class Module
                 	return $mapper;
                 },
                 
-                'playgroundgame_treasurehuntstep_mapper' => function ($sm) {
-                	$mapper = new \PlaygroundGame\Mapper\TreasureHuntStep(
+                'playgroundgame_treasurehuntPuzzle_mapper' => function ($sm) {
+                	$mapper = new \PlaygroundGame\Mapper\TreasureHuntPuzzle(
                 			$sm->get('doctrine.entitymanager.orm_default'),
                 			$sm->get('playgroundgame_module_options')
                 	);
@@ -370,6 +389,22 @@ class Module
                     $game = new Entity\Game();
                     $form->setInputFilter($game->getInputFilter());
 
+                    return $form;
+                },
+
+                'playgroundgame_mission_form' => function($sm) {
+                    $translator = $sm->get('translator');
+                    $form = new Form\Admin\Mission(null, $sm, $translator);
+                    $mission = new Entity\Mission();
+                    $form->setInputFilter($mission->getInputFilter());
+                    return $form;
+                },
+
+                'playgroundgame_mission_game_form' => function($sm) {
+                    $translator = $sm->get('translator');
+                    $form = new Form\Admin\MissionGame(null, $sm, $translator);
+                    $missionGame = new Entity\MissionGame();
+                    $form->setInputFilter($missionGame->getInputFilter());
                     return $form;
                 },
 
@@ -412,8 +447,8 @@ class Module
                 'playgroundgame_instantwinoccurrence_form' => function($sm) {
                     $translator = $sm->get('translator');
                     $form = new Form\Admin\InstantWinOccurrence(null, $sm, $translator);
-                    $instantwinOccurrence = new Entity\InstantWinOccurrence();
-                    $form->setInputFilter($instantwinOccurrence->getInputFilter());
+                    // $instantwinOccurrence = new Entity\InstantWinOccurrence();
+                    // $form->setInputFilter($instantwinOccurrence->getInputFilter());
 
                     return $form;
                 },
@@ -460,11 +495,11 @@ class Module
                 	return $form;
                 },
                 
-                'playgroundgame_treasurehuntstep_form' => function($sm) {
+                'playgroundgame_treasurehuntpuzzle_form' => function($sm) {
                 	$translator = $sm->get('translator');
-                	$form = new Form\Admin\TreasureHuntStep(null, $sm, $translator);
-                	$treasurehuntStep = new Entity\TreasureHuntStep();
-                	$form->setInputFilter($treasurehuntStep->getInputFilter());
+                	$form = new Form\Admin\TreasureHuntPuzzle(null, $sm, $translator);
+                	$treasurehuntPuzzle = new Entity\TreasureHuntPuzzle();
+                	$form->setInputFilter($treasurehuntPuzzle->getInputFilter());
                 
                 	return $form;
                 },
@@ -472,3 +507,5 @@ class Module
         );
     }
 }
+
+?>

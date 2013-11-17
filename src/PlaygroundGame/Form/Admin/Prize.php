@@ -59,7 +59,7 @@ class Prize extends ProvidesEventsForm
        		'attributes' => array(
        			'cols' => '10',
        			'rows' => '10',
-       			'id' => 'prize_content'
+       			'id' => 'content'
        		)
         ));
         
@@ -100,7 +100,24 @@ class Prize extends ProvidesEventsForm
     			'label' => $translator->translate('Mode d\'affichage des Posts', 'playgroundgame'),
        		),
         ));
-        
+         
+        $this->add(array(
+          'name' => 'picture_file',
+          'options' => array(
+            'label' => $translator->translate('Picture', 'playgroundgame')
+          ),
+          'attributes' => array(
+            'type' => 'file',
+          )
+        ));
+        $this->add(array(
+                'name' => 'picture',
+                'type' => 'Zend\Form\Element\Hidden',
+                'attributes' => array(
+                    'value' => ''
+                )
+        ));
+               
         $submitElement = new Element\Button('submit');
         $submitElement
         ->setAttributes(array(

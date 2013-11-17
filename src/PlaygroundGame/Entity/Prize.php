@@ -76,6 +76,11 @@ class Prize {
 	 */
 	protected $updated_at;
 
+	/**
+	 * @ORM\Column(type="string", length=255, nullable=true)
+	 */
+	protected $picture;
+
 	/** @PrePersist */
 	public function createChrono()
 	{
@@ -129,7 +134,7 @@ class Prize {
 	}
 
 	/**
-	 * @param field_type $title
+	 * @param field_type $Title
 	 */
 	public function setTitle($title) {
 		$this->title = $title;
@@ -246,6 +251,20 @@ class Prize {
 	public function setUpdated_at($updated_at) {
 		$this->updated_at = $updated_at;
 	}
+
+	/**
+	 * @return the $picture
+	 */
+	public function getPicture() {
+		return $this->picture;
+	}
+
+	/**
+	 * @param field_type $picture
+	 */
+	public function setPicture($picture) {
+		$this->picture = $picture;
+	}
 	
 	/**
 	 * Convert the object to an array.
@@ -288,6 +307,10 @@ class Prize {
 	
 		if (isset($data['currency']) && $data['currency'] != null) {
 			$this->currency = $data['currency'];
+		}
+
+		if (isset($data['picture']) && $data['picture'] != null) {
+			$this->picture = $data['picture'];
 		}
 	}
 

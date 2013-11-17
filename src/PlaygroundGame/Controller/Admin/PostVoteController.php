@@ -28,7 +28,7 @@ class PostVoteController extends AbstractActionController
         $form = $service->getPostVoteFormMapper()->findByGame($game);
 
         // I use the wonderful Form Generator to create the Post & Vote form
-        $formgen = $this->forward()->dispatch('PlaygroundCore\Controller\Formgen', array('action' => 'create'));
+        $formgen = $this->forward()->dispatch('PlaygroundCore\Controller\Formgen', array('controller' => 'PlaygroundCore\Controller\Formgen', 'action' => 'create'));
 
         if ($this->getRequest()->isPost()) {
             $data = $this->getRequest()->getPost()->toArray();
@@ -69,10 +69,13 @@ class PostVoteController extends AbstractActionController
 
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $data = array_merge(
+            $data = array_replace_recursive(
                     $this->getRequest()->getPost()->toArray(),
                     $this->getRequest()->getFiles()->toArray()
             );
+            if(empty($data['prizes'])){
+                $data['prizes'] = array();
+            }
             $game = $service->create($data, $postVote, 'playgroundgame_postvote_form');
             if ($game) {
                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The game was created');
@@ -124,10 +127,13 @@ class PostVoteController extends AbstractActionController
         $form->bind($game);
 
         if ($this->getRequest()->isPost()) {
-            $data = array_merge(
+            $data = array_replace_recursive(
                     $this->getRequest()->getPost()->toArray(),
                     $this->getRequest()->getFiles()->toArray()
             );
+            if(empty($data['prizes'])){
+                $data['prizes'] = array();
+            }
             $result = $service->edit($data, $game, 'playgroundgame_postvote_form');
 
             if ($result) {
@@ -164,12 +170,12 @@ class PostVoteController extends AbstractActionController
         $status = $this->getEvent()->getRouteMatch()->getParam('status');
 
         if (!$postId) {
-            return $this->redirect()->toUrl($this->url()->fromRoute('admin/postvote/leaderboard', array('gameId' => 0)));
+            return $this->redirect()->toUrl($this->url()->fromRoute('admin/postvote/entry', array('gameId' => 0)));
         }
         $post = $service->getPostVotePostMapper()->findById($postId);
 
         if (! $post) {
-            return $this->redirect()->toUrl($this->url()->fromRoute('admin/postvote/leaderboard', array('gameId' => 0)));
+            return $this->redirect()->toUrl($this->url()->fromRoute('admin/postvote/entry', array('gameId' => 0)));
         }
         $game = $post->getPostvote();
 
@@ -177,18 +183,18 @@ class PostVoteController extends AbstractActionController
             $post->setStatus(2);
             $service->getPostVotePostMapper()->update($post);
 
-            return $this->redirect()->toUrl($this->url()->fromRoute('admin/postvote/leaderboard', array('gameId' => $game->getId())));
+            return $this->redirect()->toUrl($this->url()->fromRoute('admin/postvote/entry', array('gameId' => $game->getId())));
         } elseif ($status && $status=='rejection') {
             $post->setStatus(9);
             $service->getPostVotePostMapper()->update($post);
 
-            return $this->redirect()->toUrl($this->url()->fromRoute('admin/postvote/leaderboard', array('gameId' => $game->getId())));
+            return $this->redirect()->toUrl($this->url()->fromRoute('admin/postvote/entry', array('gameId' => $game->getId())));
         }
 
         return array('game' => $game, 'post' => $post);
     }
 
-    public function leaderboardAction()
+    public function entryAction()
     {
         $gameId         = $this->getEvent()->getRouteMatch()->getParam('gameId');
         $game           = $this->getAdminGameService()->getGameMapper()->findById($gameId);
@@ -216,8 +222,6 @@ class PostVoteController extends AbstractActionController
         // magically create $content as a string containing CSV data
         $gameId         = $this->getEvent()->getRouteMatch()->getParam('gameId');
         $game           = $this->getAdminGameService()->getGameMapper()->findById($gameId);
-        //$service        = $this->getLeaderBoardService();
-        //$leaderboards   = $service->getLeaderBoardMapper()->findBy(array('game' => $game));
 
         $entries = $this->getAdminGameService()->getEntryMapper()->findBy(array('game' => $game,'winner' => 1));
 		$posts   = $this->getAdminGameService()->getPostVotePostMapper()->findBy(array('postvote' => $game));
@@ -260,7 +264,7 @@ class PostVoteController extends AbstractActionController
         $headers = $response->getHeaders();
         $headers->addHeaderLine('Content-Encoding: UTF-8');
         $headers->addHeaderLine('Content-Type', 'text/csv; charset=UTF-8');
-        $headers->addHeaderLine('Content-Disposition', "attachment; filename=\"leaderboard.csv\"");
+        $headers->addHeaderLine('Content-Disposition', "attachment; filename=\"entry.csv\"");
         $headers->addHeaderLine('Accept-Ranges', 'bytes');
         $headers->addHeaderLine('Content-Length', strlen($content));
 

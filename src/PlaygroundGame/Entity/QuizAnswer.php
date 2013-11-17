@@ -368,6 +368,11 @@ class QuizAnswer implements InputFilterAwareInterface
                 'name'     => 'answer',
                 'required' => true,
             )));
+            
+            $inputFilter->add($factory->createInput(array(
+                'name'     => 'position',
+                'required' => true,
+            )));
 
             $inputFilter->add($factory->createInput(array(
                 'name'     => 'explanation',

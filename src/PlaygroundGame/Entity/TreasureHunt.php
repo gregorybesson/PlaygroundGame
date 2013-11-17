@@ -43,46 +43,46 @@ class TreasureHunt extends Game implements InputFilterAwareInterface
     protected $timerDuration = 0;
     
     /**
-     * @ORM\OneToMany(targetEntity="TreasureHuntStep", mappedBy="treasurehunt")
+     * @ORM\OneToMany(targetEntity="TreasureHuntPuzzle", mappedBy="treasurehunt")
      **/
-    private $steps;
+    protected $puzzles;
 
     public function __construct()
     {
     	parent::__construct();
         $this->setClassType(self::CLASSTYPE);
-        $this->steps = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->puzzles = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
-     * @param unknown_type $steps
+     * @param unknown_type $puzzles
      */
-    public function setSteps($steps)
+    public function setPuzzles($puzzles)
     {
-    	$this->steps = $steps;
+    	$this->puzzles = $puzzles;
     
     	return $this;
     }
     
     /**
-     * Get step.
+     * Get puzzle.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getSteps()
+    public function getPuzzles()
     {
-    	return $this->steps;
+    	return $this->puzzles;
     }
     
     /**
-     * Add a step to the hunt.
+     * Add a puzzle to the hunt.
      *
      *
      * @return void
      */
-    public function addStep($step)
+    public function addPuzzle($puzzle)
     {
-    	$this->steps[] = $step;
+    	$this->puzzles[] = $puzzle;
     }
 
     /**

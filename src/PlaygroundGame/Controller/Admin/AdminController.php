@@ -14,7 +14,6 @@ use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 class AdminController extends AbstractActionController
 {
     protected $options;
-    protected $leaderBoardService;
 
     /**
      * @var GameService
@@ -54,7 +53,7 @@ class AdminController extends AbstractActionController
 		$paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
 
         foreach ($paginator as $game) {
-            $game->leaderboard = $service->getEntryMapper()->countByGame($game);
+            $game->entry = $service->getEntryMapper()->countByGame($game);
         }
 
         return array(
@@ -64,16 +63,14 @@ class AdminController extends AbstractActionController
         );
     }
 
-    public function leaderboardAction()
+    public function entryAction()
     {
         $gameId         = $this->getEvent()->getRouteMatch()->getParam('gameId');
         $game           = $this->getAdminGameService()->getGameMapper()->findById($gameId);
 
         $entries = $this->getAdminGameService()->getEntryMapper()->findBy(array('game' => $game));
 
-        /*$service        = $this->getLeaderBoardService();
-        $leaderboards   = $service->getLeaderBoardMapper()->findBy(array('game' => $game));
-        */
+     
 
         if (is_array($entries)) {
             $paginator = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\ArrayAdapter($entries));
@@ -94,9 +91,7 @@ class AdminController extends AbstractActionController
         // magically create $content as a string containing CSV data
         $gameId         = $this->getEvent()->getRouteMatch()->getParam('gameId');
         $game           = $this->getAdminGameService()->getGameMapper()->findById($gameId);
-        //$service        = $this->getLeaderBoardService();
-        //$leaderboards   = $service->getLeaderBoardMapper()->findBy(array('game' => $game));
-
+    
         $entries = $this->getAdminGameService()->getEntryMapper()->findBy(array('game' => $game,'winner' => 1));
 
         $content        = "\xEF\xBB\xBF"; // UTF-8 BOM
@@ -117,7 +112,7 @@ class AdminController extends AbstractActionController
         $headers = $response->getHeaders();
         $headers->addHeaderLine('Content-Encoding: UTF-8');
         $headers->addHeaderLine('Content-Type', 'text/csv; charset=UTF-8');
-        $headers->addHeaderLine('Content-Disposition', "attachment; filename=\"leaderboard.csv\"");
+        $headers->addHeaderLine('Content-Disposition', "attachment; filename=\"entry.csv\"");
         $headers->addHeaderLine('Accept-Ranges', 'bytes');
         $headers->addHeaderLine('Content-Length', strlen($content));
 
@@ -191,22 +186,6 @@ class AdminController extends AbstractActionController
     public function setAdminGameService(AdminGameService $adminGameService)
     {
         $this->adminGameService = $adminGameService;
-
-        return $this;
-    }
-
-    public function getLeaderBoardService()
-    {
-        if (!$this->leaderBoardService) {
-            $this->leaderBoardService = $this->getServiceLocator()->get('playgroundgame_leaderboard_service');
-        }
-
-        return $this->leaderBoardService;
-    }
-
-    public function setLeaderBoardService(LeaderBoardService $leaderBoardService)
-    {
-        $this->leaderBoardService = $leaderBoardService;
 
         return $this;
     }

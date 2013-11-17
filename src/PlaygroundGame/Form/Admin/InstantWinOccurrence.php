@@ -47,13 +47,28 @@ class InstantWinOccurrence extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'name' => 'occurrence_date',
+            'name' => 'occurrence_value',
             'options' => array(
-                'label' => $translator->translate('Occurrence Date', 'playgroundgame'),
+                'label' => $translator->translate('Occurrence Value', 'playgroundgame'),
             ),
             'attributes' => array(
                 'type' => 'text',
-                'id' => 'occurrence_date'
+                'id' => 'occurrence_value'
+            ),
+        ));
+
+        $this->add(array(
+            'name' => 'occurrences_file',
+            'type' => 'Zend\Form\Element\File',
+            'options' => array(
+                'label' => $translator->translate('CSV file containing occurrences', 'playgroundgame'),
+            ),
+            'attributes' => array(
+                'id' => 'occurrences_file'
+            ),
+            'validators' => array(
+                array('Exists'),
+                array('Extension', false, 'csv'),
             ),
         ));
 
