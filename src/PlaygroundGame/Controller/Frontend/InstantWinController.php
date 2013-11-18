@@ -124,7 +124,6 @@ class InstantWinController extends GameController
             $viewVariables = array(
                 'game' => $game,
                 'form' => $form,
-                'prize' => $prize,
                 'flashMessages' => $this->flashMessenger()->getMessages(),
             );
         }
@@ -149,12 +148,12 @@ class InstantWinController extends GameController
         if ($this->getRequest()->isPost()){
             $form->setData($this->getRequest()->getPost());
             if($form->isValid()){
-                $code = $form->getData()['code-input'];
+                $data =  $form->getData('code-input');
+                $code = trim($data['code-input']);
                 if (empty($code)) {
                     $this->flashMessenger()->addMessage('Vous devez entrer un code avant de valider !');
                     return false;
                 }
-                $code = trim($code);
                 $occurrence = $this->getGameService()->getOccurrenceFromCode($game, $code);
                 if (!$occurrence) {
                     $this->flashMessenger()->addMessage('Le code entré est invalide ou a déjà été utilisé !');
