@@ -47,7 +47,8 @@ class InstantWinController extends GameController
 
                 // Get Playground user from Facebook info
                 $beforeLayout = $this->layout()->getTemplate();
-                $view = $this->forward()->dispatch('playgrounduser_user', array('controller' => 'playgrounduser_user', 'action' => 'registerFacebookUser'));
+                $view = $this->forward()->dispatch('playgrounduser_user', array('controller' => 'playgrounduser_user', 'action' => 'registerFacebookUser', 'provider' => $channel));
+
                 $this->layout()->setTemplate($beforeLayout);
                 $user = $view->user;
 
@@ -123,6 +124,7 @@ class InstantWinController extends GameController
             $viewVariables = array(
                 'game' => $game,
                 'form' => $form,
+                'prize' => $prize,
                 'flashMessages' => $this->flashMessenger()->getMessages(),
             );
         }
@@ -231,7 +233,7 @@ class InstantWinController extends GameController
 
         $viewModel = $this->buildView($game);
         $viewModel->setVariables(array(
-            'occurrence'    => $occurrence,
+            'occurrence'       => $occurrence,
             'statusMail'       => $statusMail,
             'game'             => $game,
             'winner'           => $winner,

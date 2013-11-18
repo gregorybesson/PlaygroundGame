@@ -21,25 +21,22 @@ if (isset($fm[0]))
     <tr>
         <!--<th><?php //echo $this->translate('Id'); ?></th>-->
         <th>
-            <?php echo $this->translate('Valeur'); ?>
+        	<?php echo $this->translate('Valeur'); ?>
 
-            <?php if($this->filter == 'ASC'): ?>
-                <a href="<?php echo $this->url('admin/playgroundgame/instantwin-occurrence-list', array('gameId' => $this->gameId, 'filter' => 'DESC')); ?>">
-                    <img src="/images/admin/arrow-down.png" alt="" />
-                </a>
-            <?php else : ?>
-                <a href="<?php echo $this->url('admin/playgroundgame/instantwin-occurrence-list', array('gameId' => $this->gameId, 'filter' => 'ASC')); ?>">
-                    <img src="/images/admin/arrow-up.png" alt="" />
-                </a>
-            <?php endif; ?>
+        	<?php if($this->filter == 'ASC'): ?>
+        	    <a href="<?php echo $this->url('admin/playgroundgame/instantwin-occurrence-list', array('gameId' => $this->gameId, 'filter' => 'DESC')); ?>">
+        	    	<img src="/images/admin/arrow-down.png" alt="" />
+        	    </a>
+			<?php else : ?>
+				<a href="<?php echo $this->url('admin/playgroundgame/instantwin-occurrence-list', array('gameId' => $this->gameId, 'filter' => 'ASC')); ?>">
+					<img src="/images/admin/arrow-up.png" alt="" />
+				</a>
+        	<?php endif; ?>
 
         <th><?php echo $this->translate('Gagnants'); ?></th>
         <th><?php echo $this->translate('Lots'); ?></th>
         <th><?php echo $this->translate('Etat'); ?></th>
-        <?php if ($this->game->getOccurrenceType()=='code'): ?>
-            <th><?php echo $this->translate('Statut'); ?></th>
-        <?php endif; ?>
-        <th></th>
+        <th><?php echo $this->translate('Statut'); ?></th>
         <th></th>
     </tr>
     <?php foreach ($this->occurrences as $occurrence): ?>
@@ -53,9 +50,7 @@ if (isset($fm[0]))
             <?php $deleteLink = $this->url('admin/playgroundgame/instantwin-occurrence-remove', array('occurrenceId' => $occurrence->getId()));?>
             <td><?php echo ($occurrence->getPrize())? $occurrence->getPrize()->getTitle():''; ?></td>
             <td><?php echo (! $occurrence->getActive())? 'Joué' :''; ?></td>
-            <?php if ($this->game->getOccurrenceType()=='code'): ?>
-                <td><?php echo ($occurrence->getWinning())? 'Gagnant' :'Perdant'; ?></td>
-            <?php endif; ?>
+            <td><?php echo ($occurrence->getWinning())? 'Gagnant' :'Perdant'; ?></td>
             <td>
                 <a href='<?php echo $editLink ?>'><?php echo $this->translate('Edit'); ?></a> | <a href='<?php echo $deleteLink ?>'><?php echo $this->translate('Delete'); ?></a>
             </td>

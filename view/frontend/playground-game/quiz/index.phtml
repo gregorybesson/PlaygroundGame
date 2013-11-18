@@ -12,7 +12,7 @@
 		<div class="welcome-block<?php if($this->channel === 'facebook'): echo ' fb-target'; endif ?>"><?php echo $this->game->getWelcomeBlock(); ?></div>
 		<?php if($game->isStarted()):?>
 		<div class="center">
-			<div class="btn btn-warning"<?php if ($this->isCtaActive) { echo ' id="cta-play"'; } ?>><a href="<?php echo $this->url('frontend/quiz/play', array('id' => $this->game->getIdentifier()))?>" class="arrow-right"><?php echo $this->translate('Participer'); ?></a></div>
+			<div class="btn btn-warning"<?php if ($this->isCtaActive) { echo ' id="fb-play"'; } ?>><a href="<?php echo $this->url('frontend/quiz/play', array('id' => $this->game->getIdentifier()))?>" class="arrow-right"><?php echo $this->translate('Participer'); ?></a></div>
 		</div>
 		<?php endif;?>
 	</div>

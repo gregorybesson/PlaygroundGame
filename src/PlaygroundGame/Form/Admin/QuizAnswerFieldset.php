@@ -32,7 +32,6 @@ class QuizAnswerFieldset extends Fieldset
                 'label' => $translator->translate('Réponse', 'playgroundgame'),
             ),
             'attributes' => array(
-                'required' => true,
                 'cols' => '10',
                 'rows' => '2',
                 'id' => 'answer',

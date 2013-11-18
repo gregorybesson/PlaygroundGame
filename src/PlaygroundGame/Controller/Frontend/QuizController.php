@@ -64,7 +64,7 @@ class QuizController extends GameController
                 $viewModel = $this->buildView($game);
                 $beforeLayout = $this->layout()->getTemplate();
 
-                $view = $this->forward()->dispatch('playgrounduser_user', array('controller' => 'playgrounduser_user','action' => 'registerFacebookUser'));
+                $view = $this->forward()->dispatch('playgrounduser_user', array('controller' => 'playgrounduser_user','action' => 'registerFacebookUser', 'provider' => $channel));
 
                 $this->layout()->setTemplate($beforeLayout);
                 $user = $view->user;
@@ -132,6 +132,9 @@ class QuizController extends GameController
                     $valuesSortedByPosition[$value['id']] = $value['answer'];
                 }
                 $element->setValueOptions($valuesSortedByPosition);
+                // TODO : Attendre la nouvelle version de Zend pour desactiver le html escape sur les labels
+                //$element->setLabelOptions(array("disable_html_escape"=>true));
+
             } elseif ($q->getType() == 1) {
                 $element = new Element\MultiCheckbox($name);
                 $values = array();
@@ -150,6 +153,9 @@ class QuizController extends GameController
                 }
 
                 $element->setValueOptions($valuesSortedByPosition);
+                // TODO : Attendre la nouvelle version de Zend pour desactiver le html escape sur les labels
+                //$element->setLabelOptions(array("disable_html_escape"=>true));
+
             } elseif ($q->getType() == 2) {
                 $element = new Element\Textarea($name);
             }
