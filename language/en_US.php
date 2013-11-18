@@ -412,6 +412,6 @@ return array(
 	'of good answers in' => 'of good answers in',
 	'had' => 'had',
 
-    'Play an another Game' => 'Play an another Game',
+    'Play another Game' => 'Play an another Game',
 
 );
