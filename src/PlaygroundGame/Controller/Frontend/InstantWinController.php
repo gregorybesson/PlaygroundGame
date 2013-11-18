@@ -149,7 +149,8 @@ class InstantWinController extends GameController
         if ($this->getRequest()->isPost()){
             $form->setData($this->getRequest()->getPost());
             if($form->isValid()){
-                $code = $form->getData()['code-input'];
+                $data = $form->getData();
+                $code = $data['code-input'];
                 if (empty($code)) {
                     $this->flashMessenger()->addMessage('Vous devez entrer un code avant de valider !');
                     return false;
