@@ -47,28 +47,13 @@ class InstantWinOccurrence extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'name' => 'occurrence_value',
+            'name' => 'value',
             'options' => array(
-                'label' => $translator->translate('Occurrence Value', 'playgroundgame'),
+                'label' => $translator->translate('Value', 'playgroundgame'),
             ),
             'attributes' => array(
                 'type' => 'text',
-                'id' => 'occurrence_value'
-            ),
-        ));
-
-        $this->add(array(
-            'name' => 'occurrences_file',
-            'type' => 'Zend\Form\Element\File',
-            'options' => array(
-                'label' => $translator->translate('CSV file containing occurrences', 'playgroundgame'),
-            ),
-            'attributes' => array(
-                'id' => 'occurrences_file'
-            ),
-            'validators' => array(
-                array('Exists'),
-                array('Extension', false, 'csv'),
+                'id' => 'value'
             ),
         ));
 
@@ -76,7 +61,6 @@ class InstantWinOccurrence extends ProvidesEventsForm
             'type' => 'Zend\Form\Element\Select',
             'name' => 'active',
             'options' => array(
-            //'empty_option' => $translator->translate('Is the answer correct ?', 'playgroundgame'),
                 'value_options' => array(
                     '0' => $translator->translate('No', 'playgroundgame'),
                     '1' => $translator->translate('Yes', 'playgroundgame'),
@@ -85,20 +69,31 @@ class InstantWinOccurrence extends ProvidesEventsForm
             ),
         ));
 
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Select',
+            'name' => 'winning',
+            'options' => array(
+                'value_options' => array(
+                    '0' => $translator->translate('No', 'playgroundgame'),
+                    '1' => $translator->translate('Yes', 'playgroundgame'),
+                ),
+                'label' => $translator->translate('Winning', 'playgroundgame'),
+            ),
+        ));
+
         $prizes = $this->getPrizes();
         $this->add(array(
         	'type' => 'Zend\Form\Element\Select',
         	'name' => 'prize',
         	'options' => array(
-        		'empty_option' => $translator->translate('Ce jeu n\'a pas lot associé', 'playgroundgame'),
+        		'empty_option' => $translator->translate('Ce jeu n\'a pas de lot associé', 'playgroundgame'),
         		'value_options' => $prizes,
         		'label' => $translator->translate('Lots', 'playgroundgame')
         	)
         ));
 
         $submitElement = new Element\Button('submit');
-        $submitElement
-        ->setAttributes(array(
+        $submitElement->setAttributes(array(
             'type'  => 'submit',
             'class' => 'btn btn-primary',
         ));

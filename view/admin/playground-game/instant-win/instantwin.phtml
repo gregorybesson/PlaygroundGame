@@ -10,13 +10,14 @@ $form->prepare();
 <?php $form->get('submit')->setLabel($this->translate('Validate')); ?>
 <?php echo $this->formButton($form->get('submit')) ?>
 
-<div id="content" class="tabbable tabs-left">
+<div class="tabbable tabs-left">
     <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
         <li class="active"><a href="#general" data-toggle="tab"><?php echo $this->translate('General'); ?></a></li>
         <li><a href="#mechanics" data-toggle="tab"><?php echo $this->translate('Game Mechanics'); ?></a></li>
         <li><a href="#prizes" data-toggle="tab"><?php echo $this->translate('Lots'); ?></a></li>
         <li><a href="#platform" data-toggle="tab"><?php echo $this->translate('Plateforme'); ?></a></li>
         <li><a href="#facebook" data-toggle="tab"><?php echo $this->translate('Facebook'); ?></a></li>
+        <li><a href="#embed" data-toggle="tab"><?php echo $this->translate('Embed'); ?></a></li>
         <li><a href="#design" data-toggle="tab"><?php echo $this->translate('Design'); ?></a></li>
         <li><a href="#column" data-toggle="tab"><?php echo $this->translate('Colonne de droite'); ?></a></li>
         <li><a href="#share" data-toggle="tab"><?php echo $this->translate('Partage'); ?></a></li>
@@ -81,11 +82,7 @@ $form->prepare();
             dateFormat : 'dd/mm/yy'
         });
 
-        $('#winningOccurrenceNumberInput').hide();
-        $('#occurrenceValueSizeInput').hide();
-        $('#occurrenceValueMaskInput').hide();
-        
-        $('#occurrenceType').change(function() {
+        var updateForm = function() {
             if ($('#occurrenceType').val() == 'code' ){
                 $('#occurrenceDrawFrequency').val('game');
                 $('#occurrenceDrawFrequency').attr("disabled", "disabled");
@@ -100,6 +97,14 @@ $form->prepare();
                 $('#occurrenceValueSizeInput').hide();
                 $('#occurrenceValueMaskInput').hide();
             }
+        }
+
+        updateForm();
+        
+        $('#occurrenceType').change(function() {
+            updateForm();
         });
+
+
     });
 </script>
