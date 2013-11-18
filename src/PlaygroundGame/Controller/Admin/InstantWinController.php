@@ -257,9 +257,9 @@ class InstantWinController extends AbstractActionController
             {
                 var_dump('form is valid');
                 $data = $form->getData();
-                $results = $this->getAdminGameService()->importOccurrences($data);
-                if($results){
-                    $this->flashMessenger()->setNamespace('playgroundgame')->addMessage($results[0].' occurrences were created and '.$results[1].' were already in base');
+                $created = $this->getAdminGameService()->importOccurrences($data);
+                if($created){
+                    $this->flashMessenger()->setNamespace('playgroundgame')->addMessage($created.' occurrences were created !');
                     return $this->redirect()->toRoute('admin/playgroundgame/instantwin-occurrence-list', array('gameId'=>$gameId));
                 }
             }

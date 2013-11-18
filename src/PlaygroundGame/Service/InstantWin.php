@@ -118,7 +118,7 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
         {
             $game->setWinningOccurrenceNumber($game->getOccurrenceNumber());
         }
-        if(!$data['occurrenceValueSize'])
+        if(!isset($data['occurrenceValueSize']))
         {
             $data['occurrenceValueSize'] = 8;
         }
@@ -128,7 +128,6 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
             while(strlen($code)<$data['occurrenceValueSize']){
                 $code .= $available_characters[rand(0, $last_character_index)];
             }
-//             if($this->getInstantWinOccurrenceMapper()->assertNoOther($game, $code)){
             $occurrence = new \PlaygroundGame\Entity\InstantWinOccurrence();
             $occurrence->setInstantwin($game);
             $occurrence->setValue($code);
@@ -137,9 +136,6 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
             if($this->getInstantWinOccurrenceMapper()->insert($occurrence)){
                 $created++;
             }
-//             }else{
-//                 $i--;
-//             }
         }
         return true;
     }
@@ -389,15 +385,15 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
         return date('Y-m-d H:i:s', $rand_epoch);
     }
 
-    public function getOccurencesFromCSV($file_name)
+    public function getOccurencesFromCSV($fileName)
     {
-        if (file_exists($file_name)){
-            $csv_file = fopen($file_name, 'r');
-            if ($csv_file){
-                while (!feof($csv_file) )
-                    $csv_content[] = fgetcsv($csv_file);
-                fclose($csv_file);
-                return $csv_content;
+        if (file_exists($fileName)){
+            $csvFile = fopen($fileName, 'r');
+            if ($csvFile){
+                while (!feof($csvFile) )
+                    $csvContent[] = fgetcsv($csvFile);
+                fclose($csvFile);
+                return $csvContent;
             }
         }
         return false;
@@ -406,15 +402,15 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
     public function setOccurencesToCSV($game)
     {
         $path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR;
-        $file_name = $path.'occurences-'.$game->getId().'.csv';
-        $csv_file = fopen($file_name, 'w');
-        if ($csv_file){
+        $fileName = $path.'occurences-'.$game->getId().'.csv';
+        $csvFile = fopen($fileName, 'w');
+        if ($csvFile){
             $occurrences = $this->getInstantWinOccurrenceMapper()->findByGameId($game);
             foreach ($occurrences as $occurrence) {
-                fputcsv($csv_file, array($occurrence->getValue(), $occurrence->getWinning()));
+                fputcsv($csvFile, array($occurrence->getValue(), $occurrence->getWinning()));
             }
-            fclose($csv_file);
-            return $file_name;
+            fclose($csvFile);
+            return $fileName;
         }
         return false;
     }
@@ -448,14 +444,11 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                         if($occurrence){
                             $created++;
                         }
-                        else {
-                            $already_in++;
-                        }
                     }
                 }
                 // remove the csv file from folder
                 unlink($real_media_path.$data['file']['name']);
-                return array($created, $already_in);
+                return $created;
             }
         }
         return false;
@@ -542,7 +535,7 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
     public function setOccurrenceEntry($game, $user, $occurrence)
     {
         $entryMapper = $this->getEntryMapper();
-        $occurrenceMapper = this->getInstantWinOccurrenceMapper();
+        $occurrenceMapper = $this->getInstantWinOccurrenceMapper();
 
         $entry = $this->play($game, $user);
         if (!$entry){
@@ -568,15 +561,15 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
     }
 
     public function getOccurrenceFromCode($game, $value){
-        $matching_occurrences = $this->getInstantWinOccurrenceMapper()->findBy(array(
+        $matchingOccurrences = $this->getInstantWinOccurrenceMapper()->findBy(array(
             'instantwin' => $game,
             'value' => $value,
         ));
-        if (empty($matching_occurrences)) {
+        if (empty($matchingOccurrences)) {
             return false;
         }
-        elseif (count($matching_occurrences)==1) {
-            $occurrence = array_shift($matching_occurrences);
+        elseif (count($matchingOccurrences)==1) {
+            $occurrence = array_shift($matchingOccurrences);
             if ($occurrence->getEntry() || !$occurrence->getActive()) {
                 return false;
             }
