@@ -124,7 +124,6 @@ class InstantWinController extends GameController
             $viewVariables = array(
                 'game' => $game,
                 'form' => $form,
-                'prize' => $prize,
                 'flashMessages' => $this->flashMessenger()->getMessages(),
             );
         }
@@ -148,14 +147,13 @@ class InstantWinController extends GameController
         $occurrence = null;
         if ($this->getRequest()->isPost()){
             $form->setData($this->getRequest()->getPost());
-            if($form->isValid()){
-                $data = $form->getData();
-                $code = $data['code-input'];
+            if ($form->isValid()) {
+                $data =  $form->getData('code-input');
+                $code = trim($data['code-input']);
                 if (empty($code)) {
                     $this->flashMessenger()->addMessage('Vous devez entrer un code avant de valider !');
                     return false;
                 }
-                $code = trim($code);
                 $occurrence = $this->getGameService()->getOccurrenceFromCode($game, $code);
                 if (!$occurrence) {
                     $this->flashMessenger()->addMessage('Le code entré est invalide ou a déjà été utilisé !');
@@ -166,7 +164,7 @@ class InstantWinController extends GameController
 
         $lastEntry = $sg->getEntryMapper()->findLastInactiveEntryById($game, $user);
 
-        if (!$user){
+        if (!$user) {
             $redirect = urlencode($this->url()->fromRoute('frontend/instantwin/result', array('id' => $game->getIdentifier(), 'channel' => $channel)));
             return $this->redirect()->toUrl($this->url()->fromRoute('frontend/zfcuser/register', array('channel' => $channel)) . '?redirect='.$redirect);
         }
@@ -177,7 +175,7 @@ class InstantWinController extends GameController
         $socialLinkUrl = $this->shortenUrl()->shortenUrl($socialLinkUrl);
 
         $winner = false;
-        if ($lastEntry){
+        if ($lastEntry) {
             $winner = $lastEntry->getWinner();
         }
 
