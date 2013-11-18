@@ -147,7 +147,7 @@ class InstantWinController extends GameController
         $occurrence = null;
         if ($this->getRequest()->isPost()){
             $form->setData($this->getRequest()->getPost());
-            if($form->isValid()){
+            if ($form->isValid()) {
                 $data =  $form->getData('code-input');
                 $code = trim($data['code-input']);
                 if (empty($code)) {
@@ -164,7 +164,7 @@ class InstantWinController extends GameController
 
         $lastEntry = $sg->getEntryMapper()->findLastInactiveEntryById($game, $user);
 
-        if (!$user){
+        if (!$user) {
             $redirect = urlencode($this->url()->fromRoute('frontend/instantwin/result', array('id' => $game->getIdentifier(), 'channel' => $channel)));
             return $this->redirect()->toUrl($this->url()->fromRoute('frontend/zfcuser/register', array('channel' => $channel)) . '?redirect='.$redirect);
         }
@@ -175,7 +175,7 @@ class InstantWinController extends GameController
         $socialLinkUrl = $this->shortenUrl()->shortenUrl($socialLinkUrl);
 
         $winner = false;
-        if ($lastEntry){
+        if ($lastEntry) {
             $winner = $lastEntry->getWinner();
         }
 
