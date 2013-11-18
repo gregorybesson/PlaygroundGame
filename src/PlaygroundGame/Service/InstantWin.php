@@ -514,7 +514,6 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
      */
     public function isInstantWinner($game, $user)
     {
-
         $entryMapper = $this->getEntryMapper();
         $entry = $entryMapper->findLastActiveEntryById($game, $user);
         if (!$entry) {
@@ -538,6 +537,34 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
         $this->getEventManager()->trigger('complete_instantwin.post', $this, array('user' => $user, 'game' => $game, 'entry' => $entry));
 
         return $winner;
+    }
+
+    public function setOccurrenceEntry($game, $user, $occurrence)
+    {
+        $entryMapper = $this->getEntryMapper();
+        $occurrenceMapper = this->getInstantWinOccurrenceMapper();
+
+        $entry = $this->play($game, $user);
+        if (!$entry){
+            return false;
+        }
+
+        $occurrence->setEntry($entry);
+        $occurrence->setUser($user);
+        $occurrence->setActive(0);
+        $occurrence = $occurrence_mapper->update($occurrence);
+
+        $entry->setActive(false);
+        if ($occurrence->getWinning()) {
+            $entry->setWinner(true);
+        } else {
+            $entry->setPoints(0);
+            $entry->setWinner(false);
+        }
+        $entry = $entryMapper->update($entry);
+        $this->getEventManager()->trigger('complete_instantwin.post', $this, array('user' => $user, 'game' => $game, 'entry' => $entry));
+
+        return $occurrence;
     }
 
     public function getOccurrenceFromCode($game, $value){
