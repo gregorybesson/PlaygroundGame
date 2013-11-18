@@ -130,52 +130,39 @@ class InstantWinController extends GameController
         return $viewModel;
     }
 
-    public function playCode($game)
-    {
+//     public function playCode($game)
+//     {
 
-        if (!$userSession->offsetExists('occurrence')) {
-            $viewVariables = $this->playCode($game);
-            if (!$viewVariables){
-                return $this->redirect()->toUrl($this->url()->fromRoute('frontend/instantwin/play', array('id' => $game->getIdentifier(), 'channel' => $channel), array('force_canonical' => true)));
-            }
-        }
-        if ($userSession->offsetExists('occurrence')) {
-            $occurrence = $occurrence_mapper->findById($userSession->offsetGet('occurrence'));
-            $winner = $occurrence ->getWinning();
-            $viewVariables = array(
-                'game' => $game,
-                'winner' => $winner,
-                'flashMessages' => $this->flashMessenger()->getMessages(),
-                'prize' => $occurrence->getPrize(),
-                'over' => true,
-            );
-            if ($user) {
-                if ($winner && ($form_address instanceof \Zend\View\Model\ViewModel)) {
-                    $viewModel->setVariables($viewVariables);
-                    $viewModel->addChild($form_address, 'form_address');
-                    return $viewModel;
-                }
-                $entry = $sg->play($game, $user);
-                if (!$entry){
-                    $this->flashMessenger()->addMessage('Vous avez déjà participé !');
-                    $this->redirect()->toUrl($this->url()->fromRoute('frontend/instantwin/result', array('id' => $game->getIdentifier(), 'channel' => $channel)));
-                }
-                $occurrence->setEntry($entry);
-                $occurrence->setUser($user);
-                $occurrence->setActive(0);
-                $occurrence_mapper->update($occurrence);
-                $winner = $sg->isCodeInstantWinner($game, $user, $occurrence);$occurrence_mapper->update($occurrence);
-                $userSession->offsetUnset('occurrence');
-                return $this->redirect()->toUrl($this->url()->fromRoute('frontend/instantwin/result', array('id' => $game->getIdentifier(), 'channel' => $channel)));
-            } elseif (!$user && !$winner) {
-                $occurrence->setActive(0);
-                $occurrence_mapper->update($occurrence);
-                $viewModel->setVariables($viewVariables);
-                $userSession->offsetUnset('occurrence');
-                return $viewModel;
-            }
-        }
-    }
+
+//             $occurrence = $occurrence_mapper->findById($userSession->offsetGet('occurrence'));
+
+//             if ($user) {
+//                 if ($winner && ($form_address instanceof \Zend\View\Model\ViewModel)) {
+//                     $viewModel->setVariables($viewVariables);
+//                     $viewModel->addChild($form_address, 'form_address');
+//                     return $viewModel;
+//                 }
+//                 $entry = $sg->play($game, $user);
+//                 if (!$entry){
+//                     $this->flashMessenger()->addMessage('Vous avez déjà participé !');
+//                     $this->redirect()->toUrl($this->url()->fromRoute('frontend/instantwin/result', array('id' => $game->getIdentifier(), 'channel' => $channel)));
+//                 }
+//                 $occurrence->setEntry($entry);
+//                 $occurrence->setUser($user);
+//                 $occurrence->setActive(0);
+//                 $occurrence_mapper->update($occurrence);
+//                 $winner = $sg->isCodeInstantWinner($game, $user, $occurrence);$occurrence_mapper->update($occurrence);
+//                 $userSession->offsetUnset('occurrence');
+//                 return $this->redirect()->toUrl($this->url()->fromRoute('frontend/instantwin/result', array('id' => $game->getIdentifier(), 'channel' => $channel)));
+//             } elseif (!$user && !$winner) {
+//                 $occurrence->setActive(0);
+//                 $occurrence_mapper->update($occurrence);
+//                 $viewModel->setVariables($viewVariables);
+//                 $userSession->offsetUnset('occurrence');
+//                 return $viewModel;
+//             }
+//         }
+//     }
 
     public function resultAction()
     {
@@ -202,6 +189,7 @@ class InstantWinController extends GameController
                 $code = trim($code);
                 $occurrence = $this->getGameService()->getOccurrenceFromCode($game, $code);
                 if (!$occurrence) {
+                    $this->flashMessenger()->addMessage('Le code entré est invalide ou a déjà été utilisé !');
                     return $this->redirect()->toUrl($this->url()->fromRoute('frontend/instantwin/play', array('id' => $game->getIdentifier(), 'channel' => $channel), array('force_canonical' => true)));
                 }
             }
@@ -243,7 +231,7 @@ class InstantWinController extends GameController
 
         $viewModel = $this->buildView($game);
         $viewModel->setVariables(array(
-            'over'             => true,
+            'occurrence'    => $occurrence,
             'statusMail'       => $statusMail,
             'game'             => $game,
             'winner'           => $winner,
@@ -252,7 +240,6 @@ class InstantWinController extends GameController
             'socialLinkUrl'    => $socialLinkUrl,
             'secretKey'        => $secretKey,
             'nextGame'         => $nextGame,
-            'occurrence'    => $occurrence,
         ));
         return $viewModel;
     }

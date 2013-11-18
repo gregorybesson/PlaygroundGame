@@ -49,7 +49,7 @@ class InstantWinOccurrence extends ProvidesEventsForm
         $this->add(array(
             'name' => 'value',
             'options' => array(
-                'label' => $translator->translate('Occurrence Value', 'playgroundgame'),
+                'label' => $translator->translate('Value', 'playgroundgame'),
             ),
             'attributes' => array(
                 'type' => 'text',
@@ -93,8 +93,7 @@ class InstantWinOccurrence extends ProvidesEventsForm
         ));
 
         $submitElement = new Element\Button('submit');
-        $submitElement
-        ->setAttributes(array(
+        $submitElement->setAttributes(array(
             'type'  => 'submit',
             'class' => 'btn btn-primary',
         ));

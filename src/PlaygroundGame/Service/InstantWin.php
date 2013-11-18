@@ -106,7 +106,7 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
         if ($game->getOccurrenceType() == 'code') {
             return $this->scheduleCodeOccurrences($game, $data);
         } elseif ($game->getOccurrenceType() == 'datetime') {
-            return $this->scheduleDateOccurrences($date);
+            return $this->scheduleDateOccurrences($game);
         }
     }
 
@@ -134,10 +134,9 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
             $occurrence->setValue($code);
             $occurrence->setActive(1);
             $occurrence->setWinning($created < $game->getWinningOccurrenceNumber());
-            $this->getInstantWinOccurrenceMapper()->insert($occurrence);
-//                 if($this->getInstantWinOccurrenceMapper()->insert($occurrence)){
-//                     $created++;
-//                 }
+            if($this->getInstantWinOccurrenceMapper()->insert($occurrence)){
+                $created++;
+            }
 //             }else{
 //                 $i--;
 //             }
@@ -438,7 +437,6 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                 $already_in = 0;
                 foreach ($csv_content as $line){
                     if($line){
-//                         if($this->getInstantWinOccurrenceMapper()->assertNoOther($instantwin, $line[0])){
                         $occurrence = $this->updateOccurrence(array(
                             'id' => '',
                             'instant_win_id' => $data['instant_win_id'],
@@ -450,7 +448,6 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                         if($occurrence){
                             $created++;
                         }
-//                         }
                         else {
                             $already_in++;
                         }
@@ -482,16 +479,12 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
         $form  = $this->getServiceManager()->get('playgroundgame_instantwinoccurrence_form');
         $form->bind($occurrence);
 
-        // default for datetime instantWin
-        // For the datetime type, we only create the winning occurencies
-        if (!isset($data['winning']))
-            $data['winning'] = 1;
         $form->setData($data);
 
         $instantwin = $this->getGameMapper()->findById($data['instant_win_id']);
         $prize = null;
-        if(isset($data['prize_id'])){
-            $prize = $this->getPrizeMapper()->findById($data['prize_id']);
+        if(isset($data['prize'])){
+            $prize = $this->getPrizeMapper()->findById($data['prize']);
         }
 
         if (!$form->isValid()) {
@@ -553,13 +546,11 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
             'value' => $value,
         ));
         if (empty($matching_occurrences)) {
-//             $this->flashMessenger()->addMessage('Désolé mais le code entré est invalide !');
             return false;
         }
         elseif (count($matching_occurrences)==1) {
             $occurrence = array_shift($matching_occurrences);
             if ($occurrence->getEntry() || !$occurrence->getActive()) {
-//                 $this->flashMessenger()->addMessage('Le code entré a déjà été utilisé ou est invalide. Vous ne pouvez pas rejouer avec le même code !');
                 return false;
             }
             return $occurrence;

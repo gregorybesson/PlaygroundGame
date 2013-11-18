@@ -310,6 +310,7 @@ class InstantWinController extends AbstractActionController
                 $this->getRequest()->getFiles()->toArray()
             );
             $occurrence = $service->updateOccurrence($data, $occurrence->getId());
+
             if ($occurrence) {
                 // Redirect to list of games
                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The occurrence was edited');
