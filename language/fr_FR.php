@@ -415,4 +415,5 @@ return array(
 	'had' => 'a eu',
 	'seconds in game' => 'secondes au jeu',
 
+    'Play an another Game' => 'Jouer à un autre jeu',
 );
