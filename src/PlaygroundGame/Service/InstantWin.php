@@ -557,23 +557,6 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
         return $occurrence;
     }
 
-//     public function getOccurrenceFromCode($game, $value){
-//         $matchingOccurrences = $this->getInstantWinOccurrenceMapper()->findBy(array(
-//             'instantwin' => $game,
-//             'value' => $value,
-//         ));
-//         if (empty($matchingOccurrences)) {
-//             return false;
-//         }
-//         elseif (count($matchingOccurrences)==1) {
-//             $occurrence = array_shift($matchingOccurrences);
-//             if ($occurrence->getEntry() || !$occurrence->getActive()) {
-//                 return false;
-//             }
-//             return $occurrence;
-//         }
-//     }
-
     public function getGameEntity()
     {
         return new \PlaygroundGame\Entity\InstantWin;
