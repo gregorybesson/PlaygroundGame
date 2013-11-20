@@ -119,8 +119,22 @@ class InstantWinController extends GameController
             $viewModel->addChild($form_address, 'form_address');
         } elseif ($game->getOccurrenceType()=='code') {
             $form = $this->getServiceLocator()->get('playgroundgame_instantwinoccurrencecode_form');
-            $form->setAttribute('action', $this->url()->fromRoute('frontend/instantwin/result',array('id' => $game->getIdentifier(), 'channel' => $channel)));
+            $form->setAttribute('action', $this->url()->fromRoute('frontend/instantwin/play', array('id' => $game->getIdentifier(), 'channel' => $channel), array('force_canonical' => true)));
 
+            $occurrence = null;
+            if ($this->getRequest()->isPost()){
+                $form->setData($this->getRequest()->getPost());
+                if ($form->isValid()) {
+                    $data =  $form->getData('code-input');
+                    $code = filter_var($data['code-input'], FILTER_SANITIZE_STRING);
+                    $occurrence = $this->getGameService()->isInstantWinner($game,$user,$code);
+                    if (!$occurrence) {
+                        $this->flashMessenger()->addMessage('Le code entré est invalide ou a déjà été utilisé !');
+                    } else {
+                        return $this->redirect()->toUrl($this->url()->fromRoute('frontend/instantwin/result', array('id' => $game->getIdentifier(), 'channel' => $channel)));
+                    }
+                }
+            }
             $viewVariables = array(
                 'game' => $game,
                 'form' => $form,
@@ -143,25 +157,6 @@ class InstantWinController extends GameController
             return $this->notFoundAction();
         }
 
-        $form = $this->getServiceLocator()->get('playgroundgame_instantwinoccurrencecode_form');
-        $occurrence = null;
-        if ($this->getRequest()->isPost()){
-            $form->setData($this->getRequest()->getPost());
-            if ($form->isValid()) {
-                $data =  $form->getData('code-input');
-                $code = trim($data['code-input']);
-                if (empty($code)) {
-                    $this->flashMessenger()->addMessage('Vous devez entrer un code avant de valider !');
-                    return false;
-                }
-                $occurrence = $this->getGameService()->getOccurrenceFromCode($game, $code);
-                if (!$occurrence) {
-                    $this->flashMessenger()->addMessage('Le code entré est invalide ou a déjà été utilisé !');
-                    return $this->redirect()->toUrl($this->url()->fromRoute('frontend/instantwin/play', array('id' => $game->getIdentifier(), 'channel' => $channel), array('force_canonical' => true)));
-                }
-            }
-        }
-
         $lastEntry = $sg->getEntryMapper()->findLastInactiveEntryById($game, $user);
 
         if (!$user) {
@@ -174,9 +169,13 @@ class InstantWinController extends GameController
         // With core shortener helper
         $socialLinkUrl = $this->shortenUrl()->shortenUrl($socialLinkUrl);
 
-        $winner = false;
-        if ($lastEntry) {
-            $winner = $lastEntry->getWinner();
+        $winner = $lastEntry->getWinner();
+        $occurrence = null;
+
+        // On tente de récupèrer l'occurrence si elle existe pour avoir accés au lot associé
+        $occurrences = $sg->getInstantWinOccurrenceMapper()->findBy(array('instantwin' => $game->getId(), 'entry' => $lastEntry->getId(), ));
+        if (!empty($occurrences)) {
+            $occurrence = current($occurrences);
         }
 
         $form = $this->getServiceLocator()->get('playgroundgame_sharemail_form');

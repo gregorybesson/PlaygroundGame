@@ -461,8 +461,9 @@ class Module
 
                 'playgroundgame_instantwinoccurrencecode_form' => function($sm) {
                     $translator = $sm->get('translator');
-                    $form = new Form\Frontend\InstantWinOccurrenceCode(null, $translator);
-
+                    $form = new Form\Frontend\InstantWinOccurrenceCode(null, $sm, $translator);
+                    $filter = new Form\Frontend\InstantWinOccurrenceCodeFilter();
+                    $form->setInputFilter($filter);
                     return $form;
                 },
 
