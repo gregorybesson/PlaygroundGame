@@ -158,6 +158,17 @@ class InstantWinController extends GameController
         }
 
         $lastEntry = $sg->getEntryMapper()->findLastInactiveEntryById($game, $user);
+        if (!$lastEntry) {
+            return $this->redirect()->toUrl($this->url()->fromRoute('frontend/instantwin', array('id' => $game->getIdentifier(), 'channel' => $channel), array('force_canonical' => true)));
+        }
+        $winner = $lastEntry->getWinner();
+        $occurrence = null;
+
+        // On tente de récupèrer l'occurrence si elle existe pour avoir accés au lot associé
+        $occurrences = $sg->getInstantWinOccurrenceMapper()->findBy(array('instantwin' => $game->getId(), 'entry' => $lastEntry->getId(), ));
+        if (!empty($occurrences)) {
+            $occurrence = current($occurrences);
+        }
 
         if (!$user) {
             $redirect = urlencode($this->url()->fromRoute('frontend/instantwin/result', array('id' => $game->getIdentifier(), 'channel' => $channel)));
@@ -168,15 +179,6 @@ class InstantWinController extends GameController
         $socialLinkUrl = $this->url()->fromRoute('frontend/instantwin', array('id' => $game->getIdentifier(), 'channel' => $channel), array('force_canonical' => true)).'?key='.$secretKey;
         // With core shortener helper
         $socialLinkUrl = $this->shortenUrl()->shortenUrl($socialLinkUrl);
-
-        $winner = $lastEntry->getWinner();
-        $occurrence = null;
-
-        // On tente de récupèrer l'occurrence si elle existe pour avoir accés au lot associé
-        $occurrences = $sg->getInstantWinOccurrenceMapper()->findBy(array('instantwin' => $game->getId(), 'entry' => $lastEntry->getId(), ));
-        if (!empty($occurrences)) {
-            $occurrence = current($occurrences);
-        }
 
         $form = $this->getServiceLocator()->get('playgroundgame_sharemail_form');
         $form->setAttribute('method', 'post');
