@@ -201,8 +201,16 @@ class QuizQuestion extends ProvidesEventsForm
                 'name' => 'image',
                 'type'  => 'Zend\Form\Element\Hidden',
                 'attributes' => array(
-                        'value' => '',
+                    'value' => '',
                 ),
+        ));
+        $this->add(array(
+                'name' => 'delete_image',
+                'type' => 'Zend\Form\Element\Hidden',
+                'attributes' => array(
+        	        'value' => '',
+                    'class' => 'delete_image',       
+                ),   
         ));
 
         $quizAnswerFieldset = new QuizAnswerFieldset(null,$serviceManager,$translator);
