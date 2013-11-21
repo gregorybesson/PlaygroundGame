@@ -194,7 +194,7 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                         $randomDate = \DateTime::createFromFormat('Y-m-d H:i:s', $randomDate);
                         $occurrence  = new \PlaygroundGame\Entity\InstantWinOccurrence();
                         $occurrence->setInstantwin($game);
-                        $occurrence->setValue($randomDate->format('d/m/Y H:i:s'));
+                        $occurrence->setValue($randomDate->format('Y-m-d H:i:s'));
                         $occurrence->setActive(1);
 
                         $this->getInstantWinOccurrenceMapper()->insert($occurrence);
@@ -233,7 +233,7 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                             $occurrence  = new \PlaygroundGame\Entity\InstantWinOccurrence();
                             $occurrence->setInstantwin($game);
 
-                            $occurrence->setValue($randomDate->format('d/m/Y H:i:s'));
+                            $occurrence->setValue($randomDate->format('Y-m-d H:i:s'));
                             $occurrence->setActive(1);
 
                             $this->getInstantWinOccurrenceMapper()->insert($occurrence);
@@ -279,7 +279,7 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                             $randomDate = \DateTime::createFromFormat('Y-m-d H:i:s', $randomDate);
                             $occurrence  = new \PlaygroundGame\Entity\InstantWinOccurrence();
                             $occurrence->setInstantwin($game);
-                            $occurrence->setValue($randomDate->format('d/m/Y H:i:s'));
+                            $occurrence->setValue($randomDate->format('Y-m-d H:i:s'));
                             $occurrence->setActive(1);
 
                             $this->getInstantWinOccurrenceMapper()->insert($occurrence);
@@ -319,7 +319,7 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                             $randomDate = \DateTime::createFromFormat('Y-m-d H:i:s', $randomDate);
                             $occurrence  = new \PlaygroundGame\Entity\InstantWinOccurrence();
                             $occurrence->setInstantwin($game);
-                            $occurrence->setValue($randomDate->format('d/m/Y H:i:s'));
+                            $occurrence->setValue($randomDate->format('Y-m-d H:i:s'));
                             $occurrence->setActive(1);
 
                             $this->getInstantWinOccurrenceMapper()->insert($occurrence);
@@ -359,7 +359,7 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                             $randomDate = \DateTime::createFromFormat('Y-m-d H:i:s', $randomDate);
                             $occurrence  = new \PlaygroundGame\Entity\InstantWinOccurrence();
                             $occurrence->setInstantwin($game);
-                            $occurrence->setValue($randomDate->format('d/m/Y H:i:s'));
+                            $occurrence->setValue($randomDate->format('Y-m-d H:i:s'));
                             $occurrence->setActive(1);
 
                             $this->getInstantWinOccurrenceMapper()->insert($occurrence);
