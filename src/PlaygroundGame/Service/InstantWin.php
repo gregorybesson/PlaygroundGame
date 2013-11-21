@@ -516,11 +516,11 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
             // si date après date de gain et date de gain encore active alors desactive date de gain, et winner !
             $occurrence = $occurrenceMapper->checkDateOccurrenceByGameId($game);
         } elseif ($game->getOccurrenceType()=='code') {
-            $entry = $this->play($game, $user);
             $occurrence = $occurrenceMapper->checkCodeOccurrenceByGameId($game, $value);
             if (!$occurrence) {
                 return false;
             }
+            $entry = $this->play($game, $user);
         }
 
         if (!$entry) {

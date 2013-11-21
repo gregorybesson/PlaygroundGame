@@ -93,7 +93,7 @@ class InstantWinOccurrence
             'SELECT i FROM PlaygroundGame\Entity\InstantWinOccurrence i
                 WHERE i.instantwin = :game
                 AND i.active = 1
-                AND i.value <= :value
+                AND i.value = :value
                 AND i.entry IS NULL
                 ORDER BY i.value DESC
                 '

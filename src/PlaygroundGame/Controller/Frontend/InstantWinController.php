@@ -130,6 +130,7 @@ class InstantWinController extends GameController
                     $occurrence = $this->getGameService()->isInstantWinner($game,$user,$code);
                     if (!$occurrence) {
                         $this->flashMessenger()->addMessage('Le code entré est invalide ou a déjà été utilisé !');
+                         return $this->redirect()->toUrl($this->url()->fromRoute('frontend/instantwin/play', array('id' => $game->getIdentifier(), 'channel' => $channel), array('force_canonical' => true)));
                     } else {
                         return $this->redirect()->toUrl($this->url()->fromRoute('frontend/instantwin/result', array('id' => $game->getIdentifier(), 'channel' => $channel)));
                     }
