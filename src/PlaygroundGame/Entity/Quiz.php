@@ -66,6 +66,7 @@ class Quiz extends Game implements InputFilterAwareInterface
 
     /**
      * @ORM\OneToMany(targetEntity="QuizQuestion", mappedBy="quiz", cascade={"persist","remove"})
+     * @ORM\OrderBy({"position" = "ASC"})
      **/
     private $questions;
 

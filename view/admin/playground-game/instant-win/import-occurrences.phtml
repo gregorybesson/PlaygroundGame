@@ -1,4 +1,5 @@
 <?php $this->plugin('translate')->setTranslatorTextDomain('playgroundgame');// Pour le texte ?>
+
 <?php
 $form = $this->form;
 $form->prepare();
@@ -19,25 +20,16 @@ $form->prepare();
 
             <?php echo $this->formHidden($form->get('instant_win_id')); ?>
 
-            <?php echo $this->formHidden($form->get('id')); ?>
-
-            <?php $today = new \DateTime('now');?>
-            <?php $today = $today->format('d/m/Y H:i:s');?>
 
             <div class="label-input">
-                <?php echo $this->formLabel($form->get('value')); ?>
-	            <?php echo $this->formInput($form->get('value')); ?>
-	            <?php echo $this->formElementErrors($form->get('value')); ?>
+                <?php echo $this->formLabel($form->get('file')); ?>
+	            <?php echo $this->formFile($form->get('file')); ?>
+	            <?php echo $this->formElementErrors($form->get('file')); ?>
 	        </div>
 	        <div class="label-input">
 	            <?php echo $this->formLabel($form->get('active')); ?>
 	            <?php echo $this->formSelect($form->get('active')); ?>
 	            <?php echo $this->formElementErrors($form->get('active')) ?>
-	        </div>
-	        <div class="label-input">
-	            <?php echo $this->formLabel($form->get('winning')); ?>
-	            <?php echo $this->formSelect($form->get('winning')); ?>
-	            <?php echo $this->formElementErrors($form->get('winning')) ?>
 	        </div>
 	        <div class="label-input">
 		        <?php echo $this->formLabel($form->get('prize')); ?>
@@ -48,14 +40,3 @@ $form->prepare();
     </div>
 </div>
 <?php echo $this->form()->closeTag() ?>
-
-<?php if ($this->game->getOccurrenceType() == 'datetime') : ?>
-<script type="text/javascript">
-    jQuery(document).ready(function ($) {
-        $('#tabs').tab();
-        $('#value').datetimepicker({
-        	dateFormat : 'dd/mm/yy'
-        });
-    });
-</script>
-<?php endif; ?>

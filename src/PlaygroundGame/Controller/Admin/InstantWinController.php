@@ -6,7 +6,7 @@ use PlaygroundGame\Entity\Game;
 use PlaygroundGame\Form;
 use PlaygroundGame\Entity\InstantWin;
 use PlaygroundGame\Entity\InstantWinOccurrence;
-use Zend\InputFilter; 
+use Zend\InputFilter;
 use Zend\Validator;
 
 use Zend\Mvc\Controller\AbstractActionController;
@@ -100,7 +100,7 @@ class InstantWinController extends AbstractActionController
         $form   = $this->getServiceLocator()->get('playgroundgame_instantwin_form');
         $form->setAttribute('action', $this->url()->fromRoute('admin/playgroundgame/edit-instantwin', array('gameId' => $gameId)));
         $form->setAttribute('method', 'post');
-        
+
         if ($game->getFbAppId()) {
             $appIds = $form->get('fbAppId')->getOption('value_options');
             $appIds[$game->getFbAppId()] = $game->getFbAppId();
@@ -115,12 +115,12 @@ class InstantWinController extends AbstractActionController
 
             $form->get('stylesheet')->setAttribute('options', $values);
         }
-        
+
         $form->bind($game);
 
         if ($this->getRequest()->isPost()) {
             $data = array_replace_recursive(
-                    $this->getRequest()->getPost()->toArray(), 
+                    $this->getRequest()->getPost()->toArray(),
                     $this->getRequest()->getFiles()->toArray()
             );
             if(empty($data['prizes'])){
@@ -135,7 +135,7 @@ class InstantWinController extends AbstractActionController
 
         $gameForm->setVariables(array('form' => $form, 'game' => $game));
         $viewModel->addChild($gameForm, 'game_form');
-        
+
         return $viewModel->setVariables(
             array(
                 'form' => $form,
@@ -153,34 +153,23 @@ class InstantWinController extends AbstractActionController
             return $this->redirect()->toRoute('admin/playgroundgame/list');
         }
 
-        //$instantwin = $service->getGameMapper()->findById($gameId);
         $game = $service->getGameMapper()->findById($gameId);
 
         $query_result = $service->getInstantWinOccurrenceMapper()->findByGameId($game);
-        if(is_array($query_result)){
+        if (is_array($query_result)) {
             $paginator = new Paginator( new \Zend\Paginator\Adapter\ArrayAdapter($query_result));
-        }else{
+        } else {
             $paginator = $query_result;
         }
 
         $paginator->setItemCountPerPage(25);
         $paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
 
-        if ($game->getOccurrenceType()=='datetime')
-            $addLink = $this->url()->fromRoute('admin/playgroundgame/instantwin-occurrence-add', array('gameId' => $gameId));
-        elseif  ($game->getOccurrenceType()=='code'){
-            $addLink = $this->url()->fromRoute('admin/playgroundgame/instantwin-code-occurrences-add', array('gameId' => $gameId));
-            $exportLink = $this->url()->fromRoute('admin/playgroundgame/instantwin-occurrences-export', array('gameId' => $gameId));;
-        }
-
         return new ViewModel(
             array(
                 'occurrences' => $paginator,
                 'gameId'      => $gameId,
-                'filter'      => $filter,
                 'game'        => $game,
-                'addLink'     => $addLink,
-                'exportLink'  => $exportLink,
             )
         );
     }
@@ -194,14 +183,14 @@ class InstantWinController extends AbstractActionController
         if (!$gameId) {
             return $this->redirect()->toRoute('admin/playgroundgame/list');
         }
+        $game = $service->getGameMapper()->findById($gameId);
 
         $form = $this->getServiceLocator()->get('playgroundgame_instantwinoccurrence_form');
-        $form->remove('occurrences_file');
         $form->get('submit')->setAttribute('label', 'Add');
+
         $form->setAttribute('action', $this->url()->fromRoute('admin/playgroundgame/instantwin-occurrence-add', array('gameId' => $gameId)));
         $form->setAttribute('method', 'post');
         $form->get('instant_win_id')->setAttribute('value', $gameId);
-
         $occurrence = new InstantWinOccurrence();
         $form->bind($occurrence);
 
@@ -211,55 +200,51 @@ class InstantWinController extends AbstractActionController
                     $this->getRequest()->getFiles()->toArray()
             );
 
-            $occurrence = $service->createOccurrence($data);
+            $occurrence = $service->updateOccurrence($data, $occurrence->getId());
             if ($occurrence) {
                 // Redirect to list of games
                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The occurrence was created');
-
                 return $this->redirect()->toRoute('admin/playgroundgame/instantwin-occurrence-list', array('gameId'=>$gameId));
-
             }
         }
-
         return $viewModel->setVariables(
             array(
                 'form' => $form,
-                'gameId' => $gameId,
+                'game' => $game,
                 'occurrence_id' => 0,
                 'title' => 'Add occurrence',
             )
         );
     }
 
-    public function addCodeOccurrencesAction()
+    public function importOccurrencesAction()
     {
         $viewModel = new ViewModel();
-        $viewModel->setTemplate('playground-game/instant-win/code-occurrences');
-        $service = $this->getAdminGameService();
+        $viewModel->setTemplate('playground-game/instant-win/import-occurrences');
         $gameId = $this->getEvent()->getRouteMatch()->getParam('gameId');
         if (!$gameId) {
             return $this->redirect()->toRoute('admin/playgroundgame/list');
         }
-        $form = $this->getServiceLocator()->get('playgroundgame_instantwinoccurrence_form');
-        $form->remove('occurrence_value');
-        $form->remove('winning');
-        $form->remove('active');
+        $form = $this->getServiceLocator()->get('playgroundgame_instantwinoccurrenceimport_form');
 
-        $form->get('submit')->setAttribute('label', 'Add');
-        $form->setAttribute('action', $this->url()->fromRoute('admin/playgroundgame/instantwin-code-occurrences-add', array('gameId' => $gameId)));
-        $form->setAttribute('method', 'post');
-        $form->setAttribute('enctype','multipart/form-data');
+        $form->get('submit')->setAttribute('label', 'Import');
+        $form->setAttribute('action', $this->url()->fromRoute('admin/playgroundgame/instantwin-occurrences-import', array('gameId' => $gameId)));
         $form->get('instant_win_id')->setAttribute('value', $gameId);
 
         // File validator
         $inputFilter = new InputFilter\InputFilter();
-        $fileFilter = new InputFilter\FileInput('occurrences_file');
+        $fileFilter = new InputFilter\FileInput('file');
         $validatorChain = new Validator\ValidatorChain();
         $validatorChain->attach(new Validator\File\Exists());
         $validatorChain->attach(new Validator\File\Extension('csv'));
         $fileFilter->setValidatorChain($validatorChain);
         $fileFilter->setRequired(true);
+
+        $prizeFilter = new InputFilter\Input('prize');
+        $prizeFilter->setRequired(false);
+
         $inputFilter->add($fileFilter);
+        $inputFilter->add($prizeFilter);
         $form->setInputFilter($inputFilter);
 
         if ($this->getRequest()->isPost()) {
@@ -270,74 +255,78 @@ class InstantWinController extends AbstractActionController
             $form->setData($data);
             if ($form->isValid())
             {
+                var_dump('form is valid');
                 $data = $form->getData();
-                $service = $this->getAdminGameService();
-                $results = $service->uploadCodeOccurrences($data);
-                if($results){
-                    $this->flashMessenger()->setNamespace('playgroundgame')->addMessage($results[0].' occurrences were created and '.$results[1].' were already in base');
+                $created = $this->getAdminGameService()->importOccurrences($data);
+                if($created){
+                    $this->flashMessenger()->setNamespace('playgroundgame')->addMessage($created.' occurrences were created !');
                     return $this->redirect()->toRoute('admin/playgroundgame/instantwin-occurrence-list', array('gameId'=>$gameId));
                 }
+            }
+            else {
+                var_dump($form->getMessages());
             }
         }
 
         return $viewModel->setVariables(
             array(
                 'form' => $form,
-                'gameId' => $gameId,
-                'occurrence_id' => 0,
-                'title' => 'Add occurrence',
+                'title' => 'Import occurrences',
             )
         );
     }
 
     public function editOccurrenceAction()
     {
-        $service = $this->getAdminGameService();
         $viewModel = new ViewModel();
         $viewModel->setTemplate('playground-game/instant-win/occurrence');
-
-        $gameId = $this->getEvent()->getRouteMatch()->getParam('gameId');
-        /*if (!$gameId) {
-            return $this->redirect()->toRoute('admin/playgroundgame/list');
-        }*/
+        $service = $this->getAdminGameService();
 
         $occurrenceId = $this->getEvent()->getRouteMatch()->getParam('occurrenceId');
-        if (!$occurrenceId) {
+        $gameId = $this->getEvent()->getRouteMatch()->getParam('gameId');
+        if (!$gameId) {
             return $this->redirect()->toRoute('admin/playgroundgame/list');
         }
-        $occurrence   = $service->getInstantWinOccurrenceMapper()->findById($occurrenceId);
-        $instantwinId     = $occurrence->getInstantWin()->getId();
-
+        $game = $service->getGameMapper()->findById($gameId);
+        $occurrence = $service->getInstantWinOccurrenceMapper()->findById($occurrenceId);
+        // Si l'occurrence a été utilisée, on ne peut plus la modifier
+        if($occurrence->getUser()){
+            $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('This occurrence has a winner, you can not update it.');
+            return $this->redirect()->toRoute('admin/playgroundgame/instantwin-occurrence-list', array('gameId'=>$gameId));
+        }
         $form = $this->getServiceLocator()->get('playgroundgame_instantwinoccurrence_form');
-        $form->get('submit')->setAttribute('label', 'Add');
-        $form->get('instant_win_id')->setAttribute('value', $instantwinId);
+        $form->remove('occurrences_file');
+
+        $form->get('submit')->setAttribute('label', 'Edit');
+        $form->setAttribute('action', '');
+
+        $form->get('instant_win_id')->setAttribute('value', $gameId);
 
         $form->bind($occurrence);
 
         if ($this->getRequest()->isPost()) {
             $data = array_merge(
-                    $this->getRequest()->getPost()->toArray(),
-                    $this->getRequest()->getFiles()->toArray()
+                $this->getRequest()->getPost()->toArray(),
+                $this->getRequest()->getFiles()->toArray()
             );
-            $occurrence = $service->updateOccurrence($data, $occurrence);
+            $occurrence = $service->updateOccurrence($data, $occurrence->getId());
+
             if ($occurrence) {
                 // Redirect to list of games
-                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The occurrence was created');
-
-                return $this->redirect()->toRoute('admin/playgroundgame/instantwin-occurrence-list', array('gameId'=>$instantwinId));
+                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The occurrence was edited');
+                return $this->redirect()->toRoute('admin/playgroundgame/instantwin-occurrence-list', array('gameId'=>$gameId));
             }
         }
-
         return $viewModel->setVariables(
             array(
                 'form' => $form,
-                'gameId' => $instantwinId,
+                'game' => $game,
                 'occurrence_id' => $occurrenceId,
                 'title' => 'Edit occurrence',
-                'gameId' => $gameId,
             )
         );
     }
+
 
     public function removeOccurrenceAction()
     {
@@ -348,7 +337,7 @@ class InstantWinController extends AbstractActionController
         }
         $occurrence   = $service->getInstantWinOccurrenceMapper()->findById($occurrenceId);
         $instantwinId = $occurrence->getInstantWin()->getId();
-        
+
         if($occurrence->getActive()){
             $service->getInstantWinOccurrenceMapper()->remove($occurrence);
             $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The occurrence was deleted');
@@ -363,16 +352,15 @@ class InstantWinController extends AbstractActionController
     {
         $gameId         = $this->getEvent()->getRouteMatch()->getParam('gameId');
         $game           = $this->getAdminGameService()->getGameMapper()->findById($gameId);
-        
         $adapter = new DoctrineAdapter(new ORMPaginator( $this->getAdminGameService()->getEntryMapper()->queryByGame($game)));
         $paginator = new Paginator($adapter);
         $paginator->setItemCountPerPage(10);
         $paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
 
         return array(
-                'entries' => $paginator,
-                'game' => $game,
-                'gameId' => $gameId
+            'entries' => $paginator,
+            'game' => $game,
+            'gameId' => $gameId
         );
     }
 
@@ -397,7 +385,7 @@ class InstantWinController extends AbstractActionController
             } else {
                 $dob = '';
             }
-            
+
             $content   .= $e->getUser()->getId()
             . ";" . $e->getUser()->getUsername()
             . ";" . $e->getUser()->getTitle()
@@ -436,8 +424,8 @@ class InstantWinController extends AbstractActionController
         $gameId         = $this->getEvent()->getRouteMatch()->getParam('gameId');
         $game           = $this->getAdminGameService()->getGameMapper()->findById($gameId);
         $service = $this->getAdminGameService();
-        
-        $file = $service->setCodeOccurencesToCSV($game);
+
+        $file = $service->setOccurencesToCSV($game);
 
         $response = new \Zend\Http\Response\Stream();
         $response->setStream(fopen($file, 'r'));
@@ -449,7 +437,6 @@ class InstantWinController extends AbstractActionController
                 ->addHeaderLine('Content-Length', filesize($file));
 
         $response->setHeaders($headers);
-        fclose($file);
         unlink($file);
         return $response;
 
