@@ -23,10 +23,10 @@ class GameTest extends \PHPUnit_Framework_TestCase
     public function testFindByIdentifier()
     {
         $game = new \PlaygroundGame\Entity\Quiz();
-        $game->setTitle('CeciEstUnTitre');
-        $game->setIdentifier('gameid');
-        $game->setWinners(2);
-        $game->setSubstitutes(2);
+        $game->setTitle('CeciEstUnTitre')
+        ->setIdentifier('gameid')
+        ->setWinners(2)
+        ->setSubstitutes(2);
         $game = $this->tm->insert($game);
         $this->assertEquals($game->getIdentifier(), $this->tm->findByIdentifier($game->getIdentifier())->getIdentifier());
     }
@@ -34,10 +34,10 @@ class GameTest extends \PHPUnit_Framework_TestCase
     public function testFindById()
     {
         $game = new \PlaygroundGame\Entity\Quiz();
-        $game->setTitle('CeciEstUnTitre');
-        $game->setIdentifier('gameid');
-        $game->setWinners(2);
-        $game->setSubstitutes(2);
+        $game->setTitle('CeciEstUnTitre')
+        ->setIdentifier('gameid')
+        ->setWinners(2)
+        ->setSubstitutes(2);
         $game = $this->tm->insert($game);
         $this->assertEquals($game->getId(), $this->tm->findById($game->getId())->getId());
     }
@@ -45,10 +45,10 @@ class GameTest extends \PHPUnit_Framework_TestCase
     public function testUpdate()
     {
         $game = new \PlaygroundGame\Entity\Quiz();
-        $game->setTitle('CeciEstUnTitre');
-        $game->setIdentifier('gameid');
-        $game->setWinners(2);
-        $game->setSubstitutes(2);
+        $game->setTitle('CeciEstUnTitre')
+        ->setIdentifier('gameid')
+        ->setWinners(2)
+        ->setSubstitutes(2);
         $game = $this->tm->insert($game);
         $game->setTitle('CeciEstUnNouveauTitre');
         $game = $this->tm->update($game);
@@ -60,10 +60,10 @@ class GameTest extends \PHPUnit_Framework_TestCase
     public function testFindBy()
     {
         $game = new \PlaygroundGame\Entity\Quiz();
-        $game->setTitle('CeciEstUnTitre');
-        $game->setIdentifier('gameid');
-        $game->setWinners(2);
-        $game->setSubstitutes(2);
+        $game->setTitle('CeciEstUnTitre')
+        ->setIdentifier('gameid')
+        ->setWinners(2)
+        ->setSubstitutes(2);
         $game = $this->tm->insert($game);
         $id = $game->getId();
         $games = $this->tm->findBy(array('id' => $id), array('id' => 'ASC'));
@@ -73,10 +73,10 @@ class GameTest extends \PHPUnit_Framework_TestCase
     public function testRemove()
     {
         $game = new \PlaygroundGame\Entity\Quiz();
-        $game->setTitle('CeciEstUnTitre');
-        $game->setIdentifier('gameid');
-        $game->setWinners(2);
-        $game->setSubstitutes(2);
+        $game->setTitle('CeciEstUnTitre')
+        ->setIdentifier('gameid')
+        ->setWinners(2)
+        ->setSubstitutes(2);
         $game = $this->tm->insert($game);
         $id = $game->getId();
         $this->tm->remove($game);

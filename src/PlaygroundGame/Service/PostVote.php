@@ -40,9 +40,9 @@ class PostVote extends Game implements ServiceManagerAwareInterface
 
         if (! $post) {
             $post = new \PlaygroundGame\Entity\PostVotePost();
-            $post->setPostvote($game);
-            $post->setUser($user);
-            $post->setEntry($entry);
+            $post->setPostvote($game)
+                 ->setUser($user)
+                 ->setEntry($entry);
             $post = $postvotePostMapper->insert($post);
         }
 
@@ -57,10 +57,10 @@ class PostVote extends Game implements ServiceManagerAwareInterface
             if (! $postElement) {
                 $postElement = new \PlaygroundGame\Entity\PostVotePostElement();
             }
-            $postElement->setName($key);
-            $postElement->setPosition(0);
-            $postElement->setValue($media_url.$uploadFile);
-            $postElement->setPost($post);
+            $postElement->setName($key)
+                        ->setPosition(0)
+                        ->setValue($media_url.$uploadFile)
+                        ->setPost($post);
             $postElement = $postVotePostElementMapper->insert($postElement);
 
             return $media_url.$uploadFile;
@@ -123,9 +123,9 @@ class PostVote extends Game implements ServiceManagerAwareInterface
 
         if (! $post) {
             $post = new \PlaygroundGame\Entity\PostVotePost();
-            $post->setPostvote($game);
-            $post->setUser($user);
-            $post->setEntry($entry);
+            $post->setPostvote($game)
+                 ->setUser($user)
+                 ->setEntry($entry);
             $post = $postvotePostMapper->insert($post);
         }
 
@@ -138,8 +138,8 @@ class PostVote extends Game implements ServiceManagerAwareInterface
             if (! $postElement) {
                 $postElement = new \PlaygroundGame\Entity\PostVotePostElement();
             }
-            $postElement->setName($name);
-            $postElement->setPosition($position);
+            $postElement->setName($name)
+                        ->setPosition($position);
             // TODO : Manage uploads
             if (is_array($value) && isset($value['tmp_name'])) {
 				if ( ! $value['error'] ) {
@@ -248,11 +248,11 @@ class PostVote extends Game implements ServiceManagerAwareInterface
         if (!$form) {
             $form = new \PlaygroundGame\Entity\PostVoteForm();
         }
-        $form->setPostvote($game);
-        $form->setTitle($title);
-        $form->setDescription($description);
-        $form->setForm($data['form_jsonified']);
-        $form->setFormTemplate($data['form_template']);
+        $form->setPostvote($game)
+             ->setTitle($title)
+             ->setDescription($description)
+             ->setForm($data['form_jsonified'])
+             ->setFormTemplate($data['form_template']);
 
         $form = $this->getPostVoteFormMapper()->insert($form);
 
@@ -329,8 +329,8 @@ class PostVote extends Game implements ServiceManagerAwareInterface
             return false;
         } else {
             $vote = new \PlaygroundGame\Entity\PostVoteVote();
-            $vote->setPost($post);
-            $vote->setIp($ipAddress);
+            $vote->setPost($post)
+                 ->setIp($ipAddress);
             if ($user) {
                 $vote->setUserId($user->getId());
             }

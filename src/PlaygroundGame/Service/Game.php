@@ -646,11 +646,11 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         if ( $this->getServiceManager()->get('Application')->getMvcEvent()->getRouteMatch()->getParam('channel') === 'preview' 
              && $this->isAllowed('game', 'edit')){
             
-            $game->setActive(true);
-            $game->setStartDate(null);
-            $game->setEndDate(null);
-            $game->setPublicationDate(null);
-            $game->setBroadcastPlatform(true);
+            $game->setActive(true)
+                 ->setStartDate(null)
+                 ->setEndDate(null)
+                 ->setPublicationDate(null)
+                 ->setBroadcastPlatform(true);
             
             // I don't want the game to be updated through any update during the preview mode. I mark it as readonly for Doctrine
             $this->getServiceManager()->get('doctrine.entitymanager.orm_default')->getUnitOfWork()->markReadOnly($game);
@@ -928,12 +928,12 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
         if ($this->allowBonus($game, $user)) {
             $entry = new Entry();
-            $entry->setGame($game);
-            $entry->setUser($user);
-            $entry->setPoints(0);
-            $entry->setActive(0);
-            $entry->setBonus(1);
-            $entry->setWinner($winner);
+            $entry->setGame($game)
+                  ->setUser($user)
+                  ->setPoints(0)
+                  ->setActive(0)
+                  ->setBonus(1)
+                  ->setWinner($winner);
 
             $entry = $this->getEntryMapper()->insert($entry);
 

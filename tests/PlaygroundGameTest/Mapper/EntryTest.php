@@ -46,15 +46,15 @@ class EntryTest extends \PHPUnit_Framework_TestCase
     public function testCountByGame() 
     {
         $game = new \PlaygroundGame\Entity\Quiz();
-        $game->setTitle('CeciEstUnTitre');
-        $game->setIdentifier('gameid');
-        $game->setWinners(2);
-        $game->setSubstitutes(2);
+        $game->setTitle('CeciEstUnTitre')
+        ->setIdentifier('gameid')
+        ->setWinners(2)
+        ->setSubstitutes(2);
 
         $this->em->persist($game);
         $entry = new EntryEntity();
-        $entry->setPoints('DesPoints');
-        $entry->setGame($game);
+        $entry->setPoints('DesPoints')
+        ->setGame($game);
         $entry = $this->tm->insert($entry);
 
         $this->assertEquals(1, $this->tm->countByGame($game));
@@ -66,15 +66,15 @@ class EntryTest extends \PHPUnit_Framework_TestCase
     public function testQueryByGame() 
     {
         $game = new \PlaygroundGame\Entity\Quiz();
-        $game->setTitle('CeciEstUnTitre');
-        $game->setIdentifier('gameid');
-        $game->setWinners(2);
-        $game->setSubstitutes(2);
+        $game->setTitle('CeciEstUnTitre')
+        ->setIdentifier('gameid')
+        ->setWinners(2)
+        ->setSubstitutes(2);
 
         $this->em->persist($game);
         $entry = new EntryEntity();
-        $entry->setPoints('DesPoints');
-        $entry->setGame($game);
+        $entry->setPoints('DesPoints')
+        ->setGame($game);
         $this->tm->insert($entry);
         $return = $this->tm->queryByGame($game);
         $this->assertEquals("object", gettype($return));
@@ -87,15 +87,15 @@ class EntryTest extends \PHPUnit_Framework_TestCase
     public function testFindByGameId() 
     {
         $game = new \PlaygroundGame\Entity\Quiz();
-        $game->setTitle('CeciEstUnTitre');
-        $game->setIdentifier('gameid');
-        $game->setWinners(2);
-        $game->setSubstitutes(2);
+        $game->setTitle('CeciEstUnTitre')
+        ->setIdentifier('gameid')
+        ->setWinners(2)
+        ->setSubstitutes(2);
 
         $this->em->persist($game);
         $entry = new EntryEntity();
-        $entry->setPoints('DesPoints');
-        $entry->setGame($game);
+        $entry->setPoints('DesPoints')
+        ->setGame($game);
         $this->tm->insert($entry);
 
         $this->assertEquals($entry->getId(), $this->tm->findByGameId(1)[0]->getId());

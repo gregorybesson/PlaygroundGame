@@ -26,11 +26,11 @@ class InstantWinTest extends AbstractHttpControllerTestCase
     {
         $game = new InstantWinEntity();
         $startDate = new \DateTime("now");
-        $game->setOccurrenceType('code');
-        $game->setOccurrenceDrawFrequency('game');
-        $game->setStartDate($startDate);
-        $game->setOccurrenceNumber(2);
-        $game->setWinningOccurrenceNumber(1);
+        $game->setOccurrenceType('code')
+        ->setOccurrenceDrawFrequency('game')
+        ->setStartDate($startDate)
+        ->setOccurrenceNumber(2)
+        ->setWinningOccurrenceNumber(1);
 
         $mapper = $this->getMockBuilder('PlaygroundGame\Mapper\InstantWinOccurrence')
         ->disableOriginalConstructor()
@@ -56,11 +56,11 @@ class InstantWinTest extends AbstractHttpControllerTestCase
 		$endDate = new \DateTime("now");
 		$endDate->add(new \DateInterval('PT1H'));
 
-		$game->setOccurrenceDrawFrequency('game');
-		$game->setStartDate($startDate);
-		$game->setEndDate($endDate);
-		$game->setOccurrenceNumber(2);
-
+		$game->setOccurrenceDrawFrequency('game')
+		->setStartDate($startDate)
+		->setEndDate($endDate)
+		->setOccurrenceNumber(2);
+		
 		$mapper = $this->getMockBuilder('PlaygroundGame\Mapper\InstantWinOccurrence')
 		->disableOriginalConstructor()
 		->getMock();
@@ -97,10 +97,10 @@ class InstantWinTest extends AbstractHttpControllerTestCase
         $endDate = new \DateTime("now");
         $endDate->add(new \DateInterval('P5D'));
 
-        $game->setOccurrenceDrawFrequency('game');
-        $game->setStartDate($startDate);
-        $game->setEndDate($endDate);
-        $game->setOccurrenceNumber(2);
+        $game->setOccurrenceDrawFrequency('game')
+        ->setStartDate($startDate)
+        ->setEndDate($endDate)
+        ->setOccurrenceNumber(2);
 
         $mapper = $this->getMockBuilder('PlaygroundGame\Mapper\InstantWinOccurrence')
         ->disableOriginalConstructor()
@@ -132,10 +132,10 @@ class InstantWinTest extends AbstractHttpControllerTestCase
         $endDate = new \DateTime("now");
         $endDate->add(new \DateInterval('PT2H'));
 
-        $game->setOccurrenceDrawFrequency('day');
-        $game->setStartDate($startDate);
-        $game->setEndDate($endDate);
-        $game->setOccurrenceNumber(2);
+        $game->setOccurrenceDrawFrequency('day')
+        ->setStartDate($startDate)
+        ->setEndDate($endDate)
+        ->setOccurrenceNumber(2);
 
         $mapper = $this->getMockBuilder('PlaygroundGame\Mapper\InstantWinOccurrence')
         ->disableOriginalConstructor()
@@ -166,10 +166,10 @@ class InstantWinTest extends AbstractHttpControllerTestCase
         $endDate = new \DateTime("now");
         $endDate->add(new \DateInterval('P5D'));
 
-        $game->setOccurrenceDrawFrequency('day');
-        $game->setStartDate($startDate);
-        $game->setEndDate($endDate);
-        $game->setOccurrenceNumber(2);
+        $game->setOccurrenceDrawFrequency('day')
+        ->setStartDate($startDate)
+        ->setEndDate($endDate)
+        ->setOccurrenceNumber(2);
 
         $mapper = $this->getMockBuilder('PlaygroundGame\Mapper\InstantWinOccurrence')
         ->disableOriginalConstructor()
@@ -204,10 +204,10 @@ class InstantWinTest extends AbstractHttpControllerTestCase
         $endDate->add(new \DateInterval('PT1H'));
         $endDate = \DateTime::createFromFormat('m/d/Y H:i:s', $endDate->format('m/d/Y H'). ':00:00');
 
-        $game->setOccurrenceDrawFrequency('hour');
-        $game->setStartDate($startDate);
-        $game->setEndDate($endDate);
-        $game->setOccurrenceNumber(2);
+        $game->setOccurrenceDrawFrequency('hour')
+        ->setStartDate($startDate)
+        ->setEndDate($endDate)
+        ->setOccurrenceNumber(2);
 
         $mapper = $this->getMockBuilder('PlaygroundGame\Mapper\InstantWinOccurrence')
         ->disableOriginalConstructor()
@@ -239,10 +239,10 @@ class InstantWinTest extends AbstractHttpControllerTestCase
         $endDate = new \DateTime("now");
         $endDate->add(new \DateInterval('PT36H'));
 
-        $game->setOccurrenceDrawFrequency('hour');
-        $game->setStartDate($startDate);
-        $game->setEndDate($endDate);
-        $game->setOccurrenceNumber(1);
+        $game->setOccurrenceDrawFrequency('hour')
+        ->setStartDate($startDate)
+        ->setEndDate($endDate)
+        ->setOccurrenceNumber(1);
 
         $mapper = $this->getMockBuilder('PlaygroundGame\Mapper\InstantWinOccurrence')
         ->disableOriginalConstructor()
@@ -275,10 +275,10 @@ class InstantWinTest extends AbstractHttpControllerTestCase
         $endDate = new \DateTime("now");
         $endDate->add(new \DateInterval('P3DT1H'));
 
-        $game->setOccurrenceDrawFrequency('game');
-        $game->setStartDate($startDate);
-        $game->setEndDate($endDate);
-        $game->setOccurrenceNumber(2);
+        $game->setOccurrenceDrawFrequency('game')
+        ->setStartDate($startDate)
+        ->setEndDate($endDate)
+        ->setOccurrenceNumber(2);
 
         $mapper = $this->getMockBuilder('PlaygroundGame\Mapper\InstantWinOccurrence')
         ->disableOriginalConstructor()
@@ -317,10 +317,10 @@ class InstantWinTest extends AbstractHttpControllerTestCase
         $endDate = new \DateTime("now");
         $endDate->add(new \DateInterval('P8D'));
 
-        $game->setOccurrenceDrawFrequency('game');
-        $game->setStartDate($startDate);
-        $game->setEndDate($endDate);
-        $game->setOccurrenceNumber(2);
+        $game->setOccurrenceDrawFrequency('game')
+        ->setStartDate($startDate)
+        ->setEndDate($endDate)
+        ->setOccurrenceNumber(2);
 
         $mapper = $this->getMockBuilder('PlaygroundGame\Mapper\InstantWinOccurrence')
         ->disableOriginalConstructor()
@@ -353,10 +353,10 @@ class InstantWinTest extends AbstractHttpControllerTestCase
         $endDate = new \DateTime("now");
         $endDate->add(new \DateInterval('P3DT2H'));
 
-        $game->setOccurrenceDrawFrequency('day');
-        $game->setStartDate($startDate);
-        $game->setEndDate($endDate);
-        $game->setOccurrenceNumber(2);
+        $game->setOccurrenceDrawFrequency('day')
+        ->setStartDate($startDate)
+        ->setEndDate($endDate)
+        ->setOccurrenceNumber(2);
 
         $mapper = $this->getMockBuilder('PlaygroundGame\Mapper\InstantWinOccurrence')
         ->disableOriginalConstructor()
@@ -388,10 +388,10 @@ class InstantWinTest extends AbstractHttpControllerTestCase
         $endDate->add(new \DateInterval('P8D'));
 
 
-        $game->setOccurrenceDrawFrequency('day');
-        $game->setStartDate($startDate);
-        $game->setEndDate($endDate);
-        $game->setOccurrenceNumber(2);
+        $game->setOccurrenceDrawFrequency('day')
+        ->setStartDate($startDate)
+        ->setEndDate($endDate)
+        ->setOccurrenceNumber(2);
 
         $mapper = $this->getMockBuilder('PlaygroundGame\Mapper\InstantWinOccurrence')
         ->disableOriginalConstructor()
@@ -467,10 +467,10 @@ class InstantWinTest extends AbstractHttpControllerTestCase
         $endDate->add(new \DateInterval('P3DT1H'));
         $endDate = \DateTime::createFromFormat('m/d/Y H:i:s', $endDate->format('m/d/Y H'). ':00:00');
 
-        $game->setOccurrenceDrawFrequency('hour');
-        $game->setStartDate($startDate);
-        $game->setEndDate($endDate);
-        $game->setOccurrenceNumber(2);
+        $game->setOccurrenceDrawFrequency('hour')
+        ->setStartDate($startDate)
+        ->setEndDate($endDate)
+        ->setOccurrenceNumber(2);
 
         $mapper = $this->getMockBuilder('PlaygroundGame\Mapper\InstantWinOccurrence')
         ->disableOriginalConstructor()
@@ -503,10 +503,10 @@ class InstantWinTest extends AbstractHttpControllerTestCase
         $endDate = new \DateTime("now");
         $endDate->add(new \DateInterval('P3DT36H'));
 
-        $game->setOccurrenceDrawFrequency('hour');
-        $game->setStartDate($startDate);
-        $game->setEndDate($endDate);
-        $game->setOccurrenceNumber(1);
+        $game->setOccurrenceDrawFrequency('hour')
+        ->setStartDate($startDate)
+        ->setEndDate($endDate)
+        ->setOccurrenceNumber(1);
 
         $mapper = $this->getMockBuilder('PlaygroundGame\Mapper\InstantWinOccurrence')
         ->disableOriginalConstructor()

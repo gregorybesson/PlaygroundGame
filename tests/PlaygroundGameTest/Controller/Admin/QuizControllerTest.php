@@ -99,11 +99,11 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue($adminQuizQuestionMapper));
 
         $game = new \PlaygroundGame\Entity\Quiz();
-        $game->setTitle('CeciEstUnTitre');
-        $game->setIdentifier('gameid');
-        $game->setWinners(2);
-        $game->setSubstitutes(2);
-        $game->setId(1);
+        $game->setTitle('CeciEstUnTitre')
+             ->setIdentifier('gameid')
+             ->setWinners(2)
+             ->setSubstitutes(2)
+             ->setId(1);
         $question = new \PlaygroundGame\Entity\QuizQuestion();
         $question->setQuiz($game);
 

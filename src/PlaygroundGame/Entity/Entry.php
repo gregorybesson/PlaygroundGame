@@ -127,6 +127,8 @@ class Entry
     public function setId ($id)
     {
         $this->id = $id;
+        
+        return $this;
     }
 
     /**
@@ -143,6 +145,8 @@ class Entry
     public function setGame($game)
     {
         $this->game = $game;
+        
+        return $this;
     }
 
     /**
@@ -159,6 +163,8 @@ class Entry
     public function setUser($user)
     {
         $this->user = $user;
+        
+        return $this;
     }
 
     /**
@@ -175,6 +181,8 @@ class Entry
     public function setPoints($points)
     {
         $this->points = $points;
+        
+        return $this;
     }
 
     /**
@@ -239,6 +247,8 @@ class Entry
     public function setActive($active)
     {
         $this->active = $active;
+        
+        return $this;
     }
 
     /**
@@ -255,6 +265,8 @@ class Entry
     public function setBonus($bonus)
     {
         $this->bonus = $bonus;
+        
+        return $this;
     }
 
     /**
@@ -271,6 +283,8 @@ class Entry
     public function setWinner($winner)
     {
         $this->winner = $winner;
+        
+        return $this;
     }
     
     /**
@@ -287,6 +301,8 @@ class Entry
     public function setDrawable($drawable)
     {
         $this->drawable = $drawable;
+        
+        return $this;
     }
 
 	/**
@@ -303,6 +319,8 @@ class Entry
     public function setTermsOptin($termsOptin)
     {
     	$this->termsOptin = $termsOptin;
+    	
+    	return $this;
     }
 
     /**
@@ -319,6 +337,8 @@ class Entry
     public function setCreatedAt($created_at)
     {
         $this->created_at = $created_at;
+        
+        return $this;
     }
 
     /**
@@ -335,6 +355,8 @@ class Entry
     public function setUpdatedAt($updated_at)
     {
         $this->updated_at = $updated_at;
+        
+        return $this;
     }
 
     /**

@@ -89,6 +89,7 @@ class TreasureHunt extends Game implements InputFilterAwareInterface
 	 * @return the $playerType
 	 */
 	public function getPlayerType() {
+	    
 		return $this->playerType;
 	}
 
@@ -96,13 +97,17 @@ class TreasureHunt extends Game implements InputFilterAwareInterface
 	 * @param string $playerType
 	 */
 	public function setPlayerType($playerType) {
+	    
 		$this->playerType = $playerType;
+		
+		return $this;
 	}
 
 	/**
 	 * @return the $winners
 	 */
 	public function getWinners() {
+	    
 		return $this->winners;
 	}
 
@@ -110,13 +115,17 @@ class TreasureHunt extends Game implements InputFilterAwareInterface
 	 * @param field_type $winners
 	 */
 	public function setWinners($winners) {
+	    
 		$this->winners = $winners;
+		
+		return $this;
 	}
 
 	/**
 	 * @return the $timer
 	 */
 	public function getTimer() {
+	    
 		return $this->timer;
 	}
 
@@ -124,13 +133,17 @@ class TreasureHunt extends Game implements InputFilterAwareInterface
 	 * @param number $timer
 	 */
 	public function setTimer($timer) {
+	    
 		$this->timer = $timer;
+		
+		return $this;
 	}
 
 	/**
 	 * @return the $timerDuration
 	 */
 	public function getTimerDuration() {
+	    
 		return $this->timerDuration;
 	}
 
@@ -138,7 +151,10 @@ class TreasureHunt extends Game implements InputFilterAwareInterface
 	 * @param number $timerDuration
 	 */
 	public function setTimerDuration($timerDuration) {
+	    
 		$this->timerDuration = $timerDuration;
+		
+		return $this;
 	}
 
 	/**

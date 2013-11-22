@@ -130,9 +130,9 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $pluginManager = $this->getApplicationServiceLocator()->get('ControllerPluginManager');
 
         $game = new GameEntity();
-        $game->setFbFan(true);
-        $game->setIdentifier('gameid');
-        $game->setClassType('quiz');
+        $game->setFbFan(true)
+        ->setIdentifier('gameid')
+        ->setClassType('quiz');
 
         //mocking the method checkExistingEntry
         $f = $this->getMockBuilder('PlaygroundGame\Service\Game')
@@ -199,11 +199,11 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
     	$pluginManager = $this->getApplicationServiceLocator()->get('ControllerPluginManager');
 
     	$game = new GameEntity();
-    	$game->setFbFan(true);
-    	$game->setIdentifier('gameid');
-    	$game->setClassType('quiz');
-    	$game->setVictoryConditions(0);
-    	$game->setQuestions(array());
+    	$game->setFbFan(true)
+    	->setIdentifier('gameid')
+    	->setClassType('quiz')
+    	->setVictoryConditions(0)
+    	->setQuestions(array());
 
     	//mocking the method checkExistingEntry
     	$f = $this->getMockBuilder('PlaygroundGame\Service\Game')
@@ -264,13 +264,13 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
     	$pluginManager = $this->getApplicationServiceLocator()->get('ControllerPluginManager');
 
     	$game = new GameEntity();
-    	$game->setFbFan(true);
-    	$game->setIdentifier('gameid');
-    	$game->setClassType('quiz');
-    	$game->setStylesheet('skin');
-    	$game->setLayout('playground-game/layout/2columns-right.phtml');
-    	$game->setVictoryConditions(0);
-    	$game->setQuestions(array());
+    	$game->setFbFan(true)
+    	->setIdentifier('gameid')
+    	->setClassType('quiz')
+    	->setStylesheet('skin')
+    	->setLayout('playground-game/layout/2columns-right.phtml')
+    	->setVictoryConditions(0)
+    	->setQuestions(array());
 
     	$entry = new \PlaygroundGame\Entity\Entry();
 
@@ -378,9 +378,9 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
     	$pluginManager    = $this->getApplicationServiceLocator()->get('ControllerPluginManager');
 
     	$game = new GameEntity();
-    	$game->setBroadcastPlatform(true);
-    	$game->setActive(true);
-    	$game->setIdentifier('gameid');
+    	$game->setBroadcastPlatform(true)
+    	->setActive(true)
+    	->setIdentifier('gameid');
 
     	$f = $this->getMockBuilder('PlaygroundGame\Service\Game')
     	->setMethods(array('checkGame', 'checkIsFan', 'getEntryMapper', 'getServiceManager', 'findLastInactiveEntry'))
@@ -534,9 +534,9 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
     	$pluginManager    = $this->getApplicationServiceLocator()->get('ControllerPluginManager');
 
     	$game = new GameEntity();
-    	$game->setBroadcastPlatform(true);
-    	$game->setActive(true);
-    	$game->setIdentifier('gameid');
+    	$game->setBroadcastPlatform(true)
+    	->setActive(true)
+    	->setIdentifier('gameid');
 
     	$f = $this->getMockBuilder('PlaygroundGame\Service\Game')
     	->setMethods(array('checkGame', 'checkIsFan', 'checkExistingEntry', 'getServiceManager'))
@@ -587,11 +587,11 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
     	$pluginManager    = $this->getApplicationServiceLocator()->get('ControllerPluginManager');
 
     	$game = new GameEntity();
-    	$game->setBroadcastPlatform(true);
-    	$game->setActive(true);
-    	$game->setIdentifier('gameid');
-    	$game->setVictoryConditions(0);
-    	$game->setQuestions(array());
+    	$game->setBroadcastPlatform(true)
+    	->setActive(true)
+    	->setIdentifier('gameid')
+    	->setVictoryConditions(0)
+    	->setQuestions(array());
 
     	$f = $this->getMockBuilder('PlaygroundGame\Service\Game')
     	->setMethods(array('checkGame', 'checkIsFan', 'checkExistingEntry', 'getServiceManager', 'play'))
@@ -721,9 +721,9 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
     	$pluginManager    = $this->getApplicationServiceLocator()->get('ControllerPluginManager');
 
     	$game = new GameEntity();
-    	$game->setBroadcastPlatform(true);
-    	$game->setActive(true);
-    	$game->setIdentifier('gameid');
+    	$game->setBroadcastPlatform(true)
+    	->setActive(true)
+    	->setIdentifier('gameid');
 
     	$entry = new \PlaygroundGame\Entity\Entry();
 
@@ -780,9 +780,9 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
     	$pluginManager    = $this->getApplicationServiceLocator()->get('ControllerPluginManager');
 
     	$game = new GameEntity();
-    	$game->setBroadcastPlatform(true);
-    	$game->setActive(true);
-    	$game->setIdentifier('gameid');
+    	$game->setBroadcastPlatform(true)
+    	->setActive(true)
+    	->setIdentifier('gameid');
 
     	$entry = new \PlaygroundGame\Entity\Entry();
 
@@ -843,9 +843,9 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
     	$pluginManager    = $this->getApplicationServiceLocator()->get('ControllerPluginManager');
 
     	$game = new GameEntity();
-    	$game->setBroadcastPlatform(true);
-    	$game->setActive(true);
-    	$game->setIdentifier('gameid');
+    	$game->setBroadcastPlatform(true)
+    	->setActive(true)
+    	->setIdentifier('gameid');
 
     	$entry = new \PlaygroundGame\Entity\Entry();
 
@@ -906,9 +906,9 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
     	$pluginManager    = $this->getApplicationServiceLocator()->get('ControllerPluginManager');
 
     	$game = new GameEntity();
-    	$game->setBroadcastPlatform(true);
-    	$game->setActive(true);
-    	$game->setIdentifier('gameid');
+    	$game->setBroadcastPlatform(true)
+    	->setActive(true)
+    	->setIdentifier('gameid');
 
     	$entry = new \PlaygroundGame\Entity\Entry();
 
@@ -974,9 +974,9 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
     	$pluginManager    = $this->getApplicationServiceLocator()->get('ControllerPluginManager');
 
     	$game = new GameEntity();
-    	$game->setBroadcastPlatform(true);
-    	$game->setActive(true);
-    	$game->setIdentifier('gameid');
+    	$game->setBroadcastPlatform(true)
+    	->setActive(true)
+    	->setIdentifier('gameid');
 
     	$entry = new \PlaygroundGame\Entity\Entry();
     	$entry->setWinner(true);
@@ -1047,9 +1047,9 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
     	$pluginManager    = $this->getApplicationServiceLocator()->get('ControllerPluginManager');
 
     	$game = new GameEntity();
-    	$game->setBroadcastPlatform(true);
-    	$game->setActive(true);
-    	$game->setIdentifier('gameid');
+    	$game->setBroadcastPlatform(true)
+    	->setActive(true)
+    	->setIdentifier('gameid');
 
     	$entry = new \PlaygroundGame\Entity\Entry();
 
@@ -1106,9 +1106,9 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
     	$pluginManager    = $this->getApplicationServiceLocator()->get('ControllerPluginManager');
 
     	$game = new GameEntity();
-    	$game->setBroadcastPlatform(true);
-    	$game->setActive(true);
-    	$game->setIdentifier('gameid');
+    	$game->setBroadcastPlatform(true)
+    	->setActive(true)
+    	->setIdentifier('gameid');
 
     	$entry = new \PlaygroundGame\Entity\Entry();
 
@@ -1169,9 +1169,9 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
     	$pluginManager    = $this->getApplicationServiceLocator()->get('ControllerPluginManager');
 
     	$game = new GameEntity();
-    	$game->setBroadcastPlatform(true);
-    	$game->setActive(true);
-    	$game->setIdentifier('gameid');
+    	$game->setBroadcastPlatform(true)
+    	->setActive(true)
+    	->setIdentifier('gameid');
 
     	$entry = new \PlaygroundGame\Entity\Entry();
 
@@ -1232,9 +1232,9 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
      	$pluginManager    = $this->getApplicationServiceLocator()->get('ControllerPluginManager');
 
      	$game = new GameEntity();
-     	$game->setBroadcastPlatform(true);
-     	$game->setActive(true);
-     	$game->setIdentifier('gameid');
+     	$game->setBroadcastPlatform(true)
+     	->setActive(true)
+     	->setIdentifier('gameid');
 
      	$entry = new \PlaygroundGame\Entity\Entry();
 
@@ -1300,9 +1300,9 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
     	$pluginManager    = $this->getApplicationServiceLocator()->get('ControllerPluginManager');
 
     	$game = new GameEntity();
-    	$game->setBroadcastPlatform(true);
-    	$game->setActive(true);
-    	$game->setIdentifier('gameid');
+    	$game->setBroadcastPlatform(true)
+    	->setActive(true)
+    	->setIdentifier('gameid');
 
     	$entry = new \PlaygroundGame\Entity\Entry();
     	$entry->setWinner(true);
@@ -1373,9 +1373,9 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
     	$pluginManager    = $this->getApplicationServiceLocator()->get('ControllerPluginManager');
 
     	$game = new GameEntity();
-    	$game->setBroadcastPlatform(true);
-    	$game->setActive(true);
-    	$game->setIdentifier('gameid');
+    	$game->setBroadcastPlatform(true)
+    	->setActive(true)
+    	->setIdentifier('gameid');
 
     	$entry = new \PlaygroundGame\Entity\Entry();
 
@@ -1432,9 +1432,9 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
     	$pluginManager    = $this->getApplicationServiceLocator()->get('ControllerPluginManager');
 
     	$game = new GameEntity();
-    	$game->setBroadcastPlatform(true);
-    	$game->setActive(true);
-    	$game->setIdentifier('gameid');
+    	$game->setBroadcastPlatform(true)
+    	->setActive(true)
+    	->setIdentifier('gameid');
 
     	$entry = new \PlaygroundGame\Entity\Entry();
 
@@ -1495,9 +1495,9 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
     	$pluginManager    = $this->getApplicationServiceLocator()->get('ControllerPluginManager');
 
     	$game = new GameEntity();
-    	$game->setBroadcastPlatform(true);
-    	$game->setActive(true);
-    	$game->setIdentifier('gameid');
+    	$game->setBroadcastPlatform(true)
+    	->setActive(true)
+    	->setIdentifier('gameid');
 
     	$entry = new \PlaygroundGame\Entity\Entry();
 
@@ -1558,9 +1558,9 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
     	$pluginManager    = $this->getApplicationServiceLocator()->get('ControllerPluginManager');
 
     	$game = new GameEntity();
-    	$game->setBroadcastPlatform(true);
-    	$game->setActive(true);
-    	$game->setIdentifier('gameid');
+    	$game->setBroadcastPlatform(true)
+    	->setActive(true)
+    	->setIdentifier('gameid');
 
     	$entry = new \PlaygroundGame\Entity\Entry();
 
@@ -1626,9 +1626,9 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
     	$pluginManager    = $this->getApplicationServiceLocator()->get('ControllerPluginManager');
 
     	$game = new GameEntity();
-    	$game->setBroadcastPlatform(true);
-    	$game->setActive(true);
-    	$game->setIdentifier('gameid');
+    	$game->setBroadcastPlatform(true)
+    	->setActive(true)
+    	->setIdentifier('gameid');
 
     	$entry = new \PlaygroundGame\Entity\Entry();
     	$entry->setWinner(true);
@@ -1796,13 +1796,13 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
     	$viewHelperManager = $this->getApplicationServiceLocator()->get('ViewHelperManager');
 
     	$game = new GameEntity();
-    	$game->setBroadcastPlatform(true);
-    	$game->setActive(true);
-    	$game->setIdentifier('gameid');
-    	$game->setClassType('quiz');
-    	$game->setStylesheet('skin');
-    	$game->setLayout('playground-game/layout/2columns-right.phtml');
-    	$game->setTitle('title');
+    	$game->setBroadcastPlatform(true)
+    	->setActive(true)
+    	->setIdentifier('gameid')
+    	->setClassType('quiz')
+    	->setStylesheet('skin')
+    	->setLayout('playground-game/layout/2columns-right.phtml')
+    	->setTitle('title');
 
 
     	$f = $this->getMockBuilder('PlaygroundGame\Service\Game')
@@ -1916,13 +1916,13 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
     	$pluginManager    = $this->getApplicationServiceLocator()->get('ControllerPluginManager');
 
     	$game = new GameEntity();
-    	$game->setBroadcastPlatform(true);
-    	$game->setActive(true);
-    	$game->setIdentifier('gameid');
-    	$game->setClassType('quiz');
-    	$game->setStylesheet('skin');
-    	$game->setLayout('playground-game/layout/2columns-right.phtml');
-    	$game->setTitle('title');
+    	$game->setBroadcastPlatform(true)
+    	->setActive(true)
+    	->setIdentifier('gameid')
+    	->setClassType('quiz')
+    	->setStylesheet('skin')
+    	->setLayout('playground-game/layout/2columns-right.phtml')
+    	->setTitle('title');
 
 
     	$f = $this->getMockBuilder('PlaygroundGame\Service\Game')
@@ -2021,13 +2021,13 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $pluginManager    = $this->getApplicationServiceLocator()->get('ControllerPluginManager');
 
         $game = new GameEntity();
-        $game->setBroadcastPlatform(true);
-        $game->setActive(true);
-        $game->setIdentifier('gameid');
-        $game->setClassType('quiz');
-        $game->setStylesheet('skin');
-        $game->setConditionsBlock('<h2 id="subtitle-test">Ut placerat lorem sed quam luctus, in egestas diam pretium.</h2><p>Pellentesque pellentesque eros sit amet mi egestas malesuada. Nunc pellentesque libero in felis tristique molestie. Aliquam dolor libero, consectetur at neque quis, egestas tempor nulla. Pellentesque massa ante, imperdiet vulputate mauris id, dignissim dapibus urna.</p>');
-        $game->setTitle('title');
+        $game->setBroadcastPlatform(true)
+        ->setActive(true)
+        ->setIdentifier('gameid')
+        ->setClassType('quiz')
+        ->setStylesheet('skin')
+        ->setConditionsBlock('<h2 id="subtitle-test">Ut placerat lorem sed quam luctus, in egestas diam pretium.</h2><p>Pellentesque pellentesque eros sit amet mi egestas malesuada. Nunc pellentesque libero in felis tristique molestie. Aliquam dolor libero, consectetur at neque quis, egestas tempor nulla. Pellentesque massa ante, imperdiet vulputate mauris id, dignissim dapibus urna.</p>')
+        ->setTitle('title');
 
         $f = $this->getMockBuilder('PlaygroundGame\Service\Game')
         ->setMethods(array('checkGame', 'checkIsFan', 'checkExistingEntry', 'getServiceManager'))
@@ -2155,9 +2155,9 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
     	$pluginManager    = $this->getApplicationServiceLocator()->get('ControllerPluginManager');
 
     	$game = new GameEntity();
-    	$game->setBroadcastPlatform(true);
-    	$game->setActive(true);
-    	$game->setIdentifier('gameid');
+    	$game->setBroadcastPlatform(true)
+    	->setActive(true)
+    	->setIdentifier('gameid');
 
     	$f = $this->getMockBuilder('PlaygroundGame\Service\Game')
     	->setMethods(array('checkGame', 'checkIsFan', 'checkExistingEntry', 'getServiceManager', 'play'))
@@ -2207,13 +2207,13 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
     	$pluginManager    = $this->getApplicationServiceLocator()->get('ControllerPluginManager');
 
     	$game = new GameEntity();
-    	$game->setBroadcastPlatform(true);
-    	$game->setActive(true);
-    	$game->setIdentifier('gameid');
-    	$game->setClassType('quiz');
-    	$game->setStylesheet('skin');
-    	$game->setLayout('playground-game/layout/2columns-right.phtml');
-    	$game->setTitle('title');
+    	$game->setBroadcastPlatform(true)
+    	->setActive(true)
+    	->setIdentifier('gameid')
+    	->setClassType('quiz')
+    	->setStylesheet('skin')
+    	->setLayout('playground-game/layout/2columns-right.phtml')
+    	->setTitle('title');
 
     	$prize = new \PlaygroundGame\Entity\Prize();
 
@@ -2316,9 +2316,9 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
     	$pluginManager    = $this->getApplicationServiceLocator()->get('ControllerPluginManager');
 
     	$game = new GameEntity();
-    	$game->setBroadcastPlatform(true);
-    	$game->setActive(true);
-    	$game->setIdentifier('gameid');
+    	$game->setBroadcastPlatform(true)
+    	->setActive(true)
+    	->setIdentifier('gameid');
 
     	$f = $this->getMockBuilder('PlaygroundGame\Service\Game')
     	->setMethods(array('checkGame', 'checkIsFan', 'checkExistingEntry', 'getServiceManager', 'play'))
@@ -2386,9 +2386,9 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
     	$pluginManager    = $this->getApplicationServiceLocator()->get('ControllerPluginManager');
 
     	$game = new GameEntity();
-    	$game->setBroadcastPlatform(true);
-    	$game->setActive(true);
-    	$game->setIdentifier('gameid');
+    	$game->setBroadcastPlatform(true)
+    	->setActive(true)
+    	->setIdentifier('gameid');
 
     	$prize = new \PlaygroundGame\Entity\Prize();
 
