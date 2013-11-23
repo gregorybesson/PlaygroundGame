@@ -31,6 +31,20 @@ class GameController extends AbstractActionController
         if (!$game) {
             return $this->notFoundAction();
         }
+        
+        // This fix exists only for safari in FB on Windows : we need to redirect the user to the page outside of iframe
+        // for the cookie to be accepted. PlaygroundCore redirects to the FB Iframed page when
+        // it discovers that the user arrives for the first time on the game in FB.
+        // When core redirects, it adds a 'redir_fb_page_id' var in the querystring
+        // Here, we test if this var exist, and then send the user back to the game in FB.
+        // Now the cookie will be accepted by Safari...
+        $pageId = $this->params()->fromQuery('redir_fb_page_id');
+        if (!empty($pageId)) {
+            $appId = 'app_'.$game->getFbAppId();
+            $url = '//www.facebook.com/pages/game/'.$pageId.'?sk='.$appId;
+            header("Location: $url");
+            exit;
+        }
     
         return $this->forward()->dispatch('playgroundgame_'.$game->getClassType(), array('controller' => 'playgroundgame_'.$game->getClassType(), 'action' => $game->firstStep(), 'id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')));
         
