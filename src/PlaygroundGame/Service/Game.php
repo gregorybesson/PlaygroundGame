@@ -321,12 +321,30 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             $game->setMainImage($media_url . $data['uploadMainImage']['name']);
             ErrorHandler::stop(true);
         }
+        
+        if(isset($data['deleteMainImage']) && $data['deleteMainImage'] && empty($data['uploadMainImage']['tmp_name'])) {
+            ErrorHandler::start();
+            $image = $game->getMainImage();
+            $image = str_replace($media_url, '', $image);
+            unlink($path . $image);
+            $game->setMainImage(null);
+            ErrorHandler::stop(true);
+        }
 
         if (!empty($data['uploadSecondImage']['tmp_name'])) {
             ErrorHandler::start();
 			$data['uploadSecondImage']['name'] = $this->fileNewname($path, $game->getId() . "-" . $data['uploadSecondImage']['name']);
             move_uploaded_file($data['uploadSecondImage']['tmp_name'], $path . $data['uploadSecondImage']['name']);
             $game->setSecondImage($media_url . $data['uploadSecondImage']['name']);
+            ErrorHandler::stop(true);
+        }
+        
+        if(isset($data['deleteSecondImage']) && $data['deleteSecondImage'] && empty($data['uploadSecondImage']['tmp_name'])) {
+            ErrorHandler::start();
+            $image = $game->getSecondImage();
+            $image = str_replace($media_url, '', $image);
+            unlink($path .$image);
+            $game->setSecondImage(null);
             ErrorHandler::stop(true);
         }
 
@@ -344,6 +362,15 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             $game->setFbShareImage($media_url . $data['uploadFbShareImage']['name']);
             ErrorHandler::stop(true);
         }
+        
+        if(isset($data['deleteFbShareImage']) && $data['deleteFbShareImage'] && empty($data['uploadFbShareImage']['tmp_name'])) {
+            ErrorHandler::start();
+            $image = $game->getFbShareImage();
+            $image = str_replace($media_url, '', $image);
+            unlink($path .$image);
+            $game->setFbShareImage(null);
+            ErrorHandler::stop(true);
+        }
 
         if (!empty($data['uploadFbPageTabImage']['tmp_name'])) {
             ErrorHandler::start();
@@ -354,6 +381,15 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             //move_uploaded_file($data['uploadFbPageTabImage']['tmp_name'], $path . $game->getId() . "-" . $data['uploadFbPageTabImage']['name']);
 
             $game->setFbPageTabImage($media_url . $game->getId() . "-" . $data['uploadFbPageTabImage']['name']);
+            ErrorHandler::stop(true);
+        }
+        
+        if(isset($data['deleteFbPageTabImage']) && $data['deleteFbPageTabImage'] && empty($data['uploadFbPageTabImage']['tmp_name'])) {
+            ErrorHandler::start();
+            $image = $game->getFbPageTabImage();
+            $image = str_replace($media_url, '', $image);
+            unlink($path .$image);
+            $game->setFbPageTabImage(null);
             ErrorHandler::stop(true);
         }
 

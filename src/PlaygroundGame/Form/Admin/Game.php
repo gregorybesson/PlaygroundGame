@@ -84,6 +84,14 @@ class Game extends ProvidesEventsForm
                 'value' => ''
             )
         ));
+        $this->add(array(
+            'name' => 'deleteMainImage',
+            'type' => 'Zend\Form\Element\Hidden',
+            'attributes' => array(
+                'value' => '',
+                'class' => 'delete_main_image',
+            ),
+        ));
 
         // Adding an empty upload field to be able to correctly handle this on
         // the service side.
@@ -102,6 +110,14 @@ class Game extends ProvidesEventsForm
             'attributes' => array(
                 'value' => ''
             )
+        ));
+        $this->add(array(
+            'name' => 'deleteSecondImage',
+            'type' => 'Zend\Form\Element\Hidden',
+            'attributes' => array(
+                'value' => '',
+                'class' => 'delete_second_image',
+            ),
         ));
 
         $this->add(array(
@@ -399,6 +415,14 @@ class Game extends ProvidesEventsForm
                         'value' => ''
                 )
         ));
+        $this->add(array(
+            'name' => 'deleteFbPageTabImage',
+            'type' => 'Zend\Form\Element\Hidden',
+            'attributes' => array(
+                'value' => '',
+                'class' => 'delete_fb_page_tab_image',
+            ),
+        ));
 
         $this->add(array(
             'type' => 'Zend\Form\Element\Textarea',
@@ -545,6 +569,14 @@ class Game extends ProvidesEventsForm
             'attributes' => array(
                 'value' => ''
             )
+        ));
+        $this->add(array(
+            'name' => 'deleteFbShareImage',
+            'type' => 'Zend\Form\Element\Hidden',
+            'attributes' => array(
+                'value' => '',
+                'class' => 'delete_fb_share_image',
+            ),
         ));
 
         $this->add(array(

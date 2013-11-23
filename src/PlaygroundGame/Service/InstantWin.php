@@ -70,10 +70,12 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
         $game = parent::edit($data, $game, $formClass);
 
         if ($game) {
+
+            $path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR;
+            $media_url = $this->getOptions()->getMediaUrl() . '/';
+            
             if (!empty($data['uploadScratchcardImage']['tmp_name'])) {
 
-                $path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR;
-                $media_url = $this->getOptions()->getMediaUrl() . '/';
 
                 ErrorHandler::start();
                 $data['uploadScratchcardImage']['name'] = $this->fileNewname($path, $game->getId() . "-" . $data['uploadScratchcardImage']['name']);
@@ -82,6 +84,16 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                 ErrorHandler::stop(true);
 
                 $game = $this->getGameMapper()->update($game);
+            }
+            
+            if(isset($data['deleteScratchcardImage']) && $data['deleteScratchcardImage'] && empty($data['uploadScratchcardImage']['tmp_name'])) {
+                
+                ErrorHandler::start();
+                $image = $game->getScratchcardImage();
+                $image = str_replace($media_url, '', $image);
+                unlink($path .$image);
+                $game->setScratchcardImage(null);
+                ErrorHandler::stop(true);
             }
 
             if ($game->getOccurrenceNumber() && $game->getScheduleOccurrenceAuto()) {
