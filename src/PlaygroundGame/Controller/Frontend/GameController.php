@@ -42,8 +42,8 @@ class GameController extends AbstractActionController
         if (!empty($pageId)) {
             $appId = 'app_'.$game->getFbAppId();
             $url = '//www.facebook.com/pages/game/'.$pageId.'?sk='.$appId;
-            header("Location: $url");
-            exit;
+            
+            return $this->redirect()->toUrl($url);
         }
     
         return $this->forward()->dispatch('playgroundgame_'.$game->getClassType(), array('controller' => 'playgroundgame_'.$game->getClassType(), 'action' => $game->firstStep(), 'id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')));

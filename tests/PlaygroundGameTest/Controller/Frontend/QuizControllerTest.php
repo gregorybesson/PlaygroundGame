@@ -18,6 +18,64 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         parent::setUp();
     }
 
+    public function testHomeActionFacebookSafariRedirect()
+    {
+    
+        $serviceManager = $this->getApplicationServiceLocator();
+        $serviceManager->setAllowOverride(true);
+    
+        $pluginManager = $this->getApplicationServiceLocator()->get('ControllerPluginManager');
+   
+        $game = new GameEntity();
+        $game->setFbFan(true);
+        $game->setIdentifier('gameid');
+        $game->setClassType('quiz');
+        $game->setVictoryConditions(0);
+        $game->setQuestions(array());
+        $game->setFbAppId('fbid');
+    
+        //mocking the method checkExistingEntry
+        $f = $this->getMockBuilder('PlaygroundGame\Service\Game')
+        ->setMethods(array('checkGame', 'checkIsFan', 'checkExistingEntry', 'getServiceManager'))
+        //->disableOriginalConstructor()
+        ->getMock();
+    
+        $serviceManager->setService('playgroundgame_quiz_service', $f);
+    
+        $ZfcUserMock = $this->getMock('ZfcUser\Entity\User');
+    
+        $ZfcUserMock->expects($this->any())
+        ->method('getId')
+        ->will($this->returnValue('1'));
+    
+        $authMock = $this->getMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+    
+        $authMock->expects($this->any())
+        ->method('hasIdentity')
+        -> will($this->returnValue(true));
+    
+        $authMock->expects($this->any())
+        ->method('getIdentity')
+        ->will($this->returnValue($ZfcUserMock));
+    
+        $pluginManager->setService('zfcUserAuthentication', $authMock);
+    
+        // I check that the array in findOneBy contains the parameter 'active' = 1
+        $f->expects($this->exactly(1))
+        ->method('checkGame')
+        ->will($this->returnValue($game));
+    
+        $this->dispatch('/quiz/gameid?redir_fb_page_id=httpredir');
+    
+        $this->assertModuleName('playgroundgame');
+        $this->assertControllerName('playgroundgame_quiz');
+        $this->assertControllerClass('QuizController');
+        $this->assertActionName('home');
+        $this->assertMatchedRouteName('frontend/quiz');
+        $this->assertRedirectTo('//www.facebook.com/pages/game/httpredir?sk=app_fbid');
+    
+    }
+    
     public function testIndexActionNonExistentGame()
     {
         $serviceManager = $this->getApplicationServiceLocator();
