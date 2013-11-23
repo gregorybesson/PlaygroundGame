@@ -62,7 +62,7 @@ class InstantWinOccurrence
     /**
      *  DEPRECATED : The $user is replaced by its entry from now on
      */
-    public function checkInstantWinByGameId($instant_win, $user, $entry)
+    public function checkDateOccurrenceByGameId($instant_win)
     {
         $now = new \DateTime("now");
         $now = $now->format('Y-m-d H:i:s');
@@ -81,13 +81,30 @@ class InstantWinOccurrence
         $result = $query->getResult();
 
         if (count($result) == 1) {
-            $winOccurrence = $result[0];
-            $winOccurrence->setUser($user);
-            $winOccurrence->setEntry($entry);
-            $winOccurrence->setActive(0);
-            $this->update($winOccurrence);
+            return current($result);
+        } else {
+            return null;
+        }
+    }
 
-            return $winOccurrence;
+    public function checkCodeOccurrenceByGameId($instant_win, $value)
+    {
+        $query = $this->em->createQuery(
+            'SELECT i FROM PlaygroundGame\Entity\InstantWinOccurrence i
+                WHERE i.instantwin = :game
+                AND i.active = 1
+                AND i.value = :value
+                AND i.entry IS NULL
+                ORDER BY i.value DESC
+                '
+        );
+        $query->setParameter('game', $instant_win);
+        $query->setParameter('value', $value);
+        $query->setMaxResults(1);
+        $result = $query->getResult();
+
+        if (count($result) == 1) {
+            return current($result);
         } else {
             return null;
         }

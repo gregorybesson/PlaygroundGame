@@ -505,51 +505,48 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
      *
      * @return boolean
      */
-    public function isInstantWinner($game, $user)
-    {
-        $entryMapper = $this->getEntryMapper();
-        $entry = $entryMapper->findLastActiveEntryById($game, $user);
-        if (!$entry) {
-            return false;
-        }
-
-        $instantWinOccurrencesMapper = $this->getInstantWinOccurrenceMapper();
-        // si date après date de gain et date de gain encore active alors desactive date de gain, et winner !
-        $winner = $instantWinOccurrencesMapper->checkInstantWinByGameId($game, $user, $entry);
-        // On ferme la participation
-        $entry->setActive(false);
-
-        if ($winner) {
-            $entry->setWinner(true);
-        } else {
-            $entry->setPoints(0);
-            $entry->setWinner(false);
-        }
-
-        $entry = $entryMapper->update($entry);
-        $this->getEventManager()->trigger('complete_instantwin.post', $this, array('user' => $user, 'game' => $game, 'entry' => $entry));
-
-        return $winner;
-    }
-
-    public function setOccurrenceEntry($game, $user, $occurrence)
+    public function isInstantWinner($game, $user, $value = null)
     {
         $entryMapper = $this->getEntryMapper();
         $occurrenceMapper = $this->getInstantWinOccurrenceMapper();
 
-        $entry = $this->play($game, $user);
-        if (!$entry){
-            return false;
+        if ($game->getOccurrenceType()=='datetime') {
+            $entry = $entryMapper->findLastActiveEntryById($game, $user);
+
+            // si date après date de gain et date de gain encore active alors desactive date de gain, et winner !
+            $occurrence = $occurrenceMapper->checkDateOccurrenceByGameId($game);
+        } elseif ($game->getOccurrenceType()=='code') {
+            $occurrence = $occurrenceMapper->checkCodeOccurrenceByGameId($game, $value);
+            if (!$occurrence) {
+                return false;
+            }
+            $entry = $this->play($game, $user);
         }
 
-        $occurrence->setEntry($entry);
-        $occurrence->setUser($user);
-        $occurrence->setActive(0);
-        $occurrence = $occurrence_mapper->update($occurrence);
+        if (!$entry) {
+            return false;
+        }
+        return $this->setOccurrenceEntry($game, $user, $entry, $occurrence);
+    }
 
-        $entry->setActive(false);
-        if ($occurrence->getWinning()) {
-            $entry->setWinner(true);
+    public function setOccurrenceEntry($game, $user, $entry, $occurrence = null)
+    {
+        $entryMapper = $this->getEntryMapper();
+        $occurrenceMapper = $this->getInstantWinOccurrenceMapper();
+
+        $entry->setActive(0);
+        if ($occurrence) {
+            $occurrence->setEntry($entry);
+            $occurrence->setUser($user);
+            $occurrence->setActive(0);
+            $occurrence = $occurrenceMapper->update($occurrence);
+            if ($occurrence->getWinning()) {
+                $entry->setWinner(true);
+            }
+            else {
+                $entry->setPoints(0);
+                $entry->setWinner(false);
+            }
         } else {
             $entry->setPoints(0);
             $entry->setWinner(false);
@@ -558,23 +555,6 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
         $this->getEventManager()->trigger('complete_instantwin.post', $this, array('user' => $user, 'game' => $game, 'entry' => $entry));
 
         return $occurrence;
-    }
-
-    public function getOccurrenceFromCode($game, $value){
-        $matchingOccurrences = $this->getInstantWinOccurrenceMapper()->findBy(array(
-            'instantwin' => $game,
-            'value' => $value,
-        ));
-        if (empty($matchingOccurrences)) {
-            return false;
-        }
-        elseif (count($matchingOccurrences)==1) {
-            $occurrence = array_shift($matchingOccurrences);
-            if ($occurrence->getEntry() || !$occurrence->getActive()) {
-                return false;
-            }
-            return $occurrence;
-        }
     }
 
     public function getGameEntity()

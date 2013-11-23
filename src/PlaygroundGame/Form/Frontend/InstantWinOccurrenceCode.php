@@ -4,14 +4,16 @@ namespace PlaygroundGame\Form\Frontend;
 use Zend\Form\Form;
 use Zend\Form\Element;
 use ZfcBase\Form\ProvidesEventsForm;
-use Zend\I18n\Translator\Translator;
 
+use Zend\I18n\Translator\Translator;
+use Zend\ServiceManager\ServiceManager;
 
 class InstantWinOccurrenceCode extends ProvidesEventsForm
 {
+    protected $inputFilter;
     protected $serviceManager;
 
-    public function __construct ($name = null, Translator $translator)
+    public function __construct ($name = null, ServiceManager $sm, Translator $translator)
     {
         parent::__construct($name);
 
@@ -25,7 +27,9 @@ class InstantWinOccurrenceCode extends ProvidesEventsForm
                 ),
             'attributes' => array(
                 'placeholder' => $translator->translate('Code'),
-                )
+                'allow_empty' => false,
+                'required' => true,
+                ),
             ));
 
         $this->add(array(
@@ -35,6 +39,7 @@ class InstantWinOccurrenceCode extends ProvidesEventsForm
                 'value' => $translator->translate('Participer'),
             ),
         ));
+
     }
 
 }
