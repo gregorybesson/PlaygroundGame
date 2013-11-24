@@ -5,7 +5,7 @@ namespace PlaygroundGame\Mapper;
 use Doctrine\ORM\EntityManager;
 use PlaygroundGame\Options\ModuleOptions;
 
-class Game
+class PlayerForm
 {
     /**
      * @var \Doctrine\ORM\EntityManager
@@ -28,19 +28,9 @@ class Game
         $this->options = $options;
     }
 
-    public function findByIdentifier($identifier)
-    {
-        return $this->getEntityRepository()->findOneBy(array('identifier' => $identifier));
-    }
-
     public function findById($id)
     {
         return $this->getEntityRepository()->find($id);
-    }
-
-    public function findBy($array, $sort)
-    {
-        return $this->getEntityRepository()->findBy($array, $sort);
     }
     
     public function findOneBy($array)
@@ -48,12 +38,12 @@ class Game
         return $this->getEntityRepository()->findOneBy($array);
     }
 
-    public function insert($entity, $tableName = NULL, Zend\Stdlib\Hydrator\HydratorInterface $hydrator = NULL)
+    public function insert($entity)
     {
         return $this->persist($entity);
     }
 
-    public function update($entity, $tableName = NULL, Zend\Stdlib\Hydrator\HydratorInterface $hydrator = NULL)
+    public function update($entity)
     {
         return $this->persist($entity);
     }
@@ -68,7 +58,7 @@ class Game
 
     public function findAll()
     {
-        return $this->findBy(array(),array('createdAt' => 'DESC'));
+        return $this->getEntityRepository()->findAll();
     }
 
     public function remove($entity)
@@ -80,7 +70,7 @@ class Game
     public function getEntityRepository()
     {
         if (null === $this->er) {
-            $this->er = $this->em->getRepository($this->options->getGameEntityClass());
+            $this->er = $this->em->getRepository('PlaygroundGame\Entity\PlayerForm');
         }
 
         return $this->er;

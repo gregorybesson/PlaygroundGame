@@ -270,7 +270,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
         // Si mon nb de participation est < au nb autorisé, j'ajoute une entry + reponses au quiz et points
         $quizReplyMapper = $this->getQuizReplyMapper();
         $entryMapper = $this->getEntryMapper();
-        $entry = $entryMapper->findLastActiveEntryById($game, $user);
+        $entry = $this->findLastActiveEntry($game, $user);
 
         if (!$entry) {
             return false;

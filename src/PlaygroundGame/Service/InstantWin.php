@@ -523,7 +523,7 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
         $occurrenceMapper = $this->getInstantWinOccurrenceMapper();
 
         if ($game->getOccurrenceType()=='datetime') {
-            $entry = $entryMapper->findLastActiveEntryById($game, $user);
+            $entry = $this->findLastActiveEntry($game, $user);
 
             // si date après date de gain et date de gain encore active alors desactive date de gain, et winner !
             $occurrence = $occurrenceMapper->checkDateOccurrenceByGameId($game);

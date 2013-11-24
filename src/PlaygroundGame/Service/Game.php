@@ -40,6 +40,8 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      * @var UserServiceOptionsInterface
      */
     protected $options;
+    
+    protected $playerformMapper;
 
     /**
      *
@@ -637,9 +639,9 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         }
         
         // the game is not of the right type
-        if (!$game instanceof $gameEntity) {
+        /*if (!$game instanceof $gameEntity) {
             return false;
-        }
+        }*/
 
         if ( $this->getServiceManager()->get('Application')->getMvcEvent()->getRouteMatch()->getParam('channel') === 'preview' 
              && $this->isAllowed('game', 'edit')){
@@ -684,15 +686,21 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
     {
         $entry = false;
 
-        if (! is_null($active)) {
-            $search = array('game' => $game, 'user' => $user, 'active' => $active);
-        } else {
-            $search = array('game' => $game, 'user' => $user);
+        if ($user) {
+            if (! is_null($active)) {
+                $search = array('game' => $game, 'user' => $user, 'active' => $active);
+            } else {
+                $search = array('game' => $game, 'user' => $user);
+            }
+        }else{
+            if (! is_null($active)) {
+                $search = array('game' => $game, 'ip' => $this->getIp(), 'active' => $active);
+            } else {
+                $search = array('game' => $game, 'ip' => $this->getIp());
+            } 
         }
 
-        if ($user) {
-            $entry = $this->getEntryMapper()->findOneBy($search);
-        }
+        $entry = $this->getEntryMapper()->findOneBy($search);
 
         return $entry;
     }
@@ -738,7 +746,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             $limitAmount = $game->getPlayLimit();
             if ($limitAmount) {
                 $limitScale  = $game->getPlayLimitScale();
-                $userEntries = $this->getEntryMapper()->findLastEntriesBy($game, $user, $limitScale);
+                $userEntries = $this->findLastEntries($game, $user, $limitScale);
 
                 // player has reached the game limit
                 if ($userEntries >= $limitAmount) {
@@ -750,12 +758,44 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             $entry->setGame($game);
             $entry->setUser($user);
             $entry->setPoints(0);
+            $entry->setIp($this->getIp());
+            $entry->setAnonymousId($this->getAnonymousId());
 
             $entry = $this->getEntryMapper()->insert($entry);
             $this->getEventManager()->trigger(__FUNCTION__.'.post', $this, array('user' => $user, 'game' => $game));
         }
 
         return $entry;
+    }
+    
+    public function findLastEntries($game, $user, $limitScale)
+    {
+        if($user){
+	        return $this->getEntryMapper()->findLastEntriesByUser($game, $user, $limitScale);
+	    }else{
+	        return $this->getEntryMapper()->findLastEntriesByIp($game, $this->getIp(), $limitScale); 
+	    }
+    }
+    
+    public function findLastActiveEntry($game, $user)
+    {
+        if($user){
+            
+	        return $this->getEntryMapper()->findOneBy(array('game' => $game , 'user'=> $user, 'active' => true), array('updated_at' => 'desc'));
+	    }else{
+	        
+	        return $this->getEntryMapper()->findOneBy(array('game' => $game , 'ip'=> $this->getIp(), 'active' => true), array('updated_at' => 'desc'));
+	    }
+    }
+    
+
+    public function findLastInactiveEntry($game, $user)
+    {
+        if($user){
+            return $this->getEntryMapper()->findOneBy(array('game' => $game , 'user'=> $user, 'active' => false, 'bonus' => false), array('updated_at' => 'desc'));
+        }else{
+            return $this->getEntryMapper()->findOneBy(array('game' => $game , 'ip'=> $this->getIp(), 'active' => false, 'bonus' => false), array('updated_at' => 'desc'));
+        }
     }
 
     public function sendShareMail($data, $game, $user, $template = 'share_game', $topic = NULL, $userTimer = array())
@@ -767,7 +807,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $subject     = $this->getOptions()->getShareSubjectLine();
         $renderer    = $this->getServiceManager()->get('Zend\View\Renderer\RendererInterface');
         $skinUrl     = $renderer->url('frontend', array(), array('force_canonical' => true));
-        $secretKey   = strtoupper(substr(sha1($user->getId().'####'.time()),0,15));
+        $secretKey   = strtoupper(substr(sha1(uniqid('pg_', true).'####'.time()),0,15));
 
 
         if (!$topic) {
@@ -1010,30 +1050,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 		
 	    return $name;
 	}
-
-    /**
-     * TODO : Remove this method from the service
-     */
-    public function findBy($array, $sort)
-    {
-         return $this->getGameMapper()->findBy($array, $sort);
-    }
-
-    /**
-     * TODO : Remove this method from the service
-     */
-    public function findAll()
-    {
-        return $this->getGameMapper()->findAll();
-    }
-
-    /**
-     * TODO : Remove this method from the service
-     */
-    public function findAllEntry()
-    {
-        return $this->getEntryMapper()->findAll();
-    }
     
     /**
      * This function returns the list of games, order by $type
@@ -1304,5 +1320,93 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $auth = $this->getServiceManager()->get('BjyAuthorize\Service\Authorize');
         
         return $auth->isAllowed($resource, $privilege);
+    }
+    
+    public function getIp()
+    {
+        $ipaddress = '';
+        if (isset($_SERVER['HTTP_CLIENT_IP']))
+            $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
+        else if(isset($_SERVER['HTTP_X_FORWARDED_FOR']))
+            $ipaddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        else if(isset($_SERVER['HTTP_X_FORWARDED']))
+            $ipaddress = $_SERVER['HTTP_X_FORWARDED'];
+        else if(isset($_SERVER['HTTP_FORWARDED_FOR']))
+            $ipaddress = $_SERVER['HTTP_FORWARDED_FOR'];
+        else if(isset($_SERVER['HTTP_FORWARDED']))
+            $ipaddress = $_SERVER['HTTP_FORWARDED'];
+        else if(isset($_SERVER['REMOTE_ADDR']))
+            $ipaddress = $_SERVER['REMOTE_ADDR'];
+        else
+            $ipaddress = 'UNKNOWN';
+    
+        return $ipaddress;
+    }
+    
+    public function getAnonymousId()
+    {
+        $anonymousId = '';
+        if ($_COOKIE && $_COOKIE['pg_anonymous']){
+            $anonymousId = $_COOKIE['pg_anonymous'];
+        }
+        
+        return $anonymousId;
+    }
+    
+    /**
+     *
+     * This service is ready for all types of games
+     *
+     * @param  array                  $data
+     * @param  string                 $entityClass
+     * @param  string                 $formClass
+     * @return \PlaygroundGame\Entity\Game
+     */
+    public function createForm(array $data, $game, $form=null)
+    {
+    
+        $title ='';
+        $description = '';
+    
+        if ($data['form_jsonified']) {
+            $jsonPV = json_decode($data['form_jsonified']);
+            foreach ($jsonPV as $element) {
+                if ($element->form_properties) {
+                    $attributes  = $element->form_properties[0];
+                    $title       = $attributes->title;
+                    $description = $attributes->description;
+    
+                    break;
+                }
+            }
+        }
+        if (!$form) {
+            $form = new \PlaygroundGame\Entity\PlayerForm();
+        }
+        $form->setGame($game);
+        $form->setTitle($title);
+        $form->setDescription($description);
+        $form->setForm($data['form_jsonified']);
+        $form->setFormTemplate($data['form_template']);
+    
+        $form = $this->getPlayerFormMapper()->insert($form);
+    
+        return $form;
+    }
+
+    public function getPlayerFormMapper()
+    {
+        if (null === $this->playerformMapper) {
+            $this->playerformMapper = $this->getServiceManager()->get('playgroundgame_playerform_mapper');
+        }
+    
+        return $this->playerformMapper;
+    }
+    
+    public function setPlayerFormMapper($playerformMapper)
+    {
+        $this->playerformMapper = $playerformMapper;
+    
+        return $this;
     }
 }

@@ -63,7 +63,7 @@ class TreasureHuntController extends GameController
 
                 // The game is not played from Facebook : redirect to login/register form
 
-            } else {
+            } elseif(!$game->getAnonymousAllowed()) {
                 $redirect = urlencode($this->url()->fromRoute('frontend/treasurehunt/play', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)));
                 return $this->redirect()->toUrl($this->url()->fromRoute('frontend/zfcuser/register', array('channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))) . '?redirect='.$redirect);
             }
@@ -100,7 +100,7 @@ class TreasureHuntController extends GameController
             return $this->notFoundAction();
         }
 
-        $secretKey = strtoupper(substr(sha1($user->getId().'####'.time()),0,15));
+        $secretKey = strtoupper(substr(sha1(uniqid('pg_', true).'####'.time()),0,15));
         $socialLinkUrl = $this->url()->fromRoute('frontend/treasurehunt', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)).'?key='.$secretKey;
         // With core shortener helper
         $socialLinkUrl = $this->shortenUrl()->shortenUrl($socialLinkUrl);
@@ -108,6 +108,11 @@ class TreasureHuntController extends GameController
         $lastEntry = $sg->getEntryMapper()->findLastInactiveEntryById($game, $user);
         if (!$lastEntry) {
             return $this->redirect()->toUrl($this->url()->fromRoute('frontend/treasurehunt', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)));
+        }
+        
+        if (!$user && !$game->getAnonymousAllowed()) {
+            $redirect = urlencode($this->url()->fromRoute('frontend/treasurehunt/result', array('id' => $game->getIdentifier(), 'channel' => $channel)));
+            return $this->redirect()->toUrl($this->url()->fromRoute('frontend/zfcuser/register', array('channel' => $channel)) . '?redirect='.$redirect);
         }
 
         $form = $this->getServiceLocator()->get('playgroundgame_sharemail_form');

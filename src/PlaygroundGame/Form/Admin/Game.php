@@ -170,6 +170,14 @@ class Game extends ProvidesEventsForm
                 'label' => $translator->translate('Publish game on plateform', 'playgroundgame'),
             ),
         ));
+        
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Checkbox',
+            'name' => 'anonymousAllowed',
+            'options' => array(
+                'label' => $translator->translate('Anonymous players allowed', 'playgroundgame'),
+            ),
+        ));
 
         $this->add(array(
         	'type' => 'Zend\Form\Element\Checkbox',
@@ -629,6 +637,18 @@ class Game extends ProvidesEventsForm
             ),
             'options' => array(
                 'label' => $translator->translate('The steps of the game', 'playgroundgame'),
+            ),
+        ));
+        
+        $this->add(array(
+            'name' => 'stepsViews',
+            'type' => 'Zend\Form\Element\Text',
+            'attributes' => array(
+                'placeholder' => $translator->translate('steps views', 'playgroundgame'),
+                'value' => '{"index":{},"play":{},"result":{},"bounce":{}}',
+            ),
+            'options' => array(
+                'label' => $translator->translate('The steps views', 'playgroundgame'),
             ),
         ));
 

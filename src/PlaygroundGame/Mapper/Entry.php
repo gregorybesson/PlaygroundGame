@@ -115,7 +115,7 @@ class Entry implements ServiceLocatorAwareInterface
      * @param unknown_type $user
      * @param unknown_type $limitScale
      */
-    public function findLastEntriesBy($game, $user, $limitScale)
+    public function findLastEntriesByUser($game, $user, $limitScale)
     {
         $now = new \DateTime("now");
         switch ($limitScale) {
@@ -155,6 +155,49 @@ class Entry implements ServiceLocatorAwareInterface
 
         $total = $query->getSingleScalarResult();
 
+        return $total;
+    }
+    
+    public function findLastEntriesByIp($game, $ip, $limitScale)
+    {
+        $now = new \DateTime("now");
+        switch ($limitScale) {
+            case 'always':
+                $interval = 'P100Y';
+                $now->sub(new \DateInterval($interval));
+                $dateLimit = $now->format('Y-m-d') . ' 0:0:0';
+                break;
+            case 'day':
+                $dateLimit = $now->format('Y-m-d') . ' 0:0:0';
+                break;
+            case 'week':
+                $interval = 'P7D';
+                $now->sub(new \DateInterval($interval));
+                $dateLimit = $now->format('Y-m-d') . ' 0:0:0';
+                break;
+            case 'month':
+                $interval = 'P1M';
+                $now->sub(new \DateInterval($interval));
+                $dateLimit = $now->format('Y-m-d') . ' 0:0:0';
+                break;
+            case 'year':
+                $interval = 'P1Y';
+                $now->sub(new \DateInterval($interval));
+                $dateLimit = $now->format('Y-m-d') . ' 0:0:0';
+                break;
+            default:
+                $interval = 'P100Y';
+                $now->sub(new \DateInterval($interval));
+                $dateLimit = $now->format('Y-m-d') . ' 0:0:0';
+        }
+    
+        $query = $this->em->createQuery('SELECT COUNT(e.id) FROM PlaygroundGame\Entity\Entry e WHERE e.ip = :ip AND e.game = :game AND (e.bonus = 0 OR e.bonus IS NULL) AND e.created_at >= :date');
+        $query->setParameter('ip', $ip);
+        $query->setParameter('game', $game);
+        $query->setParameter('date', $dateLimit);
+    
+        $total = $query->getSingleScalarResult();
+    
         return $total;
     }
 
@@ -247,26 +290,6 @@ class Entry implements ServiceLocatorAwareInterface
         $er = $this->getEntityRepository();
 
         return $er->findOneBy($array, $sortBy);
-    }
-
-    public function findLastActiveEntryById($game, $user)
-    {
-        $er = $this->getEntityRepository();
-
-        return $er->findOneBy(array('game' => $game , 'user'=> $user, 'active' => true), array('updated_at' => 'desc'));
-    }
-
-    /**
-     * I remove the bonus entries
-     *
-     * @param unknown_type $game
-     * @param unknown_type $user
-     */
-    public function findLastInactiveEntryById($game, $user)
-    {
-        $er = $this->getEntityRepository();
-
-        return $er->findOneBy(array('game' => $game , 'user'=> $user, 'active' => false, 'bonus' => false), array('updated_at' => 'desc'));
     }
 
     public function insert($entity)
