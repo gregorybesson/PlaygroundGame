@@ -21,21 +21,21 @@ class GameController extends AbstractActionController
     protected $prizeService;
 
     protected $missionGameService;
-    
+
     protected $options;
 
     public function homeAction()
     {
-    
+
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-        
+
         $sg = $this->getGameService();
-    
+
         $game = $sg->checkGame($identifier, false);
         if (!$game) {
             return $this->notFoundAction();
         }
-        
+
         // This fix exists only for safari in FB on Windows : we need to redirect the user to the page outside of iframe
         // for the cookie to be accepted. PlaygroundCore redirects to the FB Iframed page when
         // it discovers that the user arrives for the first time on the game in FB.
@@ -46,14 +46,14 @@ class GameController extends AbstractActionController
         if (!empty($pageId)) {
             $appId = 'app_'.$game->getFbAppId();
             $url = '//www.facebook.com/pages/game/'.$pageId.'?sk='.$appId;
-            
+
             return $this->redirect()->toUrl($url);
         }
-    
+
         return $this->forward()->dispatch('playgroundgame_'.$game->getClassType(), array('controller' => 'playgroundgame_'.$game->getClassType(), 'action' => $game->firstStep(), 'id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')));
-        
+
     }
-    
+
     public function indexAction()
     {
 
@@ -61,7 +61,7 @@ class GameController extends AbstractActionController
         $user = $this->zfcUserAuthentication()->getIdentity();
         $sg = $this->getGameService();
         $isSubscribed = false;
-        
+
         $game = $sg->checkGame($identifier, false);
         if (!$game) {
             return $this->notFoundAction();
@@ -97,11 +97,11 @@ class GameController extends AbstractActionController
 
         return $viewModel;
     }
-    
+
     /**
      * This action has been designed to be called by other controllers
      * It gives the ability to display an information form and persist it in the game entry
-     * 
+     *
      * @return \Zend\View\Model\ViewModel
      */
     public function registerAction()
@@ -114,9 +114,9 @@ class GameController extends AbstractActionController
         if (!$game || $game->isClosed()) {
             return $this->notFoundAction();
         }
-        
+
         $user = $this->zfcUserAuthentication()->getIdentity();
-        
+
         $formPV = json_decode($game->getPlayerForm()->getForm());
         // TODO : create a Form class to implement this form
         $form = new Form();
@@ -190,7 +190,7 @@ class GameController extends AbstractActionController
                 $id          = isset($attributes->data->id)? $attributes->data->id : '';
                 $lengthMin   = isset($attributes->data->length)? $attributes->data->length->min : '';
                 $lengthMax   = isset($attributes->data->length)? $attributes->data->length->max : '';
-            
+
                 $element = new Element\Email($name);
                 $element->setLabel($label);
                 $element->setAttributes(
@@ -202,7 +202,7 @@ class GameController extends AbstractActionController
                     )
                 );
                 $form->add($element);
-            
+
                 $options = array();
                 $options['encoding'] = 'UTF-8';
                 if ($lengthMin && $lengthMin > 0) {
@@ -227,7 +227,7 @@ class GameController extends AbstractActionController
                         ),
                     ),
                 )));
-            
+
             }
             if (isset($element->line_checkbox)) {
                 $attributes  = $element->line_checkbox[0];
@@ -242,7 +242,7 @@ class GameController extends AbstractActionController
                 $lengthMin   = isset($attributes->data->length)? $attributes->data->length->min : '';
                 $lengthMax   = isset($attributes->data->length)? $attributes->data->length->max : '';
                 $innerData   = isset($attributes->data->innerData)? $attributes->data->innerData : array();
-            
+
                 $element = new Element\MultiCheckbox($name);
                 $element->setLabel($label);
                 $element->setAttributes(
@@ -259,7 +259,7 @@ class GameController extends AbstractActionController
                 }
                 $element->setValueOptions($values);
                 $form->add($element);
-            
+
                 $options = array();
                 $options['encoding'] = 'UTF-8';
                 /*if ($lengthMin && $lengthMin > 0) {
@@ -284,7 +284,7 @@ class GameController extends AbstractActionController
                         ),
                     ),
                 )));*/
-            
+
             }
             if (isset($element->line_paragraph)) {
                 $attributes  = $element->line_paragraph[0];
@@ -373,42 +373,41 @@ class GameController extends AbstractActionController
         }
 
 		$form->setInputFilter($inputFilter);
-        
+
         if ($this->getRequest()->isPost()) {
             // POST Request: Process form
             $data = array_merge_recursive(
                 $this->getRequest()->getPost()->toArray(),
                 $this->getRequest()->getFiles()->toArray()
             );
-        
+
             $form->setData($data);
-        
+
             if ($form->isValid()) {
-        
                 $data = json_encode($form->getData());
-                
                 $lastEntry = $sg->findLastInactiveEntry($game, $user);
                 $lastEntry->setPlayerData($data);
                 $sg->getEntryMapper()->update($lastEntry);
 
-                $redirect =  $this->redirect()->toUrl($this->url()->fromRoute('frontend/'. $game->getClassType() .'/bounce', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)));
-                
+                return $this->redirect()->toUrl($this->url()->fromRoute('frontend/'. $game->getClassType() .'/bounce', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)));
             }
         }
-        
+
         $viewModel = new ViewModel();
         $viewModel->setVariables(array(
             'game' => $game,
             'form' => $form,
+            'title' => $game->getPlayerForm()->getTitle(),
+            'description' => $game->getPlayerForm()->getDescription(),
             'flashMessages' => $this->flashMessenger()->getMessages(),
         ));
-        
+
         return $viewModel;
     }
 
     public function fbshareAction()
     {
-        
+
         $viewModel = new ViewModel();
         $viewModel->setTerminal(true);
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
@@ -596,48 +595,49 @@ class GameController extends AbstractActionController
                 // Get Playground user from Facebook info
                 $beforeLayout = $this->layout()->getTemplate();
                 $this->forward()->dispatch('playgrounduser_user', array('controller' => 'playgrounduser_user', 'action' => 'registerFacebookUser', 'provider' => $channel));
-        
+
                 $this->layout()->setTemplate($beforeLayout);
                 $user = $view->user;
-        
+
                 // If the user can not be created/retrieved from Facebook info, redirect to login/register form
                 if (!$user){
                     $redirectUrl = urlencode($this->url()->fromRoute('frontend/'. $game->getClassType() .'/play', array('id' => $game->getIdentifier(), 'channel' => $channel), array('force_canonical' => true)));
                     $redirect =  $this->redirect()->toUrl($this->url()->fromRoute('frontend/zfcuser/register', array('channel' => $channel)) . '?redirect='.$redirectUrl);
                 }
-        
+
             }
-            
+
             if($game->getFbFan()){
                 if ($sg->checkIsFan($game) === false){
                     $redirect =  $this->redirect()->toRoute($game->getClassType().'/fangate',array('id' => $game->getIdentifier()));
                 }
             }
         }
-        
+
         return $redirect;
     }
-    
+
     public function buildView($game)
-    {  
+    {
         $viewModel = new ViewModel();
-        
+
         $this->addMetaTitle($game->getTitle());
         $this->addMetaBitly();
         $this->addGaEvent($game);
-        
+
         $this->customizeGameDesign($game);
         $this->addColRight($game);
         $this->addColLeft($game);
-        
-        $view = $this->addAdditionalView($game);
 
-        if($view){
+        $view = $this->addAdditionalView($game);
+        if ($view and $view instanceof \Zend\View\Model\ViewModel) {
             $viewModel->addChild($view, 'additional');
+        } elseif ($view and $view instanceof \Zend\Http\PhpEnvironment\Response) {
+            return $view;
         }
 
         $viewModel->setVariables($this->getShareData($game));
-        
+
         return $viewModel;
     }
 
@@ -645,52 +645,49 @@ class GameController extends AbstractActionController
     {
         $view = false;
         $actionName = $this->getEvent()->getRouteMatch()->getParam('action', 'not-found');
-        
         //TODO : improve the way steps and steps views are managed
         $stepsViews = json_decode($game->getStepsViews(), true);
         if($stepsViews && isset($stepsViews[$actionName]) && is_string($stepsViews[$actionName])){
-
             $action = $stepsViews[$actionName];
             $beforeLayout = $this->layout()->getTemplate();
             $view = $this->forward()->dispatch('playgroundgame_game', array('action' => $action, 'id' => $game->getIdentifier()));
-            
             // TODO : suite au forward, le template de layout a changé, je dois le rétablir...
             $this->layout()->setTemplate($beforeLayout);
-            
+
         }
-        
+
         return $view;
     }
-    
+
     public function addColRight($game)
     {
         $colRight = new ViewModel();
         $colRight->setTemplate($this->layout()->col_right);
         $colRight->setVariables(array('game' => $game));
-        
-        $this->layout()->addChild($colRight, 'column_right'); 
+
+        $this->layout()->addChild($colRight, 'column_right');
     }
-    
+
     public function addColLeft($game)
     {
         $colLeft = new ViewModel();
         $colLeft->setTemplate($this->layout()->col_right);
         $colLeft->setVariables(array('game' => $game));
-        
+
         $this->layout()->addChild($colLeft, 'column_left');
     }
-    
+
     public function addMetaBitly()
     {
         $bitlyclient = $this->getOptions()->getBitlyUrl();
         $bitlyuser = $this->getOptions()->getBitlyUsername();
         $bitlykey = $this->getOptions()->getBitlyApiKey();
-        
+
         $this->getViewHelper('HeadMeta')->setProperty('bt:client', $bitlyclient);
         $this->getViewHelper('HeadMeta')->setProperty('bt:user', $bitlyuser);
         $this->getViewHelper('HeadMeta')->setProperty('bt:key', $bitlykey);
     }
-    
+
     public function addGaEvent($game)
     {
         // Google Analytics event
@@ -699,7 +696,7 @@ class GameController extends AbstractActionController
         $event->setLabel($game->getTitle());
         $ga->addEvent($event);
     }
-    
+
     public function addMetaTitle($title)
     {
         // Meta set in the layout
@@ -717,7 +714,7 @@ class GameController extends AbstractActionController
             )
         );
     }
-    
+
     public function customizeGameDesign($game)
     {
         // If this game has a specific layout...
@@ -725,57 +722,57 @@ class GameController extends AbstractActionController
             $layoutViewModel = $this->layout();
             $layoutViewModel->setTemplate($game->getLayout());
         }
-        
+
         // If this game has a specific stylesheet...
         if ($game->getStylesheet()) {
             $this->getViewHelper('HeadLink')->appendStylesheet($this->getRequest()->getBaseUrl(). '/' . $game->getStylesheet());
         }
     }
-    
+
     public function getShareData($game)
-    {     
+    {
         // I change the fbappid if i'm in fb
         if($this->getEvent()->getRouteMatch()->getParam('channel') === 'facebook'){
             $fo = $this->getServiceLocator()->get('facebook-opengraph');
             $fo->setId($game->getFbAppId());
         }
-        
+
         // If I want to add a share block in my view
         if ($game->getFbShareMessage()) {
             $fbShareMessage = $game->getFbShareMessage();
         } else {
             $fbShareMessage = str_replace('__placeholder__', $game->getTitle(), $this->getOptions()->getDefaultShareMessage());
         }
-        
+
         if ($game->getFbShareImage()) {
             $fbShareImage = $this->url()->fromRoute('frontend', array('channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)) . $game->getFbShareImage();
         } else {
             $fbShareImage = $this->url()->fromRoute('frontend', array('channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)) . $game->getMainImage();
         }
-        
+
         $secretKey = strtoupper(substr(sha1(uniqid('pg_', true).'####'.time()),0,15));
-        
+
         // Without bit.ly shortener
         $socialLinkUrl = $this->url()->fromRoute('frontend/' . $game->getClassType(), array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true));
         // With core shortener helper
         $socialLinkUrl = $this->shortenUrl()->shortenUrl($socialLinkUrl);
-        
+
         // FB Requests only work when it's a FB app
         if ($game->getFbRequestMessage()) {
             $fbRequestMessage = urlencode($game->getFbRequestMessage());
         } else {
             $fbRequestMessage = str_replace('__placeholder__', $game->getTitle(), $this->getOptions()->getDefaultShareMessage());
         }
-        
+
         if ($game->getTwShareMessage()) {
             $twShareMessage = $game->getTwShareMessage() . $socialLinkUrl;
         } else {
             $twShareMessage = str_replace('__placeholder__', $game->getTitle(), $this->getOptions()->getDefaultShareMessage()) . $socialLinkUrl;
         }
-        
+
         $this->getViewHelper('HeadMeta')->setProperty('og:title', $fbShareMessage);
         $this->getViewHelper('HeadMeta')->setProperty('og:image', $fbShareImage);
-        
+
         $data = array(
             'socialLinkUrl'       => $socialLinkUrl,
             'secretKey'           => $secretKey,
@@ -784,7 +781,7 @@ class GameController extends AbstractActionController
             'fbRequestMessage'    => $fbRequestMessage,
             'twShareMessage'      => $twShareMessage,
         );
-        
+
         return $data;
     }
 
@@ -993,18 +990,18 @@ class GameController extends AbstractActionController
         if (!$game) {
             return $this->notFoundAction();
         }
-        
+
         // If this game has a specific layout...
         if ($game->getLayout()) {
             $layoutViewModel = $this->layout();
             $layoutViewModel->setTemplate($game->getLayout());
         }
-        
+
         // If this game has a specific stylesheet...
         if ($game->getStylesheet()) {
             $this->getViewHelper('HeadLink')->appendStylesheet($this->getRequest()->getBaseUrl(). '/' . $game->getStylesheet());
         }
-        
+
         // I change the label in the breadcrumb ...
         $this->layout()->setVariables(
             array(
@@ -1015,14 +1012,14 @@ class GameController extends AbstractActionController
                 ),
             )
         );
-        
+
         $viewModel = new ViewModel(
             array(
                 'game'             => $game,
                 'flashMessages'    => $this->flashMessenger()->getMessages(),
             )
         );
-        
+
         return $viewModel;
     }
 

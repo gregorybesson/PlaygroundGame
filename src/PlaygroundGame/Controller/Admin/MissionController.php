@@ -23,13 +23,13 @@ class MissionController extends AbstractActionController
     /**
     * listAction : retrieve all missions
     *
-    * @return array $return 
+    * @return array $return
     */
     public function listAction()
     {
         $missions = $this->getMissionService()->getMissionMapper()->findAll();
         $missionsHasGames = array();
-        
+
         foreach ($missions as $mission) {
             $missionsHasGames[$mission->getId()] = count($this->getMissionGameService()->findMissionGameByMission($mission));
         }
@@ -41,16 +41,16 @@ class MissionController extends AbstractActionController
     /**
     * createAction : create a mission
     *
-    * @return viewModel $viewModel 
+    * @return viewModel $viewModel
     */
     public function createAction()
     {
 
         $form = $this->getServiceLocator()->get('playgroundgame_mission_form');
-        
+
         $request = $this->getRequest();
         $mission = new Mission();
-        
+
         if ($request->isPost()) {
             $data = array_merge(
                     $request->getPost()->toArray(),
@@ -58,7 +58,7 @@ class MissionController extends AbstractActionController
             );
 
             $mission = $this->getMissionService()->create($data, 'playgroundgame_mission_form');
-            
+
             if ($mission) {
                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The mission "'.$mission->getTitle().'" was created');
 
@@ -68,7 +68,7 @@ class MissionController extends AbstractActionController
 
                 return $this->redirect()->toRoute('admin/mission/list');
             }
-            
+
         }
 
         $viewModel = new ViewModel();
@@ -81,7 +81,7 @@ class MissionController extends AbstractActionController
     /**
     * editAction : edit a mission
     *
-    * @return viewModel $viewModel 
+    * @return viewModel $viewModel
     */
     public function editAction()
     {
@@ -102,7 +102,7 @@ class MissionController extends AbstractActionController
             );
 
             $form->setData($data);
-            
+
             if ($form->isValid()) {
 
                 $mission = $this->getMissionService()->edit($mission, $data);
@@ -115,7 +115,7 @@ class MissionController extends AbstractActionController
             } else {
                  $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The mission was not updated');
             }
-            
+
             return $this->redirect()->toRoute('admin/mission/list');
         }
 
@@ -128,7 +128,7 @@ class MissionController extends AbstractActionController
     /**
     * deleteAction : delete a mission
     *
-    * @return redirect 
+    * @return redirect
     */
     public function deleteAction()
     {
@@ -166,7 +166,7 @@ class MissionController extends AbstractActionController
      */
     public function getMissionService()
     {
-        if (null === $this->missionService) {           
+        if (null === $this->missionService) {
             $this->missionService = $this->getServiceLocator()->get('playgroundgame_mission_service');
         }
 
@@ -180,7 +180,7 @@ class MissionController extends AbstractActionController
      */
     public function getMissionGameService()
     {
-        if (null === $this->missionGameService) {           
+        if (null === $this->missionGameService) {
             $this->missionGameService = $this->getServiceLocator()->get('playgroundgame_mission_game_service');
         }
 

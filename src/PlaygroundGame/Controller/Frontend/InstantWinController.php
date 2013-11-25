@@ -17,33 +17,33 @@ class InstantWinController extends GameController
 
     public function playAction()
     {
-        
+
         $sg = $this->getGameService();
         $occurrence_mapper = $sg->getInstantWinOccurrenceMapper();
-        
+
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
         $channel = $this->getEvent()->getRouteMatch()->getParam('channel');
-        
+
         $game = $sg->checkGame($identifier);
         if (!$game || $game->isClosed()) {
             return $this->notFoundAction();
         }
-        
+
         $redirectFb = $this->checkFbRegistration($this->zfcUserAuthentication()->getIdentity(), $game, $channel);
         if($redirectFb){
             return $redirectFb;
         }
-        
+
         $user = $this->zfcUserAuthentication()->getIdentity();
 
         if (!$user && !$game->getAnonymousAllowed()) {
             $redirect = urlencode($this->url()->fromRoute('frontend/'. $game->getClassType() . '/play', array('id' => $game->getIdentifier(), 'channel' => $channel), array('force_canonical' => true)));
-            
+
             return $this->redirect()->toUrl($this->url()->fromRoute('frontend/zfcuser/register', array('channel' => $channel)) . '?redirect='.$redirect);
         }
 
         if ($game->getOccurrenceType()=='datetime') {
-            
+
             /*
             $beforeLayout = $this->layout()->getTemplate();
             // je délègue la responsabilité du formulaire à PlaygroundUser, y compris dans sa gestion des erreurs
@@ -122,7 +122,10 @@ class InstantWinController extends GameController
             );
         }
         $viewModel = $this->buildView($game);
-        $viewModel->setVariables($viewVariables);
+        if ($viewModel instanceof \Zend\View\Model\ViewModel) {
+            $viewModel->setVariables($viewVariables);
+        }
+
         return $viewModel;
     }
 
@@ -150,12 +153,12 @@ class InstantWinController extends GameController
         if (!empty($occurrences)) {
             $occurrence = current($occurrences);
         }
-        
+
         if (!$user && !$game->getAnonymousAllowed()) {
             $redirect = urlencode($this->url()->fromRoute('frontend/instantwin/result', array('id' => $game->getIdentifier(), 'channel' => $channel)));
             return $this->redirect()->toUrl($this->url()->fromRoute('frontend/zfcuser/register', array('channel' => $channel)) . '?redirect='.$redirect);
         }
-        
+
         $secretKey = strtoupper(substr(sha1(uniqid('pg_', true).'####'.time()),0,15));
         $socialLinkUrl = $this->url()->fromRoute('frontend/instantwin', array('id' => $game->getIdentifier(), 'channel' => $channel), array('force_canonical' => true)).'?key='.$secretKey;
         // With core shortener helper
@@ -169,9 +172,11 @@ class InstantWinController extends GameController
             $data = $this->getRequest()->getPost()->toArray();
             $form->setData($data);
             if ($form->isValid()) {
-                $result = $this->getGameService()->sendShareMail($data, $game, $user);
-                if ($result) {
-                    $statusMail = true;
+                if(isset($data['email1']) || isset($data['email2']) || isset($data['email3'])) {
+                    $result = $this->getGameService()->sendShareMail($data, $game, $user);
+                    if ($result) {
+                        $statusMail = true;
+                    }
                 }
             }
         }
@@ -179,17 +184,19 @@ class InstantWinController extends GameController
         $nextGame = parent::getMissionGameService()->checkCondition($game, $winner, true, $lastEntry);
 
         $viewModel = $this->buildView($game);
-        $viewModel->setVariables(array(
-            'occurrence'       => $occurrence,
-            'statusMail'       => $statusMail,
-            'game'             => $game,
-            'winner'           => $winner,
-            'flashMessages'    => $this->flashMessenger()->getMessages(),
-            'form'             => $form,
-            'socialLinkUrl'    => $socialLinkUrl,
-            'secretKey'        => $secretKey,
-            'nextGame'         => $nextGame,
-        ));
+        if ($viewModel instanceof \Zend\View\Model\ViewModel) {
+            $viewModel->setVariables(array(
+                'occurrence'       => $occurrence,
+                'statusMail'       => $statusMail,
+                'game'             => $game,
+                'winner'           => $winner,
+                'flashMessages'    => $this->flashMessenger()->getMessages(),
+                'form'             => $form,
+                'socialLinkUrl'    => $socialLinkUrl,
+                'secretKey'        => $secretKey,
+                'nextGame'         => $nextGame,
+            ));
+        }
         return $viewModel;
     }
 

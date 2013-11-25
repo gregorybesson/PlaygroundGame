@@ -6,10 +6,10 @@ use PlaygroundGame\Entity\Game;
 
 use PlaygroundGame\Entity\Lottery;
 
-use Zend\Mvc\Controller\AbstractActionController;
+use PlaygroundGame\Controller\Admin\GameController;
 use Zend\View\Model\ViewModel;
 
-class LotteryController extends AbstractActionController
+class LotteryController extends GameController
 {
     /**
      * @var GameService
@@ -116,118 +116,6 @@ class LotteryController extends AbstractActionController
         $viewModel->addChild($gameForm, 'game_form');
 
         return $viewModel->setVariables(array('form' => $form, 'title' => 'Edit lottery'));
-    }
-
-    public function entryAction()
-    {
-        $gameId         = $this->getEvent()->getRouteMatch()->getParam('gameId');
-        $game           = $this->getAdminGameService()->getGameMapper()->findById($gameId);
-
-        $entries = $this->getAdminGameService()->getEntryMapper()->findBy(array('game' => $game));
-
-        if (is_array($entries)) {
-            $paginator = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\ArrayAdapter($entries));
-            $paginator->setItemCountPerPage(10);
-            $paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
-        } else {
-            $paginator = $entries;
-        }
-
-        return array(
-                'entries' => $paginator,
-                'game' => $game,
-                'gameId' => $gameId
-        );
-    }
-
-    public function downloadAction()
-    {
-        // magically create $content as a string containing CSV data
-        $gameId         = $this->getEvent()->getRouteMatch()->getParam('gameId');
-        $game           = $this->getAdminGameService()->getGameMapper()->findById($gameId);
-
-        $entries = $this->getAdminGameService()->getEntryMapper()->findBy(array('game' => $game,'winner' => 1));
-
-        $content        = "\xEF\xBB\xBF"; // UTF-8 BOM
-        $content       .= "ID;Pseudo;Civilité;Nom;Prénom;E-mail;Optin Newsletter;Optin partenaire;Eligible TAS ?;Date - H;Adresse;CP;Ville;Téléphone;Mobile;Date d'inscription;Date de naissance;\n";
-        foreach ($entries as $e) {
-        	if($e->getUser()->getAddress2() != '') {
-        		$adress2 = ' - ' . $e->getUser()->getAddress2();
-			} else {
-				$adress2 = '';
-			}
-			if($e->getUser()->getDob() != NULL) {
-				$dob = $e->getUser()->getDob()->format('Y-m-d');
-			} else {
-				$dob = '';
-			}
-			
-            $content   .= $e->getUser()->getId()
-                . ";" . $e->getUser()->getUsername()
-				. ";" . $e->getUser()->getTitle()
-                . ";" . $e->getUser()->getLastname()
-                . ";" . $e->getUser()->getFirstname()
-                . ";" . $e->getUser()->getEmail()
-            	. ";" . $e->getUser()->getOptin()
-                . ";" . $e->getUser()->getOptinPartner()
-                . ";" . $e->getWinner()
-				. ";" . $e->getCreatedAt()->format('Y-m-d H:i:s')
-				. ";" . $e->getUser()->getAddress() . $adress2
-				. ";" . $e->getUser()->getPostalCode()
-				. ";" . $e->getUser()->getCity()
-				. ";" . $e->getUser()->getTelephone()
-				. ";" . $e->getUser()->getMobile()
-				. ";" . $e->getUser()->getCreatedAt()->format('Y-m-d')
-				. ";" . $dob
-                ."\n";
-        }
-
-        $response = $this->getResponse();
-        $headers = $response->getHeaders();
-        $headers->addHeaderLine('Content-Encoding: UTF-8');
-        $headers->addHeaderLine('Content-Type', 'text/csv; charset=UTF-8');
-        $headers->addHeaderLine('Content-Disposition', "attachment; filename=\"entry.csv\"");
-        $headers->addHeaderLine('Accept-Ranges', 'bytes');
-        $headers->addHeaderLine('Content-Length', strlen($content));
-
-        $response->setContent($content);
-
-        return $response;
-    }
-
-    public function drawAction()
-    {
-        // magically create $content as a string containing CSV data
-        $gameId         = $this->getEvent()->getRouteMatch()->getParam('gameId');
-        $game           = $this->getAdminGameService()->getGameMapper()->findById($gameId);
-
-        $winningEntries = $this->getAdminGameService()->draw($game);
-
-        $content        = "\xEF\xBB\xBF"; // UTF-8 BOM
-        $content       .= "ID;Pseudo;Nom;Prenom;E-mail;Etat\n";
-
-        foreach ($winningEntries as $e) {
-            $etat = 'gagnant';
-            $content   .= $e->getUser()->getId()
-            . ";" . $e->getUser()->getUsername()
-            . ";" . $e->getUser()->getLastname()
-            . ";" . $e->getUser()->getFirstname()
-            . ";" . $e->getUser()->getEmail()
-            . ";" . $etat
-            ."\n";
-        }
-
-        $response = $this->getResponse();
-        $headers = $response->getHeaders();
-        $headers->addHeaderLine('Content-Encoding: UTF-8');
-        $headers->addHeaderLine('Content-Type', 'text/csv; charset=UTF-8');
-        $headers->addHeaderLine('Content-Disposition', "attachment; filename=\"gagnants.csv\"");
-        $headers->addHeaderLine('Accept-Ranges', 'bytes');
-        $headers->addHeaderLine('Content-Length', strlen($content));
-
-        $response->setContent($content);
-
-        return $response;
     }
 
     public function getAdminGameService()
