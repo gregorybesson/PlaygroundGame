@@ -87,99 +87,127 @@ class TreasureHuntPuzzle implements InputFilterAwareInterface
     /**
 	 * @return the $position
 	 */
-	public function getPosition() {
+	public function getPosition()
+	{
 		return $this->position;
 	}
 
 	/**
 	 * @param field_type $position
 	 */
-	public function setPosition($position) {
+	public function setPosition($position)
+	{
 		$this->position = $position;
+		
+		return $this;
 	}
 
 	/**
 	 * @return the $url
 	 */
-	public function getUrl() {
+	public function getUrl()
+	{
 		return $this->url;
 	}
 
 	/**
 	 * @param field_type $url
 	 */
-	public function setUrl($url) {
+	public function setUrl($url)
+	{
 		$this->url = $url;
+		
+		return $this;
 	}
 
 	/**
 	 * @return the $domain
 	 */
-	public function getDomain() {
+	public function getDomain()
+	{
 		return $this->domain;
 	}
 
 	/**
 	 * @param field_type $domain
 	 */
-	public function setDomain($domain) {
+	public function setDomain($domain)
+	{
 		$this->domain = $domain;
+		
+		return $this;
 	}
 
 	/**
 	 * @return the $hint
 	 */
-	public function getHint() {
+	public function getHint()
+	{
 		return $this->hint;
 	}
 
 	/**
 	 * @param field_type $hint
 	 */
-	public function setHint($hint) {
+	public function setHint($hint)
+	{
 		$this->hint = $hint;
+		
+		return $this;
 	}
 
 	/**
 	 * @return the $area
 	 */
-	public function getArea() {
+	public function getArea()
+	{
 		return $this->area;
 	}
 
 	/**
 	 * @param field_type $area
 	 */
-	public function setArea($area) {
+	public function setArea($area)
+	{
 		$this->area = $area;
+		
+		return $this;
 	}
 
 	/**
 	 * @return the $timer
 	 */
-	public function getTimer() {
+	public function getTimer()
+	{
 		return $this->timer;
 	}
 
 	/**
 	 * @param number $timer
 	 */
-	public function setTimer($timer) {
+	public function setTimer($timer)
+	{
 		$this->timer = $timer;
+		
+		return $this;
 	}
 
 	/**
 	 * @return the $timer_duration
 	 */
-	public function getTimer_duration() {
+	public function getTimer_duration()
+	{
 		return $this->timer_duration;
 	}
 
 	/**
 	 * @param number $timer_duration
 	 */
-	public function setTimer_duration($timer_duration) {
+	public function setTimer_duration($timer_duration)
+	{
 		$this->timer_duration = $timer_duration;
+		
+		return $this;
 	}
 
 	/**

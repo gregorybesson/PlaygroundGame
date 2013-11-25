@@ -167,6 +167,8 @@ class MissionGame
     public function setConditions($conditions)
     {
         $this->conditions = $conditions;
+        
+        return $this;
     }
     
     public function addConditions(ArrayCollection $conditions)
@@ -213,6 +215,8 @@ class MissionGame
     public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
+        
+        return $this;
     }
 
     /**
@@ -231,6 +235,8 @@ class MissionGame
     public function setUpdatedAt($updatedAt)
     {
         $this->updatedAt = $updatedAt;
+        
+        return $this;
     }
 
     public function getInputFilter ()
