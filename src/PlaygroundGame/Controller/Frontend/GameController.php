@@ -5,6 +5,10 @@ namespace PlaygroundGame\Controller\Frontend;
 use PlaygroundGame\Entity\Lottery;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Zend\Session\Container;
+use Zend\Form\Element;
+use Zend\Form\Form;
+use Zend\InputFilter\Factory as InputFactory;
 
 class GameController extends AbstractActionController
 {
@@ -30,6 +34,20 @@ class GameController extends AbstractActionController
         $game = $sg->checkGame($identifier, false);
         if (!$game) {
             return $this->notFoundAction();
+        }
+        
+        // This fix exists only for safari in FB on Windows : we need to redirect the user to the page outside of iframe
+        // for the cookie to be accepted. PlaygroundCore redirects to the FB Iframed page when
+        // it discovers that the user arrives for the first time on the game in FB.
+        // When core redirects, it adds a 'redir_fb_page_id' var in the querystring
+        // Here, we test if this var exist, and then send the user back to the game in FB.
+        // Now the cookie will be accepted by Safari...
+        $pageId = $this->params()->fromQuery('redir_fb_page_id');
+        if (!empty($pageId)) {
+            $appId = 'app_'.$game->getFbAppId();
+            $url = '//www.facebook.com/pages/game/'.$pageId.'?sk='.$appId;
+            
+            return $this->redirect()->toUrl($url);
         }
     
         return $this->forward()->dispatch('playgroundgame_'.$game->getClassType(), array('controller' => 'playgroundgame_'.$game->getClassType(), 'action' => $game->firstStep(), 'id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')));
@@ -79,80 +97,318 @@ class GameController extends AbstractActionController
 
         return $viewModel;
     }
-
-    // TODO : Sanitize and factorize
-    public function resultAction()
-    {
-        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-        $user = $this->zfcUserAuthentication()->getIdentity();
-        $sg = $this->getGameService();
-        $statusMail = null;
-
-        $game = $sg->checkGame($identifier);
-        if (!$game || $game->isClosed()) {
-            return $this->notFoundAction();
-        }
-
-        // Want to be sure that a least one finished entry has been done by this user
-        $subscription = $sg->checkExistingEntry($game, $user, false);
-            if (!$subscription) {
-            // the user is not registered yet.
-            $redirect = urlencode($this->url()->fromRoute('frontend/lottery', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)));
-
-            return $this->redirect()->toUrl($this->url()->fromRoute('frontend/zfcuser/register', array('channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))) . '?redirect='.$redirect);
-        }
-
-        $form = $this->getServiceLocator()->get('playgroundgame_sharemail_form');
-        $form->setAttribute('method', 'post');
-
-        if ($this->getRequest()->isPost()) {
-            $data = $this->getRequest()->getPost()->toArray();
-            $form->setData($data);
-            if ($form->isValid()) {
-                $result = $this->getGameService()->sendShareMail($data, $game, $user);
-                if ($result) {
-                    $statusMail = true;
-                }
-            }
-
-        }
-        
-        $viewModel = $this->buildView($game);
-        $viewModel->setVariables(array(
-            'statusMail'       => $statusMail,
-            'game'             => $game,
-            'flashMessages'    => $this->flashMessenger()->getMessages(),
-            'form'             => $form,
-        ));
-
-        return $viewModel;
-    }
     
+    /**
+     * This action has been designed to be called by other controllers
+     * It gives the ability to display an information form and persist it in the game entry
+     * 
+     * @return \Zend\View\Model\ViewModel
+     */
     public function registerAction()
     {
+
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
         $sg = $this->getGameService();
-        
+
         $game = $sg->checkGame($identifier);
         if (!$game || $game->isClosed()) {
             return $this->notFoundAction();
         }
         
-        // je délègue la responsabilité du formulaire à PlaygroundUser, y compris dans sa gestion des erreurs
-        // I have to express controller and action params for the layout to be correctly updated
-        $formRegister = $this->forward()->dispatch('playgrounduser_user', array('controller' => 'playgrounduser_user', 'action' => 'address'));
+        $user = $this->zfcUserAuthentication()->getIdentity();
         
-        // Le formulaire est validé, il renvoie true et non un ViewModel
-        if (!($formRegister instanceof \Zend\View\Model\ViewModel)) {
+        $formPV = json_decode($game->getPlayerForm()->getForm());
+        // TODO : create a Form class to implement this form
+        $form = new Form();
+        $form->setAttribute('id', 'playerForm');
+        $form->setAttribute('enctype', 'multipart/form-data');
+
+        $inputFilter = new \Zend\InputFilter\InputFilter();
+        $factory = new InputFactory();
+
+        foreach ($formPV as $element) {
+            if (isset($element->line_text)) {
+                $attributes  = $element->line_text[0];
+                $name        = isset($attributes->name)? $attributes->name : '';
+                $type        = isset($attributes->type)? $attributes->type : '';
+                $position    = isset($attributes->order)? $attributes->order : '';
+                $placeholder = isset($attributes->data->placeholder)? $attributes->data->placeholder : '';
+                $label       = isset($attributes->data->label)? $attributes->data->label : '';
+                $required    = ($attributes->data->required == 'true') ? true : false ;
+                $class       = isset($attributes->data->class)? $attributes->data->class : '';
+                $id          = isset($attributes->data->id)? $attributes->data->id : '';
+                $lengthMin   = isset($attributes->data->length)? $attributes->data->length->min : '';
+                $lengthMax   = isset($attributes->data->length)? $attributes->data->length->max : '';
+
+                $element = new Element\Text($name);
+                $element->setLabel($label);
+                $element->setAttributes(
+                    array(
+                        'placeholder' 	=> $placeholder,
+                        'required' 		=> $required,
+                        'class' 		=> $class,
+                        'id' 			=> $id
+                    )
+                );
+                $form->add($element);
+
+                $options = array();
+                $options['encoding'] = 'UTF-8';
+                if ($lengthMin && $lengthMin > 0) {
+                    $options['min'] = $lengthMin;
+                }
+                if ($lengthMax && $lengthMax > $lengthMin) {
+                    $options['max'] = $lengthMax;
+                    $element->setAttribute('maxlength', $lengthMax);
+                    $options['messages'] = array(\Zend\Validator\StringLength::TOO_LONG => sprintf($this->getServiceLocator()->get('translator')->translate('This field contains more than %s characters', 'playgroundgame'), $lengthMax));
+                }
+                $inputFilter->add($factory->createInput(array(
+                    'name'     => $name,
+                    'required' => $required,
+                    'filters'  => array(
+                        array('name' => 'StripTags'),
+                        array('name' => 'StringTrim'),
+                    ),
+                    'validators' => array(
+                        array(
+                            'name'    => 'StringLength',
+                            'options' => $options,
+                        ),
+                    ),
+                )));
+
+            }
+            if (isset($element->line_email)) {
+                $attributes  = $element->line_email[0];
+                $name        = isset($attributes->name)? $attributes->name : '';
+                $type        = isset($attributes->type)? $attributes->type : '';
+                $position    = isset($attributes->order)? $attributes->order : '';
+                $placeholder = isset($attributes->data->placeholder)? $attributes->data->placeholder : '';
+                $label       = isset($attributes->data->label)? $attributes->data->label : '';
+                //$required    = ($attributes->data->required == 'true') ? true : false ;
+                $class       = isset($attributes->data->class)? $attributes->data->class : '';
+                $id          = isset($attributes->data->id)? $attributes->data->id : '';
+                $lengthMin   = isset($attributes->data->length)? $attributes->data->length->min : '';
+                $lengthMax   = isset($attributes->data->length)? $attributes->data->length->max : '';
             
-            return $this->redirect()->toUrl($this->url()->fromRoute('frontend/'. $game->getClassType() . '/'. $game->nextStep($this->params('action')), array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+                $element = new Element\Email($name);
+                $element->setLabel($label);
+                $element->setAttributes(
+                    array(
+                        'placeholder' 	=> $placeholder,
+                        'required' 		=> $required,
+                        'class' 		=> $class,
+                        'id' 			=> $id
+                    )
+                );
+                $form->add($element);
+            
+                $options = array();
+                $options['encoding'] = 'UTF-8';
+                if ($lengthMin && $lengthMin > 0) {
+                    $options['min'] = $lengthMin;
+                }
+                if ($lengthMax && $lengthMax > $lengthMin) {
+                    $options['max'] = $lengthMax;
+                    $element->setAttribute('maxlength', $lengthMax);
+                    $options['messages'] = array(\Zend\Validator\StringLength::TOO_LONG => sprintf($this->getServiceLocator()->get('translator')->translate('This field contains more than %s characters', 'playgroundgame'), $lengthMax));
+                }
+                $inputFilter->add($factory->createInput(array(
+                    'name'     => $name,
+                    'required' => $required,
+                    'filters'  => array(
+                        array('name' => 'StripTags'),
+                        array('name' => 'StringTrim'),
+                    ),
+                    'validators' => array(
+                        array(
+                            'name'    => 'StringLength',
+                            'options' => $options,
+                        ),
+                    ),
+                )));
+            
+            }
+            if (isset($element->line_checkbox)) {
+                $attributes  = $element->line_checkbox[0];
+                $name        = isset($attributes->name)? $attributes->name : '';
+                $type        = isset($attributes->type)? $attributes->type : '';
+                $position    = isset($attributes->order)? $attributes->order : '';
+                $placeholder = isset($attributes->data->placeholder)? $attributes->data->placeholder : '';
+                $label       = isset($attributes->data->label)? $attributes->data->label : '';
+                //$required    = ($attributes->data->required == 'true') ? true : false ;
+                $class       = isset($attributes->data->class)? $attributes->data->class : '';
+                $id          = isset($attributes->data->id)? $attributes->data->id : '';
+                $lengthMin   = isset($attributes->data->length)? $attributes->data->length->min : '';
+                $lengthMax   = isset($attributes->data->length)? $attributes->data->length->max : '';
+                $innerData   = isset($attributes->data->innerData)? $attributes->data->innerData : array();
+            
+                $element = new Element\MultiCheckbox($name);
+                $element->setLabel($label);
+                $element->setAttributes(
+                    array(
+                        'placeholder' 	=> $placeholder,
+                        'required' 		=> $required,
+                        'class' 		=> $class,
+                        'id' 			=> $id
+                    )
+                );
+                $values = array();
+                foreach($innerData as $value){
+                    $values[] = $value->label;
+                }
+                $element->setValueOptions($values);
+                $form->add($element);
+            
+                $options = array();
+                $options['encoding'] = 'UTF-8';
+                /*if ($lengthMin && $lengthMin > 0) {
+                    $options['min'] = $lengthMin;
+                }
+                if ($lengthMax && $lengthMax > $lengthMin) {
+                    $options['max'] = $lengthMax;
+                    $element->setAttribute('maxlength', $lengthMax);
+                    $options['messages'] = array(\Zend\Validator\StringLength::TOO_LONG => sprintf($this->getServiceLocator()->get('translator')->translate('This field contains more than %s characters', 'playgroundgame'), $lengthMax));
+                }
+                $inputFilter->add($factory->createInput(array(
+                    'name'     => $name,
+                    'required' => $required,
+                    'filters'  => array(
+                        array('name' => 'StripTags'),
+                        array('name' => 'StringTrim'),
+                    ),
+                    'validators' => array(
+                        array(
+                            'name'    => 'StringLength',
+                            'options' => $options,
+                        ),
+                    ),
+                )));*/
+            
+            }
+            if (isset($element->line_paragraph)) {
+                $attributes  = $element->line_paragraph[0];
+                $name        = isset($attributes->name)? $attributes->name : '';
+                $type        = isset($attributes->type)? $attributes->type : '';
+                $position    = isset($attributes->order)? $attributes->order : '';
+                $placeholder = isset($attributes->data->placeholder)? $attributes->data->placeholder : '';
+                $label       = isset($attributes->data->label)? $attributes->data->label : '';
+                $required    = ($attributes->data->required == 'true') ? true : false ;
+                $class       = isset($attributes->data->class)? $attributes->data->class : '';
+                $id          = isset($attributes->data->id)? $attributes->data->id : '';
+                $lengthMin   = isset($attributes->data->length)? $attributes->data->length->min : '';
+                $lengthMax   = isset($attributes->data->length)? $attributes->data->length->max : '';
+
+                $element = new Element\Textarea($name);
+                $element->setLabel($label);
+                $element->setAttributes(
+                    array(
+                        'placeholder' 	=> $placeholder,
+                        'required' 		=> $required,
+                        'class' 		=> $class,
+                        'id' 			=> $id
+                    )
+                );
+                $form->add($element);
+
+                $options = array();
+                $options['encoding'] = 'UTF-8';
+                if ($lengthMin && $lengthMin > 0) {
+                    $options['min'] = $lengthMin;
+                }
+                if ($lengthMax && $lengthMax > $lengthMin) {
+                    $options['max'] = $lengthMax;
+                    $element->setAttribute('maxlength', $lengthMax);
+                }
+                $inputFilter->add($factory->createInput(array(
+                    'name'     => $name,
+                    'required' => $required,
+                    'filters'  => array(
+                        array('name' => 'StripTags'),
+                        array('name' => 'StringTrim'),
+                    ),
+                    'validators' => array(
+                        array(
+                            'name'    => 'StringLength',
+                            'options' => $options,
+                        ),
+                    ),
+                )));
+            }
+            if (isset($element->line_upload)) {
+                $attributes  = $element->line_upload[0];
+                //print_r($attributes);
+                $name        = isset($attributes->name)? $attributes->name : '';
+                $type        = isset($attributes->type)? $attributes->type : '';
+                $position    = isset($attributes->order)? $attributes->order : '';
+                $label       = isset($attributes->data->label)? $attributes->data->label : '';
+                $required    = ($attributes->data->required == 'true') ? true : false ;
+                $class       = isset($attributes->data->class)? $attributes->data->class : '';
+                $id          = isset($attributes->data->id)? $attributes->data->id : '';
+                $filesizeMin = isset($attributes->data->filesize)? $attributes->data->filesize->min : '';
+                $filesizeMax = isset($attributes->data->filesize)? $attributes->data->filesize->max : '';
+                $element = new Element\File($name);
+                $element->setLabel($label);
+                $element->setAttributes(
+                    array(
+                        'required' 	=> $required,
+                        'class' 	=> $class,
+                        'id' 		=> $id
+                    )
+                );
+                $form->add($element);
+
+                $inputFilter->add($factory->createInput(array(
+                    'name'     => $name,
+                    'required' => $required,
+                    'validators' => array(
+                            array('name' => '\Zend\Validator\File\Size', 'options' => array('max' => 10*1024*1024)),
+                            array('name' => '\Zend\Validator\File\Extension', 'options'  => array('png,PNG,jpg,JPG,jpeg,JPEG,gif,GIF', 'messages' => array(
+                            \Zend\Validator\File\Extension::FALSE_EXTENSION => 'Veuillez télécharger une image' ))
+                        ),
+                    ),
+                )));
+
+            }
+        }
+
+		$form->setInputFilter($inputFilter);
+        
+        if ($this->getRequest()->isPost()) {
+            // POST Request: Process form
+            $data = array_merge_recursive(
+                $this->getRequest()->getPost()->toArray(),
+                $this->getRequest()->getFiles()->toArray()
+            );
+        
+            $form->setData($data);
+        
+            if ($form->isValid()) {
+        
+                $data = json_encode($form->getData());
+                
+                $lastEntry = $sg->findLastInactiveEntry($game, $user);
+                $lastEntry->setPlayerData($data);
+                $sg->getEntryMapper()->update($lastEntry);
+
+                $redirect =  $this->redirect()->toUrl($this->url()->fromRoute('frontend/'. $game->getClassType() .'/bounce', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)));
+                
+            }
         }
         
-        return $formRegister;
+        $viewModel = new ViewModel();
+        $viewModel->setVariables(array(
+            'game' => $game,
+            'form' => $form,
+            'flashMessages' => $this->flashMessenger()->getMessages(),
+        ));
+        
+        return $viewModel;
     }
 
     public function fbshareAction()
     {
+        
         $viewModel = new ViewModel();
         $viewModel->setTerminal(true);
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
@@ -330,116 +586,206 @@ class GameController extends AbstractActionController
         return $viewModel;
     }
 
-    public function buildView($game)
+    public function checkFbRegistration($user, $game, $channel)
     {
+        $redirect = false;
+        $session = new Container('facebook');
         $sg = $this->getGameService();
+        if ($channel == 'facebook' && $session->offsetExists('signed_request')) {
+            if (!$user) {
+                // Get Playground user from Facebook info
+                $beforeLayout = $this->layout()->getTemplate();
+                $this->forward()->dispatch('playgrounduser_user', array('controller' => 'playgrounduser_user', 'action' => 'registerFacebookUser', 'provider' => $channel));
+        
+                $this->layout()->setTemplate($beforeLayout);
+                $user = $view->user;
+        
+                // If the user can not be created/retrieved from Facebook info, redirect to login/register form
+                if (!$user){
+                    $redirectUrl = urlencode($this->url()->fromRoute('frontend/'. $game->getClassType() .'/play', array('id' => $game->getIdentifier(), 'channel' => $channel), array('force_canonical' => true)));
+                    $redirect =  $this->redirect()->toUrl($this->url()->fromRoute('frontend/zfcuser/register', array('channel' => $channel)) . '?redirect='.$redirectUrl);
+                }
+        
+            }
+            
+            if($game->getFbFan()){
+                if ($sg->checkIsFan($game) === false){
+                    $redirect =  $this->redirect()->toRoute($game->getClassType().'/fangate',array('id' => $game->getIdentifier()));
+                }
+            }
+        }
+        
+        return $redirect;
+    }
+    
+    public function buildView($game)
+    {  
+        $viewModel = new ViewModel();
+        
+        $this->addMetaTitle($game->getTitle());
+        $this->addMetaBitly();
+        $this->addGaEvent($game);
+        
+        $this->customizeGameDesign($game);
+        $this->addColRight($game);
+        $this->addColLeft($game);
+        
+        $view = $this->addAdditionalView($game);
+
+        if($view){
+            $viewModel->addChild($view, 'additional');
+        }
+
+        $viewModel->setVariables($this->getShareData($game));
+        
+        return $viewModel;
+    }
+
+    public function addAdditionalView($game)
+    {
+        $view = false;
+        $actionName = $this->getEvent()->getRouteMatch()->getParam('action', 'not-found');
+        
+        //TODO : improve the way steps and steps views are managed
+        $stepsViews = json_decode($game->getStepsViews(), true);
+        if($stepsViews && isset($stepsViews[$actionName]) && is_string($stepsViews[$actionName])){
+
+            $action = $stepsViews[$actionName];
+            $beforeLayout = $this->layout()->getTemplate();
+            $view = $this->forward()->dispatch('playgroundgame_game', array('action' => $action, 'id' => $game->getIdentifier()));
+            
+            // TODO : suite au forward, le template de layout a changé, je dois le rétablir...
+            $this->layout()->setTemplate($beforeLayout);
+            
+        }
+        
+        return $view;
+    }
+    
+    public function addColRight($game)
+    {
+        $colRight = new ViewModel();
+        $colRight->setTemplate($this->layout()->col_right);
+        $colRight->setVariables(array('game' => $game));
+        
+        $this->layout()->addChild($colRight, 'column_right'); 
+    }
+    
+    public function addColLeft($game)
+    {
+        $colLeft = new ViewModel();
+        $colLeft->setTemplate($this->layout()->col_right);
+        $colLeft->setVariables(array('game' => $game));
+        
+        $this->layout()->addChild($colLeft, 'column_left');
+    }
+    
+    public function addMetaBitly()
+    {
+        $bitlyclient = $this->getOptions()->getBitlyUrl();
+        $bitlyuser = $this->getOptions()->getBitlyUsername();
+        $bitlykey = $this->getOptions()->getBitlyApiKey();
+        
+        $this->getViewHelper('HeadMeta')->setProperty('bt:client', $bitlyclient);
+        $this->getViewHelper('HeadMeta')->setProperty('bt:user', $bitlyuser);
+        $this->getViewHelper('HeadMeta')->setProperty('bt:key', $bitlykey);
+    }
+    
+    public function addGaEvent($game)
+    {
+        // Google Analytics event
         $ga = $this->getServiceLocator()->get('google-analytics');
         $event = new \PlaygroundCore\Analytics\Event($game->getClassType(), $this->params('action'));
         $event->setLabel($game->getTitle());
-        $viewModel = new ViewModel();
-
         $ga->addEvent($event);
-        // If this game has a specific layout...
-        if ($game->getLayout()) {
-            $layoutViewModel = $this->layout();
-            $layoutViewModel->setTemplate($game->getLayout());
-        }
-
-        // If this game has a specific stylesheet...
-        if ($game->getStylesheet()) {
-            $this->getViewHelper('HeadLink')->appendStylesheet($this->getRequest()->getBaseUrl(). '/' . $game->getStylesheet());
-        }
-
-        // I change the label of the quiz in the breadcrumb ...
+    }
+    
+    public function addMetaTitle($title)
+    {
+        // Meta set in the layout
         $this->layout()->setVariables(
             array(
-                'breadcrumbTitle' => $game->getTitle(),
+                'breadcrumbTitle' => $title,
                 'currentPage' => array(
                     'pageGames' => 'games',
                     'pageWinners' => ''
                 ),
                 'headParams' => array(
-                    'headTitle' => $game->getTitle(),
-                    'headDescription' => $game->getTitle(),
+                    'headTitle' => $title,
+                    'headDescription' => $title,
                 ),
             )
         );
+    }
+    
+    public function customizeGameDesign($game)
+    {
+        // If this game has a specific layout...
+        if ($game->getLayout()) {
+            $layoutViewModel = $this->layout();
+            $layoutViewModel->setTemplate($game->getLayout());
+        }
         
-        // REGISTER FORM INCLUDED IN EXISTING CONTROLLERS VIEWS
-        /*
-        $beforeLayout = $this->layout()->getTemplate();
-        // je délègue la responsabilité du formulaire à PlaygroundUser, y compris dans sa gestion des erreurs
-        $form = $this->forward()->dispatch('playgrounduser_user', array('action' => 'address'));
-        
-        // TODO : suite au forward, le template de layout a changé, je dois le rétablir...
-        $this->layout()->setTemplate($beforeLayout);
-        $viewModel->addChild($form, 'formRegister');
-        */
-
+        // If this game has a specific stylesheet...
+        if ($game->getStylesheet()) {
+            $this->getViewHelper('HeadLink')->appendStylesheet($this->getRequest()->getBaseUrl(). '/' . $game->getStylesheet());
+        }
+    }
+    
+    public function getShareData($game)
+    {     
+        // I change the fbappid if i'm in fb
         if($this->getEvent()->getRouteMatch()->getParam('channel') === 'facebook'){
             $fo = $this->getServiceLocator()->get('facebook-opengraph');
             $fo->setId($game->getFbAppId());
         }
-
+        
+        // If I want to add a share block in my view
         if ($game->getFbShareMessage()) {
             $fbShareMessage = $game->getFbShareMessage();
         } else {
             $fbShareMessage = str_replace('__placeholder__', $game->getTitle(), $this->getOptions()->getDefaultShareMessage());
         }
-
+        
         if ($game->getFbShareImage()) {
             $fbShareImage = $this->url()->fromRoute('frontend', array('channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)) . $game->getFbShareImage();
         } else {
             $fbShareImage = $this->url()->fromRoute('frontend', array('channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)) . $game->getMainImage();
         }
-
-        $secretKey = strtoupper(substr(sha1($game->getId().'####'.time()),0,15));
-
+        
+        $secretKey = strtoupper(substr(sha1(uniqid('pg_', true).'####'.time()),0,15));
+        
         // Without bit.ly shortener
         $socialLinkUrl = $this->url()->fromRoute('frontend/' . $game->getClassType(), array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true));
         // With core shortener helper
         $socialLinkUrl = $this->shortenUrl()->shortenUrl($socialLinkUrl);
-
+        
         // FB Requests only work when it's a FB app
         if ($game->getFbRequestMessage()) {
             $fbRequestMessage = urlencode($game->getFbRequestMessage());
         } else {
             $fbRequestMessage = str_replace('__placeholder__', $game->getTitle(), $this->getOptions()->getDefaultShareMessage());
         }
-
+        
         if ($game->getTwShareMessage()) {
             $twShareMessage = $game->getTwShareMessage() . $socialLinkUrl;
         } else {
             $twShareMessage = str_replace('__placeholder__', $game->getTitle(), $this->getOptions()->getDefaultShareMessage()) . $socialLinkUrl;
         }
-
-        $bitlyclient = $this->getOptions()->getBitlyUrl();
-        $bitlyuser = $this->getOptions()->getBitlyUsername();
-        $bitlykey = $this->getOptions()->getBitlyApiKey();
-
+        
         $this->getViewHelper('HeadMeta')->setProperty('og:title', $fbShareMessage);
         $this->getViewHelper('HeadMeta')->setProperty('og:image', $fbShareImage);
-        $this->getViewHelper('HeadMeta')->setProperty('bt:client', $bitlyclient);
-        $this->getViewHelper('HeadMeta')->setProperty('bt:user', $bitlyuser);
-        $this->getViewHelper('HeadMeta')->setProperty('bt:key', $bitlykey);
-
-        // right column
-        $column = new ViewModel();
-        $column->setTemplate($this->layout()->col_right);
-        $column->setVariables(array('game' => $game));
-
-        $this->layout()->addChild($column, 'column_right');
         
-        $viewModel->setVariables(array(
+        $data = array(
             'socialLinkUrl'       => $socialLinkUrl,
             'secretKey'           => $secretKey,
             'fbShareMessage'      => $fbShareMessage,
             'fbShareImage'        => $fbShareImage,
             'fbRequestMessage'    => $fbRequestMessage,
             'twShareMessage'      => $twShareMessage,
-        ));
+        );
         
-        return $viewModel;
+        return $data;
     }
 
     public function prizesAction()

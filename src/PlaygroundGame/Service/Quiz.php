@@ -116,6 +116,15 @@ class Quiz extends Game implements ServiceManagerAwareInterface
             $question->setImage($media_url . $data['upload_image']['name']);
             ErrorHandler::stop(true);
         }
+        
+        if($data['delete_image'] && empty($data['upload_image']['tmp_name'])) {
+            ErrorHandler::start();
+            $image = $question->getImage();
+            $image = str_replace($media_url, '', $image);
+            unlink($path .$image);
+            $question->setImage(null);
+            ErrorHandler::stop(true);
+        }
 
         // Max points and correct answers calculation for the question
         $question = $this->calculateMaxAnswersQuestion($question);
@@ -261,7 +270,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
         // Si mon nb de participation est < au nb autorisé, j'ajoute une entry + reponses au quiz et points
         $quizReplyMapper = $this->getQuizReplyMapper();
         $entryMapper = $this->getEntryMapper();
-        $entry = $entryMapper->findLastActiveEntryById($game, $user);
+        $entry = $this->findLastActiveEntry($game, $user);
 
         if (!$entry) {
             return false;

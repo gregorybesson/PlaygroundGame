@@ -49,6 +49,21 @@ class Entry
      * @ORM\Column(type="string", length=255, nullable=false)
      */
     protected $points;
+    
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    protected $ip;
+    
+    /**
+     * @ORM\Column(name="anonymous_id", type="string", length=255, nullable=true)
+     */
+    protected $anonymousId;
+    
+    /**
+     * @ORM\Column(name="player_data", type="text", nullable=true)
+     */
+    protected $playerData;
 
     /**
      * Is this entry a winning one ?
@@ -163,6 +178,54 @@ class Entry
     }
 
     /**
+     * @return the $ip
+     */
+    public function getIp()
+    {
+        return $this->ip;
+    }
+
+	/**
+     * @param field_type $ip
+     */
+    public function setIp($ip)
+    {
+        $this->ip = $ip;
+    }
+
+	/**
+     * @return the $anonymousId
+     */
+    public function getAnonymousId()
+    {
+        return $this->anonymousId;
+    }
+
+	/**
+     * @param field_type $anonymousId
+     */
+    public function setAnonymousId($anonymousId)
+    {
+        $this->anonymousId = $anonymousId;
+    }
+
+	/**
+     * @return the $playerData
+     */
+    public function getPlayerData()
+    {
+        return $this->playerData;
+    }
+
+	/**
+     * @param field_type $playerData
+     */
+    public function setPlayerData($playerData)
+    {
+        $this->playerData = $playerData;
+    }
+
+	/**
      * @return the status
      */
     public function getActive()

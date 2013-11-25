@@ -17,56 +17,34 @@ class InstantWinController extends GameController
 
     public function playAction()
     {
-        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-        $user = $this->zfcUserAuthentication()->getIdentity();
+        
         $sg = $this->getGameService();
         $occurrence_mapper = $sg->getInstantWinOccurrenceMapper();
-
+        
+        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
+        $channel = $this->getEvent()->getRouteMatch()->getParam('channel');
+        
         $game = $sg->checkGame($identifier);
         if (!$game || $game->isClosed()) {
             return $this->notFoundAction();
         }
-
-        $session = new Container('facebook');
-        $channel = $this->getEvent()->getRouteMatch()->getParam('channel');
-
-        // Redirect to fan gate if the game require to 'like' the page before playing
-        if ($channel == 'facebook' && $session->offsetExists('signed_request')) {
-            if($game->getFbFan()){
-                if ($sg->checkIsFan($game) === false){
-                    return $this->redirect()->toRoute($game->getClassType().'/fangate',array('id' => $game->getIdentifier()));
-                }
-            }
+        
+        $redirectFb = $this->checkFbRegistration($this->zfcUserAuthentication()->getIdentity(), $game, $channel);
+        if($redirectFb){
+            return $redirectFb;
         }
+        
+        $user = $this->zfcUserAuthentication()->getIdentity();
 
-        $viewModel = $this->buildView($game);
-
-        if (!$user) {
-            // The game is deployed on Facebook, and played from Facebook : retrieve/register user
-            if ($channel == 'facebook' && $session->offsetExists('signed_request')) {
-
-                // Get Playground user from Facebook info
-                $beforeLayout = $this->layout()->getTemplate();
-                $view = $this->forward()->dispatch('playgrounduser_user', array('controller' => 'playgrounduser_user', 'action' => 'registerFacebookUser', 'provider' => $channel));
-
-                $this->layout()->setTemplate($beforeLayout);
-                $user = $view->user;
-
-                // If the user can not be created/retrieved from Facebook info, redirect to login/register form
-                if (!$user){
-                    $redirect = urlencode($this->url()->fromRoute('frontend/instantwin/play', array('id' => $game->getIdentifier(), 'channel' => $channel), array('force_canonical' => true)));
-                    return $this->redirect()->toUrl($this->url()->fromRoute('frontend/zfcuser/register', array('channel' => $channel)) . '?redirect='.$redirect);
-                }
-
-                // The game is not played from Facebook : redirect to login/register form
-
-            } else {
-                $redirect = urlencode($this->url()->fromRoute('frontend/instantwin/play', array('id' => $game->getIdentifier(), 'channel' => $channel), array('force_canonical' => true)));
-                return $this->redirect()->toUrl($this->url()->fromRoute('frontend/zfcuser/register', array('channel' => $channel)) . '?redirect='.$redirect);
-            }
+        if (!$user && !$game->getAnonymousAllowed()) {
+            $redirect = urlencode($this->url()->fromRoute('frontend/'. $game->getClassType() . '/play', array('id' => $game->getIdentifier(), 'channel' => $channel), array('force_canonical' => true)));
+            
+            return $this->redirect()->toUrl($this->url()->fromRoute('frontend/zfcuser/register', array('channel' => $channel)) . '?redirect='.$redirect);
         }
 
         if ($game->getOccurrenceType()=='datetime') {
+            
+            /*
             $beforeLayout = $this->layout()->getTemplate();
             // je délègue la responsabilité du formulaire à PlaygroundUser, y compris dans sa gestion des erreurs
             $form_address = $this->forward()->dispatch('playgrounduser_user', array('action' => 'address'));
@@ -78,9 +56,10 @@ class InstantWinController extends GameController
             if (!($form_address instanceof \Zend\View\Model\ViewModel)) {
                 return $this->redirect()->toUrl($this->url()->fromRoute('frontend/instantwin/result', array('id' => $game->getIdentifier(), 'channel' => $channel)));
             }
+            */
             if ($this->getRequest()->isPost()) {
                 // En post, je reçois la maj du form pour les gagnants. Je n'ai pas à créer une nouvelle participation mais vérifier la précédente
-                $lastEntry = $sg->getEntryMapper()->findLastInactiveEntryById($game, $user);
+                $lastEntry = $sg->findLastInactiveEntry($game, $user);
                 if (!$lastEntry) {
                     return $this->redirect()->toUrl($this->url()->fromRoute('frontend/instantwin', array('id' => $game->getIdentifier(), 'channel' => $channel), array('force_canonical' => true)));
                 }
@@ -116,7 +95,7 @@ class InstantWinController extends GameController
                 'prize' => $prize,
                 'over' => false,
             );
-            $viewModel->addChild($form_address, 'form_address');
+            //$viewModel->addChild($form_address, 'form_address');
         } elseif ($game->getOccurrenceType()=='code') {
             $form = $this->getServiceLocator()->get('playgroundgame_instantwinoccurrencecode_form');
             $form->setAttribute('action', $this->url()->fromRoute('frontend/instantwin/play', array('id' => $game->getIdentifier(), 'channel' => $channel), array('force_canonical' => true)));
@@ -142,6 +121,7 @@ class InstantWinController extends GameController
                 'flashMessages' => $this->flashMessenger()->getMessages(),
             );
         }
+        $viewModel = $this->buildView($game);
         $viewModel->setVariables($viewVariables);
         return $viewModel;
     }
@@ -158,7 +138,7 @@ class InstantWinController extends GameController
             return $this->notFoundAction();
         }
 
-        $lastEntry = $sg->getEntryMapper()->findLastInactiveEntryById($game, $user);
+        $lastEntry = $sg->findLastInactiveEntry($game, $user);
         if (!$lastEntry) {
             return $this->redirect()->toUrl($this->url()->fromRoute('frontend/instantwin', array('id' => $game->getIdentifier(), 'channel' => $channel), array('force_canonical' => true)));
         }
@@ -170,13 +150,13 @@ class InstantWinController extends GameController
         if (!empty($occurrences)) {
             $occurrence = current($occurrences);
         }
-
-        if (!$user) {
+        
+        if (!$user && !$game->getAnonymousAllowed()) {
             $redirect = urlencode($this->url()->fromRoute('frontend/instantwin/result', array('id' => $game->getIdentifier(), 'channel' => $channel)));
             return $this->redirect()->toUrl($this->url()->fromRoute('frontend/zfcuser/register', array('channel' => $channel)) . '?redirect='.$redirect);
         }
-
-        $secretKey = strtoupper(substr(sha1($user->getId().'####'.time()),0,15));
+        
+        $secretKey = strtoupper(substr(sha1(uniqid('pg_', true).'####'.time()),0,15));
         $socialLinkUrl = $this->url()->fromRoute('frontend/instantwin', array('id' => $game->getIdentifier(), 'channel' => $channel), array('force_canonical' => true)).'?key='.$secretKey;
         // With core shortener helper
         $socialLinkUrl = $this->shortenUrl()->shortenUrl($socialLinkUrl);
@@ -211,87 +191,6 @@ class InstantWinController extends GameController
             'nextGame'         => $nextGame,
         ));
         return $viewModel;
-    }
-
-    public function fbshareAction()
-    {
-        $viewModel = new ViewModel();
-        $viewModel->setTerminal(true);
-        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-        $fbId = $this->params()->fromQuery('fbId');
-        $user = $this->zfcUserAuthentication()->getIdentity();
-        $sg = $this->getGameService();
-
-        $game = $sg->checkGame($identifier);
-        if (!$game) {
-            return false;
-        }
-        $subscription = $sg->checkExistingEntry($game, $user);
-        if (! $subscription) {
-            return false;
-        }
-        if (!$fbId) {
-            return false;
-        }
-
-        $sg->postFbWall($fbId, $game, $user);
-
-        return true;
-
-    }
-
-    public function tweetAction()
-    {
-        $viewModel = new ViewModel();
-        $viewModel->setTerminal(true);
-        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-        $tweetId = $this->params()->fromQuery('tweetId');
-        $user = $this->zfcUserAuthentication()->getIdentity();
-        $sg = $this->getGameService();
-
-        $game = $sg->checkGame($identifier);
-        if (!$game) {
-            return false;
-        }
-        $subscription = $sg->checkExistingEntry($game, $user);
-        if (! $subscription) {
-            return false;
-        }
-        if (!$tweetId) {
-            return false;
-        }
-
-        $sg->postTwitter($tweetId, $game, $user);
-
-        return true;
-
-    }
-
-    public function googleAction()
-    {
-        $viewModel = new ViewModel();
-        $viewModel->setTerminal(true);
-        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-        $googleId = $this->params()->fromQuery('googleId');
-        $user = $this->zfcUserAuthentication()->getIdentity();
-        $sg = $this->getGameService();
-
-        $game = $sg->checkGame($identifier);
-        if (!$game) {
-            return false;
-        }
-        $subscription = $sg->checkExistingEntry($game, $user);
-        if (! $subscription) {
-            return false;
-        }
-        if (!$googleId) {
-            return false;
-        }
-
-        $sg->postGoogle($googleId, $game, $user);
-
-        return true;
-
     }
 
     public function getGameService()

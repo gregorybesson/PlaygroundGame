@@ -1507,6 +1507,17 @@ return array(
                                     )
                                 )
                             ),
+                            'player-form' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/player-form/:gameId',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgameadmin',
+                                        'action' => 'form',
+                                        'gameId' => 0
+                                    )
+                                )
+                            ),
                             'create-lottery' => array(
                                 'type' => 'Literal',
                                 'options' => array(

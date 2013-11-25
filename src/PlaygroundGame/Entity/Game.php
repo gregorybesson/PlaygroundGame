@@ -65,6 +65,11 @@ class Game implements InputFilterAwareInterface
     protected $identifier;
 
     /**
+     * @ORM\OneToOne(targetEntity="PlayerForm", mappedBy="game", cascade={"persist","remove"})
+     **/
+    protected $playerForm;
+    
+    /**
      * @ORM\Column(name="main_image", type="string", length=255, nullable=true)
      */
     protected $mainImage;
@@ -109,6 +114,11 @@ class Game implements InputFilterAwareInterface
      */
     protected $active = 0;
 
+    /**
+     * @ORM\Column(name="anonymous_allowed",type="boolean", nullable=true)
+     */
+    protected $anonymousAllowed = 0;
+    
     /**
      * @ORM\Column(name="publication_date", type="datetime", nullable=true)
      */
@@ -259,9 +269,14 @@ class Game implements InputFilterAwareInterface
     protected $twShareMessage;
     
     /**
-     * @ORM\Column(name="steps", type="string", length=255, nullable=false)
+     * @ORM\Column(name="steps", type="string", length=255, nullable=true)
      */
-    protected $steps = 'index,play,result,bounce';
+    protected $steps = '{"0":"index","1":"play","2":"result","3":"bounce"}';
+    
+    /**
+     * @ORM\Column(name="steps_views", type="string", length=255, nullable=true)
+     */
+    protected $stepsViews = '{"index":{},"play":{},"result":{},"bounce":{}}';
 
     /**
      * Doctrine accessible value of discriminator (field 'type' is not
@@ -323,6 +338,22 @@ class Game implements InputFilterAwareInterface
     }
 
     /**
+     * @return the $playerForm
+     */
+    public function getPlayerForm()
+    {
+        return $this->playerForm;
+    }
+
+	/**
+     * @param field_type $playerForm
+     */
+    public function setPlayerForm($playerForm)
+    {
+        $this->playerForm = $playerForm;
+    }
+
+	/**
      *
      * @return the unknown_type
      */
@@ -396,6 +427,22 @@ class Game implements InputFilterAwareInterface
     public function setIdentifier ($identifier)
     {
         $this->identifier = $identifier;
+    }
+
+	/**
+     * @return the $anonymousAllowed
+     */
+    public function getAnonymousAllowed()
+    {
+        return $this->anonymousAllowed;
+    }
+
+	/**
+     * @param number $anonymousAllowed
+     */
+    public function setAnonymousAllowed($anonymousAllowed)
+    {
+        $this->anonymousAllowed = $anonymousAllowed;
     }
 
 	/**
@@ -664,11 +711,13 @@ class Game implements InputFilterAwareInterface
         return false;
     }
     
+    // json array : {"0":"index","1":"play","2":"result","3":"bounce"}
     public function getStepsArray()
     {
         $steps = null;
+
         if($this->getSteps()){
-            $steps = explode(",", $this->getSteps());
+            $steps = json_decode($this->getSteps(), true);
         }
         if(!$steps){
             $steps = array('index','play','result','bounce');
@@ -745,7 +794,23 @@ class Game implements InputFilterAwareInterface
         return false;
     }
 
-    public function getState()
+    /**
+     * @return the $stepsViews
+     */
+    public function getStepsViews()
+    {
+        return $this->stepsViews;
+    }
+
+	/**
+     * @param string $stepsViews
+     */
+    public function setStepsViews($stepsViews)
+    {
+        $this->stepsViews = $stepsViews;
+    }
+
+	public function getState()
     {
         if ($this->isOpen()){
             if (!$this->isStarted() && !$this->isFinished()) {

@@ -142,5 +142,13 @@ class InstantWin extends Game
                     'value' => ''
                 )
         ));
+        $this->add(array(
+            'name' => 'deleteScratchcardImage',
+            'type' => 'Zend\Form\Element\Hidden',
+            'attributes' => array(
+                'value' => '',
+                'class' => 'delete_scratch_image',
+            )
+        ));
     }
 }
