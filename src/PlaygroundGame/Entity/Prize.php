@@ -98,6 +98,7 @@ class Prize {
 	 * @return the $id
 	 */
 	public function getId() {
+	    
 		return $this->id;
 	}
 
@@ -105,7 +106,10 @@ class Prize {
 	 * @param field_type $id
 	 */
 	public function setId($id) {
+	    
 		$this->id = $id;
+		
+		return $this;
 	}
 	
 	/**
@@ -130,6 +134,7 @@ class Prize {
 	 * @return the $title
 	 */
 	public function getTitle() {
+	    
 		return $this->title;
 	}
 
@@ -137,13 +142,17 @@ class Prize {
 	 * @param field_type $Title
 	 */
 	public function setTitle($title) {
+	    
 		$this->title = $title;
+		
+		return $this;
 	}
 
 	/**
 	 * @return the $identifier
 	 */
 	public function getIdentifier() {
+	    
 		return $this->identifier;
 	}
 
@@ -151,13 +160,17 @@ class Prize {
 	 * @param field_type $identifier
 	 */
 	public function setIdentifier($identifier) {
+	    
 		$this->identifier = $identifier;
+		
+		return $this;
 	}
 
 	/**
 	 * @return the $prizeCategory
 	 */
 	public function getPrizeCategory() {
+	    
 		return $this->prizeCategory;
 	}
 
@@ -165,13 +178,17 @@ class Prize {
 	 * @param unknown $prizeCategory
 	 */
 	public function setPrizeCategory($prizeCategory) {
+	    
 		$this->prizeCategory = $prizeCategory;
+		
+		return $this;
 	}
 
 	/**
 	 * @return the $content
 	 */
 	public function getContent() {
+	    
 		return $this->content;
 	}
 
@@ -179,13 +196,17 @@ class Prize {
 	 * @param field_type $content
 	 */
 	public function setContent($content) {
+	    
 		$this->content = $content;
+		
+		return $this;
 	}
 
 	/**
 	 * @return the $qty
 	 */
 	public function getQty() {
+	    
 		return $this->qty;
 	}
 
@@ -193,13 +214,17 @@ class Prize {
 	 * @param number $qty
 	 */
 	public function setQty($qty) {
+	    
 		$this->qty = $qty;
+		
+		return $this;
 	}
 
 	/**
 	 * @return the $unitPrice
 	 */
 	public function getUnitPrice() {
+	    
 		return $this->unitPrice;
 	}
 
@@ -207,13 +232,17 @@ class Prize {
 	 * @param number $unitPrice
 	 */
 	public function setUnitPrice($unitPrice) {
+	    
 		$this->unitPrice = $unitPrice;
+		
+		return $this;
 	}
 
 	/**
 	 * @return the $currency
 	 */
 	public function getCurrency() {
+	    
 		return $this->currency;
 	}
 
@@ -221,13 +250,17 @@ class Prize {
 	 * @param field_type $currency
 	 */
 	public function setCurrency($currency) {
+	    
 		$this->currency = $currency;
+		
+		return $this;
 	}
 
 	/**
 	 * @return the $created_at
 	 */
 	public function getCreated_at() {
+	    
 		return $this->created_at;
 	}
 
@@ -235,13 +268,17 @@ class Prize {
 	 * @param \DateTime $created_at
 	 */
 	public function setCreated_at($created_at) {
+	    
 		$this->created_at = $created_at;
+		
+		return $this;
 	}
 
 	/**
 	 * @return the $updated_at
 	 */
 	public function getUpdated_at() {
+	    
 		return $this->updated_at;
 	}
 
@@ -249,13 +286,17 @@ class Prize {
 	 * @param \DateTime $updated_at
 	 */
 	public function setUpdated_at($updated_at) {
+	    
 		$this->updated_at = $updated_at;
+		
+		return $this;
 	}
 
 	/**
 	 * @return the $picture
 	 */
 	public function getPicture() {
+	    
 		return $this->picture;
 	}
 
@@ -263,7 +304,10 @@ class Prize {
 	 * @param field_type $picture
 	 */
 	public function setPicture($picture) {
+	    
 		$this->picture = $picture;
+		
+		return $this;
 	}
 	
 	/**

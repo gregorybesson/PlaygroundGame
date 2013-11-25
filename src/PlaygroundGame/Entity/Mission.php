@@ -132,6 +132,7 @@ class Mission
     public function setTitle($title)
     {
         $this->title = $title;
+        
         return $this;
     }
 
@@ -149,6 +150,8 @@ class Mission
     public function setMissionGames($missionGames)
     {
         $this->missionGames = $missionGames;
+        
+        return $this;
     }
     
     public function addMissionGames(ArrayCollection $missionGames)
@@ -198,6 +201,7 @@ class Mission
     public function setImage($image)
     {
         $this->image = $image;
+        
         return $this;
     }
     
@@ -220,6 +224,7 @@ class Mission
     public function setDescription($description)
     {
         $this->description = $description;
+        
         return $this;
     }
 
@@ -242,6 +247,7 @@ class Mission
     public function setHidden($hidden)
     {
         $this->hidden = $hidden;
+        
         return $this;
     }
 
@@ -282,6 +288,8 @@ class Mission
     public function setCreatedAt ($createdAt)
     {
         $this->createdAt = $createdAt;
+        
+        return $this;
     }
 
     /**
@@ -300,6 +308,8 @@ class Mission
     public function setUpdatedAt ($updatedAt)
     {
         $this->updatedAt = $updatedAt;
+        
+        return $this;
     }
 
     /**

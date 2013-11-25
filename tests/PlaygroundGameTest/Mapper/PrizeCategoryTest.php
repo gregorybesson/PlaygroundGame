@@ -23,8 +23,8 @@ class PrizeCategoryTest extends \PHPUnit_Framework_TestCase
     public function testFindById()
     {
         $prizeCategory = new PrizeCategoryEntity();
-        $prizeCategory->setIdentifier('iden');
-        $prizeCategory->setTitle('Un Titre');
+        $prizeCategory->setIdentifier('iden')
+        ->setTitle('Un Titre');
         $prizeCategory = $this->tm->insert($prizeCategory);
         $this->assertEquals($prizeCategory, $this->tm->findById($prizeCategory->getId()));
     }
@@ -32,8 +32,8 @@ class PrizeCategoryTest extends \PHPUnit_Framework_TestCase
     public function testUpdate()
     {
         $prizeCategory = new PrizeCategoryEntity();
-        $prizeCategory->setIdentifier('iden');
-        $prizeCategory->setTitle('Un Titre');
+        $prizeCategory->setIdentifier('iden')
+        ->setTitle('Un Titre');
         $prizeCategory = $this->tm->insert($prizeCategory);
         $prizeCategory->setIdentifier('iden 2');
         $prizeCategory = $this->tm->update($prizeCategory);
@@ -43,8 +43,8 @@ class PrizeCategoryTest extends \PHPUnit_Framework_TestCase
     public function testRemove()
     {
         $prizeCategory = new PrizeCategoryEntity();
-        $prizeCategory->setIdentifier('iden');
-        $prizeCategory->setTitle('Un Titre');
+        $prizeCategory->setIdentifier('iden')
+        ->setTitle('Un Titre');
         $prizeCategory = $this->tm->insert($prizeCategory);
         $id = $prizeCategory->getId();
         $this->tm->remove($prizeCategory);
@@ -54,16 +54,16 @@ class PrizeCategoryTest extends \PHPUnit_Framework_TestCase
     public function testFindAll()
     {
         $prizeCategory = new PrizeCategoryEntity();
-        $prizeCategory->setIdentifier('iden 1');
-        $prizeCategory->setTitle('Un Titre');
+        $prizeCategory->setIdentifier('iden 1')
+        ->setTitle('Un Titre');
         $prizeCategory = $this->tm->insert($prizeCategory);
         $prizeCategory = new PrizeCategoryEntity();
-        $prizeCategory->setIdentifier('iden 2');
-        $prizeCategory->setTitle('Un Titre');
+        $prizeCategory->setIdentifier('iden 2')
+        ->setTitle('Un Titre');
         $prizeCategory = $this->tm->insert($prizeCategory);
         $prizeCategory = new PrizeCategoryEntity();
-        $prizeCategory->setIdentifier('iden 3');
-        $prizeCategory->setTitle('Un Titre');
+        $prizeCategory->setIdentifier('iden 3')
+        ->setTitle('Un Titre');
         $prizeCategory = $this->tm->insert($prizeCategory);
 
         $prizeCategories = $this->tm->findAll();

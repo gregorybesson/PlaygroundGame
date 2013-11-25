@@ -40,10 +40,10 @@ class AdminControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue($adminGameMapper));
 
         $game = new \PlaygroundGame\Entity\Quiz();
-        $game->setTitle('CeciEstUnTitre');
-        $game->setIdentifier('gameid');
-        $game->setWinners(2);
-        $game->setSubstitutes(2);
+        $game->setTitle('CeciEstUnTitre')
+             ->setIdentifier('gameid')
+             ->setWinners(2)
+             ->setSubstitutes(2);
 
         $adminGameMapper->expects($this->any())
             ->method('findById')
@@ -61,14 +61,14 @@ class AdminControllerTest extends AbstractHttpControllerTestCase
         $entry = new \PlaygroundGame\Entity\Entry();
         $entry->setPoints('DesPoints1');
         $user = new \PlaygroundUser\Entity\User();
-        $user->setId(1);
-        $user->setUsername('Username');
-        $user->setLastname('Lastname');
-        $user->setFirstname('Firstname');
-        $user->setEmail('mail@mail.fr');
-        $user->setOptinPartner('OptinPartner');
-        $entry->setUser($user);
-        $entry->setWinner('Winners');
+        $user->setId(1)
+             ->setUsername('Username')
+             ->setLastname('Lastname')
+             ->setFirstname('Firstname')
+             ->setEmail('mail@mail.fr')
+             ->setOptinPartner('OptinPartner');
+        $entry->setUser($user)
+              ->setWinner('Winners');
 
         $adminEntryMapper->expects($this->any())
             ->method('findBy')
@@ -104,10 +104,10 @@ class AdminControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue($adminGameMapper));
 
         $game = new \PlaygroundGame\Entity\Quiz();
-        $game->setTitle('CeciEstUnTitre');
-        $game->setIdentifier('gameid');
-        $game->setWinners(2);
-        $game->setSubstitutes(2);
+        $game->setTitle('CeciEstUnTitre')
+             ->setIdentifier('gameid')
+             ->setWinners(2)
+             ->setSubstitutes(2);
 
 
         $adminGameMapper->expects($this->any())

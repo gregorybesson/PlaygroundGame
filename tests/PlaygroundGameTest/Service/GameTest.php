@@ -326,8 +326,8 @@ class GameTest extends \PHPUnit_Framework_TestCase
     	->getMock();
 
     	$game = new GameEntity();
-    	$game->setPlayLimit(1);
-    	$game->setPlayLimitScale('always');
+    	$game->setPlayLimit(1)
+    	->setPlayLimitScale('always');
 
     	//mocking the method checkExistingEntry
     	$f = $this->getMockBuilder('PlaygroundGame\Service\Game')
@@ -356,8 +356,8 @@ class GameTest extends \PHPUnit_Framework_TestCase
     	->getMock();
 
     	$game = new GameEntity();
-    	$game->setPlayLimit(1);
-    	$game->setPlayLimitScale('always');
+    	$game->setPlayLimit(1)
+    	->setPlayLimitScale('always');
 
     	//mocking the method checkExistingEntry
     	$f = $this->getMockBuilder('PlaygroundGame\Service\Game')

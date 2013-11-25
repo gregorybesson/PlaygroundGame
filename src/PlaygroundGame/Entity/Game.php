@@ -335,6 +335,8 @@ class Game implements InputFilterAwareInterface
     public function setId ($id)
     {
         $this->id = $id;
+        
+        return $this;
     }
 
     /**
@@ -409,6 +411,8 @@ class Game implements InputFilterAwareInterface
     public function setTitle ($title)
     {
         $this->title = $title;
+        
+        return $this;
     }
 
     /**
@@ -427,6 +431,8 @@ class Game implements InputFilterAwareInterface
     public function setIdentifier ($identifier)
     {
         $this->identifier = $identifier;
+        
+        return $this;
     }
 
 	/**
@@ -461,6 +467,8 @@ class Game implements InputFilterAwareInterface
     public function setMainImage ($mainImage)
     {
         $this->mainImage = $mainImage;
+        
+        return $this;
     }
 
     /**
@@ -479,6 +487,8 @@ class Game implements InputFilterAwareInterface
     public function setSecondImage ($secondImage)
     {
         $this->secondImage = $secondImage;
+        
+        return $this;
     }
 
     /**
@@ -497,6 +507,8 @@ class Game implements InputFilterAwareInterface
     public function setCanal ($canal)
     {
         $this->canal = $canal;
+        
+        return $this;
     }
 
     /**
@@ -515,6 +527,8 @@ class Game implements InputFilterAwareInterface
     public function setBroadcastFacebook ($broadcastFacebook)
     {
         $this->broadcastFacebook = $broadcastFacebook;
+        
+        return $this;
     }
 
     /**
@@ -533,12 +547,15 @@ class Game implements InputFilterAwareInterface
     public function setBroadcastPlatform ($broadcastPlatform)
     {
         $this->broadcastPlatform = $broadcastPlatform;
+        
+        return $this;
     }
 
     /**
 	 * @return the $broadcastEmbed
 	 */
 	public function getBroadcastEmbed() {
+	    
 		return $this->broadcastEmbed;
 	}
 
@@ -546,7 +563,10 @@ class Game implements InputFilterAwareInterface
 	 * @param number $broadcastEmbed
 	 */
 	public function setBroadcastEmbed($broadcastEmbed) {
+	    
 		$this->broadcastEmbed = $broadcastEmbed;
+		
+		return $this;
 	}
 
 	/**
@@ -565,6 +585,8 @@ class Game implements InputFilterAwareInterface
     public function setPushHome ($pushHome)
     {
         $this->pushHome = $pushHome;
+        
+        return $this;
     }
 
     /**
@@ -583,6 +605,8 @@ class Game implements InputFilterAwareInterface
     public function setDisplayHome ($displayHome)
     {
         $this->displayHome = $displayHome;
+        
+        return $this;
     }
 
     /**
@@ -601,6 +625,8 @@ class Game implements InputFilterAwareInterface
     public function setPublicationDate ($publicationDate)
     {
         $this->publicationDate = $publicationDate;
+        
+        return $this;
     }
 
     /**
@@ -619,6 +645,8 @@ class Game implements InputFilterAwareInterface
     public function setStartDate ($startDate)
     {
         $this->startDate = $startDate;
+        
+        return $this;
     }
 
     /**
@@ -637,6 +665,8 @@ class Game implements InputFilterAwareInterface
     public function setEndDate ($endDate)
     {
         $this->endDate = $endDate;
+        
+        return $this;
     }
 
     /**
@@ -655,6 +685,8 @@ class Game implements InputFilterAwareInterface
     public function setCloseDate ($closeDate)
     {
         $this->closeDate = $closeDate;
+        
+        return $this;
     }
 
     public function isClosed ()
@@ -733,6 +765,8 @@ class Game implements InputFilterAwareInterface
     public function setSteps($steps)
     {
         $this->steps = $steps;
+        
+        return $this;
     }
     
     /**
@@ -899,6 +933,8 @@ class Game implements InputFilterAwareInterface
     public function setLayout ($layout)
     {
         $this->layout = $layout;
+        
+        return $this;
     }
 
     /**
@@ -917,6 +953,8 @@ class Game implements InputFilterAwareInterface
     public function setStylesheet ($stylesheet)
     {
         $this->stylesheet = $stylesheet;
+        
+        return $this;
     }
 
     /**
@@ -935,6 +973,8 @@ class Game implements InputFilterAwareInterface
     public function setWelcomeBlock ($welcomeBlock)
     {
         $this->welcomeBlock = $welcomeBlock;
+        
+        return $this;
     }
 
     /**
@@ -953,6 +993,8 @@ class Game implements InputFilterAwareInterface
     public function setTermsBlock ($termsBlock)
     {
         $this->termsBlock = $termsBlock;
+        
+        return $this;
     }
 
     /**
@@ -971,6 +1013,8 @@ class Game implements InputFilterAwareInterface
     public function setTermsOptin ($termsOptin)
     {
     	$this->termsOptin = $termsOptin;
+    	
+    	return $this;
     }
 
     /**
@@ -989,6 +1033,8 @@ class Game implements InputFilterAwareInterface
     public function setConditionsBlock ($conditionsBlock)
     {
         $this->conditionsBlock = $conditionsBlock;
+        
+        return $this;
     }
 
     /**
@@ -1007,6 +1053,8 @@ class Game implements InputFilterAwareInterface
     public function setColumnBlock1 ($columnBlock1)
     {
         $this->columnBlock1 = $columnBlock1;
+        
+        return $this;
     }
 
     /**
@@ -1025,6 +1073,8 @@ class Game implements InputFilterAwareInterface
     public function setColumnBlock2 ($columnBlock2)
     {
         $this->columnBlock2 = $columnBlock2;
+        
+        return $this;
     }
 
     /**
@@ -1043,6 +1093,8 @@ class Game implements InputFilterAwareInterface
     public function setColumnBlock3 ($columnBlock3)
     {
         $this->columnBlock3 = $columnBlock3;
+        
+        return $this;
     }
 
     /**
@@ -1109,6 +1161,8 @@ class Game implements InputFilterAwareInterface
     public function setClassType ($classType)
     {
         $this->classType = $classType;
+        
+        return $this;
     }
 
     /**
@@ -1327,6 +1381,8 @@ class Game implements InputFilterAwareInterface
     public function setCreatedAt ($createdAt)
     {
         $this->createdAt = $createdAt;
+        
+        return $this;
     }
 
     /**
@@ -1345,6 +1401,8 @@ class Game implements InputFilterAwareInterface
     public function setUpdatedAt ($updatedAt)
     {
         $this->updatedAt = $updatedAt;
+        
+        return $this;
     }
 
     /**

@@ -23,9 +23,9 @@ class QuizReplyTest extends \PHPUnit_Framework_TestCase
     public function testFindById()
     {
         $quizreply = new QuizReplyEntity();
-        $quizreply->setTotalQuestions(1);
-        $quizreply->setMaxCorrectAnswers(1);
-        $quizreply->setTotalCorrectAnswers(1);
+        $quizreply->setTotalQuestions(1)
+        ->setMaxCorrectAnswers(1)
+        ->setTotalCorrectAnswers(1);
         $quizreply = $this->tm->insert($quizreply);
         $this->assertEquals($quizreply, $this->tm->findById($quizreply->getId()));
     }
@@ -33,9 +33,9 @@ class QuizReplyTest extends \PHPUnit_Framework_TestCase
     public function testUpdate()
     {
         $quizreply = new QuizReplyEntity();
-        $quizreply->setTotalQuestions(1);
-        $quizreply->setMaxCorrectAnswers(1);
-        $quizreply->setTotalCorrectAnswers(1);
+        $quizreply->setTotalQuestions(1)
+        ->setMaxCorrectAnswers(1)
+        ->setTotalCorrectAnswers(1);
         $quizreply = $this->tm->insert($quizreply);
         $quizreply->setTotalQuestions(3);
         $quizreply = $this->tm->update($quizreply);
@@ -45,9 +45,9 @@ class QuizReplyTest extends \PHPUnit_Framework_TestCase
     public function testRemove()
     {
         $quizreply = new QuizReplyEntity();
-        $quizreply->setTotalQuestions(1);
-        $quizreply->setMaxCorrectAnswers(1);
-        $quizreply->setTotalCorrectAnswers(1);
+        $quizreply->setTotalQuestions(1)
+        ->setMaxCorrectAnswers(1)
+        ->setTotalCorrectAnswers(1);
         $quizreply = $this->tm->insert($quizreply);
         $id = $quizreply->getId();
         $this->tm->remove($quizreply);
@@ -57,19 +57,19 @@ class QuizReplyTest extends \PHPUnit_Framework_TestCase
     public function testFindAll()
     {
         $quizreply = new QuizReplyEntity();
-        $quizreply->setTotalQuestions(1);
-        $quizreply->setMaxCorrectAnswers(1);
-        $quizreply->setTotalCorrectAnswers(1);
+        $quizreply->setTotalQuestions(1)
+        ->setMaxCorrectAnswers(1)
+        ->setTotalCorrectAnswers(1);
         $quizreply = $this->tm->insert($quizreply);
         $quizreply = new QuizReplyEntity();
-        $quizreply->setTotalQuestions(2);
-        $quizreply->setMaxCorrectAnswers(1);
-        $quizreply->setTotalCorrectAnswers(1);
+        $quizreply->setTotalQuestions(2)
+        ->setMaxCorrectAnswers(1)
+        ->setTotalCorrectAnswers(1);
         $quizreply = $this->tm->insert($quizreply);
         $quizreply = new QuizReplyEntity();
-        $quizreply->setTotalQuestions(3);
-        $quizreply->setMaxCorrectAnswers(1);
-        $quizreply->setTotalCorrectAnswers(1);
+        $quizreply->setTotalQuestions(3)
+        ->setMaxCorrectAnswers(1)
+        ->setTotalCorrectAnswers(1);
         $quizreply = $this->tm->insert($quizreply);
 
         $quizreplies = $this->tm->findAll();
