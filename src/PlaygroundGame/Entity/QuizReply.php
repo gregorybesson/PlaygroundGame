@@ -135,6 +135,8 @@ class QuizReply implements InputFilterAwareInterface
     public function setTotalCorrectAnswers($totalCorrectAnswers)
     {
         $this->totalCorrectAnswers = $totalCorrectAnswers;
+        
+        return $this;
     }
 
 	/**
@@ -151,6 +153,8 @@ class QuizReply implements InputFilterAwareInterface
     public function setMaxCorrectAnswers($maxCorrectAnswers)
     {
         $this->maxCorrectAnswers = $maxCorrectAnswers;
+        
+        return $this;
     }
 
 	/**
@@ -167,6 +171,8 @@ class QuizReply implements InputFilterAwareInterface
     public function setTotalQuestions($totalQuestions)
     {
         $this->totalQuestions = $totalQuestions;
+        
+        return $this;
     }
 
 	/**
