@@ -221,6 +221,8 @@ class InstantWinOccurrence implements InputFilterAwareInterface
     public function setUser($user)
     {
         $this->user = $user;
+        
+        return $this;
     }
 
     /**

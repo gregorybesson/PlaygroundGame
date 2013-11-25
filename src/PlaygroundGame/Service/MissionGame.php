@@ -91,15 +91,15 @@ class MissionGame extends EventProvider implements ServiceManagerAwareInterface
     {
         $missionGameEntity = new MissionGameEntity();
         $game = $this->getGameMapper()->findById($data['games']);
-        $missionGameEntity->setGame($game);
-        $missionGameEntity->setPosition($data['position']);
-        $missionGameEntity->setMission($mission);
+        $missionGameEntity->setGame($game)
+                          ->setPosition($data['position'])
+                          ->setMission($mission);
         $missionGameEntity = $this->getMissionGameMapper()->insert($missionGameEntity); 
 
         $missionGameConditionEntity = new MissionGameConditionEntity;
-        $missionGameConditionEntity->setMissionGame($missionGameEntity);
-        $missionGameConditionEntity->setAttribute($data['conditions']);
-        $missionGameConditionEntity->setValue($data['points']);
+        $missionGameConditionEntity->setMissionGame($missionGameEntity)
+                                   ->setAttribute($data['conditions'])
+                                   ->setValue($data['points']);
         $missionGameConditionEntity = $this->getMissionGameConditionMapper()->insert($missionGameConditionEntity); 
 
         return $missionGameEntity;

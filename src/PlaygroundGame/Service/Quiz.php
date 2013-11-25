@@ -174,9 +174,9 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                 }
 
                 $winner = $this->isWinner($quiz, $quizCorrectAnswers);
-                $entry->setWinner($winner);
-                $entry->setPoints($quizPoints);
-                $entry->setActive(false);
+                $entry->setWinner($winner)
+                      ->setPoints($quizPoints)
+                      ->setActive(false);
                 $entry = $this->getEntryMapper()->update($entry);
             }
 
@@ -221,8 +221,8 @@ class Quiz extends Game implements ServiceManagerAwareInterface
             $question_max_correct_answers = 0;
         }
 
-        $question->setMaxPoints($question_max_points);
-        $question->setMaxCorrectAnswers($question_max_correct_answers);
+        $question->setMaxPoints($question_max_points)
+                 ->setMaxCorrectAnswers($question_max_correct_answers);
 
         // echo "Quiz Max Points : " . $quiz->getMaxPoints()  . "Quiz  Max correct : " . $quiz->getMaxCorrectAnswers();
         // echo "Max Points : " . $question->getMaxPoints() . "  max correct : " . $question->getMaxCorrectAnswers();
@@ -238,8 +238,8 @@ class Quiz extends Game implements ServiceManagerAwareInterface
             $question_max_points += $question->getMaxPoints();
             $question_max_correct_answers += $question->getMaxCorrectAnswers();
         }
-        $quiz->setMaxPoints($question_max_points);
-        $quiz->setMaxCorrectAnswers($question_max_correct_answers);
+        $quiz->setMaxPoints($question_max_points)
+             ->setMaxCorrectAnswers($question_max_correct_answers);
 
         return $quiz;
     }
@@ -293,12 +293,12 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                         $answer = $this->getQuizAnswerMapper()->findById($answer_id);
                         if ($answer) {
                             $quizReplyAnswer = new QuizReplyAnswer();
-                            $quizReplyAnswer->setAnswer($answer->getAnswer());
-                            $quizReplyAnswer->setAnswerId($answer_id);
-                            $quizReplyAnswer->setQuestion($question->getQuestion());
-                            $quizReplyAnswer->setQuestionId($question->getId());
-                            $quizReplyAnswer->setPoints($answer->getPoints());
-                            $quizReplyAnswer->setCorrect($answer->getCorrect());
+                            $quizReplyAnswer->setAnswer($answer->getAnswer())
+                                            ->setAnswerId($answer_id)
+                                            ->setQuestion($question->getQuestion())
+                                            ->setQuestionId($question->getId())
+                                            ->setPoints($answer->getPoints())
+                                            ->setCorrect($answer->getCorrect());
 
                             $quizReply->addAnswer($quizReplyAnswer);
                             $quizPoints += $answer->getPoints();
@@ -310,12 +310,12 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                     $answer = $this->getQuizAnswerMapper()->findById($a);
                     if ($answer) {
                         $quizReplyAnswer = new QuizReplyAnswer();
-                        $quizReplyAnswer->setAnswer($answer->getAnswer());
-                        $quizReplyAnswer->setAnswerId($a);
-                        $quizReplyAnswer->setQuestion($question->getQuestion());
-                        $quizReplyAnswer->setQuestionId($question->getId());
-                        $quizReplyAnswer->setPoints($answer->getPoints());
-                        $quizReplyAnswer->setCorrect($answer->getCorrect());
+                        $quizReplyAnswer->setAnswer($answer->getAnswer())
+                                        ->setAnswerId($a)
+                                        ->setQuestion($question->getQuestion())
+                                        ->setQuestionId($question->getId())
+                                        ->setPoints($answer->getPoints())
+                                        ->setCorrect($answer->getCorrect());
 
                         $quizReply->addAnswer($quizReplyAnswer);
                         $quizPoints += $answer->getPoints();
@@ -326,12 +326,12 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                     $quizReplyAnswer = new QuizReplyAnswer();
 
                     //TODO sanitize answer
-                    $quizReplyAnswer->setAnswer($a);
-                    $quizReplyAnswer->setAnswerId(0);
-                    $quizReplyAnswer->setQuestion($question->getQuestion());
-                    $quizReplyAnswer->setQuestionId($question->getId());
-                    $quizReplyAnswer->setPoints(0);
-                    $quizReplyAnswer->setCorrect(0);
+                    $quizReplyAnswer->setAnswer($a)
+                                    ->setAnswerId(0)
+                                    ->setQuestion($question->getQuestion())
+                                    ->setQuestionId($question->getId())
+                                    ->setPoints(0)
+                                    ->setCorrect(0);
 
                     $quizReply->addAnswer($quizReplyAnswer);
                     $quizPoints += 0;
@@ -342,18 +342,18 @@ class Quiz extends Game implements ServiceManagerAwareInterface
 
         $winner = $this->isWinner($game, $quizCorrectAnswers);
 
-        $entry->setWinner($winner);
+        $entry->setWinner($winner)
         // Every winning participation is eligible to draw
         // TODO : Make this modifiable in the admin (choose who can participate to draw)
-        $entry->setDrawable($winner);
-        $entry->setPoints($quizPoints);
-        $entry->setActive(false);
+             ->setDrawable($winner)
+             ->setPoints($quizPoints)
+             ->setActive(false);
         $entry = $entryMapper->update($entry);
         
-        $quizReply->setEntry($entry);
-        $quizReply->setTotalCorrectAnswers($quizCorrectAnswers);
-        $quizReply->setMaxCorrectAnswers($maxCorrectAnswers);
-        $quizReply->setTotalQuestions($totalQuestions);
+        $quizReply->setEntry($entry)
+                  ->setTotalCorrectAnswers($quizCorrectAnswers)
+                  ->setMaxCorrectAnswers($maxCorrectAnswers)
+                  ->setTotalQuestions($totalQuestions);
         
         $quizReplyMapper->insert($quizReply);
 

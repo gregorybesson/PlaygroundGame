@@ -88,6 +88,7 @@ class TreasureHuntPuzzle implements InputFilterAwareInterface
 	 * @return the $position
 	 */
 	public function getPosition() {
+	    
 		return $this->position;
 	}
 
@@ -95,13 +96,17 @@ class TreasureHuntPuzzle implements InputFilterAwareInterface
 	 * @param field_type $position
 	 */
 	public function setPosition($position) {
+	    
 		$this->position = $position;
+		
+		return $this;
 	}
 
 	/**
 	 * @return the $url
 	 */
 	public function getUrl() {
+	    
 		return $this->url;
 	}
 
@@ -109,13 +114,17 @@ class TreasureHuntPuzzle implements InputFilterAwareInterface
 	 * @param field_type $url
 	 */
 	public function setUrl($url) {
+	    
 		$this->url = $url;
+		
+		return $this;
 	}
 
 	/**
 	 * @return the $domain
 	 */
 	public function getDomain() {
+	    
 		return $this->domain;
 	}
 
@@ -123,13 +132,17 @@ class TreasureHuntPuzzle implements InputFilterAwareInterface
 	 * @param field_type $domain
 	 */
 	public function setDomain($domain) {
+	    
 		$this->domain = $domain;
+		
+		return $this;
 	}
 
 	/**
 	 * @return the $hint
 	 */
 	public function getHint() {
+	    
 		return $this->hint;
 	}
 
@@ -137,13 +150,17 @@ class TreasureHuntPuzzle implements InputFilterAwareInterface
 	 * @param field_type $hint
 	 */
 	public function setHint($hint) {
+	    
 		$this->hint = $hint;
+		
+		return $this;
 	}
 
 	/**
 	 * @return the $area
 	 */
 	public function getArea() {
+	    
 		return $this->area;
 	}
 
@@ -151,13 +168,17 @@ class TreasureHuntPuzzle implements InputFilterAwareInterface
 	 * @param field_type $area
 	 */
 	public function setArea($area) {
+	    
 		$this->area = $area;
+		
+		return $this;
 	}
 
 	/**
 	 * @return the $timer
 	 */
 	public function getTimer() {
+	    
 		return $this->timer;
 	}
 
@@ -165,13 +186,17 @@ class TreasureHuntPuzzle implements InputFilterAwareInterface
 	 * @param number $timer
 	 */
 	public function setTimer($timer) {
+	    
 		$this->timer = $timer;
+		
+		return $this;
 	}
 
 	/**
 	 * @return the $timer_duration
 	 */
 	public function getTimer_duration() {
+	    
 		return $this->timer_duration;
 	}
 
@@ -179,7 +204,10 @@ class TreasureHuntPuzzle implements InputFilterAwareInterface
 	 * @param number $timer_duration
 	 */
 	public function setTimer_duration($timer_duration) {
+	    
 		$this->timer_duration = $timer_duration;
+		
+		return $this;
 	}
 
 	/**
