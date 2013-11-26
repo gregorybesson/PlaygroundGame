@@ -49,7 +49,8 @@ class GameController extends AbstractActionController
         $content        = "\xEF\xBB\xBF"; // UTF-8 BOM
         if (! $game->getAnonymousAllowed()) {
             $content       .= "ID;Pseudo;Civilité;Nom;Prénom;E-mail;Optin Newsletter;Optin partenaire;Adresse;CP;Ville;Téléphone;Mobile;Date d'inscription;Date de naissance;";
-        } else {
+        }
+        if (current($entries)->getPlayerData()) {
             $entryData = json_decode(current($entries)->getPlayerData());
             foreach ($entryData as $key => $data) {
                 $content .= $key.';';
@@ -87,7 +88,8 @@ class GameController extends AbstractActionController
                 . ";" . $dob
                 . ";" ;
 
-            } else {
+            }
+            if ($e->getPlayerData()) {
                 $entryData = json_decode($e->getPlayerData());
                 foreach ( $entryData as $key => $data) {
                     $content .= $data.';';

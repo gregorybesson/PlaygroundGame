@@ -121,7 +121,7 @@ class AdminControllerTest extends AbstractHttpControllerTestCase
         $this->assertActionName('remove');
 
         $this->assertRedirectTo('/admin/game/list/createdAt/DESC');
-        
+
     }
 
     public function testSetActiveAction()
@@ -165,7 +165,7 @@ class AdminControllerTest extends AbstractHttpControllerTestCase
         $this->assertActionName('set-active');
 
         $this->assertRedirectTo('/admin/game/list/createdAt/DESC');*/
-        
+
     }
 
 
