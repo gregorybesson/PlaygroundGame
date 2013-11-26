@@ -13,8 +13,9 @@ use PlaygroundGame\Controller\Admin\GameController;
 
 use Zend\View\Model\ViewModel;
 use Zend\Paginator\Paginator;
+use PlaygroundCore\ORM\Pagination\LargeTablePaginator;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
-use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
+
 
 class InstantWinController extends GameController
 {
@@ -156,12 +157,10 @@ class InstantWinController extends GameController
 
         $game = $service->getGameMapper()->findById($gameId);
 
-        $query_result = $service->getInstantWinOccurrenceMapper()->findByGameId($game);
-        if (is_array($query_result)) {
-            $paginator = new Paginator( new \Zend\Paginator\Adapter\ArrayAdapter($query_result));
-        } else {
-            $paginator = $query_result;
-        }
+        $adapter = new DoctrineAdapter(new LargeTablePaginator($service->getInstantWinOccurrenceMapper()->queryByGame($game)));
+        $paginator = new Paginator($adapter);
+        $paginator->setItemCountPerPage(10);
+        $paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
 
         $paginator->setItemCountPerPage(25);
         $paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
@@ -370,6 +369,111 @@ class InstantWinController extends GameController
         unlink($file);
         return $response;
 
+    }
+
+    public function entryAction()
+    {
+        $gameId         = $this->getEvent()->getRouteMatch()->getParam('gameId');
+        if (!$gameId) {
+            return $this->redirect()->toRoute('admin/playgroundgame/list');
+        }
+        $game           = $this->getAdminGameService()->getGameMapper()->findById($gameId);
+        $adapter = new DoctrineAdapter(new LargeTablePaginator($this->getAdminGameService()->getInstantWinOccurrenceMapper()->queryPlayedByGame($game)));
+        $paginator = new Paginator($adapter);
+        $paginator->setItemCountPerPage(10);
+        $paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
+
+        return array(
+            'occurrences' => $paginator,
+            'game' => $game,
+            'gameId' => $gameId
+        );
+    }
+
+    public function downloadAction()
+    {
+        // magically create $content as a string containing CSV data
+        $gameId         = $this->getEvent()->getRouteMatch()->getParam('gameId');
+        if (!$gameId) {
+            return $this->redirect()->toRoute('admin/playgroundgame/list');
+        }
+        $game           = $this->getAdminGameService()->getGameMapper()->findById($gameId);
+
+        $entries = $this->getAdminGameService()->getEntryMapper()->findBy(array('game' => $game,'winner' => 1));
+
+        $content        = "\xEF\xBB\xBF"; // UTF-8 BOM
+        if (! $game->getAnonymousAllowed()) {
+            $content       .= "ID;Pseudo;Civilité;Nom;Prénom;E-mail;Optin Newsletter;Optin partenaire;Adresse;CP;Ville;Téléphone;Mobile;Date d'inscription;Date de naissance;";
+        }
+        if (current($entries)->getPlayerData()) {
+            $entryData = json_decode(current($entries)->getPlayerData());
+            foreach ($entryData as $key => $data) {
+                $content .= $key.';';
+            }
+        }
+        $content .= 'A Gagné ?;Date - H;Valeur;Lot'
+            ."\n";
+        foreach ($entries as $e) {
+            if (!$game->getAnonymousAllowed()) {
+                if($e->getUser()->getAddress2() != '') {
+                    $adress2 = ' - ' . $e->getUser()->getAddress2();
+                } else {
+                    $adress2 = '';
+                }
+                if($e->getUser()->getDob() != NULL) {
+                    $dob = $e->getUser()->getDob()->format('Y-m-d');
+                } else {
+                    $dob = '';
+                }
+
+                $content   .= $e->getUser()->getId()
+                . ";" . $e->getUser()->getUsername()
+                . ";" . $e->getUser()->getTitle()
+                . ";" . $e->getUser()->getLastname()
+                . ";" . $e->getUser()->getFirstname()
+                . ";" . $e->getUser()->getEmail()
+                . ";" . $e->getUser()->getOptin()
+                . ";" . $e->getUser()->getOptinPartner()
+                . ";" . $e->getUser()->getAddress() . $adress2
+                . ";" . $e->getUser()->getPostalCode()
+                . ";" . $e->getUser()->getCity()
+                . ";" . $e->getUser()->getTelephone()
+                . ";" . $e->getUser()->getMobile()
+                . ";" . $e->getUser()->getCreatedAt()->format('Y-m-d')
+                . ";" . $dob
+                . ";" ;
+
+            }
+            if ($e->getPlayerData()) {
+                $entryData = json_decode($e->getPlayerData());
+                foreach ( $entryData as $key => $data) {
+                    $content .= $data.';';
+                }
+            }
+            $content   .= $e->getWinner()
+            . ";" . $e->getCreatedAt()->format('Y-m-d H:i:s')
+            . ";" ;
+            $occurrence = $this->getAdminGameService()->getInstantWinOccurrenceMapper()->findByEntry($e);
+            if ($occurrence) {
+                $content   .= $occurrence->getValue() . ";" ;
+                if ($occurrence->getPrize()) {
+                    $content   .= $occurrence->getPrize()->getTitle(). ";" ;
+                }
+            }
+            $content   .= "\n";
+        }
+
+        $response = $this->getResponse();
+        $headers = $response->getHeaders();
+        $headers->addHeaderLine('Content-Encoding: UTF-8');
+        $headers->addHeaderLine('Content-Type', 'text/csv; charset=UTF-8');
+        $headers->addHeaderLine('Content-Disposition', "attachment; filename=\"entry.csv\"");
+        $headers->addHeaderLine('Accept-Ranges', 'bytes');
+        $headers->addHeaderLine('Content-Length', strlen($content));
+
+        $response->setContent($content);
+
+        return $response;
     }
 
     public function getAdminGameService()

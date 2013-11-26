@@ -234,9 +234,10 @@ class GameController extends AbstractActionController
                 $name        = isset($attributes->name)? $attributes->name : '';
                 $type        = isset($attributes->type)? $attributes->type : '';
                 $position    = isset($attributes->order)? $attributes->order : '';
-                $placeholder = isset($attributes->data->placeholder)? $attributes->data->placeholder : '';
                 $label       = isset($attributes->data->label)? $attributes->data->label : '';
-                //$required    = ($attributes->data->required == 'true') ? true : false ;
+
+//                 $required    = ($attributes->data->required == 'yes') ? true : false;
+                $required = false;
                 $class       = isset($attributes->data->class)? $attributes->data->class : '';
                 $id          = isset($attributes->data->id)? $attributes->data->id : '';
                 $lengthMin   = isset($attributes->data->length)? $attributes->data->length->min : '';
@@ -247,8 +248,9 @@ class GameController extends AbstractActionController
                 $element->setLabel($label);
                 $element->setAttributes(
                     array(
-                        'placeholder' 	=> $placeholder,
+                        'name'     => $name,
                         'required' 		=> $required,
+                        'allowEmpty'    => !$required,
                         'class' 		=> $class,
                         'id' 			=> $id
                     )
@@ -269,21 +271,12 @@ class GameController extends AbstractActionController
                     $options['max'] = $lengthMax;
                     $element->setAttribute('maxlength', $lengthMax);
                     $options['messages'] = array(\Zend\Validator\StringLength::TOO_LONG => sprintf($this->getServiceLocator()->get('translator')->translate('This field contains more than %s characters', 'playgroundgame'), $lengthMax));
-                }
+                }*/
                 $inputFilter->add($factory->createInput(array(
                     'name'     => $name,
                     'required' => $required,
-                    'filters'  => array(
-                        array('name' => 'StripTags'),
-                        array('name' => 'StringTrim'),
-                    ),
-                    'validators' => array(
-                        array(
-                            'name'    => 'StringLength',
-                            'options' => $options,
-                        ),
-                    ),
-                )));*/
+                    'allowEmpty' => !$required,
+                )));
 
             }
             if (isset($element->line_paragraph)) {
