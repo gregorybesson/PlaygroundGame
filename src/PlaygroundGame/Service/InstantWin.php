@@ -73,7 +73,7 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
 
             $path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR;
             $media_url = $this->getOptions()->getMediaUrl() . '/';
-            
+
             if (!empty($data['uploadScratchcardImage']['tmp_name'])) {
 
 
@@ -85,9 +85,9 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
 
                 $game = $this->getGameMapper()->update($game);
             }
-            
+
             if(isset($data['deleteScratchcardImage']) && $data['deleteScratchcardImage'] && empty($data['uploadScratchcardImage']['tmp_name'])) {
-                
+
                 ErrorHandler::start();
                 $image = $game->getScratchcardImage();
                 $image = str_replace($media_url, '', $image);
@@ -130,7 +130,7 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
         {
             $game->setWinningOccurrenceNumber($game->getOccurrenceNumber());
         }
-        if(!isset($data['occurrenceValueSize']))
+        if(empty($data['occurrenceValueSize']))
         {
             $data['occurrenceValueSize'] = 8;
         }

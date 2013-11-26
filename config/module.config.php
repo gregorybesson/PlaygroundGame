@@ -213,6 +213,7 @@ return array(
             'playgroundgame_treasurehunt' => 'PlaygroundGame\Controller\Frontend\TreasureHuntController',
             'playgroundgame_prizecategory' => 'PlaygroundGame\Controller\Frontend\PrizeCategoryController',
             'playgroundgameadmin' => 'PlaygroundGame\Controller\Admin\AdminController',
+            'playgroundgame_admin_game' => 'PlaygroundGame\Controller\Admin\GameController',
             'playgroundgame_admin_lottery' => 'PlaygroundGame\Controller\Admin\LotteryController',
             'playgroundgame_admin_instantwin' => 'PlaygroundGame\Controller\Admin\InstantWinController',
             'playgroundgame_admin_postvote' => 'PlaygroundGame\Controller\Admin\PostVoteController',
