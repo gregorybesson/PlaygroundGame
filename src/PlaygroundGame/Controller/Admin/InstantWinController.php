@@ -15,7 +15,7 @@ use Zend\View\Model\ViewModel;
 use Zend\Paginator\Paginator;
 use PlaygroundCore\ORM\Pagination\LargeTablePaginator;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
-use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
+
 
 class InstantWinController extends GameController
 {
@@ -157,12 +157,10 @@ class InstantWinController extends GameController
 
         $game = $service->getGameMapper()->findById($gameId);
 
-        $query_result = $service->getInstantWinOccurrenceMapper()->findByGameId($game);
-        if (is_array($query_result)) {
-            $paginator = new Paginator( new \Zend\Paginator\Adapter\ArrayAdapter($query_result));
-        } else {
-            $paginator = $query_result;
-        }
+        $adapter = new DoctrineAdapter(new LargeTablePaginator($service->getInstantWinOccurrenceMapper()->queryByGame($game)));
+        $paginator = new Paginator($adapter);
+        $paginator->setItemCountPerPage(10);
+        $paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
 
         $paginator->setItemCountPerPage(25);
         $paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
@@ -380,7 +378,7 @@ class InstantWinController extends GameController
             return $this->redirect()->toRoute('admin/playgroundgame/list');
         }
         $game           = $this->getAdminGameService()->getGameMapper()->findById($gameId);
-        $adapter = new DoctrineAdapter(new ORMPaginator($this->getAdminGameService()->getInstantWinOccurrenceMapper()->queryPlayedByGame($game)));
+        $adapter = new DoctrineAdapter(new LargeTablePaginator($this->getAdminGameService()->getInstantWinOccurrenceMapper()->queryPlayedByGame($game)));
         $paginator = new Paginator($adapter);
         $paginator->setItemCountPerPage(10);
         $paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
