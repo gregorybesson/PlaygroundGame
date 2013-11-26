@@ -34,7 +34,7 @@ class GameController extends AbstractActionController
         );
     }
 
-    // Used for Lottery, InstantWin, TreasureHunt and redifined for Quiz because it's slightly different
+    // Used for Lottery, TreasureHunt and redifined for Quiz and InstantWin because it's slightly different
     public function downloadAction()
     {
         // magically create $content as a string containing CSV data
