@@ -23,7 +23,7 @@ class Prize {
 	 * @ORM\GeneratedValue(strategy="AUTO")
 	 */
 	protected $id;
-	
+
 	/**
 	 * @ORM\ManyToOne(targetEntity="Game", inversedBy="prizes")
 	 *
@@ -108,10 +108,10 @@ class Prize {
 	public function setId($id)
 	{
 		$this->id = $id;
-		
+
 		return $this;
 	}
-	
+
 	/**
 	 * @return the unknown_type
 	 */
@@ -119,14 +119,14 @@ class Prize {
 	{
 		return $this->game;
 	}
-	
+
 	/**
 	 * @param unknown_type $game
 	 */
 	public function setGame($game)
 	{
 		$this->game = $game;
-	
+
 		return $this;
 	}
 
@@ -144,7 +144,7 @@ class Prize {
 	public function setTitle($title)
 	{
 		$this->title = $title;
-		
+
 		return $this;
 	}
 
@@ -162,7 +162,7 @@ class Prize {
 	public function setIdentifier($identifier)
 	{
 		$this->identifier = $identifier;
-		
+
 		return $this;
 	}
 
@@ -180,7 +180,7 @@ class Prize {
 	public function setPrizeCategory($prizeCategory)
 	{
 		$this->prizeCategory = $prizeCategory;
-		
+
 		return $this;
 	}
 
@@ -198,7 +198,7 @@ class Prize {
 	public function setContent($content)
 	{
 		$this->content = $content;
-		
+
 		return $this;
 	}
 
@@ -216,7 +216,7 @@ class Prize {
 	public function setQty($qty)
 	{
 		$this->qty = $qty;
-		
+
 		return $this;
 	}
 
@@ -234,7 +234,7 @@ class Prize {
 	public function setUnitPrice($unitPrice)
 	{
 		$this->unitPrice = $unitPrice;
-		
+
 		return $this;
 	}
 
@@ -252,7 +252,7 @@ class Prize {
 	public function setCurrency($currency)
 	{
 		$this->currency = $currency;
-		
+
 		return $this;
 	}
 
@@ -270,7 +270,7 @@ class Prize {
 	public function setCreated_at($created_at)
 	{
 		$this->created_at = $created_at;
-		
+
 		return $this;
 	}
 
@@ -288,7 +288,7 @@ class Prize {
 	public function setUpdated_at($updated_at)
 	{
 		$this->updated_at = $updated_at;
-		
+
 		return $this;
 	}
 
@@ -306,10 +306,10 @@ class Prize {
 	public function setPicture($picture)
 	{
 		$this->picture = $picture;
-		
+
 		return $this;
 	}
-	
+
 	/**
 	 * Convert the object to an array.
 	 *
@@ -318,10 +318,10 @@ class Prize {
 	public function getArrayCopy()
 	{
 		$obj_vars = get_object_vars($this);
-	
+
 		return $obj_vars;
 	}
-	
+
 	/**
 	 * Populate from an array.
 	 *
@@ -332,23 +332,23 @@ class Prize {
 		if (isset($data['content']) && $data['content'] != null) {
 			$this->content = $data['content'];
 		}
-	
+
 		if (isset($data['title']) && $data['title'] != null) {
 			$this->title = $data['title'];
 		}
-	
+
 		if (isset($data['qty']) && $data['qty'] != null) {
 			$this->qty = $data['qty'];
 		}
-	
+
 		if (isset($data['identifier']) && $data['identifier'] != null) {
 			$this->identifier = $data['identifier'];
 		}
-	
+
 		if (isset($data['unitPrice']) && $data['unitPrice'] != null) {
 			$this->unitPrice = $data['unitPrice'];
 		}
-	
+
 		if (isset($data['currency']) && $data['currency'] != null) {
 			$this->currency = $data['currency'];
 		}
@@ -361,7 +361,8 @@ class Prize {
 	/**
 	 * @return the $inputFilter
 	 */
-	public function getInputFilter() {
+	public function getInputFilter()
+	{
 		if (!$this->inputFilter) {
             $inputFilter = new InputFilter();
             $factory = new InputFactory();
@@ -391,7 +392,7 @@ class Prize {
                     )
                 )
             )));
-            
+
             $this->inputFilter = $inputFilter;
         }
 
