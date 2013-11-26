@@ -54,6 +54,18 @@ class InstantWinOccurrence
         return $query;
     }
 
+    public function queryPlayedByGame($instant_win, $sortArray = array())
+    {
+        $query = $this->em->createQuery(
+            'SELECT i FROM PlaygroundGame\Entity\InstantWinOccurrence i
+                WHERE i.instantwin = :game
+                AND i.entry IS NOT NULL
+            '.( ! empty($sortArray) ? 'ORDER BY i.'.key($sortArray).' '.current($sortArray) : '' )
+        );
+        $query->setParameter('game', $instant_win);
+        return $query;
+    }
+
     public function findBy($array = array(), $sortArray = array())
     {
         return $this->getEntityRepository()->findBy($array, $sortArray);

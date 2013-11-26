@@ -13,6 +13,7 @@ use PlaygroundGame\Controller\Admin\GameController;
 
 use Zend\View\Model\ViewModel;
 use Zend\Paginator\Paginator;
+use PlaygroundCore\ORM\Pagination\LargeTablePaginator;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 
@@ -370,6 +371,25 @@ class InstantWinController extends GameController
         unlink($file);
         return $response;
 
+    }
+
+    public function entryAction()
+    {
+        $gameId         = $this->getEvent()->getRouteMatch()->getParam('gameId');
+        if (!$gameId) {
+            return $this->redirect()->toRoute('admin/playgroundgame/list');
+        }
+        $game           = $this->getAdminGameService()->getGameMapper()->findById($gameId);
+        $adapter = new DoctrineAdapter(new ORMPaginator($this->getAdminGameService()->getInstantWinOccurrenceMapper()->queryPlayedByGame($game)));
+        $paginator = new Paginator($adapter);
+        $paginator->setItemCountPerPage(10);
+        $paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
+
+        return array(
+            'occurrences' => $paginator,
+            'game' => $game,
+            'gameId' => $gameId
+        );
     }
 
     public function getAdminGameService()
