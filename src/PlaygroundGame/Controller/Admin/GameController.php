@@ -87,12 +87,15 @@ class GameController extends AbstractActionController
                 . ";" . $e->getUser()->getCreatedAt()->format('Y-m-d')
                 . ";" . $dob
                 . ";" ;
-
             }
             if ($e->getPlayerData()) {
                 $entryData = json_decode($e->getPlayerData());
                 foreach ( $entryData as $key => $data) {
-                    $content .= $data.';';
+                    if (is_array($data)) {
+                        $content .= implode(', ', $data).';';
+                    } else {
+                        $content .= $data.';';
+                    }
                 }
             }
             $content   .= $e->getWinner()
