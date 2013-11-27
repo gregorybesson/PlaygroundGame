@@ -378,7 +378,11 @@ class InstantWinController extends GameController
             return $this->redirect()->toRoute('admin/playgroundgame/list');
         }
         $game           = $this->getAdminGameService()->getGameMapper()->findById($gameId);
-        $adapter = new DoctrineAdapter(new LargeTablePaginator($this->getAdminGameService()->getInstantWinOccurrenceMapper()->queryPlayedByGame($game)));
+        if (!$game->getAnonymousAllowed()) {
+            $adapter = new DoctrineAdapter(new LargeTablePaginator($this->getAdminGameService()->getInstantWinOccurrenceMapper()->queryPlayedByGame($game)));
+        } else {
+            $adapter = new DoctrineAdapter(new LargeTablePaginator($this->getAdminGameService()->getInstantWinOccurrenceMapper()->queryWinningPlayedByGame($game)));
+        }
         $paginator = new Paginator($adapter);
         $paginator->setItemCountPerPage(10);
         $paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
@@ -447,7 +451,11 @@ class InstantWinController extends GameController
             if ($e->getPlayerData()) {
                 $entryData = json_decode($e->getPlayerData());
                 foreach ( $entryData as $key => $data) {
-                    $content .= $data.';';
+                    if (is_array($data)) {
+                        $content .= implode(', ', $data).';';
+                    } else {
+                        $content .= $data.';';
+                    }
                 }
             }
             $content   .= $e->getWinner()
