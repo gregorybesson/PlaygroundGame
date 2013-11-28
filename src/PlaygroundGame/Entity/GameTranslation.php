@@ -3,36 +3,16 @@
 namespace PlaygroundGame\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Translatable\Entity\MappedSuperclass\AbstractPersonalTranslation;
+use Gedmo\Translatable\Entity\MappedSuperclass\AbstractTranslation;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="game_translation",
- *     uniqueConstraints={@ORM\UniqueConstraint(name="lookup_unique_idx", columns={
- *         "locale", "object_id", "field"
- *     })}
- * )
+ * @ORM\Table(name="game_translation", indexes={
+ *      @ORM\Index(name="game_translation_idx", columns={"locale", "object_class", "field", "foreign_key"})
+ * })
  * @ORM\Entity(repositoryClass="Gedmo\Translatable\Entity\Repository\TranslationRepository")
  */
-class GameTranslation extends AbstractPersonalTranslation
+class GameTranslation extends AbstractTranslation
 {
-    /**
-     * Convenient constructor
-     *
-     * @param string $locale
-     * @param string $field
-     * @param string $value
-     */
-    public function __construct($locale, $field, $value)
-    {
-        $this->setLocale($locale);
-        $this->setField($field);
-        $this->setContent($value);
-    }
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Game", inversedBy="translations")
-     * @ORM\JoinColumn(name="object_id", referencedColumnName="id", onDelete="CASCADE")
-     */
-    protected $object;
 }
