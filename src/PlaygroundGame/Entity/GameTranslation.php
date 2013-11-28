@@ -12,6 +12,7 @@ use Gedmo\Translatable\Entity\MappedSuperclass\AbstractPersonalTranslation;
  *         "locale", "object_id", "field"
  *     })}
  * )
+ * @ORM\Entity(repositoryClass="Gedmo\Translatable\Entity\Repository\TranslationRepository")
  */
 class GameTranslation extends AbstractPersonalTranslation
 {
