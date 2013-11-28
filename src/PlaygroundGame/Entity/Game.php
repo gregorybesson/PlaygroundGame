@@ -3,6 +3,8 @@ namespace PlaygroundGame\Entity;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Translatable\Translatable;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping\PrePersist;
 use Doctrine\ORM\Mapping\PreUpdate;
@@ -20,8 +22,9 @@ use Zend\InputFilter\InputFilterInterface;
  * @ORM\DiscriminatorMap({"quiz" = "Quiz", "lottery" = "Lottery", "instantwin" =
  * "InstantWin", "postvote" = "PostVote", "treasurehunt" = "TreasureHunt"})
  * @ORM\Table(name="game")
+ * @Gedmo\TranslationEntity(class="PlaygroundGame\Entity\GameTranslation")
  */
-class Game implements InputFilterAwareInterface
+class Game implements InputFilterAwareInterface, Translatable
 {
     // not yet published
     const GAME_SCHEDULE  = 'scheduled';
@@ -33,6 +36,13 @@ class Game implements InputFilterAwareInterface
     const GAME_FINISHED   = 'finished';
     // closed
     const GAME_CLOSED = 'closed';
+    
+    /**
+     * @Gedmo\Locale
+     * Used locale to override Translation listener`s locale
+     * this is not a mapped field of entity metadata, just a simple property
+     */
+    protected $locale;
 
     protected $inputFilter;
 
@@ -55,6 +65,7 @@ class Game implements InputFilterAwareInterface
     protected $prizeCategory;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(type="string", length=255, nullable=false)
      */
     protected $title;
@@ -183,11 +194,13 @@ class Game implements InputFilterAwareInterface
     protected $stylesheet;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(name="welcome_block", type="text", nullable=true)
      */
     protected $welcomeBlock;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(type="text", nullable=true)
      */
     protected $termsBlock;
@@ -198,22 +211,26 @@ class Game implements InputFilterAwareInterface
     protected $termsOptin = 0;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(type="text", nullable=true)
      */
     protected $conditionsBlock;
 
     // TODO : Adherence CMS de ces blocs à revoir
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(type="text", nullable=true)
      */
     protected $columnBlock1;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(type="text", nullable=true)
      */
     protected $columnBlock2;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(type="text", nullable=true)
      */
     protected $columnBlock3;
@@ -229,6 +246,7 @@ class Game implements InputFilterAwareInterface
     protected $fbAppId;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(name="fb_page_tab_title", type="string", length=255, nullable=true)
      */
     protected $fbPageTabTitle;
@@ -239,6 +257,7 @@ class Game implements InputFilterAwareInterface
     protected $fbPageTabImage;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(name="fb_share_message", type="text", nullable=true)
      */
     protected $fbShareMessage;
@@ -249,6 +268,7 @@ class Game implements InputFilterAwareInterface
     protected $fbShareImage;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(name="fb_request_message", type="text", nullable=true)
      */
     protected $fbRequestMessage;
@@ -259,11 +279,13 @@ class Game implements InputFilterAwareInterface
     protected $fbFan = 0;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(name="fb_fan_gate", type="text", nullable=true)
      */
     protected $fbFanGate;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(name="tw_share_message", type="string", length=255, nullable=true)
      */
     protected $twShareMessage;
@@ -1860,5 +1882,10 @@ class Game implements InputFilterAwareInterface
         }
 
         return $this->inputFilter;
+    }
+    
+    public function setTranslatableLocale($locale)
+    {
+        $this->locale = $locale;
     }
 }
