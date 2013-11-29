@@ -215,6 +215,8 @@ class InstantWin extends Game implements InputFilterAwareInterface
     public function setScratchcardImage ($scratchcardImage)
     {
         $this->scratchcardImage = $scratchcardImage;
+        
+        return $this;
     }
 
     /**

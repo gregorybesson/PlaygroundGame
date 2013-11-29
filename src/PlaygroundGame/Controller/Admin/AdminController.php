@@ -70,7 +70,7 @@ class AdminController extends AbstractActionController
 
         $entries = $this->getAdminGameService()->getEntryMapper()->findBy(array('game' => $game));
 
-     
+
 
         if (is_array($entries)) {
             $paginator = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\ArrayAdapter($entries));
@@ -91,7 +91,7 @@ class AdminController extends AbstractActionController
         // magically create $content as a string containing CSV data
         $gameId         = $this->getEvent()->getRouteMatch()->getParam('gameId');
         $game           = $this->getAdminGameService()->getGameMapper()->findById($gameId);
-    
+
         $entries = $this->getAdminGameService()->getEntryMapper()->findBy(array('game' => $game,'winner' => 1));
 
         $content        = "\xEF\xBB\xBF"; // UTF-8 BOM
@@ -150,12 +150,45 @@ class AdminController extends AbstractActionController
         if (!$gameId) {
             return $this->redirect()->toRoute('admin/playgroundgame/list');
         }
-        
+
         $game = $service->getGameMapper()->findById($gameId);
         $game->setActive(!$game->getActive());
         $service->getGameMapper()->update($game);
 
         return $this->redirect()->toRoute('admin/playgroundgame/list');
+    }
+
+    public function formAction()
+    {
+        $service = $this->getAdminGameService();
+        $gameId = $this->getEvent()->getRouteMatch()->getParam('gameId');
+        if (!$gameId) {
+            return $this->redirect()->toRoute('admin/playgroundgame/list');
+        }
+        $game = $service->getGameMapper()->findById($gameId);
+        $form = $service->getPlayerFormMapper()->findOneBy(array('game' => $game));
+
+        // I use the wonderful Form Generator to create the Post & Vote form
+        $formgen = $this->forward()->dispatch('PlaygroundCore\Controller\Formgen', array('controller' => 'PlaygroundCore\Controller\Formgen', 'action' => 'create'));
+
+        if ($this->getRequest()->isPost()) {
+            $data = $this->getRequest()->getPost()->toArray();
+            $form = $service->createForm($data, $game, $form, '\PlaygroundGame\Entity\PlayerForm');
+            if ($form) {
+                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The form was created');
+            }
+        }
+        $formTemplate='';
+        if ($form) {
+            $formTemplate = $form->getFormTemplate();
+        }
+
+        return array(
+            'form' => $form,
+            'formTemplate' => $formTemplate,
+            'gameId' => $gameId,
+            'game' => $game,
+        );
     }
 
     public function setOptions(ModuleOptions $options)

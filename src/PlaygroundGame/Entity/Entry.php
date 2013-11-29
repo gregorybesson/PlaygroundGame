@@ -49,6 +49,21 @@ class Entry
      * @ORM\Column(type="string", length=255, nullable=false)
      */
     protected $points;
+    
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    protected $ip;
+    
+    /**
+     * @ORM\Column(name="anonymous_id", type="string", length=255, nullable=true)
+     */
+    protected $anonymousId;
+    
+    /**
+     * @ORM\Column(name="player_data", type="text", nullable=true)
+     */
+    protected $playerData;
 
     /**
      * Is this entry a winning one ?
@@ -112,6 +127,8 @@ class Entry
     public function setId ($id)
     {
         $this->id = $id;
+        
+        return $this;
     }
 
     /**
@@ -128,6 +145,9 @@ class Entry
     public function setGame($game)
     {
         $this->game = $game;
+        
+        return $this;
+        
     }
 
     /**
@@ -144,6 +164,8 @@ class Entry
     public function setUser($user)
     {
         $this->user = $user;
+        
+        return $this;
     }
 
     /**
@@ -160,9 +182,65 @@ class Entry
     public function setPoints($points)
     {
         $this->points = $points;
+        
+        return $this;
     }
 
     /**
+     * @return the $ip
+     */
+    public function getIp()
+    {
+        return $this->ip;
+    }
+
+	/**
+     * @param field_type $ip
+     */
+    public function setIp($ip)
+    {
+        $this->ip = $ip;
+        
+        return $this;
+    }
+
+	/**
+     * @return the $anonymousId
+     */
+    public function getAnonymousId()
+    {
+        return $this->anonymousId;
+    }
+
+	/**
+     * @param field_type $anonymousId
+     */
+    public function setAnonymousId($anonymousId)
+    {
+        $this->anonymousId = $anonymousId;
+        
+        return $this;
+    }
+
+	/**
+     * @return the $playerData
+     */
+    public function getPlayerData()
+    {
+        return $this->playerData;
+    }
+
+	/**
+     * @param field_type $playerData
+     */
+    public function setPlayerData($playerData)
+    {
+        $this->playerData = $playerData;
+        
+        return $this;
+    }
+
+	/**
      * @return the status
      */
     public function getActive()
@@ -176,6 +254,8 @@ class Entry
     public function setActive($active)
     {
         $this->active = $active;
+        
+        return $this;
     }
 
     /**
@@ -192,6 +272,8 @@ class Entry
     public function setBonus($bonus)
     {
         $this->bonus = $bonus;
+        
+        return $this;
     }
 
     /**
@@ -208,6 +290,8 @@ class Entry
     public function setWinner($winner)
     {
         $this->winner = $winner;
+        
+        return $this;
     }
     
     /**
@@ -224,6 +308,8 @@ class Entry
     public function setDrawable($drawable)
     {
         $this->drawable = $drawable;
+        
+        return $this;
     }
 
 	/**
@@ -240,6 +326,8 @@ class Entry
     public function setTermsOptin($termsOptin)
     {
     	$this->termsOptin = $termsOptin;
+    	
+    	return $this;
     }
 
     /**
@@ -256,6 +344,8 @@ class Entry
     public function setCreatedAt($created_at)
     {
         $this->created_at = $created_at;
+        
+        return $this;
     }
 
     /**
@@ -272,6 +362,8 @@ class Entry
     public function setUpdatedAt($updated_at)
     {
         $this->updated_at = $updated_at;
+        
+        return $this;
     }
 
     /**

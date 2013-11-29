@@ -168,15 +168,16 @@ class GameTest extends \PHPUnit_Framework_TestCase
     	->getMock();
 
     	$game = new GameEntity();
+    	$game->setAnonymousAllowed(false);
 
     	$gs = new \PlaygroundGame\Service\Game();
     	$gs->setEntryMapper($mapper);
 
     	// return false : The user has already played the bonus game
     	$gs->getEntryMapper()
-    	->expects($this->never())
+    	->expects($this->once())
     	->method('findOneBy')
-    	->will($this->returnValue(true));
+    	->will($this->returnValue(false));
 
     	$this->assertFalse($gs->checkExistingEntry($game, null, null));
     }
@@ -330,7 +331,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
 
     	//mocking the method checkExistingEntry
     	$f = $this->getMockBuilder('PlaygroundGame\Service\Game')
-    	->setMethods(array('checkExistingEntry'))
+    	->setMethods(array('checkExistingEntry', 'findLastEntries'))
     	->disableOriginalConstructor()
     	->getMock();
 
@@ -340,10 +341,9 @@ class GameTest extends \PHPUnit_Framework_TestCase
     	$f->expects($this->once())
     	->method('checkExistingEntry')
     	->will($this->returnValue(false));
-
-    	$f->getEntryMapper()
-    	->expects($this->once())
-    	->method('findLastEntriesBy')
+    	
+    	$f->expects($this->once())
+    	->method('findLastEntries')
     	->will($this->returnValue(2));
 
     	$this->assertFalse($entry = $f->play($game, null));
@@ -361,7 +361,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
 
     	//mocking the method checkExistingEntry
     	$f = $this->getMockBuilder('PlaygroundGame\Service\Game')
-    	->setMethods(array('checkExistingEntry'))
+    	->setMethods(array('checkExistingEntry', 'findLastEntries'))
     	->disableOriginalConstructor()
     	->getMock();
 
@@ -371,10 +371,9 @@ class GameTest extends \PHPUnit_Framework_TestCase
     	$f->expects($this->once())
     	->method('checkExistingEntry')
     	->will($this->returnValue(false));
-
-    	$f->getEntryMapper()
-    	->expects($this->once())
-    	->method('findLastEntriesBy')
+    	
+    	$f->expects($this->once())
+    	->method('findLastEntries')
     	->will($this->returnValue(0));
 
     	$f->getEntryMapper()

@@ -23,7 +23,7 @@ class Prize {
 	 * @ORM\GeneratedValue(strategy="AUTO")
 	 */
 	protected $id;
-	
+
 	/**
 	 * @ORM\ManyToOne(targetEntity="Game", inversedBy="prizes")
 	 *
@@ -97,17 +97,21 @@ class Prize {
 	/**
 	 * @return the $id
 	 */
-	public function getId() {
+	public function getId()
+	{
 		return $this->id;
 	}
 
 	/**
 	 * @param field_type $id
 	 */
-	public function setId($id) {
+	public function setId($id)
+	{
 		$this->id = $id;
+
+		return $this;
 	}
-	
+
 	/**
 	 * @return the unknown_type
 	 */
@@ -115,157 +119,197 @@ class Prize {
 	{
 		return $this->game;
 	}
-	
+
 	/**
 	 * @param unknown_type $game
 	 */
 	public function setGame($game)
 	{
 		$this->game = $game;
-	
+
 		return $this;
 	}
 
 	/**
 	 * @return the $title
 	 */
-	public function getTitle() {
+	public function getTitle()
+	{
 		return $this->title;
 	}
 
 	/**
 	 * @param field_type $Title
 	 */
-	public function setTitle($title) {
+	public function setTitle($title)
+	{
 		$this->title = $title;
+
+		return $this;
 	}
 
 	/**
 	 * @return the $identifier
 	 */
-	public function getIdentifier() {
+	public function getIdentifier()
+	{
 		return $this->identifier;
 	}
 
 	/**
 	 * @param field_type $identifier
 	 */
-	public function setIdentifier($identifier) {
+	public function setIdentifier($identifier)
+	{
 		$this->identifier = $identifier;
+
+		return $this;
 	}
 
 	/**
 	 * @return the $prizeCategory
 	 */
-	public function getPrizeCategory() {
+	public function getPrizeCategory()
+	{
 		return $this->prizeCategory;
 	}
 
 	/**
 	 * @param unknown $prizeCategory
 	 */
-	public function setPrizeCategory($prizeCategory) {
+	public function setPrizeCategory($prizeCategory)
+	{
 		$this->prizeCategory = $prizeCategory;
+
+		return $this;
 	}
 
 	/**
 	 * @return the $content
 	 */
-	public function getContent() {
+	public function getContent()
+	{
 		return $this->content;
 	}
 
 	/**
 	 * @param field_type $content
 	 */
-	public function setContent($content) {
+	public function setContent($content)
+	{
 		$this->content = $content;
+
+		return $this;
 	}
 
 	/**
 	 * @return the $qty
 	 */
-	public function getQty() {
+	public function getQty()
+	{
 		return $this->qty;
 	}
 
 	/**
 	 * @param number $qty
 	 */
-	public function setQty($qty) {
+	public function setQty($qty)
+	{
 		$this->qty = $qty;
+
+		return $this;
 	}
 
 	/**
 	 * @return the $unitPrice
 	 */
-	public function getUnitPrice() {
+	public function getUnitPrice()
+	{
 		return $this->unitPrice;
 	}
 
 	/**
 	 * @param number $unitPrice
 	 */
-	public function setUnitPrice($unitPrice) {
+	public function setUnitPrice($unitPrice)
+	{
 		$this->unitPrice = $unitPrice;
+
+		return $this;
 	}
 
 	/**
 	 * @return the $currency
 	 */
-	public function getCurrency() {
+	public function getCurrency()
+	{
 		return $this->currency;
 	}
 
 	/**
 	 * @param field_type $currency
 	 */
-	public function setCurrency($currency) {
+	public function setCurrency($currency)
+	{
 		$this->currency = $currency;
+
+		return $this;
 	}
 
 	/**
 	 * @return the $created_at
 	 */
-	public function getCreated_at() {
+	public function getCreated_at()
+	{
 		return $this->created_at;
 	}
 
 	/**
 	 * @param \DateTime $created_at
 	 */
-	public function setCreated_at($created_at) {
+	public function setCreated_at($created_at)
+	{
 		$this->created_at = $created_at;
+
+		return $this;
 	}
 
 	/**
 	 * @return the $updated_at
 	 */
-	public function getUpdated_at() {
+	public function getUpdated_at()
+	{
 		return $this->updated_at;
 	}
 
 	/**
 	 * @param \DateTime $updated_at
 	 */
-	public function setUpdated_at($updated_at) {
+	public function setUpdated_at($updated_at)
+	{
 		$this->updated_at = $updated_at;
+
+		return $this;
 	}
 
 	/**
 	 * @return the $picture
 	 */
-	public function getPicture() {
+	public function getPicture()
+	{
 		return $this->picture;
 	}
 
 	/**
 	 * @param field_type $picture
 	 */
-	public function setPicture($picture) {
+	public function setPicture($picture)
+	{
 		$this->picture = $picture;
+
+		return $this;
 	}
-	
+
 	/**
 	 * Convert the object to an array.
 	 *
@@ -274,10 +318,10 @@ class Prize {
 	public function getArrayCopy()
 	{
 		$obj_vars = get_object_vars($this);
-	
+
 		return $obj_vars;
 	}
-	
+
 	/**
 	 * Populate from an array.
 	 *
@@ -288,23 +332,23 @@ class Prize {
 		if (isset($data['content']) && $data['content'] != null) {
 			$this->content = $data['content'];
 		}
-	
+
 		if (isset($data['title']) && $data['title'] != null) {
 			$this->title = $data['title'];
 		}
-	
+
 		if (isset($data['qty']) && $data['qty'] != null) {
 			$this->qty = $data['qty'];
 		}
-	
+
 		if (isset($data['identifier']) && $data['identifier'] != null) {
 			$this->identifier = $data['identifier'];
 		}
-	
+
 		if (isset($data['unitPrice']) && $data['unitPrice'] != null) {
 			$this->unitPrice = $data['unitPrice'];
 		}
-	
+
 		if (isset($data['currency']) && $data['currency'] != null) {
 			$this->currency = $data['currency'];
 		}
@@ -317,7 +361,8 @@ class Prize {
 	/**
 	 * @return the $inputFilter
 	 */
-	public function getInputFilter() {
+	public function getInputFilter()
+	{
 		if (!$this->inputFilter) {
             $inputFilter = new InputFilter();
             $factory = new InputFactory();
@@ -347,7 +392,7 @@ class Prize {
                     )
                 )
             )));
-            
+
             $this->inputFilter = $inputFilter;
         }
 

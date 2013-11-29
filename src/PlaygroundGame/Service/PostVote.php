@@ -30,7 +30,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
         $postVotePostElementMapper = $this->getPostVotePostElementMapper();
 
         $entryMapper = $this->getEntryMapper();
-        $entry = $entryMapper->findLastActiveEntryById($game, $user);
+        $entry = $this->findLastActiveEntry($game, $user);
 
         if (!$entry) {
             return 'falsefin0';
@@ -76,7 +76,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
         $postVotePostElementMapper = $this->getPostVotePostElementMapper();
 
         $entryMapper = $this->getEntryMapper();
-        $entry = $entryMapper->findLastActiveEntryById($game, $user);
+        $entry = $this->findLastActiveEntry($game, $user);
 
         if (!$entry) {
             return 'falsefin0';
@@ -113,7 +113,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
         $postVotePostElementMapper = $this->getPostVotePostElementMapper();
 
         $entryMapper = $this->getEntryMapper();
-        $entry = $entryMapper->findLastActiveEntryById($game, $user);
+        $entry = $this->findLastActiveEntry($game, $user);
 
         if (!$entry) {
             return false;
@@ -128,9 +128,6 @@ class PostVote extends Game implements ServiceManagerAwareInterface
             $post->setEntry($entry);
             $post = $postvotePostMapper->insert($post);
         }
-
-        //print_r($data);
-        //die('FIN');
 
         $path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR . 'game' . $game->getId() . '_post'. $post->getId() . '_';
         $media_url = $this->getOptions()->getMediaUrl() . '/' . 'game' . $game->getId() . '_post'. $post->getId() . '_';
@@ -196,7 +193,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
         $postvotePostMapper = $this->getPostVotePostMapper();
 
         $entryMapper = $this->getEntryMapper();
-        $entry = $entryMapper->findLastActiveEntryById($game, $user);
+        $entry = $this->findLastActiveEntry($game, $user);
 
         if (!$entry) {
             return false;

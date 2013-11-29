@@ -77,6 +77,7 @@ class Module
         foreach ($games as $game) {
            $array = array('game'.$game->getId() => array('title' => $game->getTitle(), 'description' => $game->getClassType(), 'location'=>'pages du jeu'));
            $dynareas = array_merge($dynareas, $array);
+
         }
 
         return $dynareas;
@@ -181,6 +182,15 @@ class Module
                             $sm->get('playgroundgame_module_options')
                     );
 
+                    return $mapper;
+                },
+                
+                'playgroundgame_playerform_mapper' => function ($sm) {
+                    $mapper = new \PlaygroundGame\Mapper\PlayerForm(
+                        $sm->get('doctrine.entitymanager.orm_default'),
+                        $sm->get('playgroundgame_module_options')
+                    );
+                
                     return $mapper;
                 },
 
@@ -461,8 +471,9 @@ class Module
 
                 'playgroundgame_instantwinoccurrencecode_form' => function($sm) {
                     $translator = $sm->get('translator');
-                    $form = new Form\Frontend\InstantWinOccurrenceCode(null, $translator);
-
+                    $form = new Form\Frontend\InstantWinOccurrenceCode(null, $sm, $translator);
+                    $filter = new Form\Frontend\InstantWinOccurrenceCodeFilter();
+                    $form->setInputFilter($filter);
                     return $form;
                 },
 

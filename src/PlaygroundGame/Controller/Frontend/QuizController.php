@@ -30,61 +30,29 @@ class QuizController extends GameController
      */
     public function playAction ()
     {
-        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-        $user       = $this->zfcUserAuthentication()->getIdentity();
         $sg         = $this->getGameService();
-
+        
+        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
+        $channel = $this->getEvent()->getRouteMatch()->getParam('channel');
+        
         $game = $sg->checkGame($identifier);
         if (! $game || $game->isClosed()) {
             return $this->notFoundAction();
         }
-
-
-        $session = new Container('facebook');
-        $channel = $this->getEvent()->getRouteMatch()->getParam('channel');
-
-        // Redirect to fan gate if the game require to 'like' the page before playing
-
-        if ($channel == 'facebook' && $session->offsetExists('signed_request')) {
-            if($game->getFbFan()){
-                if ($sg->checkIsFan($game) === false){
-                    return $this->redirect()->toRoute('frontend/' . $game->getClassType().'/fangate',array('id' => $game->getIdentifier()));
-                }
-            }
+        
+        $redirectFb = $this->checkFbRegistration($this->zfcUserAuthentication()->getIdentity(), $game, $channel);
+        if($redirectFb){
+            return $redirectFb;
         }
-
-        if (!$user) {
-
-            // The game is deployed on Facebook, and played from Facebook : retrieve/register user
-
-            if ($channel == 'facebook' && $session->offsetExists('signed_request')) {
-
-                // Get Playground user from Facebook info
-
-                $viewModel = $this->buildView($game);
-                $beforeLayout = $this->layout()->getTemplate();
-
-                $view = $this->forward()->dispatch('playgrounduser_user', array('controller' => 'playgrounduser_user','action' => 'registerFacebookUser', 'provider' => $channel));
-
-                $this->layout()->setTemplate($beforeLayout);
-                $user = $view->user;
-
-                // If the user can not be created/retrieved from Facebook info, redirect to login/register form
-                if (!$user){
-                    $redirect = urlencode($this->url()->fromRoute('frontend/'. $game->getClassType() . '/play', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)));
-                return $this->redirect()->toUrl($this->url()->fromRoute('frontend/zfcuser/register', array('channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))) . '?redirect='.$redirect);
-                }
-
-                // The game is not played from Facebook : redirect to login/register form
-
-            } else {
-                $redirect = urlencode($this->url()->fromRoute('frontend/'. $game->getClassType() . '/play', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)));
-                return $this->redirect()->toUrl($this->url()->fromRoute('frontend/zfcuser/register', array('channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))) . '?redirect='.$redirect);
-            }
-
+        
+        $user       = $this->zfcUserAuthentication()->getIdentity();
+        
+        if (!$user && !$game->getAnonymousAllowed()) {
+            $redirect = urlencode($this->url()->fromRoute('frontend/'. $game->getClassType() . '/play', array('id' => $game->getIdentifier(), 'channel' => $channel), array('force_canonical' => true)));
+        
+            return $this->redirect()->toUrl($this->url()->fromRoute('frontend/zfcuser/register', array('channel' => $channel)) . '?redirect='.$redirect);
         }
-
-
+        
         $entry = $sg->play($game, $user);
         if (!$entry) {
             // the user has already taken part of this game and the participation limit has been reached
@@ -180,6 +148,7 @@ class QuizController extends GameController
 
             $i ++;
             if (($game->getQuestionGrouping() > 0 && $i % $game->getQuestionGrouping() == 0 && $i > 0) || $i == $totalQuestions) {
+                
                 $form->add($fieldset);
                 $inputFilter->add($fieldsetFilter, $fieldsetName);
             }
@@ -194,7 +163,7 @@ class QuizController extends GameController
             // TODO : improve it : I don't validate the form in a timer quiz as no answer is mandatory
             if ($game->getTimer() || $form->isValid()) {
             	unset($data['submitForm']);
-                $entry = $this->getGameService()->createQuizReply($data, $game, $this->zfcUserAuthentication()->getIdentity());
+                $entry = $this->getGameService()->createQuizReply($data, $game, $user);
             }
                 
             return $this->redirect()->toUrl($this->url()->fromRoute('frontend/'. $game->getClassType() . '/'. $game->nextStep($this->params('action')), array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));          
@@ -227,12 +196,12 @@ class QuizController extends GameController
             return $this->notFoundAction();
         }
 
-        $secretKey = strtoupper(substr(sha1($user->getId().'####'.time()),0,15));
+        $secretKey = strtoupper(substr(sha1(uniqid('pg_', true).'####'.time()),0,15));
         $socialLinkUrl = $this->url()->fromRoute('frontend/quiz', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)).'?key='.$secretKey;
         // With core shortener helper
         $socialLinkUrl = $this->shortenUrl()->shortenUrl($socialLinkUrl);
 
-        $lastEntry = $sg->getEntryMapper()->findLastInactiveEntryById($game, $user);
+        $lastEntry = $sg->findLastInactiveEntry($game, $user);
         if (!$lastEntry) {
             return $this->redirect()->toUrl($this->url()->fromRoute('frontend/quiz', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)));
         }
@@ -313,7 +282,7 @@ class QuizController extends GameController
         $form = $this->getServiceLocator()->get('playgroundgame_sharemail_form');
         $form->setAttribute('method', 'post');
 
-        if ($this->getRequest()->isPost()) {
+        /*if ($this->getRequest()->isPost()) {
             $data = $this->getRequest()->getPost()->toArray();
             $form->setData($data);
             if ($form->isValid()) {
@@ -326,7 +295,7 @@ class QuizController extends GameController
                 }
             }
 
-        }
+        }*/
         
         $nextGame = parent::getMissionGameService()->checkCondition($game, $winner, $prediction, $lastEntry);
 
@@ -361,7 +330,7 @@ class QuizController extends GameController
             $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
             $user = $this->zfcUserAuthentication()->getIdentity();
             $game = $sg->checkGame($identifier);
-            $lastEntry = $sg->getEntryMapper()->findLastInactiveEntryById($game, $user);
+            $lastEntry = $sg->findLastInactiveEntry($game, $user);
             if ($lastEntry && $lastEntry->getWinner()) {
                 $bonusEntry = $sg->playBonus($game, $user, 1);
             }
@@ -386,7 +355,7 @@ class QuizController extends GameController
             $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
             $user = $this->zfcUserAuthentication()->getIdentity();
             $game = $sg->checkGame($identifier);
-            $lastEntry = $sg->getEntryMapper()->findLastInactiveEntryById($game, $user);
+            $lastEntry = $sg->findLastInactiveEntry($game, $user);
             if ($lastEntry && $lastEntry->getWinner()) {
                 $bonusEntry = $sg->playBonus($game, $user, 1);
             }
@@ -411,7 +380,7 @@ class QuizController extends GameController
             $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
             $user = $this->zfcUserAuthentication()->getIdentity();
             $game = $sg->checkGame($identifier);
-            $lastEntry = $sg->getEntryMapper()->findLastInactiveEntryById($game, $user);
+            $lastEntry = $sg->findLastInactiveEntry($game, $user);
             if ($lastEntry && $lastEntry->getWinner()) {
                 $bonusEntry = $sg->playBonus($game, $user, 1);
             }
@@ -436,7 +405,7 @@ class QuizController extends GameController
             $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
             $user = $this->zfcUserAuthentication()->getIdentity();
             $game = $sg->checkGame($identifier);
-            $lastEntry = $sg->getEntryMapper()->findLastInactiveEntryById($game, $user);
+            $lastEntry = $sg->findLastInactiveEntry($game, $user);
             if ($lastEntry && $lastEntry->getWinner()) {
                 $bonusEntry = $sg->playBonus($game, $user, 1);
             }

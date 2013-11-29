@@ -322,7 +322,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     	$game->setIdentifier('gameid');
 
     	$f = $this->getMockBuilder('PlaygroundGame\Service\Game')
-    	->setMethods(array('checkGame', 'checkIsFan', 'getEntryMapper', 'getServiceManager'))
+    	->setMethods(array('checkGame', 'checkIsFan', 'getEntryMapper', 'getServiceManager', 'findLastInactiveEntry'))
     	//->disableOriginalConstructor()
     	->getMock();
 
@@ -332,6 +332,10 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     	$f->expects($this->once())
     	->method('checkGame')
     	->will($this->returnValue($game));
+    	
+    	$f->expects($this->once())
+    	->method('findLastInactiveEntry')
+    	->will($this->returnValue(false));
 
     	$ZfcUserMock = $this->getMock('ZfcUser\Entity\User');
 
@@ -351,17 +355,6 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     	->method('getIdentity')
     	->will($this->returnValue($ZfcUserMock));
 
-    	$entryMock = $this->getMockBuilder('PlaygroundGame\Mapper\Entry')
-    		->disableOriginalConstructor()
-    		->getMock();
-
-    	$f->expects($this->once())
-    	->method('getEntryMapper')
-    	->will($this->returnValue($entryMock));
-
-    	$entryMock->expects($this->once())
-    	->method('findLastInactiveEntryById')
-    	->will($this->returnValue(false));
 
     	$pluginManager->setService('zfcUserAuthentication', $authMock);
     	$pluginManager->setService('shortenUrl', $bitlyMock);
@@ -484,6 +477,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     	$game->setBroadcastPlatform(true);
     	$game->setActive(true);
     	$game->setIdentifier('gameid');
+    	$game->setClassType('lottery');
 
     	$f = $this->getMockBuilder('PlaygroundGame\Service\Game')
     	->setMethods(array('checkGame', 'checkIsFan', 'checkExistingEntry', 'getServiceManager'))

@@ -217,6 +217,8 @@ class QuizReplyAnswer implements InputFilterAwareInterface
     public function setPoints($points)
     {
         $this->points = $points;
+        
+        return $this;
     }
 
     /**

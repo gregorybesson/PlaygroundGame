@@ -87,6 +87,8 @@ class PrizeCategory
     public function setId ($id)
     {
         $this->id = $id;
+        
+        return $this;
     }
 
     /**
@@ -123,6 +125,8 @@ class PrizeCategory
     public function setIdentifier ($identifier)
     {
         $this->identifier = $identifier;
+        
+        return $this;
     }
 
     /**
@@ -139,6 +143,8 @@ class PrizeCategory
     public function setActive($active)
     {
         $this->active = $active;
+        
+        return $this;
     }
 
     /**
@@ -155,6 +161,8 @@ class PrizeCategory
     public function setPicto($picto)
     {
         $this->picto = $picto;
+        
+        return $this;
     }
 
     /**
@@ -171,6 +179,8 @@ class PrizeCategory
     public function setCreatedAt($created_at)
     {
         $this->created_at = $created_at;
+        
+        return $this;
     }
 
     /**
@@ -187,6 +197,8 @@ class PrizeCategory
     public function setUpdatedAt($updated_at)
     {
         $this->updated_at = $updated_at;
+        
+        return $this;
     }
 
     /**

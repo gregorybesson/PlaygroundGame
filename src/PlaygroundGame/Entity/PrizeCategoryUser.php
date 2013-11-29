@@ -70,6 +70,8 @@ class PrizeCategoryUser
     public function setPrizeCategory($prizeCategory)
     {
         $this->prizeCategory = $prizeCategory;
+        
+        return $this;
     }
 
     /**
@@ -86,6 +88,8 @@ class PrizeCategoryUser
     public function setUser($user)
     {
         $this->user = $user;
+        
+        return $this;
     }
 
     /**
@@ -102,6 +106,8 @@ class PrizeCategoryUser
     public function setPoints($points)
     {
         $this->points = $points;
+        
+        return $this;
     }
 
     /**
@@ -118,6 +124,8 @@ class PrizeCategoryUser
     public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
+        
+        return $this;
     }
 
     /**
@@ -134,6 +142,8 @@ class PrizeCategoryUser
     public function setUpdatedAt($updatedAt)
     {
         $this->updatedAt = $updatedAt;
+        
+        return $this;
     }
 
     /**

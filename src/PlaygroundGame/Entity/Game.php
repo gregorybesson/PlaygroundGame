@@ -3,6 +3,8 @@ namespace PlaygroundGame\Entity;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Translatable\Translatable;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping\PrePersist;
 use Doctrine\ORM\Mapping\PreUpdate;
@@ -20,8 +22,9 @@ use Zend\InputFilter\InputFilterInterface;
  * @ORM\DiscriminatorMap({"quiz" = "Quiz", "lottery" = "Lottery", "instantwin" =
  * "InstantWin", "postvote" = "PostVote", "treasurehunt" = "TreasureHunt"})
  * @ORM\Table(name="game")
+ * @Gedmo\TranslationEntity(class="PlaygroundGame\Entity\GameTranslation")
  */
-class Game implements InputFilterAwareInterface
+class Game implements InputFilterAwareInterface, Translatable
 {
     // not yet published
     const GAME_SCHEDULE  = 'scheduled';
@@ -33,6 +36,13 @@ class Game implements InputFilterAwareInterface
     const GAME_FINISHED   = 'finished';
     // closed
     const GAME_CLOSED = 'closed';
+    
+    /**
+     * @Gedmo\Locale
+     * Used locale to override Translation listener`s locale
+     * this is not a mapped field of entity metadata, just a simple property
+     */
+    protected $locale;
 
     protected $inputFilter;
 
@@ -55,6 +65,7 @@ class Game implements InputFilterAwareInterface
     protected $prizeCategory;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(type="string", length=255, nullable=false)
      */
     protected $title;
@@ -64,6 +75,11 @@ class Game implements InputFilterAwareInterface
      */
     protected $identifier;
 
+    /**
+     * @ORM\OneToOne(targetEntity="PlayerForm", mappedBy="game", cascade={"persist","remove"})
+     **/
+    protected $playerForm;
+    
     /**
      * @ORM\Column(name="main_image", type="string", length=255, nullable=true)
      */
@@ -109,6 +125,11 @@ class Game implements InputFilterAwareInterface
      */
     protected $active = 0;
 
+    /**
+     * @ORM\Column(name="anonymous_allowed",type="boolean", nullable=true)
+     */
+    protected $anonymousAllowed = 0;
+    
     /**
      * @ORM\Column(name="publication_date", type="datetime", nullable=true)
      */
@@ -173,11 +194,13 @@ class Game implements InputFilterAwareInterface
     protected $stylesheet;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(name="welcome_block", type="text", nullable=true)
      */
     protected $welcomeBlock;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(type="text", nullable=true)
      */
     protected $termsBlock;
@@ -188,22 +211,26 @@ class Game implements InputFilterAwareInterface
     protected $termsOptin = 0;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(type="text", nullable=true)
      */
     protected $conditionsBlock;
 
     // TODO : Adherence CMS de ces blocs à revoir
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(type="text", nullable=true)
      */
     protected $columnBlock1;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(type="text", nullable=true)
      */
     protected $columnBlock2;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(type="text", nullable=true)
      */
     protected $columnBlock3;
@@ -219,6 +246,7 @@ class Game implements InputFilterAwareInterface
     protected $fbAppId;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(name="fb_page_tab_title", type="string", length=255, nullable=true)
      */
     protected $fbPageTabTitle;
@@ -229,6 +257,7 @@ class Game implements InputFilterAwareInterface
     protected $fbPageTabImage;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(name="fb_share_message", type="text", nullable=true)
      */
     protected $fbShareMessage;
@@ -239,6 +268,7 @@ class Game implements InputFilterAwareInterface
     protected $fbShareImage;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(name="fb_request_message", type="text", nullable=true)
      */
     protected $fbRequestMessage;
@@ -249,19 +279,26 @@ class Game implements InputFilterAwareInterface
     protected $fbFan = 0;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(name="fb_fan_gate", type="text", nullable=true)
      */
     protected $fbFanGate;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(name="tw_share_message", type="string", length=255, nullable=true)
      */
     protected $twShareMessage;
     
     /**
-     * @ORM\Column(name="steps", type="string", length=255, nullable=false)
+     * @ORM\Column(name="steps", type="string", length=255, nullable=true)
      */
-    protected $steps = 'index,play,result,bounce';
+    protected $steps = '{"0":"index","1":"play","2":"result","3":"bounce"}';
+    
+    /**
+     * @ORM\Column(name="steps_views", type="string", length=255, nullable=true)
+     */
+    protected $stepsViews = '{"index":{},"play":{},"result":{},"bounce":{}}';
 
     /**
      * Doctrine accessible value of discriminator (field 'type' is not
@@ -320,9 +357,29 @@ class Game implements InputFilterAwareInterface
     public function setId ($id)
     {
         $this->id = $id;
+        
+        return $this;
     }
 
     /**
+     * @return the $playerForm
+     */
+    public function getPlayerForm()
+    {
+        return $this->playerForm;
+    }
+
+	/**
+     * @param field_type $playerForm
+     */
+    public function setPlayerForm($playerForm)
+    {
+        $this->playerForm = $playerForm;
+        
+        return $this;
+    }
+
+	/**
      *
      * @return the unknown_type
      */
@@ -378,6 +435,8 @@ class Game implements InputFilterAwareInterface
     public function setTitle ($title)
     {
         $this->title = $title;
+        
+        return $this;
     }
 
     /**
@@ -396,6 +455,26 @@ class Game implements InputFilterAwareInterface
     public function setIdentifier ($identifier)
     {
         $this->identifier = $identifier;
+        
+        return $this;
+    }
+
+	/**
+     * @return the $anonymousAllowed
+     */
+    public function getAnonymousAllowed()
+    {
+        return $this->anonymousAllowed;
+    }
+
+	/**
+     * @param number $anonymousAllowed
+     */
+    public function setAnonymousAllowed($anonymousAllowed)
+    {
+        $this->anonymousAllowed = $anonymousAllowed;
+        
+        return $this;
     }
 
 	/**
@@ -414,6 +493,8 @@ class Game implements InputFilterAwareInterface
     public function setMainImage ($mainImage)
     {
         $this->mainImage = $mainImage;
+        
+        return $this;
     }
 
     /**
@@ -432,6 +513,8 @@ class Game implements InputFilterAwareInterface
     public function setSecondImage ($secondImage)
     {
         $this->secondImage = $secondImage;
+        
+        return $this;
     }
 
     /**
@@ -450,6 +533,8 @@ class Game implements InputFilterAwareInterface
     public function setCanal ($canal)
     {
         $this->canal = $canal;
+        
+        return $this;
     }
 
     /**
@@ -468,6 +553,8 @@ class Game implements InputFilterAwareInterface
     public function setBroadcastFacebook ($broadcastFacebook)
     {
         $this->broadcastFacebook = $broadcastFacebook;
+        
+        return $this;
     }
 
     /**
@@ -486,20 +573,26 @@ class Game implements InputFilterAwareInterface
     public function setBroadcastPlatform ($broadcastPlatform)
     {
         $this->broadcastPlatform = $broadcastPlatform;
+        
+        return $this;
     }
 
     /**
 	 * @return the $broadcastEmbed
 	 */
-	public function getBroadcastEmbed() {
+	public function getBroadcastEmbed()
+	{
 		return $this->broadcastEmbed;
 	}
 
 	/**
 	 * @param number $broadcastEmbed
 	 */
-	public function setBroadcastEmbed($broadcastEmbed) {
+	public function setBroadcastEmbed($broadcastEmbed)
+	{
 		$this->broadcastEmbed = $broadcastEmbed;
+		
+		return $this;
 	}
 
 	/**
@@ -518,6 +611,8 @@ class Game implements InputFilterAwareInterface
     public function setPushHome ($pushHome)
     {
         $this->pushHome = $pushHome;
+        
+        return $this;
     }
 
     /**
@@ -536,6 +631,8 @@ class Game implements InputFilterAwareInterface
     public function setDisplayHome ($displayHome)
     {
         $this->displayHome = $displayHome;
+        
+        return $this;
     }
 
     /**
@@ -554,6 +651,8 @@ class Game implements InputFilterAwareInterface
     public function setPublicationDate ($publicationDate)
     {
         $this->publicationDate = $publicationDate;
+        
+        return $this;
     }
 
     /**
@@ -572,6 +671,8 @@ class Game implements InputFilterAwareInterface
     public function setStartDate ($startDate)
     {
         $this->startDate = $startDate;
+        
+        return $this;
     }
 
     /**
@@ -590,6 +691,8 @@ class Game implements InputFilterAwareInterface
     public function setEndDate ($endDate)
     {
         $this->endDate = $endDate;
+        
+        return $this;
     }
 
     /**
@@ -608,6 +711,8 @@ class Game implements InputFilterAwareInterface
     public function setCloseDate ($closeDate)
     {
         $this->closeDate = $closeDate;
+        
+        return $this;
     }
 
     public function isClosed ()
@@ -664,11 +769,13 @@ class Game implements InputFilterAwareInterface
         return false;
     }
     
+    // json array : {"0":"index","1":"play","2":"result","3":"bounce"}
     public function getStepsArray()
     {
         $steps = null;
+
         if($this->getSteps()){
-            $steps = explode(",", $this->getSteps());
+            $steps = json_decode($this->getSteps(), true);
         }
         if(!$steps){
             $steps = array('index','play','result','bounce');
@@ -684,6 +791,8 @@ class Game implements InputFilterAwareInterface
     public function setSteps($steps)
     {
         $this->steps = $steps;
+        
+        return $this;
     }
     
     /**
@@ -745,7 +854,25 @@ class Game implements InputFilterAwareInterface
         return false;
     }
 
-    public function getState()
+    /**
+     * @return the $stepsViews
+     */
+    public function getStepsViews()
+    {
+        return $this->stepsViews;
+    }
+
+	/**
+     * @param string $stepsViews
+     */
+    public function setStepsViews($stepsViews)
+    {
+        $this->stepsViews = $stepsViews;
+        
+        return $this;
+    }
+
+	public function getState()
     {
         if ($this->isOpen()){
             if (!$this->isStarted() && !$this->isFinished()) {
@@ -834,6 +961,8 @@ class Game implements InputFilterAwareInterface
     public function setLayout ($layout)
     {
         $this->layout = $layout;
+        
+        return $this;
     }
 
     /**
@@ -852,6 +981,8 @@ class Game implements InputFilterAwareInterface
     public function setStylesheet ($stylesheet)
     {
         $this->stylesheet = $stylesheet;
+        
+        return $this;
     }
 
     /**
@@ -870,6 +1001,8 @@ class Game implements InputFilterAwareInterface
     public function setWelcomeBlock ($welcomeBlock)
     {
         $this->welcomeBlock = $welcomeBlock;
+        
+        return $this;
     }
 
     /**
@@ -888,6 +1021,8 @@ class Game implements InputFilterAwareInterface
     public function setTermsBlock ($termsBlock)
     {
         $this->termsBlock = $termsBlock;
+        
+        return $this;
     }
 
     /**
@@ -906,6 +1041,8 @@ class Game implements InputFilterAwareInterface
     public function setTermsOptin ($termsOptin)
     {
     	$this->termsOptin = $termsOptin;
+    	
+    	return $this;
     }
 
     /**
@@ -924,6 +1061,8 @@ class Game implements InputFilterAwareInterface
     public function setConditionsBlock ($conditionsBlock)
     {
         $this->conditionsBlock = $conditionsBlock;
+        
+        return $this;
     }
 
     /**
@@ -942,6 +1081,8 @@ class Game implements InputFilterAwareInterface
     public function setColumnBlock1 ($columnBlock1)
     {
         $this->columnBlock1 = $columnBlock1;
+        
+        return $this;
     }
 
     /**
@@ -960,6 +1101,8 @@ class Game implements InputFilterAwareInterface
     public function setColumnBlock2 ($columnBlock2)
     {
         $this->columnBlock2 = $columnBlock2;
+        
+        return $this;
     }
 
     /**
@@ -978,6 +1121,8 @@ class Game implements InputFilterAwareInterface
     public function setColumnBlock3 ($columnBlock3)
     {
         $this->columnBlock3 = $columnBlock3;
+        
+        return $this;
     }
 
     /**
@@ -1044,6 +1189,8 @@ class Game implements InputFilterAwareInterface
     public function setClassType ($classType)
     {
         $this->classType = $classType;
+        
+        return $this;
     }
 
     /**
@@ -1262,6 +1409,8 @@ class Game implements InputFilterAwareInterface
     public function setCreatedAt ($createdAt)
     {
         $this->createdAt = $createdAt;
+        
+        return $this;
     }
 
     /**
@@ -1280,6 +1429,8 @@ class Game implements InputFilterAwareInterface
     public function setUpdatedAt ($updatedAt)
     {
         $this->updatedAt = $updatedAt;
+        
+        return $this;
     }
 
     /**
@@ -1731,5 +1882,10 @@ class Game implements InputFilterAwareInterface
         }
 
         return $this->inputFilter;
+    }
+    
+    public function setTranslatableLocale($locale)
+    {
+        $this->locale = $locale;
     }
 }
