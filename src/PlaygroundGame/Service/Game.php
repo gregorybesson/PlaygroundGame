@@ -927,20 +927,22 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
     public function sendGameMail($game, $user, $post, $template = 'postvote')
     {
-        $mailService = $this->getServiceManager()->get('playgroundgame_message');
-        $from = $this->getOptions()->getEmailFromAddress();
-        $to = $user->getEmail();
-        $subject = $this->getOptions()->getParticipationSubjectLine();
         $renderer = $this->getServiceManager()->get('Zend\View\Renderer\RendererInterface');
         $skinUrl = $renderer->url('frontend', array(), array(
             'force_canonical' => true
         ));
+        $this->sendGameEmail($user->getEmail(), array('post' => $post,), $template);
+    }
 
-        $message = $mailService->createHtmlMessage($from, $to, $subject, 'playground-game/email/' . $template, array(
-            'game' => $game,
-            'post' => $post,
-            'skinUrl' => $skinUrl
-        ));
+    public function sendGameEmail($game, $email, $data=array(), $template = 'postvote')
+    {
+        $mailService = $this->getServiceManager()->get('playgroundgame_message');
+        $from = $this->getOptions()->getEmailFromAddress();
+        $subject = $this->getOptions()->getParticipationSubjectLine();
+        $renderer = $this->getServiceManager()->get('Zend\View\Renderer\RendererInterface');
+        $skinUrl = $renderer->url('frontend', array('channel'=>''), array('force_canonical' => true));
+        $data = array_merge($data, array('game' => $game, 'skinUrl' => $skinUrl));
+        $message = $mailService->createHtmlMessage($from, $email, $subject, 'playground-game/email/' . $template, $data);
         $mailService->send($message);
     }
 
@@ -1514,6 +1516,28 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $form = $this->getPlayerFormMapper()->insert($form);
 
         return $form;
+    }
+
+    public function emailPlayer($game, Entry $entry, $data=array(), $email = ''){
+        // player is not over with the game, we don't know if he will be a winner or a looser yet
+        if($entry->getActive()){
+            return false;
+        }
+        if (!$email && $entry->getUser()) {
+            $email = $entry->getUser()->getEmail();
+        }
+        // if we do not have any valid email, we can not send anything
+        if (!$email) {
+            return false;
+        }
+        if($entry->getWinner() && $game->getEmailWinner()) {
+            $data = array_merge($data, array('post' => $game->getWinnerEmailContent()));
+            $this->sendGameEmail($game, $email, $data, 'game-winner');
+        } elseif (!$entry->getWinner() && $game->getEmailLooser()){
+            $data = array_merge($data, array('post' => $game->getLooserEmailContent()));
+            $this->sendGameEmail($game, $email, $data, 'game-looser');
+        }
+        return true;
     }
 
     public function getPlayerFormMapper()
