@@ -1453,11 +1453,17 @@ class Game implements InputFilterAwareInterface, Translatable
         return $this;
     }
 
+    /**
+     * @return the $emailWinner
+     */
     public function getEmailWinner ()
     {
         return $this->emailWinner;
     }
 
+     /**
+     * @param boolean $emailWinner
+     */
     public function setEmailWinner ($emailWinner)
     {
         $this->emailWinner = $emailWinner;
@@ -1465,11 +1471,17 @@ class Game implements InputFilterAwareInterface, Translatable
         return $this;
     }
 
+    /**
+     * @return the $emailLooser
+     */
     public function getEmailLooser ()
     {
         return $this->emailLooser;
     }
 
+    /**
+     * @param boolean $emailLooser
+     */
     public function setEmailLooser ($emailLooser)
     {
         $this->emailLooser = $emailLooser;
@@ -1477,11 +1489,17 @@ class Game implements InputFilterAwareInterface, Translatable
         return $this;
     }
 
+    /**
+     * @return the $emailWinnerContent
+     */
     public function getEmailWinnerContent ()
     {
         return $this->emailWinnerContent;
     }
 
+    /**
+     * @param string $emailWinnerContent
+     */
     public function setEmailWinnerContent ($emailWinnerContent)
     {
         $this->emailWinnerContent = $emailWinnerContent;
@@ -1489,11 +1507,17 @@ class Game implements InputFilterAwareInterface, Translatable
         return $this;
     }
 
+    /**
+     * @return the $emailLooserContent
+     */
     public function getEmailLooserContent ()
     {
         return $this->emailLooserContent;
     }
 
+    /**
+     * @param string $emailLooserContent
+     */
     public function setEmailLooserContent ($emailLooserContent)
     {
         $this->emailLooserContent = $emailLooserContent;
