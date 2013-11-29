@@ -170,7 +170,7 @@ class Game extends ProvidesEventsForm
                 'label' => $translator->translate('Publish game on plateform', 'playgroundgame'),
             ),
         ));
-        
+
         $this->add(array(
             'type' => 'Zend\Form\Element\Checkbox',
             'name' => 'anonymousAllowed',
@@ -627,7 +627,7 @@ class Game extends ProvidesEventsForm
         				'target_element' => $prizeFieldset
         		)
         ));
-        
+
         $this->add(array(
             'name' => 'steps',
             'type' => 'Zend\Form\Element\Text',
@@ -639,7 +639,7 @@ class Game extends ProvidesEventsForm
                 'label' => $translator->translate('The steps of the game', 'playgroundgame'),
             ),
         ));
-        
+
         $this->add(array(
             'name' => 'stepsViews',
             'type' => 'Zend\Form\Element\Text',
@@ -650,6 +650,62 @@ class Game extends ProvidesEventsForm
             'options' => array(
                 'label' => $translator->translate('The steps views', 'playgroundgame'),
             ),
+        ));
+
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Select',
+            'name' => 'emailWinner',
+            'options' => array(
+                'value_options' => array(
+                    '0' => $translator->translate('No', 'playgroundgame'),
+                    '1' => $translator->translate('Yes', 'playgroundgame')
+                ),
+                'label' => $translator->translate('Send Email to Winners', 'playgroundgame')
+            ),
+            'attributes' => array(
+                'id' => 'emailWinner'
+            ),
+        ));
+
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Textarea',
+            'name' => 'winnerEmailContent',
+            'options' => array(
+                'label' => $translator->translate('Message for winners', 'playgroundgame')
+            ),
+            'attributes' => array(
+                'cols' => '10',
+                'rows' => '4',
+                'id' => 'winnerEmailContent'
+            )
+        ));
+
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Select',
+            'name' => 'emailLooser',
+            'options' => array(
+                'value_options' => array(
+                    '0' => $translator->translate('No', 'playgroundgame'),
+                    '1' => $translator->translate('Yes', 'playgroundgame')
+                ),
+                'label' => $translator->translate('Send Email to Loosers', 'playgroundgame')
+            ),
+            'attributes' => array(
+                'id' => 'emailLooser'
+            ),
+        ));
+
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Textarea',
+            'name' => 'looserEmailContent',
+            'options' => array(
+                'label' => $translator->translate('Message for Loosers', 'playgroundgame')
+            ),
+            'attributes' => array(
+                'cols' => '10',
+                'rows' => '4',
+                'id' => 'looserEmailContent'
+            )
         ));
 
         $submitElement = new Element\Button('submit');

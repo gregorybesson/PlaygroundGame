@@ -341,7 +341,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
     	$f->expects($this->once())
     	->method('checkExistingEntry')
     	->will($this->returnValue(false));
-    	
+
     	$f->expects($this->once())
     	->method('findLastEntries')
     	->will($this->returnValue(2));
@@ -371,7 +371,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
     	$f->expects($this->once())
     	->method('checkExistingEntry')
     	->will($this->returnValue(false));
-    	
+
     	$f->expects($this->once())
     	->method('findLastEntries')
     	->will($this->returnValue(0));
@@ -385,4 +385,5 @@ class GameTest extends \PHPUnit_Framework_TestCase
 
     	$this->assertInstanceOf('\PlaygroundGame\Entity\Entry', $entry);
     }
+
 }

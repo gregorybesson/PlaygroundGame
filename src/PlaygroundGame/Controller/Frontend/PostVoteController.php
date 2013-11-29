@@ -29,25 +29,25 @@ class PostVoteController extends GameController
     public function playAction()
     {
         $sg         = $this->getGameService();
-        
+
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
         $channel = $this->getEvent()->getRouteMatch()->getParam('channel');
-        
+
         $game = $sg->checkGame($identifier);
         if (! $game || $game->isClosed()) {
             return $this->notFoundAction();
         }
-        
+
         $redirectFb = $this->checkFbRegistration($this->zfcUserAuthentication()->getIdentity(), $game, $channel);
         if($redirectFb){
             return $redirectFb;
         }
-        
+
         $user       = $this->zfcUserAuthentication()->getIdentity();
-        
+
         if (!$user && !$game->getAnonymousAllowed()) {
             $redirect = urlencode($this->url()->fromRoute('frontend/'. $game->getClassType() . '/play', array('id' => $game->getIdentifier(), 'channel' => $channel), array('force_canonical' => true)));
-        
+
             return $this->redirect()->toUrl($this->url()->fromRoute('frontend/zfcuser/register', array('channel' => $channel)) . '?redirect='.$redirect);
         }
 
@@ -312,7 +312,7 @@ class PostVoteController extends GameController
             if ($post) {
                 if($user){
                     // send mail for participation
-                    $this->getGameService()->sendGameMail($game, $user, $post, 'postvote');
+                    $this->getGameService()->sendGameEmail($game, $user->getEmail(), array('post' => $post), 'postvote');
                 }
                 $redirectUrl = $this->url()->fromRoute('frontend/postvote/result', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')));
 
@@ -461,7 +461,7 @@ class PostVoteController extends GameController
         if ($lastEntry == null) {
             return $this->redirect()->toUrl($this->url()->fromRoute('frontend/postvote', array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
         }
-        
+
         if (!$user && !$game->getAnonymousAllowed()) {
             $redirect = urlencode($this->url()->fromRoute('frontend/postvote/result', array('id' => $game->getIdentifier(), 'channel' => $channel)));
             return $this->redirect()->toUrl($this->url()->fromRoute('frontend/zfcuser/register', array('channel' => $channel)) . '?redirect='.$redirect);
