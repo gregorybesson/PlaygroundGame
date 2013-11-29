@@ -925,15 +925,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         return false;
     }
 
-    public function sendGameMail($game, $user, $post, $template = 'postvote')
-    {
-        $renderer = $this->getServiceManager()->get('Zend\View\Renderer\RendererInterface');
-        $skinUrl = $renderer->url('frontend', array(), array(
-            'force_canonical' => true
-        ));
-        $this->sendGameEmail($user->getEmail(), array('post' => $post,), $template);
-    }
-
     public function sendGameEmail($game, $email, $data=array(), $template = 'postvote')
     {
         $mailService = $this->getServiceManager()->get('playgroundgame_message');
@@ -1531,10 +1522,10 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             return false;
         }
         if($entry->getWinner() && $game->getEmailWinner()) {
-            $data = array_merge($data, array('post' => $game->getWinnerEmailContent()));
+            $data = array_merge($data, array('post' => $game->getEmailWinnerContent()));
             $this->sendGameEmail($game, $email, $data, 'game-winner');
         } elseif (!$entry->getWinner() && $game->getEmailLooser()){
-            $data = array_merge($data, array('post' => $game->getLooserEmailContent()));
+            $data = array_merge($data, array('post' => $game->getEmailLooserContent()));
             $this->sendGameEmail($game, $email, $data, 'game-looser');
         }
         return true;
