@@ -170,7 +170,7 @@ class Game extends ProvidesEventsForm
                 'label' => $translator->translate('Publish game on plateform', 'playgroundgame'),
             ),
         ));
-        
+
         $this->add(array(
             'type' => 'Zend\Form\Element\Checkbox',
             'name' => 'anonymousAllowed',
@@ -315,6 +315,56 @@ class Game extends ProvidesEventsForm
             )
         ));
 
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Select',
+            'name' => 'mailWinner',
+            'options' => array(
+                'value_options' => array(
+                    '0' => $translator->translate('No', 'playgroundgame'),
+                    '1' => $translator->translate('Yes', 'playgroundgame')
+                ),
+                'label' => $translator->translate('Send a mail to winner', 'playgroundgame')
+            )
+        ));
+
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Textarea',
+            'name' => 'mailWinnerBlock',
+            'options' => array(
+                'label' => $translator->translate('Mail winner content', 'playgroundgame')
+            ),
+            'attributes' => array(
+                'cols' => '10',
+                'rows' => '10',
+                'id' => 'mailWinnerBlock'
+            )
+        ));
+
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Select',
+            'name' => 'mailLooser',
+            'options' => array(
+                'value_options' => array(
+                    '0' => $translator->translate('No', 'playgroundgame'),
+                    '1' => $translator->translate('Yes', 'playgroundgame')
+                ),
+                'label' => $translator->translate('Send a mail to looser', 'playgroundgame')
+            )
+        ));
+
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Textarea',
+            'name' => 'mailLooserBlock',
+            'options' => array(
+                'label' => $translator->translate('Mail looser content', 'playgroundgame')
+            ),
+            'attributes' => array(
+                'cols' => '10',
+                'rows' => '10',
+                'id' => 'mailLooserBlock'
+            )
+        ));
+
         $options = $this->getServiceManager()->get('configuration');
 
         $layoutArray = array(
@@ -408,20 +458,20 @@ class Game extends ProvidesEventsForm
         ));
 
         $this->add(array(
-                'name' => 'uploadFbPageTabImage',
-                'attributes' => array(
-                        'type' => 'file'
-                ),
-                'options' => array(
-                        'label' => $translator->translate('Game tab icone', 'playgroundgame')
-                )
+            'name' => 'uploadFbPageTabImage',
+            'attributes' => array(
+                'type' => 'file'
+            ),
+            'options' => array(
+                'label' => $translator->translate('Game tab icone', 'playgroundgame')
+            )
         ));
         $this->add(array(
-                'name' => 'fbPageTabImage',
-                'type' => 'Zend\Form\Element\Hidden',
-                'attributes' => array(
-                        'value' => ''
-                )
+            'name' => 'fbPageTabImage',
+            'type' => 'Zend\Form\Element\Hidden',
+            'attributes' => array(
+                'value' => ''
+            )
         ));
         $this->add(array(
             'name' => 'deleteFbPageTabImage',
@@ -446,16 +496,16 @@ class Game extends ProvidesEventsForm
         ));
 
         $this->add(array(
-        		'type' => 'Zend\Form\Element\Select',
-        		'name' => 'termsOptin',
-        		'options' => array(
-        				//'empty_option' => $translator->translate('Is the answer correct ?', 'playgroundgame'),
-        				'value_options' => array(
-        						'0' => $translator->translate('No', 'playgroundgame'),
-        						'1' => $translator->translate('Yes', 'playgroundgame'),
-        				),
-        				'label' => $translator->translate('Player must accept the rules', 'playgroundgame'),
-        		),
+    		'type' => 'Zend\Form\Element\Select',
+    		'name' => 'termsOptin',
+    		'options' => array(
+				//'empty_option' => $translator->translate('Is the answer correct ?', 'playgroundgame'),
+				'value_options' => array(
+					'0' => $translator->translate('No', 'playgroundgame'),
+					'1' => $translator->translate('Yes', 'playgroundgame'),
+				),
+				'label' => $translator->translate('Player must accept the rules', 'playgroundgame'),
+    		),
         ));
 
         $this->add(array(
@@ -627,7 +677,7 @@ class Game extends ProvidesEventsForm
         				'target_element' => $prizeFieldset
         		)
         ));
-        
+
         $this->add(array(
             'name' => 'steps',
             'type' => 'Zend\Form\Element\Text',
@@ -639,7 +689,7 @@ class Game extends ProvidesEventsForm
                 'label' => $translator->translate('The steps of the game', 'playgroundgame'),
             ),
         ));
-        
+
         $this->add(array(
             'name' => 'stepsViews',
             'type' => 'Zend\Form\Element\Text',
