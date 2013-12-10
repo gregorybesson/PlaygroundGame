@@ -330,14 +330,14 @@ class Game implements InputFilterAwareInterface, Translatable
     protected $emailLooser=0;
 
     /**
-     * @ORM\Column(name="email_winner_content", type="text")
+     * @ORM\Column(name="winner_email_content", type="text")
      */
-    protected $emailWinnerContent='';
+    protected $winnerEmailContent='';
 
     /**
-     * @ORM\Column(name="email_looser_content", type="text")
+     * @ORM\Column(name="looser_email_content", type="text")
      */
-    protected $emailLooserContent='';
+    protected $looserEmailContent='';
 
     public function __construct()
     {
@@ -1477,26 +1477,26 @@ class Game implements InputFilterAwareInterface, Translatable
         return $this;
     }
 
-    public function getEmailWinnerContent ()
+    public function getWinnerEmailContent ()
     {
-        return $this->emailWinnerContent;
+        return $this->winnerEmailContent;
     }
 
-    public function setEmailWinnerContent ($emailWinnerContent)
+    public function setWinnerEmailContent ($winnerEmailContent)
     {
-        $this->emailWinnerContent = $emailWinnerContent;
+        $this->winnerEmailContent = $winnerEmailContent;
 
         return $this;
     }
 
-    public function getEmailLooserContent ()
+    public function getLooserEmailContent ()
     {
-        return $this->emailLooserContent;
+        return $this->looserEmailContent;
     }
 
-    public function setEmailLooserContent ($emailLooserContent)
+    public function setLooserEmailContent ($looserEmailContent)
     {
-        $this->emailLooserContent = $emailLooserContent;
+        $this->looserEmailContent = $looserEmailContent;
 
         return $this;
     }
