@@ -382,17 +382,6 @@ class GameController extends AbstractActionController
                 $lastEntry->setPlayerData($data);
                 $sg->getEntryMapper()->update($lastEntry);
 
-                // send email to player if defined in admin
-                $email = '';
-                // First email field found is used to send the email
-                foreach($form->getElements() as $element) {
-                    if ($element InstanceOf \Zend\Form\Element\Email) {
-                        $email = $element->getValue();
-                        break;
-                    }
-                }
-                $this->getSpecialGameService($game)->emailPlayer($game, $lastEntry, array(), $email);
-
                 return $this->redirect()->toUrl($this->url()->fromRoute('frontend/'. $game->getClassType() .'/bounce', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)));
             }
         }
@@ -1035,19 +1024,7 @@ class GameController extends AbstractActionController
     public function getGameService()
     {
         if (!$this->gameService) {
-            $this->gameService = $this->getServiceLocator()->get('playgroundgame_game_service');
-        }
-
-        return $this->gameService;
-    }
-
-    public function getSpecialGameService($game)
-    {
-        if ($game->getClassType()) {
-            $this->gameService = $this->getServiceLocator()->get('playgroundgame_'.$game->getClassType().'_service');
-        }
-        if (!$this->gameService) {
-            $this->gameService = $this->getServiceLocator()->get('playgroundgame_game_service');
+            $this->gameService = $this->getServiceLocator()->get('playgroundgame_lottery_service');
         }
 
         return $this->gameService;

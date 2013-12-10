@@ -569,16 +569,6 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
         return $occurrence;
     }
 
-    // For InstantWin game, we may want to display the prize in email sent to winners
-    public function emailPlayer($game, Entry $entry, $data=array(), $email = '')
-    {
-        $occurrence = $this->getInstantWinOccurrenceMapper()->findByEntry($entry);
-        if ($occurrence && $occurrence->getPrize()) {
-            $data['prize'] = $occurrence->getPrize();
-        }
-        return parent::emailPlayer($game, $entry, $data, $email);
-    }
-
     public function getGameEntity()
     {
         return new \PlaygroundGame\Entity\InstantWin;

@@ -322,22 +322,22 @@ class Game implements InputFilterAwareInterface, Translatable
     /**
      * @ORM\Column(name="email_winner", type="boolean")
      */
-    protected $emailWinner=0;
+    protected $emailWinner;
 
     /**
      * @ORM\Column(name="email_looser", type="boolean")
      */
-    protected $emailLooser=0;
+    protected $emailLooser;
 
     /**
      * @ORM\Column(name="winner_email_content", type="text")
      */
-    protected $winnerEmailContent='';
+    protected $winnerEmailContent;
 
     /**
      * @ORM\Column(name="looser_email_content", type="text")
      */
-    protected $looserEmailContent='';
+    protected $looserEmailContent;
 
     public function __construct()
     {
