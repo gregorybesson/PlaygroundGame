@@ -36,7 +36,7 @@ class Game implements InputFilterAwareInterface, Translatable
     const GAME_FINISHED   = 'finished';
     // closed
     const GAME_CLOSED = 'closed';
-
+    
     /**
      * @Gedmo\Locale
      * Used locale to override Translation listener`s locale
@@ -79,7 +79,7 @@ class Game implements InputFilterAwareInterface, Translatable
      * @ORM\OneToOne(targetEntity="PlayerForm", mappedBy="game", cascade={"persist","remove"})
      **/
     protected $playerForm;
-
+    
     /**
      * @ORM\Column(name="main_image", type="string", length=255, nullable=true)
      */
@@ -129,7 +129,7 @@ class Game implements InputFilterAwareInterface, Translatable
      * @ORM\Column(name="anonymous_allowed",type="boolean", nullable=true)
      */
     protected $anonymousAllowed = 0;
-
+    
     /**
      * @ORM\Column(name="publication_date", type="datetime", nullable=true)
      */
@@ -289,12 +289,12 @@ class Game implements InputFilterAwareInterface, Translatable
      * @ORM\Column(name="tw_share_message", type="string", length=255, nullable=true)
      */
     protected $twShareMessage;
-
+    
     /**
      * @ORM\Column(name="steps", type="string", length=255, nullable=true)
      */
     protected $steps = '{"0":"index","1":"play","2":"result","3":"bounce"}';
-
+    
     /**
      * @ORM\Column(name="steps_views", type="string", length=255, nullable=true)
      */
@@ -318,26 +318,6 @@ class Game implements InputFilterAwareInterface, Translatable
      * @ORM\Column(name="updated_at", type="datetime")
      */
     protected $updatedAt;
-
-    /**
-     * @ORM\Column(name="email_winner", type="boolean")
-     */
-    protected $emailWinner;
-
-    /**
-     * @ORM\Column(name="email_looser", type="boolean")
-     */
-    protected $emailLooser;
-
-    /**
-     * @ORM\Column(name="winner_email_content", type="text")
-     */
-    protected $winnerEmailContent;
-
-    /**
-     * @ORM\Column(name="looser_email_content", type="text")
-     */
-    protected $looserEmailContent;
 
     public function __construct()
     {
@@ -377,7 +357,7 @@ class Game implements InputFilterAwareInterface, Translatable
     public function setId ($id)
     {
         $this->id = $id;
-
+        
         return $this;
     }
 
@@ -395,7 +375,7 @@ class Game implements InputFilterAwareInterface, Translatable
     public function setPlayerForm($playerForm)
     {
         $this->playerForm = $playerForm;
-
+        
         return $this;
     }
 
@@ -455,7 +435,7 @@ class Game implements InputFilterAwareInterface, Translatable
     public function setTitle ($title)
     {
         $this->title = $title;
-
+        
         return $this;
     }
 
@@ -475,7 +455,7 @@ class Game implements InputFilterAwareInterface, Translatable
     public function setIdentifier ($identifier)
     {
         $this->identifier = $identifier;
-
+        
         return $this;
     }
 
@@ -493,7 +473,7 @@ class Game implements InputFilterAwareInterface, Translatable
     public function setAnonymousAllowed($anonymousAllowed)
     {
         $this->anonymousAllowed = $anonymousAllowed;
-
+        
         return $this;
     }
 
@@ -513,7 +493,7 @@ class Game implements InputFilterAwareInterface, Translatable
     public function setMainImage ($mainImage)
     {
         $this->mainImage = $mainImage;
-
+        
         return $this;
     }
 
@@ -533,7 +513,7 @@ class Game implements InputFilterAwareInterface, Translatable
     public function setSecondImage ($secondImage)
     {
         $this->secondImage = $secondImage;
-
+        
         return $this;
     }
 
@@ -553,7 +533,7 @@ class Game implements InputFilterAwareInterface, Translatable
     public function setCanal ($canal)
     {
         $this->canal = $canal;
-
+        
         return $this;
     }
 
@@ -573,7 +553,7 @@ class Game implements InputFilterAwareInterface, Translatable
     public function setBroadcastFacebook ($broadcastFacebook)
     {
         $this->broadcastFacebook = $broadcastFacebook;
-
+        
         return $this;
     }
 
@@ -593,7 +573,7 @@ class Game implements InputFilterAwareInterface, Translatable
     public function setBroadcastPlatform ($broadcastPlatform)
     {
         $this->broadcastPlatform = $broadcastPlatform;
-
+        
         return $this;
     }
 
@@ -611,7 +591,7 @@ class Game implements InputFilterAwareInterface, Translatable
 	public function setBroadcastEmbed($broadcastEmbed)
 	{
 		$this->broadcastEmbed = $broadcastEmbed;
-
+		
 		return $this;
 	}
 
@@ -631,7 +611,7 @@ class Game implements InputFilterAwareInterface, Translatable
     public function setPushHome ($pushHome)
     {
         $this->pushHome = $pushHome;
-
+        
         return $this;
     }
 
@@ -651,7 +631,7 @@ class Game implements InputFilterAwareInterface, Translatable
     public function setDisplayHome ($displayHome)
     {
         $this->displayHome = $displayHome;
-
+        
         return $this;
     }
 
@@ -671,7 +651,7 @@ class Game implements InputFilterAwareInterface, Translatable
     public function setPublicationDate ($publicationDate)
     {
         $this->publicationDate = $publicationDate;
-
+        
         return $this;
     }
 
@@ -691,7 +671,7 @@ class Game implements InputFilterAwareInterface, Translatable
     public function setStartDate ($startDate)
     {
         $this->startDate = $startDate;
-
+        
         return $this;
     }
 
@@ -711,7 +691,7 @@ class Game implements InputFilterAwareInterface, Translatable
     public function setEndDate ($endDate)
     {
         $this->endDate = $endDate;
-
+        
         return $this;
     }
 
@@ -731,7 +711,7 @@ class Game implements InputFilterAwareInterface, Translatable
     public function setCloseDate ($closeDate)
     {
         $this->closeDate = $closeDate;
-
+        
         return $this;
     }
 
@@ -788,7 +768,7 @@ class Game implements InputFilterAwareInterface, Translatable
 
         return false;
     }
-
+    
     // json array : {"0":"index","1":"play","2":"result","3":"bounce"}
     public function getStepsArray()
     {
@@ -802,19 +782,19 @@ class Game implements InputFilterAwareInterface, Translatable
         }
         return $steps;
     }
-
+    
     public function getSteps()
     {
         return $this->steps;
     }
-
+    
     public function setSteps($steps)
     {
         $this->steps = $steps;
-
+        
         return $this;
     }
-
+    
     /**
      * This method returns the first step in the game workflow
      * @param string $step
@@ -823,10 +803,10 @@ class Game implements InputFilterAwareInterface, Translatable
     public function firstStep()
     {
         $steps = $this->getStepsArray();
-
+    
         return $steps[0];
     }
-
+    
     /**
      * This method returns the last step in the game workflow
      * @param string $step
@@ -836,10 +816,10 @@ class Game implements InputFilterAwareInterface, Translatable
     {
         $steps = $this->getStepsArray();
         $nbSteps = count($steps);
-
+    
         return $steps[$nbSteps-1];
     }
-
+    
     /**
      * This method returns the previous step in the game workflow
      * @param string $step
@@ -849,14 +829,14 @@ class Game implements InputFilterAwareInterface, Translatable
     {
         $steps = $this->getStepsArray();
         $key = array_search($step, $steps);
-
+    
         if(is_int($key) && $key > 0 ){
             return $steps[$key-1];
         }
-
+    
         return false;
     }
-
+    
     /**
      * This method returns the next step in the game workflow
      * @param string $step
@@ -866,11 +846,11 @@ class Game implements InputFilterAwareInterface, Translatable
     {
         $steps = $this->getStepsArray();
         $key = array_search($step, $steps);
-
+        
         if(is_int($key) && $key < count($steps)-1 ){
             return $steps[$key+1];
         }
-
+        
         return false;
     }
 
@@ -888,7 +868,7 @@ class Game implements InputFilterAwareInterface, Translatable
     public function setStepsViews($stepsViews)
     {
         $this->stepsViews = $stepsViews;
-
+        
         return $this;
     }
 
@@ -981,7 +961,7 @@ class Game implements InputFilterAwareInterface, Translatable
     public function setLayout ($layout)
     {
         $this->layout = $layout;
-
+        
         return $this;
     }
 
@@ -1001,7 +981,7 @@ class Game implements InputFilterAwareInterface, Translatable
     public function setStylesheet ($stylesheet)
     {
         $this->stylesheet = $stylesheet;
-
+        
         return $this;
     }
 
@@ -1021,7 +1001,7 @@ class Game implements InputFilterAwareInterface, Translatable
     public function setWelcomeBlock ($welcomeBlock)
     {
         $this->welcomeBlock = $welcomeBlock;
-
+        
         return $this;
     }
 
@@ -1041,7 +1021,7 @@ class Game implements InputFilterAwareInterface, Translatable
     public function setTermsBlock ($termsBlock)
     {
         $this->termsBlock = $termsBlock;
-
+        
         return $this;
     }
 
@@ -1061,7 +1041,7 @@ class Game implements InputFilterAwareInterface, Translatable
     public function setTermsOptin ($termsOptin)
     {
     	$this->termsOptin = $termsOptin;
-
+    	
     	return $this;
     }
 
@@ -1081,7 +1061,7 @@ class Game implements InputFilterAwareInterface, Translatable
     public function setConditionsBlock ($conditionsBlock)
     {
         $this->conditionsBlock = $conditionsBlock;
-
+        
         return $this;
     }
 
@@ -1101,7 +1081,7 @@ class Game implements InputFilterAwareInterface, Translatable
     public function setColumnBlock1 ($columnBlock1)
     {
         $this->columnBlock1 = $columnBlock1;
-
+        
         return $this;
     }
 
@@ -1121,7 +1101,7 @@ class Game implements InputFilterAwareInterface, Translatable
     public function setColumnBlock2 ($columnBlock2)
     {
         $this->columnBlock2 = $columnBlock2;
-
+        
         return $this;
     }
 
@@ -1141,7 +1121,7 @@ class Game implements InputFilterAwareInterface, Translatable
     public function setColumnBlock3 ($columnBlock3)
     {
         $this->columnBlock3 = $columnBlock3;
-
+        
         return $this;
     }
 
@@ -1209,7 +1189,7 @@ class Game implements InputFilterAwareInterface, Translatable
     public function setClassType ($classType)
     {
         $this->classType = $classType;
-
+        
         return $this;
     }
 
@@ -1429,7 +1409,7 @@ class Game implements InputFilterAwareInterface, Translatable
     public function setCreatedAt ($createdAt)
     {
         $this->createdAt = $createdAt;
-
+        
         return $this;
     }
 
@@ -1449,55 +1429,7 @@ class Game implements InputFilterAwareInterface, Translatable
     public function setUpdatedAt ($updatedAt)
     {
         $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    public function getEmailWinner ()
-    {
-        return $this->emailWinner;
-    }
-
-    public function setEmailWinner ($emailWinner)
-    {
-        $this->emailWinner = $emailWinner;
-
-        return $this;
-    }
-
-    public function getEmailLooser ()
-    {
-        return $this->emailLooser;
-    }
-
-    public function setEmailLooser ($emailLooser)
-    {
-        $this->emailLooser = $emailLooser;
-
-        return $this;
-    }
-
-    public function getWinnerEmailContent ()
-    {
-        return $this->winnerEmailContent;
-    }
-
-    public function setWinnerEmailContent ($winnerEmailContent)
-    {
-        $this->winnerEmailContent = $winnerEmailContent;
-
-        return $this;
-    }
-
-    public function getLooserEmailContent ()
-    {
-        return $this->looserEmailContent;
-    }
-
-    public function setLooserEmailContent ($looserEmailContent)
-    {
-        $this->looserEmailContent = $looserEmailContent;
-
+        
         return $this;
     }
 
@@ -1951,7 +1883,7 @@ class Game implements InputFilterAwareInterface, Translatable
 
         return $this->inputFilter;
     }
-
+    
     public function setTranslatableLocale($locale)
     {
         $this->locale = $locale;
