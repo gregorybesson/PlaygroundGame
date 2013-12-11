@@ -31,28 +31,28 @@ class QuizController extends GameController
     public function playAction ()
     {
         $sg         = $this->getGameService();
-        
+
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
         $channel = $this->getEvent()->getRouteMatch()->getParam('channel');
-        
+
         $game = $sg->checkGame($identifier);
         if (! $game || $game->isClosed()) {
             return $this->notFoundAction();
         }
-        
+
         $redirectFb = $this->checkFbRegistration($this->zfcUserAuthentication()->getIdentity(), $game, $channel);
         if($redirectFb){
             return $redirectFb;
         }
-        
+
         $user       = $this->zfcUserAuthentication()->getIdentity();
-        
+
         if (!$user && !$game->getAnonymousAllowed()) {
             $redirect = urlencode($this->url()->fromRoute('frontend/'. $game->getClassType() . '/play', array('id' => $game->getIdentifier(), 'channel' => $channel), array('force_canonical' => true)));
-        
+
             return $this->redirect()->toUrl($this->url()->fromRoute('frontend/zfcuser/register', array('channel' => $channel)) . '?redirect='.$redirect);
         }
-        
+
         $entry = $sg->play($game, $user);
         if (!$entry) {
             // the user has already taken part of this game and the participation limit has been reached
@@ -148,7 +148,7 @@ class QuizController extends GameController
 
             $i ++;
             if (($game->getQuestionGrouping() > 0 && $i % $game->getQuestionGrouping() == 0 && $i > 0) || $i == $totalQuestions) {
-                
+
                 $form->add($fieldset);
                 $inputFilter->add($fieldsetFilter, $fieldsetName);
             }
@@ -165,8 +165,8 @@ class QuizController extends GameController
             	unset($data['submitForm']);
                 $entry = $this->getGameService()->createQuizReply($data, $game, $user);
             }
-                
-            return $this->redirect()->toUrl($this->url()->fromRoute('frontend/'. $game->getClassType() . '/'. $game->nextStep($this->params('action')), array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));          
+
+            return $this->redirect()->toUrl($this->url()->fromRoute('frontend/'. $game->getClassType() . '/'. $game->nextStep($this->params('action')), array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
         }
 
         $viewModel = $this->buildView($game);
@@ -251,7 +251,7 @@ class QuizController extends GameController
                     $gameCorrectAnswers[$q->getId()]['question'] = $q->getQuestion();
                     $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['answer'] = $a->getAnswer();
                     $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['explanation'] = $a->getExplanation();
-                    
+
                     if (isset($correctAnswers[$q->getId()]) && isset($correctAnswers[$q->getId()][$a->getId()])) {
                         $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['found'] = true;
                     } else {
@@ -296,7 +296,9 @@ class QuizController extends GameController
             }
 
         }*/
-        
+
+        $this->sendMail($game, $user, $lastEntry);
+
         $nextGame = parent::getMissionGameService()->checkCondition($game, $winner, $prediction, $lastEntry);
 
         $viewModel = $this->buildView($game);

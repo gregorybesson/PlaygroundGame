@@ -578,6 +578,22 @@ class GameController extends AbstractActionController
         return $viewModel;
     }
 
+    /**
+     * Send mail for winner and/or looser
+     * @param unknown $game
+     * @param unknown $user
+     * @param unknown $lastEntry
+     */
+    public function sendMail($game, $user, $lastEntry){
+        if($user && $game->getMailWinner() && $lastEntry->getWinner()){
+            $this->getGameService()->sendResultMail($game, $user, $lastEntry, 'winner');
+        }
+
+        if($user && $game->getMailLooser() && !$lastEntry->getWinner()){
+            $this->getGameService()->sendResultMail($game, $user, $lastEntry, 'looser');
+        }
+    }
+
     public function checkFbRegistration($user, $game, $channel)
     {
         $redirect = false;

@@ -181,6 +181,8 @@ class InstantWinController extends GameController
             }
         }
 
+        $this->sendMail($game, $user, $lastEntry);
+
         $nextGame = parent::getMissionGameService()->checkCondition($game, $winner, true, $lastEntry);
 
         $viewModel = $this->buildView($game);
