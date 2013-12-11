@@ -57,13 +57,13 @@ class InstantWinOccurrence implements InputFilterAwareInterface
 
 	/**
      * @ORM\OneToOne(targetEntity="Entry")
-   	 * @ORM\JoinColumn(name="entry_id", referencedColumnName="id", onDelete="CASCADE")
+   	 * @ORM\JoinColumn(name="entry_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $entry;
 
     /**
      * @ORM\ManyToOne(targetEntity="Prize")
-     * @ORM\JoinColumn(name="prize_id", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\JoinColumn(name="prize_id", referencedColumnName="id", onDelete="SET NULL")
      **/
     protected $prize;
 
@@ -221,7 +221,7 @@ class InstantWinOccurrence implements InputFilterAwareInterface
     public function setUser($user)
     {
         $this->user = $user;
-        
+
         return $this;
     }
 
