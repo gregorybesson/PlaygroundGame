@@ -532,7 +532,7 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
             if (!$occurrence) {
                 return false;
             }
-            var_dump(!$occurrence->getEntry());
+
             // we also return if the occurrence was used but no data about user was registered
             // so user will have again the opportunity to fill its data
             if ($occurrence->getEntry()) {
