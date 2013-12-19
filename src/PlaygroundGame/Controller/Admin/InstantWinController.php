@@ -255,16 +255,12 @@ class InstantWinController extends GameController
             $form->setData($data);
             if ($form->isValid())
             {
-                var_dump('form is valid');
                 $data = $form->getData();
                 $created = $this->getAdminGameService()->importOccurrences($data);
                 if($created){
                     $this->flashMessenger()->setNamespace('playgroundgame')->addMessage($created.' occurrences were created !');
                     return $this->redirect()->toRoute('admin/playgroundgame/instantwin-occurrence-list', array('gameId'=>$gameId));
                 }
-            }
-            else {
-                var_dump($form->getMessages());
             }
         }
 
