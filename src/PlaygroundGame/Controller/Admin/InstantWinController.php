@@ -489,7 +489,7 @@ class InstantWinController extends GameController
         return $this->adminGameService;
     }
 
-    public function setAdminGameService(AdminGameService $adminGameService)
+    public function setAdminGameService(\PlaygroundGame\Controller\Admin\AdminGameService $adminGameService)
     {
         $this->adminGameService = $adminGameService;
 
