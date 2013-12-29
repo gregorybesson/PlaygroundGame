@@ -86,12 +86,13 @@ class Entry implements ServiceLocatorAwareInterface
             AND e.drawable = 1
             GROUP BY u.user_id
             ORDER BY RAND()
-            LIMIT ' . $total;
+            LIMIT :total';
         
         $rsm = new \Doctrine\ORM\Query\ResultSetMappingBuilder($this->em);
         $rsm->addRootEntityFromClassMetadata('\PlaygroundGame\Entity\Entry',  'e',  array('id' => 'id', 'created_at' => 'ecreated_at', 'updated_at' => 'eupdated_at'));
         $query = $this->em->createNativeQuery($sql,  $rsm);
         $query->setParameter('game_id', $game->getId());
+        $query->setParameter('total', $total);
         
         return $query->getResult();
     }
