@@ -248,18 +248,13 @@ class Quiz extends Game implements ServiceManagerAwareInterface
     {
         $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
 
-        if ($count == 'count') {
-            $aggregate = 'COUNT(e.id)';
-        }
-
         $query = $em->createQuery(
-            'SELECT '.$aggregate.' FROM PlaygroundGame\Entity\Entry e, PlaygroundGame\Entity\Game g
+            "SELECT COUNT(e.id) FROM PlaygroundGame\Entity\Entry e, PlaygroundGame\Entity\Game g
                 WHERE e.user = :user
-                AND g.classType = :quiz
-                AND e.points > 0'
+                AND g.classType = 'quiz'
+                AND e.points > 0"
         );
         $query->setParameter('user', $user);
-        $query->setParameter('quiz', 'quiz');
         $number = $query->getSingleScalarResult();
 
         return $number;

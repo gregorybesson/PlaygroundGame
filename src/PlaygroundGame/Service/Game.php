@@ -1218,23 +1218,22 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
         switch ($type) {
             case 'startDate':
-                $filter = 'g.startDate';
+                $filter = 'g.startDate ' . $order;
                 break;
             case 'activeGames':
-                $filter = 'g.active';
+                $filter = 'g.active ' . $order;
                 break;
             case 'onlineGames':
-                $filter = $onlineGames;
+                $filter = $onlineGames . ' ' . $order;
                 break;
             case 'createdAt':
-                $filter = 'g.createdAt';
+                $filter = 'g.createdAt ' . $order;
                 break;
         }
 
         $query = $em->createQuery('
             SELECT g FROM PlaygroundGame\Entity\Game g
-            ORDER BY ' . $filter . ' ' . $order . '
-        ');
+            ORDER BY ' . $filter);
         if ($filter == $onlineGames) {
             $query->setParameter('date', $today);
         }
