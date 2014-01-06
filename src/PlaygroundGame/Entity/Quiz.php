@@ -290,6 +290,10 @@ class Quiz extends Game implements InputFilterAwareInterface
     {
         parent::populate($data);
 
+        if (isset($data['winners']) && $data['winners'] != null) {
+            $this->winners = $data['winners'];
+        }
+
         if (isset($data['timer']) && $data['timer'] != null) {
             $this->timer = $data['timer'];
         }
@@ -366,6 +370,32 @@ class Quiz extends Game implements InputFilterAwareInterface
                             'min'      => 5,
                             'max'      => 255,
                         ),
+                    ),
+                ),
+            )));
+
+            $inputFilter->add($factory->createInput(array(
+                'name'     => 'winners',
+                'required' => true,
+                'filters'  => array(
+                    array('name' => 'Int'),
+                ),
+                'validators' => array(
+                    array(
+                        'name'    => 'NotEmpty',
+                    ),
+                ),
+            )));
+
+            $inputFilter->add($factory->createInput(array(
+                'name'     => 'substitutes',
+                'required' => true,
+                'filters'  => array(
+                    array('name' => 'Int'),
+                ),
+                'validators' => array(
+                    array(
+                        'name'    => 'NotEmpty',
                     ),
                 ),
             )));
