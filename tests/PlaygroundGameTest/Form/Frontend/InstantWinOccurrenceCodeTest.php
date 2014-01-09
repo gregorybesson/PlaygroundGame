@@ -23,9 +23,7 @@ class instantWinOccurrenceCodeTest extends \PHPUnit_Framework_TestCase
         $this->codeInputData = array(
             'code-input' => '',
         );
-
         parent::setUp();
-
     }
 
     public function testTextInputTagStriped()

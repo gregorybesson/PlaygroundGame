@@ -116,7 +116,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
             $question->setImage($media_url . $data['upload_image']['name']);
             ErrorHandler::stop(true);
         }
-        
+
         if($data['delete_image'] && empty($data['upload_image']['tmp_name'])) {
             ErrorHandler::start();
             $image = $question->getImage();
@@ -138,6 +138,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
             $entries = $this->getEntryMapper()->findByGameId($question->getQuiz());
 
             $answers = $question->getAnswers();
+
             $answersarray = array();
             foreach ($answers as $answer) {
                 $answersarray[$answer->getId()] = $answer;
@@ -166,7 +167,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                                     $quizPoints += $updatedAnswer->getPoints();
                                     $quizReplyAnswer->setCorrect($updatedAnswer->getCorrect());
                                     $quizCorrectAnswers += $updatedAnswer->getCorrect();
-                                    $this->getQuizReplyAnswerMapper()->update($quizReplyAnswer);
+                                    $quizReplyAnswer = $this->getQuizReplyAnswerMapper()->update($quizReplyAnswer);
                                 }
                             }
                         }
@@ -276,7 +277,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
         $ratioCorrectAnswers = 0;
         $maxCorrectAnswers = $game->getMaxCorrectAnswers();
         $totalQuestions = 0;
-        
+
         $quizReply = new QuizReply();
 
         foreach ($data as $group) {
@@ -344,12 +345,12 @@ class Quiz extends Game implements ServiceManagerAwareInterface
         $entry->setPoints($quizPoints);
         $entry->setActive(false);
         $entry = $entryMapper->update($entry);
-        
+
         $quizReply->setEntry($entry);
         $quizReply->setTotalCorrectAnswers($quizCorrectAnswers);
         $quizReply->setMaxCorrectAnswers($maxCorrectAnswers);
         $quizReply->setTotalQuestions($totalQuestions);
-        
+
         $quizReplyMapper->insert($quizReply);
 
         $this->getEventManager()->trigger('complete_quiz.post', $this, array('user' => $user, 'entry' => $entry, 'reply' => $quizReply, 'game' => $game));
@@ -380,7 +381,6 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                 $winner = true;
             }
         }
-
         return $winner;
     }
 

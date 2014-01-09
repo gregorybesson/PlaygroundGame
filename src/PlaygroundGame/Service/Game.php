@@ -127,6 +127,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $form->setData($data);
 
         if (! $form->isValid()) {
+
             if (isset($data['publicationDate']) && $data['publicationDate']) {
                 $tmpDate = \DateTime::createFromFormat('Y-m-d', $data['publicationDate']);
                 $data['publicationDate'] = $tmpDate->format('d/m/Y');
@@ -158,6 +159,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             return false;
         }
 
+        $game = $form->getData();
         $game = $this->getGameMapper()->insert($game);
 
         // If I receive false, it means that the FB Id was not available anymore
