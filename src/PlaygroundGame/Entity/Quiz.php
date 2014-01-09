@@ -377,26 +377,27 @@ class Quiz extends Game implements InputFilterAwareInterface
             $inputFilter->add($factory->createInput(array(
                 'name'     => 'winners',
                 'required' => true,
-                'filters'  => array(
-                    array('name' => 'Int'),
-                ),
                 'validators' => array(
-                    array(
-                        'name'    => 'NotEmpty',
-                    ),
+                    array('name'    => 'NotEmpty',),
+                    array('name' => 'Int'),
                 ),
             )));
 
             $inputFilter->add($factory->createInput(array(
                 'name'     => 'substitutes',
                 'required' => true,
-                'filters'  => array(
+                'validators' => array(
+                    array('name'    => 'NotEmpty',),
                     array('name' => 'Int'),
                 ),
+            )));
+
+            $inputFilter->add($factory->createInput(array(
+                'name'     => 'victoryConditions',
+                'required' => false,
                 'validators' => array(
-                    array(
-                        'name'    => 'NotEmpty',
-                    ),
+                    array('name'    => 'Digits',),
+                    array('name' => 'Int'),
                 ),
             )));
 
