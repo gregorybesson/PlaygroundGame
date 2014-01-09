@@ -26,6 +26,7 @@ class QuizQuestionTest extends \PHPUnit_Framework_TestCase
         $quizquestion->setQuestion('Ceci est une question ?');
         $quizquestion = $this->tm->insert($quizquestion);
         $this->assertEquals($quizquestion, $this->tm->findById($quizquestion->getId()));
+        $this->tm->remove($quizquestion);
     }
 
     public function testUpdate()
@@ -36,6 +37,7 @@ class QuizQuestionTest extends \PHPUnit_Framework_TestCase
         $quizquestion->setQuestion('Ceci est une nouvelle question ?');
         $quizquestion = $this->tm->update($quizquestion);
         $this->assertEquals('Ceci est une nouvelle question ?', $quizquestion->getQuestion());
+        $this->tm->remove($quizquestion);
     }
 
     public function testRemove()
