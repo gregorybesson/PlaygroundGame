@@ -1488,7 +1488,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
     public function getAnonymousId()
     {
         $anonymousId = '';
-        if ($_COOKIE && $_COOKIE['pg_anonymous']) {
+        if ($_COOKIE && array_key_exists('pg_anonymous', $_COOKIE)) {
             $anonymousId = $_COOKIE['pg_anonymous'];
         }
 

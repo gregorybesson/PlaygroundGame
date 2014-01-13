@@ -21,7 +21,7 @@ class quizTest extends \PHPUnit_Framework_TestCase
         $this->sm = Bootstrap::getServiceManager();
 
         $this->getForm();
-        $now = new \DateTime('now');
+        $now = new \DateTime('today');
         $date = new \DateTime('tomorrow');
         $this->quizData = array(
             'id' => 0,
@@ -31,10 +31,10 @@ class quizTest extends \PHPUnit_Framework_TestCase
             'substitutes' => '0',
             'title' => 'Super Quiz',
             'identifier' => 'super-quiz',
-            'publicationDate' => $now->format('d/m/Y'),
-            'startDate' => $now->format('d/m/Y'),
-            'endDate' => $date->format('d/m/Y'),
-            'closeDate' => $date->format('d/m/Y'),
+            'publicationDate' => $now->format('m/d/Y'),
+            'startDate' => $now->format('m/d/Y'),
+            'endDate' => $date->format('m/d/Y'),
+            'closeDate' => $date->format('m/d/Y'),
             'playLimit' => '0',
             'timer' => '0',
             'victoryConditions' => '100',
