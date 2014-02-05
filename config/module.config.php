@@ -1825,7 +1825,7 @@ return array(
                             'prize-category-list' => array(
                                 'type' => 'Segment',
                                 'options' => array(
-                                    'route' => '/prize-category-list',
+                                    'route' => '/prize-category-list[/:p]',
                                     'defaults' => array(
                                         'controller' => 'playgroundgame_admin_prizecategory',
                                         'action' => 'list'

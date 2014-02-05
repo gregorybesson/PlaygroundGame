@@ -27,6 +27,29 @@ class PrizeCategoryTest extends \PHPUnit_Framework_TestCase
         $prizeCategory->setTitle('Un Titre');
         $prizeCategory = $this->tm->insert($prizeCategory);
         $this->assertEquals($prizeCategory, $this->tm->findById($prizeCategory->getId()));
+        $this->assertEquals($prizeCategory, current($this->tm->findBy(array('identifier' => 'iden'))));
+        $this->tm->remove($prizeCategory);
+        $this->assertEmpty($this->tm->findBy(array('identifier' => 'iden')));
+    }
+
+    public function testInsertTranslation()
+    {
+        $translator = $this->sm->get('translator');
+        $prizeCategory = new PrizeCategoryEntity();
+        $translator->setLocale('en_US');
+        $prizeCategory->setTitle('Anglais')
+        ->setIdentifier('anglais');
+        $prizeCategory = $this->tm->insert($prizeCategory);
+        $translator->setLocale('fr_FR');
+        $prizeCategory->setTitle('Francais')
+        ->setIdentifier('francais');
+        $prizeCategory = $this->tm->insert($prizeCategory);
+        $this->assertCount(1, $this->tm->findAll());
+        $this->assertInstanceOf('\PlaygroundGame\Entity\PrizeCategory', current($this->tm->findAll()));
+
+        $prizeCategory = current($this->tm->findAll());
+        $this->assertEquals("Francais", $prizeCategory->getTitle());
+        $this->assertEquals("francais", $prizeCategory->getIdentifier());
     }
 
     public function testUpdate()
@@ -38,6 +61,8 @@ class PrizeCategoryTest extends \PHPUnit_Framework_TestCase
         $prizeCategory->setIdentifier('iden 2');
         $prizeCategory = $this->tm->update($prizeCategory);
         $this->assertEquals('iden 2', $prizeCategory->getIdentifier());
+        $this->tm->remove($prizeCategory);
+        $this->assertEmpty($this->tm->findAll());
     }
 
     public function testRemove()
@@ -69,6 +94,9 @@ class PrizeCategoryTest extends \PHPUnit_Framework_TestCase
         $prizeCategories = $this->tm->findAll();
         $this->assertEquals(3, count($prizeCategories));
 
+        foreach ($this->tm->findAll() as $prizeCategory) {
+            $this->tm->remove($prizeCategory);
+        }
     }
 
     public function tearDown()
