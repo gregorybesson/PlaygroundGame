@@ -48,12 +48,12 @@ class Game
         return $this->getEntityRepository()->findOneBy($array);
     }
 
-    public function insert($entity, $tableName = NULL, Zend\Stdlib\Hydrator\HydratorInterface $hydrator = NULL)
+    public function insert($entity, $tableName = NULL, \Zend\Stdlib\Hydrator\HydratorInterface $hydrator = NULL)
     {
         return $this->persist($entity);
     }
 
-    public function update($entity, $tableName = NULL, Zend\Stdlib\Hydrator\HydratorInterface $hydrator = NULL)
+    public function update($entity, $tableName = NULL, \Zend\Stdlib\Hydrator\HydratorInterface $hydrator = NULL)
     {
         return $this->persist($entity);
     }
