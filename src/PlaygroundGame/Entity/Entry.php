@@ -46,7 +46,7 @@ class Entry
     protected $bonus = 0;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=false)
+     * @ORM\Column(type="integer", nullable=true)
      */
     protected $points;
     

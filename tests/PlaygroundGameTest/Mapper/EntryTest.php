@@ -23,7 +23,7 @@ class EntryTest extends \PHPUnit_Framework_TestCase
     public function testFindById()
     {
         $entry = new EntryEntity();
-        $entry->setPoints('DesPoints');
+        $entry->setPoints(0);
         $this->tm->insert($entry);
         $this->assertEquals($entry, $this->tm->findById(1));
     }
@@ -34,7 +34,7 @@ class EntryTest extends \PHPUnit_Framework_TestCase
     public function testFindBy()
     {
         $entry = new EntryEntity();
-        $entry->setPoints('DesPoints');
+        $entry->setPoints(0);
         $entry = $this->tm->insert($entry);
         $entry2 = $this->tm->findBy(array('id' => 1));
         $this->assertEquals($entry->getId(), $entry2[0]->getId());
@@ -53,7 +53,7 @@ class EntryTest extends \PHPUnit_Framework_TestCase
 
         $this->em->persist($game);
         $entry = new EntryEntity();
-        $entry->setPoints('DesPoints');
+        $entry->setPoints(0);
         $entry->setGame($game);
         $entry = $this->tm->insert($entry);
 
@@ -73,7 +73,7 @@ class EntryTest extends \PHPUnit_Framework_TestCase
 
         $this->em->persist($game);
         $entry = new EntryEntity();
-        $entry->setPoints('DesPoints');
+        $entry->setPoints(0);
         $entry->setGame($game);
         $this->tm->insert($entry);
         $return = $this->tm->queryByGame($game);
@@ -94,7 +94,7 @@ class EntryTest extends \PHPUnit_Framework_TestCase
 
         $this->em->persist($game);
         $entry = new EntryEntity();
-        $entry->setPoints('DesPoints');
+        $entry->setPoints(0);
         $entry->setGame($game);
         $this->tm->insert($entry);
 
@@ -109,12 +109,12 @@ class EntryTest extends \PHPUnit_Framework_TestCase
     public function testUpdate()
     {
         $entry = new EntryEntity();
-        $entry->setPoints('DesPoints');
+        $entry->setPoints(0);
         $entry = $this->tm->insert($entry);
-        $entry->setPoints('DesNouveauxPoints');
+        $entry->setPoints(1);
         $entry = $this->tm->update($entry);
 
-        $this->assertEquals('DesNouveauxPoints', $entry->getPoints());
+        $this->assertEquals(1, $entry->getPoints());
     }
 
     /**
@@ -123,7 +123,7 @@ class EntryTest extends \PHPUnit_Framework_TestCase
     public function testRemove()
     {
         $entry = new EntryEntity();
-        $entry->setPoints('DesPoints');
+        $entry->setPoints(0);
         $entry = $this->tm->insert($entry);
         $id = $entry->getId();
         $this->tm->remove($entry);
@@ -141,15 +141,15 @@ class EntryTest extends \PHPUnit_Framework_TestCase
         }
 
         $entry1 = new EntryEntity();
-        $entry1->setPoints('DesPoints1');
+        $entry1->setPoints(1);
         $this->tm->insert($entry1);
 
         $entry2 = new EntryEntity();
-        $entry2->setPoints('DesPoints2');
+        $entry2->setPoints(2);
         $this->tm->insert($entry2);
 
         $entry3 = new EntryEntity();
-        $entry3->setPoints('DesPoints3');
+        $entry3->setPoints(3);
         $this->tm->insert($entry3);
 
         $entries = $this->tm->findAll();
@@ -174,7 +174,7 @@ class EntryTest extends \PHPUnit_Framework_TestCase
 
         $this->em->persist($game);
         $entry = new EntryEntity();
-        $entry->setPoints('DesPoints');
+        $entry->setPoints(0);
         $entry->setGame($game);
         $entry->setUser($user);
         $this->tm->insert($entry);

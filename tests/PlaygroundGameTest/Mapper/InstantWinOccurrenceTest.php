@@ -29,7 +29,7 @@ class InstantWinTest extends \PHPUnit_Framework_TestCase
 
 
         $entry = new \PlaygroundGame\Entity\Entry();
-        $entry->setPoints('points');
+        $entry->setPoints(0);
         $entryMapper = $this->sm->get('playgroundgame_entry_mapper');
         $entryMapper->insert($entry);
 
@@ -52,7 +52,7 @@ class InstantWinTest extends \PHPUnit_Framework_TestCase
         $game->setIdentifier('gameid');
 
         $entry = new \PlaygroundGame\Entity\Entry();
-        $entry->setPoints('points');
+        $entry->setPoints(0);
         $entryMapper = $this->sm->get('playgroundgame_entry_mapper');
         $entryMapper->insert($entry);
 
@@ -78,7 +78,7 @@ class InstantWinTest extends \PHPUnit_Framework_TestCase
         $game->setIdentifier('gameid');
 
         $entry = new \PlaygroundGame\Entity\Entry();
-        $entry->setPoints('points');
+        $entry->setPoints(0);
         $entryMapper = $this->sm->get('playgroundgame_entry_mapper');
         $entryMapper->insert($entry);
 
@@ -104,7 +104,7 @@ class InstantWinTest extends \PHPUnit_Framework_TestCase
         $game->setIdentifier('gameid');
 
         $entry = new \PlaygroundGame\Entity\Entry();
-        $entry->setPoints('points');
+        $entry->setPoints(0);
         $entryMapper = $this->sm->get('playgroundgame_entry_mapper');
         $entryMapper->insert($entry);
 
