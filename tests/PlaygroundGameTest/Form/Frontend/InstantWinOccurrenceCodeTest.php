@@ -5,7 +5,7 @@ namespace PlaygroundGameTest\Form\Frontend;
 use PlaygroundGameTest\Bootstrap;
 use PlaygroundGame\Form\Frontend\InstantWinOccurrenceCode;
 
-class quizQuestionTest extends \PHPUnit_Framework_TestCase
+class instantWinOccurrenceCodeTest extends \PHPUnit_Framework_TestCase
 {
     protected $sm;
 
@@ -23,9 +23,7 @@ class quizQuestionTest extends \PHPUnit_Framework_TestCase
         $this->codeInputData = array(
             'code-input' => '',
         );
-
         parent::setUp();
-
     }
 
     public function testTextInputTagStriped()

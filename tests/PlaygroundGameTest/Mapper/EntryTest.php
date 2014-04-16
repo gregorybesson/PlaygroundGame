@@ -23,7 +23,7 @@ class EntryTest extends \PHPUnit_Framework_TestCase
     public function testFindById()
     {
         $entry = new EntryEntity();
-        $entry->setPoints('DesPoints');
+        $entry->setPoints(0);
         $this->tm->insert($entry);
         $this->assertEquals($entry, $this->tm->findById(1));
     }
@@ -31,10 +31,10 @@ class EntryTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testFindById
      */
-    public function testFindBy() 
+    public function testFindBy()
     {
         $entry = new EntryEntity();
-        $entry->setPoints('DesPoints');
+        $entry->setPoints(0);
         $entry = $this->tm->insert($entry);
         $entry2 = $this->tm->findBy(array('id' => 1));
         $this->assertEquals($entry->getId(), $entry2[0]->getId());
@@ -43,7 +43,7 @@ class EntryTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testFindBy
      */
-    public function testCountByGame() 
+    public function testCountByGame()
     {
         $game = new \PlaygroundGame\Entity\Quiz();
         $game->setTitle('CeciEstUnTitre');
@@ -53,7 +53,7 @@ class EntryTest extends \PHPUnit_Framework_TestCase
 
         $this->em->persist($game);
         $entry = new EntryEntity();
-        $entry->setPoints('DesPoints');
+        $entry->setPoints(0);
         $entry->setGame($game);
         $entry = $this->tm->insert($entry);
 
@@ -63,7 +63,7 @@ class EntryTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testCountByGame
      */
-    public function testQueryByGame() 
+    public function testQueryByGame()
     {
         $game = new \PlaygroundGame\Entity\Quiz();
         $game->setTitle('CeciEstUnTitre');
@@ -73,7 +73,7 @@ class EntryTest extends \PHPUnit_Framework_TestCase
 
         $this->em->persist($game);
         $entry = new EntryEntity();
-        $entry->setPoints('DesPoints');
+        $entry->setPoints(0);
         $entry->setGame($game);
         $this->tm->insert($entry);
         $return = $this->tm->queryByGame($game);
@@ -84,7 +84,7 @@ class EntryTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testQueryByGame
      */
-    public function testFindByGameId() 
+    public function testFindByGameId()
     {
         $game = new \PlaygroundGame\Entity\Quiz();
         $game->setTitle('CeciEstUnTitre');
@@ -94,34 +94,36 @@ class EntryTest extends \PHPUnit_Framework_TestCase
 
         $this->em->persist($game);
         $entry = new EntryEntity();
-        $entry->setPoints('DesPoints');
+        $entry->setPoints(0);
         $entry->setGame($game);
         $this->tm->insert($entry);
 
-        $this->assertEquals($entry->getId(), $this->tm->findByGameId(1)[0]->getId());
+        $results = $this->tm->findByGameId(1);
+
+        $this->assertEquals($entry->getId(), $results[0]->getId());
     }
 
     /**
      * @depends testFindByGameId
      */
-    public function testUpdate() 
+    public function testUpdate()
     {
         $entry = new EntryEntity();
-        $entry->setPoints('DesPoints');
+        $entry->setPoints(0);
         $entry = $this->tm->insert($entry);
-        $entry->setPoints('DesNouveauxPoints');
+        $entry->setPoints(1);
         $entry = $this->tm->update($entry);
 
-        $this->assertEquals('DesNouveauxPoints', $entry->getPoints());
+        $this->assertEquals(1, $entry->getPoints());
     }
 
     /**
      * @depends testUpdate
      */
-    public function testRemove() 
+    public function testRemove()
     {
         $entry = new EntryEntity();
-        $entry->setPoints('DesPoints');
+        $entry->setPoints(0);
         $entry = $this->tm->insert($entry);
         $id = $entry->getId();
         $this->tm->remove($entry);
@@ -131,7 +133,7 @@ class EntryTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testRemove
      */
-    public function testFindAll() 
+    public function testFindAll()
     {
         $entries = $this->tm->findAll();
         foreach ($entries as $entry) {
@@ -139,25 +141,25 @@ class EntryTest extends \PHPUnit_Framework_TestCase
         }
 
         $entry1 = new EntryEntity();
-        $entry1->setPoints('DesPoints1');
+        $entry1->setPoints(1);
         $this->tm->insert($entry1);
-        
+
         $entry2 = new EntryEntity();
-        $entry2->setPoints('DesPoints2');
+        $entry2->setPoints(2);
         $this->tm->insert($entry2);
-        
+
         $entry3 = new EntryEntity();
-        $entry3->setPoints('DesPoints3');
+        $entry3->setPoints(3);
         $this->tm->insert($entry3);
-        
+
         $entries = $this->tm->findAll();
-        
+
         $this->assertEquals(3, count($entries));
     }
 
-    
 
-    /*public function testFindPlayersWithOneEntryBy() 
+
+    /*public function testFindPlayersWithOneEntryBy()
     {
         $user = new \PlaygroundUser\Entity\User();
         $user->setEmail('mail@mail.fr');
@@ -172,7 +174,7 @@ class EntryTest extends \PHPUnit_Framework_TestCase
 
         $this->em->persist($game);
         $entry = new EntryEntity();
-        $entry->setPoints('DesPoints');
+        $entry->setPoints(0);
         $entry->setGame($game);
         $entry->setUser($user);
         $this->tm->insert($entry);

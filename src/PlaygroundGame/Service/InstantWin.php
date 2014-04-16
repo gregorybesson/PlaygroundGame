@@ -178,9 +178,9 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
         if(count($transitions) == 2){
             $shift = $transitions[0]['offset'] - $transitions[1]['offset'];
             if($shift > 0){
-                $end->sub(new \DateInterval('PT'.$shift.'S'));
+                $end->sub(new \DateInterval('PT'.abs($shift).'S'));
             } else{
-                $end->add(new \DateInterval('PT'.$shift.'S'));
+                $end->add(new \DateInterval('PT'.abs($shift).'S'));
             }
         }
 

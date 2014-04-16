@@ -74,12 +74,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $form->get('closeDate')->setOptions(array(
             'format' => 'Y-m-d'
         ));
-        $count = isset($data['prizes']) ? count($data['prizes']) : 0;
-        if ($form->get('prizes')) {
-            $form->get('prizes')
-                ->setCount($count)
-                ->prepareFieldset();
-        }
+      
         $form->bind($game);
 
         $path = $this->getOptions()->getMediaPath() . '/';
@@ -127,6 +122,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $form->setData($data);
 
         if (! $form->isValid()) {
+
             if (isset($data['publicationDate']) && $data['publicationDate']) {
                 $tmpDate = \DateTime::createFromFormat('Y-m-d', $data['publicationDate']);
                 $data['publicationDate'] = $tmpDate->format('d/m/Y');
@@ -158,6 +154,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             return false;
         }
 
+        $game = $form->getData();
         $game = $this->getGameMapper()->insert($game);
 
         // If I receive false, it means that the FB Id was not available anymore
@@ -269,12 +266,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $form->get('closeDate')->setOptions(array(
             'format' => 'Y-m-d'
         ));
-        $count = isset($data['prizes']) ? count($data['prizes']) : 0;
-        if ($form->get('prizes')) {
-            $form->get('prizes')
-                ->setCount($count)
-                ->prepareFieldset();
-        }
+       
         $form->bind($game);
 
         $path = $this->getOptions()->getMediaPath() . '/';
@@ -925,6 +917,25 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         return false;
     }
 
+    public function sendResultMail($game, $user, $entry, $template = 'entry')
+    {
+        $mailService = $this->getServiceManager()->get('playgroundgame_message');
+        $from = $this->getOptions()->getEmailFromAddress();
+        $to = $user->getEmail();
+        $subject = $game->getTitle();
+        $renderer = $this->getServiceManager()->get('Zend\View\Renderer\RendererInterface');
+        $skinUrl = $renderer->url('frontend', array(), array(
+            'force_canonical' => true
+        ));
+
+        $message = $mailService->createHtmlMessage($from, $to, $subject, 'playground-game/email/' . $template, array(
+            'game' => $game,
+            'entry' => $entry,
+            'skinUrl' => $skinUrl
+        ));
+        $mailService->send($message);
+    }
+
     public function sendGameMail($game, $user, $post, $template = 'postvote')
     {
         $mailService = $this->getServiceManager()->get('playgroundgame_message');
@@ -1199,23 +1210,22 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
         switch ($type) {
             case 'startDate':
-                $filter = 'g.startDate';
+                $filter = 'g.startDate ' . $order;
                 break;
             case 'activeGames':
-                $filter = 'g.active';
+                $filter = 'g.active ' . $order;
                 break;
             case 'onlineGames':
-                $filter = $onlineGames;
+                $filter = $onlineGames . ' ' . $order;
                 break;
             case 'createdAt':
-                $filter = 'g.createdAt';
+                $filter = 'g.createdAt ' . $order;
                 break;
         }
 
         $query = $em->createQuery('
             SELECT g FROM PlaygroundGame\Entity\Game g
-            ORDER BY ' . $filter . ' ' . $order . '
-        ');
+            ORDER BY ' . $filter);
         if ($filter == $onlineGames) {
             $query->setParameter('date', $today);
         }
@@ -1468,7 +1478,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
     public function getAnonymousId()
     {
         $anonymousId = '';
-        if ($_COOKIE && $_COOKIE['pg_anonymous']) {
+        if ($_COOKIE && array_key_exists('pg_anonymous', $_COOKIE)) {
             $anonymousId = $_COOKIE['pg_anonymous'];
         }
 

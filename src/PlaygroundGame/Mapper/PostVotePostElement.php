@@ -73,8 +73,8 @@ class PostVotePostElement
         $elements = $this->findBy(array('post' => $post));
         foreach ($elements as $element) {
             $this->em->remove($element);
-            $this->em->flush();
         }
+        $this->em->flush();
     }
 
     public function remove($entity)

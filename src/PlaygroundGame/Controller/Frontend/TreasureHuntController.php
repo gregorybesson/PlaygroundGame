@@ -109,7 +109,7 @@ class TreasureHuntController extends GameController
         if (!$lastEntry) {
             return $this->redirect()->toUrl($this->url()->fromRoute('frontend/treasurehunt', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)));
         }
-        
+
         if (!$user && !$game->getAnonymousAllowed()) {
             $redirect = urlencode($this->url()->fromRoute('frontend/treasurehunt/result', array('id' => $game->getIdentifier(), 'channel' => $channel)));
             return $this->redirect()->toUrl($this->url()->fromRoute('frontend/zfcuser/register', array('channel' => $channel)) . '?redirect='.$redirect);
@@ -129,6 +129,8 @@ class TreasureHuntController extends GameController
                 }
             }
         }
+
+        $this->sendMail($game, $user, $lastEntry);
 
         $nextGame = parent::getMissionGameService()->checkCondition($game, $lastEntry->getWinner(), true, $lastEntry);
 

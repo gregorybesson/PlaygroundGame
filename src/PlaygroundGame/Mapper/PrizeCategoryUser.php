@@ -57,8 +57,8 @@ class PrizeCategoryUser
         $categories = $this->findBy(array('user' => $user));
         foreach ($categories as $category) {
             $this->em->remove($category);
-            $this->em->flush();
         }
+        $this->em->flush();
     }
 
     public function insert(PrizeCategoryUserEntity $entity, $tableName = null, HydratorInterface $hydrator = null)

@@ -28,6 +28,11 @@ class QuizAnswer
         $this->options = $options;
     }
 
+    public function findBy($array = array(), $sortArray = array())
+    {
+        return $this->getEntityRepository()->findBy($array, $sortArray);
+    }
+
     public function findById($id)
     {
         return $this->getEntityRepository()->find($id);

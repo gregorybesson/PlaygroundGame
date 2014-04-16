@@ -59,7 +59,7 @@ class AdminControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue($adminEntryMapper));
 
         $entry = new \PlaygroundGame\Entity\Entry();
-        $entry->setPoints('DesPoints1');
+        $entry->setPoints(1);
         $user = new \PlaygroundUser\Entity\User();
         $user->setId(1);
         $user->setUsername('Username');

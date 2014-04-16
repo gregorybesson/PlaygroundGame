@@ -17,27 +17,27 @@ class LotteryController extends GameController
     public function playAction()
     {
         $sg         = $this->getGameService();
-        
+
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
         $channel = $this->getEvent()->getRouteMatch()->getParam('channel');
-        
+
         $game = $sg->checkGame($identifier);
         if (! $game || $game->isClosed()) {
             return $this->notFoundAction();
         }
-        
+
         $redirectFb = $this->checkFbRegistration($this->zfcUserAuthentication()->getIdentity(), $game, $channel);
         if($redirectFb){
             return $redirectFb;
         }
-        
+
         $user       = $this->zfcUserAuthentication()->getIdentity();
         if (!$user && !$game->getAnonymousAllowed()) {
             $redirect = urlencode($this->url()->fromRoute('frontend/'. $game->getClassType() . '/play', array('id' => $game->getIdentifier(), 'channel' => $channel), array('force_canonical' => true)));
-        
+
             return $this->redirect()->toUrl($this->url()->fromRoute('frontend/zfcuser/register', array('channel' => $channel)) . '?redirect='.$redirect);
         }
-        
+
         $entry = $sg->play($game, $user);
         if (!$entry) {
             // the user has already taken part of this game and the participation limit has been reached
@@ -76,7 +76,7 @@ class LotteryController extends GameController
         if (!$lastEntry) {
             return $this->redirect()->toUrl($this->url()->fromRoute('frontend/lottery', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)));
         }
-        
+
         if (!$user && !$game->getAnonymousAllowed()) {
             $redirect = urlencode($this->url()->fromRoute('frontend/lottery/result', array('id' => $game->getIdentifier(), 'channel' => $channel)));
             return $this->redirect()->toUrl($this->url()->fromRoute('frontend/zfcuser/register', array('channel' => $channel)) . '?redirect='.$redirect);
@@ -96,6 +96,8 @@ class LotteryController extends GameController
                 }
             }
         }
+
+        $this->sendMail($game, $user, $lastEntry);
 
         $nextGame = parent::getMissionGameService()->checkCondition($game, $lastEntry->getWinner(), true, $lastEntry);
 

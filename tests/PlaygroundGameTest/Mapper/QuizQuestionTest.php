@@ -26,6 +26,7 @@ class QuizQuestionTest extends \PHPUnit_Framework_TestCase
         $quizquestion->setQuestion('Ceci est une question ?');
         $quizquestion = $this->tm->insert($quizquestion);
         $this->assertEquals($quizquestion, $this->tm->findById($quizquestion->getId()));
+        $this->tm->remove($quizquestion);
     }
 
     public function testUpdate()
@@ -36,6 +37,7 @@ class QuizQuestionTest extends \PHPUnit_Framework_TestCase
         $quizquestion->setQuestion('Ceci est une nouvelle question ?');
         $quizquestion = $this->tm->update($quizquestion);
         $this->assertEquals('Ceci est une nouvelle question ?', $quizquestion->getQuestion());
+        $this->tm->remove($quizquestion);
     }
 
     public function testRemove()
@@ -53,16 +55,17 @@ class QuizQuestionTest extends \PHPUnit_Framework_TestCase
         $quizquestion = new QuizQuestionEntity();
         $quizquestion->setQuestion('Ceci est une question ? 1');
         $quizquestion = $this->tm->insert($quizquestion);
+        $this->assertCount(1, $this->tm->findAll());
+
         $quizquestion = new QuizQuestionEntity();
         $quizquestion->setQuestion('Ceci est une question ? 2');
         $quizquestion = $this->tm->insert($quizquestion);
+        $this->assertCount(2, $this->tm->findAll());
+
         $quizquestion = new QuizQuestionEntity();
         $quizquestion->setQuestion('Ceci est une question ? 3');
         $quizquestion = $this->tm->insert($quizquestion);
-
-        $quizquestions = $this->tm->findAll();
-        $this->assertEquals(3, count($quizquestions));
-
+        $this->assertCount(3, $this->tm->findAll());
     }
 
     public function tearDown()

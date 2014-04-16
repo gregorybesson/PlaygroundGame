@@ -59,7 +59,6 @@ class Quiz extends Game implements ServiceManagerAwareInterface
         $form->setData($data);
 
         $quiz = $this->getGameMapper()->findById($data['quiz_id']);
-
         if (!$form->isValid()) {
             return false;
         }
@@ -67,7 +66,9 @@ class Quiz extends Game implements ServiceManagerAwareInterface
         $question->setQuiz($quiz);
 
         // Max points and correct answers calculation for the question
-        $question = $this->calculateMaxAnswersQuestion($question);
+        if(!$question = $this->calculateMaxAnswersQuestion($question)) {
+            return false;
+        }
 
         // Max points and correct answers recalculation for the quiz
         $quiz = $this->calculateMaxAnswersQuiz($question->getQuiz());
@@ -109,6 +110,11 @@ class Quiz extends Game implements ServiceManagerAwareInterface
             return false;
         }
 
+        // Max points and correct answers calculation for the question
+        if(!$question = $this->calculateMaxAnswersQuestion($question)) {
+            return false;
+        }
+
         if (!empty($data['upload_image']['tmp_name'])) {
             ErrorHandler::start();
 			$data['upload_image']['name'] = $this->fileNewname($path, $question->getId() . "-" . $data['upload_image']['name']);
@@ -116,7 +122,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
             $question->setImage($media_url . $data['upload_image']['name']);
             ErrorHandler::stop(true);
         }
-        
+
         if($data['delete_image'] && empty($data['upload_image']['tmp_name'])) {
             ErrorHandler::start();
             $image = $question->getImage();
@@ -125,9 +131,6 @@ class Quiz extends Game implements ServiceManagerAwareInterface
             $question->setImage(null);
             ErrorHandler::stop(true);
         }
-
-        // Max points and correct answers calculation for the question
-        $question = $this->calculateMaxAnswersQuestion($question);
 
         // Max points and correct answers recalculation for the quiz
         $quiz = $this->calculateMaxAnswersQuiz($question->getQuiz());
@@ -138,6 +141,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
             $entries = $this->getEntryMapper()->findByGameId($question->getQuiz());
 
             $answers = $question->getAnswers();
+
             $answersarray = array();
             foreach ($answers as $answer) {
                 $answersarray[$answer->getId()] = $answer;
@@ -166,7 +170,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                                     $quizPoints += $updatedAnswer->getPoints();
                                     $quizReplyAnswer->setCorrect($updatedAnswer->getCorrect());
                                     $quizCorrectAnswers += $updatedAnswer->getCorrect();
-                                    $this->getQuizReplyAnswerMapper()->update($quizReplyAnswer);
+                                    $quizReplyAnswer = $this->getQuizReplyAnswerMapper()->update($quizReplyAnswer);
                                 }
                             }
                         }
@@ -206,6 +210,9 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                     $question_max_correct_answers=1;
                 }
             }
+            if($question_max_correct_answers == 0) {
+                return false;
+            }
         // Closed question : Many answers allowed
         } elseif ($question->getType() == 1) {
             foreach ($question->getAnswers() as $answer) {
@@ -215,6 +222,9 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                 if ( $answer->getCorrect() ) {
                     ++$question_max_correct_answers;
                 }
+            }
+            if($question_max_correct_answers == 0) {
+                return false;
             }
         // Not a question : A textarea to fill in
         } elseif ($question->getType() == 2) {
@@ -248,18 +258,13 @@ class Quiz extends Game implements ServiceManagerAwareInterface
     {
         $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
 
-        if ($count == 'count') {
-            $aggregate = 'COUNT(e.id)';
-        }
-
         $query = $em->createQuery(
-            'SELECT '.$aggregate.' FROM PlaygroundGame\Entity\Entry e, PlaygroundGame\Entity\Game g
+            "SELECT COUNT(e.id) FROM PlaygroundGame\Entity\Entry e, PlaygroundGame\Entity\Game g
                 WHERE e.user = :user
-                AND g.classType = :quiz
-                AND e.points > 0'
+                AND g.classType = 'quiz'
+                AND e.points > 0"
         );
         $query->setParameter('user', $user);
-        $query->setParameter('quiz', 'quiz');
         $number = $query->getSingleScalarResult();
 
         return $number;
@@ -281,7 +286,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
         $ratioCorrectAnswers = 0;
         $maxCorrectAnswers = $game->getMaxCorrectAnswers();
         $totalQuestions = 0;
-        
+
         $quizReply = new QuizReply();
 
         foreach ($data as $group) {
@@ -349,12 +354,12 @@ class Quiz extends Game implements ServiceManagerAwareInterface
         $entry->setPoints($quizPoints);
         $entry->setActive(false);
         $entry = $entryMapper->update($entry);
-        
+
         $quizReply->setEntry($entry);
         $quizReply->setTotalCorrectAnswers($quizCorrectAnswers);
         $quizReply->setMaxCorrectAnswers($maxCorrectAnswers);
         $quizReply->setTotalQuestions($totalQuestions);
-        
+
         $quizReplyMapper->insert($quizReply);
 
         $this->getEventManager()->trigger('complete_quiz.post', $this, array('user' => $user, 'entry' => $entry, 'reply' => $quizReply, 'game' => $game));
@@ -385,7 +390,6 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                 $winner = true;
             }
         }
-
         return $winner;
     }
 
