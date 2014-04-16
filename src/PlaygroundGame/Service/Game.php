@@ -74,12 +74,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $form->get('closeDate')->setOptions(array(
             'format' => 'Y-m-d'
         ));
-        $count = isset($data['prizes']) ? count($data['prizes']) : 0;
-        if ($form->get('prizes')) {
-            $form->get('prizes')
-                ->setCount($count)
-                ->prepareFieldset();
-        }
+      
         $form->bind($game);
 
         $path = $this->getOptions()->getMediaPath() . '/';
@@ -271,12 +266,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $form->get('closeDate')->setOptions(array(
             'format' => 'Y-m-d'
         ));
-        $count = isset($data['prizes']) ? count($data['prizes']) : 0;
-        if ($form->get('prizes')) {
-            $form->get('prizes')
-                ->setCount($count)
-                ->prepareFieldset();
-        }
+       
         $form->bind($game);
 
         $path = $this->getOptions()->getMediaPath() . '/';
