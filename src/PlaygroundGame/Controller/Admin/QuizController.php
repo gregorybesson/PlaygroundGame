@@ -79,6 +79,9 @@ class QuizController extends GameController
 
                    return $this->redirect()->toRoute('admin/playgroundgame/quiz-question-list', array('quizId'=>$quizId));
                }
+               else { // Creation failed
+                    $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The question was not updated - create at least one good answer');
+               }
         }
 
         return $viewModel->setVariables(array('form' => $form, 'quiz_id' => $quizId, 'question_id' => 0));
@@ -116,9 +119,12 @@ class QuizController extends GameController
             $question = $service->updateQuestion($data, $question);
             if ($question) {
                 // Redirect to list of games
-                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The question was created');
+                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The question was updated');
 
                 return $this->redirect()->toRoute('admin/playgroundgame/quiz-question-list', array('quizId'=>$quizId));
+            }
+            else {
+                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The question was not updated - create at least one good answer');
             }
         }
 

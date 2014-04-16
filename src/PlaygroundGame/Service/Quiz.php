@@ -59,7 +59,6 @@ class Quiz extends Game implements ServiceManagerAwareInterface
         $form->setData($data);
 
         $quiz = $this->getGameMapper()->findById($data['quiz_id']);
-
         if (!$form->isValid()) {
             return false;
         }
@@ -67,7 +66,9 @@ class Quiz extends Game implements ServiceManagerAwareInterface
         $question->setQuiz($quiz);
 
         // Max points and correct answers calculation for the question
-        $question = $this->calculateMaxAnswersQuestion($question);
+        if(!$question = $this->calculateMaxAnswersQuestion($question)) {
+            return false;
+        }
 
         // Max points and correct answers recalculation for the quiz
         $quiz = $this->calculateMaxAnswersQuiz($question->getQuiz());
@@ -109,6 +110,11 @@ class Quiz extends Game implements ServiceManagerAwareInterface
             return false;
         }
 
+        // Max points and correct answers calculation for the question
+        if(!$question = $this->calculateMaxAnswersQuestion($question)) {
+            return false;
+        }
+
         if (!empty($data['upload_image']['tmp_name'])) {
             ErrorHandler::start();
 			$data['upload_image']['name'] = $this->fileNewname($path, $question->getId() . "-" . $data['upload_image']['name']);
@@ -125,9 +131,6 @@ class Quiz extends Game implements ServiceManagerAwareInterface
             $question->setImage(null);
             ErrorHandler::stop(true);
         }
-
-        // Max points and correct answers calculation for the question
-        $question = $this->calculateMaxAnswersQuestion($question);
 
         // Max points and correct answers recalculation for the quiz
         $quiz = $this->calculateMaxAnswersQuiz($question->getQuiz());
@@ -207,6 +210,9 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                     $question_max_correct_answers=1;
                 }
             }
+            if($question_max_correct_answers == 0) {
+                return false;
+            }
         // Closed question : Many answers allowed
         } elseif ($question->getType() == 1) {
             foreach ($question->getAnswers() as $answer) {
@@ -216,6 +222,9 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                 if ( $answer->getCorrect() ) {
                     ++$question_max_correct_answers;
                 }
+            }
+            if($question_max_correct_answers == 0) {
+                return false;
             }
         // Not a question : A textarea to fill in
         } elseif ($question->getType() == 2) {
