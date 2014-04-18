@@ -603,7 +603,7 @@ class GameController extends AbstractActionController
             if (!$user) {
                 // Get Playground user from Facebook info
                 $beforeLayout = $this->layout()->getTemplate();
-                $this->forward()->dispatch('playgrounduser_user', array('controller' => 'playgrounduser_user', 'action' => 'registerFacebookUser', 'provider' => $channel));
+                $view = $this->forward()->dispatch('playgrounduser_user', array('controller' => 'playgrounduser_user', 'action' => 'registerFacebookUser', 'provider' => $channel));
 
                 $this->layout()->setTemplate($beforeLayout);
                 $user = $view->user;
