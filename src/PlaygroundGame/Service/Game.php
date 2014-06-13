@@ -74,7 +74,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $form->get('closeDate')->setOptions(array(
             'format' => 'Y-m-d'
         ));
-      
+
         $form->bind($game);
 
         $path = $this->getOptions()->getMediaPath() . '/';
@@ -266,7 +266,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $form->get('closeDate')->setOptions(array(
             'format' => 'Y-m-d'
         ));
-       
+
         $form->bind($game);
 
         $path = $this->getOptions()->getMediaPath() . '/';
@@ -917,7 +917,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         return false;
     }
 
-    public function sendResultMail($game, $user, $entry, $template = 'entry')
+    public function sendResultMail($game, $user, $entry, $template = 'entry', $prize = NULL)
     {
         $mailService = $this->getServiceManager()->get('playgroundgame_message');
         $from = $this->getOptions()->getEmailFromAddress();
@@ -927,11 +927,11 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $skinUrl = $renderer->url('frontend', array(), array(
             'force_canonical' => true
         ));
-
         $message = $mailService->createHtmlMessage($from, $to, $subject, 'playground-game/email/' . $template, array(
             'game' => $game,
             'entry' => $entry,
-            'skinUrl' => $skinUrl
+            'skinUrl' => $skinUrl,
+            'prize' => $prize
         ));
         $mailService->send($message);
     }

@@ -181,7 +181,11 @@ class InstantWinController extends GameController
             }
         }
 
-        $this->sendMail($game, $user, $lastEntry);
+        $prize = NULL;
+        if ($occurrence instanceof \PlaygroundGame\Entity\InstantWinOccurrence){
+            $prize = $occurrence->getPrize();
+        }
+        $this->sendMail($game, $user, $lastEntry, $prize);
 
         $nextGame = parent::getMissionGameService()->checkCondition($game, $winner, true, $lastEntry);
 
