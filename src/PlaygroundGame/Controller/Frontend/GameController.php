@@ -60,7 +60,11 @@ class GameController extends AbstractActionController
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
         $user = $this->zfcUserAuthentication()->getIdentity();
         $sg = $this->getGameService();
+        $channel = $this->getEvent()->getRouteMatch()->getParam('channel');
         $isSubscribed = false;
+
+         // Determine if the play button should be a CTA button (call to action)
+        $isCtaActive = false;
 
         $game = $sg->checkGame($identifier, false);
         if (!$game) {
@@ -68,19 +72,18 @@ class GameController extends AbstractActionController
         }
 
         // If on Facebook, check if you have to be a FB fan to play the game
-        if($game->getFbFan()){
-        	$isFan = $sg->checkIsFan($game);
-        	if(!$isFan){
-        		return $this->redirect()->toUrl($this->url()->fromRoute('frontend/' . $game->getClassType().'/fangate',array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
-        	}
-        }
 
-        // Determine if the play button should be a CTA button (call to action)
-        $isCtaActive = false;
-        $channel = $this->getEvent()->getRouteMatch()->getParam('channel');
-        if ($channel == 'facebook'){
+        if ($channel == 'facebook') {
+            if ($game->getFbFan()) {
+            	$isFan = $sg->checkIsFan($game);  
+            	if (!$isFan) {
+            		return $this->redirect()->toUrl($this->url()->fromRoute('frontend/' . $game->getClassType().'/fangate',array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+            	}
+            }
+
             $isCtaActive = true;
         }
+
 
         $subscription = $sg->checkExistingEntry($game, $user);
         if ($subscription) {

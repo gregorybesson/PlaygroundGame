@@ -92,7 +92,7 @@ class LotteryController extends GameController
                 $result = $this->getGameService()->sendShareMail($data, $game, $user);
                 if ($result) {
                     $statusMail = true;
-                    $bonusEntry = $sg->playBonus($game, $user, 1);
+                    $bonusEntry = $sg->addAnotherChance($game, $user, 1);
                 }
             }
         }
@@ -126,7 +126,7 @@ class LotteryController extends GameController
              $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
              $user = $this->zfcUserAuthentication()->getIdentity();
              $game = $sg->checkGame($identifier);
-             $bonusEntry = $sg->playBonus($game, $user, 1);
+             $bonusEntry = $sg->addAnotherChance($game, $user, 1);
          }
 
          $response = $this->getResponse();
@@ -148,7 +148,7 @@ class LotteryController extends GameController
             $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
             $user = $this->zfcUserAuthentication()->getIdentity();
             $game = $sg->checkGame($identifier);
-            $bonusEntry = $sg->playBonus($game, $user, 1);
+            $bonusEntry = $sg->addAnotherChance($game, $user, 1);
         }
 
         $response = $this->getResponse();
@@ -170,7 +170,7 @@ class LotteryController extends GameController
             $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
             $user = $this->zfcUserAuthentication()->getIdentity();
             $game = $sg->checkGame($identifier);
-            $bonusEntry = $sg->playBonus($game, $user, 1);
+            $bonusEntry = $sg->addAnotherChance($game, $user, 1);
         }
 
         $response = $this->getResponse();
@@ -192,7 +192,7 @@ class LotteryController extends GameController
             $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
             $user = $this->zfcUserAuthentication()->getIdentity();
             $game = $sg->checkGame($identifier);
-            $bonusEntry = $sg->playBonus($game, $user, 1);
+            $bonusEntry = $sg->addAnotherChance($game, $user, 1);
         }
 
         $response = $this->getResponse();
