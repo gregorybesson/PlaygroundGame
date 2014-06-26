@@ -113,7 +113,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
     	$this->assertTrue($gs->allowBonus($game, null));
     }
 
-    public function testPlayBonusAllowed()
+    public function testAddAnotherChanceAllowed()
     {
     	$mapper = $this->getMockBuilder('PlaygroundGame\Mapper\Entry')
     	->disableOriginalConstructor()
@@ -137,10 +137,10 @@ class GameTest extends \PHPUnit_Framework_TestCase
     	->with($this->isInstanceOf('\PlaygroundGame\Entity\Entry'))
     	->will($this->returnValue(true));
 
-    	$this->assertTrue($gs->playBonus($game, null,0));
+    	$this->assertTrue($gs->addAnotherChance($game, null,0));
     }
 
-    public function testPlayBonusNotAllowed()
+    public function testAddAnotherChanceNotAllowed()
     {
     	$mapper = $this->getMockBuilder('PlaygroundGame\Mapper\Entry')
     	->disableOriginalConstructor()
@@ -158,7 +158,55 @@ class GameTest extends \PHPUnit_Framework_TestCase
     	->method('findOneBy')
     	->will($this->returnValue(true));
 
-    	$this->assertFalse($gs->playBonus($game, null,0));
+    	$this->assertFalse($gs->addAnotherChance($game, null,0));
+    }
+
+    public function testPlayAgainAllowed()
+    {
+        $mapper = $this->getMockBuilder('PlaygroundGame\Mapper\Entry')
+        ->disableOriginalConstructor()
+        ->getMock();
+
+        $game = new GameEntity();
+        $game->setPlayBonus('one');
+
+        $gs = new \PlaygroundGame\Service\Game();
+        $gs->setEntryMapper($mapper);
+
+        // return false : The user has not played yet the bonus game
+        $gs->getEntryMapper()
+        ->expects($this->once())
+        ->method('findOneBy')
+        ->will($this->returnValue(false));
+
+        $gs->getEntryMapper()
+        ->expects($this->once())
+        ->method('insert')
+        ->with($this->isInstanceOf('\PlaygroundGame\Entity\Entry'))
+        ->will($this->returnValue(true));
+
+        $this->assertTrue($gs->addAnotherChance($game, null,0));
+    }
+
+    public function testPlayAgainNotAllowed()
+    {
+        $mapper = $this->getMockBuilder('PlaygroundGame\Mapper\Entry')
+        ->disableOriginalConstructor()
+        ->getMock();
+
+        $game = new GameEntity();
+        $game->setPlayBonus('one');
+
+        $gs = new \PlaygroundGame\Service\Game();
+        $gs->setEntryMapper($mapper);
+
+        // return false : The user has already played the bonus game
+        $gs->getEntryMapper()
+        ->expects($this->once())
+        ->method('findOneBy')
+        ->will($this->returnValue(true));
+
+        $this->assertFalse($gs->addAnotherChance($game, null,0));
     }
 
     public function testCheckExistingEntryNoUser()
