@@ -290,7 +290,7 @@ class QuizController extends GameController
                 if ($result) {
                     $statusMail = true;
                     if ($lastEntry->getWinner()) {
-                        $bonusEntry = $sg->playBonus($game, $user, 1);
+                        $bonusEntry = $sg->addAnotherChance($game, $user, 1);
                     }
                 }
             }
@@ -334,7 +334,7 @@ class QuizController extends GameController
             $game = $sg->checkGame($identifier);
             $lastEntry = $sg->findLastInactiveEntry($game, $user);
             if ($lastEntry && $lastEntry->getWinner()) {
-                $bonusEntry = $sg->playBonus($game, $user, 1);
+                $bonusEntry = $sg->addAnotherChance($game, $user, 1);
             }
         }
 
@@ -359,7 +359,7 @@ class QuizController extends GameController
             $game = $sg->checkGame($identifier);
             $lastEntry = $sg->findLastInactiveEntry($game, $user);
             if ($lastEntry && $lastEntry->getWinner()) {
-                $bonusEntry = $sg->playBonus($game, $user, 1);
+                $bonusEntry = $sg->addAnotherChance($game, $user, 1);
             }
         }
 
@@ -384,7 +384,7 @@ class QuizController extends GameController
             $game = $sg->checkGame($identifier);
             $lastEntry = $sg->findLastInactiveEntry($game, $user);
             if ($lastEntry && $lastEntry->getWinner()) {
-                $bonusEntry = $sg->playBonus($game, $user, 1);
+                $bonusEntry = $sg->addAnotherChance($game, $user, 1);
             }
         }
 
@@ -409,7 +409,7 @@ class QuizController extends GameController
             $game = $sg->checkGame($identifier);
             $lastEntry = $sg->findLastInactiveEntry($game, $user);
             if ($lastEntry && $lastEntry->getWinner()) {
-                $bonusEntry = $sg->playBonus($game, $user, 1);
+                $bonusEntry = $sg->addAnotherChance($game, $user, 1);
             }
         }
 

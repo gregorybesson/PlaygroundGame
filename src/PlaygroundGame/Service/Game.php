@@ -1041,28 +1041,57 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         return false;
     }
 
+
+    public function addAnotherEntry($game, $user, $winner = 0)
+    {
+        $entry = new Entry();
+        $entry->setGame($game);
+        $entry->setUser($user);
+        $entry->setPoints(0);
+        $entry->setActive(0);
+        $entry->setBonus(1);
+        $entry->setWinner($winner);
+        $entry = $this->getEntryMapper()->insert($entry);
+
+        return $entry;
+    }
+
     /**
      * This bonus entry doesn't give points nor badges
      * It's just there to increase the chances during the Draw
-     *
+     * Old Name playBonus 
+     * 
      * @param PlaygroundGame\Entity\Game $game
      * @param unknown $user
      * @return number unknown
      */
-    public function playBonus($game, $user, $winner = 0)
+    public function addAnotherChance($game, $user, $winner = 0)
     {
         if ($this->allowBonus($game, $user)) {
-            $entry = new Entry();
-            $entry->setGame($game);
-            $entry->setUser($user);
-            $entry->setPoints(0);
-            $entry->setActive(0);
-            $entry->setBonus(1);
-            $entry->setWinner($winner);
-
-            $entry = $this->getEntryMapper()->insert($entry);
+            $this->addAnotherEntry($game, $user, $winner);
 
             return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * This bonus entry doesn't give points nor badges but can play again
+     *
+     * @param PlaygroundGame\Entity\Game $game
+     * @param user $user
+     * @return number unknown
+     */
+    public function playAgain($game, $user, $winner = 0)
+    {
+         if ($this->allowBonus($game, $user)) {
+            $entry = $this->addAnotherEntry($game, $user, $winner);
+            $entry->setActive(1);
+            $entry = $this->getEntryMapper()->update($entry);
+            if($entry->getActive() == 1) {
+                return true;
+            }
         }
 
         return false;

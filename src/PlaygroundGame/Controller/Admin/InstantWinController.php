@@ -200,6 +200,10 @@ class InstantWinController extends GameController
                     $this->getRequest()->getFiles()->toArray()
             );
 
+            // Change the format of the date
+            $value = \DateTime::createFromFormat('d/m/Y H:i', $data['value']);
+            $data['value'] = $value->format('Y-m-d H:i:s');
+            
             $occurrence = $service->updateOccurrence($data, $occurrence->getId());
             if ($occurrence) {
                 // Redirect to list of games
