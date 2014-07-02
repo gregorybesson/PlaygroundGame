@@ -96,7 +96,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
             return false;
         }
     }
-    
+
     /**
      *
      *
@@ -206,15 +206,20 @@ class PostVote extends Game implements ServiceManagerAwareInterface
         }
 
         // The post is confirmed by user. I update the status and close the associated entry
-        // Post validated by default, then the admin change the status
-        $post->setStatus(2);
+        // Post are validated by default, unless pre-moderation is enable for the game
+        if ($game->getPreModeration()){
+            $post->setStatus(1);
+        } else {
+            $post->setStatus(2);
+        }
+
         $postvotePostMapper->update($post);
 
         $entry->setActive(0);
         $entryMapper->update($entry);
-        
+
         $this->getEventManager()->trigger('complete_postvote.post', $this, array('user' => $user, 'game' => $game, 'entry' => $entry, 'post' => $post));
-        
+
         return $post;
     }
 
@@ -275,11 +280,11 @@ class PostVote extends Game implements ServiceManagerAwareInterface
             case 'date' :
                 $postSort = 'ORDER BY p.createdAt DESC';
         }
-        
+
         if ($search != '') {
             $filterSearch = " AND (u.username like '%" . $search . "%' OR u.lastname like '%" . $search . "%' OR u.firstname like '%" . $search . "%' OR e.value like '%" . $search . "%')";
         }
-        
+
         $query = $em->createQuery('
             SELECT p, COUNT(v) AS votesCount
             FROM PlaygroundGame\Entity\PostVotePost p
@@ -338,7 +343,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
             $postvoteVoteMapper->insert($vote);
             $game = $post->getPostvote();
             $this->getEventManager()->trigger('vote_postvote.post', $this, array('user' => $user, 'game' => $game, 'post' => $post,'vote' => $vote));
-            
+
             return true;
         }
     }

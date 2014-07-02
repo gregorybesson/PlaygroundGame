@@ -123,6 +123,7 @@ return array(
 	'Display posts orber by' => 'Display posts orber by',
 	'Posts display mode' => 'Posts display mode',
 	'Allow anonymous visitors to vote' => 'Allow anonymous visitors to vote',
+    'Enable pre-moderation' => 'Enable pre-moderation',
 	'Auto IG Generation' => 'Auto IG Generation',
 	'Number instant win' => 'Number instant win',
 	'Hour' => 'Hour',

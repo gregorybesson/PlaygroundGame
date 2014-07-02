@@ -131,6 +131,7 @@ return array(
 	'Display posts orber by' => 'Afficher les Posts triés par',
 	'Posts display mode' => 'Mode d\'affichage des Posts',
 	'Allow anonymous visitors to vote' => 'Autoriser le vote aux visiteurs anonymes',
+    'Enable pre-moderation' => 'Activer la pré-modération (posts en attente jusqu\'à acceptation)',
 	'Auto IG Generation' => 'Génération des IG automatique',
 	'Number instant win' => 'Nombre d\'instants gagnants',
 	'Hour' => 'Heure',
@@ -236,7 +237,7 @@ return array(
     'Add occurrence'	=> 'Ajouter un instant gagnant',
     'Occurrence Date' 	=> 'Date de l\'instant gagnant',
     'Edit occurrence'	=> 'Editer un instant gagnant',
-    
+
     // Admin Mission
     'Mission Management' => 'Gestion des missions',
     'Missions'           => 'Missions',
@@ -247,7 +248,7 @@ return array(
     'Deactivate mission' => 'Désactiver la mission',
     'Add a game'         => 'Ajouter un jeu',
     'Game'               => 'Jeu',
-    
+
     'Hide Mission header' => 'Cacher l\'en-tête de mission',
 
 	// Front post&vote email moderation

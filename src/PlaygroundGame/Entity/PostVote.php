@@ -41,6 +41,12 @@ class PostVote extends Game implements InputFilterAwareInterface
     protected $voteAnonymous;
 
     /**
+     * Enable pre-moderation (post are not published until admin moderation) ? (disable by default)
+     * @ORM\Column(name="pre_moderation", type="boolean", nullable=false, options={"default" = 0})
+     */
+    protected $preModeration;
+
+    /**
      * @ORM\OneToOne(targetEntity="PostVoteForm", mappedBy="postvote", cascade={"persist","remove"})
      **/
     private $form;
@@ -154,6 +160,24 @@ class PostVote extends Game implements InputFilterAwareInterface
     }
 
     /**
+     * @return bool
+     */
+    public function getPreModeration()
+    {
+        return $this->preModeration;
+    }
+
+    /**
+     * @param bool $preModeration
+     */
+    public function setPreModeration($preModeration)
+    {
+        $this->preModeration = $preModeration;
+
+        return $this;
+    }
+
+    /**
      * Convert the object to an array.
      *
      * @return array
@@ -215,6 +239,8 @@ class PostVote extends Game implements InputFilterAwareInterface
                                                     'validators' => array(array('name' => 'InArray', 'options' => array('haystack' => array('date', 'vote', 'random'),),),),)));
 
             $inputFilter->add($factory->createInput(array('name' => 'voteAnonymous', 'required' => true, 'validators' => array(array('name' => 'Between', 'options' => array('min' => 0, 'max' => 1,),),),)));
+
+            $inputFilter->add($factory->createInput(array('name' => 'preModeration', 'required' => false, 'validators' => array(array('name' => 'Between', 'options' => array('min' => 0, 'max' => 1,),),),)));
 
             $this->inputFilter = $inputFilter;
         }

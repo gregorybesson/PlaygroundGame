@@ -133,6 +133,7 @@ return array(
 	'Display posts orber by' => 'Display posts orber by',
 	'Posts display mode' => 'Posts display mode',
 	'Allow anonymous visitors to vote' => 'Allow anonymous visitors to vote',
+    'Enable pre-moderation' => 'Enable pre-moderation',
 	'Auto IG Generation' => 'Auto IG Generation',
 	'Number instant win' => 'Number instant win',
 	'Hour' => 'Hour',
@@ -238,7 +239,7 @@ return array(
     'Add occurrence'	=> 'Add occurrence',
     'Occurrence Date' 	=> 'Occurrence Date',
     'Edit occurrence'	=> 'Edit occurrence',
-    
+
     // Admin Mission
     'Mission Management' => 'Gestion des missions',
     'Missions'           => 'Missions',
@@ -249,7 +250,7 @@ return array(
     'Deactivate mission' => 'Désactiver la mission',
     'Add a game'         => 'Ajouter un jeu',
     'Game'               => 'Jeu',
-    
+
     'Hide Mission header' => 'Cacher l\'en-tête de mission',
 
 	// Front post&vote email moderation

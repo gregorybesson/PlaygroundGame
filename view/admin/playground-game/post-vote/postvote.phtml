@@ -43,6 +43,11 @@ $form->prepare();
 	            <?php echo $this->formCheckbox($form->get('voteAnonymous')); ?>
 	            <?php echo $this->formElementErrors($form->get('voteAnonymous')) ?>
 	        </div>
+	        <div class="label-input checkbox">
+	            <?php echo $this->formLabel($form->get('preModeration')); ?>
+	            <?php echo $this->formCheckbox($form->get('preModeration')); ?>
+	            <?php echo $this->formElementErrors($form->get('preModeration')) ?>
+	        </div>
         </div>
     </div>
 </div>

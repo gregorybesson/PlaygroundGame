@@ -65,5 +65,13 @@ class PostVote extends Game
                 'label' => $translator->translate('Allow anonymous visitors to vote', 'playgroundgame'),
             ),
         ));
+
+        $this->add(array(
+                'type' => 'Zend\Form\Element\Checkbox',
+                'name' => 'preModeration',
+                'options' => array(
+                        'label' => $translator->translate('Enable pre-moderation', 'playgroundgame'),
+                ),
+        ));
     }
 }
