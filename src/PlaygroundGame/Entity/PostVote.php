@@ -41,10 +41,10 @@ class PostVote extends Game implements InputFilterAwareInterface
     protected $voteAnonymous;
 
     /**
-     * Enable pre-moderation (post are not published until admin moderation) ? (disable by default)
-     * @ORM\Column(name="pre_moderation", type="boolean", nullable=false, options={"default" = 0})
+     * Type of moderation : moderate posts before their publication, or after their publication (default)
+     * @ORM\Column(name="moderation_type", type="boolean", nullable=false, options={"default" = 0})
      */
-    protected $preModeration;
+    protected $moderationType;
 
     /**
      * @ORM\OneToOne(targetEntity="PostVoteForm", mappedBy="postvote", cascade={"persist","remove"})
@@ -162,17 +162,17 @@ class PostVote extends Game implements InputFilterAwareInterface
     /**
      * @return bool
      */
-    public function getPreModeration()
+    public function getModerationType()
     {
-        return $this->preModeration;
+        return $this->moderationType;
     }
 
     /**
-     * @param bool $preModeration
+     * @param bool $moderationType
      */
-    public function setPreModeration($preModeration)
+    public function setModerationType($moderationType)
     {
-        $this->preModeration = $preModeration;
+        $this->moderationType = $moderationType;
 
         return $this;
     }
@@ -240,7 +240,7 @@ class PostVote extends Game implements InputFilterAwareInterface
 
             $inputFilter->add($factory->createInput(array('name' => 'voteAnonymous', 'required' => true, 'validators' => array(array('name' => 'Between', 'options' => array('min' => 0, 'max' => 1,),),),)));
 
-            $inputFilter->add($factory->createInput(array('name' => 'preModeration', 'required' => false, 'validators' => array(array('name' => 'Between', 'options' => array('min' => 0, 'max' => 1,),),),)));
+            $inputFilter->add($factory->createInput(array('name' => 'moderationType', 'required' => false, 'validators' => array(array('name' => 'Between', 'options' => array('min' => 0, 'max' => 1,),),),)));
 
             $this->inputFilter = $inputFilter;
         }

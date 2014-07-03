@@ -67,10 +67,18 @@ class PostVote extends Game
         ));
 
         $this->add(array(
-                'type' => 'Zend\Form\Element\Checkbox',
-                'name' => 'preModeration',
+                'type' => 'Zend\Form\Element\Select',
+                'name' => 'moderationType',
+                'attributes' =>  array(
+                        'id' => 'moderationType',
+                        'options' => array(
+                                '0' => $translator->translate('Post moderation', 'playgroundgame'),
+                                '1' => $translator->translate('Pre moderation', 'playgroundgame'),
+                        ),
+                ),
                 'options' => array(
-                        'label' => $translator->translate('Enable pre-moderation', 'playgroundgame'),
+                        'empty_option' => $translator->translate('Moderation type', 'playgroundgame'),
+                        'label' => $translator->translate('Moderation type', 'playgroundgame'),
                 ),
         ));
     }

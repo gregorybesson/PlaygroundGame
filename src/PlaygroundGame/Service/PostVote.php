@@ -207,7 +207,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
 
         // The post is confirmed by user. I update the status and close the associated entry
         // Post are validated by default, unless pre-moderation is enable for the game
-        if ($game->getPreModeration()){
+        if ($game->getModerationType()){
             $post->setStatus(1);
         } else {
             $post->setStatus(2);

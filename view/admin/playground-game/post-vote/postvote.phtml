@@ -38,15 +38,15 @@ $form->prepare();
 	            <?php echo $this->formSelect($form->get('postDisplayMode')); ?>
 	            <?php echo $this->formElementErrors($form->get('postDisplayMode')) ?>
 			</div>
+			<div class="label-input">
+	            <?php echo $this->formLabel($form->get('moderationType')); ?>
+	            <?php echo $this->formSelect($form->get('moderationType')); ?>
+	            <?php echo $this->formElementErrors($form->get('moderationType')) ?>
+			</div>
 			<div class="label-input checkbox">
 	            <?php echo $this->formLabel($form->get('voteAnonymous')); ?>
 	            <?php echo $this->formCheckbox($form->get('voteAnonymous')); ?>
 	            <?php echo $this->formElementErrors($form->get('voteAnonymous')) ?>
-	        </div>
-	        <div class="label-input checkbox">
-	            <?php echo $this->formLabel($form->get('preModeration')); ?>
-	            <?php echo $this->formCheckbox($form->get('preModeration')); ?>
-	            <?php echo $this->formElementErrors($form->get('preModeration')) ?>
 	        </div>
         </div>
     </div>
