@@ -59,6 +59,7 @@ class PostVotePost implements InputFilterAwareInterface
      *          0 : draft
      *          1 : user confirmed
      *          2 : admin accepted
+     *          9 : admin rejected
      *
      * @ORM\Column(type="integer", nullable=false)
      */
