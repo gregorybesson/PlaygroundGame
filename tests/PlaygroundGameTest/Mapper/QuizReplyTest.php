@@ -56,6 +56,14 @@ class QuizReplyTest extends \PHPUnit_Framework_TestCase
 
     public function testFindAll()
     {
+        // https://devops.adfab.fr/view/MASHUP/job/MASHUP/366/console
+        // Failed asserting that 2 matches expected 3.
+        $quizreplies = $this->tm->findAll();
+        
+        foreach ($quizreplies as $quizreply) {
+            $this->tm->remove($quizreply);
+        }
+
         $quizreply = new QuizReplyEntity();
         $quizreply->setTotalQuestions(1);
         $quizreply->setMaxCorrectAnswers(1);
@@ -71,8 +79,8 @@ class QuizReplyTest extends \PHPUnit_Framework_TestCase
         $quizreply->setMaxCorrectAnswers(1);
         $quizreply->setTotalCorrectAnswers(1);
         $quizreply = $this->tm->insert($quizreply);
-
         $quizreplies = $this->tm->findAll();
+
         $this->assertEquals(3, count($quizreplies));
 
     }
