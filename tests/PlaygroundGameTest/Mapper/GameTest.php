@@ -72,15 +72,14 @@ class GameTest extends \PHPUnit_Framework_TestCase
 
     public function testRemove()
     {
-        $game = new \PlaygroundGame\Entity\Quiz();
-        $game->setTitle('CeciEstUnTitre');
-        $game->setIdentifier('gameid');
-        $game->setWinners(2);
-        $game->setSubstitutes(2);
-        $game = $this->tm->insert($game);
-        $id = $game->getId();
-        $this->tm->remove($game);
-        $this->assertNull($this->tm->findById($id));
+        $game2 = new \PlaygroundGame\Entity\Quiz();
+        $game2->setTitle('CeciEstUnTitrei2');
+        $game2->setIdentifier('gameid2');
+        $game2->setWinners(3);
+        $game2->setSubstitutes(3);
+        $game2 = $this->tm->insert($game2);
+        $this->tm->remove($game2);
+        $this->assertNull($this->tm->findOneBy(array()));
     }
 
     /*public function testFindAll()
