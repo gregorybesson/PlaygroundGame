@@ -28,9 +28,9 @@ class QuizAnswer
         $this->options = $options;
     }
 
-    public function findBy($array = array(), $sortArray = array())
+    public function findBy($filter, $order = null, $limit = null, $offset = null)
     {
-        return $this->getEntityRepository()->findBy($array, $sortArray);
+        return $this->getEntityRepository()->findBy($filter, $order, $limit, $offset);
     }
 
     public function findById($id)

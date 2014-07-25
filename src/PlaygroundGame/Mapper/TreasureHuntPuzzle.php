@@ -38,9 +38,9 @@ class TreasureHuntPuzzle
         return $this->getEntityRepository()->findBy(array('treasurehunt' => $treasurehunt), $sortArray);
     }
 
-    public function findBy($array = array(), $sortArray = array())
+    public function findBy($filter, $order = null, $limit = null, $offset = null)
     {
-        return $this->getEntityRepository()->findBy($array, $sortArray);
+        return $this->getEntityRepository()->findBy($filter, $order, $limit, $offset);
     }
 
     public function insert($entity)

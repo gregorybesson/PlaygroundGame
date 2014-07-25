@@ -33,9 +33,9 @@ class PrizeCategory
         return $this->getEntityRepository()->find($id);
     }
 
-    public function findBy($array)
+    public function findBy($filter, $order = null, $limit = null, $offset = null)
     {
-        return $this->getEntityRepository()->findBy($array);
+        return $this->getEntityRepository()->findBy($filter, $order, $limit, $offset);
     }
 
     public function findByIdentifier($identifier)

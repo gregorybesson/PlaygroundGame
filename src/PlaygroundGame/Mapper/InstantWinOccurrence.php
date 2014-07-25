@@ -79,9 +79,9 @@ class InstantWinOccurrence
         return $query;
     }
 
-    public function findBy($array = array(), $sortArray = array())
+    public function findBy($filter, $order = null, $limit = null, $offset = null)
     {
-        return $this->getEntityRepository()->findBy($array, $sortArray);
+        return $this->getEntityRepository()->findBy($filter, $order, $limit, $offset);
     }
 
     /**
