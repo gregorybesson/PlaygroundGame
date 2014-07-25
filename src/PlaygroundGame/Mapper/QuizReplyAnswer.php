@@ -33,6 +33,11 @@ class QuizReplyAnswer
         return $this->getEntityRepository()->find($id);
     }
 
+    public function findBy($filter, $order = null, $limit = null, $offset = null)
+    {
+        return $this->getEntityRepository()->findBy($filter, $order, $limit, $offset);
+    }
+
     public function findByReply($reply)
     {
         return $this->getEntityRepository()->findBy(array('reply' => $reply));

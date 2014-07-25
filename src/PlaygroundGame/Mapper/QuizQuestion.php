@@ -38,6 +38,11 @@ class QuizQuestion
         return $this->getEntityRepository()->findBy(array('quiz' => $quiz));
     }
 
+    public function findBy($filter, $order = null, $limit = null, $offset = null)
+    {
+        return $this->getEntityRepository()->findBy($filter, $order, $limit, $offset);
+    }
+
     public function insert($entity)
     {
         return $this->persist($entity);
