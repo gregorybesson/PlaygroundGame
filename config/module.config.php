@@ -100,10 +100,6 @@ return array(
         ),
 
         'routes' => array(
-            'admin/playgroundgame/treasure-hunt-areapicker' => array(
-                '@admin_areapicker_css',
-                '@head_admin_areapicker_js'
-            ),
             'admin/playgroundgame.*' => array(
                 '@head_admin_deezer_js',
                 '@admin_deezer_js',
@@ -149,11 +145,6 @@ return array(
                         'playgroundgame_postvote' => array(
                             'children_views' => array(
                                 'col_right' => 'playground-game/post-vote/col-postvote.phtml'
-                            )
-                        ),
-                        'playgroundgame_treasurehunt' => array(
-                            'children_views' => array(
-                                'col_right' => 'playground-game/lottery/col-lottery.phtml'
                             )
                         ),
                         'playgroundgame_prizecategory' => array(
@@ -210,7 +201,6 @@ return array(
             'playgroundgame_quiz' => 'PlaygroundGame\Controller\Frontend\QuizController',
             'playgroundgame_instantwin' => 'PlaygroundGame\Controller\Frontend\InstantWinController',
             'playgroundgame_postvote' => 'PlaygroundGame\Controller\Frontend\PostVoteController',
-            'playgroundgame_treasurehunt' => 'PlaygroundGame\Controller\Frontend\TreasureHuntController',
             'playgroundgame_prizecategory' => 'PlaygroundGame\Controller\Frontend\PrizeCategoryController',
             'playgroundgameadmin' => 'PlaygroundGame\Controller\Admin\AdminController',
             'playgroundgame_admin_game' => 'PlaygroundGame\Controller\Admin\GameController',
@@ -218,7 +208,6 @@ return array(
             'playgroundgame_admin_instantwin' => 'PlaygroundGame\Controller\Admin\InstantWinController',
             'playgroundgame_admin_postvote' => 'PlaygroundGame\Controller\Admin\PostVoteController',
             'playgroundgame_admin_quiz' => 'PlaygroundGame\Controller\Admin\QuizController',
-            'playgroundgame_admin_treasurehunt' => 'PlaygroundGame\Controller\Admin\TreasureHuntController',
             'playgroundgame_admin_prizecategory' => 'PlaygroundGame\Controller\Admin\PrizeCategoryController',
             'playgroundgame_admin_mission' => 'PlaygroundGame\Controller\Admin\MissionController'
         )
@@ -949,152 +938,6 @@ return array(
                             )
                         )
                     ),
-                    'treasurehunt' => array(
-                        'type' => 'Segment',
-                        'options' => array(
-                            'route' => 'chasse-au-tresor[/:id]',
-                            'defaults' => array(
-                                'controller' => 'playgroundgame_treasurehunt',
-                                'action' => 'home'
-                            )
-                        ),
-                        'may_terminate' => true,
-                        'child_routes' => array(
-                            'index' => array(
-                                'type' => 'Literal',
-                                'options' => array(
-                                    'route' => '/index',
-                                    'defaults' => array(
-                                        'controller' => 'playgroundgame_treasurehunt',
-                                        'action' => 'index'
-                                    )
-                                )
-                            ),
-                            'play' => array(
-                                'type' => 'Literal',
-                                'options' => array(
-                                    'route' => '/jouer',
-                                    'defaults' => array(
-                                        'controller' => 'playgroundgame_treasurehunt',
-                                        'action' => 'play'
-                                    )
-                                )
-                            ),
-                            'result' => array(
-                                'type' => 'Literal',
-                                'options' => array(
-                                    'route' => '/resultat',
-                                    'defaults' => array(
-                                        'controller' => 'playgroundgame_treasurehunt',
-                                        'action' => 'result'
-                                    )
-                                )
-                            ),
-                            'register' => array(
-                                'type' => 'Literal',
-                                'options' => array(
-                                    'route' => '/register',
-                                    'defaults' => array(
-                                        'controller' => 'playgroundgame_treasurehunt',
-                                        'action' => 'register'
-                                    )
-                                )
-                            ),
-                            'fbshare' => array(
-                                'type' => 'Literal',
-                                'options' => array(
-                                    'route' => '/fbshare',
-                                    'defaults' => array(
-                                        'controller' => 'playgroundgame_treasurehunt',
-                                        'action' => 'fbshare'
-                                    )
-                                )
-                            ),
-                            'tweet' => array(
-                                'type' => 'Literal',
-                                'options' => array(
-                                    'route' => '/tweet',
-                                    'defaults' => array(
-                                        'controller' => 'playgroundgame_treasurehunt',
-                                        'action' => 'tweet'
-                                    )
-                                )
-                            ),
-                            'google' => array(
-                                'type' => 'Literal',
-                                'options' => array(
-                                    'route' => '/google',
-                                    'defaults' => array(
-                                        'controller' => 'playgroundgame_treasurehunt',
-                                        'action' => 'google'
-                                    )
-                                )
-                            ),
-                            'bounce' => array(
-                                'type' => 'Literal',
-                                'options' => array(
-                                    'route' => '/essayez-aussi',
-                                    'defaults' => array(
-                                        'controller' => 'playgroundgame_treasurehunt',
-                                        'action' => 'bounce'
-                                    )
-                                )
-                            ),
-                            'terms' => array(
-                                'type' => 'Literal',
-                                'options' => array(
-                                    'route' => '/reglement',
-                                    'defaults' => array(
-                                        'controller' => 'playgroundgame_treasurehunt',
-                                        'action' => 'terms'
-                                    )
-                                )
-                            ),
-                            'conditions' => array(
-                                'type' => 'Literal',
-                                'options' => array(
-                                    'route' => '/mentions-legales',
-                                    'defaults' => array(
-                                        'controller' => 'playgroundgame_treasurehunt',
-                                        'action' => 'conditions'
-                                    )
-                                )
-                            ),
-                            'fangate' => array(
-                                'type' => 'Literal',
-                                'options' => array(
-                                    'route' => '/fangate',
-                                    'defaults' => array(
-                                        'controller' => 'playgroundgame_treasurehunt',
-                                        'action' => 'fangate'
-                                    )
-                                )
-                            ),
-                            'prizes' => array(
-                                'type' => 'Literal',
-                                'options' => array(
-                                    'route' => '/lots',
-                                    'defaults' => array(
-                                        'controller' => 'playgroundgame_treasurehunt',
-                                        'action' => 'prizes'
-                                    )
-                                ),
-                                'may_terminate' => true,
-                                'child_routes' => array(
-                                    'prize' => array(
-                                        'type' => 'Segment',
-                                        'options' => array(
-                                            'route' => '/:prize',
-                                            'defaults' => array(
-                                                'controller' => 'playgroundgame_treasurehunt',
-                                                'action' => 'prize'
-                                            )
-                                        )
-                                    )
-                                )
-                            )
-                        )
-                    ),
                     'prizecategories' => array(
                         'type' => 'Segment',
                         'options' => array(
@@ -1347,40 +1190,6 @@ return array(
                                     'route' => '/download/:gameId',
                                     'defaults' => array(
                                         'controller' => 'playgroundgame_admin_postvote',
-                                        'action' => 'download'
-                                    )
-                                )
-                            )
-                        )
-                    ),
-                    'treasurehunt' => array(
-                        'type' => 'Literal',
-                        'priority' => 1000,
-                        'options' => array(
-                            'route' => '/treasurehunt',
-                            'defaults' => array(
-                                'controller' => 'playgroundgame_admin_treasurehunt',
-                                'action' => 'index'
-                            )
-                        ),
-                        'child_routes' => array(
-                            'entry' => array(
-                                'type' => 'Segment',
-                                'options' => array(
-                                    'route' => '/entry/:gameId[/:p]',
-                                    'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_treasurehunt',
-                                        'action' => 'entry',
-                                        'gameId' => 0
-                                    )
-                                )
-                            ),
-                            'download' => array(
-                                'type' => 'Segment',
-                                'options' => array(
-                                    'route' => '/download/:gameId',
-                                    'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_treasurehunt',
                                         'action' => 'download'
                                     )
                                 )
@@ -1856,88 +1665,6 @@ return array(
                                     )
                                 )
                             ),
-
-                            'create-treasurehunt' => array(
-                                'type' => 'Segment',
-                                'options' => array(
-                                    'route' => '/create-treasurehunt/:treasureHuntId',
-                                    'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_treasurehunt',
-                                        'action' => 'createTreasureHunt',
-                                        'treasureHuntId' => 0
-                                    )
-                                )
-                            ),
-                            'edit-treasurehunt' => array(
-                                'type' => 'Segment',
-                                'options' => array(
-                                    'route' => '/edit-treasurehunt/:gameId',
-                                    'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_treasurehunt',
-                                        'action' => 'editTreasureHunt',
-                                        'gameId' => 0
-                                    )
-                                )
-                            ),
-                            'treasurehunt-puzzle-list' => array(
-                                'type' => 'Segment',
-                                'options' => array(
-                                    'route' => '/treasurehpuzzlepuzzle-list/:gameId[/:filter][/:p]',
-                                    'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_treasurehunt',
-                                        'action' => 'listPuzzle',
-                                        'gameId' => 0,
-                                        'filter' => 'DESC'
-                                    ),
-                                    'constraints' => array(
-                                        'filter' => '[a-zA-Z][a-zA-Z0-9_-]*'
-                                    )
-                                )
-                            ),
-                            'treasurehunt-puzzle-add' => array(
-                                'type' => 'Segment',
-                                'options' => array(
-                                    'route' => '/treasurehunt-puzzle-add/:gameId',
-                                    'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_treasurehunt',
-                                        'action' => 'addPuzzle',
-                                        'gameId' => 0
-                                    )
-                                )
-                            ),
-                            'treasurehunt-puzzle-edit' => array(
-                                'type' => 'Segment',
-                                'options' => array(
-                                    'route' => '/treasurehunt-puzzle-edit/:gameId/:puzzleId',
-                                    'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_treasurehunt',
-                                        'action' => 'editPuzzle',
-                                        'gameId' => 0,
-                                        'puzzleId' => 0
-                                    )
-                                )
-                            ),
-                            'treasurehunt-puzzle-remove' => array(
-                                'type' => 'Segment',
-                                'options' => array(
-                                    'route' => '/treasurehunt-puzzle-remove/:puzzleId',
-                                    'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_treasurehunt',
-                                        'action' => 'removePuzzle',
-                                        'puzzleId' => 0
-                                    )
-                                )
-                            ),
-                            'treasure-hunt-areapicker' => array(
-                                'type' => 'Segment',
-                                'options' => array(
-                                    'route' => '/treasure-hunt-areapicker',
-                                    'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_treasurehunt',
-                                        'action' => 'areapicker'
-                                    )
-                                )
-                            )
                         )
                     )
                 )
@@ -2196,14 +1923,6 @@ return array(
                         'route' => 'admin/playgroundgame/postvote-form',
                         'privilege' => 'list'
                     ),
-
-                    'create-treasurehunt' => array(
-                        'label' => 'Add new treasure hunt',
-                        'route' => 'admin/playgroundgame/create-treasurehunt',
-                        'resource' => 'game',
-                        'privilege' => 'add'
-                    ),
-
                     'mission_list' => array(
                         'label' => 'Mission Management',
                         'route' => 'admin/mission/list',
