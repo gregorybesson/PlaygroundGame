@@ -9,6 +9,7 @@ use Zend\Session\Container;
 use Zend\Form\Element;
 use Zend\Form\Form;
 use Zend\InputFilter\Factory as InputFactory;
+use PlaygroundGame\Service\GameService;
 
 class GameController extends AbstractActionController
 {
