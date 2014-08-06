@@ -4,7 +4,6 @@ namespace PlaygroundGame\Controller\Frontend;
 
 use PlaygroundGame\Entity\PrizeCategory;
 use Zend\View\Model\ViewModel;
-use PlaygroundGame\Service\GameService;
 
 class PrizeCategoryController extends GameController
 {
@@ -80,13 +79,6 @@ class PrizeCategoryController extends GameController
         }
 
         return $this->gameService;
-    }
-
-    public function setGameService(GameService $gameService)
-    {
-        $this->gameService = $gameService;
-
-        return $this;
     }
 
     public function getPrizeCategoryService()

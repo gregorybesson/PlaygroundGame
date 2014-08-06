@@ -5,7 +5,6 @@ namespace PlaygroundGame\Controller\Frontend;
 use PlaygroundGame\Entity\Lottery;
 use Zend\View\Model\ViewModel;
 use Zend\Session\Container;
-use PlaygroundGame\Service\GameService;
 
 class LotteryController extends GameController
 {
@@ -212,12 +211,5 @@ class LotteryController extends GameController
         }
 
         return $this->gameService;
-    }
-
-    public function setGameService(GameService $gameService)
-    {
-        $this->gameService = $gameService;
-
-        return $this;
     }
 }

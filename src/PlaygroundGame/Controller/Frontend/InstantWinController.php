@@ -6,7 +6,6 @@ use PlaygroundGame\Entity\Entry;
 use Zend\View\Model\ViewModel;
 use Zend\Session\Container;
 use Zend\Form\Form;
-use PlaygroundGame\Service\GameService;
 
 class InstantWinController extends GameController
 {
@@ -214,12 +213,5 @@ class InstantWinController extends GameController
         }
 
         return $this->gameService;
-    }
-
-    public function setGameService(GameService $gameService)
-    {
-        $this->gameService = $gameService;
-
-        return $this;
     }
 }

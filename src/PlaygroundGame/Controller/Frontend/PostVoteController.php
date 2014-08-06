@@ -8,7 +8,6 @@ use Zend\InputFilter\Factory as InputFactory;
 use Zend\Session\Container;
 use PlaygroundGame\Form\Frontend\PostVoteVote;
 use Zend\View\Model\ViewModel;
-use PlaygroundGame\Service\GameService;
 
 
 class PostVoteController extends GameController
@@ -737,12 +736,5 @@ class PostVoteController extends GameController
         }
 
         return $this->gameService;
-    }
-
-    public function setGameService(GameService $gameService)
-    {
-        $this->gameService = $gameService;
-
-        return $this;
     }
 }

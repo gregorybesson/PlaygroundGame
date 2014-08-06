@@ -7,7 +7,6 @@ use Zend\Form\Form;
 use Zend\InputFilter\Factory as InputFactory;
 use Zend\View\Model\ViewModel;
 use Zend\Session\Container;
-use PlaygroundGame\Service\GameService;
 
 class QuizController extends GameController
 {
@@ -430,12 +429,5 @@ class QuizController extends GameController
         }
 
         return $this->gameService;
-    }
-
-    public function setGameService (GameService $gameService)
-    {
-        $this->gameService = $gameService;
-
-        return $this;
     }
 }
