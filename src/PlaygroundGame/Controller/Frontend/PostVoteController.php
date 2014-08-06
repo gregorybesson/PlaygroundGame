@@ -8,6 +8,7 @@ use Zend\InputFilter\Factory as InputFactory;
 use Zend\Session\Container;
 use PlaygroundGame\Form\Frontend\PostVoteVote;
 use Zend\View\Model\ViewModel;
+use PlaygroundGame\Service\GameService;
 
 
 class PostVoteController extends GameController

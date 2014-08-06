@@ -7,6 +7,7 @@ use Zend\Form\Form;
 use Zend\InputFilter\Factory as InputFactory;
 use Zend\View\Model\ViewModel;
 use Zend\Session\Container;
+use PlaygroundGame\Service\GameService;
 
 class QuizController extends GameController
 {
