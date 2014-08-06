@@ -12,7 +12,6 @@ return array(
         'PlaygroundDesign',
         'PlaygroundUser',
       'PlaygroundGame',
-   		'TreasureHunt',
         'PlaygroundPartnership',
     ),
     'module_listener_options' => array(
