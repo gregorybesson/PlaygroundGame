@@ -11,8 +11,8 @@ return array(
    		'PlaygroundCore',
         'PlaygroundDesign',
         'PlaygroundUser',
-   		'PlaygroundGame',
-        'PlaygroundPartnership',
+      'PlaygroundGame',
+        'PlaygroundPartnership'
     ),
     'module_listener_options' => array(
         'config_glob_paths'    => array(

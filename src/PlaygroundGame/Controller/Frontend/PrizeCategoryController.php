@@ -81,13 +81,6 @@ class PrizeCategoryController extends GameController
         return $this->gameService;
     }
 
-    public function setGameService(GameService $gameService)
-    {
-        $this->gameService = $gameService;
-
-        return $this;
-    }
-
     public function getPrizeCategoryService()
     {
         if (!$this->prizeCategoryService) {
