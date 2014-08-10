@@ -11,7 +11,7 @@ return array(
    		'PlaygroundCore',
         'PlaygroundDesign',
         'PlaygroundUser',
-      'PlaygroundGame',
+        'PlaygroundGame',
         'PlaygroundPartnership'
     ),
     'module_listener_options' => array(

@@ -1,5 +1,8 @@
-/.project
-/.settings
-/.buildpath
+.project
+.buildpath
+.settings
 /build
 /tests/data/*
+/vendor
+/composer.lock
+composer.phar
