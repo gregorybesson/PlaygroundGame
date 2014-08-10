@@ -29,7 +29,8 @@
 		"playground/core" : "dev-master",
 		"playground/design" : "dev-master",
 		"playground/user" : "dev-develop",
-		"playground/hybridauth" : "dev-master"
+		"playground/hybridauth" : "dev-master",
+		"playground/partnership" : "dev-develop"
 	},
 	"require-dev" : {
 		"phpunit/phpunit" : "3.7.*"
