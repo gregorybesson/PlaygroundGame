@@ -23,7 +23,8 @@
 		"zendframework/zendframework" : "2.*",
 		"playground/core" : "dev-master",
 		"playground/design" : "dev-master",
-		"playground/user" : "dev-develop"
+		"playground/user" : "dev-develop",
+		"playground/hybridauth" : "dev-master"
 	},
 	"require-dev" : {
 		"phpunit/phpunit" : "3.7.*"

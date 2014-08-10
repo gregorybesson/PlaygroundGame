@@ -50,15 +50,35 @@ class PostVoteFormTest extends \PHPUnit_Framework_TestCase
 
     public function testFindAll()
     {
-        $postvoteform = new PostVoteFormEntity();
-        $postvoteform->setTitle("test 1");
-        $postvoteform = $this->tm->insert($postvoteform);
-        $postvoteform = new PostVoteFormEntity();
-        $postvoteform->setTitle("test 2");
-        $postvoteform = $this->tm->insert($postvoteform);
-        $postvoteform = new PostVoteFormEntity();
-        $postvoteform->setTitle("test 3");
-        $postvoteform = $this->tm->insert($postvoteform);
+        // It has to work with 5.3.x and closure don't support direct $this referencing
+        $self = $this;
+        $this->em->transactional(function($em) use ($self) {
+            $postvoteform = new PostVoteFormEntity();
+            $postvoteform->setTitle("test 1");
+            $self->tm->insert($postvoteform);
+        });
+        
+        $this->em->flush();
+        $this->em->clear();
+            
+        $this->em->transactional(function($em) use ($self) {
+            $postvoteform = new PostVoteFormEntity();
+            $postvoteform->setTitle("test 2");
+            $self->tm->insert($postvoteform);
+        });
+        
+        $this->em->flush();
+        $this->em->clear();
+        
+        $this->em->transactional(function($em) use ($self) {
+            $postvoteform = new PostVoteFormEntity();
+            $postvoteform->setTitle("test 2");
+            $self->tm->insert($postvoteform);
+        });
+       
+        $this->em->flush();
+        $this->em->clear();
+
         $postvoteforms = $this->tm->findAll();
         $this->assertEquals(3, count($postvoteforms));
     }
