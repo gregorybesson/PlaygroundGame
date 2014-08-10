@@ -423,7 +423,7 @@ class InstantWinTest extends AbstractHttpControllerTestCase
         
         $paris_time_zone = new \DateTimeZone('Europe/Paris');
         
-        $startDate = new \DateTime((date('Y')+1)."-10-21 00:00:00", $paris_time_zone);
+        $startDate = new \DateTime((date('Y')+1)."-10-21 00:00:01", $paris_time_zone);
         $startDate->add(new \DateInterval('P3D'));
         $endDate = new \DateTime((date('Y')+1)."-10-21 00:00:00", $paris_time_zone);
         $endDate->add(new \DateInterval('P8D'));
