@@ -15,5 +15,4 @@ return array(
     	'url' => 'http://www.tf1.fr',
     ),
     'channel' => 'test',
-    
 );

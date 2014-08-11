@@ -10,4 +10,8 @@ before_script:
   - composer install --dev --prefer-source
 
 script:
-  - php vendor/bin/phpunit -c .
+  - php vendor/bin/phpunit --testsuite playgroundgameC
+  - php vendor/bin/phpunit --testsuite playgroundgameE
+  - php vendor/bin/phpunit --testsuite playgroundgameF
+  - php vendor/bin/phpunit --testsuite playgroundgameM
+  - php vendor/bin/phpunit --testsuite playgroundgameS
