@@ -198,11 +198,11 @@ class InstantWinTest extends AbstractHttpControllerTestCase
         $game = new InstantWinEntity();
 
         $startDate = new \DateTime("now");
-        $startDate = \DateTime::createFromFormat('m/d/Y H:i:s', $startDate->format('m/d/Y H'). ':00:00');
+        $startDate = \DateTime::createFromFormat('m/d/Y H:i:s', $startDate->format('m/d/Y H:i:s'));
 
         $endDate = new \DateTime("now");
         $endDate->add(new \DateInterval('PT1H'));
-        $endDate = \DateTime::createFromFormat('m/d/Y H:i:s', $endDate->format('m/d/Y H'). ':00:00');
+        $endDate = \DateTime::createFromFormat('m/d/Y H:i:s', $endDate->format('m/d/Y H:i:s'));
 
         $game->setOccurrenceDrawFrequency('hour');
         $game->setStartDate($startDate);
@@ -420,12 +420,12 @@ class InstantWinTest extends AbstractHttpControllerTestCase
     public function testscheduleOccurrencesDaysInTransitions()
     {
         $game = new InstantWinEntity();
-        
+        $today = $startDate = new \DateTime("now");
         $paris_time_zone = new \DateTimeZone('Europe/Paris');
         
-        $startDate = new \DateTime((date('Y')+1)."-10-21 00:00:00", $paris_time_zone);
+        $startDate = new \DateTime((date('Y')+1)."-10-21 " . $today->format('H:i:s'), $paris_time_zone);
         $startDate->add(new \DateInterval('P3D'));
-        $endDate = new \DateTime((date('Y')+1)."-10-21 00:00:00", $paris_time_zone);
+        $endDate = new \DateTime((date('Y')+1)."-10-21 " . $today->format('H:i:s'), $paris_time_zone);
         $endDate->add(new \DateInterval('P8D'));
 
         $game->setOccurrenceDrawFrequency('day');
@@ -461,11 +461,11 @@ class InstantWinTest extends AbstractHttpControllerTestCase
 
         $startDate = new \DateTime("now");
         $startDate->add(new \DateInterval('P3D'));
-        $startDate = \DateTime::createFromFormat('m/d/Y H:i:s', $startDate->format('m/d/Y H'). ':00:00');
+        $startDate = \DateTime::createFromFormat('m/d/Y H:i:s', $startDate->format('m/d/Y H:i:s'));
 
         $endDate = new \DateTime("now");
         $endDate->add(new \DateInterval('P3DT1H'));
-        $endDate = \DateTime::createFromFormat('m/d/Y H:i:s', $endDate->format('m/d/Y H'). ':00:00');
+        $endDate = \DateTime::createFromFormat('m/d/Y H:i:s', $endDate->format('m/d/Y H:i:s'));
 
         $game->setOccurrenceDrawFrequency('hour');
         $game->setStartDate($startDate);
