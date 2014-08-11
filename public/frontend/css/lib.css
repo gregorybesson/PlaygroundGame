@@ -1,0 +1,276 @@
+/*
+
+Uniform Theme: Uniform Default
+Version: 1.8
+By: Josh Pyles
+License: MIT License
+---
+For use with the Uniform plugin:
+http://uniformjs.com/
+
+*/
+/* General settings */
+div.selector,
+div.selector span,
+div.checker span,
+div.radio span,
+div.uploader,
+div.uploader span.action{
+  background-image: url("../images/common/form-style.png");
+  background-repeat: no-repeat;
+  -webkit-font-smoothing: antialiased; }
+
+.selector,
+.checker,
+.button,
+.radio,
+.uploader {
+  display: -moz-inline-box;
+  display: inline-block;
+  *display: inline;
+  zoom: 1;
+  vertical-align: middle; }
+
+.selector select:focus,
+.radio input:focus,
+.checker input:focus,
+.uploader input:focus {
+  outline: 0; }
+
+.selector,
+.radio,
+.checker,
+.uploader,
+.selector *,
+.radio *,
+.checker *,
+.uploader * {
+  margin: 0;
+  padding: 0; }
+
+/* Input & Textarea */
+select.uniform-multiselect{
+  padding: 3px;
+  outline: 0; }
+
+/* Remove default webkit and possible mozilla .search styles */
+div.checker input,
+input.search,
+input.search:active {
+  -moz-appearance: none;
+  -webkit-appearance: none; }
+
+/* Select */
+div.selector {
+  background-position: 0 -32px;
+  line-height: 28px;
+  height: 28px;
+  padding: 0 0 0 10px;
+  position: relative;
+  overflow: hidden; }
+
+div.selector.fixedWidth {
+  width: 190px; }
+
+div.selector span {
+  text-overflow: ellipsis;
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  background-position: right 0;
+  height: 28px;
+  line-height: 28px;
+  padding-right: 25px;
+  cursor: pointer;
+  width: 100%;
+  display: block; }
+
+div.selector.fixedWidth span {
+  width: 155px; }
+
+div.selector select {
+  opacity: 0;
+  filter: alpha(opacity=0);
+  -moz-opacity: 0;
+  border: none;
+  background: none;
+  position: absolute;
+  height: 24px;
+  top: 3px;
+  left: 0px;
+  width: 100%; }
+
+/* Checkbox */
+div.checker,
+div.checker span,
+div.checker input {
+  width: 14px;
+  height: 14px; }
+
+div.checker {
+  position: relative; }
+
+div.checker span {
+  display: -moz-inline-box;
+  display: inline-block;
+  *display: inline;
+  zoom: 1;
+  text-align: center;
+  background-position: 0 -62px; }
+
+div.checker input {
+  opacity: 0;
+  filter: alpha(opacity=0);
+  -moz-opacity: 0;
+  border: none;
+  background: none;
+  display: -moz-inline-box;
+  display: inline-block;
+  *display: inline;
+  zoom: 1; }
+
+div.checker span.checked {
+  background-position: -16px -62px; }
+
+/* Radio */
+div.radio,
+div.radio span,
+div.radio input {
+  width: 13px;
+  height: 13px; }
+
+div.radio {
+  position: relative; }
+
+div.radio span {
+  display: -moz-inline-box;
+  display: inline-block;
+  *display: inline;
+  zoom: 1;
+  text-align: center;
+  background-position: -2px -78px; }
+
+div.radio input {
+  opacity: 0;
+  filter: alpha(opacity=0);
+  -moz-opacity: 0;
+  border: none;
+  background: none;
+  display: -moz-inline-box;
+  display: inline-block;
+  *display: inline;
+  zoom: 1;
+  text-align: center; }
+
+div.radio span.checked {
+  background-position: -18px -78px; }
+
+/* Uploader */
+div.uploader {
+  background-position: 0 -93px;
+  height: 35px;
+  width: 190px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden; }
+
+div.uploader span.action {
+  background-position: right -130px;
+  height: 35px;
+  line-height: 35px;
+  width: 33%;
+  text-align: center;
+  float: right;
+  display: inline;
+  overflow: hidden;
+  cursor: pointer; }
+
+div.uploader span.filename {
+  text-overflow: ellipsis;
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  float: left;
+  cursor: default;
+  height: 35px;
+  margin: 0;
+  line-height: 35px;
+  width: 60%;
+  padding: 0 10px; }
+
+div.uploader input {
+  opacity: 0;
+  filter: alpha(opacity=0);
+  -moz-opacity: 0;
+  border: none;
+  background: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  float: right;
+  cursor: pointer;
+  width: 100%;
+  height: 100%; }
+
+/* INPUT & TEXTAREA */
+select.uniform-multiselect {
+  font-size: 12px;
+  font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-weight: normal;
+  color: #777;
+  border-top: solid 1px #aaa;
+  border-left: solid 1px #aaa;
+  border-bottom: solid 1px #ccc;
+  border-right: solid 1px #ccc;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px; }
+
+select.uniform-multiselect:focus {
+  -webkit-box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.3);
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.3);
+  border-color: #999; }
+
+/* Select */
+div.selector {
+  font-size: 12px; }
+
+div.selector select {
+  font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 12px; }
+
+div.selector select:hover{
+     cursor: pointer;
+}
+
+div.selector span {
+  color: #212121; }
+
+div.selector.disabled span {
+  color: #bbb; }
+
+/* Checker */
+div.checker {
+  margin: -4px 10px 0 0; }
+
+/* Radio */
+div.radio {
+  margin-right: 3px;
+  margin-top:-2px; }
+
+/* Uploader */
+div.uploader span.action {
+  font-size: 14px; }
+
+div.uploader span.filename {
+  color: #8e8e8e;
+  border-right: solid 1px #bbb;
+  font-size: 14px; }
+
+div.uploader.disabled span.action {
+  color: #aaa; }
+
+div.uploader.disabled span.filename {
+  border-color: #ddd;
+  color: #aaa; }

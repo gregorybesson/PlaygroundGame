@@ -2,8 +2,20 @@
 
 <phpunit bootstrap="./tests/Bootstrap.php">
     <testsuites>
-        <testsuite name="playgroundgame">
-            <directory>./tests/PlaygroundGameTest</directory>
+        <testsuite name="playgroundgameC">
+            <directory>./tests/PlaygroundGameTest/Controller</directory>
+        </testsuite>
+        <testsuite name="playgroundgameE">
+            <directory>./tests/PlaygroundGameTest/Entity</directory>
+        </testsuite>
+        <testsuite name="playgroundgameF">
+            <directory>./tests/PlaygroundGameTest/Form</directory>
+        </testsuite>
+        <testsuite name="playgroundgameM">
+            <directory>./tests/PlaygroundGameTest/Mapper</directory>
+        </testsuite>
+        <testsuite name="playgroundgameS">
+            <directory>./tests/PlaygroundGameTest/Service</directory>
         </testsuite>
     </testsuites>
     

@@ -70,10 +70,6 @@ class QuizQuestionTest extends \PHPUnit_Framework_TestCase
 
     public function tearDown()
     {
-        $dbh = $this->em->getConnection();
-        unset($this->tm);
-        unset($this->sm);
-        unset($this->em);
         parent::tearDown();
     }
 }

@@ -5,7 +5,8 @@ return array(
 			'orm_default' => array(
 				'driverClass' => 'Doctrine\DBAL\Driver\PDOSqlite\Driver',
 				'params' => array(
-					'path'=> __DIR__.'/../data/game.db',
+					//'path'=> __DIR__.'/../data/game.db',
+				    'path'=> ':memory:',
 				)
 			)
 		)
