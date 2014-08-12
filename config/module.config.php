@@ -33,16 +33,17 @@ return array(
     
         'guards' => array(
             'BjyAuthorize\Guard\Controller' => array(
-                array('controller' => 'playgroundgame_game',                                   'roles' => array('guest', 'user')),
+                array('controller' => 'playgroundgame_game',                'roles' => array('guest', 'user')),
+                array('controller' => 'playgroundgame_mission',             'roles' => array('guest', 'user')),
     
                 // Admin area
-                array('controller' => 'playgroundgameadmin',                                    'roles' => array('admin')),
-                array('controller' => 'playgroundgame_admin_lottery',                           'roles' => array('admin')),
-                array('controller' => 'playgroundgame_admin_instantwin',                        'roles' => array('admin')),
-                array('controller' => 'playgroundgame_admin_quiz',                              'roles' => array('admin')),
-                array('controller' => 'playgroundgame_admin_postvote',                          'roles' => array('admin')),
-                array('controller' => 'playgroundgame_admin_prizecategory',                     'roles' => array('admin')),
-                array('controller' => 'playgroundgame_admin_mission',                           'roles' => array('admin')),
+                array('controller' => 'playgroundgameadmin',                'roles' => array('admin')),
+                array('controller' => 'playgroundgame_admin_lottery',       'roles' => array('admin')),
+                array('controller' => 'playgroundgame_admin_instantwin',    'roles' => array('admin')),
+                array('controller' => 'playgroundgame_admin_quiz',          'roles' => array('admin')),
+                array('controller' => 'playgroundgame_admin_postvote',      'roles' => array('admin')),
+                array('controller' => 'playgroundgame_admin_prizecategory', 'roles' => array('admin')),
+                array('controller' => 'playgroundgame_admin_mission',       'roles' => array('admin')),
             ),
         ),
     ),
@@ -233,6 +234,7 @@ return array(
             'playgroundgame_instantwin' => 'PlaygroundGame\Controller\Frontend\InstantWinController',
             'playgroundgame_postvote' => 'PlaygroundGame\Controller\Frontend\PostVoteController',
             'playgroundgame_prizecategory' => 'PlaygroundGame\Controller\Frontend\PrizeCategoryController',
+            'playgroundgame_mission' => 'PlaygroundGame\Controller\Frontend\MissionController',
             'playgroundgameadmin' => 'PlaygroundGame\Controller\Admin\AdminController',
             'playgroundgame_admin_game' => 'PlaygroundGame\Controller\Admin\GameController',
             'playgroundgame_admin_lottery' => 'PlaygroundGame\Controller\Admin\LotteryController',
@@ -285,7 +287,18 @@ return array(
        						'spec' => 'game/%controller%_%id%_%channel%_%action%.html',
        					),
        				),*/
-
+                    
+                    'mission' => array(
+                        'type' => 'Literal',
+                        'options' => array(
+                            'route' => 'mission',
+                            'defaults' => array(
+                                'controller' => 'playgroundgame_mission',
+                                'action' => 'index'
+                            )
+                        ),
+                    ),
+                    
 		            'quiz' => array(
                         'type' => 'Segment',
                         'options' => array(
