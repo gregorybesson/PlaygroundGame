@@ -15,6 +15,37 @@ return array(
             )
         )
     ),
+    'bjyauthorize' => array(
+        'resource_providers' => array(
+            'BjyAuthorize\Provider\Resource\Config' => array(
+                'game'          => array(),
+            ),
+        ),
+    
+        'rule_providers' => array(
+            'BjyAuthorize\Provider\Rule\Config' => array(
+                'allow' => array(
+                    array(array('admin'), 'game',           array('list','add','edit','delete')),
+                    array(array('admin'), 'game',           array('prizecategory_list','prizecategory_add','prizecategory_edit','prizecategory_delete')),
+                ),
+            ),
+        ),
+    
+        'guards' => array(
+            'BjyAuthorize\Guard\Controller' => array(
+                array('controller' => 'playgroundgame_game',                                   'roles' => array('guest', 'user')),
+    
+                // Admin area
+                array('controller' => 'playgroundgameadmin',                                    'roles' => array('admin')),
+                array('controller' => 'playgroundgame_admin_lottery',                           'roles' => array('admin')),
+                array('controller' => 'playgroundgame_admin_instantwin',                        'roles' => array('admin')),
+                array('controller' => 'playgroundgame_admin_quiz',                              'roles' => array('admin')),
+                array('controller' => 'playgroundgame_admin_postvote',                          'roles' => array('admin')),
+                array('controller' => 'playgroundgame_admin_prizecategory',                     'roles' => array('admin')),
+                array('controller' => 'playgroundgame_admin_mission',                           'roles' => array('admin')),
+            ),
+        ),
+    ),
     'assetic_configuration' => array(
         'modules' => array(
             'lib_game' => array(
