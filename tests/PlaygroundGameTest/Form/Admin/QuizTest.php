@@ -19,8 +19,9 @@ class quizTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->sm = Bootstrap::getServiceManager();
+        $this->sm->setAllowOverride(true);
 
-        $this->getForm();
+        //$this->getForm();
         $now = new \DateTime('today');
         $date = new \DateTime('tomorrow');
         $this->quizData = array(
@@ -52,12 +53,24 @@ class quizTest extends \PHPUnit_Framework_TestCase
 
     public function testCanInsertNewRecord()
     {
+        $adminGameQuizForm = $this->getMockBuilder('PlaygroundGame\Service\PrizeCategory')
+        ->setMethods(array('getActivePrizeCategories'))
+        ->disableOriginalConstructor()
+        ->getMock();
+        
+        $this->sm->setService('playgroundgame_prizecategory_service', $adminGameQuizForm);
+        
+        $adminGameQuizForm->expects($this->any())
+        ->method('getActivePrizeCategories')
+        ->will($this->returnValue(array()));
+        
         $quiz = new QuizEntity();
-        $this->form->setInputFilter($quiz->getInputFilter());
+        $form = $this->sm->get('playgroundgame_quiz_form');
+        $form->setInputFilter($quiz->getInputFilter());
 
-        $this->form->bind($quiz);
-        $this->form->setData($this->quizData);
-        $this->assertTrue($this->form->isValid());
+        $form->bind($quiz);
+        $form->setData($this->quizData);
+        $this->assertTrue($form->isValid());
     }
 
     /**
@@ -65,13 +78,25 @@ class quizTest extends \PHPUnit_Framework_TestCase
      */
     public function testCanInsertNewRecordWithVictoryConditionsNull()
     {
+        $adminGameQuizForm = $this->getMockBuilder('PlaygroundGame\Service\PrizeCategory')
+        ->setMethods(array('getActivePrizeCategories'))
+        ->disableOriginalConstructor()
+        ->getMock();
+        
+        $this->sm->setService('playgroundgame_prizecategory_service', $adminGameQuizForm);
+        
+        $adminGameQuizForm->expects($this->any())
+        ->method('getActivePrizeCategories')
+        ->will($this->returnValue(array()));
+        
         $this->quizData['victoryConditions'] = null;
 
         $quiz = new QuizEntity();
-        $this->form->setInputFilter($quiz->getInputFilter());
-        $this->form->bind($quiz);
-        $this->form->setData($this->quizData);
-        $this->assertTrue($this->form->isValid());
+        $form = $this->sm->get('playgroundgame_quiz_form');
+        $form->setInputFilter($quiz->getInputFilter()); 
+        $form->bind($quiz);
+        $form->setData($this->quizData);
+        $this->assertTrue($form->isValid());
     }
 
     /**
@@ -79,14 +104,26 @@ class quizTest extends \PHPUnit_Framework_TestCase
      */
     public function testCannotInsertNewRecordWithNoWinners()
     {
+        $adminGameQuizForm = $this->getMockBuilder('PlaygroundGame\Service\PrizeCategory')
+        ->setMethods(array('getActivePrizeCategories'))
+        ->disableOriginalConstructor()
+        ->getMock();
+        
+        $this->sm->setService('playgroundgame_prizecategory_service', $adminGameQuizForm);
+        
+        $adminGameQuizForm->expects($this->any())
+        ->method('getActivePrizeCategories')
+        ->will($this->returnValue(array()));
+        
         $this->quizData['winners'] = '';
 
         $quiz = new QuizEntity();
-        $this->form->setInputFilter($quiz->getInputFilter());
-        $this->form->bind($quiz);
-        $this->form->setData($this->quizData);
-        $this->assertFalse($this->form->isValid());
-        $this->assertEquals(1, count($this->form->getMessages()));
+        $form = $this->sm->get('playgroundgame_quiz_form');
+        $form->setInputFilter($quiz->getInputFilter());
+        $form->bind($quiz);
+        $form->setData($this->quizData);
+        $this->assertFalse($form->isValid());
+        $this->assertEquals(1, count($form->getMessages()));
     }
 
     /**
@@ -94,23 +131,26 @@ class quizTest extends \PHPUnit_Framework_TestCase
      */
     public function testCannotInsertNewRecordWithNoSubstitutes()
     {
+        $adminGameQuizForm = $this->getMockBuilder('PlaygroundGame\Service\PrizeCategory')
+        ->setMethods(array('getActivePrizeCategories'))
+        ->disableOriginalConstructor()
+        ->getMock();
+        
+        $this->sm->setService('playgroundgame_prizecategory_service', $adminGameQuizForm);
+        
+        $adminGameQuizForm->expects($this->any())
+        ->method('getActivePrizeCategories')
+        ->will($this->returnValue(array()));
+        
         $this->quizData['substitutes'] = '';
 
         $quiz = new QuizEntity();
-        $this->form->setInputFilter($quiz->getInputFilter());
+        $form = $this->sm->get('playgroundgame_quiz_form');
+        $form->setInputFilter($quiz->getInputFilter());
 
-        $this->form->bind($quiz);
-        $this->form->setData($this->quizData);
-        $this->assertFalse($this->form->isValid());
-        $this->assertEquals(2, count($this->form->getMessages()));
-    }
-
-    public function getForm()
-    {
-        if (null === $this->form) {
-            $this->form = $this->sm->get('playgroundgame_quiz_form');
-        }
-
-        return $this->form;
+        $form->bind($quiz);
+        $form->setData($this->quizData);
+        $this->assertFalse($form->isValid());
+        $this->assertEquals(2, count($form->getMessages()));
     }
 }

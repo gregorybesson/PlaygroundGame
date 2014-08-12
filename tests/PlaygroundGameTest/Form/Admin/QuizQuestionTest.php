@@ -19,8 +19,8 @@ class quizQuestionTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->sm = Bootstrap::getServiceManager();
+        $this->sm->setAllowOverride(true);
 
-        $this->getForm();
         $this->quizQuestionData = array(
             'type' => '1',
             'question' => 'Ceci est une question ?',
@@ -44,12 +44,24 @@ class quizQuestionTest extends \PHPUnit_Framework_TestCase
 
     public function testCanInsertNewRecord()
     {
+        $adminGameQuizForm = $this->getMockBuilder('PlaygroundGame\Service\PrizeCategory')
+        ->setMethods(array('getActivePrizeCategories'))
+        ->disableOriginalConstructor()
+        ->getMock();
+        
+        $this->sm->setService('playgroundgame_prizecategory_service', $adminGameQuizForm);
+        
+        $adminGameQuizForm->expects($this->any())
+        ->method('getActivePrizeCategories')
+        ->will($this->returnValue(array()));
+        
         $question = new QuizQuestionEntity();
-        $this->form->setInputFilter($question->getInputFilter());
+        $form = $this->sm->get('playgroundgame_quizquestion_form');
+        $form->setInputFilter($question->getInputFilter());
 
-        $this->form->bind($question);
-        $this->form->setData($this->quizQuestionData);
-        $this->assertTrue($this->form->isValid());
+        $form->bind($question);
+        $form->setData($this->quizQuestionData);
+        $this->assertTrue($form->isValid());
 
     }
 
@@ -58,14 +70,26 @@ class quizQuestionTest extends \PHPUnit_Framework_TestCase
      */
     public function testCanInsertNewRecordWithMaxCorrectAnswerNull()
     {
+        $adminGameQuizForm = $this->getMockBuilder('PlaygroundGame\Service\PrizeCategory')
+        ->setMethods(array('getActivePrizeCategories'))
+        ->disableOriginalConstructor()
+        ->getMock();
+        
+        $this->sm->setService('playgroundgame_prizecategory_service', $adminGameQuizForm);
+        
+        $adminGameQuizForm->expects($this->any())
+        ->method('getActivePrizeCategories')
+        ->will($this->returnValue(array()));
+        
+        $question = new QuizQuestionEntity();
+        $form = $this->sm->get('playgroundgame_quizquestion_form');
+        $form->setInputFilter($question->getInputFilter());
+        
         $this->quizQuestionData['max_correct_answers'] = null;
 
-        $entity = new QuizQuestionEntity();
-        $this->form->setInputFilter($entity->getInputFilter());
-
-        $this->form->bind($entity);
-        $this->form->setData($this->quizQuestionData);
-        $this->assertTrue($this->form->isValid());
+        $form->bind($question);
+        $form->setData($this->quizQuestionData);
+        $this->assertTrue($form->isValid());
     }
 
     /**
@@ -73,14 +97,26 @@ class quizQuestionTest extends \PHPUnit_Framework_TestCase
      */
     public function testCanInsertNewRecordWithPredictionNull()
     {
+        $adminGameQuizForm = $this->getMockBuilder('PlaygroundGame\Service\PrizeCategory')
+        ->setMethods(array('getActivePrizeCategories'))
+        ->disableOriginalConstructor()
+        ->getMock();
+        
+        $this->sm->setService('playgroundgame_prizecategory_service', $adminGameQuizForm);
+        
+        $adminGameQuizForm->expects($this->any())
+        ->method('getActivePrizeCategories')
+        ->will($this->returnValue(array()));
+        
+        $question = new QuizQuestionEntity();
+        $form = $this->sm->get('playgroundgame_quizquestion_form');
+        $form->setInputFilter($question->getInputFilter());
+        
         $this->quizQuestionData['prediction'] = null;
 
-        $entity = new QuizQuestionEntity();
-        $this->form->setInputFilter($entity->getInputFilter());
-
-        $this->form->bind($entity);
-        $this->form->setData($this->quizQuestionData);
-        $this->assertTrue($this->form->isValid());
+        $form->bind($question);
+        $form->setData($this->quizQuestionData);
+        $this->assertTrue($form->isValid());
     }
 
     /**
@@ -88,14 +124,26 @@ class quizQuestionTest extends \PHPUnit_Framework_TestCase
      */
     public function testCanInsertNewRecordWithTimerNull()
     {
+        $adminGameQuizForm = $this->getMockBuilder('PlaygroundGame\Service\PrizeCategory')
+        ->setMethods(array('getActivePrizeCategories'))
+        ->disableOriginalConstructor()
+        ->getMock();
+        
+        $this->sm->setService('playgroundgame_prizecategory_service', $adminGameQuizForm);
+        
+        $adminGameQuizForm->expects($this->any())
+        ->method('getActivePrizeCategories')
+        ->will($this->returnValue(array()));
+        
+        $question = new QuizQuestionEntity();
+        $form = $this->sm->get('playgroundgame_quizquestion_form');
+        $form->setInputFilter($question->getInputFilter());
+        
         $this->quizQuestionData['timer'] = null;
 
-        $entity = new QuizQuestionEntity();
-        $this->form->setInputFilter($entity->getInputFilter());
-
-        $this->form->bind($entity);
-        $this->form->setData($this->quizQuestionData);
-        $this->assertTrue($this->form->isValid());
+        $form->bind($question);
+        $form->setData($this->quizQuestionData);
+        $this->assertTrue($form->isValid());
     }
 
     /**
@@ -103,14 +151,26 @@ class quizQuestionTest extends \PHPUnit_Framework_TestCase
      */
     public function testCanInsertNewRecordWithAutoplayNull()
     {
+        $adminGameQuizForm = $this->getMockBuilder('PlaygroundGame\Service\PrizeCategory')
+        ->setMethods(array('getActivePrizeCategories'))
+        ->disableOriginalConstructor()
+        ->getMock();
+        
+        $this->sm->setService('playgroundgame_prizecategory_service', $adminGameQuizForm);
+        
+        $adminGameQuizForm->expects($this->any())
+        ->method('getActivePrizeCategories')
+        ->will($this->returnValue(array()));
+        
+        $question = new QuizQuestionEntity();
+        $form = $this->sm->get('playgroundgame_quizquestion_form');
+        $form->setInputFilter($question->getInputFilter());
+        
         $this->quizQuestionData['autoplay'] = null;
 
-        $entity = new QuizQuestionEntity();
-        $this->form->setInputFilter($entity->getInputFilter());
-
-        $this->form->bind($entity);
-        $this->form->setData($this->quizQuestionData);
-        $this->assertTrue($this->form->isValid());
+        $form->bind($question);
+        $form->setData($this->quizQuestionData);
+        $this->assertTrue($form->isValid());
     }
 
     /**
@@ -118,14 +178,26 @@ class quizQuestionTest extends \PHPUnit_Framework_TestCase
      */
     public function testCanInsertNewRecordWithAudioNull()
     {
+        $adminGameQuizForm = $this->getMockBuilder('PlaygroundGame\Service\PrizeCategory')
+        ->setMethods(array('getActivePrizeCategories'))
+        ->disableOriginalConstructor()
+        ->getMock();
+        
+        $this->sm->setService('playgroundgame_prizecategory_service', $adminGameQuizForm);
+        
+        $adminGameQuizForm->expects($this->any())
+        ->method('getActivePrizeCategories')
+        ->will($this->returnValue(array()));
+        
+        $question = new QuizQuestionEntity();
+        $form = $this->sm->get('playgroundgame_quizquestion_form');
+        $form->setInputFilter($question->getInputFilter());
+        
         $this->quizQuestionData['audio'] = null;
 
-        $entity = new QuizQuestionEntity();
-        $this->form->setInputFilter($entity->getInputFilter());
-
-        $this->form->bind($entity);
-        $this->form->setData($this->quizQuestionData);
-        $this->assertTrue($this->form->isValid());
+        $form->bind($question);
+        $form->setData($this->quizQuestionData);
+        $this->assertTrue($form->isValid());
     }
 
     /**
@@ -133,15 +205,27 @@ class quizQuestionTest extends \PHPUnit_Framework_TestCase
      */
     public function testCannotInsertNewRecordWithNoQuestion()
     {
+        $adminGameQuizForm = $this->getMockBuilder('PlaygroundGame\Service\PrizeCategory')
+        ->setMethods(array('getActivePrizeCategories'))
+        ->disableOriginalConstructor()
+        ->getMock();
+        
+        $this->sm->setService('playgroundgame_prizecategory_service', $adminGameQuizForm);
+        
+        $adminGameQuizForm->expects($this->any())
+        ->method('getActivePrizeCategories')
+        ->will($this->returnValue(array()));
+        
+        $question = new QuizQuestionEntity();
+        $form = $this->sm->get('playgroundgame_quizquestion_form');
+        $form->setInputFilter($question->getInputFilter());
+        
         $this->quizQuestionData['question'] = null;
 
-        $entity = new QuizQuestionEntity();
-        $this->form->setInputFilter($entity->getInputFilter());
-
-        $this->form->bind($entity);
-        $this->form->setData($this->quizQuestionData);
-        $this->assertFalse($this->form->isValid());
-        $this->assertEquals(1, count($this->form->getMessages()));
+        $form->bind($question);
+        $form->setData($this->quizQuestionData);
+        $this->assertFalse($form->isValid());
+        $this->assertEquals(1, count($form->getMessages()));
     }
 
     /**
@@ -149,26 +233,29 @@ class quizQuestionTest extends \PHPUnit_Framework_TestCase
      */
     public function testCannotInsertNewRecordWithAnswerAndNoPosition()
     {
+        $adminGameQuizForm = $this->getMockBuilder('PlaygroundGame\Service\PrizeCategory')
+        ->setMethods(array('getActivePrizeCategories'))
+        ->disableOriginalConstructor()
+        ->getMock();
+        
+        $this->sm->setService('playgroundgame_prizecategory_service', $adminGameQuizForm);
+        
+        $adminGameQuizForm->expects($this->any())
+        ->method('getActivePrizeCategories')
+        ->will($this->returnValue(array()));
+        
+        $question = new QuizQuestionEntity();
+        $form = $this->sm->get('playgroundgame_quizquestion_form');
+        $form->setInputFilter($question->getInputFilter());
+        
         $this->quizQuestionData['answers'][0] = array(
         	'id' => '1',
             'answer' => 'Ceci est une réponse',
             'correct' => '1'
         );
 
-        $entity = new QuizQuestionEntity();
-        $this->form->setInputFilter($entity->getInputFilter());
-
-        $this->form->bind($entity);
-        $this->form->setData($this->quizQuestionData);
-        $this->assertFalse($this->form->isValid());
-    }
-
-    public function getForm()
-    {
-        if (null === $this->form) {
-            $this->form = $this->sm->get('playgroundgame_quizquestion_form');
-        }
-
-        return $this->form;
+        $form->bind($question);
+        $form->setData($this->quizQuestionData);
+        $this->assertFalse($form->isValid());
     }
 }
