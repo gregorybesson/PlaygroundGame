@@ -1,0 +1,83 @@
+<?php if(!isset($this->folderUrl)) $this->folderUrl = ""; ?>
+<?php $this->plugin('translate')->setTranslatorTextDomain('playgroundgame'); ?>
+<div class="game-<?php echo $this->game->getClassType(); ?> wrap-game result row">
+	<h1>
+	    <?php echo $this->game->getTitle(); ?>
+	</h1>
+	<!-- BLOCK GAME START -->
+	<div class="block-game game-play <?php if ($this->basePath($this->game->getSecondImage()) == "") echo "no-image"; ?>">
+		<div class="img-content">
+			<img class="rounded" src="<?php echo $this->basePath($this->game->getSecondImage()); ?>" />
+			<?php if($this->game->getPartner()):?>
+				<?php if( ($this->game->getPartner()->getLogo() != '')) : ?>
+					<div class="logo-sponsor">
+						<img src="<?php echo $this->basePath($this->game->getPartner()->getLogo());?>" alt="<?php echo $this->game->getPartner()->getName();?>" />
+					</div>
+				<?php endif;?>
+			<?php else :?>
+				<div class="logo-sponsor">		
+					<img src="<?php echo $this->frontendAssetPath('images/common/logo-game-start.png')?>" alt="logo" />
+				</div>
+			<?php endif;?>
+			<div class="dark-overlay row">
+				<h2 class="col-md-10">
+				    <?php echo $this->translate('Jeu'); ?> <?php echo $this->translate('offered by'); ?> <?php if($this->game->getPartner()): echo $this->game->getPartner()->getName(); else:?>
+                        Playground
+			        <?php endif;?>
+				</h2>
+			</div>
+		</div>
+	</div>
+	<!-- END BLOCK GAME START -->
+	<!-- BLOCK CONTENT -->
+	<div class="wrapper-result">
+		<div id="heading" class="row">
+			<div class="col-md-12">
+				<h2>
+				    <?php echo $this->translate('Maximize your chances of winning by inviting your friends to vote for you !'); ?>
+				    <span><?php echo $this->translate('and earn 250 points per friend you'); ?></span>
+				</h2>
+			</div>
+		</div>
+		<!-- SPONSOR (parrainer) -->
+	    <div id="parrainer">
+			<?php echo $this->partial('playground-game/partial/result-share', array(
+		            'game'			=> $this->game,
+		            'secretKey'		=> $this->secretKey,
+		            'socialLinkUrl' => $socialLinkUrl,
+		            'form'			=> $this->form,
+		            'statusMail'    => $statusMail,
+		            'gameType'		=> $this->game->getClassType(), 
+					'channel'       => $this->channel,
+					'nextGame'      => $this->nextGame,
+		    )); ?>
+		    <?php if($this->nextGame): ?>
+                <!-- another Game -->
+                <div id="terminer" class="row" >
+                    <div class="col-md-12">
+                        <span class="btn btn-default">
+                            <a href="<?php echo $this->url('frontend/' . $this->nextGame->getClassType(), array('id' => $this->nextGame->getIdentifier(), 'channel' => $this->channel)); ?>">
+                                <?php echo $this->translate('Play another Game'); ?>
+                            </a>
+                        </span>
+                    </div>
+                </div>
+            <?php else: ?>
+                <?php if(isset($this->game) && $this->game->lastStep() !== 'result') : ?>
+                    <!-- terminer -->
+                    <div id="terminer" class="row" >
+                    	<div class="col-md-12">
+                    	    <span class="btn btn-default">
+                                <a href="<?php echo $this->url('frontend/'. $this->game->getClassType() . '/bounce', array('id' => $this->game->getIdentifier(), 'channel' => $this->channel));?>">
+                                    <?php echo $this->translate('Finish'); ?>
+                                </a>
+                            </span>
+                    	</div>
+                    </div>
+                <?php endif; ?>
+            <?php endif; ?>
+		</div>
+		<?php echo $this->additional; ?>
+		<!-- END SPONSOR (parrainer) -->
+	</div>
+</div>
