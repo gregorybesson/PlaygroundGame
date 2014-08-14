@@ -386,7 +386,7 @@ class GameController extends AbstractActionController
                 $lastEntry->setPlayerData($data);
                 $sg->getEntryMapper()->update($lastEntry);
 
-                return $this->redirect()->toUrl($this->url()->fromRoute('frontend/'. $game->getClassType() .'/bounce', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)));
+                return $this->redirect()->toUrl($this->url()->fromRoute('frontend/'. $game->getClassType() .'/' . $game->nextStep($this->params('action')), array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)));
             }
         }
 
