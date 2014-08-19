@@ -390,7 +390,7 @@ class GameController extends AbstractActionController
             }
         }
 
-        $viewModel = new ViewModel();
+        $viewModel = $this->buildView($game);
         $viewModel->setVariables(array(
             'game' => $game,
             'form' => $form,
@@ -634,7 +634,7 @@ class GameController extends AbstractActionController
     {
         $viewModel = new ViewModel();
 
-        $this->addMetaTitle($game->getTitle());
+        $this->addMetaTitle($game);
         $this->addMetaBitly();
         $this->addGaEvent($game);
 
@@ -710,8 +710,9 @@ class GameController extends AbstractActionController
         $ga->addEvent($event);
     }
 
-    public function addMetaTitle($title)
+    public function addMetaTitle($game)
     {
+        $title = $game->getTitle();
         // Meta set in the layout
         $this->layout()->setVariables(
             array(
@@ -724,6 +725,7 @@ class GameController extends AbstractActionController
                     'headTitle' => $title,
                     'headDescription' => $title,
                 ),
+                'bodyCss' => $game->getIdentifier()
             )
         );
     }
