@@ -129,13 +129,11 @@ class MissionGame extends EventProvider implements ServiceManagerAwareInterface
             return false;
         }
 
-        $nextMissionGames = $this->getMissionGameMapper()->findBy(array('mission'=> $missionGame->getMission(), 'position'=> ($missionGame->getPosition() + 1 )));
+        $nextMissionGame = $this->getMissionGameMapper()->getNextGame($missionGame->getMission(), $missionGame->getPosition());
         
-        if(empty($nextMissionGames)){
+        if(empty($nextMissionGame)){
             return false;
         }
-
-        $nextMissionGame = $nextMissionGames[0];
 
         $missionGameConditions = $this->findMissionGameConditionByMissionGame($nextMissionGame);
         
