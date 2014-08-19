@@ -382,7 +382,7 @@ class GameController extends AbstractActionController
 
             if ($form->isValid()) {
                 $data = json_encode($form->getData());
-                $lastEntry = $sg->findLastInactiveEntry($game, $user);
+                $lastEntry = $sg->findLastEntry($game, $user);
                 $lastEntry->setPlayerData($data);
                 $sg->getEntryMapper()->update($lastEntry);
 

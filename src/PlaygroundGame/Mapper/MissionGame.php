@@ -165,11 +165,13 @@ class MissionGame
         $from = "FROM PlaygroundGame\Entity\MissionGame mg";
         $where = "WHERE mg.mission = :mission";
         $where .= " AND mg.position > :currentPosition";
-        $order = "ORDER BY mg.position DESC";
+        $order = "ORDER BY mg.position ASC";
 
         $query = $select.' '.$from.' '.$where.' '.$order;
 
         $query = $this->em->createQuery($query);
+
+
         $query->setParameter('mission', (int) $mission->getId());
         $query->setParameter('currentPosition', (int) $currentPosition);
         $query->setMaxResults(1);

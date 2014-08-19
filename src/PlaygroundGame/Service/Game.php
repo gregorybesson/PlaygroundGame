@@ -854,6 +854,27 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         }
     }
 
+    public function findLastEntry($game, $user)
+    {
+       if ($user) {
+            return $this->getEntryMapper()->findOneBy(array(
+                'game' => $game,
+                'user' => $user,
+                'bonus' => false
+            ), array(
+                'updated_at' => 'desc'
+            ));
+        } else {
+            return $this->getEntryMapper()->findOneBy(array(
+                'game' => $game,
+                'ip' => $this->getIp(),
+                'bonus' => false
+            ), array(
+                'updated_at' => 'desc'
+            ));
+        } 
+    }
+
     public function sendShareMail($data, $game, $user, $template = 'share_game', $topic = NULL, $userTimer = array())
     {
         $mailService = $this->getServiceManager()->get('playgroundgame_message');
