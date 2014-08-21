@@ -1116,16 +1116,6 @@ return array(
                                     )
                                 )
                             ),
-                            'entryStatus' => array(
-                                'type' => 'Segment',
-                                'options' => array(
-                                    'route' => '/entry-status/:entryId',
-                                    'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_quiz',
-                                        'action' => 'entryStatus'
-                                    )
-                                )
-                            ),
                             'draw' => array(
                                 'type' => 'Segment',
                                 'options' => array(
