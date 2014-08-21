@@ -1098,7 +1098,7 @@ return array(
                             'entry' => array(
                                 'type' => 'Segment',
                                 'options' => array(
-                                    'route' => '/entry/:gameId[/:p]',
+                                    'route' => '/:gameId/entries[/:p]',
                                     'defaults' => array(
                                         'controller' => 'playgroundgame_admin_quiz',
                                         'action' => 'entry',
