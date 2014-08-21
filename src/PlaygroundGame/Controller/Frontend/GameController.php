@@ -641,7 +641,14 @@ class GameController extends AbstractActionController
         $this->customizeGameDesign($game);
         $this->addColRight($game);
         $this->addColLeft($game);
-
+        
+        // this is possible to create a specific game design in /design/frontend/default/custom. It will precede all others templates.
+        $templatePathResolver = $this->getServiceLocator()->get('Zend\View\Resolver\TemplatePathStack');
+        $l = $templatePathResolver->getPaths();
+        
+        // TODO : Improve : I take the last path to add the game id without verifying it's correct
+        $templatePathResolver->addPath($l[0].'custom/'.$game->getIdentifier());
+        
         $view = $this->addAdditionalView($game);
         if ($view and $view instanceof \Zend\View\Model\ViewModel) {
             $viewModel->addChild($view, 'additional');
