@@ -233,6 +233,48 @@ class GameController extends AbstractActionController
                 )));
 
             }
+            if (isset($element->line_radio)) {
+                $attributes  = $element->line_radio[0];
+                $name        = isset($attributes->name)? $attributes->name : '';
+                $type        = isset($attributes->type)? $attributes->type : '';
+                $position    = isset($attributes->order)? $attributes->order : '';
+                $label       = isset($attributes->data->label)? $attributes->data->label : '';
+
+//                 $required    = ($attributes->data->required == 'yes') ? true : false;
+                $required = false;
+                $class       = isset($attributes->data->class)? $attributes->data->class : '';
+                $id          = isset($attributes->data->id)? $attributes->data->id : '';
+                $lengthMin   = isset($attributes->data->length)? $attributes->data->length->min : '';
+                $lengthMax   = isset($attributes->data->length)? $attributes->data->length->max : '';
+                $innerData   = isset($attributes->data->innerData)? $attributes->data->innerData : array();
+
+                $element = new Element\Radio($name);
+                $element->setLabel($label);
+                $element->setAttributes(
+                    array(
+                        'name'     => $name,
+                        'required' 		=> $required,
+                        'allowEmpty'    => !$required,
+                        'class' 		=> $class,
+                        'id' 			=> $id
+                    )
+                );
+                $values = array();
+                foreach($innerData as $value){
+                    $values[] = $value->label;
+                }
+                $element->setValueOptions($values);
+                $form->add($element);
+
+                $options = array();
+                $options['encoding'] = 'UTF-8';
+
+                $inputFilter->add($factory->createInput(array(
+                    'name'     => $name,
+                    'required' => $required,
+                    'allowEmpty' => !$required,
+                )));
+            }
             if (isset($element->line_checkbox)) {
                 $attributes  = $element->line_checkbox[0];
                 $name        = isset($attributes->name)? $attributes->name : '';
