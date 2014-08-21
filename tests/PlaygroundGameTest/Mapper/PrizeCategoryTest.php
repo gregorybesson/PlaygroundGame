@@ -86,6 +86,9 @@ class PrizeCategoryTest extends \PHPUnit_Framework_TestCase
             $prizeCategory->setTitle('Un Titre');
             $prizeCategory = $self->tm->insert($prizeCategory);
         });
+
+        $this->em->flush();
+        $this->em->clear();
         
         $this->em->transactional(function($em) use ($self) {
             $prizeCategory = new PrizeCategoryEntity();
@@ -93,6 +96,9 @@ class PrizeCategoryTest extends \PHPUnit_Framework_TestCase
             $prizeCategory->setTitle('Un Titre');
             $prizeCategory = $self->tm->insert($prizeCategory);
         });
+        
+        $this->em->flush();
+        $this->em->clear();
             
         $this->em->transactional(function($em) use ($self) {
             $prizeCategory = new PrizeCategoryEntity();
@@ -100,6 +106,9 @@ class PrizeCategoryTest extends \PHPUnit_Framework_TestCase
             $prizeCategory->setTitle('Un Titre');
             $prizeCategory = $self->tm->insert($prizeCategory);
         });
+        
+        $this->em->flush();
+        $this->em->clear();
 
         $prizeCategories = $this->tm->findAll();
         $this->assertEquals(3, count($prizeCategories));
