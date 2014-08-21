@@ -252,7 +252,7 @@ class GameController extends AbstractActionController
                 $element->setLabel($label);
                 $element->setAttributes(
                     array(
-                        'name'     => $name,
+                        'name'          => $name,
                         'required' 		=> $required,
                         'allowEmpty'    => !$required,
                         'class' 		=> $class,
@@ -264,11 +264,15 @@ class GameController extends AbstractActionController
                     $values[] = $value->label;
                 }
                 $element->setValueOptions($values);
-                $form->add($element);
-
+                
                 $options = array();
                 $options['encoding'] = 'UTF-8';
-
+                $options['disable_inarray_validator'] = true;
+                
+                $element->setOptions($options);
+                
+                $form->add($element);
+                
                 $inputFilter->add($factory->createInput(array(
                     'name'     => $name,
                     'required' => $required,
@@ -419,7 +423,7 @@ class GameController extends AbstractActionController
                 $this->getRequest()->getPost()->toArray(),
                 $this->getRequest()->getFiles()->toArray()
             );
-
+            
             $form->setData($data);
 
             if ($form->isValid()) {
