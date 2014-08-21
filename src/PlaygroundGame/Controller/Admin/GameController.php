@@ -34,6 +34,32 @@ class GameController extends AbstractActionController
         );
     }
 
+
+    public function entryStatusAction()
+    {
+        $entryId = $this->getEvent()->getRouteMatch()->getParam('entryId');
+        if (!$entryId) {
+            return $this->redirect()->toRoute('admin/playgroundgame/list');
+        }
+
+        $entry = $this->getAdminGameService()->getEntryMapper()->findById($entryId);
+        if (!$entry) {
+            return $this->redirect()->toRoute('admin/playgroundgame/list');
+        }
+
+        if ($entry->getWinner()==0) {
+            $entry->setWinner(1);
+        } else {
+            $entry->setWinner(0);
+        }
+
+        $entry = $this->getAdminGameService()->getEntryMapper()->update($entry);
+        $game = $entry->getGame();
+
+        return $this->redirect()->toRoute('admin/'. $game->getClassType() .'/entry', array('gameId' => $game->getId()));
+        
+    }
+
     // Used for Lottery, TreasureHunt and redifined for Quiz and InstantWin because it's slightly different
     public function downloadAction()
     {

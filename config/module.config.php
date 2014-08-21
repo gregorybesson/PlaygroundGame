@@ -1098,7 +1098,7 @@ return array(
                             'entry' => array(
                                 'type' => 'Segment',
                                 'options' => array(
-                                    'route' => '/entry/:gameId[/:p]',
+                                    'route' => '/:gameId/entries[/:p]',
                                     'defaults' => array(
                                         'controller' => 'playgroundgame_admin_quiz',
                                         'action' => 'entry',
@@ -1113,6 +1113,16 @@ return array(
                                     'defaults' => array(
                                         'controller' => 'playgroundgame_admin_quiz',
                                         'action' => 'download'
+                                    )
+                                )
+                            ),
+                            'entryStatus' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/entry-status/:entryId',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_admin_quiz',
+                                        'action' => 'entryStatus'
                                     )
                                 )
                             ),

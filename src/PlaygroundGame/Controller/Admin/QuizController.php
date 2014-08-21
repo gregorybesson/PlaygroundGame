@@ -6,9 +6,14 @@ use PlaygroundGame\Entity\Game;
 
 use PlaygroundGame\Entity\Quiz;
 use PlaygroundGame\Entity\QuizQuestion;
-
 use PlaygroundGame\Controller\Admin\GameController;
 use Zend\View\Model\ViewModel;
+use Zend\InputFilter;
+use Zend\Validator;
+use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Paginator\Paginator;
+use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
+use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 
 class QuizController extends GameController
 {
@@ -17,6 +22,34 @@ class QuizController extends GameController
      * @var GameService
      */
     protected $adminGameService;
+    protected $quizReplyAnswerMapper;
+    protected $quizReplyMapper;
+
+    public function entryAction()
+    {
+        $gameId = $this->getEvent()->getRouteMatch()->getParam('gameId');
+        if (!$gameId) {
+            return $this->redirect()->toRoute('admin/playgroundgame/list');
+        }
+        $game           = $this->getAdminGameService()->getGameMapper()->findById($gameId);
+        $adapter = new DoctrineAdapter(new ORMPaginator( $this->getAdminGameService()->getEntryMapper()->queryByGame($game)));
+        $paginator = new Paginator($adapter);
+        $paginator->setItemCountPerPage(10);
+        $paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
+
+        $replies = array();
+        foreach ($paginator as $entry) {
+            $reply = $this->getQuizReplyMapper()->findByEntry($entry);
+            $replies[] = $this->getQuizReplyAnswerMapper()->findByReply($reply);
+        }
+
+        return array(
+            'entries' => $paginator,
+            'game' => $game,
+            'gameId' => $gameId,
+            'replies' => $replies
+        );
+    }
 
     public function listQuestionAction()
     {
@@ -370,5 +403,19 @@ class QuizController extends GameController
         $this->adminGameService = $adminGameService;
 
         return $this;
+    }
+
+    function getQuizReplyAnswerMapper () {
+        if(!$this->quizReplyAnswerMapper) {
+            $this->quizReplyAnswerMapper = $this->getServiceLocator()->get('playgroundgame_quizreplyanswer_mapper');
+        }
+        return $this->quizReplyAnswerMapper;
+    }
+
+    function getQuizReplyMapper () {
+        if(!$this->quizReplyMapper) {
+            $this->quizReplyMapper = $this->getServiceLocator()->get('playgroundgame_quizreply_mapper');
+        }
+        return $this->quizReplyMapper;
     }
 }
