@@ -1,9 +1,0 @@
-<?php $this->plugin('translate')->setTranslatorTextDomain('playgroundgame');// Pour le texte ?>
-<div id="conditions" class="game-lottery row-fluid">
-	<h1>Mentions légales</h1>
-	
-	<?php if($this->channel === 'facebook'): ?><div class="fb-target"><?php endif ?>
-	<?php echo $this->game->getConditionsBlock();?>
-	<?php if($this->channel === 'facebook'): ?></div><?php endif ?>
-		
-</div>

@@ -9,6 +9,7 @@ use Zend\Session\Container;
 use Zend\Form\Element;
 use Zend\Form\Form;
 use Zend\InputFilter\Factory as InputFactory;
+use PlaygroundGame\Service\GameService;
 
 class GameController extends AbstractActionController
 {
@@ -60,7 +61,11 @@ class GameController extends AbstractActionController
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
         $user = $this->zfcUserAuthentication()->getIdentity();
         $sg = $this->getGameService();
+        $channel = $this->getEvent()->getRouteMatch()->getParam('channel');
         $isSubscribed = false;
+
+         // Determine if the play button should be a CTA button (call to action)
+        $isCtaActive = false;
 
         $game = $sg->checkGame($identifier, false);
         if (!$game) {
@@ -68,19 +73,18 @@ class GameController extends AbstractActionController
         }
 
         // If on Facebook, check if you have to be a FB fan to play the game
-        if($game->getFbFan()){
-        	$isFan = $sg->checkIsFan($game);
-        	if(!$isFan){
-        		return $this->redirect()->toUrl($this->url()->fromRoute('frontend/' . $game->getClassType().'/fangate',array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
-        	}
-        }
 
-        // Determine if the play button should be a CTA button (call to action)
-        $isCtaActive = false;
-        $channel = $this->getEvent()->getRouteMatch()->getParam('channel');
-        if ($channel == 'facebook'){
+        if ($channel == 'facebook') {
+            if ($game->getFbFan()) {
+            	$isFan = $sg->checkIsFan($game);  
+            	if (!$isFan) {
+            		return $this->redirect()->toUrl($this->url()->fromRoute('frontend/' . $game->getClassType().'/fangate',array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+            	}
+            }
+
             $isCtaActive = true;
         }
+
 
         $subscription = $sg->checkExistingEntry($game, $user);
         if ($subscription) {
@@ -229,6 +233,52 @@ class GameController extends AbstractActionController
                 )));
 
             }
+            if (isset($element->line_radio)) {
+                $attributes  = $element->line_radio[0];
+                $name        = isset($attributes->name)? $attributes->name : '';
+                $type        = isset($attributes->type)? $attributes->type : '';
+                $position    = isset($attributes->order)? $attributes->order : '';
+                $label       = isset($attributes->data->label)? $attributes->data->label : '';
+
+//                 $required    = ($attributes->data->required == 'yes') ? true : false;
+                $required = false;
+                $class       = isset($attributes->data->class)? $attributes->data->class : '';
+                $id          = isset($attributes->data->id)? $attributes->data->id : '';
+                $lengthMin   = isset($attributes->data->length)? $attributes->data->length->min : '';
+                $lengthMax   = isset($attributes->data->length)? $attributes->data->length->max : '';
+                $innerData   = isset($attributes->data->innerData)? $attributes->data->innerData : array();
+
+                $element = new Element\Radio($name);
+                $element->setLabel($label);
+                $element->setAttributes(
+                    array(
+                        'name'          => $name,
+                        'required' 		=> $required,
+                        'allowEmpty'    => !$required,
+                        'class' 		=> $class,
+                        'id' 			=> $id
+                    )
+                );
+                $values = array();
+                foreach($innerData as $value){
+                    $values[] = $value->label;
+                }
+                $element->setValueOptions($values);
+                
+                $options = array();
+                $options['encoding'] = 'UTF-8';
+                $options['disable_inarray_validator'] = true;
+                
+                $element->setOptions($options);
+                
+                $form->add($element);
+                
+                $inputFilter->add($factory->createInput(array(
+                    'name'     => $name,
+                    'required' => $required,
+                    'allowEmpty' => !$required,
+                )));
+            }
             if (isset($element->line_checkbox)) {
                 $attributes  = $element->line_checkbox[0];
                 $name        = isset($attributes->name)? $attributes->name : '';
@@ -373,20 +423,20 @@ class GameController extends AbstractActionController
                 $this->getRequest()->getPost()->toArray(),
                 $this->getRequest()->getFiles()->toArray()
             );
-
+            
             $form->setData($data);
 
             if ($form->isValid()) {
                 $data = json_encode($form->getData());
-                $lastEntry = $sg->findLastInactiveEntry($game, $user);
+                $lastEntry = $sg->findLastEntry($game, $user);
                 $lastEntry->setPlayerData($data);
                 $sg->getEntryMapper()->update($lastEntry);
 
-                return $this->redirect()->toUrl($this->url()->fromRoute('frontend/'. $game->getClassType() .'/bounce', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)));
+                return $this->redirect()->toUrl($this->url()->fromRoute('frontend/'. $game->getClassType() .'/' . $game->nextStep($this->params('action')), array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)));
             }
         }
 
-        $viewModel = new ViewModel();
+        $viewModel = $this->buildView($game);
         $viewModel->setVariables(array(
             'game' => $game,
             'form' => $form,
@@ -584,9 +634,9 @@ class GameController extends AbstractActionController
      * @param unknown $user
      * @param unknown $lastEntry
      */
-    public function sendMail($game, $user, $lastEntry){
+    public function sendMail($game, $user, $lastEntry, $prize = NULL){
         if($user && $game->getMailWinner() && $lastEntry->getWinner()){
-            $this->getGameService()->sendResultMail($game, $user, $lastEntry, 'winner');
+            $this->getGameService()->sendResultMail($game, $user, $lastEntry, 'winner', $prize);
         }
 
         if($user && $game->getMailLooser() && !$lastEntry->getWinner()){
@@ -603,7 +653,7 @@ class GameController extends AbstractActionController
             if (!$user) {
                 // Get Playground user from Facebook info
                 $beforeLayout = $this->layout()->getTemplate();
-                $this->forward()->dispatch('playgrounduser_user', array('controller' => 'playgrounduser_user', 'action' => 'registerFacebookUser', 'provider' => $channel));
+                $view = $this->forward()->dispatch('playgrounduser_user', array('controller' => 'playgrounduser_user', 'action' => 'registerFacebookUser', 'provider' => $channel));
 
                 $this->layout()->setTemplate($beforeLayout);
                 $user = $view->user;
@@ -630,14 +680,21 @@ class GameController extends AbstractActionController
     {
         $viewModel = new ViewModel();
 
-        $this->addMetaTitle($game->getTitle());
+        $this->addMetaTitle($game);
         $this->addMetaBitly();
         $this->addGaEvent($game);
 
         $this->customizeGameDesign($game);
         $this->addColRight($game);
         $this->addColLeft($game);
-
+        
+        // this is possible to create a specific game design in /design/frontend/default/custom. It will precede all others templates.
+        $templatePathResolver = $this->getServiceLocator()->get('Zend\View\Resolver\TemplatePathStack');
+        $l = $templatePathResolver->getPaths();
+        
+        // TODO : Improve : I take the last path to add the game id without verifying it's correct
+        $templatePathResolver->addPath($l[0].'custom/'.$game->getIdentifier());
+        
         $view = $this->addAdditionalView($game);
         if ($view and $view instanceof \Zend\View\Model\ViewModel) {
             $viewModel->addChild($view, 'additional');
@@ -706,8 +763,9 @@ class GameController extends AbstractActionController
         $ga->addEvent($event);
     }
 
-    public function addMetaTitle($title)
+    public function addMetaTitle($game)
     {
+        $title = $game->getTitle();
         // Meta set in the layout
         $this->layout()->setVariables(
             array(
@@ -720,6 +778,7 @@ class GameController extends AbstractActionController
                     'headTitle' => $title,
                     'headDescription' => $title,
                 ),
+                'bodyCss' => $game->getIdentifier()
             )
         );
     }

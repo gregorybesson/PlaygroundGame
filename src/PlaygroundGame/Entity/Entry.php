@@ -87,6 +87,12 @@ class Entry
      * @ORM\Column(type="datetime")
      */
     protected $created_at;
+    
+    /**
+     * The step in the play (in a quiz for example : the nth question)
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $step = 0;
 
     /**
      * @ORM\Column(type="datetime")
@@ -259,6 +265,22 @@ class Entry
     }
 
     /**
+     * @return the $step
+     */
+    public function getStep()
+    {
+        return $this->step;
+    }
+
+	/**
+     * @param number $step
+     */
+    public function setStep($step)
+    {
+        $this->step = $step;
+    }
+
+	/**
      * @return the bonus
      */
     public function getBonus()

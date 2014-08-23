@@ -12,7 +12,6 @@ if (isset($fm[0]))
 	<li class="btn-admin"><a href="<?php echo $this->url('admin/playgroundgame/create-quiz');?>"><?php echo $this->translate('Add new Quiz'); ?></a></li>
 	<li class="btn-admin"><a href="<?php echo $this->url('admin/playgroundgame/create-instantwin');?>"><?php echo $this->translate('Add new Instant Win'); ?></a></li>
 	<li class="btn-admin"><a href="<?php echo $this->url('admin/playgroundgame/create-postvote');?>"><?php echo $this->translate('Add new Post & Vote'); ?></a></li>
-	<li class="btn-admin"><a href="<?php echo $this->url('admin/playgroundgame/create-treasurehunt');?>"><?php echo $this->translate('Add new Treasure Hunt'); ?></a></li>
 </ul>
 
 <h1>Liste des jeux</h1>
@@ -52,8 +51,6 @@ if (isset($fm[0]))
                 <?php $editLink = $this->url('admin/playgroundgame/edit-instantwin', array('gameId' => $game->getId()));?>
             <?php elseif($game->getClassType() == 'postvote'):?>
                 <?php $editLink = $this->url('admin/playgroundgame/edit-postvote', array('gameId' => $game->getId()));?>
-            <?php elseif($game->getClassType() == 'treasurehunt'):?>
-                <?php $editLink = $this->url('admin/playgroundgame/edit-treasurehunt', array('gameId' => $game->getId()));?>
             <?php else:?>
                 <?php $editLink = $this->url('admin/playgroundgame/edit', array('gameId' => $game->getId()));?>
             <?php endif;?>
@@ -65,8 +62,6 @@ if (isset($fm[0]))
             <?php elseif($game->getClassType() == 'instantwin'):?>
                 <?php $optionLink = $this->url('admin/playgroundgame/instantwin-occurrence-list', array('gameId' => $game->getId())); 
                     $optionLinkName = $this->translate('Handle occurrences'); ?>
-            <?php elseif($game->getClassType() == 'treasurehunt'):?>
-                <?php $optionLink = $this->url('admin/playgroundgame/treasurehunt-puzzle-list', array('gameId' => $game->getId())); ?>
             <?php elseif($game->getClassType() == 'postvote'):?>
                 <?php $optionLink = $this->url('admin/playgroundgame/postvote-form', array('gameId' => $game->getId())); ?>
             <?php else: ?>

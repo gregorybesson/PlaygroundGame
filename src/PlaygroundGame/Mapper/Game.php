@@ -38,9 +38,9 @@ class Game
         return $this->getEntityRepository()->find($id);
     }
 
-    public function findBy($array, $sort)
+    public function findBy($filter, $order = null, $limit = null, $offset = null)
     {
-        return $this->getEntityRepository()->findBy($array, $sort);
+        return $this->getEntityRepository()->findBy($filter, $order, $limit, $offset);
     }
     
     public function findOneBy($array)

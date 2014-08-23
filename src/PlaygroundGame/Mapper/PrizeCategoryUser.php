@@ -38,11 +38,9 @@ class PrizeCategoryUser
         return $er->findAll();
     }
 
-    public function findBy($array)
+    public function findBy($filter, $order = null, $limit = null, $offset = null)
     {
-        $er = $this->getEntityRepository();
-
-        return $er->findBy($array);
+        return $this->getEntityRepository()->findBy($filter, $order, $limit, $offset);
     }
 
     public function findOneBy($array)

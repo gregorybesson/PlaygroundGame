@@ -1,7 +1,5 @@
 <?php $this->plugin('translate')->setTranslatorTextDomain('playgroundgame');// Pour le texte ?>
 <?php $downloadLink = $this->url('admin/'. $this->game->getClassType() .'/download', array('gameId' => $this->game->getId()));?>
-<?php $drawLink = $this->url('admin/'. $this->game->getClassType() .'/draw', array('gameId' => $this->game->getId()));?>
-
 <?php
 /*$fm = $this->flashMessenger()->setNamespace('playgroundgame')->getMessages();
 if (isset($fm[0]))
@@ -9,14 +7,7 @@ if (isset($fm[0]))
     print '<span class=>' . $fm[0] . '</span>';
 }*/
 ?>
-<h1><a href="<?php echo $this->url('admin/playgroundgame/edit-lottery', array('gameId' => $this->gameId)) ?>"><?php echo $this->game->getTitle(); ?></a></h1>
-
-<h3><?php echo $this->translate('Liste des Participants'); ?></h3>
-
 <a href='<?php echo $downloadLink ?>'>Export CSV</a>
-<?php if($this->game->getDrawAuto()): ?>
-| <a href='<?php echo $drawLink ?>'>Tirage au sort automatique</a>
-<?php endif;?>
 <table class="table">
     <tr>
         <th><?php echo $this->translate('Id'); ?></th>
@@ -45,4 +36,4 @@ if (isset($fm[0]))
         </tr>
     <?php endforeach; ?>
 </table>
-<?php echo (count($this->entries)>1)?$this->paginationControl($this->entries, 'Sliding', 'pagination_entrylist', array('classType' => $this->game->getClassType()  ,'gameId' => $this->gameId)):''; ?>
+<?php echo (count($this->entries)>1)?$this->paginationControl($this->entries, 'Sliding', 'playground-game/admin/pagination_entrylist'):''; ?>

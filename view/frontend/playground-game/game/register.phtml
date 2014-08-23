@@ -1,0 +1,76 @@
+<?php
+$form = $this->form;
+$form->prepare();
+//$form->setAttribute('action', $this->url('frontend/'. $this->game->getClassType() . '/register', array('id' => $this->game->getIdentifier(), 'channel' => $this->channel)));
+?>
+<?php
+				echo $this->form()->openTag($form);
+	            foreach ($this->form as $element) :
+            		$attributes = $element->getAttributes();
+            		$required = $attributes['required'];
+                    $element->setAttributes(array('class' => 'form-control'));
+            		$requiredContent = '';
+					(!empty($required)) ? $requiredContent = '<span class="text-error">*</span>' : '';
+					if ($element instanceof Zend\Form\Element\Text) : ?>
+    					<div class="row">
+    						 <label class="col-md-4">
+    						 	<b>
+    						 	    <?php echo ($element->getLabel())? $this->formLabel($element) . ' ' . $requiredContent : ''; ?>
+    						 	</b>
+    						 </label>
+    						 <div class="col-md-7">
+    						 	<?php echo $this->formText($element) ?>
+    							<?php echo $this->formElementErrors($element) ?>
+    						 </div>
+    					</div>
+    		        <?php elseif ($element instanceof Zend\Form\Element\Email) : ?>
+    					<div class="row">
+    						 <label class="col-md-4">
+    						 	<b>
+    						 	    <?php echo ($element->getLabel())? $this->formLabel($element) . ' ' . $requiredContent : ''; ?>
+    						 	</b>
+    						 </label>
+    						 <div class="col-md-7">
+    						 	<?php echo $this->formEmail($element) ?>
+    							<?php echo $this->formElementErrors($element) ?>
+    						 </div>
+    					</div>
+    			    <?php elseif ($element instanceof Zend\Form\Element\MultiCheckbox) : ?>
+    					<div class="row">
+    						 <label class="col-md-4">
+    						 	<b>
+    						 	    <?php echo ($element->getLabel())? $this->formLabel($element) . ' ' . $requiredContent : ''; ?>
+    						 	</b>
+    						 </label>
+    						 <div class="col-md-7">
+    						 	<?php echo $this->formMultiCheckbox($element) ?>
+    							<?php echo $this->formElementErrors($element) ?>
+    						 </div>
+    					</div>
+                    <?php elseif ($element instanceof Zend\Form\Element\Textarea): ?>
+		                <div class="row">
+                                <label class="col-md-4">
+                                    <b>
+                                        <?php echo ($element->getLabel()) ? $this->formLabel($element) . ' ' . $requiredContent : ''; ?>
+                                    </b>
+				               	</label>
+				               	<div class="col-md-7">
+				               		<?php
+				               		echo $this->formTextarea($element);
+                                    ?>
+		    						<?php echo $this->formElementErrors($element) ?>
+				               	</div>
+				               <div class="text-right col-md-11">
+					               <span class="character-left"></span> 
+					               <?php echo $this->translate('remaining characters'); ?>
+					           </div>
+				         </div>
+                    <?php endif;?>
+        	    <?php endforeach;?> 
+    	    </div>
+    	    <div class="center">
+                <button type="submit" name="submitPost" value="" class="btn btn-default">
+                    <?php echo $this->translate('Validate'); ?>
+                </button>
+    	    </div>
+			<?php echo $this->form()->closeTag() ?>

@@ -19,7 +19,7 @@ class GameControllerTest extends AbstractHttpControllerTestCase
 
     public function testDownloadGameEntryNotAnonymousAction()
     {
-        foreach (array('TreasureHunt', 'Lottery') as $type) {
+        foreach (array('Lottery') as $type) {
 
             $serviceManager = $this->getApplicationServiceLocator();
             $serviceManager->setAllowOverride(true);
@@ -90,7 +90,7 @@ class GameControllerTest extends AbstractHttpControllerTestCase
 
     public function testDownloadGameEntryAnonymousAction()
     {
-        foreach (array('TreasureHunt', 'Lottery') as $type) {
+        foreach (array('Lottery') as $type) {
 
             $serviceManager = $this->getApplicationServiceLocator();
             $serviceManager->setAllowOverride(true);

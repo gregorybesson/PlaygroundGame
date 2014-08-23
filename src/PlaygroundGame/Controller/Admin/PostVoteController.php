@@ -198,9 +198,7 @@ class PostVoteController extends AbstractActionController
     {
         $gameId         = $this->getEvent()->getRouteMatch()->getParam('gameId');
         $game           = $this->getAdminGameService()->getGameMapper()->findById($gameId);
-
-        //$entries = $this->getAdminGameService()->getEntryMapper()->findBy(array('game' => $game));
-        $posts   = $this->getAdminGameService()->getPostVotePostMapper()->findBy(array('postvote' => $game));
+        $posts   = $this->getAdminGameService()->getPostVotePostMapper()->findBy(array('postvote' => $game), array('updatedAt' => 'DESC'));
 
         if (is_array($posts)) {
             $paginator = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\ArrayAdapter($posts));

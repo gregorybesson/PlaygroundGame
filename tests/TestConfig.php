@@ -4,15 +4,12 @@ return array(
         'DoctrineModule',
     	'DoctrineORMModule',
    		'DoctrineDataFixtureModule',
-   		'ZendDeveloperTools',
-   		'Jhu\ZdtLoggerModule',
-    	'AsseticBundle',
     	'ZfcBase',
    		'PlaygroundCore',
         'PlaygroundDesign',
         'PlaygroundUser',
-   		'PlaygroundGame',
-        'PlaygroundPartnership',
+        'PlaygroundGame',
+        'PlaygroundPartnership'
     ),
     'module_listener_options' => array(
         'config_glob_paths'    => array(

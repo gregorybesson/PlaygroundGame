@@ -5,7 +5,7 @@ namespace PlaygroundGame\Form\Admin;
 use Zend\Form\Form;
 use Zend\Form\Element;
 use PlaygroundCore\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
-use Zend\I18n\Translator\Translator;
+use Zend\Mvc\I18n\Translator;
 use Zend\ServiceManager\ServiceManager;
 
 class InstantWin extends Game

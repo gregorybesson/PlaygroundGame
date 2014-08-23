@@ -1,0 +1,5 @@
+<?php $this->plugin('translate')->setTranslatorTextDomain('playgroundgame');// Pour le texte ?>
+
+<?php foreach ($this->missions as $mission) : ?>
+    <?php echo $this->partial('playground-game/partial/mission.phtml', array('mission' => $mission, 'channel' => $this->channel)) ?>
+<?php endforeach; ?>

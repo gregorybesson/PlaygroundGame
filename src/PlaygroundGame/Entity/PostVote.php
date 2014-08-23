@@ -41,6 +41,12 @@ class PostVote extends Game implements InputFilterAwareInterface
     protected $voteAnonymous;
 
     /**
+     * Type of moderation : moderate posts before their publication, or after their publication (default)
+     * @ORM\Column(name="moderation_type", type="boolean", nullable=false, options={"default" = 0})
+     */
+    protected $moderationType;
+
+    /**
      * @ORM\OneToOne(targetEntity="PostVoteForm", mappedBy="postvote", cascade={"persist","remove"})
      **/
     private $form;
@@ -154,6 +160,24 @@ class PostVote extends Game implements InputFilterAwareInterface
     }
 
     /**
+     * @return bool
+     */
+    public function getModerationType()
+    {
+        return $this->moderationType;
+    }
+
+    /**
+     * @param bool $moderationType
+     */
+    public function setModerationType($moderationType)
+    {
+        $this->moderationType = $moderationType;
+
+        return $this;
+    }
+
+    /**
      * Convert the object to an array.
      *
      * @return array
@@ -215,6 +239,8 @@ class PostVote extends Game implements InputFilterAwareInterface
                                                     'validators' => array(array('name' => 'InArray', 'options' => array('haystack' => array('date', 'vote', 'random'),),),),)));
 
             $inputFilter->add($factory->createInput(array('name' => 'voteAnonymous', 'required' => true, 'validators' => array(array('name' => 'Between', 'options' => array('min' => 0, 'max' => 1,),),),)));
+
+            $inputFilter->add($factory->createInput(array('name' => 'moderationType', 'required' => false, 'validators' => array(array('name' => 'Between', 'options' => array('min' => 0, 'max' => 1,),),),)));
 
             $this->inputFilter = $inputFilter;
         }

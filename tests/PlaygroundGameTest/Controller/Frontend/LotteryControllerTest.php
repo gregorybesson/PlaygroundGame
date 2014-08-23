@@ -116,7 +116,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     	$serviceManager->setAllowOverride(true);
     	$serviceManager->setService('playgroundgame_lottery_service', $f);
 
-    	$this->dispatch('/loterie/gameid');
+    	$this->dispatch('/facebook/loterie/gameid');
 
 
     	$this->assertModuleName('playgroundgame');
@@ -125,11 +125,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     	$this->assertActionName('home');
     	$this->assertMatchedRouteName('frontend/lottery');
 
-    	$this->assertRedirectTo('/loterie/gameid/fangate');
-
-    	//$postData = array('title' => 'Led Zeppelin III', 'artist' => 'Led Zeppelin');
-    	//$this->dispatch('/album/add', 'POST', $postData);
-    	//$this->assertResponseStatusCode(302);
+    	$this->assertRedirectTo('/facebook/loterie/gameid/fangate');
     }
 
     public function testIndexActionNoEntry()
@@ -147,7 +143,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
 
     	//mocking the method checkExistingEntry
     	$f = $this->getMockBuilder('PlaygroundGame\Service\Game')
-    	->setMethods(array('checkGame', 'checkIsFan', 'checkExistingEntry', 'getServiceManager'))
+    	->setMethods(array('checkGame', 'checkExistingEntry', 'getServiceManager'))
     	//->disableOriginalConstructor()
     	->getMock();
 
@@ -175,11 +171,6 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     	$f->expects($this->exactly(2))
     	->method('checkGame')
     	->will($this->returnValue($game));
-
-    	// I check that the array in findOneBy contains the parameter 'active' = 1
-    	$f->expects($this->once())
-    	->method('checkIsFan')
-    	->will($this->returnValue(true));
 
     	$f->expects($this->once())
     	->method('checkExistingEntry')
@@ -213,7 +204,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
 
     	//mocking the method checkExistingEntry
     	$f = $this->getMockBuilder('PlaygroundGame\Service\Game')
-    	->setMethods(array('checkGame', 'checkIsFan', 'checkExistingEntry', 'getServiceManager'))
+    	->setMethods(array('checkGame', 'checkExistingEntry', 'getServiceManager'))
     	//->disableOriginalConstructor()
     	->getMock();
 
@@ -241,11 +232,6 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     	$f->expects($this->exactly(2))
     	->method('checkGame')
     	->will($this->returnValue($game));
-
-    	// I check that the array in findOneBy contains the parameter 'active' = 1
-    	$f->expects($this->once())
-    	->method('checkIsFan')
-    	->will($this->returnValue(true));
 
     	$f->expects($this->once())
     	->method('checkExistingEntry')
@@ -851,7 +837,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     	$entry = new \PlaygroundGame\Entity\Entry();
 
     	$f = $this->getMockBuilder('PlaygroundGame\Service\Game')
-    	->setMethods(array('checkGame', 'checkIsFan', 'playBonus', 'checkExistingEntry', 'postFbWall', 'getEntryMapper', 'getServiceManager', 'play'))
+    	->setMethods(array('checkGame', 'checkIsFan', 'addAnotherChance', 'checkExistingEntry', 'postFbWall', 'getEntryMapper', 'getServiceManager', 'play'))
     	->disableOriginalConstructor()
     	->getMock();
 
@@ -889,7 +875,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     	->will($this->returnValue(true));
 
     	$f->expects($this->once())
-    	->method('playBonus')
+    	->method('addAnotherChance')
     	->will($this->returnValue($entry));
 
     	$getData = array('fbId' => 'xx-0000-xx');
@@ -1104,7 +1090,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     	$entry = new \PlaygroundGame\Entity\Entry();
 
     	$f = $this->getMockBuilder('PlaygroundGame\Service\Game')
-    	->setMethods(array('checkGame', 'checkIsFan', 'playBonus', 'checkExistingEntry', 'postTwitter', 'getEntryMapper', 'getServiceManager', 'play'))
+    	->setMethods(array('checkGame', 'checkIsFan', 'addAnotherChance', 'checkExistingEntry', 'postTwitter', 'getEntryMapper', 'getServiceManager', 'play'))
     	->disableOriginalConstructor()
     	->getMock();
 
@@ -1142,7 +1128,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     	->will($this->returnValue(true));
 
     	$f->expects($this->once())
-    	->method('playBonus')
+    	->method('addAnotherChance')
     	->will($this->returnValue($entry));
 
     	$getData = array('tweetId' => 'xx-0000-xx');
@@ -1357,7 +1343,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     	$entry = new \PlaygroundGame\Entity\Entry();
 
     	$f = $this->getMockBuilder('PlaygroundGame\Service\Game')
-    	->setMethods(array('checkGame', 'checkIsFan', 'playBonus', 'checkExistingEntry', 'postGoogle', 'getEntryMapper', 'getServiceManager', 'play'))
+    	->setMethods(array('checkGame', 'checkIsFan', 'addAnotherChance', 'checkExistingEntry', 'postGoogle', 'getEntryMapper', 'getServiceManager', 'play'))
     	->disableOriginalConstructor()
     	->getMock();
 
@@ -1395,7 +1381,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     	->will($this->returnValue(true));
 
     	$f->expects($this->once())
-    	->method('playBonus')
+    	->method('addAnotherChance')
     	->will($this->returnValue($entry));
 
     	$getData = array('googleId' => 'xx-0000-xx');

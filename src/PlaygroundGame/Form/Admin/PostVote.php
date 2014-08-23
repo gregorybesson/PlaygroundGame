@@ -5,7 +5,7 @@ namespace PlaygroundGame\Form\Admin;
 use Zend\Form\Form;
 use Zend\Form\Element;
 use PlaygroundCore\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
-use Zend\I18n\Translator\Translator;
+use Zend\Mvc\I18n\Translator;
 use Zend\ServiceManager\ServiceManager;
 
 class PostVote extends Game
@@ -64,6 +64,22 @@ class PostVote extends Game
             'options' => array(
                 'label' => $translator->translate('Allow anonymous visitors to vote', 'playgroundgame'),
             ),
+        ));
+
+        $this->add(array(
+                'type' => 'Zend\Form\Element\Select',
+                'name' => 'moderationType',
+                'attributes' =>  array(
+                        'id' => 'moderationType',
+                        'options' => array(
+                                '0' => $translator->translate('Post moderation', 'playgroundgame'),
+                                '1' => $translator->translate('Pre moderation', 'playgroundgame'),
+                        ),
+                ),
+                'options' => array(
+                        'empty_option' => $translator->translate('Moderation type', 'playgroundgame'),
+                        'label' => $translator->translate('Moderation type', 'playgroundgame'),
+                ),
         ));
     }
 }

@@ -78,18 +78,37 @@ class PrizeCategoryTest extends \PHPUnit_Framework_TestCase
 
     public function testFindAll()
     {
-        $prizeCategory = new PrizeCategoryEntity();
-        $prizeCategory->setIdentifier('iden 1');
-        $prizeCategory->setTitle('Un Titre');
-        $prizeCategory = $this->tm->insert($prizeCategory);
-        $prizeCategory = new PrizeCategoryEntity();
-        $prizeCategory->setIdentifier('iden 2');
-        $prizeCategory->setTitle('Un Titre');
-        $prizeCategory = $this->tm->insert($prizeCategory);
-        $prizeCategory = new PrizeCategoryEntity();
-        $prizeCategory->setIdentifier('iden 3');
-        $prizeCategory->setTitle('Un Titre');
-        $prizeCategory = $this->tm->insert($prizeCategory);
+        // It has to work with 5.3.x and closure don't support direct $this referencing 
+        $self = $this;
+        $this->em->transactional(function($em) use ($self) {
+            $prizeCategory = new PrizeCategoryEntity();
+            $prizeCategory->setIdentifier('iden 1');
+            $prizeCategory->setTitle('Un Titre');
+            $prizeCategory = $self->tm->insert($prizeCategory);
+        });
+
+        $this->em->flush();
+        $this->em->clear();
+        
+        $this->em->transactional(function($em) use ($self) {
+            $prizeCategory = new PrizeCategoryEntity();
+            $prizeCategory->setIdentifier('iden 2');
+            $prizeCategory->setTitle('Un Titre');
+            $prizeCategory = $self->tm->insert($prizeCategory);
+        });
+        
+        $this->em->flush();
+        $this->em->clear();
+            
+        $this->em->transactional(function($em) use ($self) {
+            $prizeCategory = new PrizeCategoryEntity();
+            $prizeCategory->setIdentifier('iden 3');
+            $prizeCategory->setTitle('Un Titre');
+            $prizeCategory = $self->tm->insert($prizeCategory);
+        });
+        
+        $this->em->flush();
+        $this->em->clear();
 
         $prizeCategories = $this->tm->findAll();
         $this->assertEquals(3, count($prizeCategories));
@@ -101,10 +120,6 @@ class PrizeCategoryTest extends \PHPUnit_Framework_TestCase
 
     public function tearDown()
     {
-        $dbh = $this->em->getConnection();
-        unset($this->tm);
-        unset($this->sm);
-        unset($this->em);
         parent::tearDown();
     }
 }
