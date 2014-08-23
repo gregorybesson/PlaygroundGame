@@ -26,11 +26,11 @@
 	"require" : {
 		"php" : ">=5.3.3",
 		"zendframework/zendframework" : "2.*",
-		"playground/core" : "dev-master",
-		"playground/design" : "dev-master",
-		"playground/user" : "dev-develop",
+		"playground/core" : "2.*",
+		"playground/design" : "2.*",
+		"playground/user" : "2.*",
 		"playground/hybridauth" : "dev-master",
-		"playground/partnership" : "dev-develop"
+		"playground/partnership" : "2.*"
 	},
 	"require-dev" : {
 		"phpunit/phpunit" : "3.7.*"
@@ -39,5 +39,10 @@
 		"psr-0" : {
 			"PlaygroundGame" : "src/"
 		}
-	}
+	},
+	"extra": {
+        "branch-alias": {
+            "dev-master": "2.x-dev"
+        }
+    }
 }
