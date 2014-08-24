@@ -1,6 +1,8 @@
 PlaygroundGame
 =========
 
+[![Develop Branch Build Status](https://travis-ci.org/gregorybesson/PlaygroundGame.svg)](http://travis-ci.org/gregorybesson/PlaygroundGame)
+
 The Game module : This module currently propose 4 types of games:
 
 - Post & Vote

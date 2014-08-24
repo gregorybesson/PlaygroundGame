@@ -102,19 +102,16 @@ class QuizController extends GameController
                 $this->getRequest()->getPost()->toArray(),
                 $this->getRequest()->getFiles()->toArray()
             );
-            if(empty($data['prizes'])){
-                $data['prizes'] = array();
-            }
-               $question = $service->createQuestion($data);
-               if ($question) {
-                   // Redirect to list of games
-                   $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The question was created');
 
-                   return $this->redirect()->toRoute('admin/playgroundgame/quiz-question-list', array('quizId'=>$quizId));
-               }
-               else { // Creation failed
-                    $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The question was not updated - create at least one good answer');
-               }
+            $question = $service->createQuestion($data);
+            if ($question) {
+                // Redirect to list of games
+                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The question was created');
+
+                return $this->redirect()->toRoute('admin/playgroundgame/quiz-question-list', array('quizId'=>$quizId));
+            } else { // Creation failed
+                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The question was not updated - create at least one good answer');
+            }
         }
 
         return $viewModel->setVariables(array('form' => $form, 'quiz_id' => $quizId, 'question_id' => 0));
@@ -146,9 +143,7 @@ class QuizController extends GameController
                 $this->getRequest()->getPost()->toArray(),
                 $this->getRequest()->getFiles()->toArray()
             );
-            if(empty($data['prizes'])){
-                $data['prizes'] = array();
-            }
+
             $question = $service->updateQuestion($data, $question);
             if ($question) {
                 // Redirect to list of games
@@ -199,11 +194,14 @@ class QuizController extends GameController
 
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $data = array_merge(
+            $data = array_replace_recursive(
                 $this->getRequest()->getPost()->toArray(),
                 $this->getRequest()->getFiles()->toArray()
             );
-               $game = $service->create($data, $quiz, 'playgroundgame_quiz_form');
+            if(empty($data['prizes'])){
+                $data['prizes'] = array();
+            }
+            $game = $service->create($data, $quiz, 'playgroundgame_quiz_form');
             if ($game) {
                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The game was created');
 
@@ -254,10 +252,13 @@ class QuizController extends GameController
         $form->bind($game);
 
         if ($this->getRequest()->isPost()) {
-            $data = array_merge(
+            $data = array_replace_recursive(
                 $this->getRequest()->getPost()->toArray(),
                 $this->getRequest()->getFiles()->toArray()
             );
+            if(empty($data['prizes'])){
+                $data['prizes'] = array();
+            }
             $result = $service->edit($data, $game, 'playgroundgame_quiz_form');
 
             if ($result) {
