@@ -314,6 +314,7 @@ class GameController extends AbstractActionController
 
                 $options = array();
                 $options['encoding'] = 'UTF-8';
+                $options['disable_inarray_validator'] = true;
                 /*if ($lengthMin && $lengthMin > 0) {
                     $options['min'] = $lengthMin;
                 }
@@ -322,6 +323,9 @@ class GameController extends AbstractActionController
                     $element->setAttribute('maxlength', $lengthMax);
                     $options['messages'] = array(\Zend\Validator\StringLength::TOO_LONG => sprintf($this->getServiceLocator()->get('translator')->translate('This field contains more than %s characters', 'playgroundgame'), $lengthMax));
                 }*/
+                
+                $element->setOptions($options);
+                
                 $inputFilter->add($factory->createInput(array(
                     'name'     => $name,
                     'required' => $required,
