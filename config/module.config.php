@@ -249,13 +249,13 @@ return array(
         'routes' => array(
             'frontend' => array(
                 'child_routes' => array(
-                    'jeuxconcours' => array(
+                    'gameslist' => array(
                         'type' => 'Zend\Mvc\Router\Http\Literal',
                         'options' => array(
-                            'route' => 'jeux-concours',
+                            'route' => 'gameslist',
                             'defaults' => array(
                                 'controller' => 'playgroundgame_game',
-                                'action' => 'jeuxconcours'
+                                'action' => 'gameslist'
                             )
                         ),
                         'may_terminate' => true,
@@ -266,7 +266,7 @@ return array(
                                     'route' => '[/:p]',
                                     'defaults' => array(
                                         'controller' => 'playgroundgame_game',
-                                        'action' => 'jeuxconcours'
+                                        'action' => 'gameslist'
                                     ),
                                     'constraints' => array(
                                         'p' => '[0-9]*'
@@ -1720,7 +1720,7 @@ return array(
         'default' => array(
             'playgroundgame' => array(
                 'label' => 'Jeux concours',
-                'route' => 'jeuxconcours',
+                'route' => 'gameslist',
                 'pages' => array(
                     'quiz' => array(
                         'label' => 'Quiz',

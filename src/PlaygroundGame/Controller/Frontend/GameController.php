@@ -994,11 +994,11 @@ class GameController extends AbstractActionController
     	return $viewModel;
     }
 
-    public function jeuxconcoursAction()
+    public function gameslistAction()
     {
 
         $layoutViewModel = $this->layout();
-        $layoutViewModel->setTemplate('layout/jeuxconcours-2columns-right.phtml');
+        $layoutViewModel->setTemplate('layout/gameslist-2columns-right.phtml');
 
         $slider = new ViewModel();
         $slider->setTemplate('playground-game/common/top_promo');
