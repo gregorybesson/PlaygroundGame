@@ -432,9 +432,21 @@ class GameController extends AbstractActionController
 
             if ($form->isValid()) {
                 $data = json_encode($form->getData());
-                $lastEntry = $sg->findLastEntry($game, $user);
-                $lastEntry->setPlayerData($data);
-                $sg->getEntryMapper()->update($lastEntry);
+                
+                $steps = $game->getStepsArray();
+                $key = array_search($this->params('action'), $steps);
+                $keyplay = array_search('play', $steps);
+                
+                // If register step before play, I don't have no entry yet. I have to create one
+                // If register after play step, I search for the last entry created by play step.
+                if($key && $key < $keyplay){
+                    $entry = $sg->play($game, $user);
+                }else{
+                    $entry = $sg->findLastEntry($game, $user);
+                }
+                
+                $entry->setPlayerData($data);
+                $sg->getEntryMapper()->update($entry);
 
                 return $this->redirect()->toUrl($this->url()->fromRoute('frontend/'. $game->getClassType() .'/' . $game->nextStep($this->params('action')), array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)));
             }
