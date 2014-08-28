@@ -66,6 +66,11 @@ class Entry
     protected $playerData;
 
     /**
+     * @ORM\Column(name="social_shares", type="text", nullable=true)
+     */
+    protected $socialShares;
+    
+    /**
      * Is this entry a winning one ?
      * @ORM\Column(type="boolean", nullable=true)
      */
@@ -244,6 +249,22 @@ class Entry
         $this->playerData = $playerData;
         
         return $this;
+    }
+
+	/**
+     * @return the $socialShares
+     */
+    public function getSocialShares()
+    {
+        return $this->socialShares;
+    }
+
+	/**
+     * @param field_type $socialShares
+     */
+    public function setSocialShares($socialShares)
+    {
+        $this->socialShares = $socialShares;
     }
 
 	/**
