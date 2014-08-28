@@ -882,9 +882,17 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $from = $this->getOptions()->getEmailFromAddress();
         $subject = $this->getOptions()->getShareSubjectLine();
         $renderer = $this->getServiceManager()->get('Zend\View\Renderer\RendererInterface');
-        $skinUrl = $renderer->url('frontend', array(), array(
-            'force_canonical' => true
-        ));
+        $skinUrl = $renderer->url(
+            'frontend', 
+            array('channel' => $this->getServiceManager()
+                ->get('Application')
+                ->getMvcEvent()
+                ->getRouteMatch()
+                ->getParam('channel')
+            ), array(
+                'force_canonical' => true
+            )
+        );
         $secretKey = strtoupper(substr(sha1(uniqid('pg_', true) . '####' . time()), 0, 15));
 
         if (! $topic) {
@@ -945,9 +953,17 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $to = $user->getEmail();
         $subject = $game->getTitle();
         $renderer = $this->getServiceManager()->get('Zend\View\Renderer\RendererInterface');
-        $skinUrl = $renderer->url('frontend', array(), array(
-            'force_canonical' => true
-        ));
+        $skinUrl = $renderer->url(
+            'frontend', 
+            array('channel' => $this->getServiceManager()
+                ->get('Application')
+                ->getMvcEvent()
+                ->getRouteMatch()
+                ->getParam('channel')
+            ), array(
+                'force_canonical' => true
+            )
+        );
         $message = $mailService->createHtmlMessage($from, $to, $subject, 'playground-game/email/' . $template, array(
             'game' => $game,
             'entry' => $entry,
@@ -964,9 +980,17 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $to = $user->getEmail();
         $subject = $this->getOptions()->getParticipationSubjectLine();
         $renderer = $this->getServiceManager()->get('Zend\View\Renderer\RendererInterface');
-        $skinUrl = $renderer->url('frontend', array(), array(
-            'force_canonical' => true
-        ));
+        $skinUrl = $renderer->url(
+            'frontend', 
+            array('channel' => $this->getServiceManager()
+                ->get('Application')
+                ->getMvcEvent()
+                ->getRouteMatch()
+                ->getParam('channel')
+            ), array(
+                'force_canonical' => true
+            )
+        );
 
         $message = $mailService->createHtmlMessage($from, $to, $subject, 'playground-game/email/' . $template, array(
             'game' => $game,
@@ -1062,7 +1086,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         return false;
     }
 
-
+    // TODO : Remove this logic. If we want to add another chance to an entry, just use points)
     public function addAnotherEntry($game, $user, $winner = 0)
     {
         $entry = new Entry();
