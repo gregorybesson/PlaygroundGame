@@ -105,6 +105,7 @@ class GameController extends AbstractActionController
     /**
      * This action has been designed to be called by other controllers
      * It gives the ability to display an information form and persist it in the game entry
+     * TODO : Delegate the logic in services and form
      *
      * @return \Zend\View\Model\ViewModel
      */
@@ -431,7 +432,7 @@ class GameController extends AbstractActionController
             $form->setData($data);
 
             if ($form->isValid()) {
-                $data = json_encode($form->getData());
+                $dataJson = json_encode($form->getData());
                 
                 $steps = $game->getStepsArray();
                 $key = array_search($this->params('action'), $steps);
@@ -451,7 +452,7 @@ class GameController extends AbstractActionController
                     $entry = $sg->findLastEntry($game, $user);
                 }
                 
-                $entry->setPlayerData($data);
+                $entry->setPlayerData($dataJson);
                 $sg->getEntryMapper()->update($entry);
 
                 return $this->redirect()->toUrl($this->url()->fromRoute('frontend/'. $game->getClassType() .'/' . $game->nextStep($this->params('action')), array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)));

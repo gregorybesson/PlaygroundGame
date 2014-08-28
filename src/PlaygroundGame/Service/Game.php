@@ -718,12 +718,14 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                 $search = array(
                     'game' => $game,
                     'ip' => $this->getIp(),
-                    'active' => $active
+                    'active' => $active,
+                    'user' => Null
                 );
             } else {
                 $search = array(
                     'game' => $game,
-                    'ip' => $this->getIp()
+                    'ip' => $this->getIp(),
+                    'user' => Null
                 );
             }
         }
@@ -1093,6 +1095,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $entry->setGame($game);
         $entry->setUser($user);
         $entry->setPoints(0);
+        $entry->setIp($this->getIp());
         $entry->setActive(0);
         $entry->setBonus(1);
         $entry->setWinner($winner);
