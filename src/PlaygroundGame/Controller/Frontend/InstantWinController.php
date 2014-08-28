@@ -173,7 +173,7 @@ class InstantWinController extends GameController
             $form->setData($data);
             if ($form->isValid()) {
                 if(isset($data['email1']) || isset($data['email2']) || isset($data['email3'])) {
-                    $result = $this->getGameService()->sendShareMail($data, $game, $user);
+                    $result = $this->getGameService()->sendShareMail($data, $game, $user, $lastEntry);
                     if ($result) {
                         $statusMail = true;
                     }

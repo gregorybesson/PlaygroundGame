@@ -58,6 +58,32 @@ class ShareMail extends ProvidesEventsForm
             )
         ));
 
+        $this->add(array(
+            'name' => 'email4',
+            'options' => array(
+                'label' => $translator->translate('Email address', 'playgroundgame').' 4',
+            ),
+            'attributes' => array(
+                'type' => 'email',
+                'placeholder' => $translator->translate('Email address', 'playgroundgame').' 4',
+                'class' => 'large-input',
+                'autocomplete' => 'off'
+            )
+        ));
+        
+        $this->add(array(
+            'name' => 'email5',
+            'options' => array(
+                'label' => $translator->translate('Email address', 'playgroundgame').' 5',
+            ),
+            'attributes' => array(
+                'type' => 'email',
+                'placeholder' => $translator->translate('Email address', 'playgroundgame').' 5',
+                'class' => 'large-input',
+                'autocomplete' => 'off'
+            )
+        ));
+        
         $submitElement = new Element\Button('submit');
         $submitElement->setLabel($translator->translate('Send', 'playgroundgame'))
             ->setAttributes(array(

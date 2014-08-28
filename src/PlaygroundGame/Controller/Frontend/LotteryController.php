@@ -89,7 +89,7 @@ class LotteryController extends GameController
             $data = $this->getRequest()->getPost()->toArray();
             $form->setData($data);
             if ($form->isValid()) {
-                $result = $this->getGameService()->sendShareMail($data, $game, $user);
+                $result = $this->getGameService()->sendShareMail($data, $game, $user, $lastEntry);
                 if ($result) {
                     $statusMail = true;
                     $bonusEntry = $sg->addAnotherChance($game, $user, 1);

@@ -282,21 +282,6 @@ class QuizController extends GameController
         $form = $this->getServiceLocator()->get('playgroundgame_sharemail_form');
         $form->setAttribute('method', 'post');
 
-        /*if ($this->getRequest()->isPost()) {
-            $data = $this->getRequest()->getPost()->toArray();
-            $form->setData($data);
-            if ($form->isValid()) {
-                $result = $this->getGameService()->sendShareMail($data, $game, $user, 'share_game', null, $userTimer);
-                if ($result) {
-                    $statusMail = true;
-                    if ($lastEntry->getWinner()) {
-                        $bonusEntry = $sg->addAnotherChance($game, $user, 1);
-                    }
-                }
-            }
-
-        }*/
-
         $this->sendMail($game, $user, $lastEntry);
 
         $nextGame = parent::getMissionGameService()->checkCondition($game, $winner, $prediction, $lastEntry);

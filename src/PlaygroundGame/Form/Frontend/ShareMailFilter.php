@@ -41,5 +41,27 @@ class ShareMailFilter extends InputFilter
                         array('name' => 'Zend\Validator\EmailAddress'),
                 ),
         ));
+        
+        $this->add(array(
+            'name'       => 'email4',
+            'required'   => false,
+            'filters' => array(
+                array('name' => 'Zend\Filter\StringTrim'),
+            ),
+            'validators' => array(
+                array('name' => 'Zend\Validator\EmailAddress'),
+            ),
+        ));
+        
+        $this->add(array(
+            'name'       => 'email5',
+            'required'   => false,
+            'filters' => array(
+                array('name' => 'Zend\Filter\StringTrim'),
+            ),
+            'validators' => array(
+                array('name' => 'Zend\Validator\EmailAddress'),
+            ),
+        ));
     }
 }

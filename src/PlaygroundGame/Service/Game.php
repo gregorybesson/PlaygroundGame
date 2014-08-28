@@ -877,7 +877,8 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         } 
     }
 
-    public function sendShareMail($data, $game, $user, $template = 'share_game', $topic = NULL, $userTimer = array())
+    // TODO : Simplify this method !
+    public function sendShareMail($data, $game, $user, $entry, $template = 'share_game', $topic = NULL, $userTimer = array())
     {
         $mailService = $this->getServiceManager()->get('playgroundgame_message');
         $mailSent = false;
@@ -901,6 +902,8 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             $topic = $game->getTitle();
         }
 
+        $shares = json_decode($entry->getSocialShares(), true);
+        
         if ($data['email1']) {
             $mailSent = true;
             $message = $mailService->createHtmlMessage($from, $data['email1'], $subject, 'playground-game/email/' . $template, array(
@@ -911,6 +914,13 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                 'userTimer' => $userTimer
             ));
             $mailService->send($message);
+            
+            if(!isset($shares['mail'])){
+                $shares['mail'] = 1;
+            } else{
+                $shares['mail'] += 1;
+            }
+            
         }
         if ($data['email2'] && $data['email2'] != $data['email1']) {
             $mailSent = true;
@@ -922,6 +932,12 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                 'userTimer' => $userTimer
             ));
             $mailService->send($message);
+            
+            if(!isset($shares['mail'])){
+                $shares['mail'] = 1;
+            } else{
+                $shares['mail'] += 1;
+            }
         }
         if ($data['email3'] && $data['email3'] != $data['email2'] && $data['email3'] != $data['email1']) {
             $mailSent = true;
@@ -933,13 +949,59 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                 'userTimer' => $userTimer
             ));
             $mailService->send($message);
+            
+            if(!isset($shares['mail'])){
+                $shares['mail'] = 1;
+            } else{
+                $shares['mail'] += 1;
+            }
+        }
+        if ($data['email4'] && $data['email4'] != $data['email3'] && $data['email4'] != $data['email2'] && $data['email4'] != $data['email1']) {
+            $mailSent = true;
+            $message = $mailService->createHtmlMessage($from, $data['email4'], $subject, 'playground-game/email/' . $template, array(
+                'game' => $game,
+                'email' => $user->getEmail(),
+                'secretKey' => $secretKey,
+                'skinUrl' => $skinUrl,
+                'userTimer' => $userTimer
+            ));
+            $mailService->send($message);
+        
+            if(!isset($shares['mail'])){
+                $shares['mail'] = 1;
+            } else{
+                $shares['mail'] += 1;
+            }
+        }
+        if ($data['email5'] && $data['email5'] != $data['email4'] && $data['email5'] != $data['email3'] && $data['email5'] != $data['email2'] && $data['email5'] != $data['email1']) {
+            $mailSent = true;
+            $message = $mailService->createHtmlMessage($from, $data['email5'], $subject, 'playground-game/email/' . $template, array(
+                'game' => $game,
+                'email' => $user->getEmail(),
+                'secretKey' => $secretKey,
+                'skinUrl' => $skinUrl,
+                'userTimer' => $userTimer
+            ));
+            $mailService->send($message);
+        
+            if(!isset($shares['mail'])){
+                $shares['mail'] = 1;
+            } else{
+                $shares['mail'] += 1;
+            }
         }
         if ($mailSent) {
+            
+            $sharesJson = json_encode($shares);
+            $entry->setSocialShares($sharesJson);
+            $entry = $this->getEntryMapper()->update($entry);
+            
             $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array(
                 'user' => $user,
                 'topic' => $topic,
                 'secretKey' => $secretKey,
-                'game' => $game
+                'game' => $game,
+                'entry' => $entry
             ));
 
             return true;
@@ -1002,60 +1064,98 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $mailService->send($message);
     }
 
-    public function postFbWall($secretKey, $game, $user, $topic = NULL)
+    public function postFbWall($secretKey, $game, $user, $entry)
     {
-        if (! $topic) {
-            $topic = $game->getTitle();
+        $topic = $game->getTitle();
+        
+        $shares = json_decode($entry->getSocialShares(), true);
+        if(!isset($shares['fbwall'])){
+            $shares['fbwall'] = 1;
+        } else{
+            $shares['fbwall'] += 1;
         }
-
+        $sharesJson = json_encode($shares);
+        $entry->setSocialShares($sharesJson);
+        $entry = $this->getEntryMapper()->update($entry);
+        
         $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array(
             'user' => $user,
             'game' => $game,
             'secretKey' => $secretKey,
-            'topic' => $topic
+            'topic' => $topic,
+            'entry' => $entry
         ));
 
         return true;
     }
 
-    public function postFbRequest($secretKey, $game, $user)
+    public function postFbRequest($secretKey, $game, $user, $entry)
     {
+        $shares = json_decode($entry->getSocialShares(), true);
+        if(!isset($shares['fbrequest'])){
+            $shares['fbrequest'] = 1;
+        } else{
+            $shares['fbrequest'] += 1;
+        }
+        $sharesJson = json_encode($shares);
+        $entry->setSocialShares($sharesJson);
+        $entry = $this->getEntryMapper()->update($entry);
+        
         $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array(
             'user' => $user,
             'game' => $game,
-            'secretKey' => $secretKey
+            'secretKey' => $secretKey,
+            'entry' => $entry
         ));
 
         return true;
     }
 
-    public function postTwitter($secretKey, $game, $user, $topic = NULL)
+    public function postTwitter($secretKey, $game, $user, $entry)
     {
-        if (! $topic) {
-            $topic = $game->getTitle();
-        }
+        $topic = $game->getTitle();
 
+        $shares = json_decode($entry->getSocialShares(), true);
+        if(!isset($shares['fbrequest'])){
+            $shares['tweet'] = 1;
+        } else{
+            $shares['tweet'] += 1;
+        }
+        $sharesJson = json_encode($shares);
+        $entry->setSocialShares($sharesJson);
+        $entry = $this->getEntryMapper()->update($entry);
+        
         $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array(
             'user' => $user,
             'game' => $game,
             'secretKey' => $secretKey,
-            'topic' => $topic
+            'topic' => $topic,
+            'entry' => $entry
         ));
 
         return true;
     }
 
-    public function postGoogle($secretKey, $game, $user, $topic = NULL)
+    public function postGoogle($secretKey, $game, $user, $entry)
     {
-        if (! $topic) {
-            $topic = $game->getTitle();
+        $topic = $game->getTitle();
+        
+        $shares = json_decode($entry->getSocialShares(), true);
+        if(!isset($shares['fbrequest'])){
+            $shares['google'] = 1;
+        } else{
+            $shares['google'] += 1;
         }
+        $sharesJson = json_encode($shares);
+        $entry->setSocialShares($sharesJson);
+        $entry = $this->getEntryMapper()->update($entry);
 
         $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array(
             'user' => $user,
             'game' => $game,
             'secretKey' => $secretKey,
-            'topic' => $topic
+            'topic' => $topic,
+            'entry' => $entry
         ));
 
         return true;

@@ -485,15 +485,15 @@ class GameController extends AbstractActionController
         if (!$game) {
             return false;
         }
-        $subscription = $sg->checkExistingEntry($game, $user);
-        if (! $subscription) {
+        $entry = $sg->checkExistingEntry($game, $user);
+        if (! $entry) {
             return false;
         }
         if (!$fbId) {
             return false;
         }
 
-        $sg->postFbWall($fbId, $game, $user);
+        $sg->postFbWall($fbId, $game, $user, $entry);
 
         return true;
 
@@ -512,15 +512,15 @@ class GameController extends AbstractActionController
         if (!$game) {
             return false;
         }
-        $subscription = $sg->checkExistingEntry($game, $user);
-        if (! $subscription) {
+        $entry = $sg->checkExistingEntry($game, $user);
+        if (! $entry) {
             return false;
         }
         if (!$fbId) {
             return false;
         }
 
-        $sg->postFbRequest($fbId, $game, $user);
+        $sg->postFbRequest($fbId, $game, $user, $entry);
 
         return true;
 
@@ -539,15 +539,15 @@ class GameController extends AbstractActionController
         if (!$game) {
             return false;
         }
-        $subscription = $sg->checkExistingEntry($game, $user);
-        if (! $subscription) {
+        $entry = $sg->checkExistingEntry($game, $user);
+        if (! $entry) {
             return false;
         }
         if (!$tweetId) {
             return false;
         }
 
-        $sg->postTwitter($tweetId, $game, $user);
+        $sg->postTwitter($tweetId, $game, $user, $entry);
 
         return true;
 
@@ -566,15 +566,15 @@ class GameController extends AbstractActionController
         if (!$game) {
             return false;
         }
-        $subscription = $sg->checkExistingEntry($game, $user);
-        if (! $subscription) {
+        $entry = $sg->checkExistingEntry($game, $user);
+        if (! $entry) {
             return false;
         }
         if (!$googleId) {
             return false;
         }
 
-        $sg->postGoogle($googleId, $game, $user);
+        $sg->postGoogle($googleId, $game, $user, $entry);
 
         return true;
 
