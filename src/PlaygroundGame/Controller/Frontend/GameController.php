@@ -441,6 +441,12 @@ class GameController extends AbstractActionController
                 // If register after play step, I search for the last entry created by play step.
                 if($key && $key < $keyplay){
                     $entry = $sg->play($game, $user);
+                    if (!$entry) {
+                        // the user has already taken part of this game and the participation limit has been reache
+                        $this->flashMessenger()->addMessage('Vous avez déjà participé');
+                    
+                        return $this->redirect()->toUrl($this->url()->fromRoute('frontend/'.$game->getClassType().'/result',array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+                    }
                 }else{
                     $entry = $sg->findLastEntry($game, $user);
                 }
