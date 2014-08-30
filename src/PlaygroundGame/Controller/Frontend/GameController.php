@@ -437,19 +437,34 @@ class GameController extends AbstractActionController
                 $steps = $game->getStepsArray();
                 $key = array_search($this->params('action'), $steps);
                 $keyplay = array_search('play', $steps);
+                $anonymousIdentifier = null;
                 
                 // If register step before play, I don't have no entry yet. I have to create one
                 // If register after play step, I search for the last entry created by play step.
                 if($key && $key < $keyplay){
-                    $entry = $sg->play($game, $user);
+                    
+                    if($game->getAnonymousAllowed() && $game->getAnonymousIdentifier() && isset($data[$game->getAnonymousIdentifier()])){
+                        $anonymousIdentifier = $data[$game->getAnonymousIdentifier()];
+                    }
+                    $entry = $sg->play($game, $user, $anonymousIdentifier);
                     if (!$entry) {
-                        // the user has already taken part of this game and the participation limit has been reache
+                        // the user has already taken part of this game and the participation limit has been reached
                         $this->flashMessenger()->addMessage('Vous avez déjà participé');
                     
                         return $this->redirect()->toUrl($this->url()->fromRoute('frontend/'.$game->getClassType().'/result',array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
                     }
                 }else{
-                    $entry = $sg->findLastEntry($game, $user);
+                    if($game->getAnonymousAllowed() && $game->getAnonymousIdentifier() && isset($data[$game->getAnonymousIdentifier()])){
+                        if (hasReachedPlayLimit($game, $user, $data[$game->getAnonymousIdentifier()])){
+                            // the user has already taken part of this game and the participation limit has been reached
+                            $this->flashMessenger()->addMessage('Vous avez déjà participé');
+                            
+                            return $this->redirect()->toUrl($this->url()->fromRoute('frontend/'.$game->getClassType().'/result',array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+                        }
+                        $entry = $sg->findLastEntry($game, $user);
+                        $entry->setAnonymousIdentifier($data[$game->getAnonymousIdentifier()]);
+                    }
+                    
                 }
                 
                 $entry->setPlayerData($dataJson);

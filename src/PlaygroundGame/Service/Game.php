@@ -689,29 +689,31 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
     }
 
     /**
-     * Return the last entry of the user on this game, if it exists
-     * If the param active is set, it can check if the entry is active or not.
+     * Return the last entry of the user on this game, if it exists.
+     * An entry can be associated to :
+     * - A user account (a real one, linked to PlaygroundUser
+     * - An anonymous Identifier (based on one value of playerData (generally email))
+     * - A cookie set on the player device (the less secure)
+     * If the active param is set, it can check if the entry is active or not.
+     * If the bonus param is set, it can check if the entry is a bonus or not.
      *
      * @param unknown $game
      * @param string $user
      * @return boolean
      */
-    public function checkExistingEntry($game, $user = null, $active = null, $bonus = null)
+    public function checkExistingEntry($game, $user = null, $anonymousIdentifier = null, $active = null, $bonus = null)
     {
         $entry = false;
+        $search = array('game'  => $game);
 
         if ($user) {
-            $search = array(
-                'game'  => $game,
-                'user'  => $user
-            );
-
+            $search['user'] = $user;
+        } elseif(! is_null($anonymousIdentifier)){
+            $search['anonymousIdentifier'] = $anonymousIdentifier;
+            $search['user'] = Null;
         } else {
-            $search = array(
-                'game'  => $game,
-                'ip'    => $this->getIp(),
-                'user'  => Null
-            );
+            $search['anonymousId'] = $this->getAnonymousId();
+            $search['user'] = Null;
         }
         
         if (! is_null($active)) $search['active'] = $active;
@@ -751,24 +753,16 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      * @param PlaygroundUser\Entity\UserInterface $user
      * @return number unknown
      */
-    public function play($game, $user)
+    public function play($game, $user, $anonymousIdentifier = null)
     {
 
         // certaines participations peuvent rester ouvertes. On autorise alors le joueur à reprendre là ou il en était
         // par exemple les postvote...
-        $entry = $this->checkExistingEntry($game, $user, true);
+        $entry = $this->checkExistingEntry($game, $user, $anonymousIdentifier, true);
 
         if (! $entry) {
-            // je regarde s'il y a une limitation sur le jeu
-            $limitAmount = $game->getPlayLimit();
-            if ($limitAmount) {
-                $limitScale = $game->getPlayLimitScale();
-                $userEntries = $this->findLastEntries($game, $user, $limitScale);
-
-                // player has reached the game limit
-                if ($userEntries >= $limitAmount) {
-                    return false;
-                }
+            if ($this->hasReachedPlayLimit($game, $user, $anonymousIdentifier)){
+                return false;
             }
 
             $entry = new Entry();
@@ -777,21 +771,41 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             $entry->setPoints(0);
             $entry->setIp($this->getIp());
             $entry->setAnonymousId($this->getAnonymousId());
+            if(! is_null($anonymousIdentifier)) $entry->setAnonymousIdentifier($anonymousIdentifier);
 
             $entry = $this->getEntryMapper()->insert($entry);
             $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array(
                 'user' => $user,
-                'game' => $game
+                'game' => $game,
+                'entry' => $entry
             ));
         }
 
         return $entry;
     }
 
-    public function findLastEntries($game, $user, $limitScale)
+    public function hasReachedPlayLimit($game, $user, $anonymousIdentifier = null)
+    {
+        // Is there a limitation on the game ?
+        $limitAmount = $game->getPlayLimit();
+        if ($limitAmount) {
+            $limitScale = $game->getPlayLimitScale();
+            $userEntries = $this->findLastEntries($game, $user, $anonymousIdentifier, $limitScale);
+
+            // player has reached the game limit
+            if ($userEntries >= $limitAmount) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public function findLastEntries($game, $user, $anonymousIdentifier = null, $limitScale)
     {
         if ($user) {
             return $this->getEntryMapper()->findLastEntriesByUser($game, $user, $limitScale);
+        } elseif(! is_null($anonymousIdentifier)) {
+            return $this->getEntryMapper()->findLastEntriesByAnonymousIdentifier($game, $anonymousIdentifier, $limitScale);
         } else {
             return $this->getEntryMapper()->findLastEntriesByIp($game, $this->getIp(), $limitScale);
         }
@@ -800,19 +814,19 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
     public function findLastActiveEntry($game, $user)
     {
            
-        return $this->checkExistingEntry($game, $user, true);
+        return $this->checkExistingEntry($game, $user, null, true);
     }
 
     public function findLastInactiveEntry($game, $user)
     {
         
-        return $this->checkExistingEntry($game, $user, false, false);
+        return $this->checkExistingEntry($game, $user, null, false, false);
     }
 
     public function findLastEntry($game, $user)
     {
 
-        return $this->checkExistingEntry($game, $user, null, false);
+        return $this->checkExistingEntry($game, $user, null, null, false);
     }
 
     // TODO : Simplify this method !
@@ -823,6 +837,13 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $from = $this->getOptions()->getEmailFromAddress();
         $subject = $this->getOptions()->getShareSubjectLine();
         $renderer = $this->getServiceManager()->get('Zend\View\Renderer\RendererInterface');
+        if($user){
+            $email = $user->getEmail();
+        } elseif($entry->getAnonymousIdentifier()){
+            $email = $entry->getAnonymousIdentifier();
+        }else{
+            $email = $from;
+        }
         $skinUrl = $renderer->url(
             'frontend', 
             array('channel' => $this->getServiceManager()
@@ -846,7 +867,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             $mailSent = true;
             $message = $mailService->createHtmlMessage($from, $data['email1'], $subject, 'playground-game/email/' . $template, array(
                 'game' => $game,
-                'email' => $user->getEmail(),
+                'email' => $email,
                 'secretKey' => $secretKey,
                 'skinUrl' => $skinUrl,
                 'userTimer' => $userTimer
@@ -864,7 +885,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             $mailSent = true;
             $message = $mailService->createHtmlMessage($from, $data['email2'], $subject, 'playground-game/email/' . $template, array(
                 'game' => $game,
-                'email' => $user->getEmail(),
+                'email' => $email,
                 'secretKey' => $secretKey,
                 'skinUrl' => $skinUrl,
                 'userTimer' => $userTimer
@@ -881,7 +902,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             $mailSent = true;
             $message = $mailService->createHtmlMessage($from, $data['email3'], $subject, 'playground-game/email/' . $template, array(
                 'game' => $game,
-                'email' => $user->getEmail(),
+                'email' => $email,
                 'secretKey' => $secretKey,
                 'skinUrl' => $skinUrl,
                 'userTimer' => $userTimer
@@ -898,7 +919,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             $mailSent = true;
             $message = $mailService->createHtmlMessage($from, $data['email4'], $subject, 'playground-game/email/' . $template, array(
                 'game' => $game,
-                'email' => $user->getEmail(),
+                'email' => $email,
                 'secretKey' => $secretKey,
                 'skinUrl' => $skinUrl,
                 'userTimer' => $userTimer
@@ -915,7 +936,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             $mailSent = true;
             $message = $mailService->createHtmlMessage($from, $data['email5'], $subject, 'playground-game/email/' . $template, array(
                 'game' => $game,
-                'email' => $user->getEmail(),
+                'email' => $email,
                 'secretKey' => $secretKey,
                 'skinUrl' => $skinUrl,
                 'userTimer' => $userTimer
