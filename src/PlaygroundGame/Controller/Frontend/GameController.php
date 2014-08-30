@@ -505,6 +505,7 @@ class GameController extends AbstractActionController
         $viewModel->setTerminal(true);
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
         $fbId = $this->params()->fromQuery('fbId');
+        $to = $this->params()->fromQuery('to');
         $user = $this->zfcUserAuthentication()->getIdentity();
         $sg = $this->getGameService();
 
@@ -520,7 +521,7 @@ class GameController extends AbstractActionController
             return false;
         }
 
-        $sg->postFbRequest($fbId, $game, $user, $entry);
+        $sg->postFbRequest($fbId, $game, $user, $entry, $to);
 
         return true;
 

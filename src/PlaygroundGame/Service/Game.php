@@ -1089,13 +1089,14 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         return true;
     }
 
-    public function postFbRequest($secretKey, $game, $user, $entry)
+    public function postFbRequest($secretKey, $game, $user, $entry, $to)
     {
         $shares = json_decode($entry->getSocialShares(), true);
+        $to = explode(',', $to);
         if(!isset($shares['fbrequest'])){
-            $shares['fbrequest'] = 1;
+            $shares['fbrequest'] = count($to);
         } else{
-            $shares['fbrequest'] += 1;
+            $shares['fbrequest'] += count($to);
         }
         $sharesJson = json_encode($shares);
         $entry->setSocialShares($sharesJson);
@@ -1105,7 +1106,8 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             'user' => $user,
             'game' => $game,
             'secretKey' => $secretKey,
-            'entry' => $entry
+            'entry' => $entry,
+            'invites' => count($to)
         ));
 
         return true;
