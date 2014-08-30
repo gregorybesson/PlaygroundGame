@@ -273,7 +273,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
     	}))
     	->will($this->returnValue($this->getMock('PlaygroundGame\Entity\Entry')));
 
-    	$gs->checkExistingEntry($game, true, 1);
+    	$gs->checkExistingEntry($game, true, null, 1);
     }
 
     public function testCheckIsFanNotOnFacebook()
