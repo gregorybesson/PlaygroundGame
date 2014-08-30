@@ -481,11 +481,14 @@ class PostVoteController extends GameController
             }
         }
 
+        // buildView must be before sendMail because it adds the game template path to the templateStack
+        // TODO : Improve this.
+        $viewModel = $this->buildView($game);
+        
         $this->sendMail($game, $user, $lastEntry);
 
         $nextGame = parent::getMissionGameService()->checkCondition($game, $lastEntry->getWinner(), true, $lastEntry);
 
-        $viewModel = $this->buildView($game);
         $viewModel->setVariables(array(
                 'statusMail'       => $statusMail,
                 'game'             => $game,

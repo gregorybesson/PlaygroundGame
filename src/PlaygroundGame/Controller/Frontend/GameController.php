@@ -674,11 +674,13 @@ class GameController extends AbstractActionController
      * @param unknown $lastEntry
      */
     public function sendMail($game, $user, $lastEntry, $prize = NULL){
-        if($user && $game->getMailWinner() && $lastEntry->getWinner()){
+        if(($user || ($game->getAnonymousAllowed() && $game->getAnonymousIdentifier())) && $game->getMailWinner() && $lastEntry->getWinner()){
+
             $this->getGameService()->sendResultMail($game, $user, $lastEntry, 'winner', $prize);
         }
 
-        if($user && $game->getMailLooser() && !$lastEntry->getWinner()){
+        if(($user || ($game->getAnonymousAllowed() && $game->getAnonymousIdentifier())) && $game->getMailLooser() && !$lastEntry->getWinner()){
+            
             $this->getGameService()->sendResultMail($game, $user, $lastEntry, 'looser');
         }
     }

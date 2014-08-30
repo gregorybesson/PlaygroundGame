@@ -282,11 +282,14 @@ class QuizController extends GameController
         $form = $this->getServiceLocator()->get('playgroundgame_sharemail_form');
         $form->setAttribute('method', 'post');
 
+        // buildView must be before sendMail because it adds the game template path to the templateStack
+        // TODO : Improve this.
+        $viewModel = $this->buildView($game);
+        
         $this->sendMail($game, $user, $lastEntry);
 
         $nextGame = parent::getMissionGameService()->checkCondition($game, $winner, $prediction, $lastEntry);
 
-        $viewModel = $this->buildView($game);
         $viewModel->setVariables(array(
             'statusMail'          => $statusMail,
             'game'                => $game,

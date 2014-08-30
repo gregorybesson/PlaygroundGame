@@ -185,11 +185,15 @@ class InstantWinController extends GameController
         if ($occurrence instanceof \PlaygroundGame\Entity\InstantWinOccurrence){
             $prize = $occurrence->getPrize();
         }
+        
+        // buildView must be before sendMail because it adds the game template path to the templateStack
+        // TODO : Improve this.
+        $viewModel = $this->buildView($game);
+        
         $this->sendMail($game, $user, $lastEntry, $prize);
 
         $nextGame = parent::getMissionGameService()->checkCondition($game, $winner, true, $lastEntry);
 
-        $viewModel = $this->buildView($game);
         if ($viewModel instanceof \Zend\View\Model\ViewModel) {
             $viewModel->setVariables(array(
                 'occurrence'       => $occurrence,
