@@ -43,9 +43,9 @@ class Game
         return $this->getEntityRepository()->findBy($filter, $order, $limit, $offset);
     }
     
-    public function findOneBy($array)
+    public function findOneBy($array, $sortBy = array())
     {
-        return $this->getEntityRepository()->findOneBy($array);
+        return $this->getEntityRepository()->findOneBy($array, $sortBy);
     }
 
     public function insert($entity, $tableName = NULL, \Zend\Stdlib\Hydrator\HydratorInterface $hydrator = NULL)

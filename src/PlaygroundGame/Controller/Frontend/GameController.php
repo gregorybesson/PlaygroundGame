@@ -86,8 +86,8 @@ class GameController extends AbstractActionController
         }
 
 
-        $subscription = $sg->checkExistingEntry($game, $user);
-        if ($subscription) {
+        $entry = $sg->checkExistingEntry($game, $user);
+        if ($entry) {
             $isSubscribed = true;
         }
 

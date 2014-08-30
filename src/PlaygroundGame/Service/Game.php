@@ -696,41 +696,28 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      * @param string $user
      * @return boolean
      */
-    public function checkExistingEntry($game, $user = null, $active = null)
+    public function checkExistingEntry($game, $user = null, $active = null, $bonus = null)
     {
         $entry = false;
 
         if ($user) {
-            if (! is_null($active)) {
-                $search = array(
-                    'game' => $game,
-                    'user' => $user,
-                    'active' => $active
-                );
-            } else {
-                $search = array(
-                    'game' => $game,
-                    'user' => $user
-                );
-            }
-        } else {
-            if (! is_null($active)) {
-                $search = array(
-                    'game' => $game,
-                    'ip' => $this->getIp(),
-                    'active' => $active,
-                    'user' => Null
-                );
-            } else {
-                $search = array(
-                    'game' => $game,
-                    'ip' => $this->getIp(),
-                    'user' => Null
-                );
-            }
-        }
+            $search = array(
+                'game'  => $game,
+                'user'  => $user
+            );
 
-        $entry = $this->getEntryMapper()->findOneBy($search);
+        } else {
+            $search = array(
+                'game'  => $game,
+                'ip'    => $this->getIp(),
+                'user'  => Null
+            );
+        }
+        
+        if (! is_null($active)) $search['active'] = $active;
+        if (! is_null($bonus)) $search['bonus'] = $bonus;
+
+        $entry = $this->getEntryMapper()->findOneBy($search, array('updated_at' => 'desc'));
 
         return $entry;
     }
@@ -812,69 +799,20 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
     public function findLastActiveEntry($game, $user)
     {
-        if ($user) {
-
-            return $this->getEntryMapper()->findOneBy(array(
-                'game' => $game,
-                'user' => $user,
-                'active' => true
-            ), array(
-                'updated_at' => 'desc'
-            ));
-        } else {
-
-            return $this->getEntryMapper()->findOneBy(array(
-                'game' => $game,
-                'ip' => $this->getIp(),
-                'active' => true
-            ), array(
-                'updated_at' => 'desc'
-            ));
-        }
+           
+        return $this->checkExistingEntry($game, $user, true);
     }
 
     public function findLastInactiveEntry($game, $user)
     {
-        if ($user) {
-            return $this->getEntryMapper()->findOneBy(array(
-                'game' => $game,
-                'user' => $user,
-                'active' => false,
-                'bonus' => false
-            ), array(
-                'updated_at' => 'desc'
-            ));
-        } else {
-            return $this->getEntryMapper()->findOneBy(array(
-                'game' => $game,
-                'ip' => $this->getIp(),
-                'active' => false,
-                'bonus' => false
-            ), array(
-                'updated_at' => 'desc'
-            ));
-        }
+        
+        return $this->checkExistingEntry($game, $user, false, false);
     }
 
     public function findLastEntry($game, $user)
     {
-       if ($user) {
-            return $this->getEntryMapper()->findOneBy(array(
-                'game' => $game,
-                'user' => $user,
-                'bonus' => false
-            ), array(
-                'updated_at' => 'desc'
-            ));
-        } else {
-            return $this->getEntryMapper()->findOneBy(array(
-                'game' => $game,
-                'ip' => $this->getIp(),
-                'bonus' => false
-            ), array(
-                'updated_at' => 'desc'
-            ));
-        } 
+
+        return $this->checkExistingEntry($game, $user, null, false);
     }
 
     // TODO : Simplify this method !
@@ -1417,28 +1355,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
     public function getGamesOrderBy($type = 'createdAt', $order = 'DESC')
     {
         return $this->getQueryGamesOrderBy($type, $order)->getResult();
-    }
-
-    /**
-     * This function returns the user's first entry if it's his first participation in $game
-     *
-     * @param unknown_type $game
-     */
-    public function findFirstEntries($game)
-    {
-        $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
-
-        $query = $em->createQuery('
-            SELECT e
-            FROM PlaygroundGame\Entity\Entry e
-            WHERE e.id IN (SELECT l.id FROM PlaygroundGame\Entity\Entry l GROUP BY l.user)
-            AND e.game = :game
-            ORDER BY e.created_at ASC
-        ');
-
-        $query->setParameter('game', $game);
-        $result = $query->getResult();
-        return $result;
     }
 
     public function draw($game)
