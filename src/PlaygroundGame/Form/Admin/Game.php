@@ -178,6 +178,16 @@ class Game extends ProvidesEventsForm
                 'label' => $translator->translate('Anonymous players allowed', 'playgroundgame'),
             ),
         ));
+        
+        $this->add(array(
+            'name' => 'anonymousIdentifier',
+            'options' => array(
+                'label' => $translator->translate('Anonymous Identifier', 'playgroundgame')
+            ),
+            'attributes' => array(
+                'type' => 'text'
+            )
+        ));
 
         $this->add(array(
         	'type' => 'Zend\Form\Element\Checkbox',

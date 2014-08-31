@@ -151,6 +151,15 @@ class Game implements InputFilterAwareInterface, Translatable
      * @ORM\Column(name="anonymous_allowed",type="boolean", nullable=true)
      */
     protected $anonymousAllowed = 0;
+    
+    /**
+     * This column can be filled in when anonymousAllowed = 1.
+     * If you put a value, it has to be a field key from playerdata. This key will
+     * then be used to identify a player (generally 'email')
+     * 
+     * @ORM\Column(name="anonymous_identifier", type="text", nullable=true)
+     */
+    protected $anonymousIdentifier;
 
     /**
      * @ORM\Column(name="publication_date", type="datetime", nullable=true)
@@ -497,6 +506,22 @@ class Game implements InputFilterAwareInterface, Translatable
         $this->anonymousAllowed = $anonymousAllowed;
 
         return $this;
+    }
+
+	/**
+     * @return the $anonymousIdentifier
+     */
+    public function getAnonymousIdentifier()
+    {
+        return $this->anonymousIdentifier;
+    }
+
+	/**
+     * @param field_type $anonymousIdentifier
+     */
+    public function setAnonymousIdentifier($anonymousIdentifier)
+    {
+        $this->anonymousIdentifier = $anonymousIdentifier;
     }
 
 	/**
@@ -1947,6 +1972,29 @@ class Game implements InputFilterAwareInterface, Translatable
                         'options' => array(
                             'encoding' => 'UTF-8',
                             'min' => 1,
+                            'max' => 255
+                        )
+                    )
+                )
+            )));
+            
+            $inputFilter->add($factory->createInput(array(
+                'name' => 'anonymousIdentifier',
+                'required' => false,
+                'filters' => array(
+                    array(
+                        'name' => 'StripTags'
+                    ),
+                    array(
+                        'name' => 'StringTrim'
+                    )
+                ),
+                'validators' => array(
+                    array(
+                        'name' => 'StringLength',
+                        'options' => array(
+                            'encoding' => 'UTF-8',
+                            'min' => 0,
                             'max' => 255
                         )
                     )

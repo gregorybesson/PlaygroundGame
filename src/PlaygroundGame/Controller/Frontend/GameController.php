@@ -86,8 +86,8 @@ class GameController extends AbstractActionController
         }
 
 
-        $subscription = $sg->checkExistingEntry($game, $user);
-        if ($subscription) {
+        $entry = $sg->checkExistingEntry($game, $user);
+        if ($entry) {
             $isSubscribed = true;
         }
 
@@ -437,19 +437,34 @@ class GameController extends AbstractActionController
                 $steps = $game->getStepsArray();
                 $key = array_search($this->params('action'), $steps);
                 $keyplay = array_search('play', $steps);
+                $anonymousIdentifier = null;
                 
                 // If register step before play, I don't have no entry yet. I have to create one
                 // If register after play step, I search for the last entry created by play step.
                 if($key && $key < $keyplay){
-                    $entry = $sg->play($game, $user);
+                    
+                    if($game->getAnonymousAllowed() && $game->getAnonymousIdentifier() && isset($data[$game->getAnonymousIdentifier()])){
+                        $anonymousIdentifier = $data[$game->getAnonymousIdentifier()];
+                    }
+                    $entry = $sg->play($game, $user, $anonymousIdentifier);
                     if (!$entry) {
-                        // the user has already taken part of this game and the participation limit has been reache
+                        // the user has already taken part of this game and the participation limit has been reached
                         $this->flashMessenger()->addMessage('Vous avez déjà participé');
                     
                         return $this->redirect()->toUrl($this->url()->fromRoute('frontend/'.$game->getClassType().'/result',array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
                     }
                 }else{
-                    $entry = $sg->findLastEntry($game, $user);
+                    if($game->getAnonymousAllowed() && $game->getAnonymousIdentifier() && isset($data[$game->getAnonymousIdentifier()])){
+                        if (hasReachedPlayLimit($game, $user, $data[$game->getAnonymousIdentifier()])){
+                            // the user has already taken part of this game and the participation limit has been reached
+                            $this->flashMessenger()->addMessage('Vous avez déjà participé');
+                            
+                            return $this->redirect()->toUrl($this->url()->fromRoute('frontend/'.$game->getClassType().'/result',array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+                        }
+                        $entry = $sg->findLastEntry($game, $user);
+                        $entry->setAnonymousIdentifier($data[$game->getAnonymousIdentifier()]);
+                    }
+                    
                 }
                 
                 $entry->setPlayerData($dataJson);
@@ -505,6 +520,7 @@ class GameController extends AbstractActionController
         $viewModel->setTerminal(true);
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
         $fbId = $this->params()->fromQuery('fbId');
+        $to = $this->params()->fromQuery('to');
         $user = $this->zfcUserAuthentication()->getIdentity();
         $sg = $this->getGameService();
 
@@ -520,7 +536,7 @@ class GameController extends AbstractActionController
             return false;
         }
 
-        $sg->postFbRequest($fbId, $game, $user, $entry);
+        $sg->postFbRequest($fbId, $game, $user, $entry, $to);
 
         return true;
 
@@ -658,11 +674,13 @@ class GameController extends AbstractActionController
      * @param unknown $lastEntry
      */
     public function sendMail($game, $user, $lastEntry, $prize = NULL){
-        if($user && $game->getMailWinner() && $lastEntry->getWinner()){
+        if(($user || ($game->getAnonymousAllowed() && $game->getAnonymousIdentifier())) && $game->getMailWinner() && $lastEntry->getWinner()){
+
             $this->getGameService()->sendResultMail($game, $user, $lastEntry, 'winner', $prize);
         }
 
-        if($user && $game->getMailLooser() && !$lastEntry->getWinner()){
+        if(($user || ($game->getAnonymousAllowed() && $game->getAnonymousIdentifier())) && $game->getMailLooser() && !$lastEntry->getWinner()){
+            
             $this->getGameService()->sendResultMail($game, $user, $lastEntry, 'looser');
         }
     }

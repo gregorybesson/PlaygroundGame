@@ -366,6 +366,16 @@ return array(
                                     )
                                 )
                             ),
+                            'fbrequest' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/fbrequest',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_quiz',
+                                        'action' => 'fbrequest'
+                                    )
+                                )
+                            ),
                             'tweet' => array(
                                 'type' => 'Literal',
                                 'options' => array(
@@ -513,6 +523,16 @@ return array(
                                     )
                                 )
                             ),
+                            'fbrequest' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/fbrequest',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_lottery',
+                                        'action' => 'fbrequest'
+                                    )
+                                )
+                            ),
                             'tweet' => array(
                                 'type' => 'Literal',
                                 'options' => array(
@@ -657,6 +677,16 @@ return array(
                                     'defaults' => array(
                                         'controller' => 'playgroundgame_instantwin',
                                         'action' => 'fbshare'
+                                    )
+                                )
+                            ),
+                            'fbrequest' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/fbrequest',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_instantwin',
+                                        'action' => 'fbrequest'
                                     )
                                 )
                             ),
@@ -894,6 +924,16 @@ return array(
                                     'defaults' => array(
                                         'controller' => 'playgroundgame_postvote',
                                         'action' => 'fbshare'
+                                    )
+                                )
+                            ),
+                            'fbrequest' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/fbrequest',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_postvote',
+                                        'action' => 'fbrequest'
                                     )
                                 )
                             ),
