@@ -726,8 +726,6 @@ class GameController extends AbstractActionController
         $this->addGaEvent($game);
 
         $this->customizeGameDesign($game);
-        $this->addColRight($game);
-        $this->addColLeft($game);
         
         // this is possible to create a specific game design in /design/frontend/default/custom. It will precede all others templates.
         $templatePathResolver = $this->getServiceLocator()->get('Zend\View\Resolver\TemplatePathStack');
@@ -743,6 +741,13 @@ class GameController extends AbstractActionController
             return $view;
         }
 
+        $this->layout()->setVariables(
+            array(
+                'game' => $game, 
+                'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+            )
+        );
+        
         $viewModel->setVariables($this->getShareData($game));
 
         return $viewModel;
@@ -764,24 +769,6 @@ class GameController extends AbstractActionController
         }
 
         return $view;
-    }
-
-    public function addColRight($game)
-    {
-        $colRight = new ViewModel();
-        $colRight->setTemplate($this->layout()->col_right);
-        $colRight->setVariables(array('game' => $game));
-
-        $this->layout()->addChild($colRight, 'column_right');
-    }
-
-    public function addColLeft($game)
-    {
-        $colLeft = new ViewModel();
-        $colLeft->setTemplate($this->layout()->col_right);
-        $colLeft->setVariables(array('game' => $game));
-
-        $this->layout()->addChild($colLeft, 'column_left');
     }
 
     public function addMetaBitly()
