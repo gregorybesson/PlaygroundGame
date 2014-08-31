@@ -33,7 +33,13 @@ return array(
     
         'guards' => array(
             'BjyAuthorize\Guard\Controller' => array(
+                array('controller' => 'playgroundgame',                     'roles' => array('guest', 'user')),
                 array('controller' => 'playgroundgame_game',                'roles' => array('guest', 'user')),
+                array('controller' => 'playgroundgame_lottery',             'roles' => array('guest', 'user')),
+                array('controller' => 'playgroundgame_quiz',                'roles' => array('guest', 'user')),
+                array('controller' => 'playgroundgame_postvote',            'roles' => array('guest', 'user')),
+                array('controller' => 'playgroundgame_instantwin',          'roles' => array('guest', 'user')),
+                array('controller' => 'playgroundgame_prizecategory',       'roles' => array('guest', 'user')),
                 array('controller' => 'playgroundgame_mission',             'roles' => array('guest', 'user')),
     
                 // Admin area
