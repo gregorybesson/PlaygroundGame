@@ -320,6 +320,7 @@ class QuizController extends GameController
             $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
             $user = $this->zfcUserAuthentication()->getIdentity();
             $game = $sg->checkGame($identifier);
+            // TODO : Remove this horrible thing
             $lastEntry = $sg->findLastInactiveEntry($game, $user);
             if ($lastEntry && $lastEntry->getWinner()) {
                 $bonusEntry = $sg->addAnotherChance($game, $user, 1);

@@ -817,10 +817,10 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         return $this->checkExistingEntry($game, $user, null, true);
     }
 
-    public function findLastInactiveEntry($game, $user)
+    public function findLastInactiveEntry($game, $user, $anonymousIdentifier = null)
     {
         
-        return $this->checkExistingEntry($game, $user, null, false, false);
+        return $this->checkExistingEntry($game, $user, $anonymousIdentifier, false, false);
     }
 
     public function findLastEntry($game, $user)
