@@ -451,7 +451,7 @@ class GameController extends AbstractActionController
                         // the user has already taken part of this game and the participation limit has been reached
                         $this->flashMessenger()->addMessage('Vous avez déjà participé');
                     
-                        return $this->redirect()->toUrl($this->frontendUrl()->fromRoute(''.$game->getClassType().'/result',array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+                        return $this->redirect()->toUrl($this->frontendUrl()->fromRoute($game->getClassType().'/result',array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
                     }
                 }else{
                     if($game->getAnonymousAllowed() && $game->getAnonymousIdentifier() && isset($data[$game->getAnonymousIdentifier()])){
@@ -459,7 +459,7 @@ class GameController extends AbstractActionController
                             // the user has already taken part of this game and the participation limit has been reached
                             $this->flashMessenger()->addMessage('Vous avez déjà participé');
                             
-                            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute(''.$game->getClassType().'/result',array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+                            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute($game->getClassType().'/result',array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
                         }
                         $entry = $sg->findLastEntry($game, $user);
                         $entry->setAnonymousIdentifier($data[$game->getAnonymousIdentifier()]);
@@ -470,7 +470,7 @@ class GameController extends AbstractActionController
                 $entry->setPlayerData($dataJson);
                 $sg->getEntryMapper()->update($entry);
 
-                return $this->redirect()->toUrl($this->frontendUrl()->fromRoute(''. $game->getClassType() .'/' . $game->nextStep($this->params('action')), array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)));
+                return $this->redirect()->toUrl($this->frontendUrl()->fromRoute($game->getClassType() .'/' . $game->nextStep($this->params('action')), array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)));
             }
         }
 
@@ -841,15 +841,15 @@ class GameController extends AbstractActionController
         }
 
         if ($game->getFbShareImage()) {
-            $fbShareImage = $this->url()->fromRoute('frontend', array('channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)) . $game->getFbShareImage();
+            $fbShareImage = $this->frontendUrl()->fromRoute('', array('channel' => ''), array('force_canonical' => true), false) . $game->getFbShareImage();
         } else {
-            $fbShareImage = $this->url()->fromRoute('frontend', array('channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)) . $game->getMainImage();
+            $fbShareImage = $this->frontendUrl()->fromRoute('', array('channel' => ''), array('force_canonical' => true), false) . $game->getMainImage();
         }
 
         $secretKey = strtoupper(substr(sha1(uniqid('pg_', true).'####'.time()),0,15));
 
         // Without bit.ly shortener
-        $socialLinkUrl = $this->frontendUrl()->fromRoute('' . $game->getClassType(), array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true));
+        $socialLinkUrl = $this->frontendUrl()->fromRoute($game->getClassType(), array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true));
         // With core shortener helper
         $socialLinkUrl = $this->shortenUrl()->shortenUrl($socialLinkUrl);
 
