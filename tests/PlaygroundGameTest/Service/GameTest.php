@@ -246,7 +246,12 @@ class GameTest extends \PHPUnit_Framework_TestCase
     	->expects($this->once())
     	->method('findOneBy')
     	->with($this->callback(function($o) {
-	        return !isset($o['active']);
+	        $ok = false;
+    	    if ($o['game']){
+    	        $game = $o['game'];
+    	        if (!$game->getActive()) $ok = true; 
+    	    }
+    		return $ok;
 	    }))
     	->will($this->returnValue($this->getMock('PlaygroundGame\Entity\Entry')));
 
@@ -270,7 +275,12 @@ class GameTest extends \PHPUnit_Framework_TestCase
     	->expects($this->once())
     	->method('findOneBy')
     	->with($this->callback(function($o) {
-    		return isset($o['game']['active']) && $o['game']['active'] === true;
+    	    $ok = false;
+    	    if ($o['game']){
+    	        $game = $o['game'];
+    	        if ($game->getActive()) $ok = true; 
+    	    }
+    		return $ok;
     	}))
     	->will($this->returnValue($this->getMock('PlaygroundGame\Entity\Entry')));
 
