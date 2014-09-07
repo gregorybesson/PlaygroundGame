@@ -44,6 +44,8 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
     protected $options;
 
     protected $playerformMapper;
+    
+    protected $anonymousIdentifier = null;
 
     /**
      *
@@ -701,15 +703,18 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      * @param string $user
      * @return boolean
      */
-    public function checkExistingEntry($game, $user = null, $anonymousIdentifier = null, $active = null, $bonus = null)
+    public function checkExistingEntry($game, $user = null, $active = null, $bonus = null)
     {
         $entry = false;
+        
         $search = array('game'  => $game);
+        
+        $session = new Container('anonymous_identifier');
 
         if ($user) {
             $search['user'] = $user;
-        } elseif(! is_null($anonymousIdentifier)){
-            $search['anonymousIdentifier'] = $anonymousIdentifier;
+        } elseif($this->getAnonymousIdentifier()){
+            $search['anonymousIdentifier'] = $this->getAnonymousIdentifier();
             $search['user'] = Null;
         } else {
             $search['anonymousId'] = $this->getAnonymousId();
@@ -743,6 +748,24 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
         return false;
     }
+    
+    public function getAnonymousIdentifier()
+    {
+        if(is_null($this->anonymousIdentifier)){
+            // If on Facebook, check if you have to be a FB fan to play the game
+            $session = new Container('anonymous_identifier');
+            
+            if ($session->offsetExists('anonymous_identifier')) {
+                $this->anonymousIdentifier = $session->offsetGet('anonymous_identifier');
+                
+            } else{
+
+                $this->anonymousIdentifier = false;
+            }
+        }
+    
+        return $this->anonymousIdentifier;
+    }
 
     /**
      * errors :
@@ -753,15 +776,17 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      * @param PlaygroundUser\Entity\UserInterface $user
      * @return number unknown
      */
-    public function play($game, $user, $anonymousIdentifier = null)
+    public function play($game, $user)
     {
 
         // certaines participations peuvent rester ouvertes. On autorise alors le joueur à reprendre là ou il en était
         // par exemple les postvote...
-        $entry = $this->checkExistingEntry($game, $user, $anonymousIdentifier, true);
+        $entry = $this->checkExistingEntry($game, $user, true);
 
         if (! $entry) {
-            if ($this->hasReachedPlayLimit($game, $user, $anonymousIdentifier)){
+
+            if ($this->hasReachedPlayLimit($game, $user)){
+
                 return false;
             }
 
@@ -771,7 +796,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             $entry->setPoints(0);
             $entry->setIp($this->getIp());
             $entry->setAnonymousId($this->getAnonymousId());
-            if(! is_null($anonymousIdentifier)) $entry->setAnonymousIdentifier($anonymousIdentifier);
+            if($this->getAnonymousIdentifier()) $entry->setAnonymousIdentifier($this->getAnonymousIdentifier());
 
             $entry = $this->getEntryMapper()->insert($entry);
             $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array(
@@ -784,13 +809,13 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         return $entry;
     }
 
-    public function hasReachedPlayLimit($game, $user, $anonymousIdentifier = null)
+    public function hasReachedPlayLimit($game, $user)
     {
         // Is there a limitation on the game ?
         $limitAmount = $game->getPlayLimit();
         if ($limitAmount) {
             $limitScale = $game->getPlayLimitScale();
-            $userEntries = $this->findLastEntries($game, $user, $anonymousIdentifier, $limitScale);
+            $userEntries = $this->findLastEntries($game, $user, $limitScale);
 
             // player has reached the game limit
             if ($userEntries >= $limitAmount) {
@@ -800,12 +825,14 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         return false;
     }
     
-    public function findLastEntries($game, $user, $anonymousIdentifier = null, $limitScale)
+    public function findLastEntries($game, $user, $limitScale)
     {
         if ($user) {
+
             return $this->getEntryMapper()->findLastEntriesByUser($game, $user, $limitScale);
-        } elseif(! is_null($anonymousIdentifier)) {
-            return $this->getEntryMapper()->findLastEntriesByAnonymousIdentifier($game, $anonymousIdentifier, $limitScale);
+        } elseif($this->getAnonymousIdentifier()) {
+
+            return $this->getEntryMapper()->findLastEntriesByAnonymousIdentifier($game, $this->getAnonymousIdentifier(), $limitScale);
         } else {
             return $this->getEntryMapper()->findLastEntriesByIp($game, $this->getIp(), $limitScale);
         }
@@ -813,20 +840,20 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
     public function findLastActiveEntry($game, $user)
     {
-           
-        return $this->checkExistingEntry($game, $user, null, true);
+
+        return $this->checkExistingEntry($game, $user, true);
     }
 
-    public function findLastInactiveEntry($game, $user, $anonymousIdentifier = null)
+    public function findLastInactiveEntry($game, $user)
     {
         
-        return $this->checkExistingEntry($game, $user, $anonymousIdentifier, false, false);
+        return $this->checkExistingEntry($game, $user, false, false);
     }
 
     public function findLastEntry($game, $user)
     {
 
-        return $this->checkExistingEntry($game, $user, null, null, false);
+        return $this->checkExistingEntry($game, $user, null, false);
     }
 
     // TODO : Simplify this method !
