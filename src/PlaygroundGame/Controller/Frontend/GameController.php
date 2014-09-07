@@ -51,6 +51,13 @@ class GameController extends AbstractActionController
             return $this->redirect()->toUrl($url);
         }
 
+        // If an entry has already been done during this session, I reset the anonymous_identifier cookie
+        // so that another person can play the same game (if game conditions are fullfilled)
+        $session = new Container('anonymous_identifier');
+        if ($session->offsetExists('anonymous_identifier')) {
+            $session->offsetUnset('anonymous_identifier');
+        }
+        
         return $this->forward()->dispatch('playgroundgame_'.$game->getClassType(), array('controller' => 'playgroundgame_'.$game->getClassType(), 'action' => $game->firstStep(), 'id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')));
 
     }
@@ -445,26 +452,37 @@ class GameController extends AbstractActionController
                     
                     if($game->getAnonymousAllowed() && $game->getAnonymousIdentifier() && isset($data[$game->getAnonymousIdentifier()])){
                         $anonymousIdentifier = $data[$game->getAnonymousIdentifier()];
+                        
+                        // I must transmit this info during the whole game workflow
+                        $session = new Container('anonymous_identifier');
+                        $session->offsetSet('anonymous_identifier',  $anonymousIdentifier);
                     }
-                    $entry = $sg->play($game, $user, $anonymousIdentifier);
+                    $entry = $sg->play($game, $user);
                     if (!$entry) {
                         // the user has already taken part of this game and the participation limit has been reached
                         $this->flashMessenger()->addMessage('Vous avez déjà participé');
                     
-                        return $this->redirect()->toUrl($this->frontendUrl()->fromRoute($game->getClassType().'/result',array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))). '?anonymous_identifier=' . $anonymousIdentifier);
+                        return $this->redirect()->toUrl($this->frontendUrl()->fromRoute($game->getClassType().'/result',array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
                     }
                 }else{
                     if($game->getAnonymousAllowed() && $game->getAnonymousIdentifier() && isset($data[$game->getAnonymousIdentifier()])){
-                        if (hasReachedPlayLimit($game, $user, $data[$game->getAnonymousIdentifier()])){
+                        
+                        $anonymousIdentifier = $data[$game->getAnonymousIdentifier()];
+                        
+                        // I'm looking for an entry without anonymousIdentifier (the active entry in fact).
+                        $entry = $sg->findLastEntry($game, $user);
+                        $entry->setAnonymousIdentifier($anonymousIdentifier);
+                        
+                        // I must transmit this info during the whole game workflow
+                        $session = new Container('anonymous_identifier');
+                        $session->offsetSet('anonymous_identifier',  $anonymousIdentifier);
+                        if (hasReachedPlayLimit($game, $user)){
                             // the user has already taken part of this game and the participation limit has been reached
                             $this->flashMessenger()->addMessage('Vous avez déjà participé');
                             
                             return $this->redirect()->toUrl($this->frontendUrl()->fromRoute($game->getClassType().'/result',array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
                         }
-                        $entry = $sg->findLastEntry($game, $user);
-                        $entry->setAnonymousIdentifier($data[$game->getAnonymousIdentifier()]);
                     }
-                    
                 }
                 
                 $entry->setPlayerData($dataJson);
