@@ -6,6 +6,7 @@
  */
 namespace PlaygroundGame;
 
+use Zend\ModuleManager\ModuleManager;
 use Zend\Session\Container;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
@@ -13,6 +14,72 @@ use Zend\Validator\AbstractValidator;
 
 class Module
 {
+    public function init(ModuleManager $manager)
+    {
+    
+        $eventManager = $manager->getEventManager();
+    
+        /*
+         * This event change the config before it's cached
+        * The change will apply to 'template_path_stack' and 'assetic_configuration'
+        * These 2 config take part in the Playground Theme Management
+        */
+        $eventManager->attach(\Zend\ModuleManager\ModuleEvent::EVENT_MERGE_CONFIG, array($this, 'onMergeConfig'), 50);
+    }
+    
+    /**
+     * This method is called only when the config is not cached.
+     * @param Event $e
+     */
+    public function onMergeConfig($e)
+    {
+
+        $config = $e->getConfigListener()->getMergedConfig(false);
+    
+        // If custom games need a specific route. I create these routes
+        if(isset($config['custom_games'])){
+            foreach($config['custom_games'] as $k=>$v){
+                if(isset($v['url'])){
+                    // I take the url model of the game type
+                    $routeModel = $config['router']['routes']['frontend']['child_routes'][$v['classType']];
+        
+                    // Changing the root of the route
+                    $routeModel['options']['route'] = '/';
+        
+                    // and removing the trailing slash for each subsequent route
+                    foreach($routeModel['child_routes'] as $id=>$ar){
+                        $routeModel['child_routes'][$id]['options']['route'] = ltrim($ar['options']['route'], '/');
+                    }
+        
+                    // then create the hostname route + appending the model updated
+                    $config['router']['routes']['frontend.'.$v['url']] = array(
+                        'type' => 'Zend\Mvc\Router\Http\Hostname',
+                        'options' => array(
+                            'route' => $v['url'],
+                            'defaults' => array(
+                                'id' => $k,
+                                'channel'=> 'embed'
+                            )
+                        ),
+                        'may_terminate' => true
+                    );
+                    $config['router']['routes']['frontend.'.$v['url']]['child_routes'][$v['classType']] = $routeModel;
+        
+                    $coreLayoutModel = $config['core_layout']['frontend'];
+                    $config['core_layout']['frontend.'.$v['url']] = $coreLayoutModel;
+                }
+                if(isset($v['assetic_configuration'])){
+                    foreach($v['assetic_configuration']['modules'] as $m => $d){
+                        $v['assetic_configuration']['modules'][$m]['root_path'][] = __DIR__ . '/../../../../../design/frontend/'. $parentTheme[0] .'/'. $parentTheme[1] . '/custom/' . $k . '/assets';
+                    }
+                    $config['assetic_configuration'] = array_replace_recursive($config['assetic_configuration'], $v['assetic_configuration'] );
+                }
+            }
+        }
+
+        $e->getConfigListener()->setMergedConfig($config);
+    }
+            
     public function onBootstrap(MvcEvent $e)
     {
         $serviceManager = $e->getApplication()->getServiceManager();
@@ -46,16 +113,93 @@ class Module
         if ((get_class($e->getRequest()) == 'Zend\Console\Request')) {
             return;
         }
-
-        // the Facebook Container is created and updated through PlaygroundCore which detects a call from Facebook
-        // DEPRECATED : REPLACED BY channel route !
-        /*$eventManager->attach("dispatch", function($e) {
-        	$session = new Container('facebook');
-        	if ($session->offsetExists('signed_request')){
-        		$viewModel = $e->getViewModel()->setTemplate('layout/facebook');
-        		$viewModel->facebooktemplate = true;
-        	}
-        });*/
+            
+        /**
+         * This listener gives the possibility to select the layout on module / controller / action level 
+         * This is triggered after the PlaygroundDesign one so that it's the last triggered for games.
+         */
+        $e->getApplication()->getEventManager()->getSharedManager()->attach('Zend\Mvc\Controller\AbstractActionController', 'dispatch', function ($e) {
+            $config     = $e->getApplication()->getServiceManager()->get('config');
+            if (isset($config['core_layout'])) {
+                $controller      = $e->getTarget();
+                $controllerClass = get_class($controller);
+                $moduleName      = strtolower(substr($controllerClass, 0, strpos($controllerClass, '\\')));
+                $match           = $e->getRouteMatch();
+                $routeName       = $match->getMatchedRouteName();
+                $areaName        = (strpos($routeName, '/'))?substr($routeName, 0, strpos($routeName, '/')):$routeName;
+                $controllerName  = $match->getParam('controller', 'not-found');
+                $actionName      = $match->getParam('action', 'not-found');
+                $channel         = $match->getParam('channel', 'not-found');
+                $slug            = $match->getParam('id', '');
+                $viewModel       = $e->getViewModel();
+        
+                // I add this area param so that it can be used by Controller plugin frontendUrl
+                // and View helper frontendUrl
+                $match->setParam('area', $areaName);
+        
+                /*
+                echo '$controllerClass : ' . $controllerClass . '<br/>';
+                echo '$moduleName : ' .$moduleName. '<br/>';
+                echo '$routeName : '.$routeName. '<br/>';
+                echo '$areaName : '.$areaName. '<br/>';
+                echo '$controllerName : ' .$controllerName. '<br/>';
+                echo '$actionName : ' . $actionName. '<br/>';
+                echo '$channel : ' .$channel. '<br/>';
+                echo '$slug : ' .$slug. '<br/>';
+                die('AVANT');
+                */
+                 
+                /**
+                 * Assign the correct layout
+                */
+                if(!empty($slug)){
+                    if (isset($config['custom_games'][$slug]['core_layout'][$areaName]['modules'][$moduleName]['controllers'][$controllerName]['actions'][$actionName]['channel'][$channel]['layout'])) {
+                        //print_r($config['custom_games'][$slug]['core_layout'][$areaName]['modules'][$moduleName]['controllers'][$controllerName]['actions'][$actionName]['channel'][$channel]['layout']);
+                        $controller->layout($config['custom_games'][$slug]['core_layout'][$areaName]['modules'][$moduleName]['controllers'][$controllerName]['actions'][$actionName]['channel'][$channel]['layout']);
+                    } elseif (isset($config['custom_games'][$slug]['core_layout'][$areaName]['modules'][$moduleName]['controllers'][$controllerName]['actions'][$actionName]['layout'])) {
+                        //print_r($config['custom_games'][$slug]['core_layout'][$areaName]['modules'][$moduleName]['controllers'][$controllerName]['actions'][$actionName]['layout']);
+                        $controller->layout($config['custom_games'][$slug]['core_layout'][$areaName]['modules'][$moduleName]['controllers'][$controllerName]['actions'][$actionName]['layout']);
+                    } elseif (isset($config['custom_games'][$slug]['core_layout'][$areaName]['modules'][$moduleName]['controllers'][$controllerName]['channel'][$channel]['layout'])) {
+                        //print_r($config['custom_games'][$slug]['core_layout'][$areaName]['modules'][$moduleName]['controllers'][$controllerName]['channel'][$channel]['layout']);
+                        $controller->layout($config['custom_games'][$slug]['core_layout'][$areaName]['modules'][$moduleName]['controllers'][$controllerName]['channel'][$channel]['layout']);
+                    } elseif (isset($config['custom_games'][$slug]['core_layout'][$areaName]['modules'][$moduleName]['controllers'][$controllerName]['layout'])) {
+                        //print_r($config['custom_games'][$slug]['core_layout'][$areaName]['modules'][$moduleName]['controllers'][$controllerName]['layout']);
+                        $controller->layout($config['custom_games'][$slug]['core_layout'][$areaName]['modules'][$moduleName]['controllers'][$controllerName]['layout']);
+                    } elseif (isset($config['custom_games'][$slug]['core_layout'][$areaName]['modules'][$moduleName]['channel'][$channel]['layout'])) {
+                        //print_r($config['custom_games'][$slug]['core_layout'][$areaName]['modules'][$moduleName]['channel'][$channel]['layout']);
+                        $controller->layout($config['custom_games'][$slug]['core_layout'][$areaName]['modules'][$moduleName]['channel'][$channel]['layout']);
+                    } elseif (isset($config['custom_games'][$slug]['core_layout'][$areaName]['modules'][$moduleName]['layout'])) {
+                        //print_r($config['custom_games'][$slug]['core_layout'][$areaName]['modules'][$moduleName]['layout']);
+                        $controller->layout($config['custom_games'][$slug]['core_layout'][$areaName]['modules'][$moduleName]['layout']);
+                    } elseif (isset($config['custom_games'][$slug]['core_layout'][$areaName]['channel'][$channel]['layout'])) {
+                        //print_r($config['custom_games'][$slug]['core_layout'][$areaName]['channel'][$channel]['layout']);
+                        $controller->layout($config['custom_games'][$slug]['core_layout'][$areaName]['channel'][$channel]['layout']);
+                    } elseif (isset($config['custom_games'][$slug]['core_layout'][$areaName]['layout'])) {
+                        $controller->layout($config['custom_games'][$slug]['core_layout'][$areaName]['layout']);
+                    }
+            
+                    /**
+                     * Create variables attached to layout containing path views
+                     * cascading assignment is managed
+                     */
+                    if (isset($config['custom_games'][$slug]['core_layout'][$areaName]['modules'][$moduleName]['children_views'])) {
+                        foreach ($config['custom_games'][$slug]['core_layout'][$areaName]['modules'][$moduleName]['children_views'] as $k => $v) {
+                            $viewModel->$k  = $v;
+                        }
+                    }
+                    if (isset($config['custom_games'][$slug]['core_layout'][$areaName]['modules'][$moduleName]['controllers'][$controllerName]['children_views'])) {
+                        foreach ($config['custom_games'][$slug]['core_layout'][$areaName]['modules'][$moduleName]['controllers'][$controllerName]['children_views'] as $k => $v) {
+                            $viewModel->$k  = $v;
+                        }
+                    }
+                    if (isset($config['custom_games'][$slug]['core_layout'][$areaName]['modules'][$moduleName]['controllers'][$controllerName]['actions'][$actionName]['children_views'])) {
+                        foreach ($config['custom_games'][$slug]['core_layout'][$areaName]['modules'][$moduleName]['controllers'][$controllerName]['actions'][$actionName]['children_views'] as $k => $v) {
+                            $viewModel->$k  = $v;
+                        }
+                    }
+                }
+            }
+        }, 10);
 
     }
 
