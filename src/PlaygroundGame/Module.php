@@ -36,7 +36,11 @@ class Module
 
         $config = $e->getConfigListener()->getMergedConfig(false);
         
-        $parentTheme = array($config['design']['frontend']['package'], $config['design']['frontend']['theme']);
+        if(isset($config['design']) && isset($config['design']['frontend'])){
+            $parentTheme = array($config['design']['frontend']['package'], $config['design']['frontend']['theme']);
+        } else {
+            $parentTheme = array('playground','base');
+        }
     
         // If custom games need a specific route. I create these routes
         if(isset($config['custom_games'])){
