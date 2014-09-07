@@ -246,7 +246,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
     	->expects($this->once())
     	->method('findOneBy')
     	->with($this->callback(function($o) {
-	        return !isset($o['game']['active']);
+	        return !isset($o['active']);
 	    }))
     	->will($this->returnValue($this->getMock('PlaygroundGame\Entity\Entry')));
 
