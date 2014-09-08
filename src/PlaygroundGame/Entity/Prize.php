@@ -47,9 +47,9 @@ class Prize {
 	protected $prizeCategory;
 
 	/**
-	 * @ORM\Column(type="text", nullable=true)
+	 * @ORM\Column(name="prize_content",type="text", nullable=true)
 	 */
-	protected $content;
+	protected $prizeContent;
 
 	/**
 	 * @ORM\Column(type="integer", nullable=false)
@@ -185,19 +185,19 @@ class Prize {
 	}
 
 	/**
-	 * @return the $content
+	 * @return the $prizeContent
 	 */
-	public function getContent()
+	public function getPrizeContent()
 	{
-		return $this->content;
+		return $this->prizeContent;
 	}
 
 	/**
 	 * @param field_type $content
 	 */
-	public function setContent($content)
+	public function setPrizeContent($prizeContent)
 	{
-		$this->content = $content;
+		$this->prizeContent = $prizeContent;
 
 		return $this;
 	}
@@ -329,8 +329,8 @@ class Prize {
 	 */
 	public function populate($data = array())
 	{
-		if (isset($data['content']) && $data['content'] != null) {
-			$this->content = $data['content'];
+		if (isset($data['prizeContent']) && $data['prizeContent'] != null) {
+			$this->prizeContent = $data['prizeContent'];
 		}
 
 		if (isset($data['title']) && $data['title'] != null) {

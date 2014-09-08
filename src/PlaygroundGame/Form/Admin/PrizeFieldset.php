@@ -52,14 +52,14 @@ class PrizeFieldset extends Fieldset
 
         $this->add(array(
         	'type' => 'Zend\Form\Element\Textarea',
-        	'name' => 'content',
+        	'name' => 'prizeContent',
        		'options' => array(
        			'label' => $translator->translate('Description', 'playgroundgame')
        		),
        		'attributes' => array(
        			'cols' => '10',
        			'rows' => '10',
-            'id' =>'content',
+            'id' =>'prizeContent',
        		)
         ));
         
