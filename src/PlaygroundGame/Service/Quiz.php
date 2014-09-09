@@ -123,7 +123,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
             ErrorHandler::stop(true);
         }
 
-        if($data['delete_image'] && empty($data['upload_image']['tmp_name'])) {
+        if(isset($data['delete_image']) && empty($data['upload_image']['tmp_name'])) {
             ErrorHandler::start();
             $image = $question->getImage();
             $image = str_replace($media_url, '', $image);
