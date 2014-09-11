@@ -198,7 +198,7 @@ class Entry implements ServiceLocatorAwareInterface
         $query->setParameter('date', $dateLimit);
     
         $total = $query->getSingleScalarResult();
-    
+
         return $total;
     }
     
