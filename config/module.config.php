@@ -55,14 +55,11 @@ return array(
     ),
     'assetic_configuration' => array(
         'modules' => array(
-            'lib_game' => array(
-                // module root path for your css and js files
-                'root_path' => __DIR__ . '/../view/lib',
-                // collection of assets
+            'lib' => array(
                 'collections' => array(
-                    'admin_areapicker_css' => array(
+                    /*'admin_areapicker_css' => array(
                         'assets' => array(
-                            'css/playground/areapicker/style.min.css'
+                            __DIR__ . '/../view/lib/css/playground/areapicker/style.min.css'
                         ),
                         'filters' => array(
                             'CssRewriteFilter' => array(
@@ -73,32 +70,32 @@ return array(
                             'output' => 'zfcadmin/css/admin_areapicker.css'
                         )
                     ),
-                    'head_admin_areapicker_js' => array(
+                    /*'head_admin_areapicker_js' => array(
                         'assets' => array(
-                            'js/playground/jquery.min.js',
-                            'js/playground/areapicker/app.js',
-                            'js/playground/areapicker/config.js',
-                            'js/playground/areapicker/selection.js',
-                            'js/easyxdm/easyxdm.min.js'
+                            __DIR__ . '/../view/lib/js/playground/jquery.min.js',
+                            __DIR__ . '/../view/lib/js/playground/areapicker/app.js',
+                            __DIR__ . '/../view/lib/js/playground/areapicker/config.js',
+                            __DIR__ . '/../view/lib/js/playground/areapicker/selection.js',
+                            __DIR__ . '/../view/lib/js/easyxdm/easyxdm.min.js'
                         ),
                         'filters' => array(),
                         'options' => array(
                             'output' => 'zfcadmin/js/head_admin_areapicker.js'
                         )
-                    ),
+                    ),*/
                     'head_areapicker_cors_js' => array(
                         'assets' => array(
-                            'js/playground/areapicker/cors.js'
+                            __DIR__ . '/../view/lib/js/playground/areapicker/cors.js'
                         ),
                         'filters' => array(),
                         'options' => array(
                             'move_raw' => true,
-                            'output' => 'lib'
+                            'output' => 'lib/js/playground/areapicker'
                         )
                     ),
                     'head_admin_deezer_js' => array(
                         'assets' => array(
-                            'js/deezer/dz.min.js'
+                            __DIR__ . '/../view/lib/js/deezer/dz.min.js'
                         ),
                         'filters' => array(),
                         'options' => array(
@@ -107,7 +104,7 @@ return array(
                     ),
                     'admin_deezer_js' => array(
                         'assets' => array(
-                            'js/deezer/api-deezer.js'
+                            __DIR__ . '/../view/lib/js/deezer/api-deezer.js'
                         ),
                         'filters' => array(),
                         'options' => array(
@@ -117,7 +114,7 @@ return array(
 
                     'head_frontend_deezer_js' => array(
                         'assets' => array(
-                            'js/deezer/dz.min.js'
+                            __DIR__ . '/../view/lib/js/deezer/dz.min.js'
                         ),
                         'filters' => array(),
                         'options' => array(
@@ -126,7 +123,7 @@ return array(
                     ),
                     'frontend_deezer_js' => array(
                         'assets' => array(
-                            'js/deezer/api-deezer.js'
+                            __DIR__ . '/../view/lib/js/deezer/api-deezer.js'
                         ),
                         'filters' => array(),
                         'options' => array(

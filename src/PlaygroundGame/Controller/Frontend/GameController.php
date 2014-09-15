@@ -914,52 +914,8 @@ class GameController extends AbstractActionController
     		return $this->notFoundAction();
     	}
 
-    	// If this game has a specific layout...
-    	if ($game->getLayout()) {
-    		$layoutViewModel = $this->layout();
-    		$layoutViewModel->setTemplate($game->getLayout());
-    	}
-
-    	// If this game has a specific stylesheet...
-    	if ($game->getStylesheet()) {
-    		$this->getViewHelper('HeadLink')->appendStylesheet($this->getRequest()->getBaseUrl(). '/' . $game->getStylesheet());
-    	}
-
-    	/*$adserving = $this->getOptions()->getAdServing();
-    	$adserving['cat2'] = 'game';
-    	$adserving['cat3'] = '&EASTgameid='.$game->getId();*/
-    	// I change the label in the breadcrumb ...
-    	$this->layout()->setVariables(
-			array(
-				'breadcrumbTitle' => $game->getTitle(),
-				//'adserving'       => $adserving,
-				'currentPage' => array(
-						'pageGames' => 'games',
-						'pageWinners' => ''
-				),
-                'headParams' => array(
-                    'headTitle' => $game->getTitle(),
-                    'headDescription' => $game->getTitle(),
-                ),
-			)
-    	);
-
-    	$bitlyclient = $this->getOptions()->getBitlyUrl();
-    	$bitlyuser = $this->getOptions()->getBitlyUsername();
-    	$bitlykey = $this->getOptions()->getBitlyApiKey();
-
-    	$this->getViewHelper('HeadMeta')->setProperty('bt:client', $bitlyclient);
-    	$this->getViewHelper('HeadMeta')->setProperty('bt:user', $bitlyuser);
-    	$this->getViewHelper('HeadMeta')->setProperty('bt:key', $bitlykey);
-
-    	// right column
-    	$column = new ViewModel();
-    	$column->setTemplate($this->layout()->col_right);
-    	$column->setVariables(array('game' => $game));
-
-    	$this->layout()->addChild($column, 'column_right');
-
-    	$viewModel = new ViewModel(
+    	$viewModel = $this->buildView($game);
+    	$viewModel->setVariables(
     		array(
     			'game'             => $game,
     			'flashMessages'    => $this->flashMessenger()->getMessages(),
@@ -972,64 +928,26 @@ class GameController extends AbstractActionController
     public function prizeAction()
     {
     	$identifier = $this->getEvent()->getRouteMatch()->getParam('id');
+    	$prizeIdentifier = $this->getEvent()->getRouteMatch()->getParam('prize');
+    	
     	$user = $this->zfcUserAuthentication()->getIdentity();
     	$sg = $this->getGameService();
+    	$sp = $this->getPrizeService();
 
     	$game = $sg->checkGame($identifier);
     	if (!$game) {
     		return $this->notFoundAction();
     	}
 
-    	$prizeIdentifier = $this->getEvent()->getRouteMatch()->getParam('prize');
-		$sp = $this->getPrizeService();
-
 		$prize = $sp->getPrizeMapper()->findByIdentifier($prizeIdentifier);
+		
 		if (!$prize) {
 			return $this->notFoundAction();
 		}
 
-    	// If this game has a specific layout...
-    	if ($game->getLayout()) {
-    		$layoutViewModel = $this->layout();
-    		$layoutViewModel->setTemplate($game->getLayout());
-    	}
 
-    	// If this game has a specific stylesheet...
-    	if ($game->getStylesheet()) {
-    		$this->getViewHelper('HeadLink')->appendStylesheet($this->getRequest()->getBaseUrl(). '/' . $game->getStylesheet());
-    	}
-
-    	// I change the label in the breadcrumb ...
-    	$this->layout()->setVariables(
-    			array(
-    					'breadcrumbTitle' => $game->getTitle(),
-    					'currentPage' => array(
-    							'pageGames' => 'games',
-    							'pageWinners' => ''
-    					),
-                        'headParams' => array(
-                            'headTitle' => $game->getTitle(),
-                            'headDescription' => $game->getTitle(),
-                        ),
-    			)
-    	);
-
-    	$bitlyclient = $this->getOptions()->getBitlyUrl();
-    	$bitlyuser = $this->getOptions()->getBitlyUsername();
-    	$bitlykey = $this->getOptions()->getBitlyApiKey();
-
-    	$this->getViewHelper('HeadMeta')->setProperty('bt:client', $bitlyclient);
-    	$this->getViewHelper('HeadMeta')->setProperty('bt:user', $bitlyuser);
-    	$this->getViewHelper('HeadMeta')->setProperty('bt:key', $bitlykey);
-
-    	// right column
-    	$column = new ViewModel();
-    	$column->setTemplate($this->layout()->col_right);
-    	$column->setVariables(array('game' => $game));
-
-    	$this->layout()->addChild($column, 'column_right');
-
-    	$viewModel = new ViewModel(
+    	$viewModel = $this->buildView($game);
+    	$viewModel->setVariables(
     		array(
     			'game'             => $game,
     			'prize'     	   => $prize,
