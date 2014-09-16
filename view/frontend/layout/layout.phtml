@@ -1,0 +1,31 @@
+<?php echo $this->doctype(); ?>
+<?php $this->plugin('translate')->setTranslatorTextDomain('default');// Pour le texte ?>
+<?php
+$children = $this->viewModel()
+    ->getCurrent()
+    ->getChildren();
+$ourView  = $children[0];
+?>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
+    <head></head>
+    <body class="<?php echo $this->bodyCss ?>">
+        <div id="container">
+            <div id="fb-root"></div>
+    		<div id="content" class="row-fluid">
+                <!-- CONTENT PAGE -->
+                <div id="containerpage">
+	                <?php if (isset($ourView->flashMessages) && count($ourView->flashMessages)) : ?>
+	                <ul class="flashMessages">
+	                    <?php foreach ($ourView->flashMessages as $fMessage) : ?>
+	                    <li><?php echo $this->translate($fMessage); ?></li>
+	                    <?php endforeach; ?>
+	                </ul>
+	                <?php endif; ?>
+
+                	<?php echo $this->content; ?>
+                </div><!-- END CONTENT PAGE -->
+            </div><!-- END CONTENT -->
+        </div>
+        <?php echo $this->inlineScript() ?>
+    </body>
+</html>
