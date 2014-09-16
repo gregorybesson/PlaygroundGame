@@ -251,6 +251,17 @@ return array(
                 ),
                 'may_terminate' => true,
                 'child_routes' => array(
+                    'pagination' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => '[:p]',
+                            'defaults' => array(
+                                'controller' => 'playgroundgame',
+                                'action'     => 'index',
+                            ),
+                            'constraints' => array('p' => '[0-9]*'),
+                        ),
+                    ),
                     'gameslist' => array(
                         'type' => 'Zend\Mvc\Router\Http\Literal',
                         'options' => array(
