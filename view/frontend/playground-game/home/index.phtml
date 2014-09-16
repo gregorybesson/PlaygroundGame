@@ -1,0 +1,13 @@
+<?php $this->plugin('translate')->setTranslatorTextDomain('playgrounddesign');// Pour le texte ?>
+<?php //echo $this->partialLoop('application/index/partial/item.phtml', $this->games) ?>
+
+<?php foreach($this->items as $item):?>
+    <?php if(! $item instanceof PlaygroundCms\Entity\Page):?>
+        <?php $this->partial()->setObjectKey('game')?>
+        <?php echo $this->partial('playground-game/partial/game.phtml', array('game' => $item, 'channel' => $this->channel)) ?>
+    <?php else:?>
+        <?php $this->partial()->setObjectKey('page')?>
+        <?php echo $this->partial('playground-cms/page/partial/page.phtml', array('page' => $item, 'channel' => $this->channel)) ?>
+    <?php endif;?>
+<?php endforeach;?>
+<?php echo $this->paginationControl($this->items, 'Sliding', 'playground-game/partial/pagination.phtml', array('url' => 'pagination')); ?>
