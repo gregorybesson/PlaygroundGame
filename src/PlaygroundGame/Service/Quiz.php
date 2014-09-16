@@ -65,9 +65,12 @@ class Quiz extends Game implements ServiceManagerAwareInterface
 
         $question->setQuiz($quiz);
 
-        // Max points and correct answers calculation for the question
-        if(!$question = $this->calculateMaxAnswersQuestion($question)) {
-            return false;
+        // If question is a prediction, no need to calculate max good answers
+        if (!$question->getPrediction()){
+            // Max points and correct answers calculation for the question
+            if(!$question = $this->calculateMaxAnswersQuestion($question)) {
+                return false;
+            }
         }
 
         // Max points and correct answers recalculation for the quiz
@@ -110,9 +113,12 @@ class Quiz extends Game implements ServiceManagerAwareInterface
             return false;
         }
 
-        // Max points and correct answers calculation for the question
-        if(!$question = $this->calculateMaxAnswersQuestion($question)) {
-            return false;
+        // If question is a prediction, no need to calculate max good answers
+        if (!$question->getPrediction()){
+            // Max points and correct answers calculation for the question
+            if(!$question = $this->calculateMaxAnswersQuestion($question)) {
+                return false;
+            }
         }
 
         if (!empty($data['upload_image']['tmp_name'])) {
