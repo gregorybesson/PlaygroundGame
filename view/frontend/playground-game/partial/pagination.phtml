@@ -1,0 +1,42 @@
+<?php $this->plugin('translate')->setTranslatorTextDomain('playgrounddesign');// Pour le texte ?>
+<?php if ($this->pageCount && ($this->pageCount > 1)): ?>
+    <div class="pagination">
+        <ul class="pagination">
+
+    		<li<?php echo ($this->first != $this->current) ? '' : ' class="disabled"'; ?>>
+    		    <a class="first<?php echo (isset($this->previous)) ? '' : ' inactive'; ?>" href="<?php echo $this->frontendUrl(''.$this->url, array('p' => $this->first, 'channel' => $this->channel)); ?>">&laquo;&laquo;</a>
+    		</li>
+    		<li<?php echo (isset($this->previous)) ? '' : ' class="disabled"'; ?>>
+                <a class="prev<?php echo (isset($this->previous)) ? '' : ' inactive'; ?>" href="<?php echo $this->frontendUrl(''.$this->url, array('p' => $this->previous, 'channel' => $this->channel)); ?>">&laquo;</a>
+            </li>
+
+    		<?php foreach ($this->pagesInRange as $page): ?>
+            <li<?php echo ($page == $this->current) ? ' class="active"' : ''; ?>>
+                <a href="<?php echo $this->frontendUrl(''.$this->url, array('p' => $page, 'channel' => $this->channel)); ?>">
+                    <?php echo $page; ?>
+                </a>
+            </li>
+            <?php endforeach; ?>
+
+            <li<?php echo (isset($this->next)) ? '' : ' class="disabled"'; ?>>
+                <a class="next<?php echo (isset($this->next)) ? '' : ' inactive'; ?>" href="<?php echo $this->frontendUrl($this->url, array('p' => $this->next, 'channel' => $this->channel)); ?>">&raquo;</a>
+            </li>
+            
+    		<li<?php echo ($this->last != $this->current) ? '' : ' class="disabled"'; ?>>
+                <a class="last<?php echo (isset($this->next)) ? '' : ' inactive'; ?>" href="<?php echo $this->frontendUrl($this->url, array('p' => $this->last, 'channel' => $this->channel)); ?>">&raquo;&raquo;</a>
+            </li>
+    		
+    	</ul>
+    </div>
+<?php endif; ?>
+
+<?php
+$script = $this->inlineScript();
+$script->appendScript(<<<'EOT'
+    
+$(".pagination .disabled a").click(function() {
+  return false;
+});
+
+EOT
+);
