@@ -192,15 +192,7 @@ return array(
                             )
                         ),
                         'playgroundgame' => array(
-                            'layout' => 'layout/1column-custom.phtml',
-                            'children_views' => array(
-                                'col_right' => 'playground-game/quiz/col-quiz.phtml.phtml'
-                            ),
-                            'actions' => array(
-                                'index' => array(
-                                    'layout' => 'layout/game-2columns-right.phtml'
-                                )
-                            )
+                            'layout' => 'layout/2columns-right',
                         )
                     )
                 )
@@ -230,7 +222,7 @@ return array(
 
     'controllers' => array(
         'invokables' => array(
-            'playgroundgame' => 'PlaygroundGame\Controller\IndexController',
+            'playgroundgame' => 'PlaygroundGame\Controller\Frontend\HomeController',
             'playgroundgame_game' => 'PlaygroundGame\Controller\Frontend\GameController',
             'playgroundgame_lottery' => 'PlaygroundGame\Controller\Frontend\LotteryController',
             'playgroundgame_quiz' => 'PlaygroundGame\Controller\Frontend\QuizController',
@@ -251,6 +243,13 @@ return array(
     'router' => array(
         'routes' => array(
             'frontend' => array(
+                'options' => array(
+                    'defaults' => array(
+                        'controller' => 'playgroundgame',
+                        'action'     => 'index',
+                    ),
+                ),
+                'may_terminate' => true,
                 'child_routes' => array(
                     'gameslist' => array(
                         'type' => 'Zend\Mvc\Router\Http\Literal',
