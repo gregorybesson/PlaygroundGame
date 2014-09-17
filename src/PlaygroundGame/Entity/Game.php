@@ -894,6 +894,22 @@ class Game implements InputFilterAwareInterface, Translatable
         return $steps;
     }
 
+
+
+    public function getStepsViewsArray()
+    {
+      $viewSteps = null;
+
+      if($this->getStepsViews()){
+        $viewSteps = json_decode($this->getStepsViews(), true);
+      }
+      if(!$viewSteps){
+        $viewSteps = array('index','play','result','bounce');
+      }
+
+      return $viewSteps;
+    }
+
     public function getSteps()
     {
         return $this->steps;
