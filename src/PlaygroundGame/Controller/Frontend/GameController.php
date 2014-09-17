@@ -442,12 +442,17 @@ class GameController extends AbstractActionController
                 $dataJson = json_encode($form->getData());
                 
                 $steps = $game->getStepsArray();
-                $key = array_search($this->params('action'), $steps);
+                $viewSteps = $game->getStepsViewsArray();
+                $key = array_search($this->params('action'), $viewSteps);
+                if (!$key) {
+                  $key = array_search($this->params('action'), $steps);
+                }
                 $keyplay = array_search('play', $steps);
                 $anonymousIdentifier = null;
-                
+
                 // If register step before play, I don't have no entry yet. I have to create one
                 // If register after play step, I search for the last entry created by play step.
+
                 if($key && $key < $keyplay){
                     
                     if($game->getAnonymousAllowed() && $game->getAnonymousIdentifier() && isset($data[$game->getAnonymousIdentifier()])){
