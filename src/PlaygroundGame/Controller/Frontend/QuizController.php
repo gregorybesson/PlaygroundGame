@@ -181,6 +181,306 @@ class QuizController extends GameController
         return $viewModel;
     }
 
+    public function registerAction()
+    {
+
+        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
+        $sg = $this->getGameService();
+
+        $game = $sg->checkGame($identifier);
+        if (!$game || $game->isClosed()) {
+            return $this->notFoundAction();
+        }
+
+        $user = $this->zfcUserAuthentication()->getIdentity();
+
+        $formPV = json_decode($game->getPlayerForm()->getForm());
+        // TODO : create a Form class to implement this form
+        $form = new Form();
+        $form->setAttribute('id', 'playerForm');
+        $form->setAttribute('enctype', 'multipart/form-data');
+
+        $inputFilter = new \Zend\InputFilter\InputFilter();
+        $factory = new InputFactory();
+
+        foreach ($formPV as $element) {
+            if (isset($element->line_text)) {
+                $attributes  = $element->line_text[0];
+                $name        = isset($attributes->name)? $attributes->name : '';
+                $type        = isset($attributes->type)? $attributes->type : '';
+                $position    = isset($attributes->order)? $attributes->order : '';
+                $placeholder = isset($attributes->data->placeholder)? $attributes->data->placeholder : '';
+                $label       = isset($attributes->data->label)? $attributes->data->label : '';
+                $required    = ($attributes->data->required == 'true') ? true : false ;
+                $class       = isset($attributes->data->class)? $attributes->data->class : '';
+                $id          = isset($attributes->data->id)? $attributes->data->id : '';
+                $lengthMin   = isset($attributes->data->length)? $attributes->data->length->min : '';
+                $lengthMax   = isset($attributes->data->length)? $attributes->data->length->max : '';
+
+                $element = new Element\Text($name);
+                $element->setLabel($label);
+                $element->setAttributes(
+                    array(
+                        'placeholder'   => $placeholder,
+                        'required'      => $required,
+                        'class'         => $class,
+                        'id'            => $id
+                    )
+                );
+                $form->add($element);
+
+                $options = array();
+                $options['encoding'] = 'UTF-8';
+                if ($lengthMin && $lengthMin > 0) {
+                    $options['min'] = $lengthMin;
+                }
+                if ($lengthMax && $lengthMax > $lengthMin) {
+                    $options['max'] = $lengthMax;
+                    $element->setAttribute('maxlength', $lengthMax);
+                    $options['messages'] = array(\Zend\Validator\StringLength::TOO_LONG => sprintf($this->getServiceLocator()->get('translator')->translate('This field contains more than %s characters', 'playgroundgame'), $lengthMax));
+                }
+                $inputFilter->add($factory->createInput(array(
+                    'name'     => $name,
+                    'required' => $required,
+                    'filters'  => array(
+                        array('name' => 'StripTags'),
+                        array('name' => 'StringTrim'),
+                    ),
+                    'validators' => array(
+                        array(
+                            'name'    => 'StringLength',
+                            'options' => $options,
+                        ),
+                    ),
+                )));
+
+            }
+            if (isset($element->line_email)) {
+                $attributes  = $element->line_email[0];
+                $name        = isset($attributes->name)? $attributes->name : '';
+                $type        = isset($attributes->type)? $attributes->type : '';
+                $position    = isset($attributes->order)? $attributes->order : '';
+                $placeholder = isset($attributes->data->placeholder)? $attributes->data->placeholder : '';
+                $label       = isset($attributes->data->label)? $attributes->data->label : '';
+                //$required    = ($attributes->data->required == 'true') ? true : false ;
+                $class       = isset($attributes->data->class)? $attributes->data->class : '';
+                $id          = isset($attributes->data->id)? $attributes->data->id : '';
+                $lengthMin   = isset($attributes->data->length)? $attributes->data->length->min : '';
+                $lengthMax   = isset($attributes->data->length)? $attributes->data->length->max : '';
+
+                $element = new Element\Email($name);
+                $element->setLabel($label);
+                $element->setAttributes(
+                    array(
+                        'placeholder'   => $placeholder,
+                        'required'      => $required,
+                        'class'         => $class,
+                        'id'            => $id
+                    )
+                );
+                $form->add($element);
+
+                $options = array();
+                $options['encoding'] = 'UTF-8';
+                if ($lengthMin && $lengthMin > 0) {
+                    $options['min'] = $lengthMin;
+                }
+                if ($lengthMax && $lengthMax > $lengthMin) {
+                    $options['max'] = $lengthMax;
+                    $element->setAttribute('maxlength', $lengthMax);
+                    $options['messages'] = array(\Zend\Validator\StringLength::TOO_LONG => sprintf($this->getServiceLocator()->get('translator')->translate('This field contains more than %s characters', 'playgroundgame'), $lengthMax));
+                }
+                $inputFilter->add($factory->createInput(array(
+                    'name'     => $name,
+                    'required' => $required,
+                    'filters'  => array(
+                        array('name' => 'StripTags'),
+                        array('name' => 'StringTrim'),
+                    ),
+                    'validators' => array(
+                        array(
+                            'name'    => 'StringLength',
+                            'options' => $options,
+                        ),
+                    ),
+                )));
+
+            }
+            if (isset($element->line_checkbox)) {
+                $attributes  = $element->line_checkbox[0];
+                $name        = isset($attributes->name)? $attributes->name : '';
+                $type        = isset($attributes->type)? $attributes->type : '';
+                $position    = isset($attributes->order)? $attributes->order : '';
+                $label       = isset($attributes->data->label)? $attributes->data->label : '';
+
+//                 $required    = ($attributes->data->required == 'yes') ? true : false;
+                $required = false;
+                $class       = isset($attributes->data->class)? $attributes->data->class : '';
+                $id          = isset($attributes->data->id)? $attributes->data->id : '';
+                $lengthMin   = isset($attributes->data->length)? $attributes->data->length->min : '';
+                $lengthMax   = isset($attributes->data->length)? $attributes->data->length->max : '';
+                $innerData   = isset($attributes->data->innerData)? $attributes->data->innerData : array();
+
+                $element = new Element\MultiCheckbox($name);
+                $element->setLabel($label);
+                $element->setAttributes(
+                    array(
+                        'name'     => $name,
+                        'required'      => $required,
+                        'allowEmpty'    => !$required,
+                        'class'         => $class,
+                        'id'            => $id
+                    )
+                );
+                $values = array();
+                foreach($innerData as $value){
+                    $values[] = $value->label;
+                }
+                $element->setValueOptions($values);
+                $form->add($element);
+
+                $options = array();
+                $options['encoding'] = 'UTF-8';
+                /*if ($lengthMin && $lengthMin > 0) {
+                    $options['min'] = $lengthMin;
+                }
+                if ($lengthMax && $lengthMax > $lengthMin) {
+                    $options['max'] = $lengthMax;
+                    $element->setAttribute('maxlength', $lengthMax);
+                    $options['messages'] = array(\Zend\Validator\StringLength::TOO_LONG => sprintf($this->getServiceLocator()->get('translator')->translate('This field contains more than %s characters', 'playgroundgame'), $lengthMax));
+                }*/
+                $inputFilter->add($factory->createInput(array(
+                    'name'     => $name,
+                    'required' => $required,
+                    'allowEmpty' => !$required,
+                )));
+
+            }
+            if (isset($element->line_paragraph)) {
+                $attributes  = $element->line_paragraph[0];
+                $name        = isset($attributes->name)? $attributes->name : '';
+                $type        = isset($attributes->type)? $attributes->type : '';
+                $position    = isset($attributes->order)? $attributes->order : '';
+                $placeholder = isset($attributes->data->placeholder)? $attributes->data->placeholder : '';
+                $label       = isset($attributes->data->label)? $attributes->data->label : '';
+                $required    = ($attributes->data->required == 'true') ? true : false ;
+                $class       = isset($attributes->data->class)? $attributes->data->class : '';
+                $id          = isset($attributes->data->id)? $attributes->data->id : '';
+                $lengthMin   = isset($attributes->data->length)? $attributes->data->length->min : '';
+                $lengthMax   = isset($attributes->data->length)? $attributes->data->length->max : '';
+
+                $element = new Element\Textarea($name);
+                $element->setLabel($label);
+                $element->setAttributes(
+                    array(
+                        'placeholder'   => $placeholder,
+                        'required'      => $required,
+                        'class'         => $class,
+                        'id'            => $id
+                    )
+                );
+                $form->add($element);
+
+                $options = array();
+                $options['encoding'] = 'UTF-8';
+                if ($lengthMin && $lengthMin > 0) {
+                    $options['min'] = $lengthMin;
+                }
+                if ($lengthMax && $lengthMax > $lengthMin) {
+                    $options['max'] = $lengthMax;
+                    $element->setAttribute('maxlength', $lengthMax);
+                }
+                $inputFilter->add($factory->createInput(array(
+                    'name'     => $name,
+                    'required' => $required,
+                    'filters'  => array(
+                        array('name' => 'StripTags'),
+                        array('name' => 'StringTrim'),
+                    ),
+                    'validators' => array(
+                        array(
+                            'name'    => 'StringLength',
+                            'options' => $options,
+                        ),
+                    ),
+                )));
+            }
+            if (isset($element->line_upload)) {
+                $attributes  = $element->line_upload[0];
+                //print_r($attributes);
+                $name        = isset($attributes->name)? $attributes->name : '';
+                $type        = isset($attributes->type)? $attributes->type : '';
+                $position    = isset($attributes->order)? $attributes->order : '';
+                $label       = isset($attributes->data->label)? $attributes->data->label : '';
+                $required    = ($attributes->data->required == 'true') ? true : false ;
+                $class       = isset($attributes->data->class)? $attributes->data->class : '';
+                $id          = isset($attributes->data->id)? $attributes->data->id : '';
+                $filesizeMin = isset($attributes->data->filesize)? $attributes->data->filesize->min : '';
+                $filesizeMax = isset($attributes->data->filesize)? $attributes->data->filesize->max : '';
+                $element = new Element\File($name);
+                $element->setLabel($label);
+                $element->setAttributes(
+                    array(
+                        'required'  => $required,
+                        'class'     => $class,
+                        'id'        => $id
+                    )
+                );
+                $form->add($element);
+
+                $inputFilter->add($factory->createInput(array(
+                    'name'     => $name,
+                    'required' => $required,
+                    'validators' => array(
+                            array('name' => '\Zend\Validator\File\Size', 'options' => array('max' => 10*1024*1024)),
+                            array('name' => '\Zend\Validator\File\Extension', 'options'  => array('png,PNG,jpg,JPG,jpeg,JPEG,gif,GIF', 'messages' => array(
+                            \Zend\Validator\File\Extension::FALSE_EXTENSION => 'Veuillez télécharger une image' ))
+                        ),
+                    ),
+                )));
+
+            }
+        }
+
+        $form->setInputFilter($inputFilter);
+
+        if ($this->getRequest()->isPost()) {
+            // POST Request: Process form
+            $data = array_merge_recursive(
+                $this->getRequest()->getPost()->toArray(),
+                $this->getRequest()->getFiles()->toArray()
+            );
+
+            $form->setData($data);
+
+            if ($form->isValid()) {
+                $data = json_encode($form->getData());
+                $lastEntry = $sg->findLastInactiveEntry($game, $user);
+                $lastEntry->setPlayerData($data);
+                $sg->getEntryMapper()->update($lastEntry);
+
+                return $this->redirect()->toUrl($this->url()->fromRoute('frontend/'. $game->getClassType() .'/' . $game->nextStep($this->params('action')), array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)));
+            }
+        }
+
+        $lastEntry = $sg->findLastInactiveEntry($game, $user);
+
+        // je compte les bonnes réponses et le ratio
+        $replies    = $sg->getQuizReplyMapper()->getLastGameReply($lastEntry);
+
+        $viewModel = $this->buildView($game);
+        $viewModel->setVariables(array(
+            'game' => $game,
+            'form' => $form,
+            'title' => $game->getPlayerForm()->getTitle(),
+            'description' => $game->getPlayerForm()->getDescription(),
+            'flashMessages' => $this->flashMessenger()->getMessages(),
+            'replies' => $replies,
+        ));        
+
+        return $viewModel;
+    }
+
     public function resultAction()
     {
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
