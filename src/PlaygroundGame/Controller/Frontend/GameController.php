@@ -10,6 +10,7 @@ use Zend\Form\Element;
 use Zend\Form\Form;
 use Zend\InputFilter\Factory as InputFactory;
 use PlaygroundGame\Service\GameService;
+use PlaygroundGame\Service\Prize as PrizeService;
 
 class GameController extends AbstractActionController
 {
@@ -760,7 +761,7 @@ class GameController extends AbstractActionController
         $view = $this->addAdditionalView($game);
         if ($view and $view instanceof \Zend\View\Model\ViewModel) {
             $viewModel->addChild($view, 'additional');
-        } elseif ($view and $view instanceof \Zend\Http\PhpEnvironment\Response) {
+        } elseif ($view && $view instanceof \Zend\Http\PhpEnvironment\Response) {
             return $view;
         }
 

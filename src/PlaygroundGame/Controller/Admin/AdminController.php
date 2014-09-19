@@ -3,6 +3,7 @@
 namespace PlaygroundGame\Controller\Admin;
 
 use PlaygroundGame\Entity\Game;
+use PlaygroundGame\Service\Game as AdminGameService;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;

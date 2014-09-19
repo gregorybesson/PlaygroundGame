@@ -7,6 +7,7 @@ use PlaygroundGame\Entity\Game;
 use PlaygroundGame\Entity\Quiz;
 use PlaygroundGame\Entity\QuizQuestion;
 use PlaygroundGame\Controller\Admin\GameController;
+use PlaygroundGame\Service\Game as AdminGameService;
 use Zend\View\Model\ViewModel;
 use Zend\InputFilter;
 use Zend\Validator;

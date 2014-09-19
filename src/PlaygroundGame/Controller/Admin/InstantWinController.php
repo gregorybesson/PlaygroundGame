@@ -6,6 +6,7 @@ use PlaygroundGame\Entity\Game;
 use PlaygroundGame\Form;
 use PlaygroundGame\Entity\InstantWin;
 use PlaygroundGame\Entity\InstantWinOccurrence;
+use PlaygroundGame\Service\Game as AdminGameService;
 use Zend\InputFilter;
 use Zend\Validator;
 
