@@ -43,37 +43,34 @@ class InstantWinOccurrence
         return $this->getEntityRepository()->findBy(array('instantwin' => $instant_win), $sortArray);
     }
 
-    public function queryByGame($instant_win, $sortArray = array())
+    public function queryByGame($instant_win)
     {
         $query = $this->em->createQuery(
             'SELECT i FROM PlaygroundGame\Entity\InstantWinOccurrence i
-                WHERE i.instantwin = :game
-            '.( ! empty($sortArray) ? 'ORDER BY i.'.key($sortArray).' '.current($sortArray) : '' )
+                WHERE i.instantwin = :game'
         );
         $query->setParameter('game', $instant_win);
         return $query;
     }
 
-    public function queryPlayedByGame($instant_win, $sortArray = array())
+    public function queryPlayedByGame($instant_win)
     {
         $query = $this->em->createQuery(
             'SELECT i FROM PlaygroundGame\Entity\InstantWinOccurrence i
                 WHERE i.instantwin = :game
-                AND i.entry IS NOT NULL
-            '.( ! empty($sortArray) ? 'ORDER BY i.'.key($sortArray).' '.current($sortArray) : '' )
+                AND i.entry IS NOT NULL'
         );
         $query->setParameter('game', $instant_win);
         return $query;
     }
 
-    public function queryWinningPlayedByGame($instant_win, $sortArray = array())
+    public function queryWinningPlayedByGame($instant_win)
     {
         $query = $this->em->createQuery(
             'SELECT i FROM PlaygroundGame\Entity\InstantWinOccurrence i
                 WHERE i.instantwin = :game
                 AND i.entry IS NOT NULL
-                AND i.winning = 1
-            '.( ! empty($sortArray) ? 'ORDER BY i.'.key($sortArray).' '.current($sortArray) : '' )
+                AND i.winning = 1'
         );
         $query->setParameter('game', $instant_win);
         return $query;
