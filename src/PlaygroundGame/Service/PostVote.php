@@ -266,10 +266,55 @@ class PostVote extends Game implements ServiceManagerAwareInterface
 
     public function findArrayOfValidatedPosts($game, $filter, $search='')
     {
-        //$posts = $this->getPostVotePostMapper()->findBy(array('postvote'=> $game, 'status' => 2));
+        
         $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
         $postSort = '';
         $filterSearch = '';
+        
+        $qb = $em->createQueryBuilder();
+        
+        $and = $qb->expr()->andx();
+        
+        $and->add($qb->expr()->eq('p.status', 2));
+        
+        $and->add($qb->expr()->eq('g.id', ':game'));
+        $qb->setParameter('game', $game);
+        
+        if ($search != '') {
+            $and->add(
+                $qb->expr()->orX(
+                    $qb->expr()->like('u.username', $qb->expr()->literal('%:search%')),
+                    $qb->expr()->like('u.firstname', $qb->expr()->literal('%:search%')),
+                    $qb->expr()->like('u.lastname', $qb->expr()->literal('%:search%')),
+                    $qb->expr()->like('e.value', $qb->expr()->literal('%:search%')),
+                    $qb->expr()->isNull('g.publicationDate')
+                )
+            );
+            $qb->setParameter('search', $search);
+        }
+        
+        $qb->select('p, COUNT(v) AS votesCount')
+            ->from('PlaygroundGame\Entity\PostVotePost', 'p')
+            ->innerJoin('p.postvote', 'g')
+            ->innerJoin('p.user', 'u')
+            ->innerJoin('p.postElements', 'e')
+            ->leftJoin('p.votes', 'v')
+            ->where($and);
+ 
+        switch ($filter) {
+            case 'random' :
+                $qb->orderBy('e.value', 'ASC');
+                break;
+            case 'vote' :
+                $qb->orderBy('votesCount', 'DESC');
+                break;
+            case 'date' :
+                $qb->orderBy('p.createdAt', 'DESC');
+        }
+        
+        $query = $qb->getQuery();
+        
+        /*
         switch ($filter) {
             case 'random' :
                 $postSort = 'ORDER BY e.value ASC';
@@ -300,20 +345,24 @@ class PostVote extends Game implements ServiceManagerAwareInterface
         ');
 
         $query->setParameter('game', $game);
+        
+        */
         $posts = $query->getResult();
         $arrayPosts = array();
         $i=0;
         foreach ($posts as $postRaw) {
             $data = array();
             $post = $postRaw[0];
-            foreach ($post->getPostElements() as $element) {
-                $data[$element->getPosition()] = $element->getValue();
+            if($post){
+                foreach ($post->getPostElements() as $element) {
+                    $data[$element->getPosition()] = $element->getValue();
+                }
+                $arrayPosts[$i]['data']  = $data;
+                $arrayPosts[$i]['votes'] = count($post->getVotes());
+                $arrayPosts[$i]['id']    = $post->getId();
+                $arrayPosts[$i]['user']  = $post->getUser();
+                $i++;
             }
-            $arrayPosts[$i]['data']  = $data;
-            $arrayPosts[$i]['votes'] = count($post->getVotes());
-            $arrayPosts[$i]['id']    = $post->getId();
-            $arrayPosts[$i]['user']  = $post->getUser();
-            $i++;
         }
 
         return $arrayPosts;
