@@ -90,7 +90,7 @@ class PrizeCategoryController extends GameController
         return $this->prizeCategoryService;
     }
 
-    public function setPrizeCategoryService(PrizeCategoryService $prizeCategoryService)
+    public function setPrizeCategoryService(PlaygroundGame\Service\PrizeCategory $prizeCategoryService)
     {
         $this->prizeCategoryService = $prizeCategoryService;
 

@@ -8,6 +8,7 @@ use ZfcBase\EventManager\EventProvider;
 use PlaygroundGame\Options\ModuleOptions;
 use PlaygroundGame\Entity\PrizeCategoryUser as PrizeCategoryUserEntity;
 use PlaygroundGame\Mapper\PrizeCategoryUser as PrizeCategoryUserMapper;
+use PlaygroundGame\Mapper\PrizeCategory as PrizeCategoryMapper;
 
 class PrizeCategoryUser extends EventProvider implements ServiceManagerAwareInterface
 {

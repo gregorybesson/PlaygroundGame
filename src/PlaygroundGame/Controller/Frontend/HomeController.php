@@ -78,7 +78,7 @@ class HomeController extends AbstractActionController
         return $this->gameService;
     }
     
-    public function setGameService(GameService $gameService)
+    public function setGameService(\PlaygroundGame\Service\Game $gameService)
     {
         $this->gameService = $gameService;
     
