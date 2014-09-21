@@ -1,6 +1,8 @@
 <?php
 namespace PlaygroundGame\Controller\Frontend;
 
+use Zend\View\Model\ViewModel;
+
 class MissionController extends GameController
 {
 
