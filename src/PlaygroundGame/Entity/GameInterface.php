@@ -6,7 +6,6 @@ interface GameInterface
 {
     public function createChrono();
 
-    /** @PreUpdate */
     public function updateChrono();
 
     /**
