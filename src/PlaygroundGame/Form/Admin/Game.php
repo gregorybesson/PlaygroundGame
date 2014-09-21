@@ -119,20 +119,6 @@ class Game extends ProvidesEventsForm
             )
         ));
 
-        /*$this->add(array(
-                'name' => 'prize_category',
-                'type' => 'DoctrineORMModule\Form\Element\DoctrineEntity',
-                'options' => array(
-                        'label' => $translator->translate('Catégorie de gain', 'playgroundgame'),
-                        'object_manager' => $entityManager,
-                        'target_class' => 'PlaygroundGame\Entity\PrizeCategory',
-                        'property' => 'title'
-                ),
-                'attributes' => array(
-                        'required' => false
-                )
-        ));*/
-
         $categories = $this->getPrizeCategories();
         $this->add(array(
             'type' => 'Zend\Form\Element\Select',
@@ -143,15 +129,7 @@ class Game extends ProvidesEventsForm
                 'label' => $translator->translate('Category benefit', 'playgroundgame')
             )
         ));
-/*
-        $this->add(array(
-            'type' => 'Zend\Form\Element\Checkbox',
-            'name' => 'broadcastFacebook',
-            'options' => array(
-                'label' => 'Publier ce jeu sur Facebook',
-            ),
-        ));
-*/
+
         $this->add(array(
             'type' => 'Zend\Form\Element\Checkbox',
             'name' => 'broadcastPlatform',
@@ -735,8 +713,6 @@ class Game extends ProvidesEventsForm
             $partners = $results;
         }
 
-        //print_r($partners);
-        //die();
         return $partners;
     }
 

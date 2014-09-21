@@ -1,11 +1,9 @@
 <?php
 namespace PlaygroundGame\Form\Frontend;
 
-use Zend\Form\Form;
 use Zend\Form\Element;
 use ZfcBase\Form\ProvidesEventsForm;
 use Zend\Mvc\I18n\Translator;
-use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Zend\ServiceManager\ServiceManager;
 
 class PrizeCategoryUser extends ProvidesEventsForm
@@ -47,20 +45,6 @@ class PrizeCategoryUser extends ProvidesEventsForm
                 'attributes' => array()
             ));
         }
-
-        /*$this->add(array(
-            'name' => 'prizeCategory',
-            'type' => 'DoctrineModule\Form\Element\ObjectMultiCheckbox',
-            'options' => array(
-                'label' => $translator->translate('Catégorie de gain', 'playgroundgame'),
-                'object_manager' => $entityManager,
-                'target_class' => 'PlaygroundGame\Entity\PrizeCategory',
-                'property' => 'title'
-            ),
-            'attributes' => array(
-                'required' => false
-            )
-        ));*/
 
         $submitElement = new Element\Button('submit');
         $submitElement->setLabel($translator->translate('Create', 'playgroundgame'))
