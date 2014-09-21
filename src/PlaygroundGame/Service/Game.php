@@ -498,11 +498,64 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $today = new \DateTime("now");
         // $today->format('Y-m-d H:i:s');
         $today = $today->format('Y-m-d') . ' 23:59:59';
+        $orderBy = 'g.publicationDate';
+        if ($order != '') {
+            $orderBy = 'g.'.$order;
+        }
 
+        $qb = $em->createQueryBuilder();
+        $and = $qb->expr()->andx();
+        $and->add(
+            $qb->expr()->orX(
+                $qb->expr()->lte('g.publicationDate', ':date'),
+                $qb->expr()->isNull('g.publicationDate')
+            )
+        );
+        $and->add(
+            $qb->expr()->orX(
+                $qb->expr()->gte('g.closeDate', ':date'),
+                $qb->expr()->isNull('g.closeDate')
+            )
+        );
+        $qb->setParameter('date', $today);
+        
+        $and->add($qb->expr()->eq('g.active', '1'));
+        $and->add($qb->expr()->eq('g.broadcastPlatform', '1'));
+        
+        if ($classType != '') {
+            $and->add($qb->expr()->eq('g.classType', ':classType'));
+            $qb->setParameter('classType', $classType);
+        }
+        
+        if ($displayHome) {
+            $and->add($qb->expr()->eq('g.displayHome', true));
+        }
+        
+        if ($withoutGameInMission) {
+            
+            $qb2 = $em->createQueryBuilder();
+            $qb2->select('IDENTITY(mg.game)')
+            ->from('PlaygroundGame\Entity\Mission', 'm')
+            ->innerJoin('PlaygroundGame\Entity\MissionGame', 'mg', 'WITH', $qb->expr()->eq('mg.mission', 'm.id'))
+            ->where($qb->expr()->eq('m.active', 1));
+            
+            $and->add($qb->expr()->notIn('g.id', $qb2->getDQL()));
+        }
+        
+        $qb->select('g')
+        ->from('PlaygroundGame\Entity\Game', 'g')
+        ->where($and)
+        ->orderBy($orderBy, 'DESC');
+        
+        $query = $qb->getQuery();
+        $games = $query->getResult();
+        
+        /*
+        
         $classClause = '';
         $displayHomeClause = '';
         $displayWithoutMission = '';
-        $orderBy = 'publicationDate';
+        
 
         if ($classType != '') {
             $classClause = " AND g.classType = '" . $classType . "'";
@@ -518,9 +571,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                                  AND m.active = 1 ) ";
         }
 
-        if ($order != '') {
-            $orderBy = $order;
-        }
+        
 
         // Game active with a startDate before today (or without startDate) and closeDate after today (or without closeDate)
         $query = $em->createQuery('SELECT g FROM PlaygroundGame\Entity\Game g
@@ -529,7 +580,9 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                 AND g.active = 1
                 AND g.broadcastPlatform = 1' . $displayHomeClause . $classClause . $displayWithoutMission . ' ORDER BY g.' . $orderBy . ' DESC');
         $query->setParameter('date', $today);
+        
         $games = $query->getResult();
+        */
 
         // je les classe par date de publication (date comme clé dans le tableau afin de pouvoir merger les objets
         // de type article avec le même procédé en les classant naturellement par date asc ou desc
