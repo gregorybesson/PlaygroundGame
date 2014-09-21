@@ -53,33 +53,7 @@ class Entry implements ServiceLocatorAwareInterface
     }
 
     public function draw($game, $userClass, $total)
-    {
-       /* 
-        $rsm = new \Doctrine\ORM\Query\ResultSetMapping;
-        //$rsm->addEntityResult('\PlaygroundGame\Entity\Entry', 'e');
-        $rsm->addEntityResult($userClass, 'u');
-        $rsm->addFieldResult('u', 'user_id', 'id');
-        $rsm->addFieldResult('u', 'username', 'username');
-        $rsm->addFieldResult('u', 'lastname', 'lastname');
-        $rsm->addFieldResult('u', 'firstname', 'firstname');
-        $rsm->addFieldResult('u', 'email', 'email');
-        //$rsm->addFieldResult('u', 'optin_partner', 'optin_partner');
-
-        $query = $this->em->createNativeQuery(
-            'SELECT distinct u.user_id, u.username, u.firstname, u.lastname, u.email, u.optin_partner FROM game_entry as e
-            INNER JOIN user AS u ON e.user_id = u.user_id
-            WHERE e.game_id = :game_id
-            #AND e.winner = 1
-            ORDER BY RAND()
-            LIMIT ' . $total,
-            $rsm
-        );
-        $query->setParameter('game_id', $game->getId());
-
-        $result = $query->getResult();
-
-        return $result;*/
-        
+    { 
         $sql ='SELECT u.user_id uid, u.username, u.firstname, u.lastname, u.email, u.optin_partner, e.created_at ecreated_at, e.updated_at eupdated_at, e.* FROM game_entry as e
             INNER JOIN user AS u ON e.user_id = u.user_id
             WHERE e.game_id = :game_id

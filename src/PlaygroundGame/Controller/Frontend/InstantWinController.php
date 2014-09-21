@@ -63,9 +63,6 @@ class InstantWinController extends GameController
                 if (!$winner) {
                     return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('instantwin', array('id' => $game->getIdentifier(), 'channel' => $channel), array('force_canonical' => true)));
                 }
-
-                // si la requete est POST et que j'arrive ici, c'est que le formulaire contient une erreur. Donc je prépare la vue formulaire sans le grattage
-                //$viewModel->setTemplate('instant-win/winner/form');
             } else {
                 // J'arrive sur le jeu, j'essaie donc de participer
                 $entry = $sg->play($game, $user);
@@ -90,7 +87,7 @@ class InstantWinController extends GameController
                 'prize' => $prize,
                 'over' => false,
             );
-            //$viewModel->addChild($form_address, 'form_address');
+
         } elseif ($game->getOccurrenceType()=='code') {
             $form = $this->getServiceLocator()->get('playgroundgame_instantwinoccurrencecode_form');
             $form->setAttribute('action', $this->frontendUrl()->fromRoute('instantwin/play', array('id' => $game->getIdentifier(), 'channel' => $channel), array('force_canonical' => true)));

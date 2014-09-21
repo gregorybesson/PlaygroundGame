@@ -198,7 +198,6 @@ class GameController extends AbstractActionController
                 $position    = isset($attributes->order)? $attributes->order : '';
                 $placeholder = isset($attributes->data->placeholder)? $attributes->data->placeholder : '';
                 $label       = isset($attributes->data->label)? $attributes->data->label : '';
-                //$required    = ($attributes->data->required == 'true') ? true : false ;
                 $class       = isset($attributes->data->class)? $attributes->data->class : '';
                 $id          = isset($attributes->data->id)? $attributes->data->id : '';
                 $lengthMin   = isset($attributes->data->length)? $attributes->data->length->min : '';
@@ -393,7 +392,6 @@ class GameController extends AbstractActionController
             }
             if (isset($element->line_upload)) {
                 $attributes  = $element->line_upload[0];
-                //print_r($attributes);
                 $name        = isset($attributes->name)? $attributes->name : '';
                 $type        = isset($attributes->type)? $attributes->type : '';
                 $position    = isset($attributes->order)? $attributes->order : '';

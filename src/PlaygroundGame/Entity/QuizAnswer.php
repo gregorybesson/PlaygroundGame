@@ -123,8 +123,6 @@ class QuizAnswer implements InputFilterAwareInterface
      */
     public function setQuestion($question)
     {
-        // Check that there is no drawback using the cascading update from QuizQuestion : addAnswers()
-        //$question->addAnswer($this);
         $this->question = $question;
 
         return $this;

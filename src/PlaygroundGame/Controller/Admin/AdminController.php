@@ -135,7 +135,6 @@ class AdminController extends AbstractActionController
                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The game has been edited');
             } catch (\Doctrine\DBAL\DBALException $e) {
                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('Il y a déjà eu des participants à ce jeu. Vous ne pouvez plus le supprimer');
-                //throw $e;
             }
         }
 

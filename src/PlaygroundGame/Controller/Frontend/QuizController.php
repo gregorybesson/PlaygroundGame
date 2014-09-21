@@ -65,9 +65,6 @@ class QuizController extends GameController
         // TODO : create a Form class to implement this form
         $form = new Form();
 
-        // defaults validators removed
-        //$form->setUseInputFilterDefaults(false);
-
         $inputFilter = new \Zend\InputFilter\InputFilter();
         $factory = new InputFactory();
 

@@ -40,7 +40,6 @@ class HomeController extends AbstractActionController
 
         $games = $this->getGameService()->getActiveGames(true, '', '', true);
         $pages = $this->getPageService()->getActivePages();
-        //$missions = $this->getMissionService()->getActiveMissions();
 
         // I merge both types of articles and sort them in reverse order of their key
         // And as their key is some sort of... date !, It means I sort it in date reverse order ;)

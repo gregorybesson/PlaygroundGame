@@ -189,7 +189,6 @@ class PostVoteController extends GameController
             }
             if (isset($element->line_upload)) {
                 $attributes  = $element->line_upload[0];
-                //print_r($attributes);
                 $name        = isset($attributes->name)? $attributes->name : '';
                 $type        = isset($attributes->type)? $attributes->type : '';
                 $position    = isset($attributes->order)? $attributes->order : '';

@@ -1308,25 +1308,18 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $gameService = $sm->get('playgroundgame_quiz_service');
         $options = $sm->get('playgroundgame_module_options');
 
-        $from = "admin@playground.fr"; // $options->getEmailFromAddress();
-        $subject = "sujet game"; // $options->getResetEmailSubjectLine();
+        $from = "admin@playground.fr";
+        $subject = "sujet game";
 
         $to = "gbesson@test.com";
 
         $game = $gameService->checkGame('qooqo');
 
-        // On recherche les joueurs qui n'ont pas partagé leur qquiz après avoir joué
-        // entry join user join game : distinct user et game et game_entry = 0 et updated_at <= jour-1 et > jour - 2
-        // $contacts = getQuizUsersNotSharing();
-
-        // foreach ($contacts as $contact) {
-        // $message = $mailService->createTextMessage('titi@test.com', 'gbesson@test.com', 'sujetcron', 'playground-user/email/forgot', array());
         $message = $mailService->createTextMessage($from, $to, $subject, 'playground-game/email/share_reminder', array(
             'game' => $game
         ));
 
         $mailService->send($message);
-        // }
     }
 
     public function uploadFile($path, $file)

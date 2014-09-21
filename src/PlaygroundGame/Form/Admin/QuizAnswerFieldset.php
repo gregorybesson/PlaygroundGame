@@ -40,7 +40,6 @@ class QuizAnswerFieldset extends Fieldset
                 'type' => 'Zend\Form\Element\Select',
                 'name' => 'correct',
                 'options' => array(
-                        //'empty_option' => $translator->translate('Is the answer correct ?', 'playgroundgame'),
                         'value_options' => array(
                             '0' => $translator->translate('Non', 'playgroundgame'),
                             '1' => $translator->translate('Oui', 'playgroundgame'),
