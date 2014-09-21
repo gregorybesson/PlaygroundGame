@@ -130,7 +130,9 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
             $data['occurrenceValueSize'] = 8;
         }
         $created = 0;
-        for ($i=0; $i < $game->getOccurrenceNumber() ; $i++) {
+        $numOccurrences = $game->getOccurrenceNumber();
+        
+        for ($i=0; $i < $numOccurrences ; $i++) {
             $code = '';
             while(strlen($code)<$data['occurrenceValueSize']){
                 $code .= $available_characters[rand(0, $last_character_index)];

@@ -36,7 +36,8 @@ class MissionGame extends EventProvider implements ServiceManagerAwareInterface
     public function checkGames($dataGames)
     {
 
-        for ($i=0; $i < count($dataGames); $i++) { 
+        $nbGames = count($dataGames);
+        for ($i=0; $i < $nbGames; $i++) { 
             if(!empty($dataGames[$i+1])){
                 $game1 = $this->getGameMapper()->findById($dataGames[$i]['games']); 
                 $game2 = $this->getGameMapper()->findById($dataGames[$i+1]['games']); 
@@ -59,7 +60,8 @@ class MissionGame extends EventProvider implements ServiceManagerAwareInterface
     public function checkGamesInMission($dataGames)
     {
         $gamesId = array();
-        for ($i=0; $i < count($dataGames); $i++) { 
+        $nbGames = count($dataGames);
+        for ($i=0; $i < $nbGames; $i++) { 
             $gamesId[] = $dataGames[$i]['games']; 
         }        
 
