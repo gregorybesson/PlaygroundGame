@@ -3,14 +3,12 @@ namespace PlaygroundGame\Service;
 
 use PlaygroundGame\Entity\Entry;
 use Zend\Session\Container;
-use Zend\Form\Form;
 use Zend\ServiceManager\ServiceManagerAwareInterface;
 use Zend\ServiceManager\ServiceManager;
 use ZfcBase\EventManager\EventProvider;
 use PlaygroundGame\Options\ModuleOptions;
 use PlaygroundGame\Mapper\GameInterface as GameMapperInterface;
 use DoctrineModule\Validator\NoObjectExists as NoObjectExistsValidator;
-use Zend\File\Transfer\Adapter\Http;
 use Zend\Validator\File\Size;
 use Zend\Validator\File\IsImage;
 use Zend\Stdlib\ErrorHandler;
@@ -203,8 +201,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             $extension = $this->getExtension(strtolower($data['uploadFbPageTabImage']['name']));
             $src = $this->get_src($extension, $data['uploadFbPageTabImage']['tmp_name']);
             $this->resize($data['uploadFbPageTabImage']['tmp_name'], $extension, $path . $game->getId() . "-" . $data['uploadFbPageTabImage']['name'], $src, 111, 74);
-
-            // move_uploaded_file($data['uploadFbPageTabImage']['tmp_name'], $path . $game->getId() . "-" . $data['uploadFbPageTabImage']['name']);
 
             $game->setFbPageTabImage($media_url . $game->getId() . "-" . $data['uploadFbPageTabImage']['name']);
             ErrorHandler::stop(true);
@@ -425,7 +421,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             $extension = $this->getExtension(strtolower($data['uploadFbPageTabImage']['name']));
             $src = $this->get_src($extension, $data['uploadFbPageTabImage']['tmp_name']);
             $this->resize($data['uploadFbPageTabImage']['tmp_name'], $extension, $path . $game->getId() . "-" . $data['uploadFbPageTabImage']['name'], $src, 111, 74);
-            // move_uploaded_file($data['uploadFbPageTabImage']['tmp_name'], $path . $game->getId() . "-" . $data['uploadFbPageTabImage']['name']);
 
             $game->setFbPageTabImage($media_url . $game->getId() . "-" . $data['uploadFbPageTabImage']['name']);
             ErrorHandler::stop(true);
@@ -439,10 +434,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             $game->setFbPageTabImage(null);
             ErrorHandler::stop(true);
         }
-
-        /*
-         * if ($fileName) { $adapter = new \Zend\File\Transfer\Adapter\Http(); $size = new Size(array('max'=>2000000)); $adapter->setValidators(array($size), $fileName); if (!$adapter->isValid()) { $dataError = $adapter->getMessages(); $error = array(); foreach ($dataError as $key=>$row) { $error[] = $row; } $form->setMessages(array('main_image'=>$error )); } else { $adapter->setDestination($path); if ($adapter->receive($fileName)) { $game = $this->getGameMapper()->update($game); return $game; } } } else { $game = $this->getGameMapper()->update($game); return $game; }
-         */
 
         $game = $this->getGameMapper()->update($game);
 
@@ -496,7 +487,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
     {
         $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
         $today = new \DateTime("now");
-        // $today->format('Y-m-d H:i:s');
         $today = $today->format('Y-m-d') . ' 23:59:59';
         $orderBy = 'g.publicationDate';
         if ($order != '') {
@@ -550,40 +540,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $query = $qb->getQuery();
         $games = $query->getResult();
         
-        /*
-        
-        $classClause = '';
-        $displayHomeClause = '';
-        $displayWithoutMission = '';
-        
-
-        if ($classType != '') {
-            $classClause = " AND g.classType = '" . $classType . "'";
-        }
-        if ($displayHome) {
-            $displayHomeClause = " AND g.displayHome = true";
-        }
-
-        if ($withoutGameInMission) {
-            $displayWithoutMission = " AND g.id NOT IN (SELECT IDENTITY(mg.game)
-                                 FROM PlaygroundGame\Entity\MissionGame mg, PlaygroundGame\Entity\Mission m
-                                 WHERE mg.mission = m.id
-                                 AND m.active = 1 ) ";
-        }
-
-        
-
-        // Game active with a startDate before today (or without startDate) and closeDate after today (or without closeDate)
-        $query = $em->createQuery('SELECT g FROM PlaygroundGame\Entity\Game g
-                WHERE (g.publicationDate <= :date OR g.publicationDate IS NULL)
-                AND (g.closeDate >= :date OR g.closeDate IS NULL)
-                AND g.active = 1
-                AND g.broadcastPlatform = 1' . $displayHomeClause . $classClause . $displayWithoutMission . ' ORDER BY g.' . $orderBy . ' DESC');
-        $query->setParameter('date', $today);
-        
-        $games = $query->getResult();
-        */
-
         // je les classe par date de publication (date comme clé dans le tableau afin de pouvoir merger les objets
         // de type article avec le même procédé en les classant naturellement par date asc ou desc
         $arrayGames = array();
@@ -610,7 +566,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
     {
         $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
         $today = new \DateTime("now");
-        // $today->format('Y-m-d H:i:s');
         $today = $today->format('Y-m-d') . ' 23:59:59';
 
         // Game active with a start_date before today (or without start_date) and end_date after today (or without end-date)
@@ -637,7 +592,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
     {
         $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
         $today = new \DateTime("now");
-        // $today->format('Y-m-d H:i:s');
         $today = $today->format('Y-m-d') . ' 23:59:59';
 
         // Game active with a start_date before today (or without start_date) and end_date after today (or without end-date)
@@ -699,11 +653,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         if (! $game) {
             return false;
         }
-
-        // the game is not of the right type
-        /*
-         * if (!$game instanceof $gameEntity) { return false; }
-         */
 
         if ($this->getServiceManager()
             ->get('Application')
@@ -1296,7 +1245,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
     // TODO : Terminer et Refactorer afin de le mettre dans PlaygroundCore
     public static function cronMail()
     {
-        // TODO : factoriser la config
         $configuration = require 'config/application.config.php';
         $smConfig = isset($configuration['service_manager']) ? $configuration['service_manager'] : array();
         $sm = new \Zend\ServiceManager\ServiceManager(new \Zend\Mvc\Service\ServiceManagerConfig($smConfig));
@@ -1457,9 +1405,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         // I Have to know what is the User Class used
         $zfcUserOptions = $this->getServiceManager()->get('zfcuser_module_options');
         $userClass = $zfcUserOptions->getUserEntityClass();
-
-        // $entry = $this->getEntryMapper()->findById(180);
-        // echo 'updated : ' . $entry->getId() . $entry->getWinner() . " p : " . $entry->getPoints();
 
         $result = $this->getEntryMapper()->draw($game, $userClass, $total);
 
