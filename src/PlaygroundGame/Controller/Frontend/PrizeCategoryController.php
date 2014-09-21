@@ -2,7 +2,6 @@
 
 namespace PlaygroundGame\Controller\Frontend;
 
-use PlaygroundGame\Entity\PrizeCategory;
 use Zend\View\Model\ViewModel;
 
 class PrizeCategoryController extends GameController

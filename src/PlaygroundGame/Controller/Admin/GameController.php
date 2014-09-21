@@ -2,13 +2,7 @@
 
 namespace PlaygroundGame\Controller\Admin;
 
-use PlaygroundGame\Entity\Game;
-use PlaygroundGame\Form;
-use Zend\InputFilter;
-use Zend\Validator;
-
 use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
 use Zend\Paginator\Paginator;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;

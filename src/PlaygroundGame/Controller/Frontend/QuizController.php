@@ -5,8 +5,6 @@ use Zend\Form\Element;
 use Zend\Form\Fieldset;
 use Zend\Form\Form;
 use Zend\InputFilter\Factory as InputFactory;
-use Zend\View\Model\ViewModel;
-use Zend\Session\Container;
 
 class QuizController extends GameController
 {

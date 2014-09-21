@@ -2,11 +2,8 @@
 
 namespace PlaygroundGame\Controller\Admin;
 
-use PlaygroundGame\Entity\Game;
 use PlaygroundGame\Service\Game as AdminGameService;
-
 use PlaygroundGame\Entity\Lottery;
-
 use PlaygroundGame\Controller\Admin\GameController;
 use Zend\View\Model\ViewModel;
 
