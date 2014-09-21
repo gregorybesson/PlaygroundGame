@@ -2,6 +2,7 @@
 namespace PlaygroundGame\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping\PrePersist;
 use Doctrine\ORM\Mapping\PreUpdate;
 
