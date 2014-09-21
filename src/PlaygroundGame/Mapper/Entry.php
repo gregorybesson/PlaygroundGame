@@ -284,7 +284,6 @@ class Entry implements ServiceLocatorAwareInterface
      */
     public function checkBonusEntry($game, $user)
     {
-        $er = $this->getEntityRepository();
 
         $query = $this->em->createQuery('SELECT COUNT(e.id) FROM PlaygroundGame\Entity\Entry e WHERE e.user = :user AND e.game = :game AND (e.bonus = 0 OR e.bonus IS NULL)');
         $query->setParameter('user', $user);

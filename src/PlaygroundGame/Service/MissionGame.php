@@ -5,8 +5,6 @@ namespace PlaygroundGame\Service;
 use Zend\ServiceManager\ServiceManagerAwareInterface;
 use Zend\ServiceManager\ServiceManager;
 use ZfcBase\EventManager\EventProvider;
-use PlaygroundReward\Options\ModuleOptions;
-use PlaygroundGame\Entity\Mission as MissionEntity;
 use PlaygroundGame\Entity\MissionGame as MissionGameEntity;
 use PlaygroundGame\Entity\MissionGameCondition as MissionGameConditionEntity;
 

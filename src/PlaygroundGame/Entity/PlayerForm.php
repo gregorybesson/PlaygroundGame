@@ -189,10 +189,7 @@ class PlayerForm implements InputFilterAwareInterface
     {
         if (!$this->inputFilter) {
             $inputFilter = new InputFilter();
-            $factory = new InputFactory();
-
             $inputFilter = parent::getInputFilter();
-
             $this->inputFilter = $inputFilter;
         }
 

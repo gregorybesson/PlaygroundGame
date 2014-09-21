@@ -13,8 +13,6 @@ class InstantWinOccurrence extends ProvidesEventsForm
     {
         parent::__construct($name);
 
-        $entityManager = $serviceManager->get('doctrine.entitymanager.orm_default');
-
         $this->setAttribute('method', 'post');
 
         $this->setServiceManager($serviceManager);

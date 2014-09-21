@@ -190,8 +190,6 @@ class PostVoteController extends GameController
             if (isset($element->line_upload)) {
                 $attributes  = $element->line_upload[0];
                 $name        = isset($attributes->name)? $attributes->name : '';
-                $type        = isset($attributes->type)? $attributes->type : '';
-                $position    = isset($attributes->order)? $attributes->order : '';
                 $label       = isset($attributes->data->label)? $attributes->data->label : '';
                 $required    = ($attributes->data->required == 'true') ? true : false ;
                 $class       = isset($attributes->data->class)? $attributes->data->class : '';
@@ -437,7 +435,6 @@ class PostVoteController extends GameController
     {
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
         $user = $this->zfcUserAuthentication()->getIdentity();
-        $sg = $this->getGameService();
         $channel = $this->getEvent()->getRouteMatch()->getParam('channel');
 
         $statusMail = null;
@@ -573,7 +570,7 @@ class PostVoteController extends GameController
 
         if ($request->isPost()) {
             $data = $request->getPost()->toArray();
-            $deleteFile = $sg->deleteFilePosted($data, $game, $user);
+            $sg->deleteFilePosted($data, $game, $user);
         }
 
         $response->setContent(\Zend\Json\Json::encode(array(
@@ -588,7 +585,6 @@ class PostVoteController extends GameController
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
 		$filter		= $this->getEvent()->getRouteMatch()->getParam('filter');
         $search 	= $this->params()->fromQuery('name');
-        $user 		= $this->zfcUserAuthentication()->getIdentity();
         $sg 		= $this->getGameService();
 
         $statusMail = false;

@@ -14,7 +14,6 @@ class InstantWinController extends GameController
     {
 
         $sg = $this->getGameService();
-        $occurrence_mapper = $sg->getInstantWinOccurrenceMapper();
 
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
         $channel = $this->getEvent()->getRouteMatch()->getParam('channel');

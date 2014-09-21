@@ -289,7 +289,6 @@ class Quiz extends Game implements ServiceManagerAwareInterface
 
         $quizPoints          = 0;
         $quizCorrectAnswers  = 0;
-        $ratioCorrectAnswers = 0;
         $maxCorrectAnswers = $game->getMaxCorrectAnswers();
         $totalQuestions = 0;
 

@@ -351,8 +351,6 @@ class GameController extends AbstractActionController
                 $required    = ($attributes->data->required == 'true') ? true : false ;
                 $class       = isset($attributes->data->class)? $attributes->data->class : '';
                 $id          = isset($attributes->data->id)? $attributes->data->id : '';
-                $lengthMin   = isset($attributes->data->length)? $attributes->data->length->min : '';
-                $lengthMax   = isset($attributes->data->length)? $attributes->data->length->max : '';
 
                 $element = new Element\Textarea($name);
                 $element->setLabel($label);
@@ -393,8 +391,6 @@ class GameController extends AbstractActionController
             if (isset($element->line_upload)) {
                 $attributes  = $element->line_upload[0];
                 $name        = isset($attributes->name)? $attributes->name : '';
-                $type        = isset($attributes->type)? $attributes->type : '';
-                $position    = isset($attributes->order)? $attributes->order : '';
                 $label       = isset($attributes->data->label)? $attributes->data->label : '';
                 $required    = ($attributes->data->required == 'true') ? true : false ;
                 $class       = isset($attributes->data->class)? $attributes->data->class : '';
@@ -621,7 +617,6 @@ class GameController extends AbstractActionController
     public function termsAction()
     {
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-        $user = $this->zfcUserAuthentication()->getIdentity();
         $sg = $this->getGameService();
 
         $game = $sg->checkGame($identifier, false);
@@ -641,7 +636,6 @@ class GameController extends AbstractActionController
     public function conditionsAction()
     {
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-        $user = $this->zfcUserAuthentication()->getIdentity();
         $sg = $this->getGameService();
 
         $game = $sg->checkGame($identifier, false);
@@ -906,7 +900,6 @@ class GameController extends AbstractActionController
     public function prizesAction()
     {
     	$identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-    	$user = $this->zfcUserAuthentication()->getIdentity();
     	$sg = $this->getGameService();
 
     	$game = $sg->checkGame($identifier);
@@ -933,8 +926,6 @@ class GameController extends AbstractActionController
     {
     	$identifier = $this->getEvent()->getRouteMatch()->getParam('id');
     	$prizeIdentifier = $this->getEvent()->getRouteMatch()->getParam('prize');
-    	
-    	$user = $this->zfcUserAuthentication()->getIdentity();
     	$sg = $this->getGameService();
     	$sp = $this->getPrizeService();
 

@@ -3,7 +3,6 @@
 namespace PlaygroundGame\Mapper;
 
 use Doctrine\ORM\EntityManager;
-use ZfcBase\Mapper\AbstractDbMapper;
 use PlaygroundGame\Options\ModuleOptions;
 
 class Mission

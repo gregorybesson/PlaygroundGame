@@ -3,12 +3,7 @@
 namespace PlaygroundGame\Service;
 
 use Zend\ServiceManager\ServiceManagerAwareInterface;
-use Zend\ServiceManager\ServiceManager;
 use Zend\Stdlib\ErrorHandler;
-
-use Zend\File\Transfer\Adapter\Http;
-use Zend\Validator\File\Size;
-use Zend\Validator\File\IsImage;
 
 class PostVote extends Game implements ServiceManagerAwareInterface
 {
@@ -29,7 +24,6 @@ class PostVote extends Game implements ServiceManagerAwareInterface
         $postvotePostMapper = $this->getPostVotePostMapper();
         $postVotePostElementMapper = $this->getPostVotePostElementMapper();
 
-        $entryMapper = $this->getEntryMapper();
         $entry = $this->findLastActiveEntry($game, $user);
 
         if (!$entry) {
@@ -75,7 +69,6 @@ class PostVote extends Game implements ServiceManagerAwareInterface
         $postvotePostMapper = $this->getPostVotePostMapper();
         $postVotePostElementMapper = $this->getPostVotePostElementMapper();
 
-        $entryMapper = $this->getEntryMapper();
         $entry = $this->findLastActiveEntry($game, $user);
 
         if (!$entry) {
@@ -112,7 +105,6 @@ class PostVote extends Game implements ServiceManagerAwareInterface
         $postvotePostMapper = $this->getPostVotePostMapper();
         $postVotePostElementMapper = $this->getPostVotePostElementMapper();
 
-        $entryMapper = $this->getEntryMapper();
         $entry = $this->findLastActiveEntry($game, $user);
 
         if (!$entry) {
@@ -132,7 +124,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
         $path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR . 'game' . $game->getId() . '_post'. $post->getId() . '_';
         $media_url = $this->getOptions()->getMediaUrl() . '/' . 'game' . $game->getId() . '_post'. $post->getId() . '_';
         $position=1;
-        //$postVotePostElementMapper->removeAll($post);
+
         foreach ($data as $name => $value) {
             $postElement = $postVotePostElementMapper->findOneBy(array('post' => $post, 'name' => $name));
             if (! $postElement) {
@@ -140,32 +132,10 @@ class PostVote extends Game implements ServiceManagerAwareInterface
             }
             $postElement->setName($name);
             $postElement->setPosition($position);
-            // TODO : Manage uploads
+
             if (is_array($value) && isset($value['tmp_name'])) {
 				if ( ! $value['error'] ) {
                 	ErrorHandler::start();
-/*
-                    $adapter = new \Zend\File\Transfer\Adapter\Http();
-                    // 400ko
-                    $size = new Size(array('max'=>400000));
-                    $is_image = new IsImage('jpeg,png,gif,jpg');
-                    $adapter->setValidators(array($size, $is_image), $value['name']);
-
-                    if (!$adapter->isValid()) {
-                        $dataError = $adapter->getMessages();
-                        $error = array();
-                        foreach ($dataError as $key=>$row) {
-                            // TODO : remove the exception below once understood why it appears
-                            if ($key != 'fileUploadErrorNoFile') {
-                                $error[] = $row;
-                            }
-                        }
-
-                        $form->setMessages(array($name=>$error ));
-
-                        return false;
-                    }
-*/
 					$value['name'] = $this->fileNewname($path, $value['name'], true);
                     move_uploaded_file($value['tmp_name'], $path . $value['name']);
                     $postElement->setValue($media_url . $value['name']);
@@ -268,15 +238,11 @@ class PostVote extends Game implements ServiceManagerAwareInterface
     {
         
         $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
-        $postSort = '';
-        $filterSearch = '';
-        
         $qb = $em->createQueryBuilder();
-        
         $and = $qb->expr()->andx();
         
         $and->add($qb->expr()->eq('p.status', 2));
-        
+
         $and->add($qb->expr()->eq('g.id', ':game'));
         $qb->setParameter('game', $game);
         
@@ -314,39 +280,6 @@ class PostVote extends Game implements ServiceManagerAwareInterface
         
         $query = $qb->getQuery();
         
-        /*
-        switch ($filter) {
-            case 'random' :
-                $postSort = 'ORDER BY e.value ASC';
-                break;
-            case 'vote' :
-                $postSort = 'ORDER BY votesCount DESC';
-                break;
-            case 'date' :
-                $postSort = 'ORDER BY p.createdAt DESC';
-        }
-
-        if ($search != '') {
-            $filterSearch = " AND (u.username like '%" . $search . "%' OR u.lastname like '%" . $search . "%' OR u.firstname like '%" . $search . "%' OR e.value like '%" . $search . "%')";
-        }
-
-        $query = $em->createQuery('
-            SELECT p, COUNT(v) AS votesCount
-            FROM PlaygroundGame\Entity\PostVotePost p
-            JOIN p.postvote g
-            JOIN p.user u
-            JOIN p.postElements e
-            LEFT JOIN p.votes v
-            WHERE g.id = :game
-            ' . $filterSearch . '
-            AND p.status = 2
-            GROUP BY p.id
-            ' . $postSort . '
-        ');
-
-        $query->setParameter('game', $game);
-        
-        */
         $posts = $query->getResult();
         $arrayPosts = array();
         $i=0;

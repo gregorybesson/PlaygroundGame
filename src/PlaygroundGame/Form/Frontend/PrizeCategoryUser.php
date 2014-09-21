@@ -18,14 +18,6 @@ class PrizeCategoryUser extends ProvidesEventsForm
         parent::__construct($name);
 
         $this->setServiceManager($sm);
-        $entityManager = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
-
-        // The form will hydrate an object of type "QuizQuestion"
-        // This is the secret for working with collections with Doctrine
-        // (+ add'Collection'() and remove'Collection'() and "cascade" in
-        // corresponding Entity
-        // https://github.com/doctrine/DoctrineModule/blob/master/docs/hydrator.md
-        //$this->setHydrator(new DoctrineHydrator($entityManager, 'PlaygroundGame\Entity\PrizeCategoryUser'));
 
         $this->add(array(
             'name' => 'user',

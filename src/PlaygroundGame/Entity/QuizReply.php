@@ -289,8 +289,6 @@ class QuizReply implements InputFilterAwareInterface
     {
         if (!$this->inputFilter) {
             $inputFilter = new InputFilter();
-            $factory = new InputFactory();
-
             $this->inputFilter = $inputFilter;
         }
 
