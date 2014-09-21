@@ -1433,36 +1433,28 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             )
         )';
 
+        $qb = $em->createQueryBuilder();
+        $qb->select('g')->from('PlaygroundGame\Entity\Game', 'g');
+        
         switch ($type) {
             case 'startDate':
-                $filter = 'g.startDate ' . $order;
+                $qb->orderBy('g.startDate', $order);
                 break;
             case 'activeGames':
-                $filter = 'g.active ' . $order;
+                $qb->orderBy('g.active', $order);
                 break;
             case 'onlineGames':
-                $filter = $onlineGames . ' ' . $order;
+                $qb->orderBy($onlineGames, $order);
+                $qb->setParameter('date', $today);
                 break;
             case 'createdAt':
-                $filter = 'g.createdAt ' . $order;
+                $qb->orderBy('g.createdAt', $order);
                 break;
         }
 
-        $query = $em->createQuery('
-            SELECT g FROM PlaygroundGame\Entity\Game g
-            ORDER BY ' . $filter);
-        if ($filter == $onlineGames) {
-            $query->setParameter('date', $today);
-        }
-        return $query;
-    }
+        $query = $qb->getQuery();
 
-    /**
-     * This function returns the list of games, order by $type
-     */
-    public function getGamesOrderBy($type = 'createdAt', $order = 'DESC')
-    {
-        return $this->getQueryGamesOrderBy($type, $order)->getResult();
+        return $query;
     }
 
     public function draw($game)
