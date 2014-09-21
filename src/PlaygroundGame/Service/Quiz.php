@@ -4,10 +4,6 @@ namespace PlaygroundGame\Service;
 
 use PlaygroundGame\Entity\QuizReply;
 use PlaygroundGame\Entity\QuizReplyAnswer;
-
-use PlaygroundGame\Entity\Entry;
-
-use Zend\Form\Form;
 use Zend\ServiceManager\ServiceManagerAwareInterface;
 use Zend\ServiceManager\ServiceManager;
 use PlaygroundGame\Mapper\GameInterface as GameMapperInterface;

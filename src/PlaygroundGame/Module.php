@@ -7,7 +7,6 @@
 namespace PlaygroundGame;
 
 use Zend\ModuleManager\ModuleManager;
-use Zend\Session\Container;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\Validator\AbstractValidator;

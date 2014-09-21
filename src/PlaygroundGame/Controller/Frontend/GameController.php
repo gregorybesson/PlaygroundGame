@@ -2,7 +2,6 @@
 
 namespace PlaygroundGame\Controller\Frontend;
 
-use PlaygroundGame\Entity\Lottery;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Session\Container;

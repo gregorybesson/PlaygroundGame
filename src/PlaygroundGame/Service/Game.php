@@ -199,7 +199,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         if (! empty($data['uploadFbPageTabImage']['tmp_name'])) {
             ErrorHandler::start();
             $extension = $this->getExtension(strtolower($data['uploadFbPageTabImage']['name']));
-            $src = $this->get_src($extension, $data['uploadFbPageTabImage']['tmp_name']);
+            $src = $this->getSrc($extension, $data['uploadFbPageTabImage']['tmp_name']);
             $this->resize($data['uploadFbPageTabImage']['tmp_name'], $extension, $path . $game->getId() . "-" . $data['uploadFbPageTabImage']['name'], $src, 111, 74);
 
             $game->setFbPageTabImage($media_url . $game->getId() . "-" . $data['uploadFbPageTabImage']['name']);
@@ -419,7 +419,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             ErrorHandler::start();
 
             $extension = $this->getExtension(strtolower($data['uploadFbPageTabImage']['name']));
-            $src = $this->get_src($extension, $data['uploadFbPageTabImage']['tmp_name']);
+            $src = $this->getSrc($extension, $data['uploadFbPageTabImage']['tmp_name']);
             $this->resize($data['uploadFbPageTabImage']['tmp_name'], $extension, $path . $game->getId() . "-" . $data['uploadFbPageTabImage']['name'], $src, 111, 74);
 
             $game->setFbPageTabImage($media_url . $game->getId() . "-" . $data['uploadFbPageTabImage']['name']);
@@ -1526,7 +1526,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         return $ext;
     }
 
-    public function get_src($extension, $temp_path)
+    public function getSrc($extension, $temp_path)
     {
         $image_src = '';
         switch ($extension) {
