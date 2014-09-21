@@ -547,7 +547,7 @@ class Module
 
                 'playgroundgame_mission_game_form' => function($sm) {
                     $translator = $sm->get('translator');
-                    $form = new PlaygroundGame\Form\Admin\MissionGameFieldset(null, $sm, $translator);
+                    $form = new Form\Admin\MissionGameFieldset(null, $sm, $translator);
                     $missionGame = new Entity\MissionGame();
                     $form->setInputFilter($missionGame->getInputFilter());
                     return $form;
