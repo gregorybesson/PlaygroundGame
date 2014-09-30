@@ -64,11 +64,6 @@ class PostVotePost implements InputFilterAwareInterface
      * @ORM\Column(type="integer", nullable=false)
      */
     protected $status = 0;
-    
-    /**
-     * @ORM\Column(type="boolean", nullable=true)
-     */
-    protected $pushed = 0;
 
     /**
      * @ORM\Column(name="created_at", type="datetime")
@@ -251,24 +246,6 @@ class PostVotePost implements InputFilterAwareInterface
     {
         $this->status = $status;
 
-        return $this;
-    }
-    
-    /**
-     * @return bool
-     */
-    public function isPushed()
-    {
-        return $this->pushed;
-    }
-    
-    /**
-     * @param string $pushed
-     * @return PostVotePost
-     */
-    public function setPushed($pushed)
-    {
-        $this->pushed = $pushed;
         return $this;
     }
 

@@ -41,6 +41,7 @@ return array(
                 array('controller' => 'playgroundgame_instantwin',          'roles' => array('guest', 'user')),
                 array('controller' => 'playgroundgame_prizecategory',       'roles' => array('guest', 'user')),
                 array('controller' => 'playgroundgame_mission',             'roles' => array('guest', 'user')),
+                array('controller' => 'playgroundgame_share',               'roles' => array('guest', 'user')),
     
                 // Admin area
                 array('controller' => 'playgroundgameadmin',                'roles' => array('admin')),
@@ -237,7 +238,8 @@ return array(
             'playgroundgame_admin_postvote' => 'PlaygroundGame\Controller\Admin\PostVoteController',
             'playgroundgame_admin_quiz' => 'PlaygroundGame\Controller\Admin\QuizController',
             'playgroundgame_admin_prizecategory' => 'PlaygroundGame\Controller\Admin\PrizeCategoryController',
-            'playgroundgame_admin_mission' => 'PlaygroundGame\Controller\Admin\MissionController'
+            'playgroundgame_admin_mission' => 'PlaygroundGame\Controller\Admin\MissionController',
+            'playgroundgame_share' => 'PlaygroundGame\Controller\Frontend\ShareController'
         )
     ),
     'router' => array(
@@ -471,16 +473,6 @@ return array(
                                         )
                                     )
                                 )
-                            ),
-                            'share' => array(
-                                'type' => 'Literal',
-                                'options' => array(
-                                    'route' => '/partager',
-                                    'defaults' => array(
-                                        'controller' => 'playgroundgame_game',
-                                        'action' => 'share'
-                                    )
-                                )
                             )
                         )
                     ),
@@ -636,16 +628,6 @@ return array(
                                                 'action' => 'prize'
                                             )
                                         )
-                                    )
-                                )
-                            ),
-                            'share' => array(
-                                'type' => 'Literal',
-                                'options' => array(
-                                    'route' => '/partager',
-                                    'defaults' => array(
-                                        'controller' => 'playgroundgame_game',
-                                        'action' => 'share'
                                     )
                                 )
                             )
@@ -805,16 +787,6 @@ return array(
                                         )
                                     )
                                 )
-                            ),
-                            'share' => array(
-                                'type' => 'Literal',
-                                'options' => array(
-                                    'route' => '/partager',
-                                    'defaults' => array(
-                                        'controller' => 'playgroundgame_game',
-                                        'action' => 'share'
-                                    )
-                                )
                             )
                         )
                     ),
@@ -965,7 +937,7 @@ return array(
                                 'options' => array(
                                     'route' => '/fbshare',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_postvote',
+                                        'controller' => 'playgroundgame_share',
                                         'action' => 'fbshare'
                                     )
                                 )
@@ -975,7 +947,7 @@ return array(
                                 'options' => array(
                                     'route' => '/fbrequest',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_postvote',
+                                        'controller' => 'playgroundgame_share',
                                         'action' => 'fbrequest'
                                     )
                                 )
@@ -985,7 +957,7 @@ return array(
                                 'options' => array(
                                     'route' => '/tweet',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_postvote',
+                                        'controller' => 'playgroundgame_share',
                                         'action' => 'tweet'
                                     )
                                 )
@@ -995,7 +967,7 @@ return array(
                                 'options' => array(
                                     'route' => '/google',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_postvote',
+                                        'controller' => 'playgroundgame_share',
                                         'action' => 'google'
                                     )
                                 )
@@ -1068,8 +1040,8 @@ return array(
                                 'options' => array(
                                     'route' => '/partager',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_game',
-                                        'action' => 'share'
+                                        'controller' => 'playgroundgame_share',
+                                        'action' => 'index'
                                     )
                                 )
                             )
@@ -1648,16 +1620,6 @@ return array(
                                     'defaults' => array(
                                         'controller' => 'playgroundgame_admin_postvote',
                                         'action' => 'moderationEdit'
-                                    )
-                                )
-                            ),
-                            'postvote-push' => array(
-                                'type' => 'Segment',
-                                'options' => array(
-                                    'route' => '/postvote-push/:postId[/:pushed]',
-                                    'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_postvote',
-                                        'action' => 'push'
                                     )
                                 )
                             ),
