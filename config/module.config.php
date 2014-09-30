@@ -41,7 +41,6 @@ return array(
                 array('controller' => 'playgroundgame_instantwin',          'roles' => array('guest', 'user')),
                 array('controller' => 'playgroundgame_prizecategory',       'roles' => array('guest', 'user')),
                 array('controller' => 'playgroundgame_mission',             'roles' => array('guest', 'user')),
-                array('controller' => 'playgroundgame_share',               'roles' => array('guest', 'user')),
     
                 // Admin area
                 array('controller' => 'playgroundgameadmin',                'roles' => array('admin')),
@@ -239,7 +238,6 @@ return array(
             'playgroundgame_admin_quiz' => 'PlaygroundGame\Controller\Admin\QuizController',
             'playgroundgame_admin_prizecategory' => 'PlaygroundGame\Controller\Admin\PrizeCategoryController',
             'playgroundgame_admin_mission' => 'PlaygroundGame\Controller\Admin\MissionController',
-            'playgroundgame_share' => 'PlaygroundGame\Controller\Frontend\ShareController'
         )
     ),
     'router' => array(
@@ -967,7 +965,7 @@ return array(
                                 'options' => array(
                                     'route' => '/fbshare',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_share',
+                                        'controller' => 'playgroundgame_postvote',
                                         'action' => 'fbshare'
                                     )
                                 )
@@ -977,7 +975,7 @@ return array(
                                 'options' => array(
                                     'route' => '/fbrequest',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_share',
+                                        'controller' => 'playgroundgame_postvote',
                                         'action' => 'fbrequest'
                                     )
                                 )
@@ -987,7 +985,7 @@ return array(
                                 'options' => array(
                                     'route' => '/tweet',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_share',
+                                        'controller' => 'playgroundgame_postvote',
                                         'action' => 'tweet'
                                     )
                                 )
@@ -997,7 +995,7 @@ return array(
                                 'options' => array(
                                     'route' => '/google',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_share',
+                                        'controller' => 'playgroundgame_postvote',
                                         'action' => 'google'
                                     )
                                 )
