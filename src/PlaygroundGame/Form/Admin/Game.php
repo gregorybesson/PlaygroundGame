@@ -2,11 +2,9 @@
 namespace PlaygroundGame\Form\Admin;
 
 use PlaygroundGame\Options\ModuleOptions;
-use Zend\Form\Form;
 use Zend\Form\Element;
 use ZfcBase\Form\ProvidesEventsForm;
 use Zend\Mvc\I18n\Translator;
-use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Zend\ServiceManager\ServiceManager;
 
 class Game extends ProvidesEventsForm
@@ -25,15 +23,6 @@ class Game extends ProvidesEventsForm
         parent::__construct($name);
 
         $this->setServiceManager($sm);
-
-        $entityManager = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
-
-        // The form will hydrate an object of type "QuizQuestion"
-        // This is the secret for working with collections with Doctrine
-        // (+ add'Collection'() and remove'Collection'() and "cascade" in
-        // corresponding Entity
-        // https://github.com/doctrine/DoctrineModule/blob/master/docs/hydrator.md
-        //$this->setHydrator(new DoctrineHydrator($entityManager, 'PlaygroundGame\Entity\Game'));
 
         $this->setAttribute('enctype', 'multipart/form-data');
 
@@ -130,20 +119,6 @@ class Game extends ProvidesEventsForm
             )
         ));
 
-        /*$this->add(array(
-                'name' => 'prize_category',
-                'type' => 'DoctrineORMModule\Form\Element\DoctrineEntity',
-                'options' => array(
-                        'label' => $translator->translate('Catégorie de gain', 'playgroundgame'),
-                        'object_manager' => $entityManager,
-                        'target_class' => 'PlaygroundGame\Entity\PrizeCategory',
-                        'property' => 'title'
-                ),
-                'attributes' => array(
-                        'required' => false
-                )
-        ));*/
-
         $categories = $this->getPrizeCategories();
         $this->add(array(
             'type' => 'Zend\Form\Element\Select',
@@ -154,15 +129,7 @@ class Game extends ProvidesEventsForm
                 'label' => $translator->translate('Category benefit', 'playgroundgame')
             )
         ));
-/*
-        $this->add(array(
-            'type' => 'Zend\Form\Element\Checkbox',
-            'name' => 'broadcastFacebook',
-            'options' => array(
-                'label' => 'Publier ce jeu sur Facebook',
-            ),
-        ));
-*/
+
         $this->add(array(
             'type' => 'Zend\Form\Element\Checkbox',
             'name' => 'broadcastPlatform',
@@ -746,8 +713,6 @@ class Game extends ProvidesEventsForm
             $partners = $results;
         }
 
-        //print_r($partners);
-        //die();
         return $partners;
     }
 

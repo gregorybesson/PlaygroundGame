@@ -2,15 +2,11 @@
 
 namespace PlaygroundGame\Controller\Admin;
 
-use PlaygroundGame\Entity\Game;
-
 use PlaygroundGame\Entity\Quiz;
 use PlaygroundGame\Entity\QuizQuestion;
 use PlaygroundGame\Controller\Admin\GameController;
+use PlaygroundGame\Service\Game as AdminGameService;
 use Zend\View\Model\ViewModel;
-use Zend\InputFilter;
-use Zend\Validator;
-use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Paginator\Paginator;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;

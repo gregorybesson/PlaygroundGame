@@ -2,8 +2,7 @@
 
 namespace PlaygroundGame\Controller\Admin;
 
-use PlaygroundGame\Entity\Game;
-
+use PlaygroundGame\Service\Game as AdminGameService;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use PlaygroundGame\Options\ModuleOptions;
@@ -136,7 +135,6 @@ class AdminController extends AbstractActionController
                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The game has been edited');
             } catch (\Doctrine\DBAL\DBALException $e) {
                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('Il y a déjà eu des participants à ce jeu. Vous ne pouvez plus le supprimer');
-                //throw $e;
             }
         }
 

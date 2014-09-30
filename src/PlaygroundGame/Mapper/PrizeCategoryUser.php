@@ -65,7 +65,7 @@ class PrizeCategoryUser
             $entity = $this->persist($entity);
         } catch (DBALException $e) {
             throw $e;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             throw $e;
         }
 
@@ -84,7 +84,7 @@ class PrizeCategoryUser
             $this->em->flush();
         } catch (DBALException $e) {
             throw $e;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             throw $e;
         }
 

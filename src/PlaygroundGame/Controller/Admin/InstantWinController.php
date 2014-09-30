@@ -2,10 +2,9 @@
 
 namespace PlaygroundGame\Controller\Admin;
 
-use PlaygroundGame\Entity\Game;
-use PlaygroundGame\Form;
 use PlaygroundGame\Entity\InstantWin;
 use PlaygroundGame\Entity\InstantWinOccurrence;
+use PlaygroundGame\Service\Game as AdminGameService;
 use Zend\InputFilter;
 use Zend\Validator;
 
@@ -493,7 +492,7 @@ class InstantWinController extends GameController
         return $this->adminGameService;
     }
 
-    public function setAdminGameService(\PlaygroundGame\Controller\Admin\AdminGameService $adminGameService)
+    public function setAdminGameService(\PlaygroundGame\Service\Game $adminGameService)
     {
         $this->adminGameService = $adminGameService;
 

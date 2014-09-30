@@ -45,10 +45,9 @@ class Cron extends EventProvider implements ServiceManagerAwareInterface
 
         $mailService = $sm->get('playgrounduser_message');
         $gameService = $sm->get('playgroundgame_quiz_service');
-        $options = $sm->get('playgroundgame_module_options');
 
-        $from    = "admin@playground.fr";//$options->getEmailFromAddress();
-        $subject = "sujet game"; //$options->getResetEmailSubjectLine();
+        $from    = "admin@playground.fr";
+        $subject = "sujet game";
 
         $to = "gbesson@test.com";
 
@@ -56,20 +55,15 @@ class Cron extends EventProvider implements ServiceManagerAwareInterface
 
         // On recherche les joueurs qui n'ont pas partagé leur qquiz après avoir joué
         // entry join user join game : distinct user et game et game_entry = 0 et updated_at <= jour-1 et > jour - 2
-        //$contacts = getQuizUsersNotSharing();
 
-        //foreach ($contacts as $contact) {
-            //$message = $mailService->createTextMessage('titi@test.com', 'gbesson@test.com', 'sujetcron', 'playground-user/email/forgot', array());
-            $message = $mailService->createTextMessage($from, $to, $subject, 'playground-game/email/share_reminder', array('game' => $game));
+        $message = $mailService->createTextMessage($from, $to, $subject, 'playground-game/email/share_reminder', array('game' => $game));
 
-            $mailService->send($message);
-        //}
+        $mailService->send($message);
 
     }
 
     public static function instantWinEmail()
     {
-        //TODO : factoriser la config
         $configuration = require 'config/application.config.php';
         $smConfig = isset($configuration['service_manager']) ? $configuration['service_manager'] : array();
         $sm = new \Zend\ServiceManager\ServiceManager(new \Zend\Mvc\Service\ServiceManagerConfig($smConfig));
@@ -79,10 +73,9 @@ class Cron extends EventProvider implements ServiceManagerAwareInterface
 
         $mailService = $sm->get('playgrounduser_message');
         $gameService = $sm->get('playgroundgame_instantwin_service');
-        $options = $sm->get('playgroundgame_module_options');
 
-        $from    = "admin@playground.fr";//$options->getEmailFromAddress();
-        $subject = "Votre jeu Instant gagnant"; //$options->getResetEmailSubjectLine();
+        $from    = "admin@playground.fr";
+        $subject = "Votre jeu Instant gagnant";
 
         // Je recherche les jeux instantwin en cours
         $games = $gameService->getActiveGames(false, 'instantwin');

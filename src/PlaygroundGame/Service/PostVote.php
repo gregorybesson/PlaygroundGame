@@ -3,12 +3,7 @@
 namespace PlaygroundGame\Service;
 
 use Zend\ServiceManager\ServiceManagerAwareInterface;
-use Zend\ServiceManager\ServiceManager;
 use Zend\Stdlib\ErrorHandler;
-
-use Zend\File\Transfer\Adapter\Http;
-use Zend\Validator\File\Size;
-use Zend\Validator\File\IsImage;
 
 class PostVote extends Game implements ServiceManagerAwareInterface
 {
@@ -29,7 +24,6 @@ class PostVote extends Game implements ServiceManagerAwareInterface
         $postvotePostMapper = $this->getPostVotePostMapper();
         $postVotePostElementMapper = $this->getPostVotePostElementMapper();
 
-        $entryMapper = $this->getEntryMapper();
         $entry = $this->findLastActiveEntry($game, $user);
 
         if (!$entry) {
@@ -75,7 +69,6 @@ class PostVote extends Game implements ServiceManagerAwareInterface
         $postvotePostMapper = $this->getPostVotePostMapper();
         $postVotePostElementMapper = $this->getPostVotePostElementMapper();
 
-        $entryMapper = $this->getEntryMapper();
         $entry = $this->findLastActiveEntry($game, $user);
 
         if (!$entry) {
@@ -112,7 +105,6 @@ class PostVote extends Game implements ServiceManagerAwareInterface
         $postvotePostMapper = $this->getPostVotePostMapper();
         $postVotePostElementMapper = $this->getPostVotePostElementMapper();
 
-        $entryMapper = $this->getEntryMapper();
         $entry = $this->findLastActiveEntry($game, $user);
 
         if (!$entry) {
@@ -132,7 +124,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
         $path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR . 'game' . $game->getId() . '_post'. $post->getId() . '_';
         $media_url = $this->getOptions()->getMediaUrl() . '/' . 'game' . $game->getId() . '_post'. $post->getId() . '_';
         $position=1;
-        //$postVotePostElementMapper->removeAll($post);
+
         foreach ($data as $name => $value) {
             $postElement = $postVotePostElementMapper->findOneBy(array('post' => $post, 'name' => $name));
             if (! $postElement) {
@@ -140,32 +132,10 @@ class PostVote extends Game implements ServiceManagerAwareInterface
             }
             $postElement->setName($name);
             $postElement->setPosition($position);
-            // TODO : Manage uploads
+
             if (is_array($value) && isset($value['tmp_name'])) {
 				if ( ! $value['error'] ) {
                 	ErrorHandler::start();
-/*
-                    $adapter = new \Zend\File\Transfer\Adapter\Http();
-                    // 400ko
-                    $size = new Size(array('max'=>400000));
-                    $is_image = new IsImage('jpeg,png,gif,jpg');
-                    $adapter->setValidators(array($size, $is_image), $value['name']);
-
-                    if (!$adapter->isValid()) {
-                        $dataError = $adapter->getMessages();
-                        $error = array();
-                        foreach ($dataError as $key=>$row) {
-                            // TODO : remove the exception below once understood why it appears
-                            if ($key != 'fileUploadErrorNoFile') {
-                                $error[] = $row;
-                            }
-                        }
-
-                        $form->setMessages(array($name=>$error ));
-
-                        return false;
-                    }
-*/
 					$value['name'] = $this->fileNewname($path, $value['name'], true);
                     move_uploaded_file($value['tmp_name'], $path . $value['name']);
                     $postElement->setValue($media_url . $value['name']);
@@ -266,54 +236,66 @@ class PostVote extends Game implements ServiceManagerAwareInterface
 
     public function findArrayOfValidatedPosts($game, $filter, $search='')
     {
-        //$posts = $this->getPostVotePostMapper()->findBy(array('postvote'=> $game, 'status' => 2));
+        
         $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
-        $postSort = '';
-        $filterSearch = '';
+        $qb = $em->createQueryBuilder();
+        $and = $qb->expr()->andx();
+        
+        $and->add($qb->expr()->eq('p.status', 2));
+
+        $and->add($qb->expr()->eq('g.id', ':game'));
+        $qb->setParameter('game', $game);
+        
+        if ($search != '') {
+            $and->add(
+                $qb->expr()->orX(
+                    $qb->expr()->like('u.username', $qb->expr()->literal('%:search%')),
+                    $qb->expr()->like('u.firstname', $qb->expr()->literal('%:search%')),
+                    $qb->expr()->like('u.lastname', $qb->expr()->literal('%:search%')),
+                    $qb->expr()->like('e.value', $qb->expr()->literal('%:search%')),
+                    $qb->expr()->isNull('g.publicationDate')
+                )
+            );
+            $qb->setParameter('search', $search);
+        }
+        
+        $qb->select('p, COUNT(v) AS votesCount')
+            ->from('PlaygroundGame\Entity\PostVotePost', 'p')
+            ->innerJoin('p.postvote', 'g')
+            ->innerJoin('p.user', 'u')
+            ->innerJoin('p.postElements', 'e')
+            ->leftJoin('p.votes', 'v')
+            ->where($and);
+ 
         switch ($filter) {
             case 'random' :
-                $postSort = 'ORDER BY e.value ASC';
+                $qb->orderBy('e.value', 'ASC');
                 break;
             case 'vote' :
-                $postSort = 'ORDER BY votesCount DESC';
+                $qb->orderBy('votesCount', 'DESC');
                 break;
             case 'date' :
-                $postSort = 'ORDER BY p.createdAt DESC';
+                $qb->orderBy('p.createdAt', 'DESC');
         }
-
-        if ($search != '') {
-            $filterSearch = " AND (u.username like '%" . $search . "%' OR u.lastname like '%" . $search . "%' OR u.firstname like '%" . $search . "%' OR e.value like '%" . $search . "%')";
-        }
-
-        $query = $em->createQuery('
-            SELECT p, COUNT(v) AS votesCount
-            FROM PlaygroundGame\Entity\PostVotePost p
-            JOIN p.postvote g
-            JOIN p.user u
-            JOIN p.postElements e
-            LEFT JOIN p.votes v
-            WHERE g.id = :game
-            ' . $filterSearch . '
-            AND p.status = 2
-            GROUP BY p.id
-            ' . $postSort . '
-        ');
-
-        $query->setParameter('game', $game);
+        
+        $query = $qb->getQuery();
+        
         $posts = $query->getResult();
         $arrayPosts = array();
         $i=0;
         foreach ($posts as $postRaw) {
             $data = array();
             $post = $postRaw[0];
-            foreach ($post->getPostElements() as $element) {
-                $data[$element->getPosition()] = $element->getValue();
+            if($post){
+                foreach ($post->getPostElements() as $element) {
+                    $data[$element->getPosition()] = $element->getValue();
+                }
+                $arrayPosts[$i]['data']  = $data;
+                $arrayPosts[$i]['votes'] = count($post->getVotes());
+                $arrayPosts[$i]['id']    = $post->getId();
+                $arrayPosts[$i]['user']  = $post->getUser();
+                $i++;
             }
-            $arrayPosts[$i]['data']  = $data;
-            $arrayPosts[$i]['votes'] = count($post->getVotes());
-            $arrayPosts[$i]['id']    = $post->getId();
-            $arrayPosts[$i]['user']  = $post->getUser();
-            $i++;
         }
 
         return $arrayPosts;

@@ -7,7 +7,6 @@ use Zend\ServiceManager\ServiceManager;
 use ZfcBase\EventManager\EventProvider;
 use PlaygroundReward\Options\ModuleOptions;
 use PlaygroundGame\Entity\Mission as MissionEntity;
-use PlaygroundGame\Entity\MissionGame as MissionGameEntity;
 
 class Mission extends EventProvider implements ServiceManagerAwareInterface
 {

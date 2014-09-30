@@ -2,9 +2,7 @@
 
 namespace PlaygroundGame\Form\Admin;
 
-use Zend\Form\Form;
 use PlaygroundCore\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
-use Zend\Form\Element;
 use Zend\Mvc\I18n\Translator;
 use Zend\ServiceManager\ServiceManager;
 

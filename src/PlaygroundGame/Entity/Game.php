@@ -2017,17 +2017,6 @@ class Game implements InputFilterAwareInterface, Translatable
                 )
             )));
 
-            /*
-             * $inputFilter->add($factory->createInput(array( 'type' =>
-             * 'Zend\InputFilter\FileInput', 'name' => 'upload_mainImage',
-             * 'required' => false, 'filters' => array( // array('name' =>
-             * 'filerename', // 'options' => array( // 'target' =>
-             * '/private/tmp/upload-test', //)), array('name' =>
-             * 'filelowercase'), ), 'validators' => array(array('name' =>
-             * 'fileupload'), //array('name' => 'filesize', 'options' => array(
-             * // 'min' => 4000, 'max' => 5000, //)), ), )));
-             */
-
             $this->inputFilter = $inputFilter;
         }
 

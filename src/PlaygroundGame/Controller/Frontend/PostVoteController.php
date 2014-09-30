@@ -5,8 +5,6 @@ namespace PlaygroundGame\Controller\Frontend;
 use Zend\Form\Element;
 use Zend\Form\Form;
 use Zend\InputFilter\Factory as InputFactory;
-use Zend\Session\Container;
-use PlaygroundGame\Form\Frontend\PostVoteVote;
 use Zend\View\Model\ViewModel;
 
 
@@ -191,10 +189,7 @@ class PostVoteController extends GameController
             }
             if (isset($element->line_upload)) {
                 $attributes  = $element->line_upload[0];
-                //print_r($attributes);
                 $name        = isset($attributes->name)? $attributes->name : '';
-                $type        = isset($attributes->type)? $attributes->type : '';
-                $position    = isset($attributes->order)? $attributes->order : '';
                 $label       = isset($attributes->data->label)? $attributes->data->label : '';
                 $required    = ($attributes->data->required == 'true') ? true : false ;
                 $class       = isset($attributes->data->class)? $attributes->data->class : '';
@@ -314,7 +309,10 @@ class PostVoteController extends GameController
                     // send mail for participation
                     $this->getGameService()->sendGameMail($game, $user, $post, 'postvote');
                 }
-                $redirectUrl = $this->frontendUrl()->fromRoute('postvote/result', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')));
+                if (!($step = $game->nextStep('play'))) {
+                    $step = 'result';
+                }
+                $redirectUrl = $this->frontendUrl()->fromRoute('postvote/'.$step, array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')));
 
                 return $this->redirect()->toUrl($redirectUrl);
             }
@@ -440,7 +438,7 @@ class PostVoteController extends GameController
     {
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
         $user = $this->zfcUserAuthentication()->getIdentity();
-        $sg = $this->getGameService();
+        $channel = $this->getEvent()->getRouteMatch()->getParam('channel');
 
         $statusMail = null;
 
@@ -575,7 +573,7 @@ class PostVoteController extends GameController
 
         if ($request->isPost()) {
             $data = $request->getPost()->toArray();
-            $deleteFile = $sg->deleteFilePosted($data, $game, $user);
+            $sg->deleteFilePosted($data, $game, $user);
         }
 
         $response->setContent(\Zend\Json\Json::encode(array(
@@ -590,7 +588,6 @@ class PostVoteController extends GameController
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
 		$filter		= $this->getEvent()->getRouteMatch()->getParam('filter');
         $search 	= $this->params()->fromQuery('name');
-        $user 		= $this->zfcUserAuthentication()->getIdentity();
         $sg 		= $this->getGameService();
 
         $statusMail = false;

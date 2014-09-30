@@ -4,8 +4,6 @@ namespace PlaygroundGame\Form\Admin;
 
 use PlaygroundGame\Entity\Prize;
 use Zend\Form\Fieldset;
-use Zend\Form\Form;
-use Zend\Form\Element;
 use Zend\Mvc\I18n\Translator;
 use PlaygroundCore\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Zend\ServiceManager\ServiceManager;

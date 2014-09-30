@@ -3,6 +3,7 @@
 namespace PlaygroundGame\Controller\Admin;
 
 use PlaygroundGame\Entity\PrizeCategory;
+use PlaygroundGame\Service\PrizeCategory as PrizeCategoryService;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;

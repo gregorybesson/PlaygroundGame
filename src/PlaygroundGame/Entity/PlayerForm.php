@@ -4,7 +4,6 @@ namespace PlaygroundGame\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\Factory as InputFactory;
 use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
 
@@ -189,10 +188,7 @@ class PlayerForm implements InputFilterAwareInterface
     {
         if (!$this->inputFilter) {
             $inputFilter = new InputFilter();
-            $factory = new InputFactory();
-
             $inputFilter = parent::getInputFilter();
-
             $this->inputFilter = $inputFilter;
         }
 

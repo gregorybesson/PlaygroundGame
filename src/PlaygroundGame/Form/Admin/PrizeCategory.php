@@ -2,7 +2,6 @@
 
 namespace PlaygroundGame\Form\Admin;
 
-use Zend\Form\Form;
 use Zend\Form\Element;
 use ZfcBase\Form\ProvidesEventsForm;
 use Zend\Mvc\I18n\Translator;
@@ -16,9 +15,6 @@ class PrizeCategory extends ProvidesEventsForm
     {
         parent::__construct($name);
 
-        $entityManager = $serviceManager->get('doctrine.entitymanager.orm_default');
-
-        parent::__construct();
         $this->setAttribute('enctype','multipart/form-data');
 
         $this->add(array(

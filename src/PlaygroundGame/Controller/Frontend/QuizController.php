@@ -5,8 +5,6 @@ use Zend\Form\Element;
 use Zend\Form\Fieldset;
 use Zend\Form\Form;
 use Zend\InputFilter\Factory as InputFactory;
-use Zend\View\Model\ViewModel;
-use Zend\Session\Container;
 
 class QuizController extends GameController
 {
@@ -66,9 +64,6 @@ class QuizController extends GameController
 
         // TODO : create a Form class to implement this form
         $form = new Form();
-
-        // defaults validators removed
-        //$form->setUseInputFilterDefaults(false);
 
         $inputFilter = new \Zend\InputFilter\InputFilter();
         $factory = new InputFactory();
@@ -316,7 +311,7 @@ class QuizController extends GameController
         $result = parent::fbshareAction();
         $bonusEntry = false;
 
-        if ($result) {
+        if ($result->getVariable('success')) {
             $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
             $user = $this->zfcUserAuthentication()->getIdentity();
             $game = $sg->checkGame($identifier);
@@ -342,7 +337,7 @@ class QuizController extends GameController
         $result = parent::fbrequestAction();
         $bonusEntry = false;
 
-        if ($result) {
+        if ($result->getVariable('success')) {
             $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
             $user = $this->zfcUserAuthentication()->getIdentity();
             $game = $sg->checkGame($identifier);
@@ -367,7 +362,7 @@ class QuizController extends GameController
         $result = parent::tweetAction();
         $bonusEntry = false;
 
-        if ($result) {
+        if ($result->getVariable('success')) {
             $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
             $user = $this->zfcUserAuthentication()->getIdentity();
             $game = $sg->checkGame($identifier);
@@ -392,7 +387,7 @@ class QuizController extends GameController
         $result = parent::googleAction();
         $bonusEntry = false;
 
-        if ($result) {
+        if ($result->getVariable('success')) {
             $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
             $user = $this->zfcUserAuthentication()->getIdentity();
             $game = $sg->checkGame($identifier);

@@ -7,7 +7,6 @@
 namespace PlaygroundGame;
 
 use Zend\ModuleManager\ModuleManager;
-use Zend\Session\Container;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\Validator\AbstractValidator;
@@ -547,7 +546,7 @@ class Module
 
                 'playgroundgame_mission_game_form' => function($sm) {
                     $translator = $sm->get('translator');
-                    $form = new Form\Admin\MissionGame(null, $sm, $translator);
+                    $form = new Form\Admin\MissionGameFieldset(null, $sm, $translator);
                     $missionGame = new Entity\MissionGame();
                     $form->setInputFilter($missionGame->getInputFilter());
                     return $form;

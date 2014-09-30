@@ -67,14 +67,14 @@ class Prize {
 	protected $currency;
 
 	/**
-	 * @ORM\Column(type="datetime")
+	 * @ORM\Column(name="created_at", type="datetime")
 	 */
-	protected $created_at;
+	protected $createdAt;
 
 	/**
-	 * @ORM\Column(type="datetime")
+	 * @ORM\Column(name="updated_at", type="datetime")
 	 */
-	protected $updated_at;
+	protected $updatedAt;
 
 	/**
 	 * @ORM\Column(type="string", length=255, nullable=true)
@@ -259,35 +259,35 @@ class Prize {
 	/**
 	 * @return the $created_at
 	 */
-	public function getCreated_at()
+	public function getCreatedAt()
 	{
-		return $this->created_at;
+		return $this->createdAt;
 	}
 
 	/**
-	 * @param \DateTime $created_at
+	 * @param \DateTime $createdAt
 	 */
-	public function setCreated_at($created_at)
+	public function setCreatedAt($createdAt)
 	{
-		$this->created_at = $created_at;
+		$this->createdAt = $createdAt;
 
 		return $this;
 	}
 
 	/**
-	 * @return the $updated_at
+	 * @return the $updatedAt
 	 */
-	public function getUpdated_at()
+	public function getUpdatedAt()
 	{
-		return $this->updated_at;
+		return $this->updatedAt;
 	}
 
 	/**
-	 * @param \DateTime $updated_at
+	 * @param \DateTime $updatedAt
 	 */
-	public function setUpdated_at($updated_at)
+	public function setUpdatedAt($updatedAt)
 	{
-		$this->updated_at = $updated_at;
+		$this->updatedAt = $updatedAt;
 
 		return $this;
 	}

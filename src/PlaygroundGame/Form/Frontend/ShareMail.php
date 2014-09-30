@@ -1,7 +1,6 @@
 <?php
 namespace PlaygroundGame\Form\Frontend;
 
-use Zend\Form\Form;
 use Zend\Form\Element;
 use ZfcBase\Form\ProvidesEventsForm;
 use Zend\Mvc\I18n\Translator;
@@ -17,7 +16,6 @@ class ShareMail extends ProvidesEventsForm
         parent::__construct($name);
 
         $this->setServiceManager($sm);
-        $entityManager = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
 
         $this->add(array(
             'name' => 'email1',

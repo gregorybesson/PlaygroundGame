@@ -14,12 +14,7 @@ class PrizeCategory extends AbstractHelper
      */
     public function __invoke()
     {
-        $categories = array();
         $results = $this->getPrizeCategoryService()->getActivePrizeCategories();
-
-        /*foreach ($results as $result) {
-            $categories[$result->getId()] = $result->getTitle();
-        }*/
 
         return $results;
     }

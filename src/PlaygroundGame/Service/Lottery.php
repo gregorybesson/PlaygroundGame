@@ -3,7 +3,6 @@
 namespace PlaygroundGame\Service;
 
 use Zend\ServiceManager\ServiceManagerAwareInterface;
-use Zend\ServiceManager\ServiceManager;
 use PlaygroundGame\Mapper\GameInterface as GameMapperInterface;
 
 class Lottery extends Game implements ServiceManagerAwareInterface

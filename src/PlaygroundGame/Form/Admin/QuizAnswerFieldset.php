@@ -4,8 +4,6 @@ namespace PlaygroundGame\Form\Admin;
 
 use PlaygroundGame\Entity\QuizAnswer;
 use Zend\Form\Fieldset;
-use Zend\Form\Form;
-use Zend\Form\Element;
 use Zend\Mvc\I18n\Translator;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Zend\ServiceManager\ServiceManager;
@@ -42,7 +40,6 @@ class QuizAnswerFieldset extends Fieldset
                 'type' => 'Zend\Form\Element\Select',
                 'name' => 'correct',
                 'options' => array(
-                        //'empty_option' => $translator->translate('Is the answer correct ?', 'playgroundgame'),
                         'value_options' => array(
                             '0' => $translator->translate('Non', 'playgroundgame'),
                             '1' => $translator->translate('Oui', 'playgroundgame'),

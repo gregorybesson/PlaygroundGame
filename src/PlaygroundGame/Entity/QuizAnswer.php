@@ -1,7 +1,6 @@
 <?php
 namespace PlaygroundGame\Entity;
 
-use PlaygroundGame\Entity\Game;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping\PrePersist;
@@ -124,8 +123,6 @@ class QuizAnswer implements InputFilterAwareInterface
      */
     public function setQuestion($question)
     {
-        // Check that there is no drawback using the cascading update from QuizQuestion : addAnswers()
-        //$question->addAnswer($this);
         $this->question = $question;
 
         return $this;

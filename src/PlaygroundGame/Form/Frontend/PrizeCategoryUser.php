@@ -1,11 +1,9 @@
 <?php
 namespace PlaygroundGame\Form\Frontend;
 
-use Zend\Form\Form;
 use Zend\Form\Element;
 use ZfcBase\Form\ProvidesEventsForm;
 use Zend\Mvc\I18n\Translator;
-use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Zend\ServiceManager\ServiceManager;
 
 class PrizeCategoryUser extends ProvidesEventsForm
@@ -18,14 +16,6 @@ class PrizeCategoryUser extends ProvidesEventsForm
         parent::__construct($name);
 
         $this->setServiceManager($sm);
-        $entityManager = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
-
-        // The form will hydrate an object of type "QuizQuestion"
-        // This is the secret for working with collections with Doctrine
-        // (+ add'Collection'() and remove'Collection'() and "cascade" in
-        // corresponding Entity
-        // https://github.com/doctrine/DoctrineModule/blob/master/docs/hydrator.md
-        //$this->setHydrator(new DoctrineHydrator($entityManager, 'PlaygroundGame\Entity\PrizeCategoryUser'));
 
         $this->add(array(
             'name' => 'user',
@@ -55,20 +45,6 @@ class PrizeCategoryUser extends ProvidesEventsForm
                 'attributes' => array()
             ));
         }
-
-        /*$this->add(array(
-            'name' => 'prizeCategory',
-            'type' => 'DoctrineModule\Form\Element\ObjectMultiCheckbox',
-            'options' => array(
-                'label' => $translator->translate('Catégorie de gain', 'playgroundgame'),
-                'object_manager' => $entityManager,
-                'target_class' => 'PlaygroundGame\Entity\PrizeCategory',
-                'property' => 'title'
-            ),
-            'attributes' => array(
-                'required' => false
-            )
-        ));*/
 
         $submitElement = new Element\Button('submit');
         $submitElement->setLabel($translator->translate('Create', 'playgroundgame'))

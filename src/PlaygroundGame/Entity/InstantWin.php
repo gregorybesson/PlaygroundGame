@@ -2,7 +2,6 @@
 namespace PlaygroundGame\Entity;
 
 use PlaygroundGame\Entity\Game;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Zend\InputFilter\InputFilter;

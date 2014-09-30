@@ -2,11 +2,9 @@
 
 namespace PlaygroundGame\Form\Admin;
 
-use Zend\Form\Form;
 use Zend\Form\Element;
 use ZfcBase\Form\ProvidesEventsForm;
 use Zend\Mvc\I18n\Translator;
-use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Zend\ServiceManager\ServiceManager;
 
 class InstantWinOccurrence extends ProvidesEventsForm
@@ -15,18 +13,7 @@ class InstantWinOccurrence extends ProvidesEventsForm
     {
         parent::__construct($name);
 
-        $entityManager = $serviceManager->get('doctrine.entitymanager.orm_default');
-
-        // The form will hydrate an object of type "QuizQuestion"
-        // This is the secret for working with collections with Doctrine
-        // (+ add'Collection'() and remove'Collection'() and "cascade" in corresponding Entity
-        // https://github.com/doctrine/DoctrineModule/blob/master/docs/hydrator.md
-        /*$hydrator = new DoctrineHydrator($entityManager, 'PlaygroundGame\Entity\InstantWinOccurrence');
-        $hydrator->addStrategy('prize', new \PlaygroundCore\Stdlib\Hydrator\Strategy\ObjectStrategy());
-        $this->setHydrator($hydrator);*/
-
         $this->setAttribute('method', 'post');
-        //$this->setAttribute('class','form-horizontal');
 
         $this->setServiceManager($serviceManager);
 

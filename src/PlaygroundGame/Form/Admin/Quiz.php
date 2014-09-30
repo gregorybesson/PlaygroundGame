@@ -2,8 +2,6 @@
 
 namespace PlaygroundGame\Form\Admin;
 
-use Zend\Form\Form;
-use Zend\Form\Element;
 use Zend\Mvc\I18n\Translator;
 use PlaygroundCore\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Zend\ServiceManager\ServiceManager;
@@ -111,20 +109,5 @@ class Quiz extends Game
                 'label' => $translator->translate('Group question', 'playgroundgame'),
             ),
         ));
-
-        /*$this->add(array(
-                'type' => 'Zend\Form\Element\Collection',
-                'name' => 'questions',
-                'options' => array(
-                        'label' => 'Please create questions',
-                        'count' => 2,
-                        'should_create_template' => true,
-                        'allow_add' => true,
-                        'target_element' => array(
-                            'type' => 'PlaygroundGame\Form\Admin\QuizQuestionFieldset'
-                        )
-                )
-        ));*/
-
     }
 }

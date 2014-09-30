@@ -2,7 +2,6 @@
 namespace PlaygroundGame\Form\Frontend;
 
 use Zend\Form\Form;
-use Zend\Form\Element\Captcha;
 use Zend\Captcha\Image as CaptchaImage;
 
 class PostVoteVote extends Form
