@@ -504,116 +504,6 @@ class GameController extends AbstractActionController
         return $viewModel;
     }
 
-    public function fbshareAction()
-    {
-
-        $viewModel = new ViewModel();
-        $viewModel->setTerminal(true);
-        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-        $fbId = $this->params()->fromQuery('fbId');
-        $user = $this->zfcUserAuthentication()->getIdentity();
-        $sg = $this->getGameService();
-
-        $game = $sg->checkGame($identifier);
-        if (!$game) {
-            return false;
-        }
-        $entry = $sg->checkExistingEntry($game, $user);
-        if (! $entry) {
-            return false;
-        }
-        if (!$fbId) {
-            return false;
-        }
-
-        $sg->postFbWall($fbId, $game, $user, $entry);
-
-        return true;
-
-    }
-
-    public function fbrequestAction()
-    {
-        $viewModel = new ViewModel();
-        $viewModel->setTerminal(true);
-        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-        $fbId = $this->params()->fromQuery('fbId');
-        $to = $this->params()->fromQuery('to');
-        $user = $this->zfcUserAuthentication()->getIdentity();
-        $sg = $this->getGameService();
-
-        $game = $sg->checkGame($identifier);
-        if (!$game) {
-            return false;
-        }
-        $entry = $sg->checkExistingEntry($game, $user);
-        if (! $entry) {
-            return false;
-        }
-        if (!$fbId) {
-            return false;
-        }
-
-        $sg->postFbRequest($fbId, $game, $user, $entry, $to);
-
-        return true;
-
-    }
-
-    public function tweetAction()
-    {
-        $viewModel = new ViewModel();
-        $viewModel->setTerminal(true);
-        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-        $tweetId = $this->params()->fromQuery('tweetId');
-        $user = $this->zfcUserAuthentication()->getIdentity();
-        $sg = $this->getGameService();
-
-        $game = $sg->checkGame($identifier);
-        if (!$game) {
-            return false;
-        }
-        $entry = $sg->checkExistingEntry($game, $user);
-        if (! $entry) {
-            return false;
-        }
-        if (!$tweetId) {
-            return false;
-        }
-
-        $sg->postTwitter($tweetId, $game, $user, $entry);
-
-        return true;
-
-    }
-
-    public function googleAction()
-    {
-        $viewModel = new ViewModel();
-        $viewModel->setTerminal(true);
-        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-        $googleId = $this->params()->fromQuery('googleId');
-        $user = $this->zfcUserAuthentication()->getIdentity();
-        $sg = $this->getGameService();
-
-        $game = $sg->checkGame($identifier);
-        if (!$game) {
-            return false;
-        }
-        $entry = $sg->checkExistingEntry($game, $user);
-        if (! $entry) {
-            return false;
-        }
-        if (!$googleId) {
-            return false;
-        }
-
-        $sg->postGoogle($googleId, $game, $user, $entry);
-
-        return true;
-
-    }
-
     public function termsAction()
     {
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
@@ -1124,7 +1014,7 @@ class GameController extends AbstractActionController
     
         $game = $sg->checkGame($identifier);
         if (!$game) {
-            return $viewModel->setVariable('', $value);
+            return $this->errorJson();
         }
         $entry = $sg->checkExistingEntry($game, $user);
         if (! $entry) {
@@ -1244,8 +1134,8 @@ class GameController extends AbstractActionController
     protected function errorJson($message = null)
     {
         $model = new JsonModel(array(
-            'success' => true,
-            'message' => $data
+            'success' => false,
+            'message' => $message
         ));
         return $model->setTerminal(true);
     }

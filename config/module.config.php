@@ -237,7 +237,7 @@ return array(
             'playgroundgame_admin_postvote' => 'PlaygroundGame\Controller\Admin\PostVoteController',
             'playgroundgame_admin_quiz' => 'PlaygroundGame\Controller\Admin\QuizController',
             'playgroundgame_admin_prizecategory' => 'PlaygroundGame\Controller\Admin\PrizeCategoryController',
-            'playgroundgame_admin_mission' => 'PlaygroundGame\Controller\Admin\MissionController',
+            'playgroundgame_admin_mission' => 'PlaygroundGame\Controller\Admin\MissionController'
         )
     ),
     'router' => array(
