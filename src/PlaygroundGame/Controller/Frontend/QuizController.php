@@ -311,7 +311,7 @@ class QuizController extends GameController
         $result = parent::fbshareAction();
         $bonusEntry = false;
 
-        if ($result) {
+        if ($result->getVariable('success')) {
             $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
             $user = $this->zfcUserAuthentication()->getIdentity();
             $game = $sg->checkGame($identifier);
@@ -337,7 +337,7 @@ class QuizController extends GameController
         $result = parent::fbrequestAction();
         $bonusEntry = false;
 
-        if ($result) {
+        if ($result->getVariable('success')) {
             $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
             $user = $this->zfcUserAuthentication()->getIdentity();
             $game = $sg->checkGame($identifier);
@@ -362,7 +362,7 @@ class QuizController extends GameController
         $result = parent::tweetAction();
         $bonusEntry = false;
 
-        if ($result) {
+        if ($result->getVariable('success')) {
             $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
             $user = $this->zfcUserAuthentication()->getIdentity();
             $game = $sg->checkGame($identifier);
@@ -387,7 +387,7 @@ class QuizController extends GameController
         $result = parent::googleAction();
         $bonusEntry = false;
 
-        if ($result) {
+        if ($result->getVariable('success')) {
             $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
             $user = $this->zfcUserAuthentication()->getIdentity();
             $game = $sg->checkGame($identifier);

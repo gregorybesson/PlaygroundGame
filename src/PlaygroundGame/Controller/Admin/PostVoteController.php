@@ -191,6 +191,28 @@ class PostVoteController extends AbstractActionController
 
         return array('game' => $game, 'post' => $post);
     }
+    
+    public function pushAction()
+    {
+        $service = $this->getAdminGameService();
+        $postId = $this->getEvent()->getRouteMatch()->getParam('postId');
+        $pushed = $this->getEvent()->getRouteMatch()->getParam('pushed');
+    
+        if (!$postId) {
+            return $this->redirect()->toUrl($this->url()->fromRoute('admin/postvote/entry', array('gameId' => 0)));
+        }
+        $post = $service->getPostVotePostMapper()->findById($postId);
+    
+        if (! $post) {
+            return $this->redirect()->toUrl($this->url()->fromRoute('admin/postvote/entry', array('gameId' => 0)));
+        }
+        $game = $post->getPostvote();
+    
+        $post->setPushed($pushed);
+        $service->getPostVotePostMapper()->update($post);
+    
+        return $this->redirect()->toUrl($this->url()->fromRoute('admin/postvote/entry', array('gameId' => $game->getId())));
+    }
 
     public function entryAction()
     {

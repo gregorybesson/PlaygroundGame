@@ -10,6 +10,7 @@ use Zend\Form\Form;
 use Zend\InputFilter\Factory as InputFactory;
 use PlaygroundGame\Service\GameService;
 use PlaygroundGame\Service\Prize as PrizeService;
+use Zend\View\Model\JsonModel;
 
 class GameController extends AbstractActionController
 {
@@ -503,116 +504,6 @@ class GameController extends AbstractActionController
         return $viewModel;
     }
 
-    public function fbshareAction()
-    {
-
-        $viewModel = new ViewModel();
-        $viewModel->setTerminal(true);
-        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-        $fbId = $this->params()->fromQuery('fbId');
-        $user = $this->zfcUserAuthentication()->getIdentity();
-        $sg = $this->getGameService();
-
-        $game = $sg->checkGame($identifier);
-        if (!$game) {
-            return false;
-        }
-        $entry = $sg->checkExistingEntry($game, $user);
-        if (! $entry) {
-            return false;
-        }
-        if (!$fbId) {
-            return false;
-        }
-
-        $sg->postFbWall($fbId, $game, $user, $entry);
-
-        return true;
-
-    }
-
-    public function fbrequestAction()
-    {
-        $viewModel = new ViewModel();
-        $viewModel->setTerminal(true);
-        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-        $fbId = $this->params()->fromQuery('fbId');
-        $to = $this->params()->fromQuery('to');
-        $user = $this->zfcUserAuthentication()->getIdentity();
-        $sg = $this->getGameService();
-
-        $game = $sg->checkGame($identifier);
-        if (!$game) {
-            return false;
-        }
-        $entry = $sg->checkExistingEntry($game, $user);
-        if (! $entry) {
-            return false;
-        }
-        if (!$fbId) {
-            return false;
-        }
-
-        $sg->postFbRequest($fbId, $game, $user, $entry, $to);
-
-        return true;
-
-    }
-
-    public function tweetAction()
-    {
-        $viewModel = new ViewModel();
-        $viewModel->setTerminal(true);
-        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-        $tweetId = $this->params()->fromQuery('tweetId');
-        $user = $this->zfcUserAuthentication()->getIdentity();
-        $sg = $this->getGameService();
-
-        $game = $sg->checkGame($identifier);
-        if (!$game) {
-            return false;
-        }
-        $entry = $sg->checkExistingEntry($game, $user);
-        if (! $entry) {
-            return false;
-        }
-        if (!$tweetId) {
-            return false;
-        }
-
-        $sg->postTwitter($tweetId, $game, $user, $entry);
-
-        return true;
-
-    }
-
-    public function googleAction()
-    {
-        $viewModel = new ViewModel();
-        $viewModel->setTerminal(true);
-        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-        $googleId = $this->params()->fromQuery('googleId');
-        $user = $this->zfcUserAuthentication()->getIdentity();
-        $sg = $this->getGameService();
-
-        $game = $sg->checkGame($identifier);
-        if (!$game) {
-            return false;
-        }
-        $entry = $sg->checkExistingEntry($game, $user);
-        if (! $entry) {
-            return false;
-        }
-        if (!$googleId) {
-            return false;
-        }
-
-        $sg->postGoogle($googleId, $game, $user, $entry);
-
-        return true;
-
-    }
-
     public function termsAction()
     {
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
@@ -1046,6 +937,207 @@ class GameController extends AbstractActionController
         );
 
         return $viewModel;
+    }
+    
+    public function shareAction()
+    {
+        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
+        $user = $this->zfcUserAuthentication()->getIdentity();
+        $sg = $this->getGameService();
+    
+        $statusMail = null;
+    
+        if (!$identifier) {
+            return $this->notFoundAction();
+        }
+    
+        $gameMapper = $this->getGameService()->getGameMapper();
+        $game = $gameMapper->findByIdentifier($identifier);
+    
+        if (!$game || $game->isClosed()) {
+            return $this->notFoundAction();
+        }
+    
+        // Has the user finished the game ?
+        $lastEntry = $this->getGameService()->findLastInactiveEntry($game, $user);
+    
+        if ($lastEntry == null) {
+            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('postvote', array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+        }
+    
+        if (!$user && !$game->getAnonymousAllowed()) {
+            $redirect = urlencode($this->frontendUrl()->fromRoute('postvote/result', array('id' => $game->getIdentifier(), 'channel' => $channel)));
+            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('zfcuser/register', array('channel' => $channel)) . '?redirect='.$redirect);
+        }
+    
+        $form = $this->getServiceLocator()->get('playgroundgame_sharemail_form');
+        $form->setAttribute('method', 'post');
+    
+        if ($this->getRequest()->isPost()) {
+            $data = $this->getRequest()->getPost()->toArray();
+            $form->setData($data);
+            if ($form->isValid()) {
+                $result = $this->getGameService()->sendShareMail($data, $game, $user, $lastEntry);
+                if ($result) {
+                    $statusMail = true;
+                }
+            }
+        }
+    
+        // buildView must be before sendMail because it adds the game template path to the templateStack
+        // TODO : Improve this.
+        $viewModel = $this->buildView($game);
+    
+        $this->sendMail($game, $user, $lastEntry);
+    
+        $nextGame = $this->getMissionGameService()->checkCondition($game, $lastEntry->getWinner(), true, $lastEntry);
+    
+        $viewModel->setVariables(array(
+            'statusMail'       => $statusMail,
+            'game'             => $game,
+            'flashMessages'    => $this->flashMessenger()->getMessages(),
+            'form'             => $form,
+            'nextGame'         => $nextGame,
+        ));
+    
+        return $viewModel;
+    }
+    
+    public function fbshareAction()
+    {
+        $viewModel = new JsonModel();
+        $viewModel->setTerminal(true);
+        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
+        $fbId = $this->params()->fromQuery('fbId');
+        $user = $this->zfcUserAuthentication()->getIdentity();
+        $sg = $this->getGameService();
+    
+        $game = $sg->checkGame($identifier);
+        if (!$game) {
+            return $this->errorJson();
+        }
+        $entry = $sg->checkExistingEntry($game, $user);
+        if (! $entry) {
+            return $this->errorJson();
+        }
+        if (!$fbId) {
+            return $this->errorJson();
+        }
+    
+        $sg->postFbWall($fbId, $game, $user, $entry);
+    
+        return $this->successJson();
+    
+    }
+    
+    public function fbrequestAction()
+    {
+        $viewModel = new ViewModel();
+        $viewModel->setTerminal(true);
+        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
+        $fbId = $this->params()->fromQuery('fbId');
+        $to = $this->params()->fromQuery('to');
+        $user = $this->zfcUserAuthentication()->getIdentity();
+        $sg = $this->getGameService();
+    
+        $game = $sg->checkGame($identifier);
+        if (!$game) {
+            return $this->errorJson();
+        }
+        $entry = $sg->checkExistingEntry($game, $user);
+        if (! $entry) {
+            return $this->errorJson();
+        }
+        if (!$fbId) {
+            return $this->errorJson();
+        }
+    
+        $sg->postFbRequest($fbId, $game, $user, $entry, $to);
+    
+        return $this->successJson();
+    
+    }
+    
+    public function tweetAction()
+    {
+        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
+        $tweetId = $this->params()->fromQuery('tweetId');
+        $user = $this->zfcUserAuthentication()->getIdentity();
+        $sg = $this->getGameService();
+    
+        $game = $sg->checkGame($identifier);
+        if (!$game) {
+            return $this->errorJson();
+        }
+        $entry = $sg->checkExistingEntry($game, $user);
+        if (! $entry) {
+            return $this->errorJson();
+        }
+        if (!$tweetId) {
+            return $this->errorJson();
+        }
+    
+        $sg->postTwitter($tweetId, $game, $user, $entry);
+    
+        return $this->successJson();
+    
+    }
+    
+    public function googleAction()
+    {
+        $viewModel = new ViewModel();
+        $viewModel->setTerminal(true);
+        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
+        $googleId = $this->params()->fromQuery('googleId');
+        $user = $this->zfcUserAuthentication()->getIdentity();
+        $sg = $this->getGameService();
+    
+        $game = $sg->checkGame($identifier);
+        if (!$game) {
+            return $this->errorJson();
+        }
+        $entry = $sg->checkExistingEntry($game, $user);
+        if (! $entry) {
+            return $this->errorJson();
+        }
+        if (!$googleId) {
+            return $this->errorJson();
+        }
+    
+        $sg->postGoogle($googleId, $game, $user, $entry);
+    
+        return $this->successJson();
+    
+    }
+    
+    /**
+     * return ajax response in json format
+     *
+     * @param array $data
+     * @return \Zend\View\Model\JsonModel
+     */
+    protected function successJson($data = null)
+    {
+        $model = new JsonModel(array(
+            'success' => true,
+            'data' => $data
+        ));
+        return $model->setTerminal(true);
+    }
+    
+    /**
+     * return ajax response in json format
+     *
+     * @param string $message
+     * @return \Zend\View\Model\JsonModel
+     */
+    protected function errorJson($message = null)
+    {
+        $model = new JsonModel(array(
+            'success' => false,
+            'message' => $message
+        ));
+        return $model->setTerminal(true);
     }
 
     protected function getViewHelper($helperName)
