@@ -2,8 +2,10 @@
 
 namespace PlaygroundGame\Controller\Admin;
 
-use PlaygroundGame\Service\Game as AdminGameService;
+use PlaygroundGame\Entity\Game;
+
 use PlaygroundGame\Entity\PostVote;
+
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
@@ -26,7 +28,7 @@ class PostVoteController extends AbstractActionController
         $form = $service->getPostVoteFormMapper()->findByGame($game);
 
         // I use the wonderful Form Generator to create the Post & Vote form
-        $this->forward()->dispatch('PlaygroundCore\Controller\Formgen', array('controller' => 'PlaygroundCore\Controller\Formgen', 'action' => 'create'));
+        $formgen = $this->forward()->dispatch('PlaygroundCore\Controller\Formgen', array('controller' => 'PlaygroundCore\Controller\Formgen', 'action' => 'create'));
 
         if ($this->getRequest()->isPost()) {
             $data = $this->getRequest()->getPost()->toArray();
@@ -191,6 +193,28 @@ class PostVoteController extends AbstractActionController
 
         return array('game' => $game, 'post' => $post);
     }
+    
+    public function pushAction()
+    {
+        $service = $this->getAdminGameService();
+        $postId = $this->getEvent()->getRouteMatch()->getParam('postId');
+        $pushed = $this->getEvent()->getRouteMatch()->getParam('pushed');
+    
+        if (!$postId) {
+            return $this->redirect()->toUrl($this->url()->fromRoute('admin/postvote/entry', array('gameId' => 0)));
+        }
+        $post = $service->getPostVotePostMapper()->findById($postId);
+    
+        if (! $post) {
+            return $this->redirect()->toUrl($this->url()->fromRoute('admin/postvote/entry', array('gameId' => 0)));
+        }
+        $game = $post->getPostvote();
+    
+        $post->setPushed($pushed);
+        $service->getPostVotePostMapper()->update($post);
+
+        return $this->redirect()->toUrl($this->url()->fromRoute('admin/postvote/entry', array('gameId' => $game->getId())));
+    }
 
     public function entryAction()
     {
@@ -218,6 +242,8 @@ class PostVoteController extends AbstractActionController
         // magically create $content as a string containing CSV data
         $gameId         = $this->getEvent()->getRouteMatch()->getParam('gameId');
         $game           = $this->getAdminGameService()->getGameMapper()->findById($gameId);
+
+        $entries = $this->getAdminGameService()->getEntryMapper()->findBy(array('game' => $game,'winner' => 1));
 		$posts   = $this->getAdminGameService()->getPostVotePostMapper()->findBy(array('postvote' => $game));
 
         $content        = "\xEF\xBB\xBF"; // UTF-8 BOM

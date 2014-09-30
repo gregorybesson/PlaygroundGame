@@ -7,33 +7,69 @@ if (isset($fm[0]))
     print '<span class=>' . $fm[0] . '</span>';
 }*/
 ?>
+<h1><a href="<?php echo $this->url('admin/playgroundgame/edit-postvote', array('gameId' => $this->gameId)) ?>"><?php echo $this->game->getTitle(); ?></a></h1>
+
+<h3><?php echo $this->translate('Liste des Participants'); ?></h3>
+
 <a href='<?php echo $downloadLink ?>'>Export CSV</a>
 <table class="table">
     <tr>
-        <th><?php echo $this->translate('Id'); ?></th>
-        <th><?php echo $this->translate('Pseudo'); ?></th>
-        <th><?php echo $this->translate('Nom'); ?></th>
-        <th><?php echo $this->translate('Prenom'); ?></th>
-        <th><?php echo $this->translate('E-mail'); ?></th>
-        <th><?php echo $this->translate('Optin partenaire'); ?></th>
-        <th><?php echo $this->translate('Eligible TAS'); ?></th>
+        <?php if (!$this->game->getAnonymousAllowed()) : ?>
+            <th><?php echo $this->translate('Id'); ?></th>
+            <th><?php echo $this->translate('Pseudo'); ?></th>
+            <th><?php echo $this->translate('Nom'); ?></th>
+            <th><?php echo $this->translate('Prenom'); ?></th>
+            <th><?php echo $this->translate('E-mail'); ?></th>
+        <?php endif;?>
+        <?php $post = $this->posts->getItem(0); ?>
+        <?php if ($post->getEntry()->getPlayerData()) : ?>
+            <?php $entryData = json_decode($post->getEntry()->getPlayerData()); ?>
+            <?php foreach ($entryData as $key => $attrib): ?>
+                <td><?php echo "Register - ".$key;?> </td>
+            <?php endforeach; ?>
+        <?php endif; ?>
+
+        <th><?php echo $this->translate('Modération'); ?></th>
+        <th><?php echo $this->translate('Pushed'); ?></th>
         <th></th>
     </tr>
-    <?php foreach ($this->entries as $entry): ?>
+    <?php foreach ($this->posts as $post): ?>
         <tr>
-            <td><?php echo $entry->getUser()->getId(); ?></td>
-            <td><?php echo $entry->getUser()->getUsername(); ?></td>
-            <td><?php echo $entry->getUser()->getLastname(); ?></td>
-            <td><?php echo $entry->getUser()->getFirstname(); ?></td>
-            <td><?php echo $entry->getUser()->getEmail(); ?></td>
-            <td><?php echo $entry->getUser()->getOptinPartner(); ?></td>
-            <td><?php echo $entry->getWinner(); ?></td>
-
-            <?php //$editLink = $this->url('admin/playgroundgame/edit', array('gameId' => $game->getId()));?>
-            <?php //$deleteLink = $this->url('admin/playgroundgame/remove', array('gameId' => $game->getId()));?>
-
+            <?php if (!$this->game->getAnonymousAllowed()) : ?>
+                <td><?php echo $post->getUser()->getId(); ?></td>
+                <td><?php echo $post->getUser()->getUsername(); ?></td>
+                <td><?php echo $post->getUser()->getLastname(); ?></td>
+                <td><?php echo $post->getUser()->getFirstname(); ?></td>
+                <td><?php echo $post->getUser()->getEmail(); ?></td>
+            <?php endif; ?>
+            <?php if ($post->getEntry()->getPlayerData()) : ?>
+                <?php $entryData = json_decode($post->getEntry()->getPlayerData()); ?>
+                <?php foreach ($entryData as $key => $attrib): ?>
+                    <td><?php if (is_array($attrib)) {echo implode(', ', $attrib); } else { echo $attrib; } ?></td>
+                <?php endforeach; ?>
+            <?php endif; ?>
+            <td>
+            <?php if($post->getStatus() == 0): ?>
+                En cours de création
+            <?php elseif($post->getStatus() == 1):?>
+                En attente de modération
+            <?php elseif($post->getStatus() == 2):?>
+                Accepté
+            <?php elseif($post->getStatus() == 9):?>
+                Refusé
+            <?php else :?>
+                Validé / Partagé
+            <?php endif;?>
+            </td>
+            <td>
+                <?php echo $this->translate($post->isPushed() ? 'Yes' : 'No')?>
+            </td>
+            <?php $editLink = $this->url('admin/playgroundgame/postvote-moderation-edit', array('postId' => $post->getId()));?>
+            <?php $pushLink = $this->url('admin/playgroundgame/postvote-push', array('postId' => $post->getId(), 'pushed' => (int)(!$post->isPushed())));?>
+            <td><a href='<?php echo $editLink ?>'><?php echo $this->translate('Moderate'); ?></a> 
+            | <a href='<?php echo $pushLink ?>'><?php echo $this->translate($post->isPushed() ? 'Remove push' : 'Push'); ?></a></td>
             <td></td>
         </tr>
     <?php endforeach; ?>
 </table>
-<?php echo (count($this->entries)>1)?$this->paginationControl($this->entries, 'Sliding', 'playground-game/admin/pagination_entrylist'):''; ?>
+<?php echo (count($this->posts)>1)?$this->paginationControl($this->posts, 'Sliding', 'playground-game/admin/pagination_entrylist', array('classType' => $this->game->getClassType()  ,'gameId' => $this->gameId)):''; ?>

@@ -2,6 +2,7 @@
 
 namespace PlaygroundGame\Controller\Frontend;
 
+use PlaygroundGame\Entity\Lottery;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Session\Container;
@@ -9,7 +10,7 @@ use Zend\Form\Element;
 use Zend\Form\Form;
 use Zend\InputFilter\Factory as InputFactory;
 use PlaygroundGame\Service\GameService;
-use PlaygroundGame\Service\Prize as PrizeService;
+use Zend\View\Model\JsonModel;
 
 class GameController extends AbstractActionController
 {
@@ -197,6 +198,7 @@ class GameController extends AbstractActionController
                 $position    = isset($attributes->order)? $attributes->order : '';
                 $placeholder = isset($attributes->data->placeholder)? $attributes->data->placeholder : '';
                 $label       = isset($attributes->data->label)? $attributes->data->label : '';
+                //$required    = ($attributes->data->required == 'true') ? true : false ;
                 $class       = isset($attributes->data->class)? $attributes->data->class : '';
                 $id          = isset($attributes->data->id)? $attributes->data->id : '';
                 $lengthMin   = isset($attributes->data->length)? $attributes->data->length->min : '';
@@ -350,6 +352,8 @@ class GameController extends AbstractActionController
                 $required    = ($attributes->data->required == 'true') ? true : false ;
                 $class       = isset($attributes->data->class)? $attributes->data->class : '';
                 $id          = isset($attributes->data->id)? $attributes->data->id : '';
+                $lengthMin   = isset($attributes->data->length)? $attributes->data->length->min : '';
+                $lengthMax   = isset($attributes->data->length)? $attributes->data->length->max : '';
 
                 $element = new Element\Textarea($name);
                 $element->setLabel($label);
@@ -389,7 +393,10 @@ class GameController extends AbstractActionController
             }
             if (isset($element->line_upload)) {
                 $attributes  = $element->line_upload[0];
+                //print_r($attributes);
                 $name        = isset($attributes->name)? $attributes->name : '';
+                $type        = isset($attributes->type)? $attributes->type : '';
+                $position    = isset($attributes->order)? $attributes->order : '';
                 $label       = isset($attributes->data->label)? $attributes->data->label : '';
                 $required    = ($attributes->data->required == 'true') ? true : false ;
                 $class       = isset($attributes->data->class)? $attributes->data->class : '';
@@ -505,32 +512,31 @@ class GameController extends AbstractActionController
 
     public function fbshareAction()
     {
-
-        $viewModel = new ViewModel();
+        $viewModel = new JsonModel();
         $viewModel->setTerminal(true);
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
         $fbId = $this->params()->fromQuery('fbId');
         $user = $this->zfcUserAuthentication()->getIdentity();
         $sg = $this->getGameService();
-
+    
         $game = $sg->checkGame($identifier);
         if (!$game) {
-            return false;
+            return $viewModel->setVariable('', $value);
         }
         $entry = $sg->checkExistingEntry($game, $user);
         if (! $entry) {
-            return false;
+            return $this->error();
         }
         if (!$fbId) {
-            return false;
+            return $this->error();
         }
-
+    
         $sg->postFbWall($fbId, $game, $user, $entry);
-
-        return true;
-
+    
+        return $this->success();
+    
     }
-
+    
     public function fbrequestAction()
     {
         $viewModel = new ViewModel();
@@ -540,52 +546,50 @@ class GameController extends AbstractActionController
         $to = $this->params()->fromQuery('to');
         $user = $this->zfcUserAuthentication()->getIdentity();
         $sg = $this->getGameService();
-
+    
         $game = $sg->checkGame($identifier);
         if (!$game) {
-            return false;
+            return $this->error();
         }
         $entry = $sg->checkExistingEntry($game, $user);
         if (! $entry) {
-            return false;
+            return $this->error();
         }
         if (!$fbId) {
-            return false;
+            return $this->error();
         }
-
+    
         $sg->postFbRequest($fbId, $game, $user, $entry, $to);
-
-        return true;
-
+    
+        return $this->success();
+    
     }
-
+    
     public function tweetAction()
     {
-        $viewModel = new ViewModel();
-        $viewModel->setTerminal(true);
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
         $tweetId = $this->params()->fromQuery('tweetId');
         $user = $this->zfcUserAuthentication()->getIdentity();
         $sg = $this->getGameService();
-
+    
         $game = $sg->checkGame($identifier);
         if (!$game) {
-            return false;
+            return $this->error();
         }
         $entry = $sg->checkExistingEntry($game, $user);
         if (! $entry) {
-            return false;
+            return $this->error();
         }
         if (!$tweetId) {
-            return false;
+            return $this->error();
         }
-
+    
         $sg->postTwitter($tweetId, $game, $user, $entry);
-
-        return true;
-
+    
+        return $this->success();
+    
     }
-
+    
     public function googleAction()
     {
         $viewModel = new ViewModel();
@@ -594,28 +598,29 @@ class GameController extends AbstractActionController
         $googleId = $this->params()->fromQuery('googleId');
         $user = $this->zfcUserAuthentication()->getIdentity();
         $sg = $this->getGameService();
-
+    
         $game = $sg->checkGame($identifier);
         if (!$game) {
-            return false;
+            return $this->error();
         }
         $entry = $sg->checkExistingEntry($game, $user);
         if (! $entry) {
-            return false;
+            return $this->error();
         }
         if (!$googleId) {
-            return false;
+            return $this->error();
         }
-
+    
         $sg->postGoogle($googleId, $game, $user, $entry);
-
-        return true;
-
+    
+        return $this->success();
+    
     }
 
     public function termsAction()
     {
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
+        $user = $this->zfcUserAuthentication()->getIdentity();
         $sg = $this->getGameService();
 
         $game = $sg->checkGame($identifier, false);
@@ -635,6 +640,7 @@ class GameController extends AbstractActionController
     public function conditionsAction()
     {
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
+        $user = $this->zfcUserAuthentication()->getIdentity();
         $sg = $this->getGameService();
 
         $game = $sg->checkGame($identifier, false);
@@ -752,7 +758,7 @@ class GameController extends AbstractActionController
         $view = $this->addAdditionalView($game);
         if ($view and $view instanceof \Zend\View\Model\ViewModel) {
             $viewModel->addChild($view, 'additional');
-        } elseif ($view && $view instanceof \Zend\Http\PhpEnvironment\Response) {
+        } elseif ($view and $view instanceof \Zend\Http\PhpEnvironment\Response) {
             return $view;
         }
 
@@ -899,6 +905,7 @@ class GameController extends AbstractActionController
     public function prizesAction()
     {
     	$identifier = $this->getEvent()->getRouteMatch()->getParam('id');
+    	$user = $this->zfcUserAuthentication()->getIdentity();
     	$sg = $this->getGameService();
 
     	$game = $sg->checkGame($identifier);
@@ -925,6 +932,8 @@ class GameController extends AbstractActionController
     {
     	$identifier = $this->getEvent()->getRouteMatch()->getParam('id');
     	$prizeIdentifier = $this->getEvent()->getRouteMatch()->getParam('prize');
+    	
+    	$user = $this->zfcUserAuthentication()->getIdentity();
     	$sg = $this->getGameService();
     	$sp = $this->getPrizeService();
 
@@ -1047,6 +1056,70 @@ class GameController extends AbstractActionController
 
         return $viewModel;
     }
+    
+    public function shareAction()
+    {
+        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
+        $user = $this->zfcUserAuthentication()->getIdentity();
+        $sg = $this->getGameService();
+    
+        $statusMail = null;
+    
+        if (!$identifier) {
+            return $this->notFoundAction();
+        }
+    
+        $gameMapper = $this->getGameService()->getGameMapper();
+        $game = $gameMapper->findByIdentifier($identifier);
+    
+        if (!$game || $game->isClosed()) {
+            return $this->notFoundAction();
+        }
+    
+        // Has the user finished the game ?
+        $lastEntry = $this->getGameService()->findLastInactiveEntry($game, $user);
+    
+        if ($lastEntry == null) {
+            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('postvote', array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+        }
+    
+        if (!$user && !$game->getAnonymousAllowed()) {
+            $redirect = urlencode($this->frontendUrl()->fromRoute('postvote/result', array('id' => $game->getIdentifier(), 'channel' => $channel)));
+            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('zfcuser/register', array('channel' => $channel)) . '?redirect='.$redirect);
+        }
+    
+        $form = $this->getServiceLocator()->get('playgroundgame_sharemail_form');
+        $form->setAttribute('method', 'post');
+    
+        if ($this->getRequest()->isPost()) {
+            $data = $this->getRequest()->getPost()->toArray();
+            $form->setData($data);
+            if ($form->isValid()) {
+                $result = $this->getGameService()->sendShareMail($data, $game, $user, $lastEntry);
+                if ($result) {
+                    $statusMail = true;
+                }
+            }
+        }
+    
+        // buildView must be before sendMail because it adds the game template path to the templateStack
+        // TODO : Improve this.
+        $viewModel = $this->buildView($game);
+    
+        $this->sendMail($game, $user, $lastEntry);
+    
+        $nextGame = $this->getMissionGameService()->checkCondition($game, $lastEntry->getWinner(), true, $lastEntry);
+    
+        $viewModel->setVariables(array(
+            'statusMail'       => $statusMail,
+            'game'             => $game,
+            'flashMessages'    => $this->flashMessenger()->getMessages(),
+            'form'             => $form,
+            'nextGame'         => $nextGame,
+        ));
+    
+        return $viewModel;
+    }
 
     protected function getViewHelper($helperName)
     {
@@ -1116,4 +1189,35 @@ class GameController extends AbstractActionController
 
         return $this;
     }
+    
+    /**
+     * return an ajax response in json format
+     * 
+     * @param array $data
+     * @return \Zend\View\Model\JsonModel
+     */
+    protected function successJson($data = null)
+    {
+        $model = new JsonModel(array(
+            'success' => true,
+            'data' => $data
+        ));
+        return $model->setTerminal(true);
+    }
+    
+    /**
+     * return an ajax response in json format
+     * 
+     * @param string $message
+     * @return \Zend\View\Model\JsonModel
+     */
+    protected function errorJson($message = null)
+    {
+        $model = new JsonModel(array(
+            'success' => true,
+            'message' => $data
+        ));
+        return $model->setTerminal(true);
+    }
+    
 }
