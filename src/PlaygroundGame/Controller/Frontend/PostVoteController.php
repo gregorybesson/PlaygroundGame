@@ -309,7 +309,10 @@ class PostVoteController extends GameController
                     // send mail for participation
                     $this->getGameService()->sendGameMail($game, $user, $post, 'postvote');
                 }
-                $redirectUrl = $this->frontendUrl()->fromRoute('postvote/result', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')));
+                if (!($step = $game->nextStep('play'))) {
+                    $step = 'result';
+                }
+                $redirectUrl = $this->frontendUrl()->fromRoute('postvote/'.$step, array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')));
 
                 return $this->redirect()->toUrl($redirectUrl);
             }
