@@ -259,13 +259,22 @@ class PostVote extends Game implements ServiceManagerAwareInterface
             $qb->setParameter('search', $search);
         }
         
+        if ('push' == $filter) {
+            $and->add(
+                $qb->expr()->andX(
+                    $qb->expr()->eq('p.pushed', 1)
+                )
+            );
+        }
+        
         $qb->select('p, COUNT(v) AS votesCount')
             ->from('PlaygroundGame\Entity\PostVotePost', 'p')
             ->innerJoin('p.postvote', 'g')
-            ->innerJoin('p.user', 'u')
+            ->leftJoin('p.user', 'u')
             ->innerJoin('p.postElements', 'e')
             ->leftJoin('p.votes', 'v')
-            ->where($and);
+            ->where($and)
+            ->groupBy('p.id');
  
         switch ($filter) {
             case 'random' :
@@ -276,11 +285,13 @@ class PostVote extends Game implements ServiceManagerAwareInterface
                 break;
             case 'date' :
                 $qb->orderBy('p.createdAt', 'DESC');
+            case 'push' :
+                $qb->orderBy('p.createdAt', 'DESC');
         }
         
         $query = $qb->getQuery();
         
-        $posts = $query->getResult();
+        $posts = $query->getResult();var_dump(count($posts)); echo $query->getSql(); die();
         $arrayPosts = array();
         $i=0;
         foreach ($posts as $postRaw) {
