@@ -291,7 +291,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
         
         $query = $qb->getQuery();
         
-        $posts = $query->getResult();var_dump(count($posts)); echo $query->getSql(); die();
+        $posts = $query->getResult();
         $arrayPosts = array();
         $i=0;
         foreach ($posts as $postRaw) {
