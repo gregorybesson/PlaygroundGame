@@ -25,9 +25,11 @@ if (isset($fm[0]))
         <?php if ($post->getEntry()->getPlayerData()) : ?>
             <?php $entryData = json_decode($post->getEntry()->getPlayerData()); ?>
             <?php foreach ($entryData as $key => $attrib): ?>
-                <td><?php echo "Register - ".$key;?> </td>
+                <td><?php echo $key;?> </td>
             <?php endforeach; ?>
         <?php endif; ?>
+
+        <td> Social Shares</td>
 
         <th><?php echo $this->translate('Modération'); ?></th>
         <th><?php echo $this->translate('Pushed'); ?></th>
@@ -48,6 +50,15 @@ if (isset($fm[0]))
                     <td><?php if (is_array($attrib)) {echo implode(', ', $attrib); } else { echo $attrib; } ?></td>
                 <?php endforeach; ?>
             <?php endif; ?>
+            <td>
+            <?php if ($post->getEntry()->getSocialShares()) : ?>
+                <?php $socialData = json_decode($post->getEntry()->getSocialShares()); ?>
+                <?php foreach ($socialData as $key => $attrib): ?>
+                    <?php echo $key.': '?>
+                    <?php if (is_array($attrib)) {echo implode(', ', $attrib); } else { echo $attrib; } ?>
+                <?php endforeach; ?>
+            <?php endif; ?>
+            </td>
             <td>
             <?php if($post->getStatus() == 0): ?>
                 En cours de création
