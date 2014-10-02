@@ -728,6 +728,79 @@ class PostVoteController extends GameController
 
         return $response;
     }
+    
+    public function shareAction()
+    {
+        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
+        $user = $this->zfcUserAuthentication()->getIdentity();
+        $sg = $this->getGameService();
+    
+        $statusMail = null;
+    
+        if (!$identifier) {
+            return $this->notFoundAction();
+        }
+    
+        $gameMapper = $this->getGameService()->getGameMapper();
+        $game = $gameMapper->findByIdentifier($identifier);
+    
+        if (!$game || $game->isClosed()) {
+            return $this->notFoundAction();
+        }
+    
+        // Has the user finished the game ?
+        $lastEntry = $this->getGameService()->findLastInactiveEntry($game, $user);
+    
+        if ($lastEntry == null) {
+            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('postvote', array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+        }
+    
+        $post = $sg->getPostVotePostMapper()->findOneBy(array('entry' => $lastEntry));
+    
+        $secretKey = strtoupper(substr(sha1(uniqid('pg_', true).'####'.time()),0,15));
+        $socialLinkUrl = $this->frontendUrl()->fromRoute('postvote/post',array('id' => $identifier, 'post' => $post->getId(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)).'?key='.$secretKey;
+        // With core shortener helper
+        $socialLinkUrl = $this->shortenUrl()->shortenUrl($socialLinkUrl);
+    
+        if (!$user && !$game->getAnonymousAllowed()) {
+            $redirect = urlencode($this->frontendUrl()->fromRoute('postvote/result', array('id' => $game->getIdentifier(), 'channel' => $channel)));
+            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('zfcuser/register', array('channel' => $channel)) . '?redirect='.$redirect);
+        }
+    
+        $form = $this->getServiceLocator()->get('playgroundgame_sharemail_form');
+        $form->setAttribute('method', 'post');
+    
+        if ($this->getRequest()->isPost()) {
+            $data = $this->getRequest()->getPost()->toArray();
+            $form->setData($data);
+            if ($form->isValid()) {
+                $result = $this->getGameService()->sendShareMail($data, $game, $user, $lastEntry);
+                if ($result) {
+                    $statusMail = true;
+                }
+            }
+        }
+    
+        // buildView must be before sendMail because it adds the game template path to the templateStack
+        // TODO : Improve this.
+        $viewModel = $this->buildView($game);
+    
+        $this->sendMail($game, $user, $lastEntry);
+    
+        $nextGame = $this->getMissionGameService()->checkCondition($game, $lastEntry->getWinner(), true, $lastEntry);
+    
+        $viewModel->setVariables(array(
+            'statusMail'       => $statusMail,
+            'game'             => $game,
+            'flashMessages'    => $this->flashMessenger()->getMessages(),
+            'form'             => $form,
+            'nextGame'         => $nextGame,
+            'socialLinkUrl'    => $socialLinkUrl,
+            'post'             => $post
+        ));
+    
+        return $viewModel;
+    }
 
     public function getGameService()
     {
