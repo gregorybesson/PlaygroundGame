@@ -38,63 +38,65 @@ class GameController extends AbstractActionController
         }
         $game           = $this->getAdminGameService()->getGameMapper()->findById($gameId);
 
-        $entries = $this->getAdminGameService()->getEntryMapper()->findBy(array('game' => $game,'winner' => 1));
+        $entries = $this->getAdminGameService()->getEntryMapper()->findBy(array('game' => $game));
 
         $content        = "\xEF\xBB\xBF"; // UTF-8 BOM
         if (! $game->getAnonymousAllowed()) {
             $content       .= "ID;Pseudo;Civilité;Nom;Prénom;E-mail;Optin Newsletter;Optin partenaire;Adresse;CP;Ville;Téléphone;Mobile;Date d'inscription;Date de naissance;";
         }
-        if (current($entries)->getPlayerData()) {
-            $entryData = json_decode(current($entries)->getPlayerData());
-            foreach ($entryData as $key => $data) {
-                $content .= $key.';';
-            }
-        }
-        $content .= 'A Gagné ?;Date - H'
-            ."\n";
-        foreach ($entries as $e) {
-            if (!$game->getAnonymousAllowed()) {
-                if($e->getUser()->getAddress2() != '') {
-                    $adress2 = ' - ' . $e->getUser()->getAddress2();
-                } else {
-                    $adress2 = '';
+        if (count($entries)) {
+            if (current($entries)->getPlayerData()) {
+                $entryData = json_decode(current($entries)->getPlayerData());
+                foreach ($entryData as $key => $data) {
+                    $content .= $key.';';
                 }
-                if($e->getUser()->getDob() != NULL) {
-                    $dob = $e->getUser()->getDob()->format('Y-m-d');
-                } else {
-                    $dob = '';
-                }
-
-                $content   .= $e->getUser()->getId()
-                . ";" . $e->getUser()->getUsername()
-                . ";" . $e->getUser()->getTitle()
-                . ";" . $e->getUser()->getLastname()
-                . ";" . $e->getUser()->getFirstname()
-                . ";" . $e->getUser()->getEmail()
-                . ";" . $e->getUser()->getOptin()
-                . ";" . $e->getUser()->getOptinPartner()
-                . ";" . $e->getUser()->getAddress() . $adress2
-                . ";" . $e->getUser()->getPostalCode()
-                . ";" . $e->getUser()->getCity()
-                . ";" . $e->getUser()->getTelephone()
-                . ";" . $e->getUser()->getMobile()
-                . ";" . $e->getUser()->getCreatedAt()->format('Y-m-d')
-                . ";" . $dob
-                . ";" ;
             }
-            if ($e->getPlayerData()) {
-                $entryData = json_decode($e->getPlayerData());
-                foreach ( $entryData as $key => $data) {
-                    if (is_array($data)) {
-                        $content .= implode(', ', $data).';';
+            $content .= 'A Gagné ?;Date - H'
+                ."\n";
+            foreach ($entries as $e) {
+                if (!$game->getAnonymousAllowed()) {
+                    if($e->getUser()->getAddress2() != '') {
+                        $adress2 = ' - ' . $e->getUser()->getAddress2();
                     } else {
-                        $content .= $data.';';
+                        $adress2 = '';
+                    }
+                    if($e->getUser()->getDob() != NULL) {
+                        $dob = $e->getUser()->getDob()->format('Y-m-d');
+                    } else {
+                        $dob = '';
+                    }
+    
+                    $content   .= $e->getUser()->getId()
+                    . ";" . $e->getUser()->getUsername()
+                    . ";" . $e->getUser()->getTitle()
+                    . ";" . $e->getUser()->getLastname()
+                    . ";" . $e->getUser()->getFirstname()
+                    . ";" . $e->getUser()->getEmail()
+                    . ";" . $e->getUser()->getOptin()
+                    . ";" . $e->getUser()->getOptinPartner()
+                    . ";" . $e->getUser()->getAddress() . $adress2
+                    . ";" . $e->getUser()->getPostalCode()
+                    . ";" . $e->getUser()->getCity()
+                    . ";" . $e->getUser()->getTelephone()
+                    . ";" . $e->getUser()->getMobile()
+                    . ";" . $e->getUser()->getCreatedAt()->format('Y-m-d')
+                    . ";" . $dob
+                    . ";" ;
+                }
+                if ($e->getPlayerData()) {
+                    $entryData = json_decode($e->getPlayerData());
+                    foreach ( $entryData as $key => $data) {
+                        if (is_array($data)) {
+                            $content .= implode(', ', $data).';';
+                        } else {
+                            $content .= $data.';';
+                        }
                     }
                 }
+                $content   .= $e->getWinner()
+                . ";" . $e->getCreatedAt()->format('Y-m-d H:i:s')
+                . "\n";
             }
-            $content   .= $e->getWinner()
-            . ";" . $e->getCreatedAt()->format('Y-m-d H:i:s')
-            . "\n";
         }
 
         $response = $this->getResponse();
