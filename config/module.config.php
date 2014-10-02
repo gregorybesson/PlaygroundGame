@@ -477,7 +477,7 @@ return array(
                                 'options' => array(
                                     'route' => '/partager',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_game',
+                                        'controller' => 'playgroundgame_quiz',
                                         'action' => 'share'
                                     )
                                 )
@@ -644,7 +644,7 @@ return array(
                                 'options' => array(
                                     'route' => '/partager',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_game',
+                                        'controller' => 'playgroundgame_lottery',
                                         'action' => 'share'
                                     )
                                 )
@@ -811,7 +811,7 @@ return array(
                                 'options' => array(
                                     'route' => '/partager',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_game',
+                                        'controller' => 'playgroundgame_instantwin',
                                         'action' => 'share'
                                     )
                                 )
@@ -1068,7 +1068,7 @@ return array(
                                 'options' => array(
                                     'route' => '/partager',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_game',
+                                        'controller' => 'playgroundgame_postvote',
                                         'action' => 'share'
                                     )
                                 )
