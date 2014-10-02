@@ -55,6 +55,18 @@ class PostVote extends Game
                 'label' => $translator->translate('Posts display mode', 'playgroundgame'),
             ),
         ));
+        
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Text',
+            'name' => 'postDisplayNumber',
+            'attributes' =>  array(
+                'id' => 'postDisplayNumber',
+            ),
+            'options' => array(
+                'empty_option' => $translator->translate('Number of displayed posts', 'playgroundgame'),
+                'label' => $translator->translate('Number of displayed posts', 'playgroundgame'),
+            ),
+        ));
 
         $this->add(array(
             'type' => 'Zend\Form\Element\Checkbox',
