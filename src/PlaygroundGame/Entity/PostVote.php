@@ -33,6 +33,14 @@ class PostVote extends Game implements InputFilterAwareInterface
      * @ORM\Column(name="post_display_mode", type="string", nullable=false)
      */
     protected $postDisplayMode = 'date';
+    
+    /**
+     * Number of Post displayed :
+     * 0 : infinite
+     *
+     * @ORM\Column(name="post_display_number", type="integer", nullable=false)
+     */
+    protected $postDisplayNumber = 0;
 
     /**
      * Is it possible to vote anonymously ?
@@ -138,6 +146,24 @@ class PostVote extends Game implements InputFilterAwareInterface
     {
         $this->postDisplayMode = $postDisplayMode;
 
+        return $this;
+    }
+    
+    /**
+     * @return int
+     */
+    public function getPostDisplayNumber()
+    {
+        return $this->postDisplayNumber;
+    }
+    
+    /**
+     * @param int $postDisplayMode
+     * @return PostVote
+     */
+    public function setPostDisplayNumber($postDisplayNumber)
+    {
+        $this->postDisplayNumber = $postDisplayNumber;
         return $this;
     }
 
