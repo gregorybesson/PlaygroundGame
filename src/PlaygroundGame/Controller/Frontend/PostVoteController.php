@@ -288,9 +288,10 @@ class PostVoteController extends GameController
         }
 
         $entry = $sg->findLastActiveEntry($game, $user);
+         
         if (!$entry) {
             // the user has already taken part of this game and the participation limit has been reached
-            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('postvote/bounce',array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('postvote/'.$game->nextStep('play'),array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
         }
 
         // Je recherche le post associé à entry + status == 0. Si non trouvé, je redirige vers home du jeu.
