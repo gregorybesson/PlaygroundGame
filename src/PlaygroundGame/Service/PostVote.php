@@ -135,8 +135,8 @@ class PostVote extends Game implements ServiceManagerAwareInterface
 
             if (is_array($value) && isset($value['tmp_name'])) {
                 
-                // The file upload has been done in ajax
-                /*
+                // The file upload has been done in ajax but some weird bugs remain without it
+                
 				if ( ! $value['error'] ) {
                 	ErrorHandler::start();
 					$value['name'] = $this->fileNewname($path, $value['name'], true);
@@ -163,7 +163,6 @@ class PostVote extends Game implements ServiceManagerAwareInterface
 
                     }
                 }
-                */
                 
             } else {
                 $postElement->setValue($value);
