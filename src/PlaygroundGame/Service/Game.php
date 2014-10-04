@@ -1321,6 +1321,20 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             }
 
             @move_uploaded_file($file["tmp_name"], $path . $fileNewname);
+            
+            if( class_exists("Imagick") ){
+                $ext = pathinfo($fileNewname, PATHINFO_EXTENSION);
+                $img = new \Imagick($path . $fileNewname);
+                $img->cropThumbnailImage( 100, 100 );
+                //$img->thumbnailImage(580, 0);
+                $img->setImageCompression(\Imagick::COMPRESSION_JPEG);
+                $img->setImageCompressionQuality(75);
+                // Strip out unneeded meta data
+                $img->stripImage();
+                $img->writeImage($path . str_replace('.'.$ext, '-thumbnail.'.$ext, $fileNewname));
+                ErrorHandler::stop(true);
+            
+            }
         }
 
         return $fileNewname;
