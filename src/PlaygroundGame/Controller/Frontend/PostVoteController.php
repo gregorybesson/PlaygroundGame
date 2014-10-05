@@ -818,6 +818,28 @@ class PostVoteController extends GameController
     
         $nextGame = $this->getMissionGameService()->checkCondition($game, $lastEntry->getWinner(), true, $lastEntry);
     
+        // TODO : Refactor and use the twitter cards from core
+        foreach($post->getPostElements() as $element){
+            $fbShareImage = $this->frontendUrl()->fromRoute('', array('channel' => ''), array('force_canonical' => true), false) . $element->getValue();
+            break;
+        }
+    
+        $secretKey = strtoupper(substr(sha1(uniqid('pg_', true).'####'.time()),0,15));
+
+        // Without bit.ly shortener
+        $socialLinkUrl = $this->frontendUrl()->fromRoute('postvote/list', array('id' => $game->getIdentifier(), 'filter' => 'date', 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)).'?id='.$post->getId().'&key='.$secretKey;
+        // With core shortener helper
+        $socialLinkUrl = $this->shortenUrl()->shortenUrl($socialLinkUrl);
+
+        $this->getViewHelper('HeadMeta')->setProperty('og:image', $fbShareImage);
+
+        $this->getViewHelper('HeadMeta')->setProperty('twitter:card', "photo");
+        $this->getViewHelper('HeadMeta')->setProperty('twitter:site', "@alfie");
+        $this->getViewHelper('HeadMeta')->setProperty('twitter:title', $game->getTwShareMessage());
+        $this->getViewHelper('HeadMeta')->setProperty('twitter:description', "");
+        $this->getViewHelper('HeadMeta')->setProperty('twitter:image', $fbShareImage);
+        $this->getViewHelper('HeadMeta')->setProperty('twitter:url', $socialLinkUrl);
+            
         $viewModel->setVariables(array(
             'statusMail'       => $statusMail,
             'game'             => $game,
