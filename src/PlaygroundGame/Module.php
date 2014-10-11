@@ -536,6 +536,13 @@ class Module
                     return $form;
                 },
 
+                'playgroundgame_import_form' => function($sm) {
+                    $translator = $sm->get('translator');
+                    $form = new Form\Admin\Import(null, $sm, $translator);
+                
+                    return $form;
+                },
+                
                 'playgroundgame_mission_form' => function($sm) {
                     $translator = $sm->get('translator');
                     $form = new Form\Admin\Mission(null, $sm, $translator);

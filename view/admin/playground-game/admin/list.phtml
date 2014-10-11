@@ -7,16 +7,9 @@ if (isset($fm[0]))
 }
 ?>
 
-<ul class="liste-buttons">
-	<li class="btn-admin"><a href="<?php echo $this->url('admin/playgroundgame/create-lottery');?>"><?php echo $this->translate('Add new lottery'); ?></a></li>
-	<li class="btn-admin"><a href="<?php echo $this->url('admin/playgroundgame/create-quiz');?>"><?php echo $this->translate('Add new Quiz'); ?></a></li>
-	<li class="btn-admin"><a href="<?php echo $this->url('admin/playgroundgame/create-instantwin');?>"><?php echo $this->translate('Add new Instant Win'); ?></a></li>
-	<li class="btn-admin"><a href="<?php echo $this->url('admin/playgroundgame/create-postvote');?>"><?php echo $this->translate('Add new Post & Vote'); ?></a></li>
-</ul>
+<h1><?php echo $this->translate('Game list'); ?></h1>
 
-<h1>Liste des jeux</h1>
-
-<div class="sortby-role">Tri par : <a href="<?php echo $this->url('admin/playgroundgame/list', array('type' => 'startDate', 'filter' => 'DESC')); ?>">Date début</a> | <a href="<?php echo $this->url('admin/playgroundgame/list', array('type' => 'activeGames', 'filter' => 'DESC')); ?>">Actif</a> | <a href="<?php echo $this->url('admin/playgroundgame/list', array('type' => 'onlineGames', 'filter' => 'DESC')); ?>">Online</a></div>
+<div class="sortby-role"><?php echo $this->translate('Sort order'); ?> : <a href="<?php echo $this->url('admin/playgroundgame/list', array('type' => 'startDate', 'filter' => 'DESC')); ?>"><?php echo $this->translate('Start date'); ?></a> | <a href="<?php echo $this->url('admin/playgroundgame/list', array('type' => 'activeGames', 'filter' => 'DESC')); ?>"><?php echo $this->translate('Active'); ?></a> | <a href="<?php echo $this->url('admin/playgroundgame/list', array('type' => 'onlineGames', 'filter' => 'DESC')); ?>"><?php echo $this->translate('Online'); ?></a></div>
 
 <table class="table">
     <tr>
@@ -34,12 +27,12 @@ if (isset($fm[0]))
     </tr>
     <?php foreach ($this->games as $game): ?>
         <tr>
-            <!-- <td><?php echo $game->getCreatedAt()->format('d/m/Y') ?></td> -->
+        	<!-- <td><?php echo $game->getCreatedAt()->format('d/m/Y') ?></td> -->
             <td><?php echo $game->getId() ?></td>
             <td><?php echo $game->getTitle() ?></td>
             <td class="listgame-begin"><?php echo ($game->getStartDate())? $game->getStartDate()->format('d/m/Y'):''; ?></td>
             <td><?php echo ($game->getEndDate())? $game->getEndDate()->format('d/m/Y'):''; ?></td>
-            <td class="listgame-active"><?php echo ($game->getActive())? $this->translate('Yes'):$this->translate('No'); ?></td>
+            <td class="listgame-active"><?php echo ($game->isOnline())? $this->translate('Online'):$this->translate('Offline'); ?></td>
             <td><?php echo $this->translate($game->getState()); ?></td>
             <td><?php echo $game->getClassType() ?></td>
             <td><?php echo $game->getIdentifier() ?></td>
@@ -51,6 +44,8 @@ if (isset($fm[0]))
                 <?php $editLink = $this->url('admin/playgroundgame/edit-instantwin', array('gameId' => $game->getId()));?>
             <?php elseif($game->getClassType() == 'postvote'):?>
                 <?php $editLink = $this->url('admin/playgroundgame/edit-postvote', array('gameId' => $game->getId()));?>
+            <?php elseif($game->getClassType() == 'treasurehunt'):?>
+                <?php $editLink = $this->url('admin/playgroundgame/edit-treasurehunt', array('gameId' => $game->getId()));?>
             <?php else:?>
                 <?php $editLink = $this->url('admin/playgroundgame/edit', array('gameId' => $game->getId()));?>
             <?php endif;?>
@@ -62,13 +57,27 @@ if (isset($fm[0]))
             <?php elseif($game->getClassType() == 'instantwin'):?>
                 <?php $optionLink = $this->url('admin/playgroundgame/instantwin-occurrence-list', array('gameId' => $game->getId())); 
                     $optionLinkName = $this->translate('Handle occurrences'); ?>
+            <?php elseif($game->getClassType() == 'treasurehunt'):?>
+                <?php $optionLink = $this->url('admin/playgroundgame/treasurehunt-puzzle-list', array('gameId' => $game->getId())); ?>
             <?php elseif($game->getClassType() == 'postvote'):?>
                 <?php $optionLink = $this->url('admin/playgroundgame/postvote-form', array('gameId' => $game->getId())); ?>
             <?php else: ?>
                 <?php $optionLink = ''; ?>
             <?php endif; ?>
+            <?php if($game->getActive()):?>
+                <?php $activeString = $this->translate('Desactivate the game'); ?>
+            <?php else: ?>
+                <?php $activeString = $this->translate('Activate the game'); ?>
+            <?php endif; ?>
             <td>
-                <a href='<?php echo $entryLink ?>'><?php echo $this->translate('Leader Board'); ?></a> | <a href='<?php echo $editLink ?>'><?php echo $this->translate('Edit'); ?></a> | <a href='<?php echo $deleteLink ?>'><?php echo $this->translate('Delete'); ?></a><?php if($optionLink != ''):?> | <a href='<?php echo $optionLink ?>'><?php echo $optionLinkName ?></a><?php endif;?> | <a target="_blank" href='<?php echo $this->url('frontend/' . $game->getClassType(), array('id' => $game->getIdentifier(), 'channel' => 'preview'), array('force_canonical' => true));?>'><?php echo $this->translate('Preview'); ?></a>
+                <a href='<?php echo $entryLink ?>'><?php echo $this->translate('Entries'); ?></a> 
+                | <a href='<?php echo $editLink ?>'><?php echo $this->translate('Edit'); ?></a> 
+                | <a href='<?php echo $deleteLink ?>'><?php echo $this->translate('Delete'); ?></a><?php if($optionLink != ''):?> 
+                | <a href='<?php echo $optionLink ?>'><?php echo $optionLinkName ?></a><?php endif;?> 
+                | <a target="_blank" href='<?php echo $this->url('frontend/' . $game->getClassType(), array('id' => $game->getIdentifier(), 'channel' => 'preview'), array('force_canonical' => true));?>'><?php echo $this->translate('Preview'); ?></a> 
+                | <a href='<?php echo $this->url('admin/playgroundgame/set-active', array('gameId' => $game->getId())); ?>'><?php echo $activeString; ?></a>
+                | <a href='<?php echo $this->url('admin/playgroundgame/player-form', array('gameId' => $game->getId())); ?>'><?php echo $this->translate('Create the player form'); ?></a>
+                | <a href='<?php echo $this->url('admin/playgroundgame/export', array('gameId' => $game->getId())); ?>'><?php echo $this->translate('export the game'); ?></a>
             </td>
             <td><?php echo $game->entry; ?></td>
             <td><?php echo count($this->partnerSubscriber($game->getPartner(), false));?></td>
@@ -81,6 +90,7 @@ if (isset($fm[0]))
 	<li class="btn-admin bottom"><a href="<?php echo $this->url('admin/playgroundgame/create-quiz');?>"><?php echo $this->translate('Add new Quiz'); ?></a></li>
 	<li class="btn-admin bottom"><a href="<?php echo $this->url('admin/playgroundgame/create-instantwin');?>"><?php echo $this->translate('Add new Instant Win'); ?></a></li>
 	<li class="btn-admin bottom"><a href="<?php echo $this->url('admin/playgroundgame/create-postvote');?>"><?php echo $this->translate('Add new Post & Vote'); ?></a></li>
+	<li class="btn-admin bottom"><a href="<?php echo $this->url('admin/playgroundgame/import');?>"><?php echo $this->translate('Import a game'); ?></a></li>
 </ul>
 
 <?php echo $this->paginationControl($this->games, 'Sliding', 'playground-game/admin/pagination_gamelist', array('type' => $this->type, 'filter' => $this->filter)); ?>
