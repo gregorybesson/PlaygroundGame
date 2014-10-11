@@ -9,6 +9,7 @@ use PlaygroundGame\Options\ModuleOptions;
 use Zend\Paginator\Paginator;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
+use Zend\Stdlib\ErrorHandler;
 
 class AdminController extends AbstractActionController
 {
@@ -118,6 +119,69 @@ class AdminController extends AbstractActionController
         $response->setContent($content);
 
         return $response;
+    }
+    
+    /**
+     * This method serialize a game an export it as a txt file
+     * @return \Zend\Stdlib\ResponseInterface
+     */
+    public function exportAction()
+    {
+        // magically create $content as a string containing CSV data
+        $gameId  = $this->getEvent()->getRouteMatch()->getParam('gameId');
+        $game    = $this->getAdminGameService()->getGameMapper()->findById($gameId);
+        $content = serialize($game);
+
+        $response = $this->getResponse();
+        $headers = $response->getHeaders();
+        $headers->addHeaderLine('Content-Encoding: UTF-8');
+        $headers->addHeaderLine('Content-Type', 'text/plain; charset=UTF-8');
+        $headers->addHeaderLine('Content-Disposition', "attachment; filename=\"". $game->getIdentifier() .".txt\"");
+        $headers->addHeaderLine('Accept-Ranges', 'bytes');
+        $headers->addHeaderLine('Content-Length', strlen($content));
+    
+        $response->setContent($content);
+    
+        return $response;
+    }
+    
+    /**
+     * This method take an uploaded txt file containing a serialized game
+     * and persist it in the database
+     * @return unknown
+     */
+    public function importAction()
+    {
+        $form = $this->getServiceLocator()->get('playgroundgame_import_form');
+        $form->setAttribute('action', $this->url()->fromRoute('admin/playgroundgame/import'));
+        $form->setAttribute('method', 'post');
+        
+        if ($this->getRequest()->isPost()) {
+            $data = array_replace_recursive(
+                $this->getRequest()->getPost()->toArray(),
+                $this->getRequest()->getFiles()->toArray()
+            );
+            
+            if (! empty($data['import_file']['tmp_name'])) {
+                ErrorHandler::start();
+                $game = unserialize(file_get_contents($data['import_file']['tmp_name']));
+                ErrorHandler::stop(true);
+            }
+            $game->setId(Null);
+            if($data['slug']){
+                $game->setIdentifier($data['slug']);
+            }
+            
+            $duplicate = $this->getAdminGameService()->getGameMapper()->findByIdentifier($game->getIdentifier());
+            if(!$duplicate){
+                $this->getAdminGameService()->getGameMapper()->insert($game);
+                return $this->redirect()->toRoute('admin/playgroundgame/list');
+            }
+        }
+        
+        return array(
+            'form' => $form,
+        );
     }
 
     public function removeAction()

@@ -1465,6 +1465,27 @@ return array(
                                     )
                                 )
                             ),
+                            'export' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/export/:gameId',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgameadmin',
+                                        'action' => 'export',
+                                        'gameId' => 0
+                                    )
+                                )
+                            ),
+                            'import' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/import',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgameadmin',
+                                        'action' => 'import'
+                                    )
+                                )
+                            ),
                             'create-lottery' => array(
                                 'type' => 'Literal',
                                 'options' => array(
