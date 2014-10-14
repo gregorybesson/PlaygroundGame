@@ -834,7 +834,6 @@ class Game implements InputFilterAwareInterface, Translatable
             ||
             ($this->getPublicationDate() && $this->getPublicationDate()->setTime(0,0,0) > $today)
         ){
-            die('clos');
             return true;
         }
 
