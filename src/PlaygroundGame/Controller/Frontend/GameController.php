@@ -733,9 +733,9 @@ class GameController extends AbstractActionController
 
     public function getShareData($game)
     {
+        $fo = $this->getServiceLocator()->get('facebook-opengraph');
         // I change the fbappid if i'm in fb
         if($this->getEvent()->getRouteMatch()->getParam('channel') === 'facebook'){
-            $fo = $this->getServiceLocator()->get('facebook-opengraph');
             $fo->setId($game->getFbAppId());
         }
 
@@ -772,9 +772,12 @@ class GameController extends AbstractActionController
             $twShareMessage = str_replace('__placeholder__', $game->getTitle(), $this->getOptions()->getDefaultShareMessage()) . $socialLinkUrl;
         }
 
-        $this->getViewHelper('HeadMeta')->setProperty('og:title', $fbShareMessage);
-        $this->getViewHelper('HeadMeta')->setProperty('og:image', $fbShareImage);
-
+        $ogTitle = new \PlaygroundCore\Opengraph\Tag('og:title', $fbShareMessage);
+        $ogImage = new \PlaygroundCore\Opengraph\Tag('og:image', $fbShareImage);
+        
+        $fo->addTag($ogTitle);
+        $fo->addTag($ogImage);
+        
         $data = array(
             'socialLinkUrl'       => $socialLinkUrl,
             'secretKey'           => $secretKey,

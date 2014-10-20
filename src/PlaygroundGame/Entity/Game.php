@@ -830,9 +830,9 @@ class Game implements InputFilterAwareInterface, Translatable
     {
         $today = new DateTime('now');
         if(
-            ($this->getCloseDate() && $this->getCloseDate()->setTime(0,0,0) < $today->setTime(0,0,0))
+            ($this->getCloseDate() && $this->getCloseDate()->setTime(23,59,59) < $today)
             ||
-            ($this->getPublicationDate() && $this->getPublicationDate()->setTime(0,0,0) > $today->setTime(0,0,0))
+            ($this->getPublicationDate() && $this->getPublicationDate()->setTime(0,0,0) > $today)
         ){
             return true;
         }
@@ -848,9 +848,9 @@ class Game implements InputFilterAwareInterface, Translatable
     public function isStarted ()
     {
         $today = new DateTime('now');
-        if(((!$this->getStartDate() || $this->getStartDate()->setTime(0,0,0) <= $today->setTime(0,0,0)))
+        if(((!$this->getStartDate() || $this->getStartDate()->setTime(0,0,0) <= $today))
                 &&
-                (!$this->getEndDate() || $this->getEndDate()->setTime(0,0,0) > $today->setTime(0,0,0))
+                (!$this->getEndDate() || $this->getEndDate()->setTime(23,59,59) > $today)
         ){
             return true;
         }
@@ -861,9 +861,9 @@ class Game implements InputFilterAwareInterface, Translatable
     public function isFinished ()
     {
         $today = new DateTime('now');
-        if ($this->getEndDate() && $this->getEndDate()->setTime(0,0,0) <= $today->setTime(0,0,0)
+        if ($this->getEndDate() && $this->getEndDate()->setTime(23,59,59) <= $today
             ||
-            ($this->getCloseDate() && $this->getCloseDate()->setTime(0,0,0) <= $today->setTime(0,0,0))
+            ($this->getCloseDate() && $this->getCloseDate()->setTime(23,59,59) <= $today)
         ) {
             return true;
         }
