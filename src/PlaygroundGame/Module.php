@@ -80,10 +80,19 @@ class Module
                         foreach($v['assetic_configuration']['modules'] as $m => $d){
                             $v['assetic_configuration']['modules'][$m]['root_path'][] = __DIR__ . '/../../../../../design/frontend/'. $parentTheme[0] .'/'. $parentTheme[1] . '/custom/' . $k . '/assets';
                         }
-                        // I specialize the route config to the game ! 
-                        foreach($v['assetic_configuration']['routes'] as $route => $conf){
-                            $v['assetic_configuration']['routes'][$route]['params']['id'] = $k;
+                        
+                        // I specialize the route config to the game !
+                        if(isset($v['assetic_configuration']['routes'])){
+                            $customRoutes = array();
+                            if(isset($v['assetic_configuration']['routes']['params'])){
+                                $customRoutes['custom'][$k]['params'] = $v['assetic_configuration']['routes']['params'];
+                                unset($v['assetic_configuration']['routes']['params']);
+                            }
+                            $customRoutes['custom'][$k]['params']['id'] = $k;
+                            $customRoutes['custom'][$k]['routes'] = $v['assetic_configuration']['routes'];
+                            $v['assetic_configuration']['routes'] = $customRoutes;
                         }
+                        
                         $config['assetic_configuration'] = array_replace_recursive($config['assetic_configuration'], $v['assetic_configuration'] );
                     }
                 }
