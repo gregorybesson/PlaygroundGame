@@ -536,55 +536,55 @@ class QuizQuestion implements InputFilterAwareInterface
      */
     public function populate($data = array())
     {
-        if (isset($data['question']) && $data['question'] != null) {
+        if (isset($data['question']) && $data['question'] !== null) {
             $this->question = $data['question'];
         }
 
-        if (isset($data['hint']) && $data['hint'] != null) {
+        if (isset($data['hint']) && $data['hint'] !== null) {
             $this->hint = $data['hint'];
         }
 
-        if (isset($data['type']) && $data['type'] != null) {
+        if (isset($data['type']) && $data['type'] !== null) {
             $this->type = $data['type'];
         }
 
-        if (isset($data['position']) && $data['position'] != null) {
+        if (isset($data['position']) && $data['position'] !== null) {
             $this->position = $data['position'];
         }
 
-        if (isset($data['weight']) && $data['weight'] != null) {
+        if (isset($data['weight']) && $data['weight'] !== null) {
             $this->weight = $data['weight'];
         }
 
-        if (isset($data['image']) && $data['image'] != null) {
+        if (isset($data['image']) && $data['image'] !== null) {
             $this->image = $data['image'];
         }
 
-        if (isset($data['video']) && $data['video'] != null) {
+        if (isset($data['video']) && $data['video'] !== null) {
             $this->video = $data['video'];
         }
 
-        if (isset($data['audio']) && $data['audio'] != null) {
+        if (isset($data['audio']) && $data['audio'] !== null) {
             $this->audio = $data['audio'];
         }
 
-        if (isset($data['autoplay']) && $data['autoplay'] != null) {
+        if (isset($data['autoplay']) && $data['autoplay'] !== null) {
             $this->autoplay = $data['autoplay'];
         }
 
-        if (isset($data['timer']) && $data['timer'] != null) {
+        if (isset($data['timer']) && $data['timer'] !== null) {
             $this->timer = $data['timer'];
         }
 
-        if (isset($data['timer_duration']) && $data['timer_duration'] != null) {
+        if (isset($data['timer_duration']) && $data['timer_duration'] !== null) {
             $this->timer_duration = $data['timer_duration'];
         }
 
-        if (isset($data['max_points']) && $data['max_points'] != null) {
+        if (isset($data['max_points']) && $data['max_points'] !== null) {
             $this->max_points = $data['max_points'];
         }
 
-        if (isset($data['max_correct_answers']) && $data['max_correct_answers'] != null) {
+        if (isset($data['max_correct_answers']) && $data['max_correct_answers'] !== null) {
             $this->max_correct_answers = $data['max_correct_answers'];
         }
     }

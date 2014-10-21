@@ -53,7 +53,7 @@ class PostVoteController extends GameController
 
         if (!$entry) {
             $lastEntry = $sg->findLastInactiveEntry($game, $user);
-            if ($lastEntry == null) {
+            if ($lastEntry === null) {
                 return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('postvote', array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
             }
 
@@ -450,7 +450,7 @@ class PostVoteController extends GameController
         // Has the user finished the game ?
         $lastEntry = $this->getGameService()->findLastInactiveEntry($game, $user);
 
-        if ($lastEntry == null) {
+        if ($lastEntry === null) {
             return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('postvote', array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
         }
 
@@ -595,9 +595,6 @@ class PostVoteController extends GameController
         $request = $this->getRequest();
 
         $game = $sg->checkGame($identifier, false);
-        /*if (! $game) {
-            return $this->notFoundAction();
-        }*/
 
         // Je recherche les posts validés associés à ce jeu
         $posts = $sg->findArrayOfValidatedPosts($game, $filter, $search);
@@ -739,7 +736,7 @@ class PostVoteController extends GameController
                 $response->setStatusCode(200);
                 $response->setContent($imagegetcontent);
 
-                if (file_exists($image) == true) {
+                if (file_exists($image) === true) {
                     unlink($image);
                 }
             }
@@ -771,7 +768,7 @@ class PostVoteController extends GameController
         // Has the user finished the game ?
         $lastEntry = $this->getGameService()->findLastInactiveEntry($game, $user);
     
-        if ($lastEntry == null) {
+        if ($lastEntry === null) {
             return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('postvote', array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
         }
     
@@ -804,8 +801,6 @@ class PostVoteController extends GameController
         // buildView must be before sendMail because it adds the game template path to the templateStack
         // TODO : Improve this.
         $viewModel = $this->buildView($game);
-    
-        //$this->sendMail($game, $user, $lastEntry);
     
         $nextGame = $this->getMissionGameService()->checkCondition($game, $lastEntry->getWinner(), true, $lastEntry);
     

@@ -316,7 +316,7 @@ class QuizController extends GameController
             $replyText = "";
             foreach ($questionArray as $q) {
                 $found = false;
-                if ($q['open'] == false) {
+                if ($q['open'] === false) {
                     foreach ($answers as $reply) {
                        if ($q['q'] == $reply->getQuestionId() && $q['a'] == $reply->getAnswerId()) {
                            $replyText .= ";1";

@@ -329,31 +329,31 @@ class Prize {
 	 */
 	public function populate($data = array())
 	{
-		if (isset($data['prizeContent']) && $data['prizeContent'] != null) {
+		if (isset($data['prizeContent']) && $data['prizeContent'] !== null) {
 			$this->prizeContent = $data['prizeContent'];
 		}
 
-		if (isset($data['title']) && $data['title'] != null) {
+		if (isset($data['title']) && $data['title'] !== null) {
 			$this->title = $data['title'];
 		}
 
-		if (isset($data['qty']) && $data['qty'] != null) {
+		if (isset($data['qty']) && $data['qty'] !== null) {
 			$this->qty = $data['qty'];
 		}
 
-		if (isset($data['identifier']) && $data['identifier'] != null) {
+		if (isset($data['identifier']) && $data['identifier'] !== null) {
 			$this->identifier = $data['identifier'];
 		}
 
-		if (isset($data['unitPrice']) && $data['unitPrice'] != null) {
+		if (isset($data['unitPrice']) && $data['unitPrice'] !== null) {
 			$this->unitPrice = $data['unitPrice'];
 		}
 
-		if (isset($data['currency']) && $data['currency'] != null) {
+		if (isset($data['currency']) && $data['currency'] !== null) {
 			$this->currency = $data['currency'];
 		}
 
-		if (isset($data['picture']) && $data['picture'] != null) {
+		if (isset($data['picture']) && $data['picture'] !== null) {
 			$this->picture = $data['picture'];
 		}
 	}

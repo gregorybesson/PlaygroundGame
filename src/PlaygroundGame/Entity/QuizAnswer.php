@@ -309,35 +309,35 @@ class QuizAnswer implements InputFilterAwareInterface
      */
     public function populate($data = array())
     {
-        if (isset($data['answer']) && $data['answer'] != null) {
+        if (isset($data['answer']) && $data['answer'] !== null) {
             $this->answer = $data['answer'];
         }
 
-        if (isset($data['explanation']) && $data['explanation'] != null) {
+        if (isset($data['explanation']) && $data['explanation'] !== null) {
             $this->explanation = $data['explanation'];
         }
 
-        if (isset($data['type']) && $data['type'] != null) {
+        if (isset($data['type']) && $data['type'] !== null) {
             $this->type = $data['type'];
         }
 
-        if (isset($data['position']) && $data['position'] != null) {
+        if (isset($data['position']) && $data['position'] !== null) {
             $this->position = $data['position'];
         }
 
-        if (isset($data['image']) && $data['image'] != null) {
+        if (isset($data['image']) && $data['image'] !== null) {
             $this->image = $data['image'];
         }
 
-        if (isset($data['video']) && $data['video'] != null) {
+        if (isset($data['video']) && $data['video'] !== null) {
             $this->video = $data['video'];
         }
 
-        if (isset($data['points']) && $data['points'] != null) {
+        if (isset($data['points']) && $data['points'] !== null) {
             $this->points = $data['points'];
         }
 
-        if (isset($data['correct']) && $data['correct'] != null) {
+        if (isset($data['correct']) && $data['correct'] !== null) {
             $this->correct = $data['correct'];
         }
     }

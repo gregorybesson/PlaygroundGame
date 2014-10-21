@@ -329,19 +329,19 @@ class Mission
      */
     public function populate($data = array())
     {
-        if (isset($data['title']) && $data['title'] != null) {
+        if (isset($data['title']) && $data['title'] !== null) {
             $this->title = $data['title'];
         }
 
-        if (isset($data['description']) && $data['description'] != null) {
+        if (isset($data['description']) && $data['description'] !== null) {
             $this->description = $data['description'];
         }
 
-        if (isset($data['hidden']) && $data['hidden'] != null) {
+        if (isset($data['hidden']) && $data['hidden'] !== null) {
             $this->hidden = $data['hidden'];
         }
 
-        if (isset($data['image']) && $data['image'] != null) {
+        if (isset($data['image']) && $data['image'] !== null) {
             $this->image = $data['image'];
         }
     }

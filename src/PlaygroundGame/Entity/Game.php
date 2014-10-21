@@ -1569,14 +1569,14 @@ class Game implements InputFilterAwareInterface, Translatable
     {
         $obj_vars = get_object_vars($this);
 
-        if (isset($obj_vars['publicationDate']) && $obj_vars['publicationDate'] != null) {
+        if (isset($obj_vars['publicationDate']) && $obj_vars['publicationDate'] !== null) {
             $obj_vars['publicationDate'] = $obj_vars['publicationDate']->format('d/m/Y');
         }
 
-        if (isset($obj_vars['endDate']) && $obj_vars['endDate'] != null) {
+        if (isset($obj_vars['endDate']) && $obj_vars['endDate'] !== null) {
             $obj_vars['endDate'] = $obj_vars['endDate']->format('d/m/Y');
         }
-        if (isset($obj_vars['startDate']) && $obj_vars['startDate'] != null) {
+        if (isset($obj_vars['startDate']) && $obj_vars['startDate'] !== null) {
             $obj_vars['startDate'] = $obj_vars['startDate']->format('d/m/Y');
         }
 
@@ -1590,37 +1590,37 @@ class Game implements InputFilterAwareInterface, Translatable
      */
     public function populate ($data = array())
     {
-        if (isset($data['partner']) && $data['partner'] != null) {
+        if (isset($data['partner']) && $data['partner'] !== null) {
             $this->partner = $data['partner'];
         }
 
         $this->title = (isset($data['title'])) ? $data['title'] : null;
-        $this->type = (isset($data['type']) && $data['type'] != null) ? $data['type'] : null;
+        $this->type = (isset($data['type']) && $data['type'] !== null) ? $data['type'] : null;
 
-        if (isset($data['mainImage']) && $data['mainImage'] != null) {
+        if (isset($data['mainImage']) && $data['mainImage'] !== null) {
             $this->mainImage = $data['mainImage'];
         }
 
-        if (isset($data['secondImage']) && $data['secondImage'] != null) {
+        if (isset($data['secondImage']) && $data['secondImage'] !== null) {
             $this->secondImage = $data['secondImage'];
         }
 
-        if (isset($data['active']) && $data['active'] != null) {
+        if (isset($data['active']) && $data['active'] !== null) {
             $this->active = $data['active'];
         }
 
         $this->layout           = (isset($data['layout'])) ? $data['layout'] : null;
         $this->stylesheet       = (isset($data['stylesheet'])) ? $data['stylesheet'] : null;
 
-        $this->pushHome         = (isset($data['pushHome']) && $data['pushHome'] != null) ? $data['pushHome'] : 0;
-        $this->displayHome      = (isset($data['displayHome']) && $data['displayHome'] != null) ? $data['displayHome'] : 0;
+        $this->pushHome         = (isset($data['pushHome']) && $data['pushHome'] !== null) ? $data['pushHome'] : 0;
+        $this->displayHome      = (isset($data['displayHome']) && $data['displayHome'] !== null) ? $data['displayHome'] : 0;
 
         $this->canal            = (isset($data['canal'])) ? $data['canal'] : null;
         $this->prizeCategory   = (isset($data['prizeCategory'])) ? $data['prizeCategory'] : null;
 
-        $this->publicationDate  = (isset($data['publicationDate']) && $data['publicationDate'] != null) ? DateTime::createFromFormat('d/m/Y', $data['publicationDate']) : null;
-        $this->endDate         = (isset($data['endDate']) && $data['endDate'] != null) ? DateTime::createFromFormat('d/m/Y', $data['endDate']) : null;
-        $this->startDate       = (isset($data['startDate']) && $data['startDate'] != null) ? DateTime::createFromFormat('d/m/Y', $data['startDate']) : null;
+        $this->publicationDate  = (isset($data['publicationDate']) && $data['publicationDate'] !== null) ? DateTime::createFromFormat('d/m/Y', $data['publicationDate']) : null;
+        $this->endDate         = (isset($data['endDate']) && $data['endDate'] !== null) ? DateTime::createFromFormat('d/m/Y', $data['endDate']) : null;
+        $this->startDate       = (isset($data['startDate']) && $data['startDate'] !== null) ? DateTime::createFromFormat('d/m/Y', $data['startDate']) : null;
 
         $this->identifier       = (isset($data['identifier'])) ? $data['identifier'] : null;
         $this->welcomeBlock    = (isset($data['welcomeBlock'])) ? $data['welcomeBlock'] : null;

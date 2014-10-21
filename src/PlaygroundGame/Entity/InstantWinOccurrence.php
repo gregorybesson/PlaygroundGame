@@ -297,9 +297,9 @@ class InstantWinOccurrence implements InputFilterAwareInterface
      */
     public function populate($data = array())
     {
-        $this->value = (isset($data['value']) && $data['value'] != null) ? $data['value'] : null;
-        $this->active = (isset($data['active']) && $data['active'] != null) ? $data['active'] : null;
-        $this->winning = (isset($data['winning']) && $data['winning'] != null) ? $data['winning'] : null;
+        $this->value = (isset($data['value']) && $data['value'] !== null) ? $data['value'] : null;
+        $this->active = (isset($data['active']) && $data['active'] !== null) ? $data['active'] : null;
+        $this->winning = (isset($data['winning']) && $data['winning'] !== null) ? $data['winning'] : null;
     }
 
     public function setInputFilter(InputFilterInterface $inputFilter)

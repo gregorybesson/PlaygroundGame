@@ -42,7 +42,7 @@ class MissionGame extends EventProvider implements ServiceManagerAwareInterface
                 $game1 = $this->getGameMapper()->findById($dataGames[$i]['games']); 
                 $game2 = $this->getGameMapper()->findById($dataGames[$i+1]['games']); 
 
-                if ($game2->getEndDate() == null) {
+                if ($game2->getEndDate() === null) {
                     continue;
                 }
 
@@ -125,7 +125,7 @@ class MissionGame extends EventProvider implements ServiceManagerAwareInterface
             return false;
         }
 
-        if($missionGame->getMission()->getActive() == false){
+        if($missionGame->getMission()->getActive() === false){
             return false;
         }
 

@@ -225,15 +225,15 @@ class PostVote extends Game implements InputFilterAwareInterface
     {
         parent::populate($data);
 
-        if (isset($data['template']) && $data['template'] != null) {
+        if (isset($data['template']) && $data['template'] !== null) {
             $this->template = $data['template'];
         }
 
-        if (isset($data['postDisplayMode']) && $data['postDisplayMode'] != null) {
+        if (isset($data['postDisplayMode']) && $data['postDisplayMode'] !== null) {
             $this->postDisplayMode = $data['postDisplayMode'];
         }
 
-        if (isset($data['voteAnonymous']) && $data['voteAnonymous'] != null) {
+        if (isset($data['voteAnonymous']) && $data['voteAnonymous'] !== null) {
             $this->voteAnonymous = $data['voteAnonymous'];
         }
 

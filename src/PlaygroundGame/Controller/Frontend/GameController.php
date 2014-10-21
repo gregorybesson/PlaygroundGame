@@ -244,8 +244,6 @@ class GameController extends AbstractActionController
             if (isset($element->line_radio)) {
                 $attributes  = $element->line_radio[0];
                 $name        = isset($attributes->name)? $attributes->name : '';
-                $type        = isset($attributes->type)? $attributes->type : '';
-                $position    = isset($attributes->order)? $attributes->order : '';
                 $label       = isset($attributes->data->label)? $attributes->data->label : '';
 
                 $required = false;
@@ -291,7 +289,6 @@ class GameController extends AbstractActionController
                 $name        = isset($attributes->name)? $attributes->name : '';
                 $label       = isset($attributes->data->label)? $attributes->data->label : '';
 
-//                 $required    = ($attributes->data->required == 'yes') ? true : false;
                 $required = false;
                 $class       = isset($attributes->data->class)? $attributes->data->class : '';
                 $id          = isset($attributes->data->id)? $attributes->data->id : '';
@@ -950,7 +947,7 @@ class GameController extends AbstractActionController
         // Has the user finished the game ?
         $lastEntry = $this->getGameService()->findLastInactiveEntry($game, $user);
     
-        if ($lastEntry == null) {
+        if ($lastEntry === null) {
             return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('postvote', array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
         }
     

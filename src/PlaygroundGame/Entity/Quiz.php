@@ -289,25 +289,25 @@ class Quiz extends Game implements InputFilterAwareInterface
     {
         parent::populate($data);
 
-        if (isset($data['winners']) && $data['winners'] != null) {
+        if (isset($data['winners']) && $data['winners'] !== null) {
             $this->winners = $data['winners'];
         }
 
-        if (isset($data['timer']) && $data['timer'] != null) {
+        if (isset($data['timer']) && $data['timer'] !== null) {
             $this->timer = $data['timer'];
         }
-        if (isset($data['timerDuration']) && $data['timerDuration'] != null) {
+        if (isset($data['timerDuration']) && $data['timerDuration'] !== null) {
             $this->timerDuration = $data['timerDuration'];
         }
-        if (isset($data['questionGrouping']) && $data['questionGrouping'] != null) {
+        if (isset($data['questionGrouping']) && $data['questionGrouping'] !== null) {
             $this->questionGrouping = $data['questionGrouping'];
         }
 
-        if (isset($data['maxPoints']) && $data['maxPoints'] != null) {
+        if (isset($data['maxPoints']) && $data['maxPoints'] !== null) {
             $this->maxPoints = $data['maxPoints'];
         }
 
-        if (isset($data['maxCorrectAnswers']) && $data['maxCorrectAnswers'] != null) {
+        if (isset($data['maxCorrectAnswers']) && $data['maxCorrectAnswers'] !== null) {
             $this->maxCorrectAnswers = $data['maxCorrectAnswers'];
         }
     }
