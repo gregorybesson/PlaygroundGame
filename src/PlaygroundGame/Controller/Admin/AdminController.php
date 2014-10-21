@@ -231,7 +231,7 @@ class AdminController extends AbstractActionController
         $form = $service->getPlayerFormMapper()->findOneBy(array('game' => $game));
 
         // I use the wonderful Form Generator to create the Post & Vote form
-        $formgen = $this->forward()->dispatch('PlaygroundCore\Controller\Formgen', array('controller' => 'PlaygroundCore\Controller\Formgen', 'action' => 'create'));
+        $this->forward()->dispatch('PlaygroundCore\Controller\Formgen', array('controller' => 'PlaygroundCore\Controller\Formgen', 'action' => 'create'));
 
         if ($this->getRequest()->isPost()) {
             $data = $this->getRequest()->getPost()->toArray();

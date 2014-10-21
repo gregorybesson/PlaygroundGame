@@ -191,8 +191,6 @@ class PostVoteForm implements InputFilterAwareInterface
     {
         if (!$this->inputFilter) {
             $inputFilter = new InputFilter();
-            $factory = new InputFactory();
-
             $inputFilter = parent::getInputFilter();
 
             $this->inputFilter = $inputFilter;

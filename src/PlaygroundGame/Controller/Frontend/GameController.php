@@ -344,8 +344,6 @@ class GameController extends AbstractActionController
             if (isset($element->line_paragraph)) {
                 $attributes  = $element->line_paragraph[0];
                 $name        = isset($attributes->name)? $attributes->name : '';
-                $type        = isset($attributes->type)? $attributes->type : '';
-                $position    = isset($attributes->order)? $attributes->order : '';
                 $placeholder = isset($attributes->data->placeholder)? $attributes->data->placeholder : '';
                 $label       = isset($attributes->data->label)? $attributes->data->label : '';
                 $required    = ($attributes->data->required == 'true') ? true : false ;
@@ -395,8 +393,8 @@ class GameController extends AbstractActionController
                 $required    = ($attributes->data->required == 'true') ? true : false ;
                 $class       = isset($attributes->data->class)? $attributes->data->class : '';
                 $id          = isset($attributes->data->id)? $attributes->data->id : '';
-                $filesizeMin = isset($attributes->data->filesize)? $attributes->data->filesize->min : '';
-                $filesizeMax = isset($attributes->data->filesize)? $attributes->data->filesize->max : '';
+                $filesizeMin = isset($attributes->data->filesize)? $attributes->data->filesize->min : 0;
+                $filesizeMax = isset($attributes->data->filesize)? $attributes->data->filesize->max : 10*1024*1024;
                 $element = new Element\File($name);
                 $element->setLabel($label);
                 $element->setAttributes(
@@ -412,7 +410,7 @@ class GameController extends AbstractActionController
                     'name'     => $name,
                     'required' => $required,
                     'validators' => array(
-                            array('name' => '\Zend\Validator\File\Size', 'options' => array('max' => 10*1024*1024)),
+                            array('name' => '\Zend\Validator\File\Size', 'options' => array('min' => $filesizeMin, 'max' => $filesizeMax)),
                             array('name' => '\Zend\Validator\File\Extension', 'options'  => array('png,PNG,jpg,JPG,jpeg,JPEG,gif,GIF', 'messages' => array(
                             \Zend\Validator\File\Extension::FALSE_EXTENSION => 'Veuillez télécharger une image' ))
                         ),
@@ -946,7 +944,6 @@ class GameController extends AbstractActionController
     {
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
         $user = $this->zfcUserAuthentication()->getIdentity();
-        $sg = $this->getGameService();
     
         $statusMail = null;
     

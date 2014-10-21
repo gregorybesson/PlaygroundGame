@@ -4,7 +4,6 @@ namespace PlaygroundGame\Controller\Admin;
 
 use PlaygroundGame\Service\Game as AdminGameService;
 use PlaygroundGame\Entity\PostVote;
-use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
 class PostVoteController extends GameController

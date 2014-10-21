@@ -59,7 +59,7 @@ class PrizeCategoryUser
         $this->em->flush();
     }
 
-    public function insert(PrizeCategoryUserEntity $entity, $tableName = null, HydratorInterface $hydrator = null)
+    public function insert(PrizeCategoryUserEntity $entity)
     {
         try {
             $entity = $this->persist($entity);
@@ -72,7 +72,7 @@ class PrizeCategoryUser
         return $entity;
     }
 
-    public function update($entity, $where = null, $tableName = null, HydratorInterface $hydrator = null)
+    public function update($entity)
     {
         return $this->persist($entity);
     }

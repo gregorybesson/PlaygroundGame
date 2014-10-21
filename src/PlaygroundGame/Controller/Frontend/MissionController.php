@@ -9,9 +9,7 @@ class MissionController extends GameController
     protected $missionService;
 
     public function indexAction()
-    {
-        $layoutViewModel = $this->layout();
-                
+    {           
         $missions = $this->getMissionService()->getActiveMissions();
         
         return new ViewModel(array(
