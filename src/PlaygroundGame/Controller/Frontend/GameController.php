@@ -248,7 +248,6 @@ class GameController extends AbstractActionController
                 $position    = isset($attributes->order)? $attributes->order : '';
                 $label       = isset($attributes->data->label)? $attributes->data->label : '';
 
-//                 $required    = ($attributes->data->required == 'yes') ? true : false;
                 $required = false;
                 $class       = isset($attributes->data->class)? $attributes->data->class : '';
                 $id          = isset($attributes->data->id)? $attributes->data->id : '';
@@ -290,8 +289,6 @@ class GameController extends AbstractActionController
             if (isset($element->line_checkbox)) {
                 $attributes  = $element->line_checkbox[0];
                 $name        = isset($attributes->name)? $attributes->name : '';
-                $type        = isset($attributes->type)? $attributes->type : '';
-                $position    = isset($attributes->order)? $attributes->order : '';
                 $label       = isset($attributes->data->label)? $attributes->data->label : '';
 
 //                 $required    = ($attributes->data->required == 'yes') ? true : false;
@@ -323,14 +320,6 @@ class GameController extends AbstractActionController
                 $options = array();
                 $options['encoding'] = 'UTF-8';
                 $options['disable_inarray_validator'] = true;
-                /*if ($lengthMin && $lengthMin > 0) {
-                    $options['min'] = $lengthMin;
-                }
-                if ($lengthMax && $lengthMax > $lengthMin) {
-                    $options['max'] = $lengthMax;
-                    $element->setAttribute('maxlength', $lengthMax);
-                    $options['messages'] = array(\Zend\Validator\StringLength::TOO_LONG => sprintf($this->getServiceLocator()->get('translator')->translate('This field contains more than %s characters', 'playgroundgame'), $lengthMax));
-                }*/
                 
                 $element->setOptions($options);
                 

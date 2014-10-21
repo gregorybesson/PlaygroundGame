@@ -6,7 +6,6 @@ use PlaygroundGame\Entity\PrizeCategoryUser as PrizeCategoryUserEntity;
 use Doctrine\ORM\EntityManager;
 use Doctrine\DBAL\DBALException;
 use PlaygroundGame\Options\ModuleOptions;
-use Zend\Stdlib\Hydrator\HydratorInterface;
 
 class PrizeCategoryUser
 {

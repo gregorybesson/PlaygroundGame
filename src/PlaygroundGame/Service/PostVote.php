@@ -153,7 +153,6 @@ class PostVote extends Game implements ServiceManagerAwareInterface
                         $ext = pathinfo($value['name'], PATHINFO_EXTENSION);
                         $img = new \Imagick($path . $value['name']);
                         $img->cropThumbnailImage( 100, 100 );
-                        //$img->thumbnailImage(580, 0);
                         $img->setImageCompression(\Imagick::COMPRESSION_JPEG);
                         $img->setImageCompressionQuality(75);
                         // Strip out unneeded meta data

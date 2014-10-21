@@ -32,7 +32,6 @@ class Mission extends ProvidesEventsForm
 
         $this->setAttribute('method', 'post');
         $this->setAttribute('enctype','multipart/form-data');
-        //$this->setAttribute('class','form-horizontal');
 
         $this->add(array(
             'name' => 'id',

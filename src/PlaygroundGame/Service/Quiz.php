@@ -236,9 +236,6 @@ class Quiz extends Game implements ServiceManagerAwareInterface
         $question->setMaxPoints($question_max_points);
         $question->setMaxCorrectAnswers($question_max_correct_answers);
 
-        // echo "Quiz Max Points : " . $quiz->getMaxPoints()  . "Quiz  Max correct : " . $quiz->getMaxCorrectAnswers();
-        // echo "Max Points : " . $question->getMaxPoints() . "  max correct : " . $question->getMaxCorrectAnswers();
-        // die();
         return $question;
     }
 

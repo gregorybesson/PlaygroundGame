@@ -79,34 +79,5 @@ class QuizAnswerFieldset extends Fieldset
             )
         ));
 
-/*        $this->add(array(
-                //'type' => 'Zend\Form\Element\Hidden',
-                'name' => 'video',
-                'options' => array(
-                        'label' => 'Video'
-                ),
-        ));
-
-        $this->add(array(
-                //'type' => 'Zend\Form\Element\Hidden',
-                'name' => 'image',
-                'options' => array(
-                        'label' => 'Image'
-                ),
-        ));
-*/
-/*        $this->add(array(
-                //'type' => 'Zend\Form\Element\Hidden',
-                'name' => 'points',
-                'options' => array(
-                    'label' => 'Points',
-                    'class' => 'input-mini'
-                ),
-                'attributes' =>  array(
-                    'class' => 'input-mini'
-                ),
-        ));
-*/
-
     }
 }

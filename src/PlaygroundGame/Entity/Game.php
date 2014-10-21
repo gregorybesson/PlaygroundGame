@@ -1730,31 +1730,6 @@ class Game implements InputFilterAwareInterface, Translatable
             	'required' => false,
             )));
 
-            /*$inputFilter->add($factory->createInput(array(
-                'name' => 'endDate',
-                'required' => false,
-                'validators'=>array(
-                    array(
-                        'name'=>'Date',
-                        'break_chain_on_failure'=>true,
-                        'options'=>array(
-                            'format'=>'d/m/Y',
-                            'messages'=>array(
-                                'dateFalseFormat'=>'Format de date invalide, doit être de la forme must jj/mm/aaaa',
-                                'dateInvalidDate'=>'Format de date invalide, doit être de la forme must jj/mm/aaaa'
-                            ),
-                        ),
-                    ),
-                    array(
-                        'name'=>'Regex',
-                        'options'=>array(
-                            'messages'=>array('regexNotMatch'=>'Format de date invalide, doit être de la forme must jj/mm/aaaa'),
-                            'pattern'=>'/^\d{1,2}\/\d{1,2}\/\d{4}$/',
-                        ),
-                    ),
-                ),
-            )));
-            */
             $inputFilter->add($factory->createInput(array(
                 'name' => 'identifier',
                 'required' => true,

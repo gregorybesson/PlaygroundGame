@@ -90,8 +90,6 @@ class PostVoteController extends GameController
             if (isset($element->line_text)) {
                 $attributes  = $element->line_text[0];
                 $name        = isset($attributes->name)? $attributes->name : '';
-                $type        = isset($attributes->type)? $attributes->type : '';
-                $position    = isset($attributes->order)? $attributes->order : '';
                 $placeholder = isset($attributes->data->placeholder)? $attributes->data->placeholder : '';
                 $label       = isset($attributes->data->label)? $attributes->data->label : '';
                 $required    = ($attributes->data->required == 'true') ? true : false ;
@@ -350,9 +348,6 @@ class PostVoteController extends GameController
         }
 
         $game = $sg->checkGame($identifier, false);
-        /*if (! $game) {
-            return $this->notFoundAction();
-        }*/
 
         if (! $postId) {
             return $this->notFoundAction();
@@ -481,8 +476,6 @@ class PostVoteController extends GameController
         // buildView must be before sendMail because it adds the game template path to the templateStack
         // TODO : Improve this.
         $viewModel = $this->buildView($game);
-        
-        //$this->sendMail($game, $user, $lastEntry);
 
         $nextGame = parent::getMissionGameService()->checkCondition($game, $lastEntry->getWinner(), true, $lastEntry);
 

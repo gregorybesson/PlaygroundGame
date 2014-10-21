@@ -102,11 +102,6 @@ class Lottery extends Game implements InputFilterAwareInterface
      */
     public function getDrawDate()
     {
-        /*if ($this->drawDate) {
-            return $this->drawDate->format('d/m/Y');
-        } else {
-            return null;
-        }*/
 
         return $this->drawDate;
     }
@@ -170,13 +165,6 @@ class Lottery extends Game implements InputFilterAwareInterface
                 'name' => 'drawDate',
                 'required' => false
             )));
-            /*$inputFilter->add($factory->createInput(array(
-                    'name'       => 'id',
-                    'required'   => true,
-                    'filters' => array(
-                        array('name'    => 'Int'),
-                    ),
-            )));*/
 
             $this->inputFilter = $inputFilter;
         }
