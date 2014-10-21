@@ -113,7 +113,6 @@ class GameController extends AbstractActionController
     /**
      * This action has been designed to be called by other controllers
      * It gives the ability to display an information form and persist it in the game entry
-     * TODO : Delegate the logic in services and form
      *
      * @return \Zend\View\Model\ViewModel
      */
@@ -131,7 +130,7 @@ class GameController extends AbstractActionController
         $user = $this->zfcUserAuthentication()->getIdentity();
 
         $formPV = json_decode($game->getPlayerForm()->getForm());
-        // TODO : create a Form class to implement this form
+
         $form = new Form();
         $form->setAttribute('id', 'playerForm');
         $form->setAttribute('enctype', 'multipart/form-data');
@@ -194,8 +193,6 @@ class GameController extends AbstractActionController
             if (isset($element->line_email)) {
                 $attributes  = $element->line_email[0];
                 $name        = isset($attributes->name)? $attributes->name : '';
-                $type        = isset($attributes->type)? $attributes->type : '';
-                $position    = isset($attributes->order)? $attributes->order : '';
                 $placeholder = isset($attributes->data->placeholder)? $attributes->data->placeholder : '';
                 $label       = isset($attributes->data->label)? $attributes->data->label : '';
                 $class       = isset($attributes->data->class)? $attributes->data->class : '';
@@ -620,8 +617,6 @@ class GameController extends AbstractActionController
         // this is possible to create a specific game design in /design/frontend/default/custom. It will precede all others templates.
         $templatePathResolver = $this->getServiceLocator()->get('Zend\View\Resolver\TemplatePathStack');
         $l = $templatePathResolver->getPaths();
-        
-        // TODO : Improve : I take the last path to add the game id without verifying it's correct
         $templatePathResolver->addPath($l[0].'custom/'.$game->getIdentifier());
         
         $view = $this->addAdditionalView($game);
@@ -647,13 +642,12 @@ class GameController extends AbstractActionController
     {
         $view = false;
         $actionName = $this->getEvent()->getRouteMatch()->getParam('action', 'not-found');
-        //TODO : improve the way steps and steps views are managed
         $stepsViews = json_decode($game->getStepsViews(), true);
         if($stepsViews && isset($stepsViews[$actionName]) && is_string($stepsViews[$actionName])){
             $action = $stepsViews[$actionName];
             $beforeLayout = $this->layout()->getTemplate();
             $view = $this->forward()->dispatch('playgroundgame_game', array('action' => $action, 'id' => $game->getIdentifier()));
-            // TODO : suite au forward, le template de layout a changé, je dois le rétablir...
+            // suite au forward, le template de layout a changé, je dois le rétablir...
             $this->layout()->setTemplate($beforeLayout);
 
         }
@@ -971,7 +965,6 @@ class GameController extends AbstractActionController
         }
     
         // buildView must be before sendMail because it adds the game template path to the templateStack
-        // TODO : Improve this.
         $viewModel = $this->buildView($game);
     
         $this->sendMail($game, $user, $lastEntry);

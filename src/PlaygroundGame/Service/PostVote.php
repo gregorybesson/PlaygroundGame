@@ -143,7 +143,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
                     move_uploaded_file($value['tmp_name'], $path . $value['name']);
                     $image = $this->getServiceManager()->get('playgroundcore_image_service');
                     $image->setImage($path . $value['name']);
-                    // TODO create config for this
+
                     if ($image->canCorrectOrientation()) {
                         $image->correctOrientation()->save();
                     }

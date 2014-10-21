@@ -150,7 +150,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
             }
 
             // I update all answers with points and correctness
-            // TODO : refactorer findByEntryAndQuestion pour qu'elle fonctionne avec QuizReplyAnswer
+            // Refactorer findByEntryAndQuestion pour qu'elle fonctionne avec QuizReplyAnswer
             /**
              * 1. Je recherche $this->getQuizReplyMapper()->findByEntry($entry)
              * 2. Pour chaque entrée trouvée, je recherche $this->getQuizReplyAnswerMapper()->findByReplyAndQuestion($reply, $question->getId())
@@ -328,7 +328,6 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                     ++$totalQuestions;
                     $quizReplyAnswer = new QuizReplyAnswer();
 
-                    //TODO sanitize answer
                     $quizReplyAnswer->setAnswer($a);
                     $quizReplyAnswer->setAnswerId(0);
                     $quizReplyAnswer->setQuestion($question->getQuestion());
@@ -347,7 +346,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
 
         $entry->setWinner($winner);
         // Every winning participation is eligible to draw
-        // TODO : Make this modifiable in the admin (choose who can participate to draw)
+        // Make this modifiable in the admin (choose who can participate to draw)
         $entry->setDrawable($winner);
         $entry->setPoints($quizPoints);
         $entry->setActive(false);

@@ -62,7 +62,6 @@ class QuizController extends GameController
         $questions = $game->getQuestions();
         $totalQuestions = count($questions);
 
-        // TODO : create a Form class to implement this form
         $form = new Form();
 
         $inputFilter = new \Zend\InputFilter\InputFilter();
@@ -153,7 +152,7 @@ class QuizController extends GameController
             $data = $this->getRequest()->getPost()->toArray();
             $form->setData($data);
 
-            // TODO : improve it : I don't validate the form in a timer quiz as no answer is mandatory
+            // Improve it : I don't validate the form in a timer quiz as no answer is mandatory
             if ($game->getTimer() || $form->isValid()) {
             	unset($data['submitForm']);
                 $entry = $this->getGameService()->createQuizReply($data, $game, $user);
@@ -276,7 +275,6 @@ class QuizController extends GameController
         $form->setAttribute('method', 'post');
 
         // buildView must be before sendMail because it adds the game template path to the templateStack
-        // TODO : Improve this.
         $viewModel = $this->buildView($game);
         
         $this->sendMail($game, $user, $lastEntry);
@@ -313,7 +311,7 @@ class QuizController extends GameController
             $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
             $user = $this->zfcUserAuthentication()->getIdentity();
             $game = $sg->checkGame($identifier);
-            // TODO : Remove this horrible thing
+            // Improve this thing
             $lastEntry = $sg->findLastInactiveEntry($game, $user);
             if ($lastEntry && $lastEntry->getWinner()) {
                 $bonusEntry = $sg->addAnotherChance($game, $user, 1);

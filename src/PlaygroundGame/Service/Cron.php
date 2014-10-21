@@ -32,10 +32,8 @@ class Cron extends EventProvider implements ServiceManagerAwareInterface
      */
     protected $options;
 
-    //TODO : Terminer et Refactorer afin de le mettre dans PlaygroundCore
     public static function cronMail()
     {
-        //TODO : factoriser la config
         $configuration = require 'config/application.config.php';
         $smConfig = isset($configuration['service_manager']) ? $configuration['service_manager'] : array();
         $sm = new \Zend\ServiceManager\ServiceManager(new \Zend\Mvc\Service\ServiceManagerConfig($smConfig));

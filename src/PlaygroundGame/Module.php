@@ -231,7 +231,6 @@ class Module
 
     /**
      * This method get the cron config for this module an add them to the listener
-     * TODO : déporter la def des cron dans la config.
      *
      * @param  EventManager $e
      * @return array

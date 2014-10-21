@@ -851,7 +851,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         return $this->checkExistingEntry($game, $user, null, false);
     }
 
-    // TODO : Simplify this method !
     public function sendShareMail($data, $game, $user, $entry, $template = 'share_game', $topic = NULL, $userTimer = array())
     {
         $mailService = $this->getServiceManager()->get('playgroundgame_message');
@@ -1178,7 +1177,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         return false;
     }
 
-    // TODO : Remove this logic. If we want to add another chance to an entry, just use points)
     public function addAnotherEntry($game, $user, $winner = 0)
     {
         $entry = new Entry();
@@ -1235,7 +1233,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         return false;
     }
 
-    // TODO : Terminer et Refactorer afin de le mettre dans PlaygroundCore
     public static function cronMail()
     {
         $configuration = require 'config/application.config.php';

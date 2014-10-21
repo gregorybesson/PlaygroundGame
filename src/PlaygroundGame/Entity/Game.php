@@ -59,7 +59,7 @@ class Game implements InputFilterAwareInterface, Translatable
     protected $partner;
 
     /**
-     * TODO : implementer ManyToOne(targetEntity="PrizeCategory") avec hydrator sur le formulaire
+     * Implementer ManyToOne(targetEntity="PrizeCategory") avec hydrator sur le formulaire
      * @ORM\Column(name="prize_category", type="integer", nullable=true)
      */
     protected $prizeCategory;
@@ -247,7 +247,7 @@ class Game implements InputFilterAwareInterface, Translatable
      */
     protected $conditionsBlock;
 
-    // TODO : Adherence CMS de ces blocs à revoir
+    // Adherence CMS de ces blocs à revoir
     /**
      * @Gedmo\Translatable
      * @ORM\Column(type="text", nullable=true)

@@ -72,13 +72,12 @@ class PostVoteController extends GameController
             }
         }
 
-        // TODO : Don't display incomplete post & vote without form...
         if (! $game->getForm()) {
             return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('postvote',array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
         }
 
         $formPV = json_decode($game->getForm()->getForm());
-        // TODO : create a Form class to implement this form
+
         $form = new Form();
         $form->setAttribute('id', 'postForm');
         $form->setAttribute('enctype', 'multipart/form-data');
@@ -474,7 +473,6 @@ class PostVoteController extends GameController
         }
 
         // buildView must be before sendMail because it adds the game template path to the templateStack
-        // TODO : Improve this.
         $viewModel = $this->buildView($game);
 
         $nextGame = parent::getMissionGameService()->checkCondition($game, $lastEntry->getWinner(), true, $lastEntry);
@@ -799,12 +797,10 @@ class PostVoteController extends GameController
         }
     
         // buildView must be before sendMail because it adds the game template path to the templateStack
-        // TODO : Improve this.
         $viewModel = $this->buildView($game);
     
         $nextGame = $this->getMissionGameService()->checkCondition($game, $lastEntry->getWinner(), true, $lastEntry);
     
-        // TODO : Refactor and use the twitter cards from core
         foreach($post->getPostElements() as $element){
             $fbShareImage = $this->frontendUrl()->fromRoute('', array('channel' => ''), array('force_canonical' => true), false) . $element->getValue();
             break;

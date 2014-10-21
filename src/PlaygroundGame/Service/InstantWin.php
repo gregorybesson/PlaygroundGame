@@ -289,7 +289,7 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
 
                 break;
             case 'week':
-                // TODO : Je recherche tous les IG non gagnés pour chaque jour puis soustrais à ceux à créer
+                // Rechercher tous les IG non gagnés pour chaque jour puis soustrais à ceux à créer
                 $occurences = $this->getInstantWinOccurrenceMapper()->findBy(array('instantwin' => $game));
                 $nbOccurencesToCreate = $game->getOccurrenceNumber() - count($occurences);
                 $nbWeeksInterval = (int) ($dateInterval/(60*24*7));
