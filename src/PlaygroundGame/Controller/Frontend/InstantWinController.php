@@ -37,20 +37,6 @@ class InstantWinController extends GameController
         }
 
         if ($game->getOccurrenceType()=='datetime') {
-
-            /*
-            $beforeLayout = $this->layout()->getTemplate();
-            // je délègue la responsabilité du formulaire à PlaygroundUser, y compris dans sa gestion des erreurs
-            $form_address = $this->forward()->dispatch('playgrounduser_user', array('action' => 'address'));
-            // TODO : suite au forward, le template de layout a changé, je dois le rétablir...
-            $this->layout()->setTemplate($beforeLayout);
-            // Le formulaire est validé, il renvoie true et non un ViewModel
-
-
-            if (!($form_address instanceof \Zend\View\Model\ViewModel)) {
-                return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('instantwin/result', array('id' => $game->getIdentifier(), 'channel' => $channel)));
-            }
-            */
             if ($this->getRequest()->isPost()) {
                 // En post, je reçois la maj du form pour les gagnants. Je n'ai pas à créer une nouvelle participation mais vérifier la précédente
                 $lastEntry = $sg->findLastInactiveEntry($game, $user);
@@ -178,7 +164,6 @@ class InstantWinController extends GameController
         }
         
         // buildView must be before sendMail because it adds the game template path to the templateStack
-        // TODO : Improve this.
         $viewModel = $this->buildView($game);
         
         $this->sendMail($game, $user, $lastEntry, $prize);

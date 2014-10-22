@@ -289,7 +289,7 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
 
                 break;
             case 'week':
-                // TODO : Je recherche tous les IG non gagnés pour chaque jour puis soustrais à ceux à créer
+                // Rechercher tous les IG non gagnés pour chaque jour puis soustrais à ceux à créer
                 $occurences = $this->getInstantWinOccurrenceMapper()->findBy(array('instantwin' => $game));
                 $nbOccurencesToCreate = $game->getOccurrenceNumber() - count($occurences);
                 $nbWeeksInterval = (int) ($dateInterval/(60*24*7));
@@ -409,7 +409,6 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
         if (!empty($data['file']['tmp_name'])) {
             $path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR;
             $real_media_path = realpath($path) . DIRECTORY_SEPARATOR;
-            $instantwin = $this->getGameMapper()->findById($data['instant_win_id']);
 
             // upload the csv file
             ErrorHandler::start();
@@ -419,7 +418,6 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
             $csv_content = $this->getOccurencesFromCSV($real_media_path.$data['file']['name']);
             if ($csv_content){
                 $created = 0;
-                $already_in = 0;
                 foreach ($csv_content as $line){
                     if($line){
                         $occurrence = $this->updateOccurrence(array(
@@ -496,7 +494,6 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
      */
     public function isInstantWinner($game, $user, $value = null)
     {
-        $entryMapper = $this->getEntryMapper();
         $occurrenceMapper = $this->getInstantWinOccurrenceMapper();
 
         if ($game->getOccurrenceType()=='datetime') {

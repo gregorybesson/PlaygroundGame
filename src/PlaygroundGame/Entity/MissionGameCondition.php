@@ -6,7 +6,6 @@ use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping\PrePersist;
 use Doctrine\ORM\Mapping\PreUpdate;
 use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\Factory as InputFactory;
 
 /**
  * @ORM\Entity @HasLifecycleCallbacks
@@ -188,7 +187,6 @@ class MissionGameCondition
     {
         if (! $this->inputFilter) {
             $inputFilter = new InputFilter();
-            $factory = new InputFactory();
             $this->inputFilter = $inputFilter;
         }
     

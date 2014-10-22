@@ -102,11 +102,6 @@ class Lottery extends Game implements InputFilterAwareInterface
      */
     public function getDrawDate()
     {
-        /*if ($this->drawDate) {
-            return $this->drawDate->format('d/m/Y');
-        } else {
-            return null;
-        }*/
 
         return $this->drawDate;
     }
@@ -131,7 +126,7 @@ class Lottery extends Game implements InputFilterAwareInterface
         $obj_vars = parent::getArrayCopy();
         array_merge($obj_vars, get_object_vars($this));
 
-        if (isset($obj_vars['drawDate']) && $obj_vars['drawDate'] != null) {
+        if (isset($obj_vars['drawDate']) && $obj_vars['drawDate'] !== null) {
             $obj_vars['drawDate'] = $obj_vars['drawDate']->format('d/m/Y');
         }
 
@@ -147,10 +142,10 @@ class Lottery extends Game implements InputFilterAwareInterface
     {
         parent::populate($data);
 
-        if (isset($data['drawAuto']) && $data['drawAuto'] != null) {
+        if (isset($data['drawAuto']) && $data['drawAuto'] !== null) {
             $this->drawAuto = $data['drawAuto'];
         }
-        $this->drawDate = (isset($data['drawDate']) && $data['drawDate'] != null) ? \DateTime::createFromFormat('d/m/Y', $data['drawDate']) : null;
+        $this->drawDate = (isset($data['drawDate']) && $data['drawDate'] !== null) ? \DateTime::createFromFormat('d/m/Y', $data['drawDate']) : null;
     }
 
     public function setInputFilter(InputFilterInterface $inputFilter)
@@ -170,13 +165,6 @@ class Lottery extends Game implements InputFilterAwareInterface
                 'name' => 'drawDate',
                 'required' => false
             )));
-            /*$inputFilter->add($factory->createInput(array(
-                    'name'       => 'id',
-                    'required'   => true,
-                    'filters' => array(
-                        array('name'    => 'Int'),
-                    ),
-            )));*/
 
             $this->inputFilter = $inputFilter;
         }

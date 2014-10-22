@@ -229,19 +229,19 @@ class PrizeCategory
      */
     public function populate($data = array())
     {
-        if (isset($data['title']) && $data['title'] != null) {
+        if (isset($data['title']) && $data['title'] !== null) {
             $this->title = $data['title'];
         }
 
-        if (isset($data['identifier']) && $data['identifier'] != null) {
+        if (isset($data['identifier']) && $data['identifier'] !== null) {
             $this->identifier = $data['identifier'];
         }
 
-        if (isset($data['active']) && $data['active'] != null) {
+        if (isset($data['active']) && $data['active'] !== null) {
             $this->active = $data['active'];
         }
 
-        if (isset($data['picto']) && $data['picto'] != null) {
+        if (isset($data['picto']) && $data['picto'] !== null) {
             $this->picto = $data['picto'];
         }
     }

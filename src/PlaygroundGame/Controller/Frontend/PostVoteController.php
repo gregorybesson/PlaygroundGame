@@ -53,7 +53,7 @@ class PostVoteController extends GameController
 
         if (!$entry) {
             $lastEntry = $sg->findLastInactiveEntry($game, $user);
-            if ($lastEntry == null) {
+            if ($lastEntry === null) {
                 return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('postvote', array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
             }
 
@@ -72,13 +72,12 @@ class PostVoteController extends GameController
             }
         }
 
-        // TODO : Don't display incomplete post & vote without form...
         if (! $game->getForm()) {
             return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('postvote',array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
         }
 
         $formPV = json_decode($game->getForm()->getForm());
-        // TODO : create a Form class to implement this form
+
         $form = new Form();
         $form->setAttribute('id', 'postForm');
         $form->setAttribute('enctype', 'multipart/form-data');
@@ -90,8 +89,6 @@ class PostVoteController extends GameController
             if (isset($element->line_text)) {
                 $attributes  = $element->line_text[0];
                 $name        = isset($attributes->name)? $attributes->name : '';
-                $type        = isset($attributes->type)? $attributes->type : '';
-                $position    = isset($attributes->order)? $attributes->order : '';
                 $placeholder = isset($attributes->data->placeholder)? $attributes->data->placeholder : '';
                 $label       = isset($attributes->data->label)? $attributes->data->label : '';
                 $required    = ($attributes->data->required == 'true') ? true : false ;
@@ -141,8 +138,6 @@ class PostVoteController extends GameController
             if (isset($element->line_paragraph)) {
                 $attributes  = $element->line_paragraph[0];
                 $name        = isset($attributes->name)? $attributes->name : '';
-                $type        = isset($attributes->type)? $attributes->type : '';
-                $position    = isset($attributes->order)? $attributes->order : '';
                 $placeholder = isset($attributes->data->placeholder)? $attributes->data->placeholder : '';
                 $label       = isset($attributes->data->label)? $attributes->data->label : '';
                 $required    = ($attributes->data->required == 'true') ? true : false ;
@@ -194,8 +189,8 @@ class PostVoteController extends GameController
                 $required    = ($attributes->data->required == 'true') ? true : false ;
                 $class       = isset($attributes->data->class)? $attributes->data->class : '';
                 $id          = isset($attributes->data->id)? $attributes->data->id : '';
-                $filesizeMin = isset($attributes->data->filesize)? $attributes->data->filesize->min : '';
-                $filesizeMax = isset($attributes->data->filesize)? $attributes->data->filesize->max : '';
+                $filesizeMin = isset($attributes->data->filesize)? $attributes->data->filesize->min : 0;
+                $filesizeMax = isset($attributes->data->filesize)? $attributes->data->filesize->max : 10*1024*1024;
                 $element = new Element\File($name);
                 $element->setLabel($label);
                 $element->setAttributes(
@@ -211,7 +206,7 @@ class PostVoteController extends GameController
                     'name'     => $name,
                     'required' => $required,
                     'validators' => array(
-                            array('name' => '\Zend\Validator\File\Size', 'options' => array('max' => 10*1024*1024)),
+                            array('name' => '\Zend\Validator\File\Size', 'options' => array('min' => $filesizeMin, 'max' => $filesizeMax)),
                             array('name' => '\Zend\Validator\File\Extension', 'options'  => array('png,PNG,jpg,JPG,jpeg,JPEG,gif,GIF', 'messages' => array(
                             \Zend\Validator\File\Extension::FALSE_EXTENSION => 'Veuillez télécharger une image' ))
                         ),
@@ -352,9 +347,6 @@ class PostVoteController extends GameController
         }
 
         $game = $sg->checkGame($identifier, false);
-        /*if (! $game) {
-            return $this->notFoundAction();
-        }*/
 
         if (! $postId) {
             return $this->notFoundAction();
@@ -457,7 +449,7 @@ class PostVoteController extends GameController
         // Has the user finished the game ?
         $lastEntry = $this->getGameService()->findLastInactiveEntry($game, $user);
 
-        if ($lastEntry == null) {
+        if ($lastEntry === null) {
             return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('postvote', array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
         }
 
@@ -481,10 +473,7 @@ class PostVoteController extends GameController
         }
 
         // buildView must be before sendMail because it adds the game template path to the templateStack
-        // TODO : Improve this.
         $viewModel = $this->buildView($game);
-        
-        //$this->sendMail($game, $user, $lastEntry);
 
         $nextGame = parent::getMissionGameService()->checkCondition($game, $lastEntry->getWinner(), true, $lastEntry);
 
@@ -604,9 +593,6 @@ class PostVoteController extends GameController
         $request = $this->getRequest();
 
         $game = $sg->checkGame($identifier, false);
-        /*if (! $game) {
-            return $this->notFoundAction();
-        }*/
 
         // Je recherche les posts validés associés à ce jeu
         $posts = $sg->findArrayOfValidatedPosts($game, $filter, $search);
@@ -748,7 +734,7 @@ class PostVoteController extends GameController
                 $response->setStatusCode(200);
                 $response->setContent($imagegetcontent);
 
-                if (file_exists($image) == true) {
+                if (file_exists($image) === true) {
                     unlink($image);
                 }
             }
@@ -780,7 +766,7 @@ class PostVoteController extends GameController
         // Has the user finished the game ?
         $lastEntry = $this->getGameService()->findLastInactiveEntry($game, $user);
     
-        if ($lastEntry == null) {
+        if ($lastEntry === null) {
             return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('postvote', array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
         }
     
@@ -811,14 +797,10 @@ class PostVoteController extends GameController
         }
     
         // buildView must be before sendMail because it adds the game template path to the templateStack
-        // TODO : Improve this.
         $viewModel = $this->buildView($game);
-    
-        //$this->sendMail($game, $user, $lastEntry);
     
         $nextGame = $this->getMissionGameService()->checkCondition($game, $lastEntry->getWinner(), true, $lastEntry);
     
-        // TODO : Refactor and use the twitter cards from core
         foreach($post->getPostElements() as $element){
             $fbShareImage = $this->frontendUrl()->fromRoute('', array('channel' => ''), array('force_canonical' => true), false) . $element->getValue();
             break;

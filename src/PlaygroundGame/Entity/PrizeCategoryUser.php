@@ -163,8 +163,6 @@ class PrizeCategoryUser
      */
     public function populate($data = array())
     {
-        /*$this->title = $data['title'];
-        $this->identifier = $data['identifier'];
-        $this->welcome_block = $data['welcome_block'];*/
+
     }
 }

@@ -113,7 +113,6 @@ class GameController extends AbstractActionController
     /**
      * This action has been designed to be called by other controllers
      * It gives the ability to display an information form and persist it in the game entry
-     * TODO : Delegate the logic in services and form
      *
      * @return \Zend\View\Model\ViewModel
      */
@@ -131,7 +130,7 @@ class GameController extends AbstractActionController
         $user = $this->zfcUserAuthentication()->getIdentity();
 
         $formPV = json_decode($game->getPlayerForm()->getForm());
-        // TODO : create a Form class to implement this form
+
         $form = new Form();
         $form->setAttribute('id', 'playerForm');
         $form->setAttribute('enctype', 'multipart/form-data');
@@ -143,8 +142,6 @@ class GameController extends AbstractActionController
             if (isset($element->line_text)) {
                 $attributes  = $element->line_text[0];
                 $name        = isset($attributes->name)? $attributes->name : '';
-                $type        = isset($attributes->type)? $attributes->type : '';
-                $position    = isset($attributes->order)? $attributes->order : '';
                 $placeholder = isset($attributes->data->placeholder)? $attributes->data->placeholder : '';
                 $label       = isset($attributes->data->label)? $attributes->data->label : '';
                 $required    = ($attributes->data->required == 'true') ? true : false ;
@@ -194,8 +191,6 @@ class GameController extends AbstractActionController
             if (isset($element->line_email)) {
                 $attributes  = $element->line_email[0];
                 $name        = isset($attributes->name)? $attributes->name : '';
-                $type        = isset($attributes->type)? $attributes->type : '';
-                $position    = isset($attributes->order)? $attributes->order : '';
                 $placeholder = isset($attributes->data->placeholder)? $attributes->data->placeholder : '';
                 $label       = isset($attributes->data->label)? $attributes->data->label : '';
                 $class       = isset($attributes->data->class)? $attributes->data->class : '';
@@ -244,11 +239,8 @@ class GameController extends AbstractActionController
             if (isset($element->line_radio)) {
                 $attributes  = $element->line_radio[0];
                 $name        = isset($attributes->name)? $attributes->name : '';
-                $type        = isset($attributes->type)? $attributes->type : '';
-                $position    = isset($attributes->order)? $attributes->order : '';
                 $label       = isset($attributes->data->label)? $attributes->data->label : '';
 
-//                 $required    = ($attributes->data->required == 'yes') ? true : false;
                 $required = false;
                 $class       = isset($attributes->data->class)? $attributes->data->class : '';
                 $id          = isset($attributes->data->id)? $attributes->data->id : '';
@@ -290,11 +282,8 @@ class GameController extends AbstractActionController
             if (isset($element->line_checkbox)) {
                 $attributes  = $element->line_checkbox[0];
                 $name        = isset($attributes->name)? $attributes->name : '';
-                $type        = isset($attributes->type)? $attributes->type : '';
-                $position    = isset($attributes->order)? $attributes->order : '';
                 $label       = isset($attributes->data->label)? $attributes->data->label : '';
 
-//                 $required    = ($attributes->data->required == 'yes') ? true : false;
                 $required = false;
                 $class       = isset($attributes->data->class)? $attributes->data->class : '';
                 $id          = isset($attributes->data->id)? $attributes->data->id : '';
@@ -323,14 +312,6 @@ class GameController extends AbstractActionController
                 $options = array();
                 $options['encoding'] = 'UTF-8';
                 $options['disable_inarray_validator'] = true;
-                /*if ($lengthMin && $lengthMin > 0) {
-                    $options['min'] = $lengthMin;
-                }
-                if ($lengthMax && $lengthMax > $lengthMin) {
-                    $options['max'] = $lengthMax;
-                    $element->setAttribute('maxlength', $lengthMax);
-                    $options['messages'] = array(\Zend\Validator\StringLength::TOO_LONG => sprintf($this->getServiceLocator()->get('translator')->translate('This field contains more than %s characters', 'playgroundgame'), $lengthMax));
-                }*/
                 
                 $element->setOptions($options);
                 
@@ -344,8 +325,6 @@ class GameController extends AbstractActionController
             if (isset($element->line_paragraph)) {
                 $attributes  = $element->line_paragraph[0];
                 $name        = isset($attributes->name)? $attributes->name : '';
-                $type        = isset($attributes->type)? $attributes->type : '';
-                $position    = isset($attributes->order)? $attributes->order : '';
                 $placeholder = isset($attributes->data->placeholder)? $attributes->data->placeholder : '';
                 $label       = isset($attributes->data->label)? $attributes->data->label : '';
                 $required    = ($attributes->data->required == 'true') ? true : false ;
@@ -395,8 +374,8 @@ class GameController extends AbstractActionController
                 $required    = ($attributes->data->required == 'true') ? true : false ;
                 $class       = isset($attributes->data->class)? $attributes->data->class : '';
                 $id          = isset($attributes->data->id)? $attributes->data->id : '';
-                $filesizeMin = isset($attributes->data->filesize)? $attributes->data->filesize->min : '';
-                $filesizeMax = isset($attributes->data->filesize)? $attributes->data->filesize->max : '';
+                $filesizeMin = isset($attributes->data->filesize)? $attributes->data->filesize->min : 0;
+                $filesizeMax = isset($attributes->data->filesize)? $attributes->data->filesize->max : 10*1024*1024;
                 $element = new Element\File($name);
                 $element->setLabel($label);
                 $element->setAttributes(
@@ -412,7 +391,7 @@ class GameController extends AbstractActionController
                     'name'     => $name,
                     'required' => $required,
                     'validators' => array(
-                            array('name' => '\Zend\Validator\File\Size', 'options' => array('max' => 10*1024*1024)),
+                            array('name' => '\Zend\Validator\File\Size', 'options' => array('min' => $filesizeMin, 'max' => $filesizeMax)),
                             array('name' => '\Zend\Validator\File\Extension', 'options'  => array('png,PNG,jpg,JPG,jpeg,JPEG,gif,GIF', 'messages' => array(
                             \Zend\Validator\File\Extension::FALSE_EXTENSION => 'Veuillez télécharger une image' ))
                         ),
@@ -465,23 +444,24 @@ class GameController extends AbstractActionController
                         return $this->redirect()->toUrl($this->frontendUrl()->fromRoute($game->getClassType().'/result',array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
                     }
                 }else{
+                    // I'm looking for an entry without anonymousIdentifier (the active entry in fact).
+                    $entry = $sg->findLastEntry($game, $user);
                     if($game->getAnonymousAllowed() && $game->getAnonymousIdentifier() && isset($data[$game->getAnonymousIdentifier()])){
                         
                         $anonymousIdentifier = $data[$game->getAnonymousIdentifier()];
                         
-                        // I'm looking for an entry without anonymousIdentifier (the active entry in fact).
-                        $entry = $sg->findLastEntry($game, $user);
                         $entry->setAnonymousIdentifier($anonymousIdentifier);
                         
                         // I must transmit this info during the whole game workflow
                         $session = new Container('anonymous_identifier');
                         $session->offsetSet('anonymous_identifier',  $anonymousIdentifier);
-                        if (hasReachedPlayLimit($game, $user)){
-                            // the user has already taken part of this game and the participation limit has been reached
-                            $this->flashMessenger()->addMessage('Vous avez déjà participé');
-                            
-                            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute($game->getClassType().'/result',array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
-                        }
+                        
+                    }
+                    if ($sg->hasReachedPlayLimit($game, $user)){
+                        // the user has already taken part of this game and the participation limit has been reached
+                        $this->flashMessenger()->addMessage('Vous avez déjà participé');
+                    
+                        return $this->redirect()->toUrl($this->frontendUrl()->fromRoute($game->getClassType().'/result',array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
                     }
                 }
                 
@@ -636,8 +616,6 @@ class GameController extends AbstractActionController
         // this is possible to create a specific game design in /design/frontend/default/custom. It will precede all others templates.
         $templatePathResolver = $this->getServiceLocator()->get('Zend\View\Resolver\TemplatePathStack');
         $l = $templatePathResolver->getPaths();
-        
-        // TODO : Improve : I take the last path to add the game id without verifying it's correct
         $templatePathResolver->addPath($l[0].'custom/'.$game->getIdentifier());
         
         $view = $this->addAdditionalView($game);
@@ -663,13 +641,12 @@ class GameController extends AbstractActionController
     {
         $view = false;
         $actionName = $this->getEvent()->getRouteMatch()->getParam('action', 'not-found');
-        //TODO : improve the way steps and steps views are managed
         $stepsViews = json_decode($game->getStepsViews(), true);
         if($stepsViews && isset($stepsViews[$actionName]) && is_string($stepsViews[$actionName])){
             $action = $stepsViews[$actionName];
             $beforeLayout = $this->layout()->getTemplate();
             $view = $this->forward()->dispatch('playgroundgame_game', array('action' => $action, 'id' => $game->getIdentifier()));
-            // TODO : suite au forward, le template de layout a changé, je dois le rétablir...
+            // suite au forward, le template de layout a changé, je dois le rétablir...
             $this->layout()->setTemplate($beforeLayout);
 
         }
@@ -946,7 +923,6 @@ class GameController extends AbstractActionController
     {
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
         $user = $this->zfcUserAuthentication()->getIdentity();
-        $sg = $this->getGameService();
     
         $statusMail = null;
     
@@ -964,7 +940,7 @@ class GameController extends AbstractActionController
         // Has the user finished the game ?
         $lastEntry = $this->getGameService()->findLastInactiveEntry($game, $user);
     
-        if ($lastEntry == null) {
+        if ($lastEntry === null) {
             return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('postvote', array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
         }
     
@@ -988,7 +964,6 @@ class GameController extends AbstractActionController
         }
     
         // buildView must be before sendMail because it adds the game template path to the templateStack
-        // TODO : Improve this.
         $viewModel = $this->buildView($game);
     
         $this->sendMail($game, $user, $lastEntry);

@@ -240,19 +240,19 @@ class InstantWin extends Game implements InputFilterAwareInterface
     {
         parent::populate($data);
 
-        if (isset($data['scheduleOccurrenceAuto']) && $data['scheduleOccurrenceAuto'] != null) {
+        if (isset($data['scheduleOccurrenceAuto']) && $data['scheduleOccurrenceAuto'] !== null) {
             $this->scheduleOccurrenceAuto = $data['scheduleOccurrenceAuto'];
         }
 
-        if (isset($data['occurrenceNumber']) && $data['occurrenceNumber'] != null) {
+        if (isset($data['occurrenceNumber']) && $data['occurrenceNumber'] !== null) {
             $this->occurrenceNumber = $data['occurrenceNumber'];
         }
 
-        if (isset($data['winningOccurrenceNumber']) && $data['winningOccurrenceNumber'] != null) {
+        if (isset($data['winningOccurrenceNumber']) && $data['winningOccurrenceNumber'] !== null) {
             $this->occurrenceNumber = $data['winningOccurrenceNumber'];
         }
 
-        if (isset($data['occurrenceType']) && $data['occurrenceType'] != null) {
+        if (isset($data['occurrenceType']) && $data['occurrenceType'] !== null) {
             $this->occurrenceType = $data['occurrenceType'];
         }
     }

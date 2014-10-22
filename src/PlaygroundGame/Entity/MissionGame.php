@@ -181,7 +181,6 @@ class MissionGame
     public function removeConditions(ArrayCollection $conditions)
     {
         foreach ($conditions as $condition) {
-            //$condition->setMissionGame(null);
             $this->conditions->removeElement($condition);
         }
     }

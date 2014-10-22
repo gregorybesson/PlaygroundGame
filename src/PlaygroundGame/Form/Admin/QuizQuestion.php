@@ -95,21 +95,6 @@ class QuizQuestion extends ProvidesEventsForm
             ),
         ));
 
-        /*$this->add(array(
-            'name' => 'timer',
-            'type' => 'Zend\Form\Element\Radio',
-            'options' => array(
-                'label' => $translator->translate('Inclure un chrono', 'playgroundgame'),
-                'label_attributes' => array(
-                    'class' => 'control-label',
-                ),
-                'value_options' => array(
-                    '0' => $translator->translate('Non', 'playgroundgame'),
-                    '1' => $translator->translate('Oui', 'playgroundgame'),
-                ),
-            ),
-        ));*/
-
         $this->add(array(
             'name' => 'timer_duration',
             'options' => array(

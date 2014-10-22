@@ -226,7 +226,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                     }
                     ErrorHandler::start();
                     $filename = "game-" . $game->getId() . "-prize-" . $prize->getId() . "-" . $prize_data['picture']['name'];
-                    $filepath = $this->fileNewname($path, $filename);
                     move_uploaded_file($prize_data['picture']['tmp_name'], $path . $filename);
                     $prize->setPicture($media_url . $filename);
                     ErrorHandler::stop(true);
@@ -462,7 +461,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                     // Upload and set new
                     ErrorHandler::start();
                     $filename = "game-" . $game->getId() . "-prize-" . $prize->getId() . "-" . $prize_data['picture_file']['name'];
-                    $filepath = $this->fileNewname($path, $filename);
                     move_uploaded_file($prize_data['picture_file']['tmp_name'], $path . $filename);
                     $prize->setPicture($media_url . $filename);
                     ErrorHandler::stop(true);
@@ -640,8 +638,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
     public function checkGame($identifier, $checkIfStarted = true)
     {
         $gameMapper = $this->getGameMapper();
-        $gameEntity = $this->getGameEntity();
-        $today = new \Datetime('now');
 
         if (! $identifier) {
             return false;
@@ -708,10 +704,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
     public function checkExistingEntry($game, $user = null, $active = null, $bonus = null)
     {
         $entry = false;
-        
         $search = array('game'  => $game);
-        
-        $session = new Container('anonymous_identifier');
 
         if ($user) {
             $search['user'] = $user;
@@ -858,7 +851,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         return $this->checkExistingEntry($game, $user, null, false);
     }
 
-    // TODO : Simplify this method !
     public function sendShareMail($data, $game, $user, $entry, $template = 'share_game', $topic = NULL, $userTimer = array())
     {
         $mailService = $this->getServiceManager()->get('playgroundgame_message');
@@ -1185,7 +1177,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         return false;
     }
 
-    // TODO : Remove this logic. If we want to add another chance to an entry, just use points)
     public function addAnotherEntry($game, $user, $winner = 0)
     {
         $entry = new Entry();
@@ -1242,7 +1233,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         return false;
     }
 
-    // TODO : Terminer et Refactorer afin de le mettre dans PlaygroundCore
     public static function cronMail()
     {
         $configuration = require 'config/application.config.php';
@@ -1254,7 +1244,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
         $mailService = $sm->get('playgrounduser_message');
         $gameService = $sm->get('playgroundgame_quiz_service');
-        $options = $sm->get('playgroundgame_module_options');
 
         $from = "admin@playground.fr";
         $subject = "sujet game";
@@ -1311,11 +1300,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             ), $fileNewname);
 
             if (! $adapter->isValid()) {
-                $dataError = $adapter->getMessages();
-                $error = array();
-                foreach ($dataError as $key => $row) {
-                    $error[] = $row;
-                }
 
                 return false;
             }
@@ -1326,7 +1310,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                 $ext = pathinfo($fileNewname, PATHINFO_EXTENSION);
                 $img = new \Imagick($path . $fileNewname);
                 $img->cropThumbnailImage( 100, 100 );
-                //$img->thumbnailImage(580, 0);
                 $img->setImageCompression(\Imagick::COMPRESSION_JPEG);
                 $img->setImageCompressionQuality(75);
                 // Strip out unneeded meta data
@@ -1422,7 +1405,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
         $result = $this->getEntryMapper()->draw($game, $userClass, $total);
 
-        $entries = array();
         foreach ($result as $e) {
             $e->setWinner(1);
             $e = $this->getEntryMapper()->update($e);

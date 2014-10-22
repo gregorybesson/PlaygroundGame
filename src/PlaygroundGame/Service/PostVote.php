@@ -143,7 +143,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
                     move_uploaded_file($value['tmp_name'], $path . $value['name']);
                     $image = $this->getServiceManager()->get('playgroundcore_image_service');
                     $image->setImage($path . $value['name']);
-                    // TODO create config for this
+
                     if ($image->canCorrectOrientation()) {
                         $image->correctOrientation()->save();
                     }
@@ -153,7 +153,6 @@ class PostVote extends Game implements ServiceManagerAwareInterface
                         $ext = pathinfo($value['name'], PATHINFO_EXTENSION);
                         $img = new \Imagick($path . $value['name']);
                         $img->cropThumbnailImage( 100, 100 );
-                        //$img->thumbnailImage(580, 0);
                         $img->setImageCompression(\Imagick::COMPRESSION_JPEG);
                         $img->setImageCompressionQuality(75);
                         // Strip out unneeded meta data
