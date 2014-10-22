@@ -142,8 +142,6 @@ class GameController extends AbstractActionController
             if (isset($element->line_text)) {
                 $attributes  = $element->line_text[0];
                 $name        = isset($attributes->name)? $attributes->name : '';
-                $type        = isset($attributes->type)? $attributes->type : '';
-                $position    = isset($attributes->order)? $attributes->order : '';
                 $placeholder = isset($attributes->data->placeholder)? $attributes->data->placeholder : '';
                 $label       = isset($attributes->data->label)? $attributes->data->label : '';
                 $required    = ($attributes->data->required == 'true') ? true : false ;
@@ -446,23 +444,24 @@ class GameController extends AbstractActionController
                         return $this->redirect()->toUrl($this->frontendUrl()->fromRoute($game->getClassType().'/result',array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
                     }
                 }else{
+                    // I'm looking for an entry without anonymousIdentifier (the active entry in fact).
+                    $entry = $sg->findLastEntry($game, $user);
                     if($game->getAnonymousAllowed() && $game->getAnonymousIdentifier() && isset($data[$game->getAnonymousIdentifier()])){
                         
                         $anonymousIdentifier = $data[$game->getAnonymousIdentifier()];
                         
-                        // I'm looking for an entry without anonymousIdentifier (the active entry in fact).
-                        $entry = $sg->findLastEntry($game, $user);
                         $entry->setAnonymousIdentifier($anonymousIdentifier);
                         
                         // I must transmit this info during the whole game workflow
                         $session = new Container('anonymous_identifier');
                         $session->offsetSet('anonymous_identifier',  $anonymousIdentifier);
-                        if (hasReachedPlayLimit($game, $user)){
-                            // the user has already taken part of this game and the participation limit has been reached
-                            $this->flashMessenger()->addMessage('Vous avez déjà participé');
-                            
-                            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute($game->getClassType().'/result',array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
-                        }
+                        
+                    }
+                    if ($sg->hasReachedPlayLimit($game, $user)){
+                        // the user has already taken part of this game and the participation limit has been reached
+                        $this->flashMessenger()->addMessage('Vous avez déjà participé');
+                    
+                        return $this->redirect()->toUrl($this->frontendUrl()->fromRoute($game->getClassType().'/result',array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
                     }
                 }
                 
