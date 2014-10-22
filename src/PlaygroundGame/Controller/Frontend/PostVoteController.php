@@ -2,9 +2,7 @@
 
 namespace PlaygroundGame\Controller\Frontend;
 
-use Zend\Form\Element;
 use Zend\Form\Form;
-use Zend\InputFilter\Factory as InputFactory;
 use Zend\View\Model\ViewModel;
 
 
