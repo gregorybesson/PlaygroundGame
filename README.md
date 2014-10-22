@@ -1,8 +1,7 @@
-PlaygroundGame
+PlaygroundGame [![SensioLabsInsight](https://insight.sensiolabs.com/projects/4e1ce35f-3756-44fd-82e3-11c3a01767b4/big.png)](https://insight.sensiolabs.com/projects/4e1ce35f-3756-44fd-82e3-11c3a01767b4)
 =========
 
 [![Develop Branch Build Status](https://travis-ci.org/gregorybesson/PlaygroundGame.svg)](http://travis-ci.org/gregorybesson/PlaygroundGame)
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/4e1ce35f-3756-44fd-82e3-11c3a01767b4/big.png)](https://insight.sensiolabs.com/projects/4e1ce35f-3756-44fd-82e3-11c3a01767b4)
 
 The Game module : This module currently propose 4 types of games:
 
