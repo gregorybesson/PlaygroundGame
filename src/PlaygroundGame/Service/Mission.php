@@ -41,7 +41,7 @@ class Mission extends EventProvider implements ServiceManagerAwareInterface
     * @param array $data 
     * @param string $formClass
     *
-    * @return \PlaygroundGame\Entity\Mission $mission
+    * @return false|\PlaygroundGame\Entity\Mission $mission
     */
     public function create(array $data, $formClass)
     {
