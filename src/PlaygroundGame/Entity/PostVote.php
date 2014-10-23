@@ -132,7 +132,7 @@ class PostVote extends Game implements InputFilterAwareInterface
     }
 
     /**
-     * @return the unknown_type
+     * @return string unknown_type
      */
     public function getPostDisplayMode()
     {
@@ -158,7 +158,7 @@ class PostVote extends Game implements InputFilterAwareInterface
     }
     
     /**
-     * @param int $postDisplayMode
+     * @param int $postDisplayNumber
      * @return PostVote
      */
     public function setPostDisplayNumber($postDisplayNumber)

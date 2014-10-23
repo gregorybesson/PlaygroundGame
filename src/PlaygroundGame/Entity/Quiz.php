@@ -131,7 +131,7 @@ class Quiz extends Game implements InputFilterAwareInterface
     }
 
     /**
-     * @return the unknown_type
+     * @return integer unknown_type
      */
     public function getTimer()
     {
@@ -149,7 +149,7 @@ class Quiz extends Game implements InputFilterAwareInterface
     }
 
     /**
-     * @return the unknown_type
+     * @return integer unknown_type
      */
     public function getTimerDuration()
     {
@@ -172,7 +172,6 @@ class Quiz extends Game implements InputFilterAwareInterface
     }
 
     /**
-     * @param unknown_type $timerDuration
      */
     public function setVictoryConditions($victoryConditions)
     {
@@ -182,7 +181,7 @@ class Quiz extends Game implements InputFilterAwareInterface
     }
 
     /**
-     * @return the unknown_type
+     * @return integer unknown_type
      */
     public function getQuestionGrouping()
     {

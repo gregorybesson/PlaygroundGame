@@ -108,7 +108,7 @@ class ShareMail extends ProvidesEventsForm
      * Set service manager instance
      *
      * @param  ServiceManager $serviceManager
-     * @return User
+     * @return ShareMail
      */
     public function setServiceManager (ServiceManager $serviceManager)
     {

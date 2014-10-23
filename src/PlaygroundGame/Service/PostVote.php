@@ -95,8 +95,6 @@ class PostVote extends Game implements ServiceManagerAwareInterface
      *
      *
      * @param  array                  $data
-     * @param  string                 $entityClass
-     * @param  string                 $formClass
      * @return \PlaygroundGame\Entity\Game
      */
     public function createPost(array $data, $game, $user, $form)
@@ -176,8 +174,6 @@ class PostVote extends Game implements ServiceManagerAwareInterface
 
     /**
      *
-     * @param  string                 $entityClass
-     * @param  string                 $formClass
      * @return \PlaygroundGame\Entity\Game
      */
     public function confirmPost($game, $user)
@@ -220,8 +216,6 @@ class PostVote extends Game implements ServiceManagerAwareInterface
      * This service is ready for all types of games
      *
      * @param  array                  $data
-     * @param  string                 $entityClass
-     * @param  string                 $formClass
      * @return \PlaygroundGame\Entity\Game
      */
     public function createForm(array $data, $game, $form=null)
@@ -440,8 +434,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
     /**
      * setQuizQuestionMapper
      *
-     * @param  QuizQuestionMapperInterface $quizquestionMapper
-     * @return QuizQuestion
+     * @return PostVote
      */
     public function setPostVoteMapper($postvoteMapper)
     {

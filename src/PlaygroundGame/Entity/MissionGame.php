@@ -80,7 +80,7 @@ class MissionGame
 
     /**
      * @param $id
-     * @return Block|mixed
+     * @return MissionGame
      */
     public function setId($id)
     {
@@ -90,7 +90,7 @@ class MissionGame
     }
 
     /**
-     * @return mixed
+     * @return integer
      */
     public function getId()
     {
@@ -99,7 +99,7 @@ class MissionGame
 
      /**
      * @param $id
-     * @return Block|mixed
+     * @return MissionGame
      */
     public function setPosition($position)
     {
@@ -109,7 +109,7 @@ class MissionGame
     }
 
     /**
-     * @return mixed
+     * @return integer
      */
     public function getPosition()
     {
@@ -143,7 +143,7 @@ class MissionGame
     }
 
     /**
-     * @param field_type $mission
+     * @param \PlaygroundGame\Service\Mission $mission
      */
     public function setMission($mission)
     {
@@ -199,7 +199,7 @@ class MissionGame
 
 	/**
      *
-     * @return the $createdAt
+     * @return \DateTime $createdAt
      */
     public function getCreatedAt()
     {
@@ -219,7 +219,7 @@ class MissionGame
 
     /**
      *
-     * @return the $updatedAt
+     * @return \DateTime $updatedAt
      */
     public function getUpdatedAt()
     {

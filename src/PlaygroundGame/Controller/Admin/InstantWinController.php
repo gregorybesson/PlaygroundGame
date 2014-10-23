@@ -4,12 +4,9 @@ namespace PlaygroundGame\Controller\Admin;
 
 use PlaygroundGame\Entity\InstantWin;
 use PlaygroundGame\Entity\InstantWinOccurrence;
-use PlaygroundGame\Service\Game as AdminGameService;
 use Zend\InputFilter;
 use Zend\Validator;
-
 use PlaygroundGame\Controller\Admin\GameController;
-
 use Zend\View\Model\ViewModel;
 use Zend\Paginator\Paginator;
 use PlaygroundCore\ORM\Pagination\LargeTablePaginator;

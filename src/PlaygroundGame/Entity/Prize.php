@@ -139,7 +139,7 @@ class Prize {
 	}
 
 	/**
-	 * @param field_type $Title
+	 * @param field_type $title
 	 */
 	public function setTitle($title)
 	{
@@ -193,7 +193,6 @@ class Prize {
 	}
 
 	/**
-	 * @param field_type $content
 	 */
 	public function setPrizeContent($prizeContent)
 	{
@@ -203,7 +202,7 @@ class Prize {
 	}
 
 	/**
-	 * @return the $qty
+	 * @return integer $qty
 	 */
 	public function getQty()
 	{
@@ -221,7 +220,7 @@ class Prize {
 	}
 
 	/**
-	 * @return the $unitPrice
+	 * @return integer $unitPrice
 	 */
 	public function getUnitPrice()
 	{
@@ -257,7 +256,7 @@ class Prize {
 	}
 
 	/**
-	 * @return the $created_at
+	 * @return \DateTime $created_at
 	 */
 	public function getCreatedAt()
 	{
@@ -275,7 +274,7 @@ class Prize {
 	}
 
 	/**
-	 * @return the $updatedAt
+	 * @return \DateTime $updatedAt
 	 */
 	public function getUpdatedAt()
 	{
@@ -359,7 +358,7 @@ class Prize {
 	}
 
 	/**
-	 * @return the $inputFilter
+	 * @return InputFilter $inputFilter
 	 */
 	public function getInputFilter()
 	{
@@ -400,7 +399,7 @@ class Prize {
 	}
 
 	/**
-	 * @param field_type $inputFilter
+	 * @param InputFilterInterface $inputFilter
 	 */
 	public function setInputFilter(InputFilterInterface $inputFilter)
     {

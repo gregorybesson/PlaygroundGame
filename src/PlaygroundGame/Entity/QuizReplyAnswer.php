@@ -121,7 +121,7 @@ class QuizReplyAnswer implements InputFilterAwareInterface
     }
 
     /**
-     * @param PlaygroundGame\Entity\Reply $reply
+     * @param QuizReply $reply
      */
     public function setReply($reply)
     {
@@ -193,7 +193,7 @@ class QuizReplyAnswer implements InputFilterAwareInterface
     }
 
     /**
-     * @param unknown_type $answer
+     * @param unknown_type $answerId
      */
     public function setAnswerId($answerId)
     {

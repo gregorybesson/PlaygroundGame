@@ -101,7 +101,7 @@ class PostVoteVote implements InputFilterAwareInterface
     }
 
     /**
-     * @param unknown_type $ip
+     * @param string $ip
      */
     public function setIp($ip)
     {

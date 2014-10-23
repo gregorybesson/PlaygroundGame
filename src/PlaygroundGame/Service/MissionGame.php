@@ -197,7 +197,6 @@ class MissionGame extends EventProvider implements ServiceManagerAwareInterface
 
     /**
     * findMissionGameByMission : Permet de recuperer les missionsGame à partir d'une mission
-    * @param Mission $mission
     *
     * @return Collection de MissionGame $missionGames
     */
@@ -229,8 +228,7 @@ class MissionGame extends EventProvider implements ServiceManagerAwareInterface
     /**
      * Set service manager instance
      *
-     * @param  ServiceManager $locator
-     * @return Event
+     * @return MissionGame
      */
     public function setServiceManager(ServiceManager $serviceManager)
     {

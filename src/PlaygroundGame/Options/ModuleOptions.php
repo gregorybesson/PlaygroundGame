@@ -69,7 +69,7 @@ class ModuleOptions extends AbstractOptions implements GameEditOptionsInterface
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getGameEntityClass()
     {
@@ -120,7 +120,7 @@ class ModuleOptions extends AbstractOptions implements GameEditOptionsInterface
     /**
      * Set media path
      *
-     * @param  string                           $media_path
+     * @param  string                           $media_path_mission
      * @return \PlaygroundGame\Options\ModuleOptions
      */
     public function setMediaPathMission($media_path_mission)
@@ -140,7 +140,6 @@ class ModuleOptions extends AbstractOptions implements GameEditOptionsInterface
 
     /**
      *
-     * @param  string                           $media_url
      * @return \PlaygroundGame\Options\ModuleOptions
      */
     public function setMediaUrlMission($media_url_mission)

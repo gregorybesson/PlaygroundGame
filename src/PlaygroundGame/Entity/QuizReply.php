@@ -129,7 +129,7 @@ class QuizReply implements InputFilterAwareInterface
     }
 
 	/**
-     * @param field_type $totalCorrectAnswers
+     * @param integer $totalCorrectAnswers
      */
     public function setTotalCorrectAnswers($totalCorrectAnswers)
     {
@@ -165,7 +165,7 @@ class QuizReply implements InputFilterAwareInterface
     }
 
 	/**
-     * @param field_type $totalQuestions
+     * @param integer $totalQuestions
      */
     public function setTotalQuestions($totalQuestions)
     {
@@ -175,7 +175,7 @@ class QuizReply implements InputFilterAwareInterface
     }
 
 	/**
-     * @return the $answers
+     * @return ArrayCollection $answers
      */
     public function getAnswers()
     {
@@ -184,7 +184,7 @@ class QuizReply implements InputFilterAwareInterface
 
 	/**
      * frm collection solution
-     * @param unknown_type $answers
+     * @param ArrayCollection $answers
      */
     public function setAnswers(ArrayCollection $answers)
     {
@@ -212,7 +212,7 @@ class QuizReply implements InputFilterAwareInterface
     /**
      * Add an answer to the quiz.
      *
-     * @param QuizAnswer $answer
+     * @param QuizReplyAnswer $answer
      *
      * @return void
      */

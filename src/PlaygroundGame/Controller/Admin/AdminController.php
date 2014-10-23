@@ -235,7 +235,7 @@ class AdminController extends AbstractActionController
 
         if ($this->getRequest()->isPost()) {
             $data = $this->getRequest()->getPost()->toArray();
-            $form = $service->createForm($data, $game, $form, '\PlaygroundGame\Entity\PlayerForm');
+            $form = $service->createForm($data, $game, $form);
             if ($form) {
                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The form was created');
             }

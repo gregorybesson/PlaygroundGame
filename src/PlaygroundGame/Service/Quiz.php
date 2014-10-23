@@ -5,7 +5,6 @@ namespace PlaygroundGame\Service;
 use PlaygroundGame\Entity\QuizReply;
 use PlaygroundGame\Entity\QuizReplyAnswer;
 use Zend\ServiceManager\ServiceManagerAwareInterface;
-use Zend\ServiceManager\ServiceManager;
 use PlaygroundGame\Mapper\GameInterface as GameMapperInterface;
 use Zend\Stdlib\ErrorHandler;
 
@@ -40,8 +39,6 @@ class Quiz extends Game implements ServiceManagerAwareInterface
      *
      *
      * @param  array                  $data
-     * @param  string                 $entityClass
-     * @param  string                 $formClass
      * @return \PlaygroundGame\Entity\Game
      */
     public function createQuestion(array $data)
@@ -92,8 +89,6 @@ class Quiz extends Game implements ServiceManagerAwareInterface
 
     /**
      * @param  array                  $data
-     * @param  string                 $entityClass
-     * @param  string                 $formClass
      * @return \PlaygroundGame\Entity\Game
      */
     public function updateQuestion(array $data, $question)
@@ -440,7 +435,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
      * setQuizQuestionMapper
      *
      * @param  QuizQuestionMapperInterface $quizquestionMapper
-     * @return QuizQuestion
+     * @return Quiz
      */
     public function setQuizQuestionMapper($quizquestionMapper)
     {
@@ -453,7 +448,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
      * setQuizAnswerMapper
      *
      * @param  QuizAnswerMapperInterface $quizAnswerMapper
-     * @return QuizAnswer
+     * @return Quiz
      */
     public function setQuizAnswerMapper($quizAnswerMapper)
     {
@@ -494,7 +489,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
      * setQuizReplyMapper
      *
      * @param  QuizReplyMapperInterface $quizreplyMapper
-     * @return QuizReply
+     * @return Quiz
      */
     public function setQuizReplyMapper($quizreplyMapper)
     {
@@ -521,7 +516,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
      * setQuizReplyAnswerMapper
      *
      * @param  QuizReplyAnswerMapper $quizReplyAnswerMapper
-     * @return QuizReply
+     * @return Quiz
      */
     public function setQuizReplyAnswerMapper($quizReplyAnswerMapper)
     {

@@ -13,6 +13,9 @@ use Zend\Validator\File\Size;
 use Zend\Validator\File\IsImage;
 use Zend\Stdlib\ErrorHandler;
 use PlaygroundCore\Filter\Sanitize;
+use Zend\Form\Element;
+use Zend\Form\Form;
+use Zend\InputFilter\Factory as InputFactory;
 
 class Game extends EventProvider implements ServiceManagerAwareInterface
 {
@@ -51,7 +54,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      * This service is ready for all types of games
      *
      * @param array $data
-     * @param string $entityClass
+     * @param string $entity
      * @param string $formClass
      * @return \PlaygroundGame\Entity\Game
      */
@@ -243,7 +246,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      * This service is ready for all types of games
      *
      * @param array $data
-     * @param string $entityClass
      * @param string $formClass
      * @return \PlaygroundGame\Entity\Game
      */
@@ -699,6 +701,8 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      *
      * @param unknown $game
      * @param string $user
+     * @param boolean $active
+     * @param boolean $bonus
      * @return boolean
      */
     public function checkExistingEntry($game, $user = null, $active = null, $bonus = null)
@@ -767,8 +771,8 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      * -1 : user not connected
      * -2 : limit entry games for this user reached
      *
-     * @param PlaygroundGame\Entity\Game $game
-     * @param PlaygroundUser\Entity\UserInterface $user
+     * @param \PlaygroundGame\Entity\Game $game
+     * @param \PlaygroundUser\Entity\UserInterface $user
      * @return number unknown
      */
     public function play($game, $user)
@@ -1199,7 +1203,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      * 
      * @param PlaygroundGame\Entity\Game $game
      * @param unknown $user
-     * @return number unknown
+     * @return boolean unknown
      */
     public function addAnotherChance($game, $user, $winner = 0)
     {
@@ -1217,7 +1221,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      *
      * @param PlaygroundGame\Entity\Game $game
      * @param user $user
-     * @return number unknown
+     * @return boolean unknown
      */
     public function playAgain($game, $user, $winner = 0)
     {
@@ -1259,6 +1263,9 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $mailService->send($message);
     }
 
+    /**
+     * @param string $path
+     */
     public function uploadFile($path, $file)
     {
         $err = $file["error"];
@@ -1436,7 +1443,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      * setGameMapper
      *
      * @param GameMapperInterface $gameMapper
-     * @return User
+     * @return Game
      */
     public function setGameMapper(GameMapperInterface $gameMapper)
     {
@@ -1463,7 +1470,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      * setEntryMapper
      *
      * @param EntryMapperInterface $entryMapper
-     * @return Entry
+     * @return Game
      */
     public function setEntryMapper($entryMapper)
     {
@@ -1512,6 +1519,9 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         return $this;
     }
 
+    /**
+     * @param string $str
+     */
     public function getExtension($str)
     {
         $i = strrpos($str, '.');
@@ -1522,6 +1532,9 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         return $ext;
     }
 
+    /**
+     * @param string $extension
+     */
     public function getSrc($extension, $temp_path)
     {
         $image_src = '';
@@ -1543,6 +1556,12 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         return $image_src;
     }
 
+    /**
+     * @param string $extension
+     * @param string $rep
+     * @param integer $mini_width
+     * @param integer $mini_height
+     */
     public function resize($tmp_file, $extension, $rep, $src, $mini_width, $mini_height)
     {
         list ($src_width, $src_height) = getimagesize($tmp_file);
@@ -1571,6 +1590,10 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         return new \PlaygroundGame\Entity\Game();
     }
 
+    /**
+     * @param string $resource
+     * @param string $privilege
+     */
     public function isAllowed($resource, $privilege = null)
     {
         $auth = $this->getServiceManager()->get('BjyAuthorize\Service\Authorize');
@@ -1620,8 +1643,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      * This service is ready for all types of games
      *
      * @param array $data
-     * @param string $entityClass
-     * @param string $formClass
      * @return \PlaygroundGame\Entity\Game
      */
     public function createForm(array $data, $game, $form = null)
@@ -1652,6 +1673,288 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
         $form = $this->getPlayerFormMapper()->insert($form);
 
+        return $form;
+    }
+    
+    /**
+     * Create a ZF2 Form from json data
+     * @return Form
+     */
+    public function createFormFromJson($jsonForm){
+        $formPV = json_decode($jsonForm);
+        
+        $form = new Form();
+        $form->setAttribute('id', 'playerForm');
+        $form->setAttribute('enctype', 'multipart/form-data');
+        
+        $inputFilter = new \Zend\InputFilter\InputFilter();
+        $factory = new InputFactory();
+        
+        foreach ($formPV as $element) {
+            if (isset($element->line_text)) {
+                $attributes  = $element->line_text[0];
+                $name        = isset($attributes->name)? $attributes->name : '';
+                $placeholder = isset($attributes->data->placeholder)? $attributes->data->placeholder : '';
+                $label       = isset($attributes->data->label)? $attributes->data->label : '';
+                $required    = ($attributes->data->required == 'true') ? true : false ;
+                $class       = isset($attributes->data->class)? $attributes->data->class : '';
+                $id          = isset($attributes->data->id)? $attributes->data->id : '';
+                $lengthMin   = isset($attributes->data->length)? $attributes->data->length->min : '';
+                $lengthMax   = isset($attributes->data->length)? $attributes->data->length->max : '';
+        
+                $element = new Element\Text($name);
+                $element->setLabel($label);
+                $element->setAttributes(
+                    array(
+                        'placeholder' 	=> $placeholder,
+                        'required' 		=> $required,
+                        'class' 		=> $class,
+                        'id' 			=> $id
+                    )
+                );
+                $form->add($element);
+        
+                $options = array();
+                $options['encoding'] = 'UTF-8';
+                if ($lengthMin && $lengthMin > 0) {
+                    $options['min'] = $lengthMin;
+                }
+                if ($lengthMax && $lengthMax > $lengthMin) {
+                    $options['max'] = $lengthMax;
+                    $element->setAttribute('maxlength', $lengthMax);
+                    $options['messages'] = array(\Zend\Validator\StringLength::TOO_LONG => sprintf($this->getServiceLocator()->get('translator')->translate('This field contains more than %s characters', 'playgroundgame'), $lengthMax));
+                }
+                $inputFilter->add($factory->createInput(array(
+                    'name'     => $name,
+                    'required' => $required,
+                    'filters'  => array(
+                        array('name' => 'StripTags'),
+                        array('name' => 'StringTrim'),
+                    ),
+                    'validators' => array(
+                        array(
+                            'name'    => 'StringLength',
+                            'options' => $options,
+                        ),
+                    ),
+                )));
+        
+            }
+            if (isset($element->line_email)) {
+                $attributes  = $element->line_email[0];
+                $name        = isset($attributes->name)? $attributes->name : '';
+                $placeholder = isset($attributes->data->placeholder)? $attributes->data->placeholder : '';
+                $label       = isset($attributes->data->label)? $attributes->data->label : '';
+                $class       = isset($attributes->data->class)? $attributes->data->class : '';
+                $id          = isset($attributes->data->id)? $attributes->data->id : '';
+                $lengthMin   = isset($attributes->data->length)? $attributes->data->length->min : '';
+                $lengthMax   = isset($attributes->data->length)? $attributes->data->length->max : '';
+        
+                $element = new Element\Email($name);
+                $element->setLabel($label);
+                $element->setAttributes(
+                    array(
+                        'placeholder' 	=> $placeholder,
+                        'required' 		=> $required,
+                        'class' 		=> $class,
+                        'id' 			=> $id
+                    )
+                );
+                $form->add($element);
+        
+                $options = array();
+                $options['encoding'] = 'UTF-8';
+                if ($lengthMin && $lengthMin > 0) {
+                    $options['min'] = $lengthMin;
+                }
+                if ($lengthMax && $lengthMax > $lengthMin) {
+                    $options['max'] = $lengthMax;
+                    $element->setAttribute('maxlength', $lengthMax);
+                    $options['messages'] = array(\Zend\Validator\StringLength::TOO_LONG => sprintf($this->getServiceLocator()->get('translator')->translate('This field contains more than %s characters', 'playgroundgame'), $lengthMax));
+                }
+                $inputFilter->add($factory->createInput(array(
+                    'name'     => $name,
+                    'required' => $required,
+                    'filters'  => array(
+                        array('name' => 'StripTags'),
+                        array('name' => 'StringTrim'),
+                    ),
+                    'validators' => array(
+                        array(
+                            'name'    => 'StringLength',
+                            'options' => $options,
+                        ),
+                    ),
+                )));
+        
+            }
+            if (isset($element->line_radio)) {
+                $attributes  = $element->line_radio[0];
+                $name        = isset($attributes->name)? $attributes->name : '';
+                $label       = isset($attributes->data->label)? $attributes->data->label : '';
+        
+                $required = false;
+                $class       = isset($attributes->data->class)? $attributes->data->class : '';
+                $id          = isset($attributes->data->id)? $attributes->data->id : '';
+                $lengthMin   = isset($attributes->data->length)? $attributes->data->length->min : '';
+                $lengthMax   = isset($attributes->data->length)? $attributes->data->length->max : '';
+                $innerData   = isset($attributes->data->innerData)? $attributes->data->innerData : array();
+        
+                $element = new Element\Radio($name);
+                $element->setLabel($label);
+                $element->setAttributes(
+                    array(
+                        'name'          => $name,
+                        'required' 		=> $required,
+                        'allowEmpty'    => !$required,
+                        'class' 		=> $class,
+                        'id' 			=> $id
+                    )
+                );
+                $values = array();
+                foreach($innerData as $value){
+                    $values[] = $value->label;
+                }
+                $element->setValueOptions($values);
+        
+                $options = array();
+                $options['encoding'] = 'UTF-8';
+                $options['disable_inarray_validator'] = true;
+        
+                $element->setOptions($options);
+        
+                $form->add($element);
+        
+                $inputFilter->add($factory->createInput(array(
+                    'name'     => $name,
+                    'required' => $required,
+                    'allowEmpty' => !$required,
+                )));
+            }
+            if (isset($element->line_checkbox)) {
+                $attributes  = $element->line_checkbox[0];
+                $name        = isset($attributes->name)? $attributes->name : '';
+                $label       = isset($attributes->data->label)? $attributes->data->label : '';
+        
+                $required = false;
+                $class       = isset($attributes->data->class)? $attributes->data->class : '';
+                $id          = isset($attributes->data->id)? $attributes->data->id : '';
+                $lengthMin   = isset($attributes->data->length)? $attributes->data->length->min : '';
+                $lengthMax   = isset($attributes->data->length)? $attributes->data->length->max : '';
+                $innerData   = isset($attributes->data->innerData)? $attributes->data->innerData : array();
+        
+                $element = new Element\MultiCheckbox($name);
+                $element->setLabel($label);
+                $element->setAttributes(
+                    array(
+                        'name'     => $name,
+                        'required' 		=> $required,
+                        'allowEmpty'    => !$required,
+                        'class' 		=> $class,
+                        'id' 			=> $id
+                    )
+                );
+                $values = array();
+                foreach($innerData as $value){
+                    $values[] = $value->label;
+                }
+                $element->setValueOptions($values);
+                $form->add($element);
+        
+                $options = array();
+                $options['encoding'] = 'UTF-8';
+                $options['disable_inarray_validator'] = true;
+        
+                $element->setOptions($options);
+        
+                $inputFilter->add($factory->createInput(array(
+                    'name'     => $name,
+                    'required' => $required,
+                    'allowEmpty' => !$required,
+                )));
+        
+            }
+            if (isset($element->line_paragraph)) {
+                $attributes  = $element->line_paragraph[0];
+                $name        = isset($attributes->name)? $attributes->name : '';
+                $placeholder = isset($attributes->data->placeholder)? $attributes->data->placeholder : '';
+                $label       = isset($attributes->data->label)? $attributes->data->label : '';
+                $required    = ($attributes->data->required == 'true') ? true : false ;
+                $class       = isset($attributes->data->class)? $attributes->data->class : '';
+                $id          = isset($attributes->data->id)? $attributes->data->id : '';
+        
+                $element = new Element\Textarea($name);
+                $element->setLabel($label);
+                $element->setAttributes(
+                    array(
+                        'placeholder' 	=> $placeholder,
+                        'required' 		=> $required,
+                        'class' 		=> $class,
+                        'id' 			=> $id
+                    )
+                );
+                $form->add($element);
+        
+                $options = array();
+                $options['encoding'] = 'UTF-8';
+                if ($lengthMin && $lengthMin > 0) {
+                    $options['min'] = $lengthMin;
+                }
+                if ($lengthMax && $lengthMax > $lengthMin) {
+                    $options['max'] = $lengthMax;
+                    $element->setAttribute('maxlength', $lengthMax);
+                }
+                $inputFilter->add($factory->createInput(array(
+                    'name'     => $name,
+                    'required' => $required,
+                    'filters'  => array(
+                        array('name' => 'StripTags'),
+                        array('name' => 'StringTrim'),
+                    ),
+                    'validators' => array(
+                        array(
+                            'name'    => 'StringLength',
+                            'options' => $options,
+                        ),
+                    ),
+                )));
+            }
+            if (isset($element->line_upload)) {
+                $attributes  = $element->line_upload[0];
+                $name        = isset($attributes->name)? $attributes->name : '';
+                $label       = isset($attributes->data->label)? $attributes->data->label : '';
+                $required    = ($attributes->data->required == 'true') ? true : false ;
+                $class       = isset($attributes->data->class)? $attributes->data->class : '';
+                $id          = isset($attributes->data->id)? $attributes->data->id : '';
+                $filesizeMin = isset($attributes->data->filesize)? $attributes->data->filesize->min : 0;
+                $filesizeMax = isset($attributes->data->filesize)? $attributes->data->filesize->max : 10*1024*1024;
+                $element = new Element\File($name);
+                $element->setLabel($label);
+                $element->setAttributes(
+                    array(
+                        'required' 	=> $required,
+                        'class' 	=> $class,
+                        'id' 		=> $id
+                    )
+                );
+                $form->add($element);
+        
+                $inputFilter->add($factory->createInput(array(
+                    'name'     => $name,
+                    'required' => $required,
+                    'validators' => array(
+                        array('name' => '\Zend\Validator\File\Size', 'options' => array('min' => $filesizeMin, 'max' => $filesizeMax)),
+                        array('name' => '\Zend\Validator\File\Extension', 'options'  => array('png,PNG,jpg,JPG,jpeg,JPEG,gif,GIF', 'messages' => array(
+                            \Zend\Validator\File\Extension::FALSE_EXTENSION => 'Veuillez télécharger une image' ))
+                        ),
+                    ),
+                )));
+        
+            }
+        }
+        
+        $form->setInputFilter($inputFilter);
+        
         return $form;
     }
 

@@ -88,7 +88,7 @@ class PrizeCategoryUser extends ProvidesEventsForm
      * Set service manager instance
      *
      * @param  ServiceManager $serviceManager
-     * @return User
+     * @return PrizeCategoryUser
      */
     public function setServiceManager (ServiceManager $serviceManager)
     {
