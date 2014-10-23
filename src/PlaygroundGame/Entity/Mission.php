@@ -252,7 +252,7 @@ class Mission
 
     /**
      *
-     * @return the unknown_type
+     * @return integer unknown_type
      */
     public function getActive ()
     {
@@ -273,7 +273,7 @@ class Mission
 
     /**
      *
-     * @return the $createdAt
+     * @return \DateTime $createdAt
      */
     public function getCreatedAt ()
     {
@@ -293,7 +293,7 @@ class Mission
 
     /**
      *
-     * @return the $updatedAt
+     * @return \DateTime $updatedAt
      */
     public function getUpdatedAt ()
     {

@@ -78,7 +78,6 @@ class InstantWin extends Game implements InputFilterAwareInterface
     }
 
     /**
-     * @param unknown_type $questions
      */
     public function setOccurrences($occurrences)
     {
@@ -100,7 +99,6 @@ class InstantWin extends Game implements InputFilterAwareInterface
     /**
      * Add a question to the quiz.
      *
-     * @param QuizQuestion $question
      *
      * @return void
      */
@@ -110,7 +108,7 @@ class InstantWin extends Game implements InputFilterAwareInterface
     }
 
     /**
-     * @return the unknown_type
+     * @return string unknown_type
      */
     public function getOccurrenceType()
     {
@@ -153,7 +151,7 @@ class InstantWin extends Game implements InputFilterAwareInterface
     }
 
     /**
-     * @param unknown_type $occurrenceNumber
+     * @param unknown_type $winningOccurrenceNumber
      */
     public function setWinningOccurrenceNumber($winningOccurrenceNumber)
     {
@@ -181,7 +179,7 @@ class InstantWin extends Game implements InputFilterAwareInterface
     }
 
     /**
-     * @return the unknown_type
+     * @return integer unknown_type
      */
     public function getScheduleOccurrenceAuto()
     {

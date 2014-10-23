@@ -3,7 +3,6 @@
 namespace PlaygroundGame\Controller\Admin;
 
 use PlaygroundGame\Entity\Mission;
-
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
@@ -128,7 +127,7 @@ class MissionController extends AbstractActionController
     /**
     * deleteAction : delete a mission
     *
-    * @return redirect
+    * @return \Zend\Http\Response
     */
     public function deleteAction()
     {

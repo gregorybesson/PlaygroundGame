@@ -121,7 +121,7 @@ class InstantWinOccurrence extends ProvidesEventsForm
      * Set service manager instance
      *
      * @param  ServiceManager $serviceManager
-     * @return User
+     * @return InstantWinOccurrence
      */
     public function setServiceManager (ServiceManager $serviceManager)
     {

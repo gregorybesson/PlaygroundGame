@@ -9,7 +9,6 @@ class PrizeCategory extends AbstractHelper
     protected $prizeCategoryService;
 
     /**
-     * @param  int|string $identifier
      * @return string
      */
     public function __invoke()
@@ -30,7 +29,7 @@ class PrizeCategory extends AbstractHelper
     }
 
     /**
-     * @return mixed
+     * @return \PlaygroundGame\Service\PrizeCategory
      */
     public function getPrizeCategoryService()
     {

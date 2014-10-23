@@ -36,7 +36,7 @@ class Lottery extends Game implements ServiceManagerAwareInterface
      * setLotteryMapper
      *
      * @param  LotteryMapperInterface $lotteryMapper
-     * @return User
+     * @return Lottery
      */
     public function setLotteryMapper(GameMapperInterface $lotteryMapper)
     {

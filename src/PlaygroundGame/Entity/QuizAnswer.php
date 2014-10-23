@@ -201,7 +201,7 @@ class QuizAnswer implements InputFilterAwareInterface
     }
 
     /**
-     * @return the unknown_type
+     * @return integer unknown_type
      */
     public function getPoints()
     {
@@ -219,7 +219,7 @@ class QuizAnswer implements InputFilterAwareInterface
     }
 
     /**
-     * @return the unknown_type
+     * @return integer unknown_type
      */
     public function getPosition()
     {
@@ -237,7 +237,7 @@ class QuizAnswer implements InputFilterAwareInterface
     }
 
     /**
-     * @return the unknown_type
+     * @return integer unknown_type
      */
     public function getCorrect()
     {

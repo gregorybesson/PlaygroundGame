@@ -350,7 +350,7 @@ class PostVoteController extends GameController
     /**
      * Example of AJAX File Upload with Session Progress and partial validation.
      *
-     * @return array|ViewModel
+     * @return \Zend\Stdlib\ResponseInterface
      */
     public function ajaxuploadAction()
     {

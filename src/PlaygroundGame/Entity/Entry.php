@@ -196,7 +196,7 @@ class Entry
     }
 
     /**
-     * @param field_type $points
+     * @param integer $points
      */
     public function setPoints($points)
     {
@@ -292,7 +292,7 @@ class Entry
     }
 
 	/**
-     * @return the status
+     * @return integer status
      */
     public function getActive()
     {
@@ -300,7 +300,7 @@ class Entry
     }
 
     /**
-     * @param field_type $active
+     * @param integer $active
      */
     public function setActive($active)
     {
@@ -310,7 +310,7 @@ class Entry
     }
 
     /**
-     * @return the $step
+     * @return integer $step
      */
     public function getStep()
     {
@@ -326,7 +326,7 @@ class Entry
     }
 
 	/**
-     * @return the bonus
+     * @return integer bonus
      */
     public function getBonus()
     {
@@ -334,7 +334,7 @@ class Entry
     }
 
     /**
-     * @param field_type $bonus
+     * @param integer $bonus
      */
     public function setBonus($bonus)
     {
@@ -344,7 +344,7 @@ class Entry
     }
 
     /**
-     * @return the status
+     * @return integer status
      */
     public function getWinner()
     {
@@ -352,7 +352,7 @@ class Entry
     }
 
     /**
-     * @param field_type $winner
+     * @param integer $winner
      */
     public function setWinner($winner)
     {
@@ -362,7 +362,7 @@ class Entry
     }
     
     /**
-     * @return the $drawable
+     * @return integer $drawable
      */
     public function getDrawable()
     {
@@ -398,7 +398,7 @@ class Entry
     }
 
     /**
-     * @return the $created_at
+     * @return \DateTime $created_at
      */
     public function getCreatedAt()
     {
@@ -416,7 +416,7 @@ class Entry
     }
 
     /**
-     * @return the $updated_at
+     * @return \DateTime $updated_at
      */
     public function getUpdatedAt()
     {

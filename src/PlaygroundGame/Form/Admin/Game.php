@@ -773,7 +773,7 @@ class Game extends ProvidesEventsForm
      * Set service manager instance
      *
      * @param  ServiceManager $serviceManager
-     * @return User
+     * @return Game
      */
     public function setServiceManager (ServiceManager $serviceManager)
     {

@@ -34,7 +34,6 @@ interface GameInterface
     public function getTitle();
 
     /**
-     * @param field_type $name
      */
     public function setTitle($title);
 
@@ -194,7 +193,6 @@ interface GameInterface
     public function getWelcomeBlock();
 
     /**
-     * @param field_type $welcome_page_id
      */
     public function setWelcomeBlock($welcome_block);
 

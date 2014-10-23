@@ -95,7 +95,7 @@ class MissionGameCondition
 
 	/**
      * @param $id
-     * @return Block|mixed
+     * @return MissionGameCondition
      */
     public function setMissionGame($missionGame)
     {
@@ -114,7 +114,7 @@ class MissionGameCondition
 
      /**
      * @param $id
-     * @return Block|mixed
+     * @return MissionGameCondition
      */
     public function setAttribute($attribute)
     {
@@ -133,7 +133,7 @@ class MissionGameCondition
 
      /**
      * @param $id
-     * @return Block|mixed
+     * @return MissionGameCondition
      */
     public function setComparison($comparison)
     {
@@ -152,7 +152,7 @@ class MissionGameCondition
 
      /**
      * @param $id
-     * @return Block|mixed
+     * @return MissionGameCondition
      */
     public function setValue($value)
     {

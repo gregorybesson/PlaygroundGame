@@ -132,7 +132,6 @@ class PostVoteForm implements InputFilterAwareInterface
     }
 
     /**
-     * @param unknown_type $value
      */
     public function setForm($form)
     {
@@ -150,7 +149,6 @@ class PostVoteForm implements InputFilterAwareInterface
     }
 
     /**
-     * @param unknown_type $value
      */
     public function setFormTemplate($formTemplate)
     {

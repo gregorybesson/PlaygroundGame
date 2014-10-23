@@ -67,7 +67,6 @@ class Mission extends EventProvider implements ServiceManagerAwareInterface
     * edit : mise ajour de mission
     * @param array $data 
     * @param Mission $mission
-    * @param string $formClass
     *
     * @return Mission  $mission
     */
@@ -202,7 +201,6 @@ class Mission extends EventProvider implements ServiceManagerAwareInterface
     /**
      * Set service manager instance
      *
-     * @param  ServiceManager $locator
      * @return Mission
      */
     public function setServiceManager(ServiceManager $serviceManager)

@@ -25,8 +25,8 @@ class MissionGameCondition
 
     /**
     * __construct
-    * @param Doctrine\ORM\EntityManager $em
-    * @param PlaygroundDesign\Options\ModuleOptions $options
+    * @param EntityManager $em
+    * @param ModuleOptions $options
     *
     */
     public function __construct(EntityManager $em, ModuleOptions $options)
@@ -59,7 +59,6 @@ class MissionGameCondition
 
     /**
     * findBy : recupere des entites en fonction de filtre
-    * @param array $array tableau de filtre
     *
     * @return collection $missionGameConditions collection de PlaygroundGame\Entity\MissionGameCondition
     */
@@ -138,7 +137,7 @@ class MissionGameCondition
     /**
     * getEntityRepository : recupere l'entite missionGameCondition
     *
-    * @return PlaygroundGame\Entity\MissionGameCondition $missionGameCondition
+    * @return \Doctrine\ORM\EntityRepository $missionGameCondition
     */
     public function getEntityRepository()
     {

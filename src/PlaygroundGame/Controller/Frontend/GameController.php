@@ -843,6 +843,9 @@ class GameController extends AbstractActionController
         return $model->setTerminal(true);
     }
 
+    /**
+     * @param string $helperName
+     */
     protected function getViewHelper($helperName)
     {
         return $this->getServiceLocator()->get('viewhelpermanager')->get($helperName);

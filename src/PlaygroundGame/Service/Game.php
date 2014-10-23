@@ -54,7 +54,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      * This service is ready for all types of games
      *
      * @param array $data
-     * @param string $entityClass
+     * @param string $entity
      * @param string $formClass
      * @return \PlaygroundGame\Entity\Game
      */
@@ -246,7 +246,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      * This service is ready for all types of games
      *
      * @param array $data
-     * @param string $entityClass
      * @param string $formClass
      * @return \PlaygroundGame\Entity\Game
      */
@@ -702,6 +701,8 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      *
      * @param unknown $game
      * @param string $user
+     * @param boolean $active
+     * @param boolean $bonus
      * @return boolean
      */
     public function checkExistingEntry($game, $user = null, $active = null, $bonus = null)
@@ -770,8 +771,8 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      * -1 : user not connected
      * -2 : limit entry games for this user reached
      *
-     * @param PlaygroundGame\Entity\Game $game
-     * @param PlaygroundUser\Entity\UserInterface $user
+     * @param \PlaygroundGame\Entity\Game $game
+     * @param \PlaygroundUser\Entity\UserInterface $user
      * @return number unknown
      */
     public function play($game, $user)
@@ -1202,7 +1203,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      * 
      * @param PlaygroundGame\Entity\Game $game
      * @param unknown $user
-     * @return number unknown
+     * @return boolean unknown
      */
     public function addAnotherChance($game, $user, $winner = 0)
     {
@@ -1220,7 +1221,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      *
      * @param PlaygroundGame\Entity\Game $game
      * @param user $user
-     * @return number unknown
+     * @return boolean unknown
      */
     public function playAgain($game, $user, $winner = 0)
     {
@@ -1262,6 +1263,9 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $mailService->send($message);
     }
 
+    /**
+     * @param string $path
+     */
     public function uploadFile($path, $file)
     {
         $err = $file["error"];
@@ -1439,7 +1443,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      * setGameMapper
      *
      * @param GameMapperInterface $gameMapper
-     * @return User
+     * @return Game
      */
     public function setGameMapper(GameMapperInterface $gameMapper)
     {
@@ -1466,7 +1470,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      * setEntryMapper
      *
      * @param EntryMapperInterface $entryMapper
-     * @return Entry
+     * @return Game
      */
     public function setEntryMapper($entryMapper)
     {
@@ -1515,6 +1519,9 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         return $this;
     }
 
+    /**
+     * @param string $str
+     */
     public function getExtension($str)
     {
         $i = strrpos($str, '.');
@@ -1525,6 +1532,9 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         return $ext;
     }
 
+    /**
+     * @param string $extension
+     */
     public function getSrc($extension, $temp_path)
     {
         $image_src = '';
@@ -1546,6 +1556,12 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         return $image_src;
     }
 
+    /**
+     * @param string $extension
+     * @param string $rep
+     * @param integer $mini_width
+     * @param integer $mini_height
+     */
     public function resize($tmp_file, $extension, $rep, $src, $mini_width, $mini_height)
     {
         list ($src_width, $src_height) = getimagesize($tmp_file);
@@ -1574,6 +1590,10 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         return new \PlaygroundGame\Entity\Game();
     }
 
+    /**
+     * @param string $resource
+     * @param string $privilege
+     */
     public function isAllowed($resource, $privilege = null)
     {
         $auth = $this->getServiceManager()->get('BjyAuthorize\Service\Authorize');
@@ -1623,8 +1643,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      * This service is ready for all types of games
      *
      * @param array $data
-     * @param string $entityClass
-     * @param string $formClass
      * @return \PlaygroundGame\Entity\Game
      */
     public function createForm(array $data, $game, $form = null)
@@ -1660,7 +1678,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
     
     /**
      * Create a ZF2 Form from json data
-     * @return \PlaygroundGame\Service\Form
+     * @return Form
      */
     public function createFormFromJson($jsonForm){
         $formPV = json_decode($jsonForm);

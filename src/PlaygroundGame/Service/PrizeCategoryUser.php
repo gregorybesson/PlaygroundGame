@@ -94,7 +94,7 @@ class PrizeCategoryUser extends EventProvider implements ServiceManagerAwareInte
      * setPrizeCategoryMapper
      *
      * @param  PrizeCategoryMapper $prizeCategoryMapper
-     * @return User
+     * @return PrizeCategoryUser
      */
     public function setPrizeCategoryMapper(PrizeCategoryMapper $prizeCategoryMapper)
     {
@@ -133,7 +133,7 @@ class PrizeCategoryUser extends EventProvider implements ServiceManagerAwareInte
      * Set service manager instance
      *
      * @param  ServiceManager $serviceManager
-     * @return User
+     * @return PrizeCategoryUser
      */
     public function setServiceManager(ServiceManager $serviceManager)
     {
