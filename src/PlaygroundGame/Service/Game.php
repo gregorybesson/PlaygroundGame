@@ -808,6 +808,10 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         return $entry;
     }
 
+    /**
+     * @param \PlaygroundGame\Entity\Game $game
+     * @param \PlaygroundUser\Entity\UserInterface $user
+     */
     public function hasReachedPlayLimit($game, $user)
     {
         // Is there a limitation on the game ?
@@ -1330,6 +1334,9 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         return $fileNewname;
     }
 
+    /**
+     * @param string $path
+     */
     public function fileNewname($path, $filename, $generate = false)
     {
         $sanitize = new Sanitize();

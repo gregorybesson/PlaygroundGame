@@ -113,7 +113,7 @@ class QuizReplyAnswer implements InputFilterAwareInterface
     }
 
     /**
-     * @return PlaygroundGame\Entity\Reply
+     * @return QuizReply
      */
     public function getReply()
     {

@@ -15,18 +15,22 @@ class Mission extends EventProvider implements ServiceManagerAwareInterface
     * @var missionMapper
     */
     protected $missionMapper;
+    
     /**
     * @var missionGameMapper
     */
     protected $missionGameMapper;
+    
     /**
     * @var missionGameService
     */
     protected $missionGameService;
+    
     /**
     * @var gameMapper
     */
     protected $gameMapper;
+    
     /**
     * @var options
     */
@@ -37,7 +41,7 @@ class Mission extends EventProvider implements ServiceManagerAwareInterface
     * @param array $data 
     * @param string $formClass
     *
-    * @return Mission $mission
+    * @return false|\PlaygroundGame\Entity\Mission $mission
     */
     public function create(array $data, $formClass)
     {
@@ -64,11 +68,11 @@ class Mission extends EventProvider implements ServiceManagerAwareInterface
     }
 
     /**
-    * edit : mise ajour de mission
+    * edit : mise a jour de mission
     * @param array $data 
-    * @param Mission $mission
+    * @param \PlaygroundGame\Entity\Mission $mission
     *
-    * @return Mission  $mission
+    * @return \PlaygroundGame\Entity\Mission  $mission
     */
     public function edit($mission, $data)
     {
@@ -81,10 +85,10 @@ class Mission extends EventProvider implements ServiceManagerAwareInterface
 
     /**
     * uploadImage : upload de l'image de la mission
-    * @param Mission $mission
+    * @param \PlaygroundGame\Entity\Mission $mission
     * @param array $data 
     *
-    * @return Mission $mission
+    * @return \PlaygroundGame\Entity\Mission $mission
     */
     public function uploadImage($mission, $data)
     {
@@ -134,7 +138,7 @@ class Mission extends EventProvider implements ServiceManagerAwareInterface
     * findById : recupere l'entite en fonction de son id
     * @param int $id id du mission
     *
-    * @return PlaygroundGame\Entity\Mission $mission
+    * @return \PlaygroundGame\Entity\Mission $mission
     */
     public function findById($id)
     {

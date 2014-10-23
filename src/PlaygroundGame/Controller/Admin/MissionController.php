@@ -48,7 +48,6 @@ class MissionController extends AbstractActionController
         $form = $this->getServiceLocator()->get('playgroundgame_mission_form');
 
         $request = $this->getRequest();
-        $mission = new Mission();
 
         if ($request->isPost()) {
             $data = array_merge(

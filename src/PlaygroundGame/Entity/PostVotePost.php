@@ -158,7 +158,7 @@ class PostVotePost implements InputFilterAwareInterface
     }
 
     /**
-     * @return PlaygroundGame\Entity\Entry
+     * @return boolean
      */
     public function getEntry()
     {
