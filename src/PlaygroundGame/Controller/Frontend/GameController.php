@@ -23,6 +23,9 @@ class GameController extends AbstractActionController
 
     protected $options;
 
+    /**
+     * This action acts as a hub : Depending on the first step of the game, it will forward the action to this step 
+     */
     public function homeAction()
     {
 
@@ -60,6 +63,9 @@ class GameController extends AbstractActionController
 
     }
 
+    /**
+     * Homepage of the game
+     */
     public function indexAction()
     {
 
@@ -208,6 +214,9 @@ class GameController extends AbstractActionController
         return $viewModel;
     }
 
+    /**
+     * This action takes care of the terms of the game
+     */
     public function termsAction()
     {
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
@@ -227,6 +236,9 @@ class GameController extends AbstractActionController
         return $viewModel;
     }
 
+    /**
+     * This action takes care of the conditions of the game
+     */
     public function conditionsAction()
     {
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
@@ -246,6 +258,9 @@ class GameController extends AbstractActionController
         return $viewModel;
     }
 
+    /**
+     * This action takes care of bounce page of the game
+     */
     public function bounceAction()
     {
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
@@ -278,10 +293,11 @@ class GameController extends AbstractActionController
     }
 
     /**
-     * Send mail for winner and/or looser
-     * @param unknown $game
-     * @param unknown $user
-     * @param unknown $lastEntry
+     * Send mail for winner and/or loser
+     * @param \PlaygroundGame\Entity\Game $game
+     * @param \PlaygroundUser\Entity\User $user
+     * @param \PlaygroundGame\Entity\Entry $lastEntry
+     * @param \PlaygroundGame\Entity\Prize $prize
      */
     public function sendMail($game, $user, $lastEntry, $prize = NULL){
         if(($user || ($game->getAnonymousAllowed() && $game->getAnonymousIdentifier())) && $game->getMailWinner() && $lastEntry->getWinner()){
@@ -295,6 +311,12 @@ class GameController extends AbstractActionController
         }
     }
 
+    /**
+     * 
+     * @param \PlaygroundGame\Entity\Game $game
+     * @param \PlaygroundUser\Entity\User $user
+     * @param string $channel
+     */
     public function checkFbRegistration($user, $game, $channel)
     {
         $redirect = false;
@@ -327,6 +349,10 @@ class GameController extends AbstractActionController
         return $redirect;
     }
 
+    /**
+     * This method create the basic Game view
+     * @param \PlaygroundGame\Entity\Game $game
+     */
     public function buildView($game)
     {
         $viewModel = new ViewModel();
@@ -491,6 +517,9 @@ class GameController extends AbstractActionController
         return $data;
     }
 
+    /**
+     * This action displays the Prizes page associated to the game
+     */
     public function prizesAction()
     {
     	$identifier = $this->getEvent()->getRouteMatch()->getParam('id');
@@ -516,6 +545,9 @@ class GameController extends AbstractActionController
     	return $viewModel;
     }
 
+    /**
+     * This action displays a specific Prize page among those associated to the game
+     */
     public function prizeAction()
     {
     	$identifier = $this->getEvent()->getRouteMatch()->getParam('id');
