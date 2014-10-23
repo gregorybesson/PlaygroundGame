@@ -147,7 +147,6 @@ class GameController extends AbstractActionController
                   $key = array_search($this->params('action'), $steps);
                 }
                 $keyplay = array_search('play', $steps);
-                $anonymousIdentifier = null;
 
                 // If register step before play, I don't have no entry yet. I have to create one
                 // If register after play step, I search for the last entry created by play step.
