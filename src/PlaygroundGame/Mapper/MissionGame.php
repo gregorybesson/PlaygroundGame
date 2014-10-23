@@ -25,8 +25,8 @@ class MissionGame
 
     /**
     * __construct
-    * @param Doctrine\ORM\EntityManager $em
-    * @param PlaygroundDesign\Options\ModuleOptions $options
+    * @param EntityManager $em
+    * @param ModuleOptions $options
     *
     */
     public function __construct(EntityManager $em, ModuleOptions $options)
@@ -59,7 +59,6 @@ class MissionGame
 
     /**
     * findBy : recupere des entites en fonction de filtre
-    * @param array $array tableau de filtre
     *
     * @return collection $missionGames collection de PlaygroundGame\Entity\MissionGame
     */
@@ -138,7 +137,7 @@ class MissionGame
     /**
     * getEntityRepository : recupere l'entite missionGame
     *
-    * @return PlaygroundGame\Entity\MissionGame $missionGame
+    * @return \Doctrine\ORM\EntityRepository $missionGame
     */
     public function getEntityRepository()
     {

@@ -162,7 +162,7 @@ class InstantWinOccurrence implements InputFilterAwareInterface
     }
 
     /**
-     * @param Datetime $value
+     * @param string $value
      */
     public function setValue($value)
     {
@@ -172,7 +172,7 @@ class InstantWinOccurrence implements InputFilterAwareInterface
     }
 
     /**
-     * @return the unknown_type
+     * @return integer unknown_type
      */
     public function getActive()
     {
@@ -180,7 +180,7 @@ class InstantWinOccurrence implements InputFilterAwareInterface
     }
 
     /**
-     * @param unknown_type $active
+     * @param integer $active
      */
     public function setActive($active)
     {
@@ -190,7 +190,7 @@ class InstantWinOccurrence implements InputFilterAwareInterface
     }
 
     /**
-     * @return the unknown_type
+     * @return integer unknown_type
      */
     public function getWinning()
     {
@@ -198,7 +198,7 @@ class InstantWinOccurrence implements InputFilterAwareInterface
     }
 
     /**
-     * @param unknown_type $winning
+     * @param boolean $winning
      */
     public function setWinning($winning)
     {

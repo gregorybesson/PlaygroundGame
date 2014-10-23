@@ -32,7 +32,6 @@ class PrizeCategory extends EventProvider implements ServiceManagerAwareInterfac
      * This service is ready for all types of games
      *
      * @param  array                  $data
-     * @param  string                 $entityClass
      * @param  string                 $formClass
      * @return \PlaygroundGame\Entity\Game
      */
@@ -68,7 +67,6 @@ class PrizeCategory extends EventProvider implements ServiceManagerAwareInterfac
     /**
      *
      * @param  array                  $data
-     * @param  string                 $entityClass
      * @param  string                 $formClass
      * @return \PlaygroundGame\Entity\Game
      */
@@ -127,7 +125,7 @@ class PrizeCategory extends EventProvider implements ServiceManagerAwareInterfac
      * setPrizeCategoryMapper
      *
      * @param  PrizeCategoryMapper $prizeCategoryMapper
-     * @return User
+     * @return PrizeCategory
      */
     public function setPrizeCategoryMapper(PrizeCategoryMapper $prizeCategoryMapper)
     {
@@ -166,7 +164,7 @@ class PrizeCategory extends EventProvider implements ServiceManagerAwareInterfac
      * Set service manager instance
      *
      * @param  ServiceManager $serviceManager
-     * @return User
+     * @return PrizeCategory
      */
     public function setServiceManager(ServiceManager $serviceManager)
     {

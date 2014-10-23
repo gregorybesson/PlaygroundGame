@@ -141,7 +141,7 @@ class PrizeCategory
     }
 
     /**
-     * @return the status
+     * @return integer status
      */
     public function getActive()
     {
@@ -159,7 +159,7 @@ class PrizeCategory
     }
 
     /**
-     * @return the picto
+     * @return string picto
      */
     public function getPicto()
     {
@@ -177,7 +177,7 @@ class PrizeCategory
     }
 
     /**
-     * @return the $created_at
+     * @return \DateTime $created_at
      */
     public function getCreatedAt()
     {
@@ -195,7 +195,7 @@ class PrizeCategory
     }
 
     /**
-     * @return the $updated_at
+     * @return \DateTime $updated_at
      */
     public function getUpdatedAt()
     {

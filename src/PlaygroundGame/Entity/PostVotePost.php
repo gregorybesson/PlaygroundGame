@@ -129,7 +129,7 @@ class PostVotePost implements InputFilterAwareInterface
     }
 
     /**
-     * @param unknown_type $post_vote
+     * @param unknown_type $postvote
      */
     public function setPostvote($postvote)
     {
@@ -166,7 +166,7 @@ class PostVotePost implements InputFilterAwareInterface
     }
 
     /**
-     * @param PlaygroundGame\Entity\Entry $entry
+     * @param boolean $entry
      */
     public function setEntry($entry)
     {
@@ -189,7 +189,7 @@ class PostVotePost implements InputFilterAwareInterface
     }
 
     /**
-     * @return the unknown_type
+     * @return PostVotePostEntry[] unknown_type
      */
     public function getPostElements()
     {
@@ -197,7 +197,6 @@ class PostVotePost implements InputFilterAwareInterface
     }
 
     /**
-     * @param unknown_type $post_entries
      */
     public function setPostElements($postElements)
     {
@@ -209,7 +208,7 @@ class PostVotePost implements InputFilterAwareInterface
     /**
      * Add an entry to the vote.
      *
-     * @param PostVoteVote $votes
+     * @param PostVoteVote $vote
      *
      * @return void
      */
@@ -237,7 +236,7 @@ class PostVotePost implements InputFilterAwareInterface
     }
 
     /**
-     * @return the unknown_type
+     * @return integer unknown_type
      */
     public function getStatus()
     {
@@ -255,7 +254,7 @@ class PostVotePost implements InputFilterAwareInterface
     }
     
    /**
-    * @return bool
+    * @return integer
     */
     public function isPushed()
     {

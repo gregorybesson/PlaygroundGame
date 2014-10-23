@@ -491,7 +491,7 @@ class Game implements InputFilterAwareInterface, Translatable
     }
 
 	/**
-     * @return the $anonymousAllowed
+     * @return integer $anonymousAllowed
      */
     public function getAnonymousAllowed()
     {
@@ -586,7 +586,7 @@ class Game implements InputFilterAwareInterface, Translatable
 
     /**
      *
-     * @return the $canal
+     * @return integer $canal
      */
     public function getBroadcastFacebook ()
     {
@@ -606,7 +606,7 @@ class Game implements InputFilterAwareInterface, Translatable
 
     /**
      *
-     * @return the $canal
+     * @return integer $canal
      */
     public function getBroadcastPlatform ()
     {
@@ -625,7 +625,7 @@ class Game implements InputFilterAwareInterface, Translatable
     }
 
     /**
-	 * @return the $broadcastEmbed
+	 * @return integer $broadcastEmbed
 	 */
 	public function getBroadcastEmbed()
 	{
@@ -643,7 +643,7 @@ class Game implements InputFilterAwareInterface, Translatable
 	}
 
 	/**
-     * @return the $mailWinner
+     * @return integer $mailWinner
      */
     public function getMailWinner()
     {
@@ -675,7 +675,7 @@ class Game implements InputFilterAwareInterface, Translatable
     }
 
 	/**
-     * @return the $mailLooser
+     * @return integer $mailLooser
      */
     public function getMailLooser()
     {
@@ -708,7 +708,7 @@ class Game implements InputFilterAwareInterface, Translatable
 
 	/**
      *
-     * @return the $pushHome
+     * @return integer $pushHome
      */
     public function getPushHome ()
     {
@@ -728,7 +728,7 @@ class Game implements InputFilterAwareInterface, Translatable
 
     /**
      *
-     * @return the $displayHome
+     * @return integer $displayHome
      */
     public function getDisplayHome ()
     {
@@ -924,7 +924,6 @@ class Game implements InputFilterAwareInterface, Translatable
 
     /**
      * This method returns the first step in the game workflow
-     * @param string $step
      * @return string
      */
     public function firstStep()
@@ -936,7 +935,6 @@ class Game implements InputFilterAwareInterface, Translatable
 
     /**
      * This method returns the last step in the game workflow
-     * @param string $step
      * @return string
      */
     public function lastStep()
@@ -982,7 +980,7 @@ class Game implements InputFilterAwareInterface, Translatable
     }
 
     /**
-     * @return the $stepsViews
+     * @return string $stepsViews
      */
     public function getStepsViews()
     {
@@ -1019,7 +1017,7 @@ class Game implements InputFilterAwareInterface, Translatable
     }
 
     /**
-     * @return the unknown_type
+     * @return integer unknown_type
      */
     public function getPlayLimit()
     {
@@ -1154,7 +1152,7 @@ class Game implements InputFilterAwareInterface, Translatable
 
     /**
      *
-     * @return the $termsOptin
+     * @return integer $termsOptin
      */
     public function getTermsOptin ()
     {
@@ -1253,7 +1251,7 @@ class Game implements InputFilterAwareInterface, Translatable
     }
 
     /**
-     * @return the unknown_type
+     * @return ArrayCollection unknown_type
      */
     public function getPrizes()
     {
@@ -1262,7 +1260,7 @@ class Game implements InputFilterAwareInterface, Translatable
 
     /**
      * frm collection solution
-     * @param unknown_type $prizes
+     * @param ArrayCollection $prizes
      */
     public function setPrizes(ArrayCollection $prizes)
     {
@@ -1312,6 +1310,7 @@ class Game implements InputFilterAwareInterface, Translatable
     /**
      *
      * @param string classType
+     * @param string $classType
      */
     public function setClassType ($classType)
     {
@@ -1322,7 +1321,7 @@ class Game implements InputFilterAwareInterface, Translatable
 
     /**
      *
-     * @return the unknown_type
+     * @return integer unknown_type
      */
     public function getActive ()
     {
@@ -1462,7 +1461,7 @@ class Game implements InputFilterAwareInterface, Translatable
 
     /**
      *
-     * @return the fbFan
+     * @return integer fbFan
      */
     public function getFbFan ()
     {
@@ -1522,7 +1521,7 @@ class Game implements InputFilterAwareInterface, Translatable
 
     /**
      *
-     * @return the $createdAt
+     * @return DateTime $createdAt
      */
     public function getCreatedAt ()
     {
@@ -1542,7 +1541,7 @@ class Game implements InputFilterAwareInterface, Translatable
 
     /**
      *
-     * @return the $updatedAt
+     * @return DateTime $updatedAt
      */
     public function getUpdatedAt ()
     {

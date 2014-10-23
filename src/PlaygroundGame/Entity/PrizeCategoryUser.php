@@ -111,7 +111,7 @@ class PrizeCategoryUser
     }
 
     /**
-     * @return the $createdAt
+     * @return \DateTime $createdAt
      */
     public function getCreatedAt()
     {
@@ -129,7 +129,7 @@ class PrizeCategoryUser
     }
 
     /**
-     * @return the $updatedAt
+     * @return \DateTime $updatedAt
      */
     public function getUpdatedAt()
     {

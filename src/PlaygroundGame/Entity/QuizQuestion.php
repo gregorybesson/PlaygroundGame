@@ -183,7 +183,7 @@ class QuizQuestion implements InputFilterAwareInterface
     }
 
     /**
-     * @return the unknown_type
+     * @return ArrayCollection unknown_type
      */
     public function getAnswers()
     {
@@ -192,7 +192,7 @@ class QuizQuestion implements InputFilterAwareInterface
 
     /**
      * frm collection solution
-     * @param unknown_type $answers
+     * @param ArrayCollection $answers
      */
     public function setAnswers(ArrayCollection $answers)
     {
@@ -230,7 +230,7 @@ class QuizQuestion implements InputFilterAwareInterface
     }
 
     /**
-     * @return the unknown_type
+     * @return integer unknown_type
      */
     public function getType()
     {
@@ -284,7 +284,7 @@ class QuizQuestion implements InputFilterAwareInterface
     }
 
     /**
-     * @return the unknown_type
+     * @return integer unknown_type
      */
     public function getAudio()
     {
@@ -302,7 +302,7 @@ class QuizQuestion implements InputFilterAwareInterface
     }
 
     /**
-     * @return the unknown_type
+     * @return boolean unknown_type
      */
     public function getAutoplay()
     {
@@ -338,7 +338,7 @@ class QuizQuestion implements InputFilterAwareInterface
     }
 
     /**
-     * @return the unknown_type
+     * @return boolean unknown_type
      */
     public function getTimer()
     {
@@ -356,7 +356,7 @@ class QuizQuestion implements InputFilterAwareInterface
     }
 
     /**
-     * @return the unknown_type
+     * @return integer unknown_type
      */
     public function getPrediction()
     {
@@ -374,7 +374,7 @@ class QuizQuestion implements InputFilterAwareInterface
     }
 
     /**
-     * @return the unknown_type
+     * @return integer unknown_type
      */
     public function getTimerDuration()
     {
@@ -392,7 +392,7 @@ class QuizQuestion implements InputFilterAwareInterface
     }
 
     /**
-     * @return the unknown_type
+     * @return integer unknown_type
      */
     public function getWeight()
     {
@@ -500,7 +500,7 @@ class QuizQuestion implements InputFilterAwareInterface
     }
 
     /**
-     * @return string
+     * @return integer
      */
     public function getPosition()
     {

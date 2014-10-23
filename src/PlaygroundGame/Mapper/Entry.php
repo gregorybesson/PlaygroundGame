@@ -223,8 +223,7 @@ class Entry implements ServiceLocatorAwareInterface
      * get users with only one participation able to
      * replay the game in the timeframe (I except offered entries marked as bonus)
      *
-     * @param unknown_type $games
-     * @param unknown_type $limitScale
+     * @param unknown_type $game
      */
     public function findPlayersWithOneEntryBy($game)
     {

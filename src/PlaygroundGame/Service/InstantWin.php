@@ -21,7 +21,7 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
      * saving an instantwin image if any
      *
      * @param  array                  $data
-     * @param  string                 $entityClass
+     * @param  string                 $entity
      * @param  string                 $formClass
      * @return \PlaygroundGame\Entity\Game
      */
@@ -56,7 +56,6 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
      * saving an instantwin image if any
      *
      * @param  array                  $data
-     * @param  string                 $entityClass
      * @param  string                 $formClass
      * @return \PlaygroundGame\Entity\Game
      */
@@ -104,9 +103,7 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
      *
      *
      * @param  array                  $data
-     * @param  string                 $entityClass
-     * @param  string                 $formClass
-     * @return \PlaygroundGame\Entity\Game
+     * @return boolean|null
      */
     public function scheduleOccurrences($game, array $data)
     {
@@ -374,6 +371,9 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
         return date('Y-m-d H:i:s', $rand_epoch);
     }
 
+    /**
+     * @param string $fileName
+     */
     public function getOccurencesFromCSV($fileName)
     {
         if (file_exists($fileName)){
@@ -445,8 +445,6 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
      *
      *
      * @param  array                  $data
-     * @param  string                 $entityClass
-     * @param  string                 $formClass
      * @return \PlaygroundGame\Entity\Game
      */
     public function updateOccurrence(array $data, $occurrence_id = null)
@@ -515,6 +513,10 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
         return $this->setOccurrenceEntry($game, $user, $entry, $occurrence);
     }
 
+    /**
+     * @param \PlaygroundGame\Entity\Game $game
+     * @param \PlaygroundUser\Entity\UserInterface $user
+     */
     public function setOccurrenceEntry($game, $user, $entry, $occurrence = null)
     {
         $entryMapper = $this->getEntryMapper();
@@ -565,8 +567,7 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
     /**
      * setInstantWinOccurrenceMapper
      *
-     * @param  InstantWinOccurrenceMapperInterface $quizquestionMapper
-     * @return InstantWinOccurrence
+     * @return InstantWin
      */
     public function setInstantWinOccurrenceMapper($instantWinOccurrenceMapper)
     {

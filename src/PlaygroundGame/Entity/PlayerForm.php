@@ -130,7 +130,6 @@ class PlayerForm implements InputFilterAwareInterface
     }
 
     /**
-     * @param unknown_type $value
      */
     public function setForm($form)
     {
@@ -148,7 +147,6 @@ class PlayerForm implements InputFilterAwareInterface
     }
 
     /**
-     * @param unknown_type $value
      */
     public function setFormTemplate($formTemplate)
     {

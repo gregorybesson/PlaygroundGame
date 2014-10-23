@@ -2,8 +2,6 @@
 
 namespace PlaygroundGame\Service;
 
-use PlaygroundGame\Entity\Entry;
-
 use Zend\ServiceManager\ServiceManagerAwareInterface;
 use Zend\ServiceManager\ServiceManager;
 use ZfcBase\EventManager\EventProvider;
@@ -115,7 +113,7 @@ class Cron extends EventProvider implements ServiceManagerAwareInterface
      * setGameMapper
      *
      * @param  GameMapperInterface $gameMapper
-     * @return User
+     * @return Cron
      */
     public function setGameMapper(GameMapperInterface $gameMapper)
     {
@@ -142,7 +140,7 @@ class Cron extends EventProvider implements ServiceManagerAwareInterface
      * setEntryMapper
      *
      * @param  EntryMapperInterface $entryMapper
-     * @return Entry
+     * @return Cron
      */
     public function setEntryMapper($entryMapper)
     {
@@ -181,7 +179,7 @@ class Cron extends EventProvider implements ServiceManagerAwareInterface
      * Set service manager instance
      *
      * @param  ServiceManager $serviceManager
-     * @return Game
+     * @return Cron
      */
     public function setServiceManager(ServiceManager $serviceManager)
     {

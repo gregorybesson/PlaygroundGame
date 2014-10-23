@@ -28,7 +28,7 @@ class Module
     
     /**
      * This method is called only when the config is not cached.
-     * @param Event $e
+     * @param \Zend\ModuleManager\ModuleEvent $e
      */
     public function onMergeConfig(\Zend\ModuleManager\ModuleEvent $e)
     {
