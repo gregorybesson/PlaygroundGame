@@ -121,7 +121,7 @@ class QuizReply implements InputFilterAwareInterface
     }
 
 	/**
-     * @return the $totalCorrectAnswers
+     * @return integer $totalCorrectAnswers
      */
     public function getTotalCorrectAnswers()
     {
@@ -157,7 +157,7 @@ class QuizReply implements InputFilterAwareInterface
     }
 
 	/**
-     * @return the $totalQuestions
+     * @return integer $totalQuestions
      */
     public function getTotalQuestions()
     {

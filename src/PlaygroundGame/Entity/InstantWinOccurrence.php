@@ -154,7 +154,7 @@ class InstantWinOccurrence implements InputFilterAwareInterface
     }
 
     /**
-     * @return the unknown_type
+     * @return string unknown_type
      */
     public function getValue()
     {

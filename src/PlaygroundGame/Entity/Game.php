@@ -1300,7 +1300,7 @@ class Game implements InputFilterAwareInterface, Translatable
 
     /**
      *
-     * @return the $classType
+     * @return string $classType
      */
     public function getClassType ()
     {

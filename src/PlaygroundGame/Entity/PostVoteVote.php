@@ -93,7 +93,7 @@ class PostVoteVote implements InputFilterAwareInterface
     }
 
     /**
-     * @return the unknown_type
+     * @return string unknown_type
      */
     public function getIp()
     {
