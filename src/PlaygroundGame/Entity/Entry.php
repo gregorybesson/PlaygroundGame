@@ -188,7 +188,7 @@ class Entry
     }
 
     /**
-     * @return the $points
+     * @return integer $points
      */
     public function getPoints()
     {

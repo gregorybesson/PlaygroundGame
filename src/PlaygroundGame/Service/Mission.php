@@ -183,7 +183,7 @@ class Mission extends EventProvider implements ServiceManagerAwareInterface
      * Set options instance
      *
      * @param  Option $options
-     * @return \PlaygroundGame\Entity\Mission
+     * @return Mission
      */
     public function setOptions($options)
     {
@@ -205,7 +205,7 @@ class Mission extends EventProvider implements ServiceManagerAwareInterface
     /**
      * Set service manager instance
      *
-     * @return \PlaygroundGame\Entity\Mission
+     * @return Mission
      */
     public function setServiceManager(ServiceManager $serviceManager)
     {

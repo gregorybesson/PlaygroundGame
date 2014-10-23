@@ -135,7 +135,7 @@ class MissionGame
     }
 
     /**
-     * @return the $game
+     * @return \PlaygroundGame\Service\Mission $game
      */
     public function getMission()
     {
