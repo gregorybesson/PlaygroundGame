@@ -101,12 +101,7 @@ class MissionController extends AbstractActionController
 
             $form->setData($data);
 
-            if ($form->isValid()) {
-
-                $mission = $this->getMissionService()->edit($mission, $data);
-            }else{
-                $mission = null;
-            }
+            $mission = $this->getMissionService()->edit($mission, $data, 'playgroundgame_mission_form');
 
             if ($mission) {
                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The mission "'.$mission->getTitle().'" was updated');

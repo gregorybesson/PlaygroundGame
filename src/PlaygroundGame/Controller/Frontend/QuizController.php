@@ -229,9 +229,9 @@ class QuizController extends GameController
 			$start = $timer->getCreatedAt()->format('U');
 			$end = $timer->getUpdatedAt()->format('U');
 			$userTimer = array(
-								'ratio' 	=> $ratioCorrectAnswers,
-								'timer' 	=> $end - $start,
-								);
+			   'ratio' 	=> $ratioCorrectAnswers,
+			   'timer' 	=> $end - $start,
+			);
 		}
 
         // Je prépare le tableau des bonnes réponses trouvées et non trouvées
@@ -279,9 +279,8 @@ class QuizController extends GameController
         
         $this->sendMail($game, $user, $lastEntry);
 
-        $nextGame = parent::getMissionGameService()->checkCondition($game, $winner, $prediction, $lastEntry);
-
         $viewModel->setVariables(array(
+            'entry'               => $lastEntry,
             'statusMail'          => $statusMail,
             'game'                => $game,
             'flashMessages'       => $this->flashMessenger()->getMessages(),
@@ -294,8 +293,7 @@ class QuizController extends GameController
             'gameCorrectAnswers'  => $gameCorrectAnswers,
             'socialLinkUrl' 	  => $socialLinkUrl,
             'secretKey'		  	  => $secretKey,
-            'userTimer' 		  => $userTimer,
-            'nextGame'            => $nextGame
+            'userTimer' 		  => $userTimer
         ));
 
         return $viewModel;

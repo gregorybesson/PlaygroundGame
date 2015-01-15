@@ -7,6 +7,7 @@ use Zend\ServiceManager\ServiceManager;
 use ZfcBase\EventManager\EventProvider;
 use PlaygroundReward\Options\ModuleOptions;
 use PlaygroundGame\Entity\Mission as MissionEntity;
+use DoctrineModule\Validator\NoObjectExists as NoObjectExistsValidator;
 
 class Mission extends EventProvider implements ServiceManagerAwareInterface
 {
@@ -47,10 +48,27 @@ class Mission extends EventProvider implements ServiceManagerAwareInterface
     {
 
         $mission = new MissionEntity();
+        $entityManager = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
 
         $form = $this->getServiceManager()->get($formClass);
 
         $form->bind($mission);
+
+        $identifierInput = $form->getInputFilter()->get('identifier');
+        $noObjectExistsValidator = new NoObjectExistsValidator(array(
+            'object_repository' => $entityManager->getRepository('PlaygroundGame\Entity\Mission'),
+            'fields' => 'identifier',
+            'messages' => array(
+                'objectFound' => 'This url already exists !'
+            )
+        ));
+
+        $identifierInput->getValidatorChain()->addValidator($noObjectExistsValidator);
+
+        // If the identifier has not been set, I use the title to create one.
+        if (empty($data['identifier']) && ! empty($data['title'])) {
+            $data['identifier'] = $data['title'];
+        }
        
         $form->setData($data);
 
@@ -74,10 +92,41 @@ class Mission extends EventProvider implements ServiceManagerAwareInterface
     *
     * @return \PlaygroundGame\Entity\Mission  $mission
     */
-    public function edit($mission, $data)
+    public function edit($mission, $data, $formClass)
     {
 
+        $form = $this->getServiceManager()->get($formClass);
+        $entityManager = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
+
+        $form->bind($mission);
+
+        $identifierInput = $form->getInputFilter()->get('identifier');
+        $noObjectExistsValidator = new NoObjectExistsValidator(array(
+            'object_repository' => $entityManager->getRepository('PlaygroundGame\Entity\Mission'),
+            'fields' => 'identifier',
+            'messages' => array(
+                'objectFound' => 'This url already exists !'
+            )
+        ));
+
+        if ($mission->getIdentifier() != $data['identifier']) {
+            $identifierInput->getValidatorChain()->addValidator($noObjectExistsValidator);
+        }
+
+        if ((! isset($data['identifier']) || empty($data['identifier'])) && isset($data['title'])) {
+
+            $data['identifier'] = $data['title'];
+        }
+
+        $form->setData($data);
+
+        if (! $form->isValid()) {
+
+            return false;
+        }
+
         $this->uploadImage($mission, $data);
+
         $mission = $this->getMissionMapper()->update($mission);
 
         return $mission;
