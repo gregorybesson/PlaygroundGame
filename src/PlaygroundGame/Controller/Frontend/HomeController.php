@@ -63,7 +63,6 @@ class HomeController extends AbstractActionController
         return new ViewModel(
             array(
                 'items'	=> $paginator,
-                //'missions' => $missions,
                )
         );
     }

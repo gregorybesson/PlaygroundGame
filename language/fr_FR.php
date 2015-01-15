@@ -240,19 +240,6 @@ return array(
     'Occurrence Date' 	=> 'Date de l\'instant gagnant',
     'Edit occurrence'	=> 'Editer un instant gagnant',
 
-    // Admin Mission
-    'Mission Management' => 'Gestion des missions',
-    'Missions'           => 'Missions',
-    'Add new mission'    => 'Ajouter une nouvelle mission',
-    'Linked games'       => 'Jeux associés',
-    'Link games'         => 'Associer des jeux',
-    'Activate mission'   => 'Activer la mission',
-    'Deactivate mission' => 'Désactiver la mission',
-    'Add a game'         => 'Ajouter un jeu',
-    'Game'               => 'Jeu',
-
-    'Hide Mission header' => 'Cacher l\'en-tête de mission',
-
 	// Front post&vote email moderation
 	'This post has been reported in a game.' => 'Ce post a été signalé dans un jeu.',
 

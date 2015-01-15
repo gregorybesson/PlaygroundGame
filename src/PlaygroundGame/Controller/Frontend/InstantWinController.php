@@ -168,8 +168,6 @@ class InstantWinController extends GameController
         
         $this->sendMail($game, $user, $lastEntry, $prize);
 
-        $nextGame = parent::getMissionGameService()->checkCondition($game, $winner, true, $lastEntry);
-
         if ($viewModel instanceof \Zend\View\Model\ViewModel) {
             $viewModel->setVariables(array(
                 'occurrence'       => $occurrence,
@@ -180,7 +178,6 @@ class InstantWinController extends GameController
                 'form'             => $form,
                 'socialLinkUrl'    => $socialLinkUrl,
                 'secretKey'        => $secretKey,
-                'nextGame'         => $nextGame,
             ));
         }
         return $viewModel;

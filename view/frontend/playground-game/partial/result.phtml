@@ -49,32 +49,18 @@
 		            'statusMail'    => $statusMail,
 		            'gameType'		=> $this->game->getClassType(), 
 					'channel'       => $this->channel,
-					'nextGame'      => $this->nextGame,
 		    )); ?>
-		    <?php if($this->nextGame): ?>
-                <!-- another Game -->
+            <?php if(isset($this->game) && $this->game->lastStep() !== 'result') : ?>
+                <!-- terminer -->
                 <div id="terminer" class="row" >
-                    <div class="col-md-12">
-                        <span class="btn btn-default">
-                            <a href="<?php echo $this->url('frontend/' . $this->nextGame->getClassType(), array('id' => $this->nextGame->getIdentifier(), 'channel' => $this->channel)); ?>">
-                                <?php echo $this->translate('Play another Game'); ?>
+                	<div class="col-md-12">
+                	    <span class="btn btn-default">
+                            <a href="<?php echo $this->url('frontend/'. $this->game->getClassType() . '/bounce', array('id' => $this->game->getIdentifier(), 'channel' => $this->channel));?>">
+                                <?php echo $this->translate('Finish'); ?>
                             </a>
                         </span>
-                    </div>
+                	</div>
                 </div>
-            <?php else: ?>
-                <?php if(isset($this->game) && $this->game->lastStep() !== 'result') : ?>
-                    <!-- terminer -->
-                    <div id="terminer" class="row" >
-                    	<div class="col-md-12">
-                    	    <span class="btn btn-default">
-                                <a href="<?php echo $this->url('frontend/'. $this->game->getClassType() . '/bounce', array('id' => $this->game->getIdentifier(), 'channel' => $this->channel));?>">
-                                    <?php echo $this->translate('Finish'); ?>
-                                </a>
-                            </span>
-                    	</div>
-                    </div>
-                <?php endif; ?>
             <?php endif; ?>
 		</div>
 		<?php echo $this->additional; ?>

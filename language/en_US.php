@@ -242,19 +242,6 @@ return array(
     'Occurrence Date' 	=> 'Occurrence Date',
     'Edit occurrence'	=> 'Edit occurrence',
 
-    // Admin Mission
-    'Mission Management' => 'Gestion des missions',
-    'Missions'           => 'Missions',
-    'Add new mission'    => 'Ajouter une nouvelle mission',
-    'Linked games'       => 'Jeux associés',
-    'Link games'         => 'Associer des jeux',
-    'Activate mission'   => 'Activer la mission',
-    'Deactivate mission' => 'Désactiver la mission',
-    'Add a game'         => 'Ajouter un jeu',
-    'Game'               => 'Jeu',
-
-    'Hide Mission header' => 'Cacher l\'en-tête de mission',
-
 	// Front post&vote email moderation
 	'This post has been reported in a game.' => 'This post has been reported in a game.',
 

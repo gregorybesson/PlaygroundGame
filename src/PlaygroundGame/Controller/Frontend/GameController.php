@@ -19,8 +19,6 @@ class GameController extends AbstractActionController
 
     protected $prizeService;
 
-    protected $missionGameService;
-
     protected $options;
 
     /**
@@ -724,14 +722,11 @@ class GameController extends AbstractActionController
     
         $this->sendMail($game, $user, $lastEntry);
     
-        $nextGame = $this->getMissionGameService()->checkCondition($game, $lastEntry->getWinner(), true, $lastEntry);
-    
         $viewModel->setVariables(array(
             'statusMail'       => $statusMail,
             'game'             => $game,
             'flashMessages'    => $this->flashMessenger()->getMessages(),
             'form'             => $form,
-            'nextGame'         => $nextGame,
         ));
     
         return $viewModel;
@@ -889,22 +884,6 @@ class GameController extends AbstractActionController
         }
 
         return $this->gameService;
-    }
-
-    public function getMissionGameService()
-    {
-        if (!$this->missionGameService) {
-            $this->missionGameService = $this->getServiceLocator()->get('playgroundgame_mission_game_service');
-        }
-
-        return $this->missionGameService;
-    }
-
-    public function setMissionGameService(GameService $missionGameService)
-    {
-        $this->missionGameService = $missionGameService;
-
-        return $this;
     }
 
     public function setGameService(GameService $gameService)
