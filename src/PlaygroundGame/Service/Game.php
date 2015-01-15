@@ -307,7 +307,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             $data['publicationDate'] = $data['startDate'];
         }
 
-        if (! isset($data['identifier']) && isset($data['title'])) {
+        if ((! isset($data['identifier']) || empty($data['identifier'])) && isset($data['title'])) {
             $data['identifier'] = $data['title'];
         }
 
@@ -483,7 +483,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      *
      * @return Array of PlaygroundGame\Entity\Game
      */
-    public function getActiveGames($displayHome = true, $classType = '', $order = '', $withoutGameInMission = false)
+    public function getActiveGames($displayHome = true, $classType = '', $order = '')
     {
         $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
         $today = new \DateTime("now");
@@ -519,17 +519,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         
         if ($displayHome) {
             $and->add($qb->expr()->eq('g.displayHome', true));
-        }
-        
-        if ($withoutGameInMission) {
-            
-            $qb2 = $em->createQueryBuilder();
-            $qb2->select('IDENTITY(mg.game)')
-            ->from('PlaygroundGame\Entity\Mission', 'm')
-            ->innerJoin('PlaygroundGame\Entity\MissionGame', 'mg', 'WITH', $qb->expr()->eq('mg.mission', 'm.id'))
-            ->where($qb->expr()->eq('m.active', 1));
-            
-            $and->add($qb->expr()->notIn('g.id', $qb2->getDQL()));
         }
         
         $qb->select('g')

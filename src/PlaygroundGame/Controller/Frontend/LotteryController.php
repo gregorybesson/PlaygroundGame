@@ -98,8 +98,6 @@ class LotteryController extends GameController
         
         $this->sendMail($game, $user, $lastEntry);
 
-        $nextGame = parent::getMissionGameService()->checkCondition($game, $lastEntry->getWinner(), true, $lastEntry);
-
         $viewModel->setVariables(array(
                 'statusMail'       => $statusMail,
                 'game'             => $game,
@@ -107,7 +105,6 @@ class LotteryController extends GameController
                 'form'             => $form,
                 'socialLinkUrl'    => $socialLinkUrl,
                 'secretKey'		   => $secretKey,
-                'nextGame'         => $nextGame
             )
         );
 

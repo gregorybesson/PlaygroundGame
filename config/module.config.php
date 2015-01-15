@@ -40,7 +40,6 @@ return array(
                 array('controller' => 'playgroundgame_postvote',            'roles' => array('guest', 'user')),
                 array('controller' => 'playgroundgame_instantwin',          'roles' => array('guest', 'user')),
                 array('controller' => 'playgroundgame_prizecategory',       'roles' => array('guest', 'user')),
-                array('controller' => 'playgroundgame_mission',             'roles' => array('guest', 'user')),
     
                 // Admin area
                 array('controller' => 'playgroundgameadmin',                'roles' => array('admin')),
@@ -49,7 +48,6 @@ return array(
                 array('controller' => 'playgroundgame_admin_quiz',          'roles' => array('admin')),
                 array('controller' => 'playgroundgame_admin_postvote',      'roles' => array('admin')),
                 array('controller' => 'playgroundgame_admin_prizecategory', 'roles' => array('admin')),
-                array('controller' => 'playgroundgame_admin_mission',       'roles' => array('admin')),
             ),
         ),
     ),
@@ -229,7 +227,6 @@ return array(
             'playgroundgame_instantwin' => 'PlaygroundGame\Controller\Frontend\InstantWinController',
             'playgroundgame_postvote' => 'PlaygroundGame\Controller\Frontend\PostVoteController',
             'playgroundgame_prizecategory' => 'PlaygroundGame\Controller\Frontend\PrizeCategoryController',
-            'playgroundgame_mission' => 'PlaygroundGame\Controller\Frontend\MissionController',
             'playgroundgameadmin' => 'PlaygroundGame\Controller\Admin\AdminController',
             'playgroundgame_admin_game' => 'PlaygroundGame\Controller\Admin\GameController',
             'playgroundgame_admin_lottery' => 'PlaygroundGame\Controller\Admin\LotteryController',
@@ -237,7 +234,6 @@ return array(
             'playgroundgame_admin_postvote' => 'PlaygroundGame\Controller\Admin\PostVoteController',
             'playgroundgame_admin_quiz' => 'PlaygroundGame\Controller\Admin\QuizController',
             'playgroundgame_admin_prizecategory' => 'PlaygroundGame\Controller\Admin\PrizeCategoryController',
-            'playgroundgame_admin_mission' => 'PlaygroundGame\Controller\Admin\MissionController'
         )
     ),
     'router' => array(
@@ -301,17 +297,6 @@ return array(
        					),
        				),*/
                     
-                    'mission' => array(
-                        'type' => 'Literal',
-                        'options' => array(
-                            'route' => 'mission',
-                            'defaults' => array(
-                                'controller' => 'playgroundgame_mission',
-                                'action' => 'index'
-                            )
-                        ),
-                    ),
-                    
 		            'quiz' => array(
                         'type' => 'Segment',
                         'options' => array(
@@ -326,7 +311,7 @@ return array(
                         // 'spec'
                         // =>
                         // 'quiz/%id%/%action%%channel%.html',
-                                                ),
+                        ),
                         'may_terminate' => true,
                         'child_routes' => array(
                             'index' => array(
@@ -1333,93 +1318,6 @@ return array(
                             )
                         )
                     ),
-                    'mission' => array(
-                        'type' => 'Literal',
-                        'options' => array(
-                            'route' => '/mission',
-                            'defaults' => array(
-                                'controller' => 'playgroundgame_admin_mission',
-                                'action' => 'list'
-                            )
-                        ),
-                        'child_routes' => array(
-                            'list' => array(
-                                'type' => 'Segment',
-                                'options' => array(
-                                    'route' => '/list[/:p]',
-                                    'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_mission',
-                                        'action' => 'list'
-                                    )
-                                )
-                            ),
-                            'create' => array(
-                                'type' => 'Literal',
-                                'options' => array(
-                                    'route' => '/create',
-                                    'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_mission',
-                                        'action' => 'create'
-                                    )
-                                )
-                            ),
-                            'edit' => array(
-                                'type' => 'Segment',
-                                'options' => array(
-                                    'route' => '/edit/:missionId',
-                                    'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_mission',
-                                        'action' => 'edit',
-                                        'missionId' => 0
-                                    )
-                                )
-                            ),
-                            'delete' => array(
-                                'type' => 'Segment',
-                                'options' => array(
-                                    'route' => '/delete/:missionId',
-                                    'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_mission',
-                                        'action' => 'delete',
-                                        'missionId' => 0
-                                    )
-                                )
-                            ),
-                            'associate' => array(
-                                'type' => 'Segment',
-                                'options' => array(
-                                    'route' => '/associate/:missionId',
-                                    'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_mission',
-                                        'action' => 'associate',
-                                        'missionId' => 0
-                                    )
-                                )
-                            ),
-                            'activate' => array(
-                                'type' => 'Segment',
-                                'options' => array(
-                                    'route' => '/activate/:missionId',
-                                    'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_mission',
-                                        'action' => 'activate',
-                                        'missionId' => 0
-                                    )
-                                )
-                            ),
-                            'desactivate' => array(
-                                'type' => 'Segment',
-                                'options' => array(
-                                    'route' => '/desactivate/:missionId',
-                                    'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_mission',
-                                        'action' => 'desactivate',
-                                        'missionId' => 0
-                                    )
-                                )
-                            )
-                        )
-                    ),
 
                     'playgroundgame' => array(
                         'type' => 'Literal',
@@ -2089,12 +1987,6 @@ return array(
                     'postvote-form' => array(
                         'label' => 'Options du Post & vote',
                         'route' => 'admin/playgroundgame/postvote-form',
-                        'privilege' => 'list'
-                    ),
-                    'mission_list' => array(
-                        'label' => 'Mission Management',
-                        'route' => 'admin/mission/list',
-                        'resource' => 'game',
                         'privilege' => 'list'
                     )
                 )

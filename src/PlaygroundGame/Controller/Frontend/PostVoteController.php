@@ -333,14 +333,11 @@ class PostVoteController extends GameController
         // buildView must be before sendMail because it adds the game template path to the templateStack
         $viewModel = $this->buildView($game);
 
-        $nextGame = parent::getMissionGameService()->checkCondition($game, $lastEntry->getWinner(), true, $lastEntry);
-
         $viewModel->setVariables(array(
                 'statusMail'       => $statusMail,
                 'game'             => $game,
                 'flashMessages'    => $this->flashMessenger()->getMessages(),
                 'form'             => $form,
-                'nextGame'         => $nextGame,
             )
         );
 
@@ -657,8 +654,6 @@ class PostVoteController extends GameController
         // buildView must be before sendMail because it adds the game template path to the templateStack
         $viewModel = $this->buildView($game);
     
-        $nextGame = $this->getMissionGameService()->checkCondition($game, $lastEntry->getWinner(), true, $lastEntry);
-    
         foreach($post->getPostElements() as $element){
             $fbShareImage = $this->frontendUrl()->fromRoute('', array('channel' => ''), array('force_canonical' => true), false) . $element->getValue();
             break;
@@ -685,7 +680,6 @@ class PostVoteController extends GameController
             'game'             => $game,
             'flashMessages'    => $this->flashMessenger()->getMessages(),
             'form'             => $form,
-            'nextGame'         => $nextGame,
             'socialLinkUrl'    => $socialLinkUrl,
             'post'             => $post
         ));

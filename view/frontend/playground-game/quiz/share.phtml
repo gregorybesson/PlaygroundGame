@@ -78,7 +78,6 @@ $nextStep = $nextStep ? $nextStep : 'result'
                         'statusMail'    => $statusMail,
                         'gameType'      => $this->game->getClassType(),
                         'channel'       => $this->channel,
-                        'nextGame'      => $this->nextGame,
                 )); ?>
                 <div class="col-md-12 text-center">
                     <a class="btn btn-default btn-green" href="<?php echo $this->frontendUrl(''. $this->game->getClassType() . '/' . $nextStep, array('id' => $this->game->getIdentifier(), 'channel' => $this->channel));?>">
