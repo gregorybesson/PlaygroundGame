@@ -46,7 +46,7 @@ class QuizController extends GameController
         $user       = $this->zfcUserAuthentication()->getIdentity();
 
         if (!$user && !$game->getAnonymousAllowed()) {
-            $redirect = urlencode($this->frontendUrl()->fromRoute(''. $game->getClassType() . '/play', array('id' => $game->getIdentifier(), 'channel' => $channel), array('force_canonical' => true)));
+            $redirect = urlencode($this->frontendUrl()->fromRoute($game->getClassType() . '/play', array('id' => $game->getIdentifier(), 'channel' => $channel), array('force_canonical' => true)));
 
             return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('zfcuser/register', array('channel' => $channel)) . '?redirect='.$redirect);
         }
@@ -56,7 +56,7 @@ class QuizController extends GameController
             // the user has already taken part of this game and the participation limit has been reached
             $this->flashMessenger()->addMessage('Vous avez déjà participé!');
 
-            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute(''. $game->getClassType() . '/result',array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute($game->getClassType() . '/result',array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
         }
 
         $questions = $game->getQuestions();

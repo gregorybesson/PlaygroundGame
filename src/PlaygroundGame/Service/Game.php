@@ -307,7 +307,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             $data['publicationDate'] = $data['startDate'];
         }
 
-        if (! isset($data['identifier']) && isset($data['title'])) {
+        if ((! isset($data['identifier']) || empty($data['identifier'])) && isset($data['title'])) {
             $data['identifier'] = $data['title'];
         }
 
