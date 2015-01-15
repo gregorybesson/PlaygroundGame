@@ -44,10 +44,10 @@ class PostVoteFormTest extends \PHPUnit_Framework_TestCase
         $this->em->transactional(function($em) use ($self) {
             $postvoteform = new PostVoteFormEntity();
             $postvoteform->setTitle('Ceci est un titre');
-            $postvoteform = $this->tm->insert($postvoteform);
+            $postvoteform = $self->tm->insert($postvoteform);
             $id = $postvoteform->getId();
-            $this->tm->remove($postvoteform);
-            $this->assertNull($this->tm->findById($id));
+            $self->tm->remove($postvoteform);
+            $self->assertNull($self->tm->findById($id));
         });
         
         $this->em->flush();
