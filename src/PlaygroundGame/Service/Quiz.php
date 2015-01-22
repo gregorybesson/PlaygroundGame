@@ -337,7 +337,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                 } elseif ($question->getType() == 2) {
                     ++$totalQuestions;
                     $quizReplyAnswer = new QuizReplyAnswer();
-
+                    
                     $quizReplyAnswer->setAnswer($a);
                     $quizReplyAnswer->setAnswerId(0);
                     $quizReplyAnswer->setQuestion($question->getQuestion());
@@ -348,6 +348,18 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                     $quizReply->addAnswer($quizReplyAnswer);
                     $quizPoints += 0;
                     $quizCorrectAnswers += 0;
+                    
+                    $qAnswers = $question->getAnswers();
+                    foreach ($qAnswers as $qAnswer) {
+                        if (trim(strip_tags($a)) == trim(strip_tags($qAnswer->getAnswer()))) {
+                            $quizReplyAnswer->setPoints($qAnswer->getPoints());
+                            $quizPoints += $qAnswer->getPoints();
+                            $quizReplyAnswer->setCorrect($qAnswer->getCorrect());
+                            $quizCorrectAnswers += $qAnswer->getCorrect();
+                            // $quizReplyAnswer = $this->getQuizReplyAnswerMapper()->update($quizReplyAnswer);
+                            break;
+                        }
+                    }
                 }
             }
         }
