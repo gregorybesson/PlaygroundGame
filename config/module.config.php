@@ -324,6 +324,26 @@ return array(
                                     )
                                 )
                             ),
+                            'login' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/connexion',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_quiz',
+                                        'action' => 'login'
+                                    )
+                                )
+                            ),
+                            'user-register' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/inscription[/:socialnetwork]',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_quiz',
+                                        'action' => 'userregister'
+                                    )
+                                )
+                            ),
                             'play' => array(
                                 'type' => 'Literal',
                                 'options' => array(
@@ -491,6 +511,26 @@ return array(
                                     )
                                 )
                             ),
+                            'login' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/connexion',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_lottery',
+                                        'action' => 'login'
+                                    )
+                                )
+                            ),
+                            'user-register' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/inscription[/:socialnetwork]',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_lottery',
+                                        'action' => 'userregister'
+                                    )
+                                )
+                            ),
                             'play' => array(
                                 'type' => 'Literal',
                                 'options' => array(
@@ -655,6 +695,26 @@ return array(
                                     'defaults' => array(
                                         'controller' => 'playgroundgame_instantwin',
                                         'action' => 'index'
+                                    )
+                                )
+                            ),
+                            'login' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/connexion',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_instantwin',
+                                        'action' => 'login'
+                                    )
+                                )
+                            ),
+                            'user-register' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/inscription[/:socialnetwork]',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_instantwin',
+                                        'action' => 'userregister'
                                     )
                                 )
                             ),
@@ -846,6 +906,26 @@ return array(
                                                 'action' => 'list'
                                             )
                                         )
+                                    )
+                                )
+                            ),
+                            'login' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/connexion',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_postvote',
+                                        'action' => 'login'
+                                    )
+                                )
+                            ),
+                            'user-register' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/inscription[/:socialnetwork]',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_postvote',
+                                        'action' => 'userregister'
                                     )
                                 )
                             ),
