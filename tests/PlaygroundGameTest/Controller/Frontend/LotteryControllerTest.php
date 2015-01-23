@@ -3,7 +3,7 @@
 namespace PlaygroundGameTest\Controller\Frontend;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
-use \PlaygroundGame\Entity\Game as GameEntity;
+use \PlaygroundGame\Entity\Lottery as GameEntity;
 
 class LotteryControllerTest extends AbstractHttpControllerTestCase
 {

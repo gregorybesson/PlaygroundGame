@@ -2,7 +2,7 @@
 
 namespace PlaygroundGameTest\Service;
 
-use \PlaygroundGame\Entity\Game as GameEntity;
+use \PlaygroundGame\Entity\Lottery as GameEntity;
 
 class GameTest extends \PHPUnit_Framework_TestCase
 {
