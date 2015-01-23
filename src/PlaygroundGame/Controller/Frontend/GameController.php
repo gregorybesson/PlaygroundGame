@@ -20,6 +20,8 @@ class GameController extends AbstractActionController
     protected $prizeService;
 
     protected $options;
+    
+    protected $loginForm;
 
     /**
      * This action acts as a hub : Depending on the first step of the game, it will forward the action to this step 
@@ -839,6 +841,54 @@ class GameController extends AbstractActionController
     
     }
     
+    public function loginAction()
+    {
+        $request = $this->getRequest();
+        $form    = $this->getLoginForm();
+        
+        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
+        
+        $sg = $this->getGameService();
+        
+        $game = $sg->checkGame($identifier, false);
+        if (!$game) {
+            return $this->notFoundAction();
+        }
+    
+        if ($request->isPost()) {
+            
+            $form->setData($request->getPost());
+            
+            if (!$form->isValid()) {
+                $this->flashMessenger()->setNamespace('zfcuser-login-form')->addMessage('Authentication failed. Please try again.');
+            
+                return $this->redirect()->toUrl($this->url()->fromRoute('frontend/' . $game->getClassType() . '/login', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))).($redirect ? '?redirect='.$redirect : ''));
+            }
+            
+            // clear adapters
+            $this->zfcUserAuthentication()->getAuthAdapter()->resetAdapters();
+            $this->zfcUserAuthentication()->getAuthService()->clearIdentity();
+
+            $logged = $this->forward()->dispatch('playgrounduser_user', array('action' => 'ajaxauthenticate'));
+
+            if ($logged) {
+                return $this->redirect()->toUrl($this->url()->fromRoute('frontend/' . $game->getClassType() . '/' . $game->nextStep('index'), array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+            } else {
+                $this->flashMessenger()->setNamespace('zfcuser-login-form')->addMessage('Authentication failed. Please try again.');
+                return $this->redirect()->toUrl($this->url()->fromRoute('frontend/' . $game->getClassType() . '/login', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+            }
+        }
+        
+        $form->setAttribute('action', $this->url()->fromRoute('frontend/'.$game->getClassType().'/login', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+        $viewModel = $this->buildView($game);
+        $viewModel->setVariables(array(
+            'game'             => $game,
+            'form'             => $form,
+            'flashMessages'    => $this->flashMessenger()->getMessages(),
+        ));
+        return $viewModel;
+    }
+    
     /**
      * return ajax response in json format
      *
@@ -922,6 +972,26 @@ class GameController extends AbstractActionController
     {
         $this->options = $options;
 
+        return $this;
+    }
+    
+    public function getLoginForm()
+    {
+        if (!$this->loginForm) {
+            $this->setLoginForm($this->getServiceLocator()->get('zfcuser_login_form'));
+        }
+        return $this->loginForm;
+    }
+    
+    public function setLoginForm($loginForm)
+    {
+        $this->loginForm = $loginForm;
+        $fm = $this->flashMessenger()->setNamespace('zfcuser-login-form')->getMessages();
+        if (isset($fm[0])) {
+            $this->loginForm->setMessages(
+                array('identity' => array($fm[0]))
+            );
+        }
         return $this;
     }
 }
