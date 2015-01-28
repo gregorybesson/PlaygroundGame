@@ -137,7 +137,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
         		ErrorHandler::start();
         		$data['answers'][$i]['upload_image']['name'] = $this->fileNewname($path, $question->getId() . "-" . $data['answers'][$i]['upload_image']['name']);
         		move_uploaded_file($data['answers'][$i]['upload_image']['tmp_name'], $path . $data['answers'][$i]['upload_image']['name']);
-        		$question->setImage($media_url . $data['answers'][$i]['upload_image']['name']);
+        		$answer->setImage($media_url . $data['answers'][$i]['upload_image']['name']);
         		ErrorHandler::stop(true);
         	}
         	
