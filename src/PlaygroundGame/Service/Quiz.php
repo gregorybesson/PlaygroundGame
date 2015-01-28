@@ -124,9 +124,33 @@ class Quiz extends Game implements ServiceManagerAwareInterface
             ErrorHandler::start();
             $image = $question->getImage();
             $image = str_replace($media_url, '', $image);
-            unlink($path .$image);
+            if (file_exists($path .$image)) {
+            	unlink($path .$image);
+            }
             $question->setImage(null);
             ErrorHandler::stop(true);
+        }
+        
+        $i = 0;
+        foreach ($question->getAnswers() as $answer) {
+        	if (!empty($data['answers'][$i]['upload_image']['tmp_name'])) {
+        		ErrorHandler::start();
+        		$data['answers'][$i]['upload_image']['name'] = $this->fileNewname($path, $question->getId() . "-" . $data['answers'][$i]['upload_image']['name']);
+        		move_uploaded_file($data['answers'][$i]['upload_image']['tmp_name'], $path . $data['answers'][$i]['upload_image']['name']);
+        		$question->setImage($media_url . $data['answers'][$i]['upload_image']['name']);
+        		ErrorHandler::stop(true);
+        	}
+        	
+        	/*if(isset($data['delete_image']) && empty($data['upload_image']['tmp_name'])) {
+        		ErrorHandler::start();
+        		$image = $question->getImage();
+        		$image = str_replace($media_url, '', $image);
+        		unlink($path .$image);
+        		$question->setImage(null);
+        		ErrorHandler::stop(true);
+        	}*/
+        	
+        	$i++;
         }
 
         // Max points and correct answers recalculation for the quiz
