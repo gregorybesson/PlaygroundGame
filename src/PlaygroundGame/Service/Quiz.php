@@ -185,28 +185,13 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                         $quizCorrectAnswers = 0;
                         if ($quizReplyAnswers) {
                             foreach ($quizReplyAnswers as $quizReplyAnswer) {
-                                if (2 != $question->getType()) {
-                                    if ($answersarray[$quizReplyAnswer->getAnswerId()]) {
-                                        $updatedAnswer = $answersarray[$quizReplyAnswer->getAnswerId()];
-                                        $quizReplyAnswer->setPoints($updatedAnswer->getPoints());
-                                        $quizPoints += $updatedAnswer->getPoints();
-                                        $quizReplyAnswer->setCorrect($updatedAnswer->getCorrect());
-                                        $quizCorrectAnswers += $updatedAnswer->getCorrect();
-                                        $quizReplyAnswer = $this->getQuizReplyAnswerMapper()->update($quizReplyAnswer);
-                                    }
-                                } else {
-                                    // question is a textarea
-                                    // search for a matching answer
-                                    foreach ($answers as $answer) {
-                                        if (trim(strip_tags($answer->getAnswer())) == trim(strip_tags($quizReplyAnswer->getAnswer()))) {
-                                            $quizReplyAnswer->setPoints($answer->getPoints());
-                                            $quizPoints += $answer->getPoints();
-                                            $quizReplyAnswer->setCorrect($answer->getCorrect());
-                                            $quizCorrectAnswers += $answer->getCorrect();
-                                            $quizReplyAnswer = $this->getQuizReplyAnswerMapper()->update($quizReplyAnswer);
-                                            break;
-                                        }
-                                    }
+                            	if ($answersarray[$quizReplyAnswer->getAnswerId()]) {
+                                    $updatedAnswer = $answersarray[$quizReplyAnswer->getAnswerId()];
+                                    $quizReplyAnswer->setPoints($updatedAnswer->getPoints());
+                                    $quizPoints += $updatedAnswer->getPoints();
+                                    $quizReplyAnswer->setCorrect($updatedAnswer->getCorrect());
+                                    $quizCorrectAnswers += $updatedAnswer->getCorrect();
+                                    $quizReplyAnswer = $this->getQuizReplyAnswerMapper()->update($quizReplyAnswer);
                                 }
                             }
                         }
@@ -372,18 +357,6 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                     $quizReply->addAnswer($quizReplyAnswer);
                     $quizPoints += 0;
                     $quizCorrectAnswers += 0;
-                    
-                    $qAnswers = $question->getAnswers();
-                    foreach ($qAnswers as $qAnswer) {
-                        if (trim(strip_tags($a)) == trim(strip_tags($qAnswer->getAnswer()))) {
-                            $quizReplyAnswer->setPoints($qAnswer->getPoints());
-                            $quizPoints += $qAnswer->getPoints();
-                            $quizReplyAnswer->setCorrect($qAnswer->getCorrect());
-                            $quizCorrectAnswers += $qAnswer->getCorrect();
-                            // $quizReplyAnswer = $this->getQuizReplyAnswerMapper()->update($quizReplyAnswer);
-                            break;
-                        }
-                    }
                 }
             }
         }
