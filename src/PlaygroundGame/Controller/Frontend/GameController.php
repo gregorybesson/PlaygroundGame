@@ -114,6 +114,38 @@ class GameController extends AbstractActionController
     }
 
     /**
+      * leaderboardAction
+      *
+      * @return ViewModel $viewModel
+      */
+    public function leaderboardAction()
+    {
+
+        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
+        $sg = $this->getGameService();
+
+        $game = $sg->checkGame($identifier);
+        if (!$game || $game->isClosed()) {
+            return $this->notFoundAction();
+        }
+
+        $beforeLayout = $this->layout()->getTemplate();
+        $subViewModel = $this->forward()->dispatch('playgroundreward', array('action' => 'leaderboard'));
+        
+        // suite au forward, le template de layout a changé, je dois le rétablir...
+        $this->layout()->setTemplate($beforeLayout);
+
+        // give the ability to the game to have its customized look and feel.
+        $templatePathResolver = $this->getServiceLocator()->get('Zend\View\Resolver\TemplatePathStack');
+        $l = $templatePathResolver->getPaths();
+
+        $templatePathResolver->addPath($l[0].'custom/'.$game->getIdentifier());
+
+        return $subViewModel;
+
+    }
+
+    /**
      * This action has been designed to be called by other controllers
      * It gives the ability to display an information form and persist it in the game entry
      *

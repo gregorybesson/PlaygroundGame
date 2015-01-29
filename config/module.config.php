@@ -486,7 +486,20 @@ return array(
                                         'action' => 'share'
                                     )
                                 )
-                            )
+                            ),
+                            'leaderboard' => array(
+                                'type' => 'segment',
+                                'options' => array(
+                                    'route' => '/leaderboard[/:filter][/:p]',
+                                    'constraints' => array(
+                                        'filter' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                    ),
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_quiz',
+                                        'action'     => 'leaderboard'
+                                    ),
+                                ),
+                            ),
                         )
                     ),
 
@@ -673,7 +686,20 @@ return array(
                                         'action' => 'share'
                                     )
                                 )
-                            )
+                            ),
+                            'leaderboard' => array(
+                                'type' => 'segment',
+                                'options' => array(
+                                    'route' => '/leaderboard[/:filter][/:p]',
+                                    'constraints' => array(
+                                        'filter' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                    ),
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_lottery',
+                                        'action'     => 'leaderboard'
+                                    ),
+                                ),
+                            ),
                         )
                     ),
 
@@ -860,7 +886,20 @@ return array(
                                         'action' => 'share'
                                     )
                                 )
-                            )
+                            ),
+                            'leaderboard' => array(
+                                'type' => 'segment',
+                                'options' => array(
+                                    'route' => '/leaderboard[/:filter][/:p]',
+                                    'constraints' => array(
+                                        'filter' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                    ),
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_instantwin',
+                                        'action'     => 'leaderboard'
+                                    ),
+                                ),
+                            ),
                         )
                     ),
 
@@ -1137,7 +1176,20 @@ return array(
                                         'action' => 'share'
                                     )
                                 )
-                            )
+                            ),
+                            'leaderboard' => array(
+                                'type' => 'segment',
+                                'options' => array(
+                                    'route' => '/leaderboard[/:filter][/:p]',
+                                    'constraints' => array(
+                                        'filter' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                    ),
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_postvote',
+                                        'action'     => 'leaderboard'
+                                    ),
+                                ),
+                            ),
                         )
                     ),
                     'prizecategories' => array(
