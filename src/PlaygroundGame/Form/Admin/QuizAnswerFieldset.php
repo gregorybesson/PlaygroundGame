@@ -78,6 +78,34 @@ class QuizAnswerFieldset extends Fieldset
                 'class' => 'delete-button',
             )
         ));
-
+        
+        $this->add(array(
+            'type' => 'Zend\Form\Element\File',
+            'name' => 'upload_image',
+            'options' => array(
+                'label' => $translator->translate('Image', 'playgroundgame'),
+            ),
+            'attributes' => array(
+                'cols' => '10',
+                'rows' => '10',
+//                 'id' => 'image',
+//                 'multiple' => true
+            )
+        ));
+//         $this->add(array(
+//             'name' => 'image',
+//             'type'  => 'Zend\Form\Element\Hidden',
+//             'attributes' => array(
+//                 'value' => '',
+//             ),
+//         ));
+//         $this->add(array(
+//             'name' => 'delete_image',
+//             'type' => 'Zend\Form\Element\Hidden',
+//             'attributes' => array(
+//                 'value' => '',
+//                 'class' => 'delete_image',
+//             ),
+//         ));
     }
 }
