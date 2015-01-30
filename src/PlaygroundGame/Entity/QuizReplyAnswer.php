@@ -63,6 +63,11 @@ class QuizReplyAnswer implements InputFilterAwareInterface
     protected $correct;
 
     /**
+     * @ORM\Column(name="answer_data", type="text", nullable=true)
+     */
+    protected $answerData;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     protected $created_at;
@@ -235,6 +240,24 @@ class QuizReplyAnswer implements InputFilterAwareInterface
     {
         $this->correct = $correct;
 
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAnswerData()
+    {
+        return $this->answerData;
+    }
+
+    /**
+     * @param string $playerData
+     */
+    public function setAnswerData($answerData)
+    {
+        $this->answerData = $answerData;
+        
         return $this;
     }
 
