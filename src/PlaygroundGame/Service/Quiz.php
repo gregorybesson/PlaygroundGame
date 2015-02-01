@@ -114,7 +114,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
 
         if (!empty($data['upload_image']['tmp_name'])) {
             ErrorHandler::start();
-			$data['upload_image']['name'] = $this->fileNewname($path, $question->getId() . "-" . $data['upload_image']['name']);
+            $data['upload_image']['name'] = $this->fileNewname($path, $question->getId() . "-" . $data['upload_image']['name']);
             move_uploaded_file($data['upload_image']['tmp_name'], $path . $data['upload_image']['name']);
             $question->setImage($media_url . $data['upload_image']['name']);
             ErrorHandler::stop(true);
@@ -125,7 +125,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
             $image = $question->getImage();
             $image = str_replace($media_url, '', $image);
             if (file_exists($path .$image)) {
-            	unlink($path .$image);
+                unlink($path .$image);
             }
             $question->setImage(null);
             ErrorHandler::stop(true);
@@ -133,24 +133,24 @@ class Quiz extends Game implements ServiceManagerAwareInterface
         
         $i = 0;
         foreach ($question->getAnswers() as $answer) {
-        	if (!empty($data['answers'][$i]['upload_image']['tmp_name'])) {
-        		ErrorHandler::start();
-        		$data['answers'][$i]['upload_image']['name'] = $this->fileNewname($path, $question->getId() . "-" . $data['answers'][$i]['upload_image']['name']);
-        		move_uploaded_file($data['answers'][$i]['upload_image']['tmp_name'], $path . $data['answers'][$i]['upload_image']['name']);
-        		$answer->setImage($media_url . $data['answers'][$i]['upload_image']['name']);
-        		ErrorHandler::stop(true);
-        	}
-        	
-        	/*if(isset($data['delete_image']) && empty($data['upload_image']['tmp_name'])) {
-        		ErrorHandler::start();
-        		$image = $question->getImage();
-        		$image = str_replace($media_url, '', $image);
-        		unlink($path .$image);
-        		$question->setImage(null);
-        		ErrorHandler::stop(true);
-        	}*/
-        	
-        	$i++;
+            if (!empty($data['answers'][$i]['upload_image']['tmp_name'])) {
+                ErrorHandler::start();
+                $data['answers'][$i]['upload_image']['name'] = $this->fileNewname($path, $question->getId() . "-" . $data['answers'][$i]['upload_image']['name']);
+                move_uploaded_file($data['answers'][$i]['upload_image']['tmp_name'], $path . $data['answers'][$i]['upload_image']['name']);
+                $answer->setImage($media_url . $data['answers'][$i]['upload_image']['name']);
+                ErrorHandler::stop(true);
+            }
+            
+            /*if(isset($data['delete_image']) && empty($data['upload_image']['tmp_name'])) {
+                ErrorHandler::start();
+                $image = $question->getImage();
+                $image = str_replace($media_url, '', $image);
+                unlink($path .$image);
+                $question->setImage(null);
+                ErrorHandler::stop(true);
+            }*/
+            
+            $i++;
         }
 
         // Max points and correct answers recalculation for the quiz
@@ -322,6 +322,9 @@ class Quiz extends Game implements ServiceManagerAwareInterface
 
         foreach ($data as $group) {
             foreach ($group as $q => $a) {
+                if (strpos($q, '-data', strlen($q) - 5) !== false) {
+                    continue; // answer data is processed below
+                }
                 $question = $this->getQuizQuestionMapper()->findById((int) str_replace('q', '', $q));
                 ++$totalQuestions;
                 if (is_array($a)) {
@@ -339,6 +342,10 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                             $quizReply->addAnswer($quizReplyAnswer);
                             $quizPoints += $answer->getPoints();
                             $quizCorrectAnswers += $answer->getCorrect();
+
+                            if (isset($group[$q.'-'.$answer_id.'-data'])) {
+                                $quizReplyAnswer->setAnswerData($group[$q.'-'.$answer_id.'-data']);
+                            }
                         }
                     }
                 } elseif ($question->getType() == 0 || $question->getType() == 1) {
@@ -356,6 +363,9 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                         $quizReply->addAnswer($quizReplyAnswer);
                         $quizPoints += $answer->getPoints();
                         $quizCorrectAnswers += $answer->getCorrect();
+                        if (isset($group[$q.'-'.$a.'-data'])) {
+                            $quizReplyAnswer->setAnswerData($group[$q.'-'.$a.'-data']);
+                        }
                     }
                 } elseif ($question->getType() == 2) {
                     ++$totalQuestions;
@@ -381,6 +391,10 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                             // $quizReplyAnswer = $this->getQuizReplyAnswerMapper()->update($quizReplyAnswer);
                             break;
                         }
+                    }
+
+                    if (isset($group[$q.'-'.$a.'-data'])) {
+                        $quizReplyAnswer->setAnswerData($group[$q.'-'.$a.'-data']);
                     }
                 }
             }
