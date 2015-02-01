@@ -72,8 +72,8 @@ class QuizController extends GameController
         $explanations = array();
         foreach ($questions as $q) {
             if (($game->getQuestionGrouping() > 0 && $i % $game->getQuestionGrouping() == 0) || ($i == 0 && $game->getQuestionGrouping() == 0)) {
-            	$fieldsetName = 'questionGroup' . ++ $j;
-            	$fieldset = new Fieldset($fieldsetName);
+                $fieldsetName = 'questionGroup' . ++ $j;
+                $fieldset = new Fieldset($fieldsetName);
             }
             $name = 'q' . $q->getId();
             $fieldsetFilter = new \Zend\InputFilter\InputFilter();
@@ -96,6 +96,8 @@ class QuizController extends GameController
                 $element->setValueOptions($valuesSortedByPosition);
                 $element->setLabelOptions(array("disable_html_escape"=>true));
 
+                $elementData = new Element\Hidden($name.'-data');
+
             } elseif ($q->getType() == 1) {
                 $element = new Element\MultiCheckbox($name);
                 $values = array();
@@ -107,6 +109,7 @@ class QuizController extends GameController
                         'answer' => $a->getAnswer(),
                     );
                     $explanations[$a->getAnswer()] = $a->getExplanation();
+                    $elementData[$a->getId()] = new Element\Hidden($name.'-'.$a->getId().'-data');
                 }
 
                 foreach ($values as $key => $value) {
@@ -118,24 +121,32 @@ class QuizController extends GameController
 
             } elseif ($q->getType() == 2) {
                 $element = new Element\Textarea($name);
+                $elementData = new Element\Hidden($name.'-data');
             }
 
             $element->setLabel($q->getQuestion());
             $fieldset->add($element);
+            if (is_array($elementData)) {
+                foreach ($elementData as $id => $e) {
+                    $fieldset->add($e);
+                }
+            } else {
+                $fieldset->add($elementData);
+            }
 
             $fieldsetFilter->add($factory->createInput(array(
-            	'name'     => $name,
-            	'required' => true,
-            	'validators'=>array(
-           			array(
-            			'name'=>'NotEmpty',
-            			'options'=>array(
-            				'messages'=>array(
-            					'isEmpty' => 'Merci de répondre à la question.',
-            				),
-            			),
-            		),
-            	)
+                'name'     => $name,
+                'required' => true,
+                'validators'=>array(
+                    array(
+                        'name'=>'NotEmpty',
+                        'options'=>array(
+                            'messages'=>array(
+                                'isEmpty' => 'Merci de répondre à la question.',
+                            ),
+                        ),
+                    ),
+                )
             )));
 
             $i ++;
@@ -154,7 +165,7 @@ class QuizController extends GameController
 
             // Improve it : I don't validate the form in a timer quiz as no answer is mandatory
             if ($game->getTimer() || $form->isValid()) {
-            	unset($data['submitForm']);
+                unset($data['submitForm']);
                 $entry = $this->getGameService()->createQuizReply($data, $game, $user);
             }
 
@@ -181,7 +192,7 @@ class QuizController extends GameController
 
         $statusMail = null;
         $prediction = false;
-		$userTimer = array();
+        $userTimer = array();
 
         $game = $sg->checkGame($identifier);
         if (!$game || $game->isClosed()) {
@@ -224,15 +235,15 @@ class QuizController extends GameController
             $ratioCorrectAnswers = 100;
         }
 
-		if($game->getTimer()){
-			$timer = $sg->getEntryMapper()->findOneBy(array('game' => $game , 'user'=> $user));
-			$start = $timer->getCreatedAt()->format('U');
-			$end = $timer->getUpdatedAt()->format('U');
-			$userTimer = array(
-			   'ratio' 	=> $ratioCorrectAnswers,
-			   'timer' 	=> $end - $start,
-			);
-		}
+        if($game->getTimer()){
+            $timer = $sg->getEntryMapper()->findOneBy(array('game' => $game , 'user'=> $user));
+            $start = $timer->getCreatedAt()->format('U');
+            $end = $timer->getUpdatedAt()->format('U');
+            $userTimer = array(
+               'ratio'  => $ratioCorrectAnswers,
+               'timer'  => $end - $start,
+            );
+        }
 
         // Je prépare le tableau des bonnes réponses trouvées et non trouvées
         $gameCorrectAnswers = array();
@@ -291,9 +302,9 @@ class QuizController extends GameController
             'maxCorrectAnswers'   => $maxCorrectAnswers,
             'ratioCorrectAnswers' => $ratioCorrectAnswers,
             'gameCorrectAnswers'  => $gameCorrectAnswers,
-            'socialLinkUrl' 	  => $socialLinkUrl,
-            'secretKey'		  	  => $secretKey,
-            'userTimer' 		  => $userTimer
+            'socialLinkUrl'       => $socialLinkUrl,
+            'secretKey'           => $secretKey,
+            'userTimer'           => $userTimer
         ));
 
         return $viewModel;

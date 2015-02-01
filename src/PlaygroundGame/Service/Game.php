@@ -1870,6 +1870,50 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                 )));
         
             }
+            if (isset($element->line_dropdown)) {
+
+                $attributes  = $element->line_dropdown[0];
+                $name        = isset($attributes->name)? $attributes->name : '';
+                $label       = isset($attributes->data->label)? $attributes->data->label : '';
+        
+                $required = false;
+                $class       = isset($attributes->data->class)? $attributes->data->class : '';
+                $id          = isset($attributes->data->id)? $attributes->data->id : '';
+                $lengthMin   = isset($attributes->data->length)? $attributes->data->length->min : '';
+                $lengthMax   = isset($attributes->data->length)? $attributes->data->length->max : '';
+                $dropdownValues   = isset($attributes->data->dropdownValues)? $attributes->data->dropdownValues : array();
+        
+                $element = new Element\Select($name);
+                $element->setLabel($label);
+                $element->setAttributes(
+                    array(
+                        'name'     => $name,
+                        'required'      => $required,
+                        'allowEmpty'    => !$required,
+                        'class'         => $class,
+                        'id'            => $id
+                    )
+                );
+                $values = array();
+                foreach($dropdownValues as $value){
+                    $values[] = $value->dropdown_label;
+                }
+                $element->setValueOptions($values);
+                $form->add($element);
+        
+                $options = array();
+                $options['encoding'] = 'UTF-8';
+                $options['disable_inarray_validator'] = true;
+        
+                $element->setOptions($options);
+        
+                $inputFilter->add($factory->createInput(array(
+                    'name'     => $name,
+                    'required' => $required,
+                    'allowEmpty' => !$required,
+                )));
+        
+            }
             if (isset($element->line_paragraph)) {
                 $attributes  = $element->line_paragraph[0];
                 $name        = isset($attributes->name)? $attributes->name : '';
