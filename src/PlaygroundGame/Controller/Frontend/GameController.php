@@ -1066,9 +1066,18 @@ class GameController extends AbstractActionController
                 $post['credential'] = isset($post['password'])?$post['password']:'';
                 $request->setPost(new Parameters($post));
 
-                return $this->forward()->dispatch('playgroundgame_' . $game->getClassType, array(
-                    'action' => 'login'
-                ));
+                // clear adapters
+                $this->zfcUserAuthentication()->getAuthAdapter()->resetAdapters();
+                $this->zfcUserAuthentication()->getAuthService()->clearIdentity();
+
+                $logged = $this->forward()->dispatch('playgrounduser_user', array('action' => 'ajaxauthenticate'));
+
+                if ($logged) {
+                    return $this->redirect()->toUrl($this->url()->fromRoute('frontend/' . $game->getClassType() . '/' . $game->nextStep('index'), array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+                } else {
+                    $this->flashMessenger()->setNamespace('zfcuser-login-form')->addMessage('Authentication failed. Please try again.');
+                    return $this->redirect()->toUrl($this->url()->fromRoute('frontend/' . $game->getClassType() . '/login', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+                }
             }
         //}
 
