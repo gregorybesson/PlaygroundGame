@@ -8,6 +8,9 @@ use Zend\Session\Container;
 use PlaygroundGame\Service\GameService;
 use PlaygroundGame\Service\Prize as PrizeService;
 use Zend\View\Model\JsonModel;
+use ZfcUser\Options\UserControllerOptionsInterface;
+use Zend\Http\PhpEnvironment\Response;
+use Zend\Stdlib\Parameters;
 
 class GameController extends AbstractActionController
 {
@@ -22,6 +25,12 @@ class GameController extends AbstractActionController
     protected $options;
     
     protected $loginForm;
+    
+    protected $registerForm;
+    
+    protected $userService;
+    
+    protected $userOptions;
 
     /**
      * This action acts as a hub : Depending on the first step of the game, it will forward the action to this step 
@@ -920,6 +929,154 @@ class GameController extends AbstractActionController
         ));
         return $viewModel;
     }
+
+    public function userregisterAction()
+    {
+        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
+        $sg = $this->getGameService();
+        $game = $sg->checkGame($identifier, false);
+        if ($this->zfcUserAuthentication()->hasIdentity()) {
+            return $this->redirect()->toUrl($this->url()->fromRoute('frontend/'.$game->getClassType().'/'.$game->nextStep('index'), array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+        }
+        $request = $this->getRequest();
+        $service = $this->getUserService();
+        $form = $this->getRegisterForm();
+        $socialnetwork = $this->params()->fromRoute('socialnetwork', false);
+        $form->setAttribute('action', $this->url()->fromRoute('frontend/'.$game->getClassType().'/user-register', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+        $params = array();
+        $socialCredentials = array();
+
+        if ($this->getUserOptions()->getUseRedirectParameterIfPresent() && $request->getQuery()->get('redirect')) {
+            $redirect = $request->getQuery()->get('redirect');
+        } else {
+            $redirect = false;
+        }
+
+        if ($socialnetwork) {
+            $infoMe = null;
+            $infoMe = $this->getProviderService()->getInfoMe($socialnetwork);
+
+            if (!empty($infoMe)) {
+                $user = $this->getProviderService()->getUserProviderMapper()->findUserByProviderId($infoMe->identifier, $socialnetwork);
+
+                if ($user || $service->getOptions()->getCreateUserAutoSocial() == true) {
+                    //on le dirige vers l'action d'authentification
+                    if(! $redirect && $this->getUserOptions()->getLoginRedirectRoute() != ''){
+                        $redirect = $this->url()->fromRoute('frontend/'.$game->getClassType().'/login', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')));
+                    }
+                    $redir = $this->url()
+                        ->fromRoute('frontend/'.$game->getClassType().'/login', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))) .'/' . $socialnetwork . ($redirect ? '?redirect=' . $redirect : '');
+
+                    return $this->redirect()->toUrl($redir);
+                }
+
+                // Je retire la saisie du login/mdp
+                $form->setAttribute('action', $this->url()->fromRoute('frontend/'.$game->getClassType().'/user-register', array('id' => $game->getIdentifier(), 'socialnetwork' => $socialnetwork, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+                $form->remove('password');
+                $form->remove('passwordVerify');
+
+                $birthMonth = $infoMe->birthMonth;
+                if (strlen($birthMonth) <= 1){
+                    $birthMonth = '0'.$birthMonth;
+                }
+                $birthDay = $infoMe->birthDay;
+                if (strlen($birthDay) <= 1){
+                    $birthDay = '0'.$birthDay;
+                }
+                $title = '';
+                $gender = $infoMe->gender;
+                if($gender == 'female'){
+                    $title = 'Me';
+                } else {
+                    $title = 'M';
+                }
+
+                $params = array(
+                    //'birth_year'  => $infoMe->birthYear,
+                    'title'      => $title,
+                    'dob'      => $birthDay.'/'.$birthMonth.'/'.$infoMe->birthYear,
+                    'firstname'   => $infoMe->firstName,
+                    'lastname'    => $infoMe->lastName,
+                    'email'       => $infoMe->email,
+                    'postalCode' => $infoMe->zip,
+                );
+                $socialCredentials = array(
+                    'socialNetwork' => strtolower($socialnetwork),
+                    'socialId'      => $infoMe->identifier,
+                );
+            }
+        }
+
+        $redirectUrl = $this->url()->fromRoute('frontend/'.$game->getClassType().'/user-register', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))) .($socialnetwork ? '/' . $socialnetwork : ''). ($redirect ? '?redirect=' . $redirect : '');
+        $prg = $this->prg($redirectUrl, true);
+
+        if ($prg instanceof Response) {
+            return $prg;
+        } elseif ($prg === false) {
+            $form->setData($params);
+            $viewModel = $this->buildView($game);
+            $viewModel->setVariables(array(
+                'registerForm' => $form,
+                'enableRegistration' => $this->getUserOptions()->getEnableRegistration(),
+                'redirect' => $redirect,
+                'game'             => $game,
+                'flashMessages'    => $this->flashMessenger()->getMessages(),
+            ));
+            return $viewModel;
+        }
+
+        $post = $prg;
+        $post = array_merge(
+            $post,
+            $socialCredentials
+        );
+        
+        $user = $service->register($post);
+
+        if (! $user) {
+            $viewModel = $this->buildView($game);
+            $viewModel->setVariables(array(
+                'registerForm' => $form,
+                'enableRegistration' => $this->getUserOptions()->getEnableRegistration(),
+                'redirect' => $redirect,
+                'game'             => $game,
+                'flashMessages'    => $this->flashMessenger()->getMessages(),
+            ));
+            
+            return $viewModel;
+        }
+
+        //if (!$socialnetwork) {
+
+            if ($service->getOptions()->getEmailVerification()) {
+
+                $vm = new ViewModel(array('userEmail' => $user->getEmail()));
+                $vm->setTemplate('playground-user/register/registermail');
+
+                return $vm;
+
+                //return $this->redirect()->toUrl($this->url()->fromRoute('frontend/zfcuser/registermail', array('userId' => $user->getId(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+            } elseif ($service->getOptions()->getLoginAfterRegistration()) {
+                $identityFields = $service->getOptions()->getAuthIdentityFields();
+                if (in_array('email', $identityFields)) {
+                    $post['identity'] = $user->getEmail();
+                } elseif (in_array('username', $identityFields)) {
+                    $post['identity'] = $user->getUsername();
+                }
+                $post['credential'] = isset($post['password'])?$post['password']:'';
+                $request->setPost(new Parameters($post));
+
+                return $this->forward()->dispatch('playgroundgame_' . $game->getClassType, array(
+                    'action' => 'login'
+                ));
+            }
+        //}
+
+        // TODO: Add the redirect parameter here...
+        $redirect = $this->url()->fromRoute('frontend/'.$game->getClassType().'/login', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))) . ($socialnetwork ? '/' . $socialnetwork : ''). ($redirect ? '?redirect=' . $redirect : '');
+
+        return $this->redirect()->toUrl($redirect);
+    }
     
     /**
      * return ajax response in json format
@@ -1026,4 +1183,61 @@ class GameController extends AbstractActionController
         }
         return $this;
     }
+    
+    public function getRegisterForm()
+    {
+        if (!$this->registerForm) {
+            $this->setRegisterForm($this->getServiceLocator()->get('zfcuser_register_form'));
+        }
+        return $this->registerForm;
+    }
+    
+    public function setRegisterForm($registerForm)
+    {
+        $this->registerForm = $registerForm;
+    }
+    
+    /**
+     * Getters/setters for DI stuff
+     */
+    
+    public function getUserService()
+    {
+        if (!$this->userService) {
+            $this->userService = $this->getServiceLocator()->get('zfcuser_user_service');
+        }
+        return $this->userService;
+    }
+    
+    public function setUserService(UserService $userService)
+    {
+        $this->userService = $userService;
+        return $this;
+    }
+    
+    /**
+     * set options
+     *
+     * @param UserControllerOptionsInterface $options
+     * @return UserController
+     */
+    public function setUserOptions(UserControllerOptionsInterface $options)
+    {
+        $this->userOptions = $options;
+        return $this;
+    }
+    
+    /**
+     * get options
+     *
+     * @return UserControllerOptionsInterface
+     */
+    public function getUserOptions()
+    {
+        if (!$this->userOptions instanceof UserControllerOptionsInterface) {
+            $this->setUserOptions($this->getServiceLocator()->get('zfcuser_module_options'));
+        }
+        return $this->userOptions;
+    }
+    
 }
