@@ -1030,8 +1030,8 @@ class GameController extends AbstractActionController
             $post,
             $socialCredentials
         );
-        
-        $user = $service->register($post);
+
+        $user = $service->register($post, 'playgroundgame_register_form');
 
         if (! $user) {
             $viewModel = $this->buildView($game);
@@ -1196,7 +1196,7 @@ class GameController extends AbstractActionController
     public function getRegisterForm()
     {
         if (!$this->registerForm) {
-            $this->setRegisterForm($this->getServiceLocator()->get('zfcuser_register_form'));
+            $this->setRegisterForm($this->getServiceLocator()->get('playgroundgame_register_form'));
         }
         return $this->registerForm;
     }

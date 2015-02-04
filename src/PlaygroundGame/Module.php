@@ -501,6 +501,26 @@ class Module
                     return $form;
                 },
 
+                'playgroundgame_register_form' => function ($sm) {
+                    $translator = $sm->get('translator');
+                    $zfcUserOptions = $sm->get('zfcuser_module_options');
+                    $form = new Form\Frontend\Register(null, $zfcUserOptions, $translator, $sm );
+                    //$form->setCaptchaElement($sm->get('zfcuser_captcha_element'));
+                    $form->setInputFilter(new \ZfcUser\Form\RegisterFilter(
+                        new \ZfcUser\Validator\NoRecordExists(array(
+                            'mapper' => $sm->get('zfcuser_user_mapper'),
+                            'key'    => 'email'
+                        )),
+                        new \ZfcUser\Validator\NoRecordExists(array(
+                            'mapper' => $sm->get('zfcuser_user_mapper'),
+                            'key'    => 'username'
+                        )),
+                        $zfcUserOptions
+                    ));
+
+                    return $form;
+                },
+
                 'playgroundgame_import_form' => function(\Zend\ServiceManager\ServiceManager $sm) {
                     $translator = $sm->get('translator');
                     $form = new Form\Admin\Import(null, $sm, $translator);
