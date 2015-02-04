@@ -22,6 +22,11 @@ class Register extends \PlaygroundUser\Form\Register
         $this->setServiceManager($serviceManager);
         parent::__construct($name, $registerOptions, $translator, $serviceManager);
 
+        $this->get('optin')
+            ->setAttributes(array('type' => 'checkbox'));
+
+        $this->get('optinPartner')
+            ->setAttributes(array('type' => 'checkbox'));
 
         $this->add(array(
             'name' => 'address',
@@ -32,6 +37,18 @@ class Register extends \PlaygroundUser\Form\Register
                 'type' => 'text',
                 'class' => 'large-input required',
                 'placeholder' => $translator->translate('Address', 'playgrounduser')
+            )
+        ));
+
+        $this->add(array(
+            'name' => 'address2',
+            'options' => array(
+                'label' => $translator->translate('Address2', 'playgrounduser')
+            ),
+            'attributes' => array(
+                'type' => 'text',
+                'class' => 'large-input required',
+                'placeholder' => $translator->translate('Address2', 'playgrounduser')
             )
         ));
 
