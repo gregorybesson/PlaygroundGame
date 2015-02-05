@@ -64,8 +64,7 @@ class Module
                                 'options' => array(
                                     'route' => $v['url'],
                                     'defaults' => array(
-                                        'id' => $k,
-                                        'channel'=> 'embed'
+                                        'id' => $k
                                     )
                                 ),
                                 'may_terminate' => true
