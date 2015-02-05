@@ -322,7 +322,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
 
         foreach ($data as $group) {
             foreach ($group as $q => $a) {
-                if (strlen($q) <= 5 || strpos($q, '-data', strlen($q) - 5) !== false) {
+                if (strlen($q) > 5 && strpos($q, '-data', strlen($q) - 5) !== false) {
                     continue; // answer data is processed below
                 }
                 $question = $this->getQuizQuestionMapper()->findById((int) str_replace('q', '', $q));
