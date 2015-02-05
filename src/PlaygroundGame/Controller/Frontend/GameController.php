@@ -138,8 +138,11 @@ class GameController extends AbstractActionController
             return $this->notFoundAction();
         }
 
+        $filter = $this->getEvent()->getRouteMatch()->getParam('filter');
+        $p = $this->getEvent()->getRouteMatch()->getParam('p');
+
         $beforeLayout = $this->layout()->getTemplate();
-        $subViewModel = $this->forward()->dispatch('playgroundreward', array('action' => 'leaderboard'));
+        $subViewModel = $this->forward()->dispatch('playgroundreward', array('action' => 'leaderboard', 'filter' => $filter, 'p' => $p));
         
         // suite au forward, le template de layout a changé, je dois le rétablir...
         $this->layout()->setTemplate($beforeLayout);
