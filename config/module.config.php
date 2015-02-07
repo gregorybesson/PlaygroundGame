@@ -344,6 +344,16 @@ return array(
                                     )
                                 )
                             ),
+                            'optin' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/optin[/:gameId]',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_quiz',
+                                        'action' => 'optin'
+                                    )
+                                )
+                            ),
                             'play' => array(
                                 'type' => 'Literal',
                                 'options' => array(
@@ -544,6 +554,16 @@ return array(
                                     )
                                 )
                             ),
+                            'optin' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/optin[/:gameId]',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_lottery',
+                                        'action' => 'optin'
+                                    )
+                                )
+                            ),
                             'play' => array(
                                 'type' => 'Literal',
                                 'options' => array(
@@ -741,6 +761,16 @@ return array(
                                     'defaults' => array(
                                         'controller' => 'playgroundgame_instantwin',
                                         'action' => 'userregister'
+                                    )
+                                )
+                            ),
+                            'optin' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/optin[/:gameId]',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_instantwin',
+                                        'action' => 'optin'
                                     )
                                 )
                             ),
@@ -965,6 +995,16 @@ return array(
                                     'defaults' => array(
                                         'controller' => 'playgroundgame_postvote',
                                         'action' => 'userregister'
+                                    )
+                                )
+                            ),
+                            'optin' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/optin[/:gameId]',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_postvote',
+                                        'action' => 'optin'
                                     )
                                 )
                             ),

@@ -884,6 +884,29 @@ class GameController extends AbstractActionController
         return $this->successJson();
     
     }
+
+    public function optinAction()
+    {
+        $request = $this->getRequest();
+        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
+    
+        $sg = $this->getGameService();
+    
+        $game = $sg->checkGame($identifier, false);
+        if (!$game) {
+            return $this->notFoundAction();
+        }
+
+        if ($request->isPost()) {
+            $data['optin'] = ($this->params()->fromPost('optin'))? 1:0;
+            $data['optinPartner'] = ($this->params()->fromPost('optinPartner'))? 1:0;
+
+            $this->getUserService()->updateNewsletter($data);
+
+        }
+
+        return $this->redirect()->toUrl($this->url()->fromRoute('frontend/' . $game->getClassType() . '/index', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+    }
     
     public function loginAction()
     {
