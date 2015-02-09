@@ -225,6 +225,7 @@ class QuizController extends GameController
                     ++$userCorrectAnswers;
                 }
                 $userAnswers[$answer->getQuestionId()][$answer->getAnswerId()] = true;
+                $userAnswers[$answer->getQuestionId()]['answer'] = $answer->getAnswer();
             }
         }
 
@@ -251,9 +252,10 @@ class QuizController extends GameController
         foreach ($questions as $q) {
             foreach ($q->getAnswers() as $a) {
                 if ($a->getCorrect()) {
-                    $gameCorrectAnswers[$q->getId()]['question'] = $q->getQuestion();
+                    $gameCorrectAnswers[$q->getId()]['question'] = $q;
                     $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['answer'] = $a->getAnswer();
                     $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['explanation'] = $a->getExplanation();
+                    $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['userAnswer'] = $userAnswers[$q->getId()]['answer'];
 
                     if (isset($correctAnswers[$q->getId()]) && isset($correctAnswers[$q->getId()][$a->getId()])) {
                         $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['found'] = true;
@@ -263,11 +265,12 @@ class QuizController extends GameController
 
                     $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['correctAnswers'] = true;
                 } else {
-                    $gameCorrectAnswers[$q->getId()]['question'] = $q->getQuestion();
+                    $gameCorrectAnswers[$q->getId()]['question'] = $q;
                     $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['answer'] = $a->getAnswer();
                     $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['explanation'] = $a->getExplanation();
                     $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['correctAnswers'] = false;
-
+                    $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['userAnswer'] = $userAnswers[$q->getId()]['answer'];
+                    
                     if (isset($userAnswers[$q->getId()]) && isset($userAnswers[$q->getId()][$a->getId()])) {
                         $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['yourChoice'] = true;
                     }else {
