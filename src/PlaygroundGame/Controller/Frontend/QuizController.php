@@ -255,7 +255,7 @@ class QuizController extends GameController
                     $gameCorrectAnswers[$q->getId()]['question'] = $q;
                     $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['answer'] = $a->getAnswer();
                     $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['explanation'] = $a->getExplanation();
-                    $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['userAnswer'] = $userAnswers[$q->getId()]['answer'];
+                    $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['userAnswer'] = isset($userAnswers[$q->getId()]) ? $userAnswers[$q->getId()]['answer'] : false;
 
                     if (isset($correctAnswers[$q->getId()]) && isset($correctAnswers[$q->getId()][$a->getId()])) {
                         $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['found'] = true;
@@ -269,7 +269,7 @@ class QuizController extends GameController
                     $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['answer'] = $a->getAnswer();
                     $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['explanation'] = $a->getExplanation();
                     $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['correctAnswers'] = false;
-                    $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['userAnswer'] = $userAnswers[$q->getId()]['answer'];
+                    $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['userAnswer'] = isset($userAnswers[$q->getId()]) ? $userAnswers[$q->getId()]['answer'] : false;
                     
                     if (isset($userAnswers[$q->getId()]) && isset($userAnswers[$q->getId()][$a->getId()])) {
                         $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['yourChoice'] = true;
