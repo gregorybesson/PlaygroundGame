@@ -36,7 +36,7 @@ class QuizController extends GameController
         $replies = array();
         foreach ($paginator as $entry) {
             $reply = $this->getQuizReplyMapper()->findByEntry($entry);
-            $replies[] = $this->getQuizReplyAnswerMapper()->findByReply($reply);
+            $replies[$entry->getId()] = $this->getQuizReplyAnswerMapper()->findByReply($reply);
         }
 
         return array(
