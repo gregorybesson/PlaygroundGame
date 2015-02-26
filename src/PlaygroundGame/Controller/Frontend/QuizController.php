@@ -307,7 +307,8 @@ class QuizController extends GameController
             'gameCorrectAnswers'  => $gameCorrectAnswers,
             'socialLinkUrl'       => $socialLinkUrl,
             'secretKey'           => $secretKey,
-            'userTimer'           => $userTimer
+            'userTimer'           => $userTimer,
+            'userAnswers'         => $userAnswers,
         ));
 
         return $viewModel;
