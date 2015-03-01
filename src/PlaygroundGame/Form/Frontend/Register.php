@@ -1,7 +1,6 @@
 <?php
 namespace PlaygroundGame\Form\Frontend;
 
-use Zend\Form\Form;
 use PlaygroundUser\Options\UserCreateOptionsInterface;
 use ZfcUser\Options\RegistrationOptionsInterface;
 use Zend\Mvc\I18n\Translator;
