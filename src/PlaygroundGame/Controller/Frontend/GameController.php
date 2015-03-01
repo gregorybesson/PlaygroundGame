@@ -985,7 +985,7 @@ class GameController extends AbstractActionController
             if (!empty($infoMe)) {
                 $user = $this->getProviderService()->getUserProviderMapper()->findUserByProviderId($infoMe->identifier, $socialnetwork);
 
-                if ($user || $service->getOptions()->getCreateUserAutoSocial() == true) {
+                if ($user || $service->getOptions()->getCreateUserAutoSocial() === true) {
                     //on le dirige vers l'action d'authentification
                     if(! $redirect && $this->getUserOptions()->getLoginRedirectRoute() != ''){
                         $redirect = $this->url()->fromRoute('frontend/'.$game->getClassType().'/login', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')));
@@ -1072,42 +1072,37 @@ class GameController extends AbstractActionController
             return $viewModel;
         }
 
-        //if (!$socialnetwork) {
+        if ($service->getOptions()->getEmailVerification()) {
 
-            if ($service->getOptions()->getEmailVerification()) {
+            $vm = new ViewModel(array('userEmail' => $user->getEmail()));
+            $vm->setTemplate('playground-user/register/registermail');
 
-                $vm = new ViewModel(array('userEmail' => $user->getEmail()));
-                $vm->setTemplate('playground-user/register/registermail');
+            return $vm;
 
-                return $vm;
-
-                //return $this->redirect()->toUrl($this->url()->fromRoute('frontend/zfcuser/registermail', array('userId' => $user->getId(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
-            } elseif ($service->getOptions()->getLoginAfterRegistration()) {
-                $identityFields = $service->getOptions()->getAuthIdentityFields();
-                if (in_array('email', $identityFields)) {
-                    $post['identity'] = $user->getEmail();
-                } elseif (in_array('username', $identityFields)) {
-                    $post['identity'] = $user->getUsername();
-                }
-                $post['credential'] = isset($post['password'])?$post['password']:'';
-                $request->setPost(new Parameters($post));
-
-                // clear adapters
-                $this->zfcUserAuthentication()->getAuthAdapter()->resetAdapters();
-                $this->zfcUserAuthentication()->getAuthService()->clearIdentity();
-
-                $logged = $this->forward()->dispatch('playgrounduser_user', array('action' => 'ajaxauthenticate'));
-
-                if ($logged) {
-                    return $this->redirect()->toUrl($this->url()->fromRoute('frontend/' . $game->getClassType() . '/' . $game->nextStep('index'), array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
-                } else {
-                    $this->flashMessenger()->setNamespace('zfcuser-login-form')->addMessage('Authentication failed. Please try again.');
-                    return $this->redirect()->toUrl($this->url()->fromRoute('frontend/' . $game->getClassType() . '/login', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
-                }
+        } elseif ($service->getOptions()->getLoginAfterRegistration()) {
+            $identityFields = $service->getOptions()->getAuthIdentityFields();
+            if (in_array('email', $identityFields)) {
+                $post['identity'] = $user->getEmail();
+            } elseif (in_array('username', $identityFields)) {
+                $post['identity'] = $user->getUsername();
             }
-        //}
+            $post['credential'] = isset($post['password'])?$post['password']:'';
+            $request->setPost(new Parameters($post));
 
-        // TODO: Add the redirect parameter here...
+            // clear adapters
+            $this->zfcUserAuthentication()->getAuthAdapter()->resetAdapters();
+            $this->zfcUserAuthentication()->getAuthService()->clearIdentity();
+
+            $logged = $this->forward()->dispatch('playgrounduser_user', array('action' => 'ajaxauthenticate'));
+
+            if ($logged) {
+                return $this->redirect()->toUrl($this->url()->fromRoute('frontend/' . $game->getClassType() . '/' . $game->nextStep('index'), array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+            } else {
+                $this->flashMessenger()->setNamespace('zfcuser-login-form')->addMessage('Authentication failed. Please try again.');
+                return $this->redirect()->toUrl($this->url()->fromRoute('frontend/' . $game->getClassType() . '/login', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+            }
+        }
+
         $redirect = $this->url()->fromRoute('frontend/'.$game->getClassType().'/login', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))) . ($socialnetwork ? '/' . $socialnetwork : ''). ($redirect ? '?redirect=' . $redirect : '');
 
         return $this->redirect()->toUrl($redirect);
@@ -1244,7 +1239,7 @@ class GameController extends AbstractActionController
         return $this->userService;
     }
     
-    public function setUserService(UserService $userService)
+    public function setUserService($userService)
     {
         $this->userService = $userService;
         return $this;

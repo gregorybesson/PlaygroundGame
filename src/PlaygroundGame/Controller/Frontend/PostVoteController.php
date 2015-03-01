@@ -3,8 +3,6 @@
 namespace PlaygroundGame\Controller\Frontend;
 
 use Zend\Form\Form;
-use Zend\View\Model\ViewModel;
-
 
 class PostVoteController extends GameController
 {

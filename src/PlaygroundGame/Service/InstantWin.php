@@ -2,7 +2,6 @@
 
 namespace PlaygroundGame\Service;
 
-use PlaygroundGame\Mapper\InstantWinOccurrence;
 use Zend\ServiceManager\ServiceManagerAwareInterface;
 use Zend\Stdlib\ErrorHandler;
 
