@@ -349,6 +349,9 @@ class PostVoteController extends GameController
      */
     public function ajaxuploadAction()
     {
+	// Call this for the session lock to be released (other ajax calls can then be made)
+        session_write_close();
+
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
         $user = $this->zfcUserAuthentication()->getIdentity();
         $sg = $this->getGameService();
@@ -531,6 +534,9 @@ class PostVoteController extends GameController
 
     public function ajaxVoteAction ()
     {
+	// Call this for the session lock to be released (other ajax calls can then be made)
+        session_write_close();
+
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
         $postId     = $this->getEvent()->getRouteMatch()->getParam('post');
         $user 		= $this->zfcUserAuthentication()->getIdentity();
