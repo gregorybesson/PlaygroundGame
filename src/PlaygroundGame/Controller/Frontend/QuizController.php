@@ -262,6 +262,12 @@ class QuizController extends GameController
                     } else {
                         $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['found'] = false;
                     }
+                    
+                    if (isset($userAnswers[$q->getId()]) && isset($userAnswers[$q->getId()][$a->getId()])) {
+                        $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['yourChoice'] = true;
+                    }else {
+                        $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['yourChoice'] = false;
+                    }
 
                     $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['correctAnswers'] = true;
                 } else {
