@@ -69,7 +69,9 @@ class QuizController extends GameController
 
         $i = 0;
         $j = 0;
+        $elementData = array();
         $explanations = array();
+
         foreach ($questions as $q) {
             if (($game->getQuestionGrouping() > 0 && $i % $game->getQuestionGrouping() == 0) || ($i == 0 && $game->getQuestionGrouping() == 0)) {
                 $fieldsetName = 'questionGroup' . ++ $j;
@@ -96,7 +98,7 @@ class QuizController extends GameController
                 $element->setValueOptions($valuesSortedByPosition);
                 $element->setLabelOptions(array("disable_html_escape"=>true));
 
-                $elementData = new Element\Hidden($name.'-data');
+                $elementData[$q->getId()] = new Element\Hidden($name.'-data');
 
             } elseif ($q->getType() == 1) {
                 $element = new Element\MultiCheckbox($name);
@@ -121,17 +123,13 @@ class QuizController extends GameController
 
             } elseif ($q->getType() == 2) {
                 $element = new Element\Textarea($name);
-                $elementData = new Element\Hidden($name.'-data');
+                $elementData[$q->getId()] = new Element\Hidden($name.'-data');
             }
 
             $element->setLabel($q->getQuestion());
             $fieldset->add($element);
-            if (is_array($elementData)) {
-                foreach ($elementData as $id => $e) {
-                    $fieldset->add($e);
-                }
-            } else {
-                $fieldset->add($elementData);
+            foreach ($elementData as $id => $e) {
+                $fieldset->add($e);
             }
 
             $fieldsetFilter->add($factory->createInput(array(
