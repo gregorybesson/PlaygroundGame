@@ -124,6 +124,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
         $position=1;
 
         foreach ($data as $name => $value) {
+            
             $postElement = $postVotePostElementMapper->findOneBy(array('post' => $post, 'name' => $name));
             if (! $postElement) {
                 $postElement = new \PlaygroundGame\Entity\PostVotePostElement();
@@ -161,6 +162,9 @@ class PostVote extends Game implements ServiceManagerAwareInterface
                     }
                 }
                 
+            } elseif (is_array($value)) {
+                $arValues = $form->get($name)->getValueOptions();
+                $postElement->setValue($arValues[$value[0]]);
             } else {
                 $postElement->setValue($value);
             }
@@ -169,6 +173,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
             $position++;
         }
         $postvotePostMapper->update($post);
+
         return $post;
     }
 
