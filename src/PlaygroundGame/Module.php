@@ -149,6 +149,7 @@ class Module
                 $routeName       = $match->getMatchedRouteName();
                 $areaName        = (strpos($routeName, '/'))?substr($routeName, 0, strpos($routeName, '/')):$routeName;
                 $areaName        = (strpos($areaName, '.'))?substr($areaName, 0, strpos($areaName, '.')):$areaName;
+                $areaName        = ($areaName == 'frontend' || $areaName == 'admin')? $areaName : 'frontend';
                 $controllerName  = $match->getParam('controller', 'not-found');
                 $actionName      = $match->getParam('action', 'not-found');
                 $channel         = $match->getParam('channel', 'not-found');
