@@ -29,7 +29,7 @@
 		"playground/core" : "2.*",
 		"playground/design" : "2.*",
 		"playground/user" : "2.*",
-		"playground/hybridauth" : "dev-master",
+		"playground/hybridauth" : "2.*",
 		"playground/partnership" : "2.*"
 	},
 	"require-dev" : {
