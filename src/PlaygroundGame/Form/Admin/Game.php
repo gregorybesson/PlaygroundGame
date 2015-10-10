@@ -126,8 +126,10 @@ class Game extends ProvidesEventsForm
             'options' => array(
                 'empty_option' => $translator->translate('No category for this game', 'playgroundgame'),
                 'value_options' => $categories,
-                'label' => $translator->translate('Category benefit', 'playgroundgame')
-            )
+                'label' => $translator->translate('Category benefit', 'playgroundgame'),
+                'disable_inarray_validator' => true
+            ),
+
         ));
 
         $this->add(array(
