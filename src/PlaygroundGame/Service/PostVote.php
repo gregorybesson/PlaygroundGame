@@ -174,6 +174,13 @@ class PostVote extends Game implements ServiceManagerAwareInterface
         }
         $postvotePostMapper->update($post);
 
+        // If a preview step is not proposed, I confirmPost on this step
+        $steps = $game->getStepsArray();
+        $previewKey = array_search('preview', $steps);
+        if (!$previewKey) {
+          $post = $this->confirmPost($game, $user);
+        }          
+
         return $post;
     }
 
@@ -212,6 +219,11 @@ class PostVote extends Game implements ServiceManagerAwareInterface
         $entryMapper->update($entry);
 
         $this->getEventManager()->trigger('complete_postvote.post', $this, array('user' => $user, 'game' => $game, 'entry' => $entry, 'post' => $post));
+
+        if($user){
+            // send mail for participation
+            $this->sendGameMail($game, $user, $post, 'postvote');
+        }
 
         return $post;
     }

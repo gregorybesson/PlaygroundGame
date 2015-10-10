@@ -108,7 +108,7 @@ class PostVoteController extends GameController
 
                 if ($post) {
                     // determine the route where the user should go
-                    $redirectUrl = $this->frontendUrl()->fromRoute('postvote/preview', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')));
+                    $redirectUrl = $this->frontendUrl()->fromRoute('postvote/'.$game->nextStep('play'), array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')));
 
                     return $this->redirect()->toUrl($redirectUrl);
                 }
@@ -142,7 +142,7 @@ class PostVoteController extends GameController
          
         if (!$entry) {
             // the user has already taken part of this game and the participation limit has been reached
-            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('postvote/'.$game->nextStep('play'),array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('postvote/'.$game->nextStep('preview'),array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
         }
 
         // Je recherche le post associé à entry + status == 0. Si non trouvé, je redirige vers home du jeu.
@@ -157,10 +157,6 @@ class PostVoteController extends GameController
             $post = $this->getGameService()->confirmPost($game, $user);
 
             if ($post) {
-                if($user){
-                    // send mail for participation
-                    $this->getGameService()->sendGameMail($game, $user, $post, 'postvote');
-                }
                 if (!($step = $game->nextStep('play'))) {
                     $step = 'result';
                 }
