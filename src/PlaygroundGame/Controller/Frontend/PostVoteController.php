@@ -78,7 +78,7 @@ class PostVoteController extends GameController
         $post = $sg->getPostVotePostMapper()->findOneBy(array('entry' => $entry, 'status' => 0));
         if ($post) {
             foreach ($post->getPostElements() as $element) {
-                if ($form->get($element->getName())) {
+                try {
                     $form->get($element->getName())->setValue($element->getValue());
 
 					$elementType = $form->get($element->getName())->getAttribute('type');
@@ -88,7 +88,7 @@ class PostVoteController extends GameController
 						$elementInput->setRequired(false);
 						$form->get($element->getName())->setAttribute('required', false);
 					}
-                }
+                } catch(\Zend\Form\Exception\InvalidElementException $e){}
             }
         }
 
@@ -324,12 +324,20 @@ class PostVoteController extends GameController
             }
         }
 
+        // Je recherche le post associé à entry + status == 0. Si non trouvé, je redirige vers home du jeu.
+        $post = $this->getGameService()->getPostVotePostMapper()->findOneBy(array('entry' => $lastEntry));
+
+        if (! $post) {
+            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('postvote',array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+        }
+
         // buildView must be before sendMail because it adds the game template path to the templateStack
         $viewModel = $this->buildView($game);
 
         $viewModel->setVariables(array(
                 'statusMail'       => $statusMail,
                 'game'             => $game,
+                'post'             => $post,
                 'flashMessages'    => $this->flashMessenger()->getMessages(),
                 'form'             => $form,
             )
@@ -340,6 +348,13 @@ class PostVoteController extends GameController
 
     /**
      * Example of AJAX File Upload with Session Progress and partial validation.
+     * It's now possible to send a base64 image in this case the call is the form :
+     * this._ajax(
+     * {
+     *   url: url.dataset.url,
+     *    method: 'post',
+     *    body: 'photo=' + image
+     * },
      *
      * @return \Zend\Stdlib\ResponseInterface
      */
@@ -375,6 +390,15 @@ class PostVoteController extends GameController
 
         if ($request->isPost()) {
             $data = $this->getRequest()->getFiles()->toArray();
+
+            if(empty($data)){
+                $data = $this->getRequest()->getPost()->toArray();
+
+                $key = key($data);
+
+                $uploadImage = array('name' => $key.'.png', 'error' => 0, 'base64' => $data[$key]);
+                $data = array($key => $uploadImage);
+            }
             $uploadFile = $sg->uploadFileToPost($data, $game, $user);
         }
 

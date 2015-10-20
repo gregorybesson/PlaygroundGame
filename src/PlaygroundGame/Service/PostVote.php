@@ -27,7 +27,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
         $entry = $this->findLastActiveEntry($game, $user);
 
         if (!$entry) {
-            return 'falsefin0';
+            return '0';
         }
 
         $post = $postvotePostMapper->findOneBy(array('entry' => $entry));
