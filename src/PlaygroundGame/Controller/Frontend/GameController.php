@@ -434,15 +434,24 @@ class GameController extends AbstractActionController
     public function addAdditionalView($game)
     {
         $view = false;
+
         $actionName = $this->getEvent()->getRouteMatch()->getParam('action', 'not-found');
         $stepsViews = json_decode($game->getStepsViews(), true);
-        if($stepsViews && isset($stepsViews[$actionName]) && is_string($stepsViews[$actionName])){
-            $action = $stepsViews[$actionName];
+        if($stepsViews && isset($stepsViews[$actionName])){
             $beforeLayout = $this->layout()->getTemplate();
-            $view = $this->forward()->dispatch('playgroundgame_game', array('action' => $action, 'id' => $game->getIdentifier()));
+            $actionData = $stepsViews[$actionName];
+            if(is_string($actionData)){
+                $action = $actionData;
+                $controller = $this->getEvent()->getRouteMatch()->getParam('controller', 'playgroundgame_game');
+                $view = $this->forward()->dispatch($controller, array('action' => $action, 'id' => $game->getIdentifier()));
+                
+            } elseif(is_array($actionData) && count($actionData)>0){
+                $action = key($actionData);
+                $controller = $actionData[$action];
+                $view = $this->forward()->dispatch($controller, array('action' => $action, 'id' => $game->getIdentifier()));
+            }
             // suite au forward, le template de layout a changé, je dois le rétablir...
             $this->layout()->setTemplate($beforeLayout);
-
         }
 
         return $view;
