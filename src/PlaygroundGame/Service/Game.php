@@ -1261,6 +1261,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      */
     public function uploadFile($path, $file)
     {
+
         $err = $file["error"];
         $message = '';
         if ($err > 0) {
@@ -1288,23 +1289,42 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         } else {
 
             $fileNewname = $this->fileNewname($path, $file['name'], true);
-            $adapter = new \Zend\File\Transfer\Adapter\Http();
-            // 500ko
-            $size = new Size(array(
-                'max' => 512000
-            ));
-            $is_image = new IsImage('jpeg,png,gif,jpg');
-            $adapter->setValidators(array(
-                $size,
-                $is_image
-            ), $fileNewname);
 
-            if (! $adapter->isValid()) {
+            if(isset($file["base64"])){
+                list(,$img) = explode(',', $file["base64"]);
+                $img = str_replace(' ','+',$img);
+                $im = base64_decode($img);
+                if ($im !== false){
+                    // getimagesizefromstring
+                    file_put_contents($path . $fileNewname, $im);
+                    imagedestroy($im);
+                } else {
+                    
+                    return 1; 
+                }
 
-                return false;
+                return $fileNewname;
+            } else {
+
+                $adapter = new \Zend\File\Transfer\Adapter\Http();
+                // 1Mo
+                $size = new Size(array(
+                    'max' => 1024000
+                ));
+                $is_image = new IsImage('jpeg,png,gif,jpg');
+                $adapter->setValidators(array(
+                    $size,
+                    $is_image
+                ), $fileNewname);
+
+                if (! $adapter->isValid()) {
+
+                    return false;
+                }
+
+                @move_uploaded_file($file["tmp_name"], $path . $fileNewname);
             }
 
-            @move_uploaded_file($file["tmp_name"], $path . $fileNewname);
             
             if( class_exists("Imagick") ){
                 $ext = pathinfo($fileNewname, PATHINFO_EXTENSION);
