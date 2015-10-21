@@ -176,7 +176,7 @@ class GameController extends AbstractActionController
 
         $user = $this->zfcUserAuthentication()->getIdentity();
 
-        $form = $sg->createFormFromJson($game->getPlayerForm()->getForm());
+        $form = $sg->createFormFromJson($game->getPlayerForm()->getForm(), 'playerForm');
 
         if ($this->getRequest()->isPost()) {
             // POST Request: Process form
@@ -399,32 +399,37 @@ class GameController extends AbstractActionController
      */
     public function buildView($game)
     {
-        $viewModel = new ViewModel();
+        if ($this->getRequest()->isXmlHttpRequest()){
 
-        $this->addMetaTitle($game);
-        $this->addMetaBitly();
-        $this->addGaEvent($game);
+            $viewModel = new JsonModel();
+        } else {
+            $viewModel = new ViewModel();
 
-        $this->customizeGameDesign($game);
-        
-        // this is possible to create a specific game design in /design/frontend/default/custom. It will precede all others templates.
-        $templatePathResolver = $this->getServiceLocator()->get('Zend\View\Resolver\TemplatePathStack');
-        $l = $templatePathResolver->getPaths();
-        $templatePathResolver->addPath($l[0].'custom/'.$game->getIdentifier());
-        
-        $view = $this->addAdditionalView($game);
-        if ($view and $view instanceof \Zend\View\Model\ViewModel) {
-            $viewModel->addChild($view, 'additional');
-        } elseif ($view && $view instanceof \Zend\Http\PhpEnvironment\Response) {
-            return $view;
+            $this->addMetaTitle($game);
+            $this->addMetaBitly();
+            $this->addGaEvent($game);
+
+            $this->customizeGameDesign($game);
+            
+            // this is possible to create a specific game design in /design/frontend/default/custom. It will precede all others templates.
+            $templatePathResolver = $this->getServiceLocator()->get('Zend\View\Resolver\TemplatePathStack');
+            $l = $templatePathResolver->getPaths();
+            $templatePathResolver->addPath($l[0].'custom/'.$game->getIdentifier());
+            
+            $view = $this->addAdditionalView($game);
+            if ($view and $view instanceof \Zend\View\Model\ViewModel) {
+                $viewModel->addChild($view, 'additional');
+            } elseif ($view && $view instanceof \Zend\Http\PhpEnvironment\Response) {
+                return $view;
+            }
+
+            $this->layout()->setVariables(
+                array(
+                    'game' => $game, 
+                    'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                )
+            );
         }
-
-        $this->layout()->setVariables(
-            array(
-                'game' => $game, 
-                'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
-            )
-        );
         
         $viewModel->setVariables($this->getShareData($game));
 

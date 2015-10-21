@@ -24,7 +24,7 @@ use Zend\InputFilter\InputFilterInterface;
  * @ORM\Table(name="game")
  * @Gedmo\TranslationEntity(class="PlaygroundGame\Entity\GameTranslation")
  */
-abstract class Game implements InputFilterAwareInterface, Translatable
+abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSerializable
 {
     // not yet published
     const GAME_SCHEDULE  = 'scheduled';
@@ -1580,6 +1580,16 @@ abstract class Game implements InputFilterAwareInterface, Translatable
         }
 
         return $obj_vars;
+    }
+
+    /**
+     * Convert the object to json.
+     *
+     * @return array
+     */
+    public function jsonSerialize ()
+    {
+        return $this->getArrayCopy();
     }
 
     /**
