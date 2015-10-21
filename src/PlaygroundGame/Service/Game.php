@@ -1297,7 +1297,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                 if ($im !== false){
                     // getimagesizefromstring
                     file_put_contents($path . $fileNewname, $im);
-                    imagedestroy($im);
+
                 } else {
                     
                     return 1; 
@@ -1696,11 +1696,11 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      * Create a ZF2 Form from json data
      * @return Form
      */
-    public function createFormFromJson($jsonForm){
+    public function createFormFromJson($jsonForm, $id='jsonForm'){
         $formPV = json_decode($jsonForm);
         
         $form = new Form();
-        $form->setAttribute('id', 'playerForm');
+        $form->setAttribute('id', $id);
         $form->setAttribute('enctype', 'multipart/form-data');
         
         $inputFilter = new \Zend\InputFilter\InputFilter();

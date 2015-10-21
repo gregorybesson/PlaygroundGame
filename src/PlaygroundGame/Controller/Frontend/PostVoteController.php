@@ -72,11 +72,12 @@ class PostVoteController extends GameController
             return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('postvote',array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
         }
 
-        $form = $sg->createFormFromJson($game->getForm()->getForm());
+        $form = $sg->createFormFromJson($game->getForm()->getForm(),'postvoteForm');
 
         // Je recherche le post associé à entry + status == 0. Si non trouvé, je redirige vers home du jeu.
         $post = $sg->getPostVotePostMapper()->findOneBy(array('entry' => $entry, 'status' => 0));
         if ($post) {
+
             foreach ($post->getPostElements() as $element) {
                 try {
                     $form->get($element->getName())->setValue($element->getValue());
