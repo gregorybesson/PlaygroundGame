@@ -717,6 +717,55 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         return $entry;
     }
 
+    /*
+    * This function updates the entry with the player data after checking 
+    * that the data are compliant with the formUser Game attribute
+    *
+    * The $data has to be a json object
+    */
+    public function updateEntryPlayerForm($data, $game, $user, $entry, $mandatory = true)
+    {
+        $form = $this->createFormFromJson($game->getPlayerForm()->getForm(), 'playerForm');
+        $form->setData($data);
+
+        if(!$mandatory){
+            $filter = $form->getInputFilter();
+            foreach ($form->getElements() as $element) {
+                try {
+                    $elementInput = $filter->get($element->getName());
+                    $elementInput->setRequired(false);
+                    $form->get($element->getName())->setAttribute('required', false);
+                } catch(\Zend\Form\Exception\InvalidElementException $e){}
+            }
+        }
+
+        if ($form->isValid()) {
+            $dataJson = json_encode($form->getData());
+            if($game->getAnonymousAllowed() && $game->getAnonymousIdentifier() && isset($dataJson[$game->getAnonymousIdentifier()])){
+                
+                $session = new \Zend\Session\Container('anonymous_identifier');
+                if(empty($session->offsetGet('anonymous_identifier'))){
+                    $anonymousIdentifier = $dataJson[$game->getAnonymousIdentifier()];
+                
+                    $entry->setAnonymousIdentifier($anonymousIdentifier);
+                
+                    // I must transmit this info during the whole game workflow
+                    $session->offsetSet('anonymous_identifier',  $anonymousIdentifier);
+                }
+            }
+
+            $entry->setPlayerData($dataJson);
+            $this->getEntryMapper()->update($entry);
+        } else {
+            print_r($form->getMessages());
+            die('FALSE');
+            return false;
+        }
+
+        return true;
+    }
+
+
     public function checkIsFan($game)
     {
         // If on Facebook, check if you have to be a FB fan to play the game
