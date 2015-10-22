@@ -188,7 +188,6 @@ class GameController extends AbstractActionController
             $form->setData($data);
 
             if ($form->isValid()) {
-                $dataJson = json_encode($form->getData());
                 
                 $steps = $game->getStepsArray();
                 $viewSteps = $game->getStepsViewsArray();
@@ -202,14 +201,6 @@ class GameController extends AbstractActionController
                 // If register after play step, I search for the last entry created by play step.
 
                 if($key && $key < $keyplay){
-                    
-                    if($game->getAnonymousAllowed() && $game->getAnonymousIdentifier() && isset($data[$game->getAnonymousIdentifier()])){
-                        $anonymousIdentifier = $data[$game->getAnonymousIdentifier()];
-                        
-                        // I must transmit this info during the whole game workflow
-                        $session = new Container('anonymous_identifier');
-                        $session->offsetSet('anonymous_identifier',  $anonymousIdentifier);
-                    }
                     $entry = $sg->play($game, $user);
                     if (!$entry) {
                         // the user has already taken part of this game and the participation limit has been reached
@@ -220,17 +211,6 @@ class GameController extends AbstractActionController
                 }else{
                     // I'm looking for an entry without anonymousIdentifier (the active entry in fact).
                     $entry = $sg->findLastEntry($game, $user);
-                    if($game->getAnonymousAllowed() && $game->getAnonymousIdentifier() && isset($data[$game->getAnonymousIdentifier()])){
-                        
-                        $anonymousIdentifier = $data[$game->getAnonymousIdentifier()];
-                        
-                        $entry->setAnonymousIdentifier($anonymousIdentifier);
-                        
-                        // I must transmit this info during the whole game workflow
-                        $session = new Container('anonymous_identifier');
-                        $session->offsetSet('anonymous_identifier',  $anonymousIdentifier);
-                        
-                    }
                     if ($sg->hasReachedPlayLimit($game, $user)){
                         // the user has already taken part of this game and the participation limit has been reached
                         $this->flashMessenger()->addMessage('Vous avez déjà participé');
@@ -239,8 +219,7 @@ class GameController extends AbstractActionController
                     }
                 }
                 
-                $entry->setPlayerData($dataJson);
-                $sg->getEntryMapper()->update($entry);
+                $sg->updateEntryPlayerForm($form->getData(), $game, $user, $entry);
 
                 return $this->redirect()->toUrl($this->frontendUrl()->fromRoute($game->getClassType() .'/' . $game->nextStep($this->params('action')), array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)));
             }
