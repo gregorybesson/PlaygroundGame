@@ -45,6 +45,15 @@ class Module
         if (PHP_SAPI !== 'cli') {
             if(isset($config['custom_games'])){
                 foreach($config['custom_games'] as $k=>$v){
+                    // add custom language directory
+                    $config['translator']['translation_file_patterns'][] = array(
+                        'type'         => 'phpArray',
+                        'base_dir'     => __DIR__ . '/../../../../../design/frontend/'. $parentTheme[0] .'/'. $parentTheme[1] . '/custom/' . $k . '/language',
+                        'pattern'      => '%s.php',
+                        'text_domain'  => $k
+                    );
+
+                    // create routes
                     if(isset($v['url'])){
                         // I take the url model of the game type
                         if(isset($config['router']['routes']['frontend']['child_routes'][$v['classType']])){
