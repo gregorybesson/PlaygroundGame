@@ -40,8 +40,16 @@ class PostVote extends Game implements ServiceManagerAwareInterface
             $post = $postvotePostMapper->insert($post);
         }
 
-        $path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR . 'game' . $game->getId() . '_post'. $post->getId() . '_';
-        $media_url = $this->getOptions()->getMediaUrl() . '/' . 'game' . $game->getId() . '_post'. $post->getId() . '_';
+        $path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR . 'game' . $game->getId() . DIRECTORY_SEPARATOR;
+        if (!is_dir($path)) {
+            mkdir($path,0777, true);
+        }
+        $path .= 'post'. $post->getId() . DIRECTORY_SEPARATOR;
+        if (!is_dir($path)) {
+            mkdir($path,0777, true);
+        }
+
+        $media_url = $this->getOptions()->getMediaUrl() . '/' . 'game' . $game->getId() . '/' . 'post'. $post->getId() . '/';
 
         $key = key($data);
         $uploadFile = $this->uploadFile($path, $data[$key]);
@@ -119,12 +127,20 @@ class PostVote extends Game implements ServiceManagerAwareInterface
             $post = $postvotePostMapper->insert($post);
         }
 
-        $path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR . 'game' . $game->getId() . '_post'. $post->getId() . '_';
-        $media_url = $this->getOptions()->getMediaUrl() . '/' . 'game' . $game->getId() . '_post'. $post->getId() . '_';
+        $path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR . 'game' . $game->getId() . DIRECTORY_SEPARATOR;
+        if (!is_dir($path)) {
+            mkdir($path,0777, true);
+        }
+        $path .= 'post'. $post->getId() . DIRECTORY_SEPARATOR;
+        if (!is_dir($path)) {
+            mkdir($path,0777, true);
+        }
+
+        $media_url = $this->getOptions()->getMediaUrl() . '/' . 'game' . $game->getId() . '/' . 'post'. $post->getId() . '/';
         $position=1;
 
         foreach ($data as $name => $value) {
-            
+
             $postElement = $postVotePostElementMapper->findOneBy(array('post' => $post, 'name' => $name));
             if (! $postElement) {
                 $postElement = new \PlaygroundGame\Entity\PostVotePostElement();
@@ -133,7 +149,6 @@ class PostVote extends Game implements ServiceManagerAwareInterface
             $postElement->setPosition($position);
 
             if (is_array($value) && isset($value['tmp_name'])) {
-                
                 // The file upload has been done in ajax but some weird bugs remain without it
                 
 				if ( ! $value['error'] ) {
@@ -165,13 +180,15 @@ class PostVote extends Game implements ServiceManagerAwareInterface
             } elseif (is_array($value)) {
                 $arValues = $form->get($name)->getValueOptions();
                 $postElement->setValue($arValues[$value[0]]);
-            } else {
+            } elseif(!empty($value)){
+
                 $postElement->setValue($value);
             }
             $postElement->setPost($post);
             $postVotePostElementMapper->insert($postElement);
             $position++;
         }
+
         $postvotePostMapper->update($post);
 
         $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array(

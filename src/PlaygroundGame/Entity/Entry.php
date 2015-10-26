@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping\PreUpdate;
  * @ORM\Entity @HasLifecycleCallbacks
  * @ORM\Table(name="game_entry")
  */
-class Entry
+class Entry implements \JsonSerializable
 {
 
     /**
@@ -441,6 +441,16 @@ class Entry
     public function getArrayCopy()
     {
         return get_object_vars($this);
+    }
+
+    /**
+    * Convert the object to json.
+    *
+    * @return array
+    */
+    public function jsonSerialize ()
+    {
+        return $this->getArrayCopy();
     }
 
     /**

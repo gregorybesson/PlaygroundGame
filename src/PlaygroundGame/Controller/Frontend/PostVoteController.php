@@ -107,7 +107,7 @@ class PostVoteController extends GameController
                 $data = $form->getData();
                 $post = $this->getGameService()->createPost($data, $game, $user, $form);
 
-                if ($post) {
+                if ($post && !empty($game->nextStep('play'))) {
                     // determine the route where the user should go
                     $redirectUrl = $this->frontendUrl()->fromRoute('postvote/'.$game->nextStep('play'), array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')));
 
