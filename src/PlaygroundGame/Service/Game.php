@@ -1806,6 +1806,55 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                 )));
         
             }
+            if (isset($element->line_password)) {
+                $attributes  = $element->line_password[0];
+                $name        = isset($attributes->name)? $attributes->name : '';
+                $placeholder = isset($attributes->data->placeholder)? $attributes->data->placeholder : '';
+                $label       = isset($attributes->data->label)? $attributes->data->label : '';
+                $required    = ($attributes->data->required == 'true') ? true : false ;
+                $class       = isset($attributes->data->class)? $attributes->data->class : '';
+                $id          = isset($attributes->data->id)? $attributes->data->id : '';
+                $lengthMin   = isset($attributes->data->length)? $attributes->data->length->min : '';
+                $lengthMax   = isset($attributes->data->length)? $attributes->data->length->max : '';
+        
+                $element = new Element\Password($name);
+                $element->setLabel($label);
+                $element->setAttributes(
+                    array(
+                        'placeholder'   => $placeholder,
+                        'required'      => $required,
+                        'class'         => $class,
+                        'id'            => $id
+                    )
+                );
+                $form->add($element);
+        
+                $options = array();
+                $options['encoding'] = 'UTF-8';
+                if ($lengthMin && $lengthMin > 0) {
+                    $options['min'] = $lengthMin;
+                }
+                if ($lengthMax && $lengthMax > $lengthMin) {
+                    $options['max'] = $lengthMax;
+                    $element->setAttribute('maxlength', $lengthMax);
+                    $options['messages'] = array(\Zend\Validator\StringLength::TOO_LONG => sprintf($this->getServiceLocator()->get('translator')->translate('This field contains more than %s characters', 'playgroundgame'), $lengthMax));
+                }
+                $inputFilter->add($factory->createInput(array(
+                    'name'     => $name,
+                    'required' => $required,
+                    'filters'  => array(
+                        array('name' => 'StripTags'),
+                        array('name' => 'StringTrim'),
+                    ),
+                    'validators' => array(
+                        array(
+                            'name'    => 'StringLength',
+                            'options' => $options,
+                        ),
+                    ),
+                )));
+        
+            }
             if (isset($element->line_hidden)) {
                 $attributes  = $element->line_hidden[0];
                 $name        = isset($attributes->name)? $attributes->name : '';
