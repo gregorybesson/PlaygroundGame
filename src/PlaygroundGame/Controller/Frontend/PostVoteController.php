@@ -118,6 +118,7 @@ class PostVoteController extends GameController
 
         $viewModel = $this->buildView($game);
         $viewModel->setVariables(array(
+                'playerData' => $entry->getPlayerData(),
                 'game' => $game,
                 'form' => $form,
                 'post' => $post,
