@@ -1811,7 +1811,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                 $name        = isset($attributes->name)? $attributes->name : '';
                 $placeholder = isset($attributes->data->placeholder)? $attributes->data->placeholder : '';
                 $label       = isset($attributes->data->label)? $attributes->data->label : '';
-                $required    = ($attributes->data->required == 'true') ? true : false ;
+                $required    = (isset($attributes->data->required) && $attributes->data->required == 'true') ? true : false ;
                 $class       = isset($attributes->data->class)? $attributes->data->class : '';
                 $id          = isset($attributes->data->id)? $attributes->data->id : '';
                 $lengthMin   = isset($attributes->data->length)? $attributes->data->length->min : '';
