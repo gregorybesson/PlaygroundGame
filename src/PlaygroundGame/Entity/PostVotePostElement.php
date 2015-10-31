@@ -208,6 +208,11 @@ class PostVotePostElement implements InputFilterAwareInterface, \JsonSerializabl
     public function getArrayCopy()
     {
         $obj_vars = get_object_vars($this);
+        // if called from getArrayCopy of PostVotePost, 
+        // keeping the post object in each element produce an infinite loop...
+        if (isset($obj_vars['post'])){
+            $obj_vars['post'] = null;
+        }
 
         return $obj_vars;
     }

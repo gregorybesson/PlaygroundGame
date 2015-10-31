@@ -82,7 +82,7 @@ class PostVotePost implements InputFilterAwareInterface, \JsonSerializable
 
     public function __construct()
     {
-        $this->post_entries = new ArrayCollection();
+        $this->postElements = new ArrayCollection();
     }
 
     /**
@@ -316,9 +316,9 @@ class PostVotePost implements InputFilterAwareInterface, \JsonSerializable
     {
         $obj_vars = get_object_vars($this);
 
-        // if (isset($obj_vars['postvote'])) {
-        //     $obj_vars['postvote'] = null;
-        // }
+        if (isset($obj_vars['postElements'])) {
+            $obj_vars['postElements'] = $this->getPostElements()->toArray();
+        }
 
         return $obj_vars;
     }
