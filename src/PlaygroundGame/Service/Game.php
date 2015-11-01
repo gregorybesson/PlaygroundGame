@@ -1767,6 +1767,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                 $id          = isset($attributes->data->id)? $attributes->data->id : '';
                 $lengthMin   = isset($attributes->data->length)? $attributes->data->length->min : '';
                 $lengthMax   = isset($attributes->data->length)? $attributes->data->length->max : '';
+                $validator   = isset($attributes->data->validator)? $attributes->data->validator : '';
         
                 $element = new Element\Text($name);
                 $element->setLabel($label);
@@ -1790,6 +1791,20 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                     $element->setAttribute('maxlength', $lengthMax);
                     $options['messages'] = array(\Zend\Validator\StringLength::TOO_LONG => sprintf($this->getServiceLocator()->get('translator')->translate('This field contains more than %s characters', 'playgroundgame'), $lengthMax));
                 }
+
+                $validators = array(
+                    array(
+                        'name'    => 'StringLength',
+                        'options' => $options,
+                    ),
+                );
+                if($validator){
+                    $regex = "/.*\(([^)]*)\)/";
+                    preg_match($regex,$validator,$matches);
+                    $valArray = array('name' => str_replace('('.$matches[1].')','',$validator), 'options' => array($matches[1]));
+                    $validators[] = $valArray;
+                }
+
                 $inputFilter->add($factory->createInput(array(
                     'name'     => $name,
                     'required' => $required,
@@ -1797,12 +1812,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                         array('name' => 'StripTags'),
                         array('name' => 'StringTrim'),
                     ),
-                    'validators' => array(
-                        array(
-                            'name'    => 'StringLength',
-                            'options' => $options,
-                        ),
-                    ),
+                    'validators' => $validators,
                 )));
         
             }

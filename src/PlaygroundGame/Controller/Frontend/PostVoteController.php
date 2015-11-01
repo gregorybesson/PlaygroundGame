@@ -93,6 +93,8 @@ class PostVoteController extends GameController
             }
         }
 
+        $viewModel = $this->buildView($game);
+
         if ($this->getRequest()->isPost()) {
             // POST Request: Process form
             $data = array_merge_recursive(
@@ -113,10 +115,16 @@ class PostVoteController extends GameController
 
                     return $this->redirect()->toUrl($redirectUrl);
                 }
+            } else {
+                $messages = $form->getMessages();
+                $viewModel = $this->buildView($game);
+                $viewModel->setVariables(array(
+                    'error' => true,
+                    'message' => implode(',', $messages['title']),
+                ));
             }
         }
 
-        $viewModel = $this->buildView($game);
         $viewModel->setVariables(array(
                 'playerData' => $entry->getPlayerData(),
                 'game' => $game,
