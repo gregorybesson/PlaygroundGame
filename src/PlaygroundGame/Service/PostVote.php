@@ -21,6 +21,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
 
     public function uploadFileToPost($data, $game, $user)
     {
+        $result = false;
         $postvotePostMapper = $this->getPostVotePostMapper();
         $postVotePostElementMapper = $this->getPostVotePostElementMapper();
 
@@ -65,11 +66,11 @@ class PostVote extends Game implements ServiceManagerAwareInterface
             $postElement->setPost($post);
             $postElement = $postVotePostElementMapper->insert($postElement);
 
-            return $media_url.$uploadFile;
+            $result = $media_url.$uploadFile;
 
-        } else {
-            return false;
         }
+
+        return $result;
     }
 
     public function deleteFilePosted($data, $game, $user)
