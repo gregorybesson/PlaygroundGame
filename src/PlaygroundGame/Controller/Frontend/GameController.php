@@ -404,6 +404,7 @@ class GameController extends AbstractActionController
 
             $this->layout()->setVariables(
                 array(
+                    'action' => $this->params('action'),
                     'game' => $game, 
                     'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
                 )
