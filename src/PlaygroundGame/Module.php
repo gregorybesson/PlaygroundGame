@@ -55,33 +55,39 @@ class Module
 
                     // create routes
                     if(isset($v['url'])){
-                        // I take the url model of the game type
-                        if(isset($config['router']['routes']['frontend']['child_routes'][$v['classType']])){
-                            $routeModel = $config['router']['routes']['frontend']['child_routes'][$v['classType']];
-                
-                            // Changing the root of the route
-                            $routeModel['options']['route'] = '/';
-                
-                            // and removing the trailing slash for each subsequent route
-                            foreach($routeModel['child_routes'] as $id=>$ar){
-                                $routeModel['child_routes'][$id]['options']['route'] = ltrim($ar['options']['route'], '/');
+
+                        if (!is_array($v['url'])){
+                            $v['url'] = array($v['url']);
+                        }
+                        foreach($v['url'] as $url){
+                            // I take the url model of the game type
+                            if(isset($config['router']['routes']['frontend']['child_routes'][$v['classType']])){
+                                $routeModel = $config['router']['routes']['frontend']['child_routes'][$v['classType']];
+                    
+                                // Changing the root of the route
+                                $routeModel['options']['route'] = '/';
+                    
+                                // and removing the trailing slash for each subsequent route
+                                foreach($routeModel['child_routes'] as $id=>$ar){
+                                    $routeModel['child_routes'][$id]['options']['route'] = ltrim($ar['options']['route'], '/');
+                                }
+                    
+                                // then create the hostname route + appending the model updated
+                                $config['router']['routes']['frontend.'.$url] = array(
+                                    'type' => 'Zend\Mvc\Router\Http\Hostname',
+                                    'options' => array(
+                                        'route' => $url,
+                                        'defaults' => array(
+                                            'id' => $k
+                                        )
+                                    ),
+                                    'may_terminate' => true
+                                );
+                                $config['router']['routes']['frontend.'.$url]['child_routes'][$v['classType']] = $routeModel;
+                    
+                                $coreLayoutModel = $config['core_layout']['frontend'];
+                                $config['core_layout']['frontend.'.$url] = $coreLayoutModel;
                             }
-                
-                            // then create the hostname route + appending the model updated
-                            $config['router']['routes']['frontend.'.$v['url']] = array(
-                                'type' => 'Zend\Mvc\Router\Http\Hostname',
-                                'options' => array(
-                                    'route' => $v['url'],
-                                    'defaults' => array(
-                                        'id' => $k
-                                    )
-                                ),
-                                'may_terminate' => true
-                            );
-                            $config['router']['routes']['frontend.'.$v['url']]['child_routes'][$v['classType']] = $routeModel;
-                
-                            $coreLayoutModel = $config['core_layout']['frontend'];
-                            $config['core_layout']['frontend.'.$v['url']] = $coreLayoutModel;
                         }
                     }
                     if(isset($v['assetic_configuration'])){
