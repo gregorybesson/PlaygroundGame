@@ -119,7 +119,7 @@ class PostVoteController extends GameController
                 $messages = $form->getMessages();
                 $viewModel = $this->buildView($game);
                 $viewModel->setVariables(array(
-                    'error' => true,
+                    'success' => false,
                     'message' => implode(',', $messages['title']),
                 ));
             }
