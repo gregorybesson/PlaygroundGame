@@ -192,19 +192,19 @@ class PostVote extends Game implements ServiceManagerAwareInterface
 
         $postvotePostMapper->update($post);
 
-        $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array(
-            'user' => $user,
-            'game' => $game,
-            'post' => $post,
-            'entry' => $entry
-        ));
-
         // If a preview step is not proposed, I confirmPost on this step
         $steps = $game->getStepsArray();
         $previewKey = array_search('preview', $steps);
         if (!$previewKey) {
           $post = $this->confirmPost($game, $user);
-        }          
+        }
+
+        $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array(
+            'user' => $user,
+            'game' => $game,
+            'post' => $post,
+            'entry' => $entry
+        ));    
 
         return $post;
     }
