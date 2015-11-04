@@ -217,7 +217,7 @@ class PostVoteController extends GameController
         // Je recherche le post associé à entry + status == 0. Si non trouvé, je redirige vers home du jeu.
         $post = $sg->getPostVotePostMapper()->findById($postId);
 
-        if (! $post) {
+        if (! $post || $post->getStatus() === 9) {
             return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('postvote',array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
         }
 
