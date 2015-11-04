@@ -464,7 +464,9 @@ class GameController extends AbstractActionController
 
     public function addMetaTitle($game)
     {
-        $title = $game->getTitle();
+        $sg = $this->getGameService();
+        $title = $sg->getServiceManager()->get('translator')->translate($game->getTitle());
+        $sg->getServiceManager()->get('ViewHelperManager')->get('HeadTitle')->set($title);
         // Meta set in the layout
         $this->layout()->setVariables(
             array(
