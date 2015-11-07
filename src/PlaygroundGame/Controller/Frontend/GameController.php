@@ -33,6 +33,51 @@ class GameController extends AbstractActionController
     protected $userOptions;
 
     /**
+     * Action called if matched action does not exist
+     * For this view not to be catched by Zend\Mvc\View\RouteNotFoundStrategy
+     * it has to be rendered in the controller. Hence the code below.
+     *
+     * This action is injected as a catchall action for each custom_games definition
+     * This way, when a custom_game is created, the 404 is it's responsability and the 
+     * view can be defined in design/frontend/default/custom/$slug/playground_game/$gametype/404.phtml
+     * 
+     *
+     * @return array
+     */
+    public function notFoundAction()
+    {
+
+        $inflector      = new \Zend\Filter\Word\CamelCaseToDash();
+        $sg             = $this->getGameService();
+        $identifier     = $this->getEvent()->getRouteMatch()->getParam('id');
+        $viewRender     = $this->getServiceLocator()->get( 'ViewRenderer' );
+
+        $this->getEvent()->getRouteMatch()->setParam('action', 'not-found');
+        $this->response->setStatusCode(404);
+
+        $game = $sg->checkGame($identifier);
+
+        $namespace = explode('\\', ltrim(get_class($this), '\\'));
+        $controllerClass = array_pop($namespace);
+        $moduleName = array_shift($namespace);
+        $controller = substr($controllerClass, 0, strlen($controllerClass) - strlen('Controller'));
+        $res = $moduleName.'/'.$controller.'/404';
+        $res = strtolower($inflector->filter($res)) ;
+        
+        $viewModel = $this->buildView($game);
+        $viewModel->setVariables(array(
+            'game' => $game,
+        ));
+        $viewModel->setTemplate( $res );
+
+        $this->layout()->setVariable( "content", $viewRender->render( $viewModel ) );
+        $this->response->setContent( $viewRender->render( $this->layout() ) );
+
+        return $this->response;
+
+    }
+
+    /**
      * This action acts as a hub : Depending on the first step of the game, it will forward the action to this step 
      */
     public function homeAction()

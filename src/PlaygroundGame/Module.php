@@ -84,6 +84,20 @@ class Module
                                     'may_terminate' => true
                                 );
                                 $config['router']['routes']['frontend.'.$url]['child_routes'][$v['classType']] = $routeModel;
+                                
+                                // adding not-found catchall : Any non existent URL will be catched by this controller
+                                $config['router']['routes']['frontend.'.$url]['child_routes'][$v['classType']]['child_routes']['catchall'] = array(
+                                    'type' => '\Zend\Mvc\Router\Http\Regex',
+                                    'priority' => -1000,
+                                    'options' => array(
+                                        'regex' => '.*',
+                                        'spec' => '%url%',
+                                        'defaults' => array(
+                                            'controller' => 'playgroundgame_'.$v['classType'],
+                                            'action' => 'not-found'
+                                        ),
+                                    ),
+                                );
                     
                                 $coreLayoutModel = $config['core_layout']['frontend'];
                                 $config['core_layout']['frontend.'.$url] = $coreLayoutModel;
