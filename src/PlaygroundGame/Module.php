@@ -86,10 +86,12 @@ class Module
                                 $config['router']['routes']['frontend.'.$url]['child_routes'][$v['classType']] = $routeModel;
                                 
                                 // adding not-found catchall : Any non existent URL will be catched by this controller
+                                // I catch everything but the classType route...
                                 $config['router']['routes']['frontend.'.$url]['child_routes'][$v['classType']]['child_routes']['catchall'] = array(
                                     'type' => '\Zend\Mvc\Router\Http\Regex',
                                     'priority' => -1000,
                                     'options' => array(
+                                        //'regex' => '^((?!'.$v['classType'].').)*$',
                                         'regex' => '.*',
                                         'spec' => '%url%',
                                         'defaults' => array(
@@ -184,17 +186,14 @@ class Module
                 $channel         = $match->getParam('channel', 'not-found');
                 $slug            = $match->getParam('id', '');
                 $viewModel       = $e->getViewModel();
-        
-                // I add this area param so that it can be used by Controller plugin frontendUrl
-                // and View helper frontendUrl
-                $match->setParam('area', $areaName);
                  
-                //echo $slug . " " . $areaName . ' ' . $moduleName . ' ' . $controllerName . ' ' . $actionName;
+                //echo ' slug:' . $slug . " route:" . $routeName . ' area:' . $areaName . ' module:' . $moduleName . ' ctrl:' . $controllerName . ' action:' . $actionName . "\n";
 
                 /**
                  * Assign the correct layout
                 */
                 if(!empty($slug)){
+
                     if (isset($config['custom_games'][$slug]['core_layout'][$areaName]['modules'][$moduleName]['controllers'][$controllerName]['actions'][$actionName]['channel'][$channel]['layout'])) {
                         $controller->layout($config['custom_games'][$slug]['core_layout'][$areaName]['modules'][$moduleName]['controllers'][$controllerName]['actions'][$actionName]['channel'][$channel]['layout']);
                     } elseif (isset($config['custom_games'][$slug]['core_layout'][$areaName]['modules'][$moduleName]['controllers'][$controllerName]['actions'][$actionName]['layout'])) {
@@ -213,6 +212,16 @@ class Module
                         $controller->layout($config['custom_games'][$slug]['core_layout'][$areaName]['layout']);
                     }
             
+
+                    // the area needs to be updated if I'm in a custom game for frontendUrl to work
+                    if(isset($config['custom_games'][$slug])){
+                        $url = (is_array($config['custom_games'][$slug]['url']))? $config['custom_games'][$slug]['url'][0]:$config['custom_games'][$slug]['url'];
+
+                        $areaName = ($areaName === 'frontend' && $e->getRequest()->getUri()->getHost() === $url)? $areaName.'.'.$url:$areaName;
+                    }
+                    // I add this area param so that it can be used by Controller plugin frontendUrl
+                    // and View helper frontendUrl
+                    $match->setParam('area', $areaName);
                     /**
                      * Create variables attached to layout containing path views
                      * cascading assignment is managed
