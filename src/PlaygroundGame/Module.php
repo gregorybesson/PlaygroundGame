@@ -86,12 +86,10 @@ class Module
                                 $config['router']['routes']['frontend.'.$url]['child_routes'][$v['classType']] = $routeModel;
                                 
                                 // adding not-found catchall : Any non existent URL will be catched by this controller
-                                // I catch everything but the classType route...
                                 $config['router']['routes']['frontend.'.$url]['child_routes'][$v['classType']]['child_routes']['catchall'] = array(
                                     'type' => '\Zend\Mvc\Router\Http\Regex',
                                     'priority' => -1000,
                                     'options' => array(
-                                        //'regex' => '^((?!'.$v['classType'].').)*$',
                                         'regex' => '.*',
                                         'spec' => '%url%',
                                         'defaults' => array(
@@ -215,9 +213,9 @@ class Module
 
                     // the area needs to be updated if I'm in a custom game for frontendUrl to work
                     if(isset($config['custom_games'][$slug])){
-                        $url = (is_array($config['custom_games'][$slug]['url']))? $config['custom_games'][$slug]['url'][0]:$config['custom_games'][$slug]['url'];
-
-                        $areaName = ($areaName === 'frontend' && $e->getRequest()->getUri()->getHost() === $url)? $areaName.'.'.$url:$areaName;
+                        $url = (is_array($config['custom_games'][$slug]['url']))? $config['custom_games'][$slug]['url']:array($config['custom_games'][$slug]['url']);
+                        $from = strtolower($e->getRequest()->getUri()->getHost());
+                        $areaName = ($areaName === 'frontend' && in_array($from,$url))? $areaName.'.'.$from:$areaName;
                     }
                     // I add this area param so that it can be used by Controller plugin frontendUrl
                     // and View helper frontendUrl
