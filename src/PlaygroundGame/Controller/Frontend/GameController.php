@@ -60,6 +60,9 @@ class GameController extends AbstractActionController
         $namespace = explode('\\', ltrim(get_class($this), '\\'));
         $controllerClass = array_pop($namespace);
         $moduleName = array_shift($namespace);
+
+        // I want to fix the 404 page in playground-game template...
+        $moduleName = 'playground-game';
         $controller = substr($controllerClass, 0, strlen($controllerClass) - strlen('Controller'));
         $res = $moduleName.'/'.$controller.'/404';
         $res = strtolower($inflector->filter($res)) ;
