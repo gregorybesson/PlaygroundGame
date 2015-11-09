@@ -24,6 +24,7 @@ class PlayerForm implements InputFilterAwareInterface
 
     /**
      * @ORM\OneToOne(targetEntity="Game", inversedBy="playerForm")
+     * @ORM\JoinColumn(name="game_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $game;
 

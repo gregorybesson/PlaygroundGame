@@ -24,6 +24,7 @@ class PostVoteForm implements InputFilterAwareInterface
 
     /**
      * @ORM\OneToOne(targetEntity="PostVote", inversedBy="form")
+     * @ORM\JoinColumn(name="postvote_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $postvote;
 

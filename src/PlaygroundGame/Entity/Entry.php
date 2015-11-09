@@ -22,7 +22,8 @@ class Entry implements \JsonSerializable
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Game")
+     * @ORM\ManyToOne(targetEntity="Game", cascade={"persist","remove"})
+     * @ORM\JoinColumn(name="game_id", referencedColumnName="id", onDelete="CASCADE")
      **/
     protected $game;
 

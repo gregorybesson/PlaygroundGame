@@ -29,6 +29,7 @@ class PostVotePost implements InputFilterAwareInterface, \JsonSerializable
 
     /**
      * @ORM\ManyToOne(targetEntity="PostVote", inversedBy="posts")
+     * @ORM\JoinColumn(name="postvote_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $postvote;
 
