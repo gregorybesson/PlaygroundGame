@@ -147,12 +147,6 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
 
     	$serviceManager->setService('playgroundgame_lottery_service', $f);
 
-        $translateMock = $this->getMock('PlaygroundCore\Controller\Plugin\Translate');
-
-        $translateMock->expects($this->any())
-        ->method('translate')
-        ->will($this->returnValue('ok'));
-
     	$ZfcUserMock = $this->getMock('ZfcUser\Entity\User');
 
     	$ZfcUserMock->expects($this->any())
