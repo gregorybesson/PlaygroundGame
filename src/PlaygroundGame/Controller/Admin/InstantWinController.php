@@ -43,7 +43,7 @@ class InstantWinController extends GameController
         $viewModel->setTemplate('playground-game/instant-win/instantwin');
 
         $gameForm = new ViewModel();
-        $gameForm->setTemplate('playground-game/admin/game-form');
+        $gameForm->setTemplate('playground-game/game/game-form');
 
         $instantwin = new InstantWin();
 
@@ -93,7 +93,7 @@ class InstantWinController extends GameController
         $viewModel->setTemplate('playground-game/instant-win/instantwin');
 
         $gameForm = new ViewModel();
-        $gameForm->setTemplate('playground-game/admin/game-form');
+        $gameForm->setTemplate('playground-game/game/game-form');
 
         $form   = $this->getServiceLocator()->get('playgroundgame_instantwin_form');
         $form->setAttribute('action', $this->url()->fromRoute('admin/playgroundgame/edit-instantwin', array('gameId' => $gameId)));

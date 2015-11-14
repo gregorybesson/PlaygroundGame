@@ -54,7 +54,7 @@ class PostVoteController extends GameController
         $viewModel->setTemplate('playground-game/post-vote/postvote');
 
         $gameForm = new ViewModel();
-        $gameForm->setTemplate('playground-game/admin/game-form');
+        $gameForm->setTemplate('playground-game/game/game-form');
 
         $postVote = new PostVote();
 
@@ -100,7 +100,7 @@ class PostVoteController extends GameController
         $viewModel->setTemplate('playground-game/post-vote/postvote');
 
         $gameForm = new ViewModel();
-        $gameForm->setTemplate('playground-game/admin/game-form');
+        $gameForm->setTemplate('playground-game/game/game-form');
 
         $form   = $this->getServiceLocator()->get('playgroundgame_postvote_form');
         $form->setAttribute('action', $this->url()->fromRoute('admin/playgroundgame/edit-postvote', array('gameId' => $gameId)));
