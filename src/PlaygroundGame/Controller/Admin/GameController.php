@@ -46,34 +46,36 @@ class GameController extends AbstractActionController
         }
         
         $header = array();
-        $formPV = json_decode($game->getPlayerForm()->getForm(),true);
-        foreach ($formPV as $element) {
-            if (isset($element['line_text'][0]['name'])) {
-                $header[$element['line_text'][0]['name']] = 1;
-            }
-            if (isset($element['line_password'][0]['name'])) {
-                $header[$element['line_password'][0]['name']] = 1;
-            }
-            if (isset($element['line_hidden'][0]['name'])) {
-                $header[$element['line_hidden'][0]['name']] = 1;
-            }
-            if (isset($element['line_email'][0]['name'])) {
-                $header[$element['line_email'][0]['name']] = 1;
-            }
-            if (isset($element['line_radio'][0]['name'])) {
-                $header[$element['line_radio'][0]['name']] = 1;
-            }
-            if (isset($element['line_checkbox'][0]['name'])) {
-                $header[$element['line_checkbox'][0]['name']] = 1;
-            }
-            if (isset($element['line_dropdown'][0]['name'])) {
-                $header[$element['line_dropdown'][0]['name']] = 1;
-            }
-            if (isset($element['line_paragraph'][0]['name'])) {
-                $header[$element['line_paragraph'][0]['name']] = 1;
-            }
-            if (isset($element['line_upload'][0]['name'])) {
-                $header[$element['line_upload'][0]['name']] = 1;
+        if($game->getPlayerForm()){      
+            $formPV = json_decode($game->getPlayerForm()->getForm(),true);
+            foreach ($formPV as $element) {
+                if (isset($element['line_text'][0]['name'])) {
+                    $header[$element['line_text'][0]['name']] = 1;
+                }
+                if (isset($element['line_password'][0]['name'])) {
+                    $header[$element['line_password'][0]['name']] = 1;
+                }
+                if (isset($element['line_hidden'][0]['name'])) {
+                    $header[$element['line_hidden'][0]['name']] = 1;
+                }
+                if (isset($element['line_email'][0]['name'])) {
+                    $header[$element['line_email'][0]['name']] = 1;
+                }
+                if (isset($element['line_radio'][0]['name'])) {
+                    $header[$element['line_radio'][0]['name']] = 1;
+                }
+                if (isset($element['line_checkbox'][0]['name'])) {
+                    $header[$element['line_checkbox'][0]['name']] = 1;
+                }
+                if (isset($element['line_dropdown'][0]['name'])) {
+                    $header[$element['line_dropdown'][0]['name']] = 1;
+                }
+                if (isset($element['line_paragraph'][0]['name'])) {
+                    $header[$element['line_paragraph'][0]['name']] = 1;
+                }
+                if (isset($element['line_upload'][0]['name'])) {
+                    $header[$element['line_upload'][0]['name']] = 1;
+                }
             }
         }
 

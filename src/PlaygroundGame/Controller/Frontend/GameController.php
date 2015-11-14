@@ -57,16 +57,8 @@ class GameController extends AbstractActionController
 
         $game = $sg->checkGame($identifier);
 
-        $namespace = explode('\\', ltrim(get_class($this), '\\'));
-        $controllerClass = array_pop($namespace);
-        $moduleName = array_shift($namespace);
+        $res = 'error/404';
 
-        // I want to fix the 404 page in playground-game template...
-        $moduleName = 'playground-game';
-        $controller = substr($controllerClass, 0, strlen($controllerClass) - strlen('Controller'));
-        $res = $moduleName.'/'.$controller.'/404';
-        $res = strtolower($inflector->filter($res)) ;
-        
         $viewModel = $this->buildView($game);
         $viewModel->setVariables(array(
             'game' => $game,
@@ -144,10 +136,10 @@ class GameController extends AbstractActionController
 
         if ($channel == 'facebook') {
             if ($game->getFbFan()) {
-            	$isFan = $sg->checkIsFan($game);  
-            	if (!$isFan) {
-            		return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('' . $game->getClassType().'/fangate',array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
-            	}
+                $isFan = $sg->checkIsFan($game);  
+                if (!$isFan) {
+                    return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('' . $game->getClassType().'/fangate',array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+                }
             }
 
             $isCtaActive = true;
@@ -351,14 +343,14 @@ class GameController extends AbstractActionController
             $rssUrl = $config['rss']['url'];
         }
 
-		$viewModel = $this->buildView($game);
-		$viewModel->setVariables(array(
-		    'rssUrl'         => $rssUrl,
+        $viewModel = $this->buildView($game);
+        $viewModel->setVariables(array(
+            'rssUrl'         => $rssUrl,
             'game'           => $game,
             'user'           => $user,
             'availableGames' => $availableGames,
             'flashMessages'  => $this->flashMessenger()->getMessages(),
-		));
+        ));
 
         return $viewModel;
     }
@@ -432,34 +424,38 @@ class GameController extends AbstractActionController
         } else {
             $viewModel = new ViewModel();
 
-            $this->addMetaTitle($game);
-            $this->addMetaBitly();
-            $this->addGaEvent($game);
+            if($game){
+                $this->addMetaTitle($game);
+                $this->addMetaBitly();
+                $this->addGaEvent($game);
 
-            $this->customizeGameDesign($game);
-            
-            // this is possible to create a specific game design in /design/frontend/default/custom. It will precede all others templates.
-            $templatePathResolver = $this->getServiceLocator()->get('Zend\View\Resolver\TemplatePathStack');
-            $l = $templatePathResolver->getPaths();
-            $templatePathResolver->addPath($l[0].'custom/'.$game->getIdentifier());
-            
-            $view = $this->addAdditionalView($game);
-            if ($view and $view instanceof \Zend\View\Model\ViewModel) {
-                $viewModel->addChild($view, 'additional');
-            } elseif ($view && $view instanceof \Zend\Http\PhpEnvironment\Response) {
-                return $view;
+                $this->customizeGameDesign($game);
+                
+                // this is possible to create a specific game design in /design/frontend/default/custom. It will precede all others templates.
+                $templatePathResolver = $this->getServiceLocator()->get('Zend\View\Resolver\TemplatePathStack');
+                $l = $templatePathResolver->getPaths();
+                $templatePathResolver->addPath($l[0].'custom/'.$game->getIdentifier());
+                
+                $view = $this->addAdditionalView($game);
+                if ($view and $view instanceof \Zend\View\Model\ViewModel) {
+                    $viewModel->addChild($view, 'additional');
+                } elseif ($view && $view instanceof \Zend\Http\PhpEnvironment\Response) {
+                    return $view;
+                }
+
+                $this->layout()->setVariables(
+                    array(
+                        'action' => $this->params('action'),
+                        'game' => $game, 
+                        'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                    )
+                );
             }
-
-            $this->layout()->setVariables(
-                array(
-                    'action' => $this->params('action'),
-                    'game' => $game, 
-                    'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
-                )
-            );
         }
         
-        $viewModel->setVariables($this->getShareData($game));
+        if($game){
+            $viewModel->setVariables($this->getShareData($game));
+        }
 
         return $viewModel;
     }
@@ -513,7 +509,7 @@ class GameController extends AbstractActionController
     public function addMetaTitle($game)
     {
         $sg = $this->getGameService();
-        $title = $sg->getServiceManager()->get('translator')->translate($game->getTitle());
+        $title = $this->translate($game->getTitle());
         $sg->getServiceManager()->get('ViewHelperManager')->get('HeadTitle')->set($title);
         // Meta set in the layout
         $this->layout()->setVariables(
@@ -610,27 +606,27 @@ class GameController extends AbstractActionController
      */
     public function prizesAction()
     {
-    	$identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-    	$sg = $this->getGameService();
+        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
+        $sg = $this->getGameService();
 
-    	$game = $sg->checkGame($identifier);
-    	if (!$game) {
-    		return $this->notFoundAction();
-    	}
+        $game = $sg->checkGame($identifier);
+        if (!$game) {
+            return $this->notFoundAction();
+        }
 
-    	if (count($game->getPrizes()) == 0){
-    		return $this->notFoundAction();
-    	}
+        if (count($game->getPrizes()) == 0){
+            return $this->notFoundAction();
+        }
 
-    	$viewModel = $this->buildView($game);
-    	$viewModel->setVariables(
-    		array(
-    			'game'             => $game,
-    			'flashMessages'    => $this->flashMessenger()->getMessages(),
-    		)
-    	);
+        $viewModel = $this->buildView($game);
+        $viewModel->setVariables(
+            array(
+                'game'             => $game,
+                'flashMessages'    => $this->flashMessenger()->getMessages(),
+            )
+        );
 
-    	return $viewModel;
+        return $viewModel;
     }
 
     /**
@@ -638,33 +634,33 @@ class GameController extends AbstractActionController
      */
     public function prizeAction()
     {
-    	$identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-    	$prizeIdentifier = $this->getEvent()->getRouteMatch()->getParam('prize');
-    	$sg = $this->getGameService();
-    	$sp = $this->getPrizeService();
+        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
+        $prizeIdentifier = $this->getEvent()->getRouteMatch()->getParam('prize');
+        $sg = $this->getGameService();
+        $sp = $this->getPrizeService();
 
-    	$game = $sg->checkGame($identifier);
-    	if (!$game) {
-    		return $this->notFoundAction();
-    	}
+        $game = $sg->checkGame($identifier);
+        if (!$game) {
+            return $this->notFoundAction();
+        }
 
-		$prize = $sp->getPrizeMapper()->findByIdentifier($prizeIdentifier);
-		
-		if (!$prize) {
-			return $this->notFoundAction();
-		}
+        $prize = $sp->getPrizeMapper()->findByIdentifier($prizeIdentifier);
+        
+        if (!$prize) {
+            return $this->notFoundAction();
+        }
 
 
-    	$viewModel = $this->buildView($game);
-    	$viewModel->setVariables(
-    		array(
-    			'game'             => $game,
-    			'prize'     	   => $prize,
-  				'flashMessages'    => $this->flashMessenger()->getMessages(),
-   			)
-    	);
+        $viewModel = $this->buildView($game);
+        $viewModel->setVariables(
+            array(
+                'game'             => $game,
+                'prize'            => $prize,
+                'flashMessages'    => $this->flashMessenger()->getMessages(),
+            )
+        );
 
-    	return $viewModel;
+        return $viewModel;
     }
 
     public function gameslistAction()
@@ -1208,18 +1204,18 @@ class GameController extends AbstractActionController
 
     public function getPrizeService()
     {
-    	if (!$this->prizeService) {
-    		$this->prizeService = $this->getServiceLocator()->get('playgroundgame_prize_service');
-    	}
+        if (!$this->prizeService) {
+            $this->prizeService = $this->getServiceLocator()->get('playgroundgame_prize_service');
+        }
 
-    	return $this->prizeService;
+        return $this->prizeService;
     }
 
     public function setPrizeService(PrizeService $prizeService)
     {
-    	$this->prizeService = $prizeService;
+        $this->prizeService = $prizeService;
 
-    	return $this;
+        return $this;
     }
 
     public function getOptions()
