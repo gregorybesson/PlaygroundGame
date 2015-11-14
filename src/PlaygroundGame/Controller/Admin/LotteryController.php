@@ -21,7 +21,7 @@ class LotteryController extends GameController
         $viewModel->setTemplate('playground-game/lottery/lottery');
 
         $gameForm = new ViewModel();
-        $gameForm->setTemplate('playground-game/admin/game-form');
+        $gameForm->setTemplate('playground-game/game/game-form');
 
         $lottery = new Lottery();
 
@@ -70,7 +70,7 @@ class LotteryController extends GameController
         $viewModel->setTemplate('playground-game/lottery/lottery');
 
         $gameForm = new ViewModel();
-        $gameForm->setTemplate('playground-game/admin/game-form');
+        $gameForm->setTemplate('playground-game/game/game-form');
 
         $form   = $this->getServiceLocator()->get('playgroundgame_lottery_form');
         $form->setAttribute('action', $this->url()->fromRoute('admin/playgroundgame/edit-lottery', array('gameId' => $gameId)));

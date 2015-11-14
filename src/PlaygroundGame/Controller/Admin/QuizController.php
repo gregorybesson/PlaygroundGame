@@ -178,7 +178,7 @@ class QuizController extends GameController
         $viewModel->setTemplate('playground-game/quiz/quiz');
 
         $gameForm = new ViewModel();
-        $gameForm->setTemplate('playground-game/admin/game-form');
+        $gameForm->setTemplate('playground-game/game/game-form');
 
         $quiz = new Quiz();
 
@@ -224,7 +224,7 @@ class QuizController extends GameController
         $viewModel->setTemplate('playground-game/quiz/quiz');
 
         $gameForm = new ViewModel();
-        $gameForm->setTemplate('playground-game/admin/game-form');
+        $gameForm->setTemplate('playground-game/game/game-form');
 
         $form   = $this->getServiceLocator()->get('playgroundgame_quiz_form');
         $form->setAttribute('action', $this->url()->fromRoute('admin/playgroundgame/edit-quiz', array('gameId' => $gameId)));

@@ -42,7 +42,7 @@ return array(
                 array('controller' => 'playgroundgame_prizecategory',       'roles' => array('guest', 'user')),
     
                 // Admin area
-                array('controller' => 'playgroundgameadmin',                'roles' => array('admin')),
+                array('controller' => 'playgroundgame_admin_game',          'roles' => array('admin')),
                 array('controller' => 'playgroundgame_admin_lottery',       'roles' => array('admin')),
                 array('controller' => 'playgroundgame_admin_instantwin',    'roles' => array('admin')),
                 array('controller' => 'playgroundgame_admin_quiz',          'roles' => array('admin')),
@@ -227,7 +227,6 @@ return array(
             'playgroundgame_instantwin' => 'PlaygroundGame\Controller\Frontend\InstantWinController',
             'playgroundgame_postvote' => 'PlaygroundGame\Controller\Frontend\PostVoteController',
             'playgroundgame_prizecategory' => 'PlaygroundGame\Controller\Frontend\PrizeCategoryController',
-            'playgroundgameadmin' => 'PlaygroundGame\Controller\Admin\AdminController',
             'playgroundgame_admin_game' => 'PlaygroundGame\Controller\Admin\GameController',
             'playgroundgame_admin_lottery' => 'PlaygroundGame\Controller\Admin\LotteryController',
             'playgroundgame_admin_instantwin' => 'PlaygroundGame\Controller\Admin\InstantWinController',
@@ -1427,7 +1426,7 @@ return array(
                         'options' => array(
                             'route' => '/game',
                             'defaults' => array(
-                                'controller' => 'playgroundgameadmin',
+                                'controller' => 'playgroundgame_admin_game',
                                 'action' => 'index'
                             )
                         ),
@@ -1437,7 +1436,7 @@ return array(
                                 'options' => array(
                                     'route' => '/list/:type/:filter[/:p]',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgameadmin',
+                                        'controller' => 'playgroundgame_admin_game',
                                         'action' => 'list',
                                         'type' => 'createdAt',
                                         'filter' => 'DESC'
@@ -1449,7 +1448,7 @@ return array(
                                 'options' => array(
                                     'route' => '/create',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgameadmin',
+                                        'controller' => 'playgroundgame_admin_game',
                                         'action' => 'create'
                                     )
                                 )
@@ -1459,7 +1458,7 @@ return array(
                                 'options' => array(
                                     'route' => '/player-form/:gameId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgameadmin',
+                                        'controller' => 'playgroundgame_admin_game',
                                         'action' => 'form',
                                         'gameId' => 0
                                     )
@@ -1470,7 +1469,7 @@ return array(
                                 'options' => array(
                                     'route' => '/export/:gameId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgameadmin',
+                                        'controller' => 'playgroundgame_admin_game',
                                         'action' => 'export',
                                         'gameId' => 0
                                     )
@@ -1481,7 +1480,7 @@ return array(
                                 'options' => array(
                                     'route' => '/import',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgameadmin',
+                                        'controller' => 'playgroundgame_admin_game',
                                         'action' => 'import'
                                     )
                                 )
@@ -1688,7 +1687,7 @@ return array(
                                 'options' => array(
                                     'route' => '/entry/:gameId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgameadmin',
+                                        'controller' => 'playgroundgame_admin_game',
                                         'action' => 'entry',
                                         'gameId' => 0
                                     )
@@ -1700,7 +1699,7 @@ return array(
                                         'options' => array(
                                             'route' => '[:p]',
                                             'defaults' => array(
-                                                'controller' => 'playgroundgameadmin',
+                                                'controller' => 'playgroundgame_admin_game',
                                                 'action' => 'entry'
                                             )
                                         )
@@ -1756,7 +1755,7 @@ return array(
                                 'options' => array(
                                     'route' => '/download/:gameId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgameadmin',
+                                        'controller' => 'playgroundgame_admin_game',
                                         'action' => 'download',
                                         'gameId' => 0
                                     )
@@ -1767,7 +1766,7 @@ return array(
                                 'options' => array(
                                     'route' => '/edit/:gameId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgameadmin',
+                                        'controller' => 'playgroundgame_admin_game',
                                         'action' => 'edit',
                                         'gameId' => 0
                                     )
@@ -1778,7 +1777,7 @@ return array(
                                 'options' => array(
                                     'route' => '/remove/:gameId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgameadmin',
+                                        'controller' => 'playgroundgame_admin_game',
                                         'action' => 'remove',
                                         'gameId' => 0
                                     )
@@ -1792,7 +1791,7 @@ return array(
                                         'gameId' => '[0-9]+'
                                     ),
                                     'defaults' => array(
-                                        'controller' => 'playgroundgameadmin',
+                                        'controller' => 'playgroundgame_admin_game',
                                         'action' => 'setActive',
                                         'gameId' => 0
                                     )

@@ -93,4 +93,4 @@ if (isset($fm[0]))
 	<li class="btn-admin bottom"><a href="<?php echo $this->url('admin/playgroundgame/import');?>"><?php echo $this->translate('Import a game'); ?></a></li>
 </ul>
 
-<?php echo $this->paginationControl($this->games, 'Sliding', 'playground-game/admin/pagination_gamelist', array('type' => $this->type, 'filter' => $this->filter)); ?>
+<?php echo $this->paginationControl($this->games, 'Sliding', 'playground-game/game/pagination_gamelist', array('type' => $this->type, 'filter' => $this->filter)); ?>
