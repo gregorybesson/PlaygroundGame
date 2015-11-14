@@ -47,7 +47,6 @@ class GameController extends AbstractActionController
     public function notFoundAction()
     {
 
-        $inflector      = new \Zend\Filter\Word\CamelCaseToDash();
         $sg             = $this->getGameService();
         $identifier     = $this->getEvent()->getRouteMatch()->getParam('id');
         $viewRender     = $this->getServiceLocator()->get( 'ViewRenderer' );
@@ -437,7 +436,7 @@ class GameController extends AbstractActionController
                 $templatePathResolver->addPath($l[0].'custom/'.$game->getIdentifier());
                 
                 $view = $this->addAdditionalView($game);
-                if ($view and $view instanceof \Zend\View\Model\ViewModel) {
+                if ($view && $view instanceof \Zend\View\Model\ViewModel) {
                     $viewModel->addChild($view, 'additional');
                 } elseif ($view && $view instanceof \Zend\Http\PhpEnvironment\Response) {
                     return $view;

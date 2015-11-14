@@ -758,8 +758,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             $entry->setPlayerData($dataJson);
             $this->getEntryMapper()->update($entry);
         } else {
-            print_r($form->getMessages());
-            die('FALSE');
+            
             return false;
         }
 
