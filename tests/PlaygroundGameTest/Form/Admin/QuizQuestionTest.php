@@ -28,7 +28,6 @@ class quizQuestionTest extends \PHPUnit_Framework_TestCase
             'audio' => '123456789',
             'autoplay' => '1',
             'weight' => '1',
-            'timer' => '',
             'timer_duration' => '',
             'submit' => '',
             'quiz_id' => '2',
@@ -61,6 +60,7 @@ class quizQuestionTest extends \PHPUnit_Framework_TestCase
 
         $form->bind($question);
         $form->setData($this->quizQuestionData);
+
         $this->assertTrue($form->isValid());
 
     }
@@ -111,11 +111,12 @@ class quizQuestionTest extends \PHPUnit_Framework_TestCase
         $question = new QuizQuestionEntity();
         $form = $this->sm->get('playgroundgame_quizquestion_form');
         $form->setInputFilter($question->getInputFilter());
-        
-        $this->quizQuestionData['prediction'] = null;
+
+        unset($this->quizQuestionData['prediction']);
 
         $form->bind($question);
         $form->setData($this->quizQuestionData);
+
         $this->assertTrue($form->isValid());
     }
 
@@ -139,7 +140,7 @@ class quizQuestionTest extends \PHPUnit_Framework_TestCase
         $form = $this->sm->get('playgroundgame_quizquestion_form');
         $form->setInputFilter($question->getInputFilter());
         
-        $this->quizQuestionData['timer'] = null;
+        unset($this->quizQuestionData['timer']);
 
         $form->bind($question);
         $form->setData($this->quizQuestionData);
@@ -166,7 +167,7 @@ class quizQuestionTest extends \PHPUnit_Framework_TestCase
         $form = $this->sm->get('playgroundgame_quizquestion_form');
         $form->setInputFilter($question->getInputFilter());
         
-        $this->quizQuestionData['autoplay'] = null;
+        unset($this->quizQuestionData['autoplay']);
 
         $form->bind($question);
         $form->setData($this->quizQuestionData);

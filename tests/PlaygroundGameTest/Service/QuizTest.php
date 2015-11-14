@@ -21,22 +21,25 @@ class QuizTest extends AbstractHttpControllerTestCase
 
         $this->sm = $this->getApplicationServiceLocator();
         $this->sm->setAllowOverride(true);
+        $this->em = $this->sm->get('doctrine.entitymanager.orm_default');
+        $this->tm = $this->sm->get('playgroundgame_game_mapper');
+        $tool = new \Doctrine\ORM\Tools\SchemaTool($this->em);
+        $classes = $this->em->getMetadataFactory()->getAllMetadata();
+        $tool->dropSchema($classes);
+        $tool->createSchema($classes);
         parent::setUp();
 
         $this->dataTrue = array(
             'submit' => '', 
-            'quiz_id' => '3', 
-            'prediction' => '0', 
+            'quiz_id' => '3',
             'type' => '0', 
             'question' => '<p>Question ?</p>',
-            'hint' => '', 
-            'timer' => '', 
+            'hint' => '',
             'timer_duration' => '', 
             'position' => '0', 
             'video' => '', 
             'search_sound' => '', 
-            'audio' => '0', 
-            'autoplay' => '', 
+            'audio' => '0',
             'answers' => array (
                 0 => array (
                     'id' => '', 
@@ -58,17 +61,14 @@ class QuizTest extends AbstractHttpControllerTestCase
         $this->dataFalse = array(
             'submit' => '', 
             'quiz_id' => '3', 
-            'prediction' => '0', 
             'type' => '0', 
             'question' => '<p>Question ?</p>',
             'hint' => '', 
-            'timer' => '', 
             'timer_duration' => '', 
             'position' => '0', 
             'video' => '', 
             'search_sound' => '', 
-            'audio' => '0', 
-            'autoplay' => '', 
+            'audio' => '0',
             'answers' => array (
                 0 => array (
                     'id' => '', 
