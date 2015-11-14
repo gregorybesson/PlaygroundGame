@@ -25,9 +25,6 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
 
         $pluginManager    = $this->getApplicationServiceLocator()->get('ControllerPluginManager');
 
-        $game = new GameEntity();
-        $game->setFbFan(true);
-
         //mocking the method checkExistingEntry
         $f = $this->getMockBuilder('PlaygroundGame\Service\Game')
         ->setMethods(array('checkGame', 'checkIsFan'))
@@ -37,7 +34,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         $serviceManager->setService('playgroundgame_lottery_service', $f);
 
         // I check that the array in findOneBy contains the parameter 'active' = 1
-        $f->expects($this->once())
+        $f->expects($this->exactly(2))
         ->method('checkGame')
         ->will($this->returnValue(false));
 
@@ -139,15 +136,22 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     	$game = new GameEntity();
     	$game->setFbFan(true);
     	$game->setIdentifier('gameid');
+        $game->setTitle('gameid');
     	$game->setClassType('lottery');
 
     	//mocking the method checkExistingEntry
     	$f = $this->getMockBuilder('PlaygroundGame\Service\Game')
     	->setMethods(array('checkGame', 'checkExistingEntry', 'getServiceManager'))
-    	//->disableOriginalConstructor()
+    	->disableOriginalConstructor()
     	->getMock();
 
     	$serviceManager->setService('playgroundgame_lottery_service', $f);
+
+        $translateMock = $this->getMock('PlaygroundCore\Controller\Plugin\Translate');
+
+        $translateMock->expects($this->any())
+        ->method('translate')
+        ->will($this->returnValue('ok'));
 
     	$ZfcUserMock = $this->getMock('ZfcUser\Entity\User');
 
@@ -175,6 +179,10 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     	$f->expects($this->once())
     	->method('checkExistingEntry')
     	->will($this->returnValue(false));
+
+        $f->expects($this->any())
+        ->method('getServiceManager')
+        ->will($this->returnValue($serviceManager));
 
     	$this->dispatch('/loterie/gameid');
 
@@ -237,6 +245,10 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     	->method('checkExistingEntry')
     	->will($this->returnValue($entry));
 
+        $f->expects($this->any())
+        ->method('getServiceManager')
+        ->will($this->returnValue($serviceManager));
+
     	$this->dispatch('/loterie/gameid');
 
     	$this->assertModuleName('playgroundgame');
@@ -257,13 +269,13 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
 
     	$f = $this->getMockBuilder('PlaygroundGame\Service\Game')
     	->setMethods(array('checkGame', 'checkIsFan', 'checkExistingEntry', 'getServiceManager'))
-    	//->disableOriginalConstructor()
+    	->disableOriginalConstructor()
     	->getMock();
 
     	$serviceManager->setService('playgroundgame_lottery_service', $f);
 
     	// I check that the array in findOneBy contains the parameter 'active' = 1
-     	$f->expects($this->once())
+     	$f->expects($this->exactly(2))
      	->method('checkGame')
      	->will($this->returnValue(false));
 
@@ -373,7 +385,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     	$serviceManager->setService('playgroundgame_lottery_service', $f);
 
     	// I check that the array in findOneBy contains the parameter 'active' = 1
-     	$f->expects($this->once())
+     	$f->expects($this->exactly(2))
      	->method('checkGame')
      	->will($this->returnValue(false));
 
@@ -420,7 +432,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     	$serviceManager->setService('playgroundgame_lottery_service', $f);
 
     	// I check that the array in findOneBy contains the parameter 'active' = 1
-    	$f->expects($this->once())
+    	$f->expects($this->exactly(2))
     	->method('checkGame')
     	->will($this->returnValue(false));
 
@@ -1413,7 +1425,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     	$serviceManager->setService('playgroundgame_lottery_service', $f);
 
     	// I check that the array in findOneBy contains the parameter 'active' = 1
-    	$f->expects($this->once())
+    	$f->expects($this->exactly(2))
     	->method('checkGame')
     	->will($this->returnValue(false));
 
@@ -1460,7 +1472,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     	$serviceManager->setService('playgroundgame_lottery_service', $f);
 
     	// I check that the array in findOneBy contains the parameter 'active' = 1
-    	$f->expects($this->once())
+    	$f->expects($this->exactly(2))
     	->method('checkGame')
     	->will($this->returnValue(false));
 
@@ -1526,7 +1538,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     	->method('getAvailableGames')
     	->will($this->returnValue(array()));
 
-    	$f->expects($this->once())
+    	$f->expects($this->any())
     	->method('getServiceManager')
     	->will($this->returnValue($serviceManager));
 
@@ -1581,7 +1593,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     	$serviceManager->setService('playgroundgame_lottery_service', $f);
 
     	// I check that the array in findOneBy contains the parameter 'active' = 1
-    	$f->expects($this->once())
+    	$f->expects($this->exactly(2))
     	->method('checkGame')
     	->will($this->returnValue(false));
 
@@ -1660,6 +1672,10 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
 
     	$pluginManager->setService('zfcUserAuthentication', $authMock);
 
+        $f->expects($this->any())
+        ->method('getServiceManager')
+        ->will($this->returnValue($serviceManager));
+
     	$this->dispatch('/loterie/gameid/reglement');
 
     	$this->assertModuleName('playgroundgame');
@@ -1686,7 +1702,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         $serviceManager->setService('playgroundgame_lottery_service', $f);
 
         // I check that the array in findOneBy contains the parameter 'active' = 1
-        $f->expects($this->once())
+        $f->expects($this->exactly(2))
         ->method('checkGame')
         ->will($this->returnValue(false));
 
@@ -1765,6 +1781,10 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
 
         $pluginManager->setService('zfcUserAuthentication', $authMock);
 
+        $f->expects($this->any())
+        ->method('getServiceManager')
+        ->will($this->returnValue($serviceManager));
+
         $this->dispatch('/loterie/gameid/mentions-legales');
 
         $this->assertModuleName('playgroundgame');
@@ -1823,7 +1843,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     	$serviceManager->setService('playgroundgame_lottery_service', $f);
 
     	// I check that the array in findOneBy contains the parameter 'active' = 1
-    	$f->expects($this->once())
+    	$f->expects($this->exactly(2))
     	->method('checkGame')
     	->will($this->returnValue(false));
 
@@ -1875,7 +1895,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     	$serviceManager->setService('playgroundgame_lottery_service', $f);
 
     	// I check that the array in findOneBy contains the parameter 'active' = 1
-    	$f->expects($this->once())
+    	$f->expects($this->exactly(2))
     	->method('checkGame')
     	->will($this->returnValue($game));
 
@@ -1896,6 +1916,10 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     	->will($this->returnValue($ZfcUserMock));
 
     	$pluginManager->setService('zfcUserAuthentication', $authMock);
+
+        $f->expects($this->any())
+        ->method('getServiceManager')
+        ->will($this->returnValue($serviceManager));
 
     	$this->dispatch('/loterie/gameid/lots');
 
@@ -1957,6 +1981,10 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
 
     	$pluginManager->setService('zfcUserAuthentication', $authMock);
 
+        $f->expects($this->any())
+        ->method('getServiceManager')
+        ->will($this->returnValue($serviceManager));
+
     	$this->dispatch('/loterie/gameid/lots');
 
     	$this->assertModuleName('playgroundgame');
@@ -1984,7 +2012,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     	$serviceManager->setService('playgroundgame_lottery_service', $f);
 
     	// I check that the array in findOneBy contains the parameter 'active' = 1
-    	$f->expects($this->once())
+    	$f->expects($this->exactly(2))
     	->method('checkGame')
     	->will($this->returnValue(false));
 
@@ -2054,7 +2082,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     	$serviceManager->setService('playgroundgame_prize_service', $p);
 
     	// I check that the array in findOneBy contains the parameter 'active' = 1
-    	$f->expects($this->once())
+    	$f->expects($this->exactly(2))
     	->method('checkGame')
     	->will($this->returnValue($game));
 
@@ -2075,6 +2103,10 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     	->will($this->returnValue($ZfcUserMock));
 
     	$pluginManager->setService('zfcUserAuthentication', $authMock);
+
+        $f->expects($this->any())
+        ->method('getServiceManager')
+        ->will($this->returnValue($serviceManager));
 
     	$this->dispatch('/loterie/gameid/lots/prize');
 
@@ -2147,6 +2179,10 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
     	->will($this->returnValue($ZfcUserMock));
 
     	$pluginManager->setService('zfcUserAuthentication', $authMock);
+
+        $f->expects($this->any())
+        ->method('getServiceManager')
+        ->will($this->returnValue($serviceManager));
 
     	$this->dispatch('/loterie/gameid/lots/prize');
 

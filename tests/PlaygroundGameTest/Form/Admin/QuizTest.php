@@ -20,6 +20,12 @@ class quizTest extends \PHPUnit_Framework_TestCase
     {
         $this->sm = Bootstrap::getServiceManager();
         $this->sm->setAllowOverride(true);
+        $this->em = $this->sm->get('doctrine.entitymanager.orm_default');
+        $this->tm = $this->sm->get('playgroundgame_game_mapper');
+        $tool = new \Doctrine\ORM\Tools\SchemaTool($this->em);
+        $classes = $this->em->getMetadataFactory()->getAllMetadata();
+        $tool->dropSchema($classes);
+        $tool->createSchema($classes);
 
         //$this->getForm();
         $now = new \DateTime('today');
