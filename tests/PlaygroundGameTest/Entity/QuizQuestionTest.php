@@ -66,7 +66,7 @@ class QuizQuestionTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
-     * 
+     *
      * @depends testCanInsertNewRecord
      */
     public function testCanUpdateInsertedRecord($id)

@@ -20,8 +20,7 @@ class PostVoteVote extends Form
                 'height' => 60,
                 'wordlen' => 4,
                 'dotNoiseLevel' => 20,
-                'lineNoiseLevel' => 1)
-        );
+                'lineNoiseLevel' => 1));
 
         $captchaImage->setImgDir($dirdata.'/captcha');
         $captchaImage->setImgUrl($urlcaptcha);

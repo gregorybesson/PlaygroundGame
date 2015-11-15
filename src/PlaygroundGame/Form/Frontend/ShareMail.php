@@ -86,7 +86,7 @@ class ShareMail extends ProvidesEventsForm
             ->setAttributes(array(
             'type' => 'submit',
             'class'=> 'btn btn-warning'
-        ));
+            ));
 
         $this->add($submitElement, array(
             'priority' => - 100

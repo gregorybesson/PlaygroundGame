@@ -258,7 +258,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
      * @param  array                  $data
      * @return \PlaygroundGame\Entity\Game
      */
-    public function createForm(array $data, $game, $form=null)
+    public function createForm(array $data, $game, $form = null)
     {
         $title ='';
         $description = '';
@@ -289,7 +289,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
         return $form;
     }
 
-    public function findArrayOfValidatedPosts($game, $filter, $search='')
+    public function findArrayOfValidatedPosts($game, $filter, $search = '')
     {
         $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
         $qb = $em->createQueryBuilder();
@@ -331,15 +331,15 @@ class PostVote extends Game implements ServiceManagerAwareInterface
             ->groupBy('p.id');
  
         switch ($filter) {
-            case 'random' :
+            case 'random':
                 $qb->orderBy('e.value', 'ASC');
                 break;
-            case 'vote' :
+            case 'vote':
                 $qb->orderBy('votesCount', 'DESC');
                 break;
-            case 'date' :
+            case 'date':
                 $qb->orderBy('p.createdAt', 'DESC');
-            case 'push' :
+            case 'push':
                 $qb->orderBy('p.createdAt', 'DESC');
         }
         

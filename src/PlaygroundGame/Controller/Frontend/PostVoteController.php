@@ -128,8 +128,7 @@ class PostVoteController extends GameController
                 'playerData' => $entry->getPlayerData(),
                 'form' => $form,
                 'post' => $post,
-            )
-        );
+            ));
 
         return $viewModel;
     }
@@ -337,8 +336,7 @@ class PostVoteController extends GameController
                 'statusMail'       => $statusMail,
                 'post'             => $post,
                 'form'             => $form,
-            )
-        );
+            ));
 
         return $viewModel;
     }
@@ -541,8 +539,7 @@ class PostVoteController extends GameController
                 'reportId' => $reportId,
                 'filter' => $filter,
                 'search' => $search,
-            )
-        );
+            ));
 
         return $viewModel;
     }

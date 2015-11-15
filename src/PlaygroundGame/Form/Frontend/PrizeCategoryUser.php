@@ -49,7 +49,7 @@ class PrizeCategoryUser extends ProvidesEventsForm
         $submitElement->setLabel($translator->translate('Create', 'playgroundgame'))
             ->setAttributes(array(
             'type' => 'submit'
-        ));
+            ));
 
         $this->add($submitElement, array(
             'priority' => - 100

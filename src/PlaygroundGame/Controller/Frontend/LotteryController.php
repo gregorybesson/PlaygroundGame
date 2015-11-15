@@ -102,8 +102,7 @@ class LotteryController extends GameController
                 'form'             => $form,
                 'socialLinkUrl'    => $socialLinkUrl,
                 'secretKey'           => $secretKey,
-            )
-        );
+            ));
 
         return $viewModel;
     }

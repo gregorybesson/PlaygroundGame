@@ -37,9 +37,9 @@ class GameController extends AbstractActionController
      * it has to be rendered in the controller. Hence the code below.
      *
      * This action is injected as a catchall action for each custom_games definition
-     * This way, when a custom_game is created, the 404 is it's responsability and the 
+     * This way, when a custom_game is created, the 404 is it's responsability and the
      * view can be defined in design/frontend/default/custom/$slug/playground_game/$gametype/404.phtml
-     * 
+     *
      *
      * @return array
      */
@@ -66,7 +66,7 @@ class GameController extends AbstractActionController
     }
 
     /**
-     * This action acts as a hub : Depending on the first step of the game, it will forward the action to this step 
+     * This action acts as a hub : Depending on the first step of the game, it will forward the action to this step
      */
     public function homeAction()
     {
@@ -346,7 +346,7 @@ class GameController extends AbstractActionController
     }
 
     /**
-     * 
+     *
      * @param \PlaygroundGame\Entity\Game $game
      * @param \PlaygroundUser\Entity\User $user
      * @param string $channel
@@ -653,7 +653,7 @@ class GameController extends AbstractActionController
         $this->getViewHelper('HeadMeta')->setProperty('bt:key', $bitlykey);
 
         $this->layout()->setVariables(
-           array(
+            array(
             'sliderItems'   => $sliderItems,
             /*'adserving'       => array(
                 'cat1' => 'playground',
@@ -664,7 +664,7 @@ class GameController extends AbstractActionController
                 'pageGames' => 'games',
                 'pageWinners' => ''
             ),
-           )
+            )
         );
 
         return new ViewModel(

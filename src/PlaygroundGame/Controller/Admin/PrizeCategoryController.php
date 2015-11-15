@@ -44,8 +44,8 @@ class PrizeCategoryController extends AbstractActionController
 
         if ($request->isPost()) {
             $data = array_merge(
-                    $request->getPost()->toArray(),
-                    $request->getFiles()->toArray()
+                $request->getPost()->toArray(),
+                $request->getFiles()->toArray()
             );
             $category = $this->getPrizeCategoryService()->create($data, $category, 'playgroundgame_prizecategory_form');
             if ($category) {
@@ -74,8 +74,8 @@ class PrizeCategoryController extends AbstractActionController
 
         if ($request->isPost()) {
             $data = array_merge(
-                    $request->getPost()->toArray(),
-                    $request->getFiles()->toArray()
+                $request->getPost()->toArray(),
+                $request->getFiles()->toArray()
             );
             $category = $this->getPrizeCategoryService()->edit($data, $category, 'playgroundgame_prizecategory_form');
             if ($category) {

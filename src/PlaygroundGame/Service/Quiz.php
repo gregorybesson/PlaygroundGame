@@ -284,7 +284,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
         return $quiz;
     }
 
-    public function getNumberCorrectAnswersQuiz($user, $count='count')
+    public function getNumberCorrectAnswersQuiz($user, $count = 'count')
     {
         $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
 
@@ -420,7 +420,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
         return $entry;
     }
 
-    public function isWinner($game, $quizCorrectAnswers=0)
+    public function isWinner($game, $quizCorrectAnswers = 0)
     {
         // Pour déterminer le gagnant, je regarde le nombre max de reponses correctes possibles
         // dans le jeu, puis je calcule le ratio de bonnes réponses et le compare aux conditions

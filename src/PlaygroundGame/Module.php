@@ -42,7 +42,7 @@ class Module
         // If custom games need a specific route. I create these routes
         if (PHP_SAPI !== 'cli') {
             if (isset($config['custom_games'])) {
-                foreach ($config['custom_games'] as $k=>$v) {
+                foreach ($config['custom_games'] as $k => $v) {
                     // add custom language directory
                     $config['translator']['translation_file_patterns'][] = array(
                         'type'         => 'phpArray',
@@ -65,7 +65,7 @@ class Module
                                 $routeModel['options']['route'] = '/';
                     
                                 // and removing the trailing slash for each subsequent route
-                                foreach ($routeModel['child_routes'] as $id=>$ar) {
+                                foreach ($routeModel['child_routes'] as $id => $ar) {
                                     $routeModel['child_routes'][$id]['options']['route'] = ltrim($ar['options']['route'], '/');
                                 }
                     
@@ -162,7 +162,7 @@ class Module
         }
             
         /**
-         * This listener gives the possibility to select the layout on module / controller / action level 
+         * This listener gives the possibility to select the layout on module / controller / action level
          * This is triggered after the PlaygroundDesign one so that it's the last triggered for games.
          */
         $e->getApplication()->getEventManager()->getSharedManager()->attach('Zend\Mvc\Controller\AbstractActionController', 'dispatch', function (MvcEvent $e) {
@@ -347,14 +347,13 @@ class Module
                 'playgroundgame_module_options' => function (\Zend\ServiceManager\ServiceManager $sm) {
                         $config = $sm->get('Configuration');
 
-                        return new Options\ModuleOptions(isset($config['playgroundgame']) ? $config['playgroundgame'] : array()
-                    );
+                        return new Options\ModuleOptions(isset($config['playgroundgame']) ? $config['playgroundgame'] : array());
                 },
 
                 'playgroundgame_game_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $mapper = new \PlaygroundGame\Mapper\Game(
-                            $sm->get('doctrine.entitymanager.orm_default'),
-                            $sm->get('playgroundgame_module_options')
+                        $sm->get('doctrine.entitymanager.orm_default'),
+                        $sm->get('playgroundgame_module_options')
                     );
 
                     return $mapper;
@@ -371,8 +370,8 @@ class Module
 
                 'playgroundgame_lottery_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $mapper = new \PlaygroundGame\Mapper\Lottery(
-                            $sm->get('doctrine.entitymanager.orm_default'),
-                            $sm->get('playgroundgame_module_options')
+                        $sm->get('doctrine.entitymanager.orm_default'),
+                        $sm->get('playgroundgame_module_options')
                     );
 
                     return $mapper;
@@ -397,30 +396,30 @@ class Module
                 },
 
                 'playgroundgame_quiz_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
-                $mapper = new \PlaygroundGame\Mapper\Quiz(
+                    $mapper = new \PlaygroundGame\Mapper\Quiz(
                         $sm->get('doctrine.entitymanager.orm_default'),
                         $sm->get('playgroundgame_module_options')
-                );
+                    );
 
-                return $mapper;
+                    return $mapper;
                 },
 
                 'playgroundgame_quizquestion_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $mapper = new \PlaygroundGame\Mapper\QuizQuestion(
-                            $sm->get('doctrine.entitymanager.orm_default'),
-                            $sm->get('playgroundgame_module_options')
+                        $sm->get('doctrine.entitymanager.orm_default'),
+                        $sm->get('playgroundgame_module_options')
                     );
 
                     return $mapper;
                 },
 
                 'playgroundgame_quizanswer_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
-                $mapper = new \PlaygroundGame\Mapper\QuizAnswer(
+                    $mapper = new \PlaygroundGame\Mapper\QuizAnswer(
                         $sm->get('doctrine.entitymanager.orm_default'),
                         $sm->get('playgroundgame_module_options')
-                );
+                    );
 
-                return $mapper;
+                    return $mapper;
                 },
 
                 'playgroundgame_quizreply_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
@@ -461,12 +460,12 @@ class Module
                 },
 
                 'playgroundgame_postvoteform_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
-                $mapper = new \PlaygroundGame\Mapper\PostVoteForm(
+                    $mapper = new \PlaygroundGame\Mapper\PostVoteForm(
                         $sm->get('doctrine.entitymanager.orm_default'),
                         $sm->get('playgroundgame_module_options')
-                );
+                    );
 
-                return $mapper;
+                    return $mapper;
                 },
 
                 'playgroundgame_postvotepost_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
@@ -637,10 +636,10 @@ class Module
                 },
 
                 'playgroundgame_prizecategoryuser_form' => function (\Zend\ServiceManager\ServiceManager $sm) {
-                $translator = $sm->get('translator');
-                $form = new Form\Frontend\PrizeCategoryUser(null, $sm, $translator);
+                    $translator = $sm->get('translator');
+                    $form = new Form\Frontend\PrizeCategoryUser(null, $sm, $translator);
 
-                return $form;
+                    return $form;
                 },
 
                 'playgroundgame_sharemail_form' => function (\Zend\ServiceManager\ServiceManager $sm) {

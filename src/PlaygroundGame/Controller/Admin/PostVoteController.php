@@ -66,8 +66,8 @@ class PostVoteController extends GameController
         $request = $this->getRequest();
         if ($request->isPost()) {
             $data = array_replace_recursive(
-                    $this->getRequest()->getPost()->toArray(),
-                    $this->getRequest()->getFiles()->toArray()
+                $this->getRequest()->getPost()->toArray(),
+                $this->getRequest()->getFiles()->toArray()
             );
             if (empty($data['prizes'])) {
                 $data['prizes'] = array();
@@ -124,8 +124,8 @@ class PostVoteController extends GameController
 
         if ($this->getRequest()->isPost()) {
             $data = array_replace_recursive(
-                    $this->getRequest()->getPost()->toArray(),
-                    $this->getRequest()->getFiles()->toArray()
+                $this->getRequest()->getPost()->toArray(),
+                $this->getRequest()->getFiles()->toArray()
             );
             if (empty($data['prizes'])) {
                 $data['prizes'] = array();

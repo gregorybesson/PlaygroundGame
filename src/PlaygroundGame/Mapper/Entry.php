@@ -63,8 +63,8 @@ class Entry implements ServiceLocatorAwareInterface
             LIMIT :total';
         
         $rsm = new \Doctrine\ORM\Query\ResultSetMappingBuilder($this->em);
-        $rsm->addRootEntityFromClassMetadata('\PlaygroundGame\Entity\Entry',  'e',  array('id' => 'id', 'created_at' => 'ecreated_at', 'updated_at' => 'eupdated_at'));
-        $query = $this->em->createNativeQuery($sql,  $rsm);
+        $rsm->addRootEntityFromClassMetadata('\PlaygroundGame\Entity\Entry', 'e', array('id' => 'id', 'created_at' => 'ecreated_at', 'updated_at' => 'eupdated_at'));
+        $query = $this->em->createNativeQuery($sql, $rsm);
         $query->setParameter('game_id', $game->getId());
         $query->setParameter('total', $total);
         
@@ -255,8 +255,8 @@ class Entry implements ServiceLocatorAwareInterface
                 break;
             default:
                 $interval = 'P100Y';
-            $now->sub(new \DateInterval($interval));
-            $dateLimit = $now->format('Y-m-d') . ' 0:0:0';
+                $now->sub(new \DateInterval($interval));
+                $dateLimit = $now->format('Y-m-d') . ' 0:0:0';
         }
 
         $query = $this->em->createQuery(
@@ -300,7 +300,7 @@ class Entry implements ServiceLocatorAwareInterface
         return true;
     }
 
-    public function findOneBy($array=array(), $sortBy = array('updated_at' => 'desc'))
+    public function findOneBy($array = array(), $sortBy = array('updated_at' => 'desc'))
     {
         $er = $this->getEntityRepository();
 

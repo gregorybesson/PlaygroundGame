@@ -63,7 +63,7 @@ class Entry implements \JsonSerializable
     /**
      * This column hosts an id chosen by the admin in case of a game with "anonymous" participation :
      * This is a value chosen from the playerData (generally "email").
-     * 
+     *
      * @ORM\Column(name="anonymous_identifier", type="string", length=255, nullable=true)
      */
     protected $anonymousIdentifier;

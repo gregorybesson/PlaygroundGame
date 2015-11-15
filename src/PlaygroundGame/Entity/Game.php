@@ -156,7 +156,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      * This column can be filled in when anonymousAllowed = 1.
      * If you put a value, it has to be a field key from playerdata. This key will
      * then be used to identify a player (generally 'email')
-     * 
+     *
      * @ORM\Column(name="anonymous_identifier", type="text", nullable=true)
      */
     protected $anonymousIdentifier;
@@ -829,8 +829,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
     public function isClosed()
     {
         $today = new DateTime('now');
-        if (
-            ($this->getCloseDate() && $this->getCloseDate()->setTime(23, 59, 59) < $today)
+        if (($this->getCloseDate() && $this->getCloseDate()->setTime(23, 59, 59) < $today)
             ||
             ($this->getPublicationDate() && $this->getPublicationDate()->setTime(0, 0, 0) > $today)
         ) {

@@ -120,7 +120,7 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
         $created = 0;
         $numOccurrences = $game->getOccurrenceNumber();
         
-        for ($i=0; $i < $numOccurrences ; $i++) {
+        for ($i=0; $i < $numOccurrences; $i++) {
             $code = '';
             while (strlen($code)<$data['occurrenceValueSize']) {
                 $code .= $available_characters[rand(0, $last_character_index)];
@@ -184,7 +184,7 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                 $occurrences = $this->getInstantWinOccurrenceMapper()->findBy(array('instantwin' => $game));
                 $nbOccurencesToCreate = $game->getOccurrenceNumber() - count($occurrences);
                 if ($nbOccurencesToCreate > 0) {
-                    for ($i=1;$i<=$nbOccurencesToCreate;$i++) {
+                    for ($i=1; $i<=$nbOccurencesToCreate; $i++) {
                         $randomDate = $this->getRandomDate($beginning->format('U'), $end->format('U'));
                         $randomDate = \DateTime::createFromFormat('Y-m-d H:i:s', $randomDate);
                         $occurrence  = new \PlaygroundGame\Entity\InstantWinOccurrence();
@@ -198,7 +198,6 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
 
                 break;
             case 'hour':
-
                 $occurrences = $this->getInstantWinOccurrenceMapper()->findBy(array('instantwin' => $game));
                 $nbExistingOccurrences = count($occurrences);
                 $nbOccurencesToCreate = 0;
@@ -216,8 +215,8 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                 $endDrawDate = \DateTime::createFromFormat('m/d/Y H:i:s', $beginning->format('m/d/Y H'). ':59:59');
 
                 if ($nbOccurencesToCreate > 0) {
-                    for ($d=1;$d<=$nbInterval;$d++) {
-                        for ($i=1;$i<=$nbOccurencesToCreate;$i++) {
+                    for ($d=1; $d<=$nbInterval; $d++) {
+                        for ($i=1; $i<=$nbOccurencesToCreate; $i++) {
                             $randomDate = $this->getRandomDate($beginningDrawDate->format('U'), $endDrawDate->format('U'));
                             $randomDate = \DateTime::createFromFormat('Y-m-d H:i:s', $randomDate);
                             $occurrence  = new \PlaygroundGame\Entity\InstantWinOccurrence();
@@ -236,7 +235,6 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
 
                 break;
             case 'day':
-
                 $occurrences = $this->getInstantWinOccurrenceMapper()->findBy(array('instantwin' => $game));
                 $nbExistingOccurrences = count($occurrences);
                 $nbOccurencesToCreate = 0;
@@ -256,8 +254,8 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                 $beginningDrawDate = \DateTime::createFromFormat('m/d/Y H:i:s', $beginning->format('m/d/Y H:i:s'));
                 $endDrawDate = \DateTime::createFromFormat('m/d/Y H:i:s', $beginning->format('m/d/Y'). ' 23:59:59');
                 if ($nbOccurencesToCreate > 0) {
-                    for ($d=1;$d<=$nbInterval;$d++) {
-                        for ($i=1;$i<=$nbOccurencesToCreate;$i++) {
+                    for ($d=1; $d<=$nbInterval; $d++) {
+                        for ($i=1; $i<=$nbOccurencesToCreate; $i++) {
                             $randomDate = $this->getRandomDate($beginningDrawDate->format('U'), $endDrawDate->format('U'));
                             $randomDate = \DateTime::createFromFormat('Y-m-d H:i:s', $randomDate);
                             $occurrence  = new \PlaygroundGame\Entity\InstantWinOccurrence();
@@ -293,8 +291,8 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                 }
 
                 if ($nbOccurencesToCreate > 0) {
-                    for ($d=1;$d<=$nbWeeksInterval;$d++) {
-                        for ($i=1;$i<=$nbOccurencesToCreate;$i++) {
+                    for ($d=1; $d<=$nbWeeksInterval; $d++) {
+                        for ($i=1; $i<=$nbOccurencesToCreate; $i++) {
                             $randomDate = $this->getRandomDate($beginningDrawDate->format('U'), $endDrawDate->format('U'));
                             $randomDate = \DateTime::createFromFormat('Y-m-d H:i:s', $randomDate);
                             $occurrence  = new \PlaygroundGame\Entity\InstantWinOccurrence();
@@ -330,8 +328,8 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                 }
 
                 if ($nbOccurencesToCreate > 0) {
-                    for ($d=1;$d<=$nbMonthsInterval;$d++) {
-                        for ($i=1;$i<=$nbOccurencesToCreate;$i++) {
+                    for ($d=1; $d<=$nbMonthsInterval; $d++) {
+                        for ($i=1; $i<=$nbOccurencesToCreate; $i++) {
                             $randomDate = $this->getRandomDate($beginningDrawDate->format('U'), $endDrawDate->format('U'));
                             $randomDate = \DateTime::createFromFormat('Y-m-d H:i:s', $randomDate);
                             $occurrence  = new \PlaygroundGame\Entity\InstantWinOccurrence();

@@ -294,8 +294,8 @@ class InstantWin extends Game implements InputFilterAwareInterface
                           'name' => 'InArray',
                            'options' => array(
                                'haystack' => array('hour', 'day', 'week', 'month', 'game'),
-                        ),
-                    ),
+                           ),
+                       ),
                    ),
             )));
 

@@ -258,10 +258,12 @@ class PostVote extends Game implements InputFilterAwareInterface
 
             $inputFilter
                     ->add(
-                            $factory
+                        $factory
                                     ->createInput(
-                                            array('name' => 'postDisplayMode', 'required' => false,
-                                                    'validators' => array(array('name' => 'InArray', 'options' => array('haystack' => array('date', 'vote', 'random'), ), ), ), )));
+                                        array('name' => 'postDisplayMode', 'required' => false,
+                                                    'validators' => array(array('name' => 'InArray', 'options' => array('haystack' => array('date', 'vote', 'random'), ), ), ), )
+                                    )
+                    );
 
             $inputFilter->add($factory->createInput(array('name' => 'voteAnonymous', 'required' => true, 'validators' => array(array('name' => 'Between', 'options' => array('min' => 0, 'max' => 1, ), ), ), )));
 

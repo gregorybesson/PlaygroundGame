@@ -707,7 +707,7 @@ class Game extends ProvidesEventsForm
             ->getEventManager()
             ->trigger(__FUNCTION__, $this, array(
             'partners' => $partners
-        ))
+            ))
             ->last();
 
         if ($results) {
@@ -733,7 +733,7 @@ class Game extends ProvidesEventsForm
             ->getEventManager()
             ->trigger(__FUNCTION__, $this, array(
             'apps' => $apps
-        ))
+            ))
             ->last();
 
         if ($results) {

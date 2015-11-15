@@ -338,8 +338,8 @@ class Quiz extends Game implements InputFilterAwareInterface
                    'filters'  => array(
                     array('name' => 'StripTags'),
                     array('name' => 'StringTrim'),
-                ),
-                'validators' => array(
+                   ),
+                   'validators' => array(
                     array(
                            'name'    => 'StringLength',
                            'options' => array(

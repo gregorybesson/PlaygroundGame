@@ -753,7 +753,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                     $entry->setAnonymousIdentifier($anonymousIdentifier);
                 
                     // I must transmit this info during the whole game workflow
-                    $session->offsetSet('anonymous_identifier',  $anonymousIdentifier);
+                    $session->offsetSet('anonymous_identifier', $anonymousIdentifier);
                 }
             }
 
@@ -911,7 +911,8 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                 ->getMvcEvent()
                 ->getRouteMatch()
                 ->getParam('channel')
-            ), array(
+            ),
+            array(
                 'force_canonical' => true
             )
         );
@@ -1047,7 +1048,8 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                 ->getMvcEvent()
                 ->getRouteMatch()
                 ->getParam('channel')
-            ), array(
+            ),
+            array(
                 'force_canonical' => true
             )
         );
@@ -1074,7 +1076,8 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                 ->getMvcEvent()
                 ->getRouteMatch()
                 ->getParam('channel')
-            ), array(
+            ),
+            array(
                 'force_canonical' => true
             )
         );
@@ -1231,8 +1234,8 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
     /**
      * This bonus entry doesn't give points nor badges
      * It's just there to increase the chances during the Draw
-     * Old Name playBonus 
-     * 
+     * Old Name playBonus
+     *
      * @param PlaygroundGame\Entity\Game $game
      * @param unknown $user
      * @return boolean unknown
@@ -1724,7 +1727,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      * Create a ZF2 Form from json data
      * @return Form
      */
-    public function createFormFromJson($jsonForm, $id='jsonForm')
+    public function createFormFromJson($jsonForm, $id = 'jsonForm')
     {
         $formPV = json_decode($jsonForm);
         
@@ -2232,7 +2235,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                 }
                 if ($e->getPlayerData()) {
                     $entryData = json_decode($e->getPlayerData(), true);
-                    foreach ($header as $k=>$v) {
+                    foreach ($header as $k => $v) {
                         if (isset($entryData[$k])) {
                             if (is_array($entryData[$k])) {
                                 $content .= implode(', ', $entryData[$k]).';';
@@ -2244,7 +2247,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                         }
                     }
                 } else {
-                    foreach ($header as $k=>$v) {
+                    foreach ($header as $k => $v) {
                         $content .= ';';
                     }
                 }

@@ -90,7 +90,7 @@ class InstantWinOccurrence
         $now = $now->format('Y-m-d H:i:s');
 
         $query = $this->em->createQuery(
-                'SELECT i FROM PlaygroundGame\Entity\InstantWinOccurrence i
+            'SELECT i FROM PlaygroundGame\Entity\InstantWinOccurrence i
                 WHERE i.instantwin = :game
                 AND i.active = 1
                 AND i.value <= :now
@@ -173,7 +173,7 @@ class InstantWinOccurrence
     public function assertNoOther($instantwin, $value)
     {
         $query = $this->em->createQuery(
-                'SELECT i FROM PlaygroundGame\Entity\InstantWinOccurrence i
+            'SELECT i FROM PlaygroundGame\Entity\InstantWinOccurrence i
                 WHERE i.instantwin = :game
                 AND i.value = :value'
         );

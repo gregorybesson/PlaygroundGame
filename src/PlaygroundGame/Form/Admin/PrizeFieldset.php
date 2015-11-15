@@ -57,7 +57,7 @@ class PrizeFieldset extends Fieldset
                'attributes' => array(
                    'cols' => '10',
                    'rows' => '10',
-            'id' =>'prizeContent',
+               'id' =>'prizeContent',
                )
         ));
         

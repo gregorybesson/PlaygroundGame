@@ -78,7 +78,7 @@ class PrizeCategoryTest extends \PHPUnit_Framework_TestCase
 
     public function testFindAll()
     {
-        // It has to work with 5.3.x and closure don't support direct $this referencing 
+        // It has to work with 5.3.x and closure don't support direct $this referencing
         $self = $this;
         $this->em->transactional(function ($em) use ($self) {
             $prizeCategory = new PrizeCategoryEntity();

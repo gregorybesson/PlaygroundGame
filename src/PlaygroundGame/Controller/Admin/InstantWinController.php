@@ -53,8 +53,8 @@ class InstantWinController extends GameController
         $request = $this->getRequest();
         if ($request->isPost()) {
             $data = array_replace_recursive(
-                    $this->getRequest()->getPost()->toArray(),
-                    $this->getRequest()->getFiles()->toArray()
+                $this->getRequest()->getPost()->toArray(),
+                $this->getRequest()->getFiles()->toArray()
             );
             if (empty($data['prizes'])) {
                 $data['prizes'] = array();
@@ -116,8 +116,8 @@ class InstantWinController extends GameController
 
         if ($this->getRequest()->isPost()) {
             $data = array_replace_recursive(
-                    $this->getRequest()->getPost()->toArray(),
-                    $this->getRequest()->getFiles()->toArray()
+                $this->getRequest()->getPost()->toArray(),
+                $this->getRequest()->getFiles()->toArray()
             );
             if (empty($data['prizes'])) {
                 $data['prizes'] = array();
@@ -190,8 +190,8 @@ class InstantWinController extends GameController
 
         if ($this->getRequest()->isPost()) {
             $data = array_merge(
-                    $this->getRequest()->getPost()->toArray(),
-                    $this->getRequest()->getFiles()->toArray()
+                $this->getRequest()->getPost()->toArray(),
+                $this->getRequest()->getFiles()->toArray()
             );
 
             // Change the format of the date
