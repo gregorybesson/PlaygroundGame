@@ -14,7 +14,7 @@ class InstantWinOccurrenceImport extends ProvidesEventsForm
         parent::__construct($name);
 
         $this->setAttribute('method', 'post');
-        $this->setAttribute('enctype','multipart/form-data');
+        $this->setAttribute('enctype', 'multipart/form-data');
 
         $this->setServiceManager($serviceManager);
 
@@ -82,7 +82,7 @@ class InstantWinOccurrenceImport extends ProvidesEventsForm
      *
      * @return array
      */
-    public function getPrizes ()
+    public function getPrizes()
     {
         $prizes = array();
         $prizeService = $this->getServiceManager()->get('playgroundgame_prize_service');
@@ -100,7 +100,7 @@ class InstantWinOccurrenceImport extends ProvidesEventsForm
      *
      * @return ServiceManager
      */
-    public function getServiceManager ()
+    public function getServiceManager()
     {
         return $this->serviceManager;
     }
@@ -111,7 +111,7 @@ class InstantWinOccurrenceImport extends ProvidesEventsForm
      * @param  ServiceManager $serviceManager
      * @return InstantWinOccurrenceImport
      */
-    public function setServiceManager (ServiceManager $serviceManager)
+    public function setServiceManager(ServiceManager $serviceManager)
     {
         $this->serviceManager = $serviceManager;
 

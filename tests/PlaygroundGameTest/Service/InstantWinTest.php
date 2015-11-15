@@ -47,50 +47,48 @@ class InstantWinTest extends AbstractHttpControllerTestCase
         $this->assertTrue($result);
     }
 
-   public function testscheduleOccurrencesToday1Game()
+    public function testscheduleOccurrencesToday1Game()
     {
+        $game = new InstantWinEntity();
 
-		$game = new InstantWinEntity();
+        $startDate = new \DateTime("now");
+        $endDate = new \DateTime("now");
+        $endDate->add(new \DateInterval('PT1H'));
 
-		$startDate = new \DateTime("now");
-		$endDate = new \DateTime("now");
-		$endDate->add(new \DateInterval('PT1H'));
+        $game->setOccurrenceDrawFrequency('game');
+        $game->setStartDate($startDate);
+        $game->setEndDate($endDate);
+        $game->setOccurrenceNumber(2);
 
-		$game->setOccurrenceDrawFrequency('game');
-		$game->setStartDate($startDate);
-		$game->setEndDate($endDate);
-		$game->setOccurrenceNumber(2);
+        $mapper = $this->getMockBuilder('PlaygroundGame\Mapper\InstantWinOccurrence')
+        ->disableOriginalConstructor()
+        ->getMock();
 
-		$mapper = $this->getMockBuilder('PlaygroundGame\Mapper\InstantWinOccurrence')
-		->disableOriginalConstructor()
-		->getMock();
+        $this->getServiceManager()->setService('playgroundgame_instantwinoccurrence_mapper', $mapper);
 
-		$this->getServiceManager()->setService('playgroundgame_instantwinoccurrence_mapper', $mapper);
+        $mapper->expects($this->once())
+        ->method('findBy')
+        ->will($this->returnValue(array()));
 
-		$mapper->expects($this->once())
-		->method('findBy')
-		->will($this->returnValue(array()));
+        $mapper->expects($this->exactly(2))
+        ->method('insert')
+        ->will($this->returnValue(true));
 
-		$mapper->expects($this->exactly(2))
-		->method('insert')
-		->will($this->returnValue(true));
+        $gs = $this->getServiceManager()->get('playgroundgame_instantwin_service');
+        $result = $gs->scheduleOccurrences($game, array());
 
-		$gs = $this->getServiceManager()->get('playgroundgame_instantwin_service');
-	    $result = $gs->scheduleOccurrences($game, array());
+        $this->assertTrue($result);
 
-		$this->assertTrue($result);
-
-		// 3j 1j game
-		// 3j 5j game
-		// 3j 1j day
-		// 3j 5j day
-		// 3j 1j hour
-		// 3j 5j hour
+        // 3j 1j game
+        // 3j 5j game
+        // 3j 1j day
+        // 3j 5j day
+        // 3j 1j hour
+        // 3j 5j hour
     }
 
     public function testscheduleOccurrencesToday5Game()
     {
-
         $game = new InstantWinEntity();
 
         $startDate = new \DateTime("now");
@@ -120,12 +118,10 @@ class InstantWinTest extends AbstractHttpControllerTestCase
         $result = $gs->scheduleOccurrences($game, array());
 
         $this->assertTrue($result);
-
     }
 
     public function testscheduleOccurrencesToday1Day()
     {
-
         $game = new InstantWinEntity();
 
         $startDate = new \DateTime("now");
@@ -157,9 +153,8 @@ class InstantWinTest extends AbstractHttpControllerTestCase
         $this->assertTrue($result);
     }
 
-  public function testscheduleOccurrencesToday5Day()
+    public function testscheduleOccurrencesToday5Day()
     {
-
         $game = new InstantWinEntity();
 
         $startDate = new \DateTime("now");
@@ -189,12 +184,10 @@ class InstantWinTest extends AbstractHttpControllerTestCase
         $result = $gs->scheduleOccurrences($game, array());
 
         $this->assertTrue($result);
-
     }
 
     public function testscheduleOccurrencesToday1Hour()
     {
-
         $game = new InstantWinEntity();
 
         $startDate = new \DateTime("now");
@@ -231,7 +224,6 @@ class InstantWinTest extends AbstractHttpControllerTestCase
 
     public function testscheduleOccurrencesToday48Hours()
     {
-
         $game = new InstantWinEntity();
 
         $startDate = new \DateTime("now");
@@ -262,12 +254,10 @@ class InstantWinTest extends AbstractHttpControllerTestCase
         $result = $gs->scheduleOccurrences($game, array());
 
         $this->assertTrue($result);
-
     }
 
     public function testscheduleOccurrences3Days1Game()
     {
-
         $game = new InstantWinEntity();
 
         $startDate = new \DateTime("now");
@@ -309,7 +299,6 @@ class InstantWinTest extends AbstractHttpControllerTestCase
 
     public function testscheduleOccurrences3Days5Game()
     {
-
         $game = new InstantWinEntity();
 
         $startDate = new \DateTime("now");
@@ -340,12 +329,10 @@ class InstantWinTest extends AbstractHttpControllerTestCase
         $result = $gs->scheduleOccurrences($game, array());
 
         $this->assertTrue($result);
-
     }
 
     public function testscheduleOccurrences3Days1Day()
     {
-
         $game = new InstantWinEntity();
 
         $startDate = new \DateTime("now");
@@ -411,7 +398,6 @@ class InstantWinTest extends AbstractHttpControllerTestCase
         $result = $gs->scheduleOccurrences($game, array());
 
         $this->assertTrue($result);
-
     }
 
     /**
@@ -456,12 +442,10 @@ class InstantWinTest extends AbstractHttpControllerTestCase
         $result = $gs->scheduleOccurrences($game, array());
 
         $this->assertTrue($result);
-
     }
 
     public function testscheduleOccurrences3Days1Hour()
     {
-
         $game = new InstantWinEntity();
 
         $startDate = new \DateTime("now");
@@ -499,7 +483,6 @@ class InstantWinTest extends AbstractHttpControllerTestCase
 
     public function testscheduleOccurrences3Days48Hours()
     {
-
         $game = new InstantWinEntity();
 
         $startDate = new \DateTime("now");
@@ -531,7 +514,6 @@ class InstantWinTest extends AbstractHttpControllerTestCase
         $result = $gs->scheduleOccurrences($game, array());
 
         $this->assertTrue($result);
-
     }
 
     public function getServiceManager()
@@ -547,5 +529,4 @@ class InstantWinTest extends AbstractHttpControllerTestCase
 
         parent::tearDown();
     }
-
 }

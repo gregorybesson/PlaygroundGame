@@ -104,22 +104,22 @@ class InstantWin extends Game
         ));
         
         $this->add(array(
-        		'type' => 'Zend\Form\Element\Select',
-        		'name' => 'occurrenceDrawFrequency',
-        		'attributes' =>  array(
-        				'id' => 'occurrenceDrawFrequency',
-        				'options' => array(
-        						'hour' => $translator->translate('Hour', 'playgroundgame'),
-        						'day' => $translator->translate('Day', 'playgroundgame'),
-        						'week' => $translator->translate('Week', 'playgroundgame'),
-        						'month' => $translator->translate('Month', 'playgroundgame'),
-        						'game' => $translator->translate('Game', 'playgroundgame'),
-        				),
-        		),
-        		'options' => array(
-        				'empty_option' => $translator->translate('Instant win creation frequency ?', 'playgroundgame'),
-        				'label' => $translator->translate('Creation frequency', 'playgroundgame'),
-        		),
+                'type' => 'Zend\Form\Element\Select',
+                'name' => 'occurrenceDrawFrequency',
+                'attributes' =>  array(
+                        'id' => 'occurrenceDrawFrequency',
+                        'options' => array(
+                                'hour' => $translator->translate('Hour', 'playgroundgame'),
+                                'day' => $translator->translate('Day', 'playgroundgame'),
+                                'week' => $translator->translate('Week', 'playgroundgame'),
+                                'month' => $translator->translate('Month', 'playgroundgame'),
+                                'game' => $translator->translate('Game', 'playgroundgame'),
+                        ),
+                ),
+                'options' => array(
+                        'empty_option' => $translator->translate('Instant win creation frequency ?', 'playgroundgame'),
+                        'label' => $translator->translate('Creation frequency', 'playgroundgame'),
+                ),
         ));
 
         // Adding an empty upload field to be able to correctly handle this on

@@ -14,7 +14,7 @@ class PostVoteVote extends Form
         $dirdata = './data';
 
         //pass captcha image options
-        $captchaImage = new CaptchaImage(  array(
+        $captchaImage = new CaptchaImage(array(
                 'font' => $dirdata . '/fonts/arial.ttf',
                 'width' => 110,
                 'height' => 60,
@@ -44,5 +44,4 @@ class PostVoteVote extends Form
             ),
         ));
     }
-
 }

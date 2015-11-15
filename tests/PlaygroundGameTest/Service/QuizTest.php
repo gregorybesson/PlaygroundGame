@@ -8,8 +8,7 @@ use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
 class QuizTest extends AbstractHttpControllerTestCase
 {
-	
-	protected $traceError = true;
+    protected $traceError = true;
     protected $sm = null;
     protected $data;
 
@@ -30,71 +29,71 @@ class QuizTest extends AbstractHttpControllerTestCase
         parent::setUp();
 
         $this->dataTrue = array(
-            'submit' => '', 
+            'submit' => '',
             'quiz_id' => '3',
-            'type' => '0', 
+            'type' => '0',
             'question' => '<p>Question ?</p>',
             'hint' => '',
-            'timer_duration' => '', 
-            'position' => '0', 
-            'video' => '', 
-            'search_sound' => '', 
+            'timer_duration' => '',
+            'position' => '0',
+            'video' => '',
+            'search_sound' => '',
             'audio' => '0',
-            'answers' => array (
-                0 => array (
-                    'id' => '', 
+            'answers' => array(
+                0 => array(
+                    'id' => '',
                     'answer' => '<p>Reponse !</p>',
-                    'correct' => '1', 
-                    'position' => '0', 
+                    'correct' => '1',
+                    'position' => '0',
                     'explanation' => ''
                 )
             ),
             'upload_image' => array(
-                'name' => '', 
-                'type' => '', 
-                'tmp_name' => '', 
+                'name' => '',
+                'type' => '',
+                'tmp_name' => '',
                 'error' => 4,
                 'size' => 0
             ),
-            'prizes' => array ()
+            'prizes' => array()
         );
         $this->dataFalse = array(
-            'submit' => '', 
-            'quiz_id' => '3', 
-            'type' => '0', 
+            'submit' => '',
+            'quiz_id' => '3',
+            'type' => '0',
             'question' => '<p>Question ?</p>',
-            'hint' => '', 
-            'timer_duration' => '', 
-            'position' => '0', 
-            'video' => '', 
-            'search_sound' => '', 
+            'hint' => '',
+            'timer_duration' => '',
+            'position' => '0',
+            'video' => '',
+            'search_sound' => '',
             'audio' => '0',
-            'answers' => array (
-                0 => array (
-                    'id' => '', 
+            'answers' => array(
+                0 => array(
+                    'id' => '',
                     'answer' => '<p>Reponse !</p>',
-                    'correct' => '0', 
-                    'position' => '0', 
+                    'correct' => '0',
+                    'position' => '0',
                     'explanation' => ''
                 )
             ),
             'upload_image' => array(
-                'name' => '', 
-                'type' => '', 
-                'tmp_name' => '', 
+                'name' => '',
+                'type' => '',
+                'tmp_name' => '',
                 'error' => 4,
                 'size' => 0
             ),
-            'prizes' => array ()
+            'prizes' => array()
         );
-
     }
 
-	public function testCreateQuestionTrue() {
-		$quiz = new QuizEntity();
-		$quiz->setTitle("title");
+    public function testCreateQuestionTrue()
+    {
+        $quiz = new QuizEntity();
+        $quiz->setTitle("title");
         $startDate = new \DateTime("now");
-		$quiz->setStartDate($startDate);
+        $quiz->setStartDate($startDate);
 
         $gameMapper = $this->getMockBuilder('PlaygroundGame\Mapper\Game')
         ->disableOriginalConstructor()
@@ -127,9 +126,10 @@ class QuizTest extends AbstractHttpControllerTestCase
         $qs->setServiceManager($this->getServiceManager());
 
         $this->assertInstanceOf('\PlaygroundGame\Entity\QuizQuestion', $qs->createQuestion($this->dataTrue));
-	}
+    }
 
-    public function testCreateQuestionFalse() {
+    public function testCreateQuestionFalse()
+    {
         $quiz = new QuizEntity();
         $quiz->setTitle("title");
         $startDate = new \DateTime("now");
@@ -149,7 +149,7 @@ class QuizTest extends AbstractHttpControllerTestCase
         $this->assertFalse($qs->createQuestion($this->dataFalse));
     }
 
-	public function getServiceManager()
+    public function getServiceManager()
     {
         $serviceManager = $this->getApplicationServiceLocator();
         return $this->sm;

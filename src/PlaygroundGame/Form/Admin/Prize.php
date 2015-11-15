@@ -15,7 +15,7 @@ class Prize extends ProvidesEventsForm
     {
         parent::__construct($name);
 
-        $this->setAttribute('enctype','multipart/form-data');
+        $this->setAttribute('enctype', 'multipart/form-data');
 
         $this->add(array(
             'name' => 'id',
@@ -47,54 +47,54 @@ class Prize extends ProvidesEventsForm
         ));
 
         $this->add(array(
-        	'type' => 'Zend\Form\Element\Textarea',
-        	'name' => 'prizeContent',
-       		'options' => array(
-       			'label' => $translator->translate('Description', 'playgroundgame')
-       		),
-       		'attributes' => array(
-       			'cols' => '10',
-       			'rows' => '10',
-       			'id' => 'prizeContent'
-       		)
+            'type' => 'Zend\Form\Element\Textarea',
+            'name' => 'prizeContent',
+               'options' => array(
+                   'label' => $translator->translate('Description', 'playgroundgame')
+               ),
+               'attributes' => array(
+                   'cols' => '10',
+                   'rows' => '10',
+                   'id' => 'prizeContent'
+               )
         ));
         
         $this->add(array(
-        	'name' => 'qty',
-        	'options' => array(
-       			'label' => $translator->translate('Quantity', 'playgroundgame')
-       		),
-       		'attributes' => array(
-       			'type' => 'text',
-       			'placeholder' => $translator->translate('Quantity', 'playgroundgame')
-       		)
+            'name' => 'qty',
+            'options' => array(
+                   'label' => $translator->translate('Quantity', 'playgroundgame')
+               ),
+               'attributes' => array(
+                   'type' => 'text',
+                   'placeholder' => $translator->translate('Quantity', 'playgroundgame')
+               )
         ));
         
         $this->add(array(
-        	'name' => 'unitPrice',
-        	'options' => array(
-       			'label' => $translator->translate('Prix', 'playgroundgame')
-       		),
-       		'attributes' => array(
-       			'type' => 'text',
-       			'placeholder' => $translator->translate('Prix', 'playgroundgame')
-       		)
+            'name' => 'unitPrice',
+            'options' => array(
+                   'label' => $translator->translate('Prix', 'playgroundgame')
+               ),
+               'attributes' => array(
+                   'type' => 'text',
+                   'placeholder' => $translator->translate('Prix', 'playgroundgame')
+               )
         ));
         
         $this->add(array(
-       		'type' => 'Zend\Form\Element\Select',
-       		'name' => 'currency',
-       		'attributes' =>  array(
-        		'id' => 'currency',
-        		'options' => array(
-        			'EU' => $translator->translate('Euro', 'playgroundgame'),
-       				'DO' => $translator->translate('Dollar', 'playgroundgame'),
-   				),
-       		),
-       		'options' => array(
-        		'empty_option' => $translator->translate('Afficher les Posts triés par', 'playgroundgame'),
-    			'label' => $translator->translate('Mode d\'affichage des Posts', 'playgroundgame'),
-       		),
+               'type' => 'Zend\Form\Element\Select',
+               'name' => 'currency',
+               'attributes' =>  array(
+                'id' => 'currency',
+                'options' => array(
+                    'EU' => $translator->translate('Euro', 'playgroundgame'),
+                       'DO' => $translator->translate('Dollar', 'playgroundgame'),
+                ),
+               ),
+               'options' => array(
+                'empty_option' => $translator->translate('Afficher les Posts triés par', 'playgroundgame'),
+                'label' => $translator->translate('Mode d\'affichage des Posts', 'playgroundgame'),
+               ),
         ));
          
         $this->add(array(
@@ -123,6 +123,5 @@ class Prize extends ProvidesEventsForm
         $this->add($submitElement, array(
             'priority' => -100,
         ));
-
     }
 }

@@ -12,7 +12,6 @@ use Doctrine\ORM\Mapping\PreUpdate;
  */
 class PrizeCategoryUser
 {
-
     /**
      * @ORM\Id
      * @ORM\ManyToOne(targetEntity="PrizeCategory")
@@ -163,6 +162,5 @@ class PrizeCategoryUser
      */
     public function populate($data = array())
     {
-
     }
 }

@@ -89,7 +89,6 @@ class GameControllerTest extends AbstractHttpControllerTestCase
     public function testDownloadGameEntryNotAnonymousAction()
     {
         foreach (array('Lottery') as $type) {
-
             $serviceManager = $this->getApplicationServiceLocator();
             $serviceManager->setAllowOverride(true);
 
@@ -160,7 +159,6 @@ class GameControllerTest extends AbstractHttpControllerTestCase
     public function testDownloadGameEntryAnonymousAction()
     {
         foreach (array('Lottery') as $type) {
-
             $serviceManager = $this->getApplicationServiceLocator();
             $serviceManager->setAllowOverride(true);
 
@@ -258,7 +256,6 @@ class GameControllerTest extends AbstractHttpControllerTestCase
         $this->assertActionName('remove');
 
         $this->assertRedirectTo('/admin/game/list/createdAt/DESC');
-
     }
 
     public function testSetActiveAction()
@@ -302,8 +299,5 @@ class GameControllerTest extends AbstractHttpControllerTestCase
         $this->assertActionName('set-active');
 
         $this->assertRedirectTo('/admin/game/list/createdAt/DESC');*/
-
     }
-
-
 }

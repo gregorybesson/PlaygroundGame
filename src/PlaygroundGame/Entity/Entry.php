@@ -13,7 +13,6 @@ use Doctrine\ORM\Mapping\PreUpdate;
  */
 class Entry implements \JsonSerializable
 {
-
     /**
      * @ORM\Id
      * @ORM\Column(type="integer");
@@ -115,7 +114,6 @@ class Entry implements \JsonSerializable
 
     public function __construct()
     {
-
     }
 
     /** @PrePersist */
@@ -135,7 +133,7 @@ class Entry implements \JsonSerializable
      *
      * @return the $id
      */
-    public function getId ()
+    public function getId()
     {
         return $this->id;
     }
@@ -144,7 +142,7 @@ class Entry implements \JsonSerializable
      *
      * @param field_type $id
      */
-    public function setId ($id)
+    public function setId($id)
     {
         $this->id = $id;
         
@@ -167,7 +165,6 @@ class Entry implements \JsonSerializable
         $this->game = $game;
         
         return $this;
-        
     }
 
     /**
@@ -214,7 +211,7 @@ class Entry implements \JsonSerializable
         return $this->ip;
     }
 
-	/**
+    /**
      * @param field_type $ip
      */
     public function setIp($ip)
@@ -224,7 +221,7 @@ class Entry implements \JsonSerializable
         return $this;
     }
 
-	/**
+    /**
      * @return the $anonymousId
      */
     public function getAnonymousId()
@@ -232,7 +229,7 @@ class Entry implements \JsonSerializable
         return $this->anonymousId;
     }
 
-	/**
+    /**
      * @param field_type $anonymousId
      */
     public function setAnonymousId($anonymousId)
@@ -242,7 +239,7 @@ class Entry implements \JsonSerializable
         return $this;
     }
 
-	/**
+    /**
      * @return the $anonymousIdentifier
      */
     public function getAnonymousIdentifier()
@@ -250,7 +247,7 @@ class Entry implements \JsonSerializable
         return $this->anonymousIdentifier;
     }
 
-	/**
+    /**
      * @param field_type $anonymousIdentifier
      */
     public function setAnonymousIdentifier($anonymousIdentifier)
@@ -258,7 +255,7 @@ class Entry implements \JsonSerializable
         $this->anonymousIdentifier = $anonymousIdentifier;
     }
 
-	/**
+    /**
      * @return the $playerData
      */
     public function getPlayerData()
@@ -266,7 +263,7 @@ class Entry implements \JsonSerializable
         return $this->playerData;
     }
 
-	/**
+    /**
      * @param field_type $playerData
      */
     public function setPlayerData($playerData)
@@ -276,7 +273,7 @@ class Entry implements \JsonSerializable
         return $this;
     }
 
-	/**
+    /**
      * @return the $socialShares
      */
     public function getSocialShares()
@@ -284,7 +281,7 @@ class Entry implements \JsonSerializable
         return $this->socialShares;
     }
 
-	/**
+    /**
      * @param field_type $socialShares
      */
     public function setSocialShares($socialShares)
@@ -292,7 +289,7 @@ class Entry implements \JsonSerializable
         $this->socialShares = $socialShares;
     }
 
-	/**
+    /**
      * @return integer status
      */
     public function getActive()
@@ -318,7 +315,7 @@ class Entry implements \JsonSerializable
         return $this->step;
     }
 
-	/**
+    /**
      * @param number $step
      */
     public function setStep($step)
@@ -326,7 +323,7 @@ class Entry implements \JsonSerializable
         $this->step = $step;
     }
 
-	/**
+    /**
      * @return integer bonus
      */
     public function getBonus()
@@ -370,7 +367,7 @@ class Entry implements \JsonSerializable
         return $this->drawable;
     }
 
-	/**
+    /**
      * @param number $drawable
      */
     public function setDrawable($drawable)
@@ -380,12 +377,12 @@ class Entry implements \JsonSerializable
         return $this;
     }
 
-	/**
+    /**
      * @return the termsOptin
      */
     public function getTermsOptin()
     {
-    	return $this->termsOptin;
+        return $this->termsOptin;
     }
     
     /**
@@ -393,9 +390,9 @@ class Entry implements \JsonSerializable
      */
     public function setTermsOptin($termsOptin)
     {
-    	$this->termsOptin = $termsOptin;
-    	
-    	return $this;
+        $this->termsOptin = $termsOptin;
+        
+        return $this;
     }
 
     /**
@@ -449,7 +446,7 @@ class Entry implements \JsonSerializable
     *
     * @return array
     */
-    public function jsonSerialize ()
+    public function jsonSerialize()
     {
         return $this->getArrayCopy();
     }
@@ -461,6 +458,5 @@ class Entry implements \JsonSerializable
      */
     public function populate($data = array())
     {
-
     }
 }

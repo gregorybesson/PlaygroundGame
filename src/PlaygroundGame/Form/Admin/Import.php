@@ -15,7 +15,7 @@ class Import extends ProvidesEventsForm
     {
         parent::__construct($name);
 
-        $this->setAttribute('enctype','multipart/form-data');
+        $this->setAttribute('enctype', 'multipart/form-data');
         
         $this->add(array(
             'name' => 'slug',
@@ -47,6 +47,5 @@ class Import extends ProvidesEventsForm
         $this->add($submitElement, array(
             'priority' => -100,
         ));
-
     }
 }

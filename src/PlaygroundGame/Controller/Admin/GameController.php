@@ -43,23 +43,23 @@ class GameController extends AbstractActionController
 
     public function listAction()
     {
-        $filter 	= $this->getEvent()->getRouteMatch()->getParam('filter');
-        $type	= $this->getEvent()->getRouteMatch()->getParam('type');
+        $filter    = $this->getEvent()->getRouteMatch()->getParam('filter');
+        $type    = $this->getEvent()->getRouteMatch()->getParam('type');
 
-        $service 	= $this->getAdminGameService();
-		$adapter = new DoctrineAdapter(new ORMPaginator($service->getQueryGamesOrderBy($type, $filter)));
-		$paginator = new Paginator($adapter);
-		$paginator->setItemCountPerPage(25);
-		$paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
+        $service    = $this->getAdminGameService();
+        $adapter = new DoctrineAdapter(new ORMPaginator($service->getQueryGamesOrderBy($type, $filter)));
+        $paginator = new Paginator($adapter);
+        $paginator->setItemCountPerPage(25);
+        $paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
 
         foreach ($paginator as $game) {
             $game->entry = $service->getEntryMapper()->countByGame($game);
         }
 
         return array(
-            'games' 	=> $paginator,
-            'type' 		=> $type,
-            'filter' 	=> $filter,
+            'games'    => $paginator,
+            'type'        => $type,
+            'filter'    => $filter,
         );
     }
 
@@ -71,7 +71,7 @@ class GameController extends AbstractActionController
         }
 
         $game = $this->getAdminGameService()->getGameMapper()->findById($gameId);
-        $adapter = new DoctrineAdapter(new ORMPaginator( $this->getAdminGameService()->getEntryMapper()->queryByGame($game)));
+        $adapter = new DoctrineAdapter(new ORMPaginator($this->getAdminGameService()->getEntryMapper()->queryByGame($game)));
         $paginator = new Paginator($adapter);
         $paginator->setItemCountPerPage(10);
         $paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
@@ -86,7 +86,6 @@ class GameController extends AbstractActionController
     // Used for Lottery, TreasureHunt and redifined for Quiz and InstantWin because it's slightly different
     public function downloadAction()
     {
-
         $gameId = $this->getEvent()->getRouteMatch()->getParam('gameId');
         if (!$gameId) {
             return $this->redirect()->toRoute('admin/playgroundgame/list');
@@ -193,13 +192,13 @@ class GameController extends AbstractActionController
                 $game = unserialize(file_get_contents($data['import_file']['tmp_name']));
                 ErrorHandler::stop(true);
             }
-            $game->setId(Null);
-            if($data['slug']){
+            $game->setId(null);
+            if ($data['slug']) {
                 $game->setIdentifier($data['slug']);
             }
             
             $duplicate = $this->getAdminGameService()->getGameMapper()->findByIdentifier($game->getIdentifier());
-            if(!$duplicate){
+            if (!$duplicate) {
                 $this->getAdminGameService()->getGameMapper()->insert($game);
                 return $this->redirect()->toRoute('admin/playgroundgame/list');
             }

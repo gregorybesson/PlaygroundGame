@@ -7,7 +7,6 @@ use Zend\Stdlib\ErrorHandler;
 
 class PostVote extends Game implements ServiceManagerAwareInterface
 {
-
     protected $postvoteMapper;
     protected $postvoteformMapper;
     protected $postVotePostMapper;
@@ -43,11 +42,11 @@ class PostVote extends Game implements ServiceManagerAwareInterface
 
         $path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR . 'game' . $game->getId() . DIRECTORY_SEPARATOR;
         if (!is_dir($path)) {
-            mkdir($path,0777, true);
+            mkdir($path, 0777, true);
         }
         $path .= 'post'. $post->getId() . DIRECTORY_SEPARATOR;
         if (!is_dir($path)) {
-            mkdir($path,0777, true);
+            mkdir($path, 0777, true);
         }
 
         $media_url = $this->getOptions()->getMediaUrl() . '/' . 'game' . $game->getId() . '/' . 'post'. $post->getId() . '/';
@@ -67,7 +66,6 @@ class PostVote extends Game implements ServiceManagerAwareInterface
             $postElement = $postVotePostElementMapper->insert($postElement);
 
             $result = $media_url.$uploadFile;
-
         }
 
         return $result;
@@ -89,7 +87,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
 
         if ($element) {
             $element = $postVotePostElementMapper->remove($element);
-            if($element) {
+            if ($element) {
                 return true;
             } else {
                 return false;
@@ -108,7 +106,6 @@ class PostVote extends Game implements ServiceManagerAwareInterface
      */
     public function createPost(array $data, $game, $user, $form)
     {
-
         $postvotePostMapper = $this->getPostVotePostMapper();
         $postVotePostElementMapper = $this->getPostVotePostElementMapper();
 
@@ -130,18 +127,17 @@ class PostVote extends Game implements ServiceManagerAwareInterface
 
         $path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR . 'game' . $game->getId() . DIRECTORY_SEPARATOR;
         if (!is_dir($path)) {
-            mkdir($path,0777, true);
+            mkdir($path, 0777, true);
         }
         $path .= 'post'. $post->getId() . DIRECTORY_SEPARATOR;
         if (!is_dir($path)) {
-            mkdir($path,0777, true);
+            mkdir($path, 0777, true);
         }
 
         $media_url = $this->getOptions()->getMediaUrl() . '/' . 'game' . $game->getId() . '/' . 'post'. $post->getId() . '/';
         $position=1;
 
         foreach ($data as $name => $value) {
-
             $postElement = $postVotePostElementMapper->findOneBy(array('post' => $post, 'name' => $name));
             if (! $postElement) {
                 $postElement = new \PlaygroundGame\Entity\PostVotePostElement();
@@ -151,10 +147,10 @@ class PostVote extends Game implements ServiceManagerAwareInterface
 
             if (is_array($value) && isset($value['tmp_name'])) {
                 // The file upload has been done in ajax but some weird bugs remain without it
-                
-				if ( ! $value['error'] ) {
-                	ErrorHandler::start();
-					$value['name'] = $this->fileNewname($path, $value['name'], true);
+
+                if (! $value['error']) {
+                    ErrorHandler::start();
+                    $value['name'] = $this->fileNewname($path, $value['name'], true);
                     move_uploaded_file($value['tmp_name'], $path . $value['name']);
                     $image = $this->getServiceManager()->get('playgroundcore_image_service');
                     $image->setImage($path . $value['name']);
@@ -164,25 +160,22 @@ class PostVote extends Game implements ServiceManagerAwareInterface
                     }
                     $postElement->setValue($media_url . $value['name']);
                     
-                    if( class_exists("Imagick") ){    
+                    if (class_exists("Imagick")) {
                         $ext = pathinfo($value['name'], PATHINFO_EXTENSION);
                         $img = new \Imagick($path . $value['name']);
-                        $img->cropThumbnailImage( 100, 100 );
+                        $img->cropThumbnailImage(100, 100);
                         $img->setImageCompression(\Imagick::COMPRESSION_JPEG);
                         $img->setImageCompressionQuality(75);
                         // Strip out unneeded meta data
                         $img->stripImage();
                         $img->writeImage($path . str_replace('.'.$ext, '-thumbnail.'.$ext, $value['name']));
                         ErrorHandler::stop(true);
-
                     }
                 }
-                
             } elseif (is_array($value)) {
                 $arValues = $form->get($name)->getValueOptions();
                 $postElement->setValue($arValues[$value[0]]);
-            } elseif(!empty($value)){
-
+            } elseif (!empty($value)) {
                 $postElement->setValue($value);
             }
             $postElement->setPost($post);
@@ -196,7 +189,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
         $steps = $game->getStepsArray();
         $previewKey = array_search('preview', $steps);
         if (!$previewKey) {
-          $post = $this->confirmPost($game, $user);
+            $post = $this->confirmPost($game, $user);
         }
 
         $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array(
@@ -204,7 +197,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
             'game' => $game,
             'post' => $post,
             'entry' => $entry
-        ));    
+        ));
 
         return $post;
     }
@@ -232,7 +225,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
 
         // The post is confirmed by user. I update the status and close the associated entry
         // Post are validated by default, unless pre-moderation is enable for the game
-        if ($game->getModerationType()){
+        if ($game->getModerationType()) {
             $post->setStatus(1);
         } else {
             $post->setStatus(2);
@@ -244,13 +237,13 @@ class PostVote extends Game implements ServiceManagerAwareInterface
         $entryMapper->update($entry);
 
         $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array(
-            'user' => $user, 
-            'game' => $game, 
-            'entry' => $entry, 
+            'user' => $user,
+            'game' => $game,
+            'entry' => $entry,
             'post' => $post
         ));
 
-        if($user){
+        if ($user) {
             // send mail for participation
             $this->sendGameMail($game, $user, $post, 'postvote');
         }
@@ -267,7 +260,6 @@ class PostVote extends Game implements ServiceManagerAwareInterface
      */
     public function createForm(array $data, $game, $form=null)
     {
-
         $title ='';
         $description = '';
 
@@ -299,7 +291,6 @@ class PostVote extends Game implements ServiceManagerAwareInterface
 
     public function findArrayOfValidatedPosts($game, $filter, $search='')
     {
-        
         $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
         $qb = $em->createQueryBuilder();
         $and = $qb->expr()->andx();
@@ -360,7 +351,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
         foreach ($posts as $postRaw) {
             $data = array();
             $post = $postRaw[0];
-            if($post){
+            if ($post) {
                 foreach ($post->getPostElements() as $element) {
                     $data[$element->getPosition()] = $element->getValue();
                 }
@@ -399,7 +390,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
 
             $postvoteVoteMapper->insert($vote);
             $game = $post->getPostvote();
-            $this->getEventManager()->trigger('vote_postvote.post', $this, array('user' => $user, 'game' => $game, 'post' => $post,'vote' => $vote));
+            $this->getEventManager()->trigger('vote_postvote.post', $this, array('user' => $user, 'game' => $game, 'post' => $post, 'vote' => $vote));
 
             return true;
         }

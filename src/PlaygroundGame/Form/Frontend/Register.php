@@ -6,7 +6,6 @@ use Zend\Mvc\I18n\Translator;
 
 class Register extends \PlaygroundUser\Form\Register
 {
-
     /**
      *
      * @var RegistrationOptionsInterface
@@ -76,7 +75,6 @@ class Register extends \PlaygroundUser\Form\Register
                 'placeholder' => $translator->translate('Telephone', 'playgrounduser')
             )
         ));
-
     }
 
     public function setServiceManager($serviceManager)

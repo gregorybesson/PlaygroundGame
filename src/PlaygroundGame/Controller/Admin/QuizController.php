@@ -13,7 +13,6 @@ use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 
 class QuizController extends GameController
 {
-
     /**
      * @var GameService
      */
@@ -28,7 +27,7 @@ class QuizController extends GameController
             return $this->redirect()->toRoute('admin/playgroundgame/list');
         }
         $game           = $this->getAdminGameService()->getGameMapper()->findById($gameId);
-        $adapter = new DoctrineAdapter(new ORMPaginator( $this->getAdminGameService()->getEntryMapper()->queryByGame($game)));
+        $adapter = new DoctrineAdapter(new ORMPaginator($this->getAdminGameService()->getEntryMapper()->queryByGame($game)));
         $paginator = new Paginator($adapter);
         $paginator->setItemCountPerPage(10);
         $paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
@@ -67,10 +66,10 @@ class QuizController extends GameController
         $paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
 
         return array(
-        	'questions' => $paginator,
-        	'quiz_id' => $quizId,
-        	'quiz' => $quiz,
-		);
+            'questions' => $paginator,
+            'quiz_id' => $quizId,
+            'quiz' => $quiz,
+        );
     }
 
     public function addQuestionAction()
@@ -146,8 +145,7 @@ class QuizController extends GameController
                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The question was updated');
 
                 return $this->redirect()->toRoute('admin/playgroundgame/quiz-question-list', array('quizId'=>$quizId));
-            }
-            else {
+            } else {
                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The question was not updated - create at least one good answer');
             }
         }
@@ -194,7 +192,7 @@ class QuizController extends GameController
                 $this->getRequest()->getPost()->toArray(),
                 $this->getRequest()->getFiles()->toArray()
             );
-            if(empty($data['prizes'])){
+            if (empty($data['prizes'])) {
                 $data['prizes'] = array();
             }
             $game = $service->create($data, $quiz, 'playgroundgame_quiz_form');
@@ -230,7 +228,7 @@ class QuizController extends GameController
         $form->setAttribute('action', $this->url()->fromRoute('admin/playgroundgame/edit-quiz', array('gameId' => $gameId)));
         $form->setAttribute('method', 'post');
 
-		if ($game->getFbAppId()) {
+        if ($game->getFbAppId()) {
             $appIds = $form->get('fbAppId')->getOption('value_options');
             $appIds[$game->getFbAppId()] = $game->getFbAppId();
             $form->get('fbAppId')->setAttribute('options', $appIds);
@@ -252,7 +250,7 @@ class QuizController extends GameController
                 $this->getRequest()->getPost()->toArray(),
                 $this->getRequest()->getFiles()->toArray()
             );
-            if(empty($data['prizes'])){
+            if (empty($data['prizes'])) {
                 $data['prizes'] = array();
             }
             $result = $service->edit($data, $game, 'playgroundgame_quiz_form');
@@ -286,14 +284,14 @@ class QuizController extends GameController
                     $questionArray[$i]['q'] = $q->getId();
                     $questionArray[$i]['a'] = $a->getId();
                     $questionArray[$i]['open'] = false;
-                    $label .= ";" . strip_tags(str_replace("\r\n","",$q->getQuestion())) . " - " .strip_tags(str_replace("\r\n","",$a->getAnswer()));
+                    $label .= ";" . strip_tags(str_replace("\r\n", "", $q->getQuestion())) . " - " .strip_tags(str_replace("\r\n", "", $a->getAnswer()));
                     $i++;
                 }
             } elseif ($q->getType() == 2) {
                 $questionArray[$i]['q'] = $q->getId();
                 $questionArray[$i]['open'] = true;
                 $questionArray[$i]['a'] = '';
-                $label .= ";" . strip_tags(str_replace("\r\n","",$q->getQuestion()));
+                $label .= ";" . strip_tags(str_replace("\r\n", "", $q->getQuestion()));
                 $i++;
             }
         }
@@ -305,11 +303,10 @@ class QuizController extends GameController
         $content        = "\xEF\xBB\xBF"; // UTF-8 BOM
         $content       .= "ID;Pseudo;Civilité;Nom;Prénom;E-mail;Optin Newsletter;Optin partenaire;Eligible TAS ?" . $label . ";Date - H;Adresse;CP;Ville;Téléphone;Mobile;Date d'inscription;Date de naissance;\n";
         foreach ($entries as $e) {
-
             $answers = array();
             $replies   = $sg->getQuizReplyMapper()->getLastGameReply($e);
 
-            if($replies){
+            if ($replies) {
                 $answers = $replies[0]->getAnswers();
             }
 
@@ -318,11 +315,11 @@ class QuizController extends GameController
                 $found = false;
                 if ($q['open'] === false) {
                     foreach ($answers as $reply) {
-                       if ($q['q'] == $reply->getQuestionId() && $q['a'] == $reply->getAnswerId()) {
-                           $replyText .= ";1";
-                           $found = true;
-                           break;
-                       }
+                        if ($q['q'] == $reply->getQuestionId() && $q['a'] == $reply->getAnswerId()) {
+                            $replyText .= ";1";
+                            $found = true;
+                            break;
+                        }
                     }
                     if (!$found) {
                         $replyText .= ";0";
@@ -330,7 +327,7 @@ class QuizController extends GameController
                 } else {
                     foreach ($answers as $reply) {
                         if ($q['q'] == $reply->getQuestionId()) {
-                            $replyText .= ";" . strip_tags(str_replace("\r\n","",$reply->getAnswer()));
+                            $replyText .= ";" . strip_tags(str_replace("\r\n", "", $reply->getAnswer()));
                             $found = true;
                             break;
                         }
@@ -341,20 +338,20 @@ class QuizController extends GameController
                 }
             }
 
-			if($e->getUser()->getAddress2() != '') {
-        		$adress2 = ' - ' . $e->getUser()->getAddress2();
-			} else {
-				$adress2 = '';
-			}
-			if($e->getUser()->getDob() != NULL) {
-				$dob = $e->getUser()->getDob()->format('Y-m-d');
-			} else {
-				$dob = '';
-			}
+            if ($e->getUser()->getAddress2() != '') {
+                $adress2 = ' - ' . $e->getUser()->getAddress2();
+            } else {
+                $adress2 = '';
+            }
+            if ($e->getUser()->getDob() != null) {
+                $dob = $e->getUser()->getDob()->format('Y-m-d');
+            } else {
+                $dob = '';
+            }
 
             $content   .= $e->getUser()->getId()
             . ";" . $e->getUser()->getUsername()
-			. ";" . $e->getUser()->getTitle()
+            . ";" . $e->getUser()->getTitle()
             . ";" . $e->getUser()->getLastname()
             . ";" . $e->getUser()->getFirstname()
             . ";" . $e->getUser()->getEmail()
@@ -364,12 +361,12 @@ class QuizController extends GameController
             . $replyText
             . ";" . $e->getCreatedAt()->format('Y-m-d H:i:s')
             . ";" . $e->getUser()->getAddress() . $adress2
-			. ";" . $e->getUser()->getPostalCode()
-			. ";" . $e->getUser()->getCity()
-			. ";" . $e->getUser()->getTelephone()
-			. ";" . $e->getUser()->getMobile()
-			. ";" . $e->getUser()->getCreatedAt()->format('Y-m-d')
-			. ";" . $dob
+            . ";" . $e->getUser()->getPostalCode()
+            . ";" . $e->getUser()->getCity()
+            . ";" . $e->getUser()->getTelephone()
+            . ";" . $e->getUser()->getMobile()
+            . ";" . $e->getUser()->getCreatedAt()->format('Y-m-d')
+            . ";" . $dob
             ."\n";
         }
 
@@ -402,15 +399,17 @@ class QuizController extends GameController
         return $this;
     }
 
-    function getQuizReplyAnswerMapper () {
-        if(!$this->quizReplyAnswerMapper) {
+    public function getQuizReplyAnswerMapper()
+    {
+        if (!$this->quizReplyAnswerMapper) {
             $this->quizReplyAnswerMapper = $this->getServiceLocator()->get('playgroundgame_quizreplyanswer_mapper');
         }
         return $this->quizReplyAnswerMapper;
     }
 
-    function getQuizReplyMapper () {
-        if(!$this->quizReplyMapper) {
+    public function getQuizReplyMapper()
+    {
+        if (!$this->quizReplyMapper) {
             $this->quizReplyMapper = $this->getServiceLocator()->get('playgroundgame_quizreply_mapper');
         }
         return $this->quizReplyMapper;

@@ -4,10 +4,10 @@ namespace PlaygroundGame\Form\Frontend;
 
 use Zend\InputFilter\InputFilter;
 
-class InstantWinOccurrenceCodeFilter extends InputFilter {
-
-    public function __construct() {
-
+class InstantWinOccurrenceCodeFilter extends InputFilter
+{
+    public function __construct()
+    {
         $this->add(array(
             'name' => 'code-input',
             'required' => true,
@@ -27,5 +27,4 @@ class InstantWinOccurrenceCodeFilter extends InputFilter {
             ),
         ));
     }
-
 }

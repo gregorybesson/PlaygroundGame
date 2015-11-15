@@ -4,5 +4,4 @@ namespace PlaygroundGame\Options;
 
 interface GameEditOptionsInterface
 {
-
 }

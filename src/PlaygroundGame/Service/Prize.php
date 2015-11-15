@@ -11,7 +11,6 @@ use PlaygroundGame\Mapper\Prize as PrizeMapper;
 
 class Prize extends EventProvider implements ServiceManagerAwareInterface
 {
-
     /**
      * @var prizeMapper
      */
@@ -37,7 +36,6 @@ class Prize extends EventProvider implements ServiceManagerAwareInterface
      */
     public function create(array $data, $prize, $formClass)
     {
-
         $form  = $this->getServiceManager()->get($formClass);
         $form->bind($prize);
 
@@ -76,7 +74,7 @@ class Prize extends EventProvider implements ServiceManagerAwareInterface
             'messages'          => array('objectFound' => 'This url already exists !')
         ));
         
-        if($prize->getIdentifier() != $data['identifier']){
+        if ($prize->getIdentifier() != $data['identifier']) {
             $identifierInput->getValidatorChain()->addValidator($noObjectExistsValidator);
         }
 

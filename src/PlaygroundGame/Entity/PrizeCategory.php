@@ -86,7 +86,7 @@ class PrizeCategory
      *
      * @return the $id
      */
-    public function getId ()
+    public function getId()
     {
         return $this->id;
     }
@@ -95,7 +95,7 @@ class PrizeCategory
      *
      * @param field_type $id
      */
-    public function setId ($id)
+    public function setId($id)
     {
         $this->id = $id;
 
@@ -124,7 +124,7 @@ class PrizeCategory
      *
      * @return the $identifier
      */
-    public function getIdentifier ()
+    public function getIdentifier()
     {
         return $this->identifier;
     }
@@ -133,7 +133,7 @@ class PrizeCategory
      *
      * @param field_type $identifier
      */
-    public function setIdentifier ($identifier)
+    public function setIdentifier($identifier)
     {
         $this->identifier = $identifier;
 

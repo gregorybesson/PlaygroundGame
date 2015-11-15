@@ -5,7 +5,7 @@ namespace PlaygroundGameTest\Form\Frontend;
 use PlaygroundGameTest\Bootstrap;
 use PlaygroundGame\Form\Frontend\InstantWinOccurrenceCode;
 
-class instantWinOccurrenceCodeTest extends \PHPUnit_Framework_TestCase
+class InstantWinOccurrenceCodeTest extends \PHPUnit_Framework_TestCase
 {
     protected $sm;
 
@@ -28,7 +28,7 @@ class instantWinOccurrenceCodeTest extends \PHPUnit_Framework_TestCase
 
     public function testTextInputTagStriped()
     {
-        $this->form->setData(array('code-input' => '<tag>sometext</tag>',));
+        $this->form->setData(array('code-input' => '<tag>sometext</tag>', ));
         $this->assertTrue($this->form->isValid());
 
         $data = $this->form->getData();
@@ -37,13 +37,13 @@ class instantWinOccurrenceCodeTest extends \PHPUnit_Framework_TestCase
 
     public function testTextInputAlphaNumValid()
     {
-        $this->form->setData(array('code-input' => 'Valid012345-$@code',));
+        $this->form->setData(array('code-input' => 'Valid012345-$@code', ));
         $this->assertTrue($this->form->isValid());
     }
 
     public function testTextInputSpacesRemoved()
     {
-        $this->form->setData(array('code-input' => ' no-spaces ',));
+        $this->form->setData(array('code-input' => ' no-spaces ', ));
         $this->assertTrue($this->form->isValid());
         $data = $this->form->getData();
         $this->assertEquals('no-spaces', $data['code-input']);
@@ -51,10 +51,10 @@ class instantWinOccurrenceCodeTest extends \PHPUnit_Framework_TestCase
 
     public function testTextInputNotEmpty()
     {
-        $this->form->setData(array('code-input' => ' ',));
+        $this->form->setData(array('code-input' => ' ', ));
         $this->assertFalse($this->form->isValid());
 
-        $this->form->setData(array('code-input' => '',));
+        $this->form->setData(array('code-input' => '', ));
         $this->assertFalse($this->form->isValid());
     }
 

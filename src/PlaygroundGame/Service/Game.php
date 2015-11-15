@@ -19,7 +19,6 @@ use Zend\InputFilter\Factory as InputFactory;
 
 class Game extends EventProvider implements ServiceManagerAwareInterface
 {
-
     /**
      *
      * @var GameMapperInterface
@@ -125,7 +124,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $form->setData($data);
 
         if (! $form->isValid()) {
-
             if (isset($data['publicationDate']) && $data['publicationDate']) {
                 $tmpDate = \DateTime::createFromFormat('Y-m-d', $data['publicationDate']);
                 $data['publicationDate'] = $tmpDate->format('d/m/Y');
@@ -164,8 +162,9 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $result = $this->getEventManager()->trigger(__FUNCTION__, $this, array(
             'game' => $game
         ));
-        if (! $result)
+        if (! $result) {
             return false;
+        }
 
             // I wait for the game to be saved to obtain its ID.
         if (! empty($data['uploadStylesheet']['tmp_name'])) {
@@ -646,7 +645,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             ->getMvcEvent()
             ->getRouteMatch()
             ->getParam('channel') === 'preview' && $this->isAllowed('game', 'edit')) {
-
             $game->setActive(true);
             $game->setStartDate(null);
             $game->setEndDate(null);
@@ -701,16 +699,20 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
         if ($user) {
             $search['user'] = $user;
-        } elseif($this->getAnonymousIdentifier()){
+        } elseif ($this->getAnonymousIdentifier()) {
             $search['anonymousIdentifier'] = $this->getAnonymousIdentifier();
-            $search['user'] = Null;
+            $search['user'] = null;
         } else {
             $search['anonymousId'] = $this->getAnonymousId();
-            $search['user'] = Null;
+            $search['user'] = null;
         }
         
-        if (! is_null($active)) $search['active'] = $active;
-        if (! is_null($bonus)) $search['bonus'] = $bonus;
+        if (! is_null($active)) {
+            $search['active'] = $active;
+        }
+        if (! is_null($bonus)) {
+            $search['bonus'] = $bonus;
+        }
 
         $entry = $this->getEntryMapper()->findOneBy($search);
 
@@ -725,27 +727,27 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
     */
     public function updateEntryPlayerForm($data, $game, $user, $entry, $mandatory = true)
     {
-
         $form = $this->createFormFromJson($game->getPlayerForm()->getForm(), 'playerForm');
         $form->setData($data);
 
-        if(!$mandatory){
+        if (!$mandatory) {
             $filter = $form->getInputFilter();
             foreach ($form->getElements() as $element) {
                 try {
                     $elementInput = $filter->get($element->getName());
                     $elementInput->setRequired(false);
                     $form->get($element->getName())->setAttribute('required', false);
-                } catch(\Zend\Form\Exception\InvalidElementException $e){}
+                } catch (\Zend\Form\Exception\InvalidElementException $e) {
+                }
             }
         }
 
         if ($form->isValid()) {
             $dataJson = json_encode($form->getData());
 
-            if($game->getAnonymousAllowed() && $game->getAnonymousIdentifier() && isset($data[$game->getAnonymousIdentifier()])){
+            if ($game->getAnonymousAllowed() && $game->getAnonymousIdentifier() && isset($data[$game->getAnonymousIdentifier()])) {
                 $session = new \Zend\Session\Container('anonymous_identifier');
-                if(empty($session->offsetGet('anonymous_identifier'))){
+                if (empty($session->offsetGet('anonymous_identifier'))) {
                     $anonymousIdentifier = $data[$game->getAnonymousIdentifier()];
                 
                     $entry->setAnonymousIdentifier($anonymousIdentifier);
@@ -758,7 +760,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             $entry->setPlayerData($dataJson);
             $this->getEntryMapper()->update($entry);
         } else {
-            
             return false;
         }
 
@@ -775,7 +776,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             // I'm on Facebook
             $sr = $session->offsetGet('signed_request');
             if ($sr['page']['liked'] == 1) {
-
                 return true;
             }
         } else {
@@ -788,15 +788,13 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
     
     public function getAnonymousIdentifier()
     {
-        if(is_null($this->anonymousIdentifier)){
+        if (is_null($this->anonymousIdentifier)) {
             // If on Facebook, check if you have to be a FB fan to play the game
             $session = new Container('anonymous_identifier');
             
             if ($session->offsetExists('anonymous_identifier')) {
                 $this->anonymousIdentifier = $session->offsetGet('anonymous_identifier');
-                
-            } else{
-
+            } else {
                 $this->anonymousIdentifier = false;
             }
         }
@@ -821,9 +819,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $entry = $this->checkExistingEntry($game, $user, true);
 
         if (! $entry) {
-
-            if ($this->hasReachedPlayLimit($game, $user)){
-
+            if ($this->hasReachedPlayLimit($game, $user)) {
                 return false;
             }
 
@@ -833,7 +829,9 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             $entry->setPoints(0);
             $entry->setIp($this->getIp());
             $entry->setAnonymousId($this->getAnonymousId());
-            if($this->getAnonymousIdentifier()) $entry->setAnonymousIdentifier($this->getAnonymousIdentifier());
+            if ($this->getAnonymousIdentifier()) {
+                $entry->setAnonymousIdentifier($this->getAnonymousIdentifier());
+            }
 
             $entry = $this->getEntryMapper()->insert($entry);
             $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array(
@@ -869,10 +867,8 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
     public function findLastEntries($game, $user, $limitScale)
     {
         if ($user) {
-
             return $this->getEntryMapper()->findLastEntriesByUser($game, $user, $limitScale);
-        } elseif($this->getAnonymousIdentifier()) {
-
+        } elseif ($this->getAnonymousIdentifier()) {
             return $this->getEntryMapper()->findLastEntriesByAnonymousIdentifier($game, $this->getAnonymousIdentifier(), $limitScale);
         } else {
             return $this->getEntryMapper()->findLastEntriesByIp($game, $this->getIp(), $limitScale);
@@ -881,38 +877,35 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
     public function findLastActiveEntry($game, $user)
     {
-
         return $this->checkExistingEntry($game, $user, true);
     }
 
     public function findLastInactiveEntry($game, $user)
     {
-        
         return $this->checkExistingEntry($game, $user, false, false);
     }
 
     public function findLastEntry($game, $user)
     {
-
         return $this->checkExistingEntry($game, $user, null, false);
     }
 
-    public function sendShareMail($data, $game, $user, $entry, $template = 'share_game', $topic = NULL, $userTimer = array())
+    public function sendShareMail($data, $game, $user, $entry, $template = 'share_game', $topic = null, $userTimer = array())
     {
         $mailService = $this->getServiceManager()->get('playgroundgame_message');
         $mailSent = false;
         $from = $this->getOptions()->getEmailFromAddress();
         $subject = $this->getOptions()->getShareSubjectLine();
         $renderer = $this->getServiceManager()->get('Zend\View\Renderer\RendererInterface');
-        if($user){
+        if ($user) {
             $email = $user->getEmail();
-        } elseif($entry->getAnonymousIdentifier()){
+        } elseif ($entry->getAnonymousIdentifier()) {
             $email = $entry->getAnonymousIdentifier();
-        }else{
+        } else {
             $email = $from;
         }
         $skinUrl = $renderer->url(
-            'frontend', 
+            'frontend',
             array('channel' => $this->getServiceManager()
                 ->get('Application')
                 ->getMvcEvent()
@@ -941,12 +934,11 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             ));
             $mailService->send($message);
             
-            if(!isset($shares['mail'])){
+            if (!isset($shares['mail'])) {
                 $shares['mail'] = 1;
-            } else{
+            } else {
                 $shares['mail'] += 1;
             }
-            
         }
         if ($data['email2'] && $data['email2'] != $data['email1']) {
             $mailSent = true;
@@ -959,9 +951,9 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             ));
             $mailService->send($message);
             
-            if(!isset($shares['mail'])){
+            if (!isset($shares['mail'])) {
                 $shares['mail'] = 1;
-            } else{
+            } else {
                 $shares['mail'] += 1;
             }
         }
@@ -976,9 +968,9 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             ));
             $mailService->send($message);
             
-            if(!isset($shares['mail'])){
+            if (!isset($shares['mail'])) {
                 $shares['mail'] = 1;
-            } else{
+            } else {
                 $shares['mail'] += 1;
             }
         }
@@ -993,9 +985,9 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             ));
             $mailService->send($message);
         
-            if(!isset($shares['mail'])){
+            if (!isset($shares['mail'])) {
                 $shares['mail'] = 1;
-            } else{
+            } else {
                 $shares['mail'] += 1;
             }
         }
@@ -1010,14 +1002,13 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             ));
             $mailService->send($message);
         
-            if(!isset($shares['mail'])){
+            if (!isset($shares['mail'])) {
                 $shares['mail'] = 1;
-            } else{
+            } else {
                 $shares['mail'] += 1;
             }
         }
         if ($mailSent) {
-            
             $sharesJson = json_encode($shares);
             $entry->setSocialShares($sharesJson);
             $entry = $this->getEntryMapper()->update($entry);
@@ -1036,22 +1027,21 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         return false;
     }
 
-    public function sendResultMail($game, $user, $entry, $template = 'entry', $prize = NULL)
+    public function sendResultMail($game, $user, $entry, $template = 'entry', $prize = null)
     {
-
         $mailService = $this->getServiceManager()->get('playgroundgame_message');
         $from = $this->getOptions()->getEmailFromAddress();
-        if($user){
+        if ($user) {
             $to = $user->getEmail();
-        } elseif($entry->getAnonymousIdentifier()){
+        } elseif ($entry->getAnonymousIdentifier()) {
             $to = $entry->getAnonymousIdentifier();
-        }else{
+        } else {
             return false;
         }
         $subject = $game->getTitle();
         $renderer = $this->getServiceManager()->get('Zend\View\Renderer\RendererInterface');
         $skinUrl = $renderer->url(
-            'frontend', 
+            'frontend',
             array('channel' => $this->getServiceManager()
                 ->get('Application')
                 ->getMvcEvent()
@@ -1078,7 +1068,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $subject = $this->getOptions()->getParticipationSubjectLine();
         $renderer = $this->getServiceManager()->get('Zend\View\Renderer\RendererInterface');
         $skinUrl = $renderer->url(
-            'frontend', 
+            'frontend',
             array('channel' => $this->getServiceManager()
                 ->get('Application')
                 ->getMvcEvent()
@@ -1102,9 +1092,9 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $topic = $game->getTitle();
         
         $shares = json_decode($entry->getSocialShares(), true);
-        if(!isset($shares['fbwall'])){
+        if (!isset($shares['fbwall'])) {
             $shares['fbwall'] = 1;
-        } else{
+        } else {
             $shares['fbwall'] += 1;
         }
         $sharesJson = json_encode($shares);
@@ -1126,9 +1116,9 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
     {
         $shares = json_decode($entry->getSocialShares(), true);
         $to = explode(',', $to);
-        if(!isset($shares['fbrequest'])){
+        if (!isset($shares['fbrequest'])) {
             $shares['fbrequest'] = count($to);
-        } else{
+        } else {
             $shares['fbrequest'] += count($to);
         }
         $sharesJson = json_encode($shares);
@@ -1151,9 +1141,9 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $topic = $game->getTitle();
 
         $shares = json_decode($entry->getSocialShares(), true);
-        if(!isset($shares['fbrequest'])){
+        if (!isset($shares['fbrequest'])) {
             $shares['tweet'] = 1;
-        } else{
+        } else {
             $shares['tweet'] += 1;
         }
         $sharesJson = json_encode($shares);
@@ -1176,9 +1166,9 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $topic = $game->getTitle();
         
         $shares = json_decode($entry->getSocialShares(), true);
-        if(!isset($shares['fbrequest'])){
+        if (!isset($shares['fbrequest'])) {
             $shares['google'] = 1;
-        } else{
+        } else {
             $shares['google'] += 1;
         }
         $sharesJson = json_encode($shares);
@@ -1267,11 +1257,11 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      */
     public function playAgain($game, $user, $winner = 0)
     {
-         if ($this->allowBonus($game, $user)) {
+        if ($this->allowBonus($game, $user)) {
             $entry = $this->addAnotherEntry($game, $user, $winner);
             $entry->setActive(1);
             $entry = $this->getEntryMapper()->update($entry);
-            if($entry->getActive() == 1) {
+            if ($entry->getActive() == 1) {
                 return true;
             }
         }
@@ -1310,7 +1300,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      */
     public function uploadFile($path, $file)
     {
-
         $err = $file["error"];
         $message = '';
         if ($err > 0) {
@@ -1336,25 +1325,21 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
             return $err;
         } else {
-
             $fileNewname = $this->fileNewname($path, $file['name'], true);
 
-            if(isset($file["base64"])){
-                list(,$img) = explode(',', $file["base64"]);
-                $img = str_replace(' ','+',$img);
+            if (isset($file["base64"])) {
+                list(, $img) = explode(',', $file["base64"]);
+                $img = str_replace(' ', '+', $img);
                 $im = base64_decode($img);
-                if ($im !== false){
+                if ($im !== false) {
                     // getimagesizefromstring
                     file_put_contents($path . $fileNewname, $im);
-
                 } else {
-                    
-                    return 1; 
+                    return 1;
                 }
 
                 return $fileNewname;
             } else {
-
                 $adapter = new \Zend\File\Transfer\Adapter\Http();
                 // 1Mo
                 $size = new Size(array(
@@ -1367,7 +1352,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                 ), $fileNewname);
 
                 if (! $adapter->isValid()) {
-
                     return false;
                 }
 
@@ -1375,17 +1359,16 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             }
 
             
-            if( class_exists("Imagick") ){
+            if (class_exists("Imagick")) {
                 $ext = pathinfo($fileNewname, PATHINFO_EXTENSION);
                 $img = new \Imagick($path . $fileNewname);
-                $img->cropThumbnailImage( 100, 100 );
+                $img->cropThumbnailImage(100, 100);
                 $img->setImageCompression(\Imagick::COMPRESSION_JPEG);
                 $img->setImageCompressionQuality(75);
                 // Strip out unneeded meta data
                 $img->stripImage();
                 $img->writeImage($path . str_replace('.'.$ext, '-thumbnail.'.$ext, $fileNewname));
                 ErrorHandler::stop(true);
-            
             }
         }
 
@@ -1629,7 +1612,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      */
     public function resize($tmp_file, $extension, $rep, $src, $mini_width, $mini_height)
     {
-        list ($src_width, $src_height) = getimagesize($tmp_file);
+        list($src_width, $src_height) = getimagesize($tmp_file);
 
         $ratio_src = $src_width / $src_height;
         $ratio_mini = $mini_width / $mini_height;
@@ -1669,25 +1652,21 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
     public function getIp()
     {
         $ipaddress = '';
-        if (isset($_SERVER['HTTP_CLIENT_IP']))
+        if (isset($_SERVER['HTTP_CLIENT_IP'])) {
             $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
-        else
-            if (isset($_SERVER['HTTP_X_FORWARDED_FOR']))
-                $ipaddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
-            else
-                if (isset($_SERVER['HTTP_X_FORWARDED']))
-                    $ipaddress = $_SERVER['HTTP_X_FORWARDED'];
-                else
-                    if (isset($_SERVER['HTTP_FORWARDED_FOR']))
-                        $ipaddress = $_SERVER['HTTP_FORWARDED_FOR'];
-                    else
-                        if (isset($_SERVER['HTTP_FORWARDED']))
-                            $ipaddress = $_SERVER['HTTP_FORWARDED'];
-                        else
-                            if (isset($_SERVER['REMOTE_ADDR']))
-                                $ipaddress = $_SERVER['REMOTE_ADDR'];
-                            else
-                                $ipaddress = 'UNKNOWN';
+        } elseif (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ipaddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } elseif (isset($_SERVER['HTTP_X_FORWARDED'])) {
+            $ipaddress = $_SERVER['HTTP_X_FORWARDED'];
+        } elseif (isset($_SERVER['HTTP_FORWARDED_FOR'])) {
+            $ipaddress = $_SERVER['HTTP_FORWARDED_FOR'];
+        } elseif (isset($_SERVER['HTTP_FORWARDED'])) {
+            $ipaddress = $_SERVER['HTTP_FORWARDED'];
+        } elseif (isset($_SERVER['REMOTE_ADDR'])) {
+            $ipaddress = $_SERVER['REMOTE_ADDR'];
+        } else {
+            $ipaddress = 'UNKNOWN';
+        }
 
         return $ipaddress;
     }
@@ -1745,7 +1724,8 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      * Create a ZF2 Form from json data
      * @return Form
      */
-    public function createFormFromJson($jsonForm, $id='jsonForm'){
+    public function createFormFromJson($jsonForm, $id='jsonForm')
+    {
         $formPV = json_decode($jsonForm);
         
         $form = new Form();
@@ -1772,10 +1752,10 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                 $element->setLabel($label);
                 $element->setAttributes(
                     array(
-                        'placeholder' 	=> $placeholder,
-                        'required' 		=> $required,
-                        'class' 		=> $class,
-                        'id' 			=> $id
+                        'placeholder'    => $placeholder,
+                        'required'        => $required,
+                        'class'        => $class,
+                        'id'            => $id
                     )
                 );
                 $form->add($element);
@@ -1797,10 +1777,10 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                         'options' => $options,
                     ),
                 );
-                if($validator){
+                if ($validator) {
                     $regex = "/.*\(([^)]*)\)/";
-                    preg_match($regex,$validator,$matches);
-                    $valArray = array('name' => str_replace('('.$matches[1].')','',$validator), 'options' => array($matches[1]));
+                    preg_match($regex, $validator, $matches);
+                    $valArray = array('name' => str_replace('('.$matches[1].')', '', $validator), 'options' => array($matches[1]));
                     $validators[] = $valArray;
                 }
 
@@ -1813,7 +1793,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                     ),
                     'validators' => $validators,
                 )));
-        
             }
             if (isset($element->line_password)) {
                 $attributes  = $element->line_password[0];
@@ -1862,7 +1841,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                         ),
                     ),
                 )));
-        
             }
             if (isset($element->line_hidden)) {
                 $attributes  = $element->line_hidden[0];
@@ -1909,7 +1887,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                         ),
                     ),
                 )));
-        
             }
             if (isset($element->line_email)) {
                 $attributes  = $element->line_email[0];
@@ -1925,10 +1902,10 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                 $element->setLabel($label);
                 $element->setAttributes(
                     array(
-                        'placeholder' 	=> $placeholder,
-                        'required' 		=> $required,
-                        'class' 		=> $class,
-                        'id' 			=> $id
+                        'placeholder'    => $placeholder,
+                        'required'        => $required,
+                        'class'        => $class,
+                        'id'            => $id
                     )
                 );
                 $form->add($element);
@@ -1957,7 +1934,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                         ),
                     ),
                 )));
-        
             }
             if (isset($element->line_radio)) {
                 $attributes  = $element->line_radio[0];
@@ -1976,14 +1952,14 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                 $element->setAttributes(
                     array(
                         'name'          => $name,
-                        'required' 		=> $required,
+                        'required'        => $required,
                         'allowEmpty'    => !$required,
-                        'class' 		=> $class,
-                        'id' 			=> $id
+                        'class'        => $class,
+                        'id'            => $id
                     )
                 );
                 $values = array();
-                foreach($innerData as $value){
+                foreach ($innerData as $value) {
                     $values[] = $value->label;
                 }
                 $element->setValueOptions($values);
@@ -2019,14 +1995,14 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                 $element->setAttributes(
                     array(
                         'name'     => $name,
-                        'required' 		=> $required,
+                        'required'        => $required,
                         'allowEmpty'    => !$required,
-                        'class' 		=> $class,
-                        'id' 			=> $id
+                        'class'        => $class,
+                        'id'            => $id
                     )
                 );
                 $values = array();
-                foreach($innerData as $value){
+                foreach ($innerData as $value) {
                     $values[] = $value->label;
                 }
                 $element->setValueOptions($values);
@@ -2043,10 +2019,8 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                     'required' => $required,
                     'allowEmpty' => !$required,
                 )));
-        
             }
             if (isset($element->line_dropdown)) {
-
                 $attributes  = $element->line_dropdown[0];
                 $name        = isset($attributes->name)? $attributes->name : '';
                 $label       = isset($attributes->data->label)? $attributes->data->label : '';
@@ -2070,7 +2044,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                     )
                 );
                 $values = array();
-                foreach($dropdownValues as $value){
+                foreach ($dropdownValues as $value) {
                     $values[] = $value->dropdown_label;
                 }
                 $element->setValueOptions($values);
@@ -2087,7 +2061,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                     'required' => $required,
                     'allowEmpty' => !$required,
                 )));
-        
             }
             if (isset($element->line_paragraph)) {
                 $attributes  = $element->line_paragraph[0];
@@ -2102,10 +2075,10 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                 $element->setLabel($label);
                 $element->setAttributes(
                     array(
-                        'placeholder' 	=> $placeholder,
-                        'required' 		=> $required,
-                        'class' 		=> $class,
-                        'id' 			=> $id
+                        'placeholder'    => $placeholder,
+                        'required'        => $required,
+                        'class'        => $class,
+                        'id'            => $id
                     )
                 );
                 $form->add($element);
@@ -2147,9 +2120,9 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                 $element->setLabel($label);
                 $element->setAttributes(
                     array(
-                        'required' 	=> $required,
-                        'class' 	=> $class,
-                        'id' 		=> $id
+                        'required'    => $required,
+                        'class'    => $class,
+                        'id'        => $id
                     )
                 );
                 $form->add($element);
@@ -2164,7 +2137,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                         ),
                     ),
                 )));
-        
             }
         }
         
@@ -2173,22 +2145,24 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         return $form;
     }
 
-    public function download($gameId, $columns = array()){
-
+    public function download($gameId, $columns = array())
+    {
         $game = $this->getGameMapper()->findById($gameId);
         $entries = $this->getEntryMapper()->findBy(array('game' => $game));
 
         $content        = "\xEF\xBB\xBF"; // UTF-8 BOM
 
-        if(!$game) return $content;
+        if (!$game) {
+            return $content;
+        }
         
         if (! $game->getAnonymousAllowed()) {
             $content       .= "ID;Pseudo;Civilité;Nom;Prénom;E-mail;Optin Newsletter;Optin partenaire;Adresse;CP;Ville;Téléphone;Mobile;Date d'inscription;Date de naissance;";
         }
         
         $header = array();
-        if($game->getPlayerForm()){      
-            $formPV = json_decode($game->getPlayerForm()->getForm(),true);
+        if ($game->getPlayerForm()) {
+            $formPV = json_decode($game->getPlayerForm()->getForm(), true);
             foreach ($formPV as $element) {
                 if (isset($element['line_text'][0]['name'])) {
                     $header[$element['line_text'][0]['name']] = 1;
@@ -2221,7 +2195,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         }
 
         if (count($entries)) {
-
             foreach ($header as $key => $data) {
                 $content .= $key.';';
             }
@@ -2229,12 +2202,12 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                 ."\n";
             foreach ($entries as $e) {
                 if (!$game->getAnonymousAllowed()) {
-                    if($e->getUser()->getAddress2() != '') {
+                    if ($e->getUser()->getAddress2() != '') {
                         $adress2 = ' - ' . $e->getUser()->getAddress2();
                     } else {
                         $adress2 = '';
                     }
-                    if($e->getUser()->getDob() != NULL) {
+                    if ($e->getUser()->getDob() != null) {
                         $dob = $e->getUser()->getDob()->format('Y-m-d');
                     } else {
                         $dob = '';
@@ -2258,20 +2231,20 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                     . ";" ;
                 }
                 if ($e->getPlayerData()) {
-                    $entryData = json_decode($e->getPlayerData(),true);
-                    foreach($header as $k=>$v){
-                        if(isset($entryData[$k])){
+                    $entryData = json_decode($e->getPlayerData(), true);
+                    foreach ($header as $k=>$v) {
+                        if (isset($entryData[$k])) {
                             if (is_array($entryData[$k])) {
                                 $content .= implode(', ', $entryData[$k]).';';
                             } else {
                                 $content .= $entryData[$k].';';
                             }
-                        } else{
+                        } else {
                             $content .= ';';
                         }
                     }
                 } else {
-                    foreach($header as $k=>$v){
+                    foreach ($header as $k=>$v) {
                         $content .= ';';
                     }
                 }

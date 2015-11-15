@@ -7,7 +7,6 @@ use PlaygroundGame\Mapper\GameInterface as GameMapperInterface;
 
 class Lottery extends Game implements ServiceManagerAwareInterface
 {
-
     /**
      * @var LotteryMapperInterface
      */

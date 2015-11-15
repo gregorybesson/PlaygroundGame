@@ -55,7 +55,6 @@ class Cron extends EventProvider implements ServiceManagerAwareInterface
         $message = $mailService->createTextMessage($from, $to, $subject, 'playground-game/email/share_reminder', array('game' => $game));
 
         $mailService->send($message);
-
     }
 
     public static function instantWinEmail()

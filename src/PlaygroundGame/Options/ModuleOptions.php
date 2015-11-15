@@ -30,21 +30,21 @@ class ModuleOptions extends AbstractOptions implements GameEditOptionsInterface
      * @var string
      */
     protected $emailFromAddress = '';
-	
-	/**
+    
+    /**
      * @var string
      */
     protected $defaultSubjectLine = '';
-	
-	/**
+    
+    /**
      * @var string
      */
-	protected $participationSubjectLine = '';
-	
-	/**
+    protected $participationSubjectLine = '';
+    
+    /**
      * @var string
      */
-	protected $shareSubjectLine = '';
+    protected $shareSubjectLine = '';
 
     /**
      * @var string
@@ -112,51 +112,51 @@ class ModuleOptions extends AbstractOptions implements GameEditOptionsInterface
     {
         return $this->media_url;
     }
-	
-	public function setEmailFromAddress($emailFromAddress)
+    
+    public function setEmailFromAddress($emailFromAddress)
     {
         $this->emailFromAddress = $emailFromAddress;
 
         return $this;
     }
-	
-	public function getEmailFromAddress()
+    
+    public function getEmailFromAddress()
     {
         return $this->emailFromAddress;
     }
-	
-	public function setDefaultSubjectLine($defaultSubjectLine)
+    
+    public function setDefaultSubjectLine($defaultSubjectLine)
     {
         $this->defaultSubjectLine = $defaultSubjectLine;
 
         return $this;
     }
-	
-	public function getDefaultSubjectLine()
+    
+    public function getDefaultSubjectLine()
     {
         return $this->defaultSubjectLine;
     }
-	
-	public function setParticipationSubjectLine($participationSubjectLine)
+    
+    public function setParticipationSubjectLine($participationSubjectLine)
     {
         $this->participationSubjectLine = $participationSubjectLine;
 
         return $this;
     }
-	
-	public function getParticipationSubjectLine()
+    
+    public function getParticipationSubjectLine()
     {
         return $this->participationSubjectLine;
     }
-	
-	public function setShareSubjectLine($shareSubjectLine)
+    
+    public function setShareSubjectLine($shareSubjectLine)
     {
         $this->shareSubjectLine = $shareSubjectLine;
 
         return $this;
     }
-	
-	public function getShareSubjectLine()
+    
+    public function getShareSubjectLine()
     {
         return $this->shareSubjectLine;
     }
@@ -180,5 +180,4 @@ class ModuleOptions extends AbstractOptions implements GameEditOptionsInterface
     {
         return $this->core_layout;
     }
-
 }

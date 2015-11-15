@@ -39,7 +39,7 @@ class InstantWin extends Game implements InputFilterAwareInterface
      *
      * @ORM\Column(name="occurrence_number", type="integer", nullable=true)
      */
-    protected $occurrenceNumber;    
+    protected $occurrenceNumber;
 
     /**
      * Determine how much winning occurrences to create among the occurrences
@@ -72,7 +72,7 @@ class InstantWin extends Game implements InputFilterAwareInterface
 
     public function __construct()
     {
-    	parent::__construct();
+        parent::__construct();
         $this->setClassType(self::CLASSTYPE);
         $this->occurrences = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -165,7 +165,7 @@ class InstantWin extends Game implements InputFilterAwareInterface
      */
     public function getOccurrenceDrawFrequency()
     {
-    	return $this->occurrenceDrawFrequency;
+        return $this->occurrenceDrawFrequency;
     }
     
     /**
@@ -173,9 +173,9 @@ class InstantWin extends Game implements InputFilterAwareInterface
      */
     public function setOccurrenceDrawFrequency($occurrenceDrawFrequency)
     {
-    	$this->occurrenceDrawFrequency = $occurrenceDrawFrequency;
+        $this->occurrenceDrawFrequency = $occurrenceDrawFrequency;
     
-    	return $this;
+        return $this;
     }
 
     /**
@@ -200,7 +200,7 @@ class InstantWin extends Game implements InputFilterAwareInterface
      *
      * @return the $scratchcardImage
      */
-    public function getScratchcardImage ()
+    public function getScratchcardImage()
     {
         return $this->scratchcardImage;
     }
@@ -209,7 +209,7 @@ class InstantWin extends Game implements InputFilterAwareInterface
      *
      * @param field_type $scratchcardImage
      */
-    public function setScratchcardImage ($scratchcardImage)
+    public function setScratchcardImage($scratchcardImage)
     {
         $this->scratchcardImage = $scratchcardImage;
         
@@ -268,35 +268,35 @@ class InstantWin extends Game implements InputFilterAwareInterface
 
             $inputFilter = parent::getInputFilter();
 
-            $inputFilter->add($factory->createInput(array('name' => 'id', 'required' => true, 'filters' => array(array('name' => 'Int'),),)));
+            $inputFilter->add($factory->createInput(array('name' => 'id', 'required' => true, 'filters' => array(array('name' => 'Int'), ), )));
 
             $inputFilter->add($factory->createInput(array(
-            	'name' => 'occurrenceNumber', 
-            	'required' => false, 
-            	'validators' => array(
-            		array('name' => 'Digits',),
-            	),
+                'name' => 'occurrenceNumber',
+                'required' => false,
+                'validators' => array(
+                    array('name' => 'Digits', ),
+                ),
             )));
 
             $inputFilter->add($factory->createInput(array(
-                'name' => 'winningOccurrenceNumber', 
-                'required' => false, 
+                'name' => 'winningOccurrenceNumber',
+                'required' => false,
                 'validators' => array(
-                    array('name' => 'Digits',),
+                    array('name' => 'Digits', ),
                 ),
             )));
             
             $inputFilter->add($factory->createInput(array(
-           		'name' => 'occurrenceDrawFrequency',
-           		'required' => false,
-           		'validators' => array(
-       				array(
-      					'name' => 'InArray',
-           				'options' => array(
-           					'haystack' => array('hour', 'day', 'week', 'month', 'game'),
-            			),
-            		),
-           		),
+                   'name' => 'occurrenceDrawFrequency',
+                   'required' => false,
+                   'validators' => array(
+                       array(
+                          'name' => 'InArray',
+                           'options' => array(
+                               'haystack' => array('hour', 'day', 'week', 'month', 'game'),
+                        ),
+                    ),
+                   ),
             )));
 
             $inputFilter->add($factory->createInput(array(

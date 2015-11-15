@@ -352,13 +352,13 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
 
     public function __construct()
     {
-    	$this->prizes = new ArrayCollection();
+        $this->prizes = new ArrayCollection();
     }
 
     /**
      * @PrePersist
      */
-    public function createChrono ()
+    public function createChrono()
     {
         $this->createdAt = new \DateTime("now");
         $this->updatedAt = new \DateTime("now");
@@ -367,7 +367,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
     /**
      * @PreUpdate
      */
-    public function updateChrono ()
+    public function updateChrono()
     {
         $this->updatedAt = new \DateTime("now");
     }
@@ -376,7 +376,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @return the $id
      */
-    public function getId ()
+    public function getId()
     {
         return $this->id;
     }
@@ -385,7 +385,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @param field_type $id
      */
-    public function setId ($id)
+    public function setId($id)
     {
         $this->id = $id;
 
@@ -400,7 +400,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
         return $this->playerForm;
     }
 
-	/**
+    /**
      * @param field_type $playerForm
      */
     public function setPlayerForm($playerForm)
@@ -410,11 +410,11 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
         return $this;
     }
 
-	/**
+    /**
      *
      * @return the unknown_type
      */
-    public function getPartner ()
+    public function getPartner()
     {
         return $this->partner;
     }
@@ -423,7 +423,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @param unknown_type $partner
      */
-    public function setPartner ($partner)
+    public function setPartner($partner)
     {
         $this->partner = $partner;
 
@@ -434,7 +434,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @param unknown_type $prizeCategory
      */
-    public function setPrizeCategory ($prizeCategory)
+    public function setPrizeCategory($prizeCategory)
     {
         $this->prizeCategory = $prizeCategory;
 
@@ -445,7 +445,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @return the unknown_type
      */
-    public function getPrizeCategory ()
+    public function getPrizeCategory()
     {
         return $this->prizeCategory;
     }
@@ -454,7 +454,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @return the $title
      */
-    public function getTitle ()
+    public function getTitle()
     {
         return $this->title;
     }
@@ -463,7 +463,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @param field_type $title
      */
-    public function setTitle ($title)
+    public function setTitle($title)
     {
         $this->title = $title;
 
@@ -474,7 +474,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @return the $identifier
      */
-    public function getIdentifier ()
+    public function getIdentifier()
     {
         return $this->identifier;
     }
@@ -483,14 +483,14 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @param field_type $identifier
      */
-    public function setIdentifier ($identifier)
+    public function setIdentifier($identifier)
     {
         $this->identifier = $identifier;
 
         return $this;
     }
 
-	/**
+    /**
      * @return integer $anonymousAllowed
      */
     public function getAnonymousAllowed()
@@ -498,7 +498,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
         return $this->anonymousAllowed;
     }
 
-	/**
+    /**
      * @param number $anonymousAllowed
      */
     public function setAnonymousAllowed($anonymousAllowed)
@@ -508,7 +508,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
         return $this;
     }
 
-	/**
+    /**
      * @return the $anonymousIdentifier
      */
     public function getAnonymousIdentifier()
@@ -516,7 +516,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
         return $this->anonymousIdentifier;
     }
 
-	/**
+    /**
      * @param field_type $anonymousIdentifier
      */
     public function setAnonymousIdentifier($anonymousIdentifier)
@@ -524,11 +524,11 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
         $this->anonymousIdentifier = $anonymousIdentifier;
     }
 
-	/**
+    /**
      *
      * @return the $mainImage
      */
-    public function getMainImage ()
+    public function getMainImage()
     {
         return $this->mainImage;
     }
@@ -537,7 +537,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @param field_type $mainImage
      */
-    public function setMainImage ($mainImage)
+    public function setMainImage($mainImage)
     {
         $this->mainImage = $mainImage;
 
@@ -548,7 +548,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @return the $secondImage
      */
-    public function getSecondImage ()
+    public function getSecondImage()
     {
         return $this->secondImage;
     }
@@ -557,7 +557,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @param field_type $secondImage
      */
-    public function setSecondImage ($secondImage)
+    public function setSecondImage($secondImage)
     {
         $this->secondImage = $secondImage;
 
@@ -568,7 +568,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @return the $canal
      */
-    public function getCanal ()
+    public function getCanal()
     {
         return $this->canal;
     }
@@ -577,7 +577,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @param field_type $canal
      */
-    public function setCanal ($canal)
+    public function setCanal($canal)
     {
         $this->canal = $canal;
 
@@ -588,7 +588,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @return integer $canal
      */
-    public function getBroadcastFacebook ()
+    public function getBroadcastFacebook()
     {
         return $this->broadcastFacebook;
     }
@@ -597,7 +597,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @param field_type $broadcastFacebook
      */
-    public function setBroadcastFacebook ($broadcastFacebook)
+    public function setBroadcastFacebook($broadcastFacebook)
     {
         $this->broadcastFacebook = $broadcastFacebook;
 
@@ -608,7 +608,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @return integer $canal
      */
-    public function getBroadcastPlatform ()
+    public function getBroadcastPlatform()
     {
         return $this->broadcastPlatform;
     }
@@ -617,7 +617,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @param field_type $broadcastPlatform
      */
-    public function setBroadcastPlatform ($broadcastPlatform)
+    public function setBroadcastPlatform($broadcastPlatform)
     {
         $this->broadcastPlatform = $broadcastPlatform;
 
@@ -625,24 +625,24 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
     }
 
     /**
-	 * @return integer $broadcastEmbed
-	 */
-	public function getBroadcastEmbed()
-	{
-		return $this->broadcastEmbed;
-	}
+     * @return integer $broadcastEmbed
+     */
+    public function getBroadcastEmbed()
+    {
+        return $this->broadcastEmbed;
+    }
 
-	/**
-	 * @param number $broadcastEmbed
-	 */
-	public function setBroadcastEmbed($broadcastEmbed)
-	{
-		$this->broadcastEmbed = $broadcastEmbed;
+    /**
+     * @param number $broadcastEmbed
+     */
+    public function setBroadcastEmbed($broadcastEmbed)
+    {
+        $this->broadcastEmbed = $broadcastEmbed;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
+    /**
      * @return integer $mailWinner
      */
     public function getMailWinner()
@@ -650,7 +650,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
         return $this->mailWinner;
     }
 
-	/**
+    /**
      * @param number $mailWinner
      */
     public function setMailWinner($mailWinner)
@@ -658,7 +658,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
         $this->mailWinner = $mailWinner;
     }
 
-	/**
+    /**
      * @return the $mailWinnerBlock
      */
     public function getMailWinnerBlock()
@@ -666,7 +666,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
         return $this->mailWinnerBlock;
     }
 
-	/**
+    /**
      * @param field_type $mailWinnerBlock
      */
     public function setMailWinnerBlock($mailWinnerBlock)
@@ -674,7 +674,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
         $this->mailWinnerBlock = $mailWinnerBlock;
     }
 
-	/**
+    /**
      * @return integer $mailLooser
      */
     public function getMailLooser()
@@ -682,7 +682,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
         return $this->mailLooser;
     }
 
-	/**
+    /**
      * @param number $mailLooser
      */
     public function setMailLooser($mailLooser)
@@ -690,7 +690,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
         $this->mailLooser = $mailLooser;
     }
 
-	/**
+    /**
      * @return the $mailLooserBlock
      */
     public function getMailLooserBlock()
@@ -698,7 +698,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
         return $this->mailLooserBlock;
     }
 
-	/**
+    /**
      * @param field_type $mailLooserBlock
      */
     public function setMailLooserBlock($mailLooserBlock)
@@ -706,11 +706,11 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
         $this->mailLooserBlock = $mailLooserBlock;
     }
 
-	/**
+    /**
      *
      * @return integer $pushHome
      */
-    public function getPushHome ()
+    public function getPushHome()
     {
         return $this->pushHome;
     }
@@ -719,7 +719,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @param field_type $pushHome
      */
-    public function setPushHome ($pushHome)
+    public function setPushHome($pushHome)
     {
         $this->pushHome = $pushHome;
 
@@ -730,7 +730,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @return integer $displayHome
      */
-    public function getDisplayHome ()
+    public function getDisplayHome()
     {
         return $this->displayHome;
     }
@@ -739,7 +739,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @param field_type $displayHome
      */
-    public function setDisplayHome ($displayHome)
+    public function setDisplayHome($displayHome)
     {
         $this->displayHome = $displayHome;
 
@@ -750,7 +750,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @return the $publicationDate
      */
-    public function getPublicationDate ()
+    public function getPublicationDate()
     {
         return $this->publicationDate;
     }
@@ -759,7 +759,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @param field_type $publicationDate
      */
-    public function setPublicationDate ($publicationDate)
+    public function setPublicationDate($publicationDate)
     {
         $this->publicationDate = $publicationDate;
 
@@ -770,7 +770,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @return the $startDate
      */
-    public function getStartDate ()
+    public function getStartDate()
     {
         return $this->startDate;
     }
@@ -779,7 +779,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @param field_type $startDate
      */
-    public function setStartDate ($startDate)
+    public function setStartDate($startDate)
     {
         $this->startDate = $startDate;
 
@@ -790,7 +790,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @return the $endDate
      */
-    public function getEndDate ()
+    public function getEndDate()
     {
         return $this->endDate;
     }
@@ -799,7 +799,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @param field_type $endDate
      */
-    public function setEndDate ($endDate)
+    public function setEndDate($endDate)
     {
         $this->endDate = $endDate;
 
@@ -810,7 +810,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @return the $closeDate
      */
-    public function getCloseDate ()
+    public function getCloseDate()
     {
         return $this->closeDate;
     }
@@ -819,51 +819,20 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @param field_type $closeDate
      */
-    public function setCloseDate ($closeDate)
+    public function setCloseDate($closeDate)
     {
         $this->closeDate = $closeDate;
 
         return $this;
     }
 
-    public function isClosed ()
+    public function isClosed()
     {
         $today = new DateTime('now');
-        if(
-            ($this->getCloseDate() && $this->getCloseDate()->setTime(23,59,59) < $today)
+        if (
+            ($this->getCloseDate() && $this->getCloseDate()->setTime(23, 59, 59) < $today)
             ||
-            ($this->getPublicationDate() && $this->getPublicationDate()->setTime(0,0,0) > $today)
-        ){
-            return true;
-        }
-
-        return false;
-    }
-
-    public function isOpen ()
-    {
-        return !$this->isClosed();
-    }
-
-    public function isStarted ()
-    {
-        $today = new DateTime('now');
-        if(((!$this->getStartDate() || $this->getStartDate()->setTime(0,0,0) <= $today))
-                &&
-                (!$this->getEndDate() || $this->getEndDate()->setTime(23,59,59) > $today)
-        ){
-            return true;
-        }
-
-        return false;
-    }
-
-    public function isFinished ()
-    {
-        $today = new DateTime('now');
-        if ($this->getEndDate() && $this->getEndDate()->setTime(23,59,59) <= $today
-            ||
-            ($this->getCloseDate() && $this->getCloseDate()->setTime(23,59,59) <= $today)
+            ($this->getPublicationDate() && $this->getPublicationDate()->setTime(0, 0, 0) > $today)
         ) {
             return true;
         }
@@ -871,9 +840,40 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
         return false;
     }
 
-    public function isOnline ()
+    public function isOpen()
     {
-        if($this->getActive() && $this->getBroadcastPlatform()){
+        return !$this->isClosed();
+    }
+
+    public function isStarted()
+    {
+        $today = new DateTime('now');
+        if (((!$this->getStartDate() || $this->getStartDate()->setTime(0, 0, 0) <= $today))
+                &&
+                (!$this->getEndDate() || $this->getEndDate()->setTime(23, 59, 59) > $today)
+        ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isFinished()
+    {
+        $today = new DateTime('now');
+        if ($this->getEndDate() && $this->getEndDate()->setTime(23, 59, 59) <= $today
+            ||
+            ($this->getCloseDate() && $this->getCloseDate()->setTime(23, 59, 59) <= $today)
+        ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isOnline()
+    {
+        if ($this->getActive() && $this->getBroadcastPlatform()) {
             return true;
         }
 
@@ -885,10 +885,10 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
     {
         $steps = null;
 
-        if($this->getSteps()){
+        if ($this->getSteps()) {
             $steps = json_decode($this->getSteps(), true);
         }
-        if(!$steps){
+        if (!$steps) {
             $steps = array('index','play','result','bounce');
         }
         return $steps;
@@ -898,16 +898,16 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
 
     public function getStepsViewsArray()
     {
-      $viewSteps = null;
+        $viewSteps = null;
 
-      if($this->getStepsViews()){
-        $viewSteps = json_decode($this->getStepsViews(), true);
-      }
-      if(!$viewSteps){
-        $viewSteps = array('index','play','result','bounce');
-      }
+        if ($this->getStepsViews()) {
+            $viewSteps = json_decode($this->getStepsViews(), true);
+        }
+        if (!$viewSteps) {
+            $viewSteps = array('index','play','result','bounce');
+        }
 
-      return $viewSteps;
+        return $viewSteps;
     }
 
     public function getSteps()
@@ -955,7 +955,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
         $steps = $this->getStepsArray();
         $key = array_search($step, $steps);
 
-        if(is_int($key) && $key > 0 ){
+        if (is_int($key) && $key > 0) {
             return $steps[$key-1];
         }
 
@@ -972,7 +972,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
         $steps = $this->getStepsArray();
         $key = array_search($step, $steps);
 
-        if(is_int($key) && $key < count($steps)-1 ){
+        if (is_int($key) && $key < count($steps)-1) {
             return $steps[$key+1];
         }
 
@@ -987,7 +987,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
         return $this->stepsViews;
     }
 
-	/**
+    /**
      * @param string $stepsViews
      */
     public function setStepsViews($stepsViews)
@@ -997,9 +997,9 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
         return $this;
     }
 
-	public function getState()
+    public function getState()
     {
-        if ($this->isOpen()){
+        if ($this->isOpen()) {
             if (!$this->isStarted() && !$this->isFinished()) {
                 return self::GAME_PUBLISHED;
             } elseif ($this->isStarted()) {
@@ -1007,10 +1007,10 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
             } elseif ($this->isFinished()) {
                 return self::GAME_FINISHED;
             }
-        }else{
+        } else {
             if ($this->isFinished()) {
                 return self::GAME_CLOSED;
-            } else{
+            } else {
                 return self::GAME_SCHEDULE;
             }
         }
@@ -1074,7 +1074,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @return the $layout
      */
-    public function getLayout ()
+    public function getLayout()
     {
         return $this->layout;
     }
@@ -1083,7 +1083,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @param field_type $layout
      */
-    public function setLayout ($layout)
+    public function setLayout($layout)
     {
         $this->layout = $layout;
 
@@ -1094,7 +1094,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @return the $stylesheet
      */
-    public function getStylesheet ()
+    public function getStylesheet()
     {
         return $this->stylesheet;
     }
@@ -1103,7 +1103,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @param field_type $stylesheet
      */
-    public function setStylesheet ($stylesheet)
+    public function setStylesheet($stylesheet)
     {
         $this->stylesheet = $stylesheet;
 
@@ -1114,7 +1114,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @return the $welcomeBlock
      */
-    public function getWelcomeBlock ()
+    public function getWelcomeBlock()
     {
         return $this->welcomeBlock;
     }
@@ -1123,7 +1123,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @param field_type $welcomeBlock
      */
-    public function setWelcomeBlock ($welcomeBlock)
+    public function setWelcomeBlock($welcomeBlock)
     {
         $this->welcomeBlock = $welcomeBlock;
 
@@ -1134,7 +1134,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @return the $termsBlock
      */
-    public function getTermsBlock ()
+    public function getTermsBlock()
     {
         return $this->termsBlock;
     }
@@ -1143,7 +1143,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @param text $termsBlock
      */
-    public function setTermsBlock ($termsBlock)
+    public function setTermsBlock($termsBlock)
     {
         $this->termsBlock = $termsBlock;
 
@@ -1154,27 +1154,27 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @return integer $termsOptin
      */
-    public function getTermsOptin ()
+    public function getTermsOptin()
     {
-    	return $this->termsOptin;
+        return $this->termsOptin;
     }
 
     /**
      *
      * @param text $termsOptin
      */
-    public function setTermsOptin ($termsOptin)
+    public function setTermsOptin($termsOptin)
     {
-    	$this->termsOptin = $termsOptin;
+        $this->termsOptin = $termsOptin;
 
-    	return $this;
+        return $this;
     }
 
     /**
      *
      * @return the $conditionsBlock
      */
-    public function getConditionsBlock ()
+    public function getConditionsBlock()
     {
         return $this->conditionsBlock;
     }
@@ -1183,7 +1183,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @param text $conditionsBlock
      */
-    public function setConditionsBlock ($conditionsBlock)
+    public function setConditionsBlock($conditionsBlock)
     {
         $this->conditionsBlock = $conditionsBlock;
 
@@ -1194,7 +1194,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @return the $columnBlock1
      */
-    public function getColumnBlock1 ()
+    public function getColumnBlock1()
     {
         return $this->columnBlock1;
     }
@@ -1203,7 +1203,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @param text $columnBlock1
      */
-    public function setColumnBlock1 ($columnBlock1)
+    public function setColumnBlock1($columnBlock1)
     {
         $this->columnBlock1 = $columnBlock1;
 
@@ -1214,7 +1214,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @return the $columnBlock2
      */
-    public function getColumnBlock2 ()
+    public function getColumnBlock2()
     {
         return $this->columnBlock2;
     }
@@ -1223,7 +1223,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @param text $columnBlock2
      */
-    public function setColumnBlock2 ($columnBlock2)
+    public function setColumnBlock2($columnBlock2)
     {
         $this->columnBlock2 = $columnBlock2;
 
@@ -1234,7 +1234,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @return the $columnBlock3
      */
-    public function getColumnBlock3 ()
+    public function getColumnBlock3()
     {
         return $this->columnBlock3;
     }
@@ -1243,7 +1243,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @param text $columnBlock3
      */
-    public function setColumnBlock3 ($columnBlock3)
+    public function setColumnBlock3($columnBlock3)
     {
         $this->columnBlock3 = $columnBlock3;
 
@@ -1255,7 +1255,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      */
     public function getPrizes()
     {
-    	return $this->prizes;
+        return $this->prizes;
     }
 
     /**
@@ -1264,26 +1264,26 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      */
     public function setPrizes(ArrayCollection $prizes)
     {
-    	$this->prizes = $prizes;
+        $this->prizes = $prizes;
 
-    	return $this;
+        return $this;
     }
 
     public function addPrizes(ArrayCollection $prizes)
     {
-    	foreach ($prizes as $prize) {
-    		$prize->setGame($this);
-    		$this->prizes->add($prize);
-    	}
+        foreach ($prizes as $prize) {
+            $prize->setGame($this);
+            $this->prizes->add($prize);
+        }
     }
 
 
     public function removePrizes(ArrayCollection $prizes)
     {
-    	foreach ($prizes as $prize) {
-    		$prize->setGame(null);
-    		$this->prizes->removeElement($prize);
-    	}
+        foreach ($prizes as $prize) {
+            $prize->setGame(null);
+            $this->prizes->removeElement($prize);
+        }
     }
 
     /**
@@ -1295,14 +1295,14 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      */
     public function addPrize($prize)
     {
-    	$this->prizes[] = $prize;
+        $this->prizes[] = $prize;
     }
 
     /**
      *
      * @return string $classType
      */
-    public function getClassType ()
+    public function getClassType()
     {
         return $this->classType;
     }
@@ -1312,7 +1312,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      * @param string classType
      * @param string $classType
      */
-    public function setClassType ($classType)
+    public function setClassType($classType)
     {
         $this->classType = $classType;
 
@@ -1323,7 +1323,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @return integer unknown_type
      */
-    public function getActive ()
+    public function getActive()
     {
         return $this->active;
     }
@@ -1332,7 +1332,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @param unknown_type $active
      */
-    public function setActive ($active)
+    public function setActive($active)
     {
         $this->active = $active;
 
@@ -1343,7 +1343,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @return string the Facebook app_id
      */
-    public function getFbAppId ()
+    public function getFbAppId()
     {
         return $this->fbAppId;
     }
@@ -1352,7 +1352,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @param string $fbAppId
      */
-    public function setFbAppId ($fbAppId)
+    public function setFbAppId($fbAppId)
     {
         $this->fbAppId = $fbAppId;
 
@@ -1363,7 +1363,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @return string the Facebook fbPageTabTitle
      */
-    public function getFbPageTabTitle ()
+    public function getFbPageTabTitle()
     {
         return $this->fbPageTabTitle;
     }
@@ -1372,7 +1372,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @param string $fbPageTabTitle
      */
-    public function setFbPageTabTitle ($fbPageTabTitle)
+    public function setFbPageTabTitle($fbPageTabTitle)
     {
         $this->fbPageTabTitle = $fbPageTabTitle;
 
@@ -1383,7 +1383,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @return string the Facebook fbPageTabImage
      */
-    public function getFbPageTabImage ()
+    public function getFbPageTabImage()
     {
         return $this->fbPageTabImage;
     }
@@ -1392,7 +1392,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @param string $fbPageTabImage
      */
-    public function setFbPageTabImage ($fbPageTabImage)
+    public function setFbPageTabImage($fbPageTabImage)
     {
         $this->fbPageTabImage = $fbPageTabImage;
 
@@ -1403,7 +1403,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @return the unknown_type
      */
-    public function getFbShareMessage ()
+    public function getFbShareMessage()
     {
         return $this->fbShareMessage;
     }
@@ -1412,7 +1412,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @param unknown_type $fbShareMessage
      */
-    public function setFbShareMessage ($fbShareMessage)
+    public function setFbShareMessage($fbShareMessage)
     {
         $this->fbShareMessage = $fbShareMessage;
 
@@ -1423,7 +1423,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @return the unknown_type
      */
-    public function getFbShareImage ()
+    public function getFbShareImage()
     {
         return $this->fbShareImage;
     }
@@ -1432,7 +1432,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @param unknown_type $fbShareImage
      */
-    public function setFbShareImage ($fbShareImage)
+    public function setFbShareImage($fbShareImage)
     {
         $this->fbShareImage = $fbShareImage;
 
@@ -1443,7 +1443,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @return the unknown_type
      */
-    public function getFbRequestMessage ()
+    public function getFbRequestMessage()
     {
         return $this->fbRequestMessage;
     }
@@ -1452,7 +1452,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @param unknown_type $fbRequestMessage
      */
-    public function setFbRequestMessage ($fbRequestMessage)
+    public function setFbRequestMessage($fbRequestMessage)
     {
         $this->fbRequestMessage = $fbRequestMessage;
 
@@ -1463,27 +1463,27 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @return integer fbFan
      */
-    public function getFbFan ()
+    public function getFbFan()
     {
-    	return $this->fbFan;
+        return $this->fbFan;
     }
 
     /**
      *
      * @param unknown_type $fbFan
      */
-    public function setFbFan ($fbFan)
+    public function setFbFan($fbFan)
     {
-    	$this->fbFan = $fbFan;
+        $this->fbFan = $fbFan;
 
-    	return $this;
+        return $this;
     }
 
     /**
      *
      * @return the fbFanGate
      */
-    public function getFbFanGate ()
+    public function getFbFanGate()
     {
         return $this->fbFanGate;
     }
@@ -1492,7 +1492,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @param unknown_type $fbFanGate
      */
-    public function setFbFanGate ($fbFanGate)
+    public function setFbFanGate($fbFanGate)
     {
         $this->fbFanGate = $fbFanGate;
 
@@ -1503,7 +1503,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @return the unknown_type
      */
-    public function getTwShareMessage ()
+    public function getTwShareMessage()
     {
         return $this->twShareMessage;
     }
@@ -1512,7 +1512,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @param unknown_type $twShareMessage
      */
-    public function setTwShareMessage ($twShareMessage)
+    public function setTwShareMessage($twShareMessage)
     {
         $this->twShareMessage = $twShareMessage;
 
@@ -1523,7 +1523,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @return DateTime $createdAt
      */
-    public function getCreatedAt ()
+    public function getCreatedAt()
     {
         return $this->createdAt;
     }
@@ -1532,7 +1532,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @param \DateTime $createdAt
      */
-    public function setCreatedAt ($createdAt)
+    public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
 
@@ -1543,7 +1543,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @return DateTime $updatedAt
      */
-    public function getUpdatedAt ()
+    public function getUpdatedAt()
     {
         return $this->updatedAt;
     }
@@ -1552,7 +1552,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @param \DateTime $updatedAt
      */
-    public function setUpdatedAt ($updatedAt)
+    public function setUpdatedAt($updatedAt)
     {
         $this->updatedAt = $updatedAt;
 
@@ -1564,7 +1564,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @return array
      */
-    public function getArrayCopy ()
+    public function getArrayCopy()
     {
         $obj_vars = get_object_vars($this);
 
@@ -1587,7 +1587,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @return array
      */
-    public function jsonSerialize ()
+    public function jsonSerialize()
     {
         return $this->getArrayCopy();
     }
@@ -1597,7 +1597,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @param array $data
      */
-    public function populate ($data = array())
+    public function populate($data = array())
     {
         if (isset($data['partner']) && $data['partner'] !== null) {
             $this->partner = $data['partner'];
@@ -1645,12 +1645,12 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
         $this->twShareMessage   = (isset($data['twShareMessage'])) ? $data['twShareMessage'] : null;
     }
 
-    public function setInputFilter (InputFilterInterface $inputFilter)
+    public function setInputFilter(InputFilterInterface $inputFilter)
     {
         throw new \Exception("Not used");
     }
 
-    public function getInputFilter ()
+    public function getInputFilter()
     {
         if (! $this->inputFilter) {
             $inputFilter = new InputFilter();
@@ -1677,8 +1677,8 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
             )));
 
             $inputFilter->add($factory->createInput(array(
-           		'name' => 'fbFan',
-           		'required' => false
+                   'name' => 'fbFan',
+                   'required' => false
             )));
 
             $inputFilter->add($factory->createInput(array(
@@ -1687,8 +1687,8 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
             )));
 
             $inputFilter->add($factory->createInput(array(
-            	'name' => 'prizes',
-            	'required' => false
+                'name' => 'prizes',
+                'required' => false
             )));
 
             $inputFilter->add($factory->createInput(array(
@@ -1735,8 +1735,8 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
             )));
 
             $inputFilter->add($factory->createInput(array(
-            	'name' => 'termsOptin',
-            	'required' => false,
+                'name' => 'termsOptin',
+                'required' => false,
             )));
 
             $inputFilter->add($factory->createInput(array(
@@ -1922,7 +1922,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
                     ),
                     'validators' => array(
                         array(
-                	        'name' => 'StringLength',
+                            'name' => 'StringLength',
                             'options' => array(
                                 'encoding' => 'UTF-8',
                                 'min' => 1,
@@ -1945,7 +1945,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
                 ),
                 'validators' => array(
                     array(
-                    	'name' => 'StringLength',
+                        'name' => 'StringLength',
                         'options' => array(
                             'encoding' => 'UTF-8',
                             'min' => 1,

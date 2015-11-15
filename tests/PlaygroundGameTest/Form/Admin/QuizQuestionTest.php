@@ -6,7 +6,7 @@ use PlaygroundGameTest\Bootstrap;
 use PlaygroundGame\Form\Admin\QuizQuestion;
 use PlaygroundGame\Entity\QuizQuestion as QuizQuestionEntity;
 
-class quizQuestionTest extends \PHPUnit_Framework_TestCase
+class QuizQuestionTest extends \PHPUnit_Framework_TestCase
 {
     protected $sm;
 
@@ -38,7 +38,6 @@ class quizQuestionTest extends \PHPUnit_Framework_TestCase
         );
 
         parent::setUp();
-
     }
 
     public function testCanInsertNewRecord()
@@ -62,7 +61,6 @@ class quizQuestionTest extends \PHPUnit_Framework_TestCase
         $form->setData($this->quizQuestionData);
 
         $this->assertTrue($form->isValid());
-
     }
 
     /**
@@ -250,7 +248,7 @@ class quizQuestionTest extends \PHPUnit_Framework_TestCase
         $form->setInputFilter($question->getInputFilter());
         
         $this->quizQuestionData['answers'][0] = array(
-        	'id' => '1',
+            'id' => '1',
             'answer' => 'Ceci est une réponse',
             'correct' => '1'
         );

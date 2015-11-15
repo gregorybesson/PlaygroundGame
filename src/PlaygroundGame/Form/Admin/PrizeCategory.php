@@ -15,7 +15,7 @@ class PrizeCategory extends ProvidesEventsForm
     {
         parent::__construct($name);
 
-        $this->setAttribute('enctype','multipart/form-data');
+        $this->setAttribute('enctype', 'multipart/form-data');
 
         $this->add(array(
             'name' => 'id',
@@ -85,6 +85,5 @@ class PrizeCategory extends ProvidesEventsForm
         $this->add($submitElement, array(
             'priority' => -100,
         ));
-
     }
 }

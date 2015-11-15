@@ -48,12 +48,12 @@ class Game
         return $this->getEntityRepository()->findOneBy($array, $sortBy);
     }
 
-    public function insert($entity, $tableName = NULL, \Zend\Stdlib\Hydrator\HydratorInterface $hydrator = NULL)
+    public function insert($entity, $tableName = null, \Zend\Stdlib\Hydrator\HydratorInterface $hydrator = null)
     {
         return $this->persist($entity);
     }
 
-    public function update($entity, $tableName = NULL, \Zend\Stdlib\Hydrator\HydratorInterface $hydrator = NULL)
+    public function update($entity, $tableName = null, \Zend\Stdlib\Hydrator\HydratorInterface $hydrator = null)
     {
         return $this->persist($entity);
     }
@@ -68,7 +68,7 @@ class Game
 
     public function findAll()
     {
-        return $this->findBy(array(),array('createdAt' => 'DESC'));
+        return $this->findBy(array(), array('createdAt' => 'DESC'));
     }
 
     public function remove($entity)

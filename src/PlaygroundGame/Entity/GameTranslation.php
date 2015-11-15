@@ -14,5 +14,4 @@ use Gedmo\Translatable\Entity\MappedSuperclass\AbstractTranslation;
  */
 class GameTranslation extends AbstractTranslation
 {
-
 }

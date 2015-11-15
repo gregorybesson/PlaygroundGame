@@ -8,7 +8,6 @@ use Zend\ServiceManager\ServiceManager;
 
 class PostVote extends Game
 {
-
     public function __construct($name = null, ServiceManager $sm, Translator $translator)
     {
         $this->setServiceManager($sm);

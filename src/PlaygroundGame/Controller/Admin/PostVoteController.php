@@ -8,7 +8,6 @@ use Zend\View\Model\ViewModel;
 
 class PostVoteController extends GameController
 {
-
     /**
      * @var GameService
      */
@@ -40,11 +39,11 @@ class PostVoteController extends GameController
         }
 
         return array(
-        	'form' => $form,
-        	'formTemplate' => $formTemplate,
-        	'gameId' => $gameId,
-        	'game' => $game,
-		);
+            'form' => $form,
+            'formTemplate' => $formTemplate,
+            'gameId' => $gameId,
+            'game' => $game,
+        );
     }
 
     public function createPostVoteAction()
@@ -70,7 +69,7 @@ class PostVoteController extends GameController
                     $this->getRequest()->getPost()->toArray(),
                     $this->getRequest()->getFiles()->toArray()
             );
-            if(empty($data['prizes'])){
+            if (empty($data['prizes'])) {
                 $data['prizes'] = array();
             }
             $game = $service->create($data, $postVote, 'playgroundgame_postvote_form');
@@ -105,8 +104,8 @@ class PostVoteController extends GameController
         $form   = $this->getServiceLocator()->get('playgroundgame_postvote_form');
         $form->setAttribute('action', $this->url()->fromRoute('admin/playgroundgame/edit-postvote', array('gameId' => $gameId)));
         $form->setAttribute('method', 'post');
-		
-		if ($game->getFbAppId()) {
+        
+        if ($game->getFbAppId()) {
             $appIds = $form->get('fbAppId')->getOption('value_options');
             $appIds[$game->getFbAppId()] = $game->getFbAppId();
             $form->get('fbAppId')->setAttribute('options', $appIds);
@@ -128,7 +127,7 @@ class PostVoteController extends GameController
                     $this->getRequest()->getPost()->toArray(),
                     $this->getRequest()->getFiles()->toArray()
             );
-            if(empty($data['prizes'])){
+            if (empty($data['prizes'])) {
                 $data['prizes'] = array();
             }
             $result = $service->edit($data, $game, 'playgroundgame_postvote_form');
@@ -249,5 +248,4 @@ class PostVoteController extends GameController
 
         return $this;
     }
-
 }

@@ -71,7 +71,7 @@ class Quiz extends Game implements InputFilterAwareInterface
 
     public function __construct()
     {
-    	parent::__construct();
+        parent::__construct();
         $this->setClassType(self::CLASSTYPE);
         $this->questions = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -376,7 +376,7 @@ class Quiz extends Game implements InputFilterAwareInterface
                 'name'     => 'winners',
                 'required' => true,
                 'validators' => array(
-                    array('name'    => 'NotEmpty',),
+                    array('name'    => 'NotEmpty', ),
                     array('name' => 'Int'),
                 ),
             )));
@@ -385,7 +385,7 @@ class Quiz extends Game implements InputFilterAwareInterface
                 'name'     => 'substitutes',
                 'required' => true,
                 'validators' => array(
-                    array('name'    => 'NotEmpty',),
+                    array('name'    => 'NotEmpty', ),
                     array('name' => 'Int'),
                 ),
             )));
@@ -394,7 +394,7 @@ class Quiz extends Game implements InputFilterAwareInterface
                 'name'     => 'victoryConditions',
                 'required' => false,
                 'validators' => array(
-                    array('name'    => 'Digits',),
+                    array('name'    => 'Digits', ),
                     array('name' => 'Int'),
                 ),
             )));

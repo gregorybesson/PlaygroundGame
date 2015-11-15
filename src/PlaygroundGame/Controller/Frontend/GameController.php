@@ -14,7 +14,6 @@ use Zend\Stdlib\Parameters;
 
 class GameController extends AbstractActionController
 {
-
     /**
      * @var gameService
      */
@@ -46,10 +45,9 @@ class GameController extends AbstractActionController
      */
     public function notFoundAction()
     {
-
         $sg             = $this->getGameService();
         $identifier     = $this->getEvent()->getRouteMatch()->getParam('id');
-        $viewRender     = $this->getServiceLocator()->get( 'ViewRenderer' );
+        $viewRender     = $this->getServiceLocator()->get('ViewRenderer');
 
         $this->getEvent()->getRouteMatch()->setParam('action', 'not-found');
         $this->response->setStatusCode(404);
@@ -59,13 +57,12 @@ class GameController extends AbstractActionController
         $res = 'error/404';
 
         $viewModel = $this->buildView($game);
-        $viewModel->setTemplate( $res );
+        $viewModel->setTemplate($res);
 
-        $this->layout()->setVariable( "content", $viewRender->render( $viewModel ) );
-        $this->response->setContent( $viewRender->render( $this->layout() ) );
+        $this->layout()->setVariable("content", $viewRender->render($viewModel));
+        $this->response->setContent($viewRender->render($this->layout()));
 
         return $this->response;
-
     }
 
     /**
@@ -73,7 +70,6 @@ class GameController extends AbstractActionController
      */
     public function homeAction()
     {
-
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
 
         $sg = $this->getGameService();
@@ -105,7 +101,6 @@ class GameController extends AbstractActionController
         }
         
         return $this->forward()->dispatch('playgroundgame_'.$game->getClassType(), array('controller' => 'playgroundgame_'.$game->getClassType(), 'action' => $game->firstStep(), 'id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')));
-
     }
 
     /**
@@ -113,7 +108,6 @@ class GameController extends AbstractActionController
      */
     public function indexAction()
     {
-
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
         $user = $this->zfcUserAuthentication()->getIdentity();
         $sg = $this->getGameService();
@@ -132,9 +126,9 @@ class GameController extends AbstractActionController
 
         if ($channel == 'facebook') {
             if ($game->getFbFan()) {
-                $isFan = $sg->checkIsFan($game);  
+                $isFan = $sg->checkIsFan($game);
                 if (!$isFan) {
-                    return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('' . $game->getClassType().'/fangate',array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+                    return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('' . $game->getClassType().'/fangate', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
                 }
             }
 
@@ -163,7 +157,6 @@ class GameController extends AbstractActionController
       */
     public function leaderboardAction()
     {
-
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
         $sg = $this->getGameService();
 
@@ -188,7 +181,6 @@ class GameController extends AbstractActionController
         $templatePathResolver->addPath($l[0].'custom/'.$game->getIdentifier());
 
         return $subViewModel;
-
     }
 
     /**
@@ -199,7 +191,6 @@ class GameController extends AbstractActionController
      */
     public function registerAction()
     {
-
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
         $sg = $this->getGameService();
 
@@ -222,34 +213,33 @@ class GameController extends AbstractActionController
             $form->setData($data);
 
             if ($form->isValid()) {
-                
                 $steps = $game->getStepsArray();
                 $viewSteps = $game->getStepsViewsArray();
                 $key = array_search($this->params('action'), $viewSteps);
                 if (!$key) {
-                  $key = array_search($this->params('action'), $steps);
+                    $key = array_search($this->params('action'), $steps);
                 }
                 $keyplay = array_search('play', $steps);
 
                 // If register step before play, I don't have no entry yet. I have to create one
                 // If register after play step, I search for the last entry created by play step.
 
-                if($key && $key < $keyplay){
+                if ($key && $key < $keyplay) {
                     $entry = $sg->play($game, $user);
                     if (!$entry) {
                         // the user has already taken part of this game and the participation limit has been reached
                         $this->flashMessenger()->addMessage('Vous avez déjà participé');
                     
-                        return $this->redirect()->toUrl($this->frontendUrl()->fromRoute($game->getClassType().'/result',array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+                        return $this->redirect()->toUrl($this->frontendUrl()->fromRoute($game->getClassType().'/result', array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
                     }
-                }else{
+                } else {
                     // I'm looking for an entry without anonymousIdentifier (the active entry in fact).
                     $entry = $sg->findLastEntry($game, $user);
-                    if ($sg->hasReachedPlayLimit($game, $user)){
+                    if ($sg->hasReachedPlayLimit($game, $user)) {
                         // the user has already taken part of this game and the participation limit has been reached
                         $this->flashMessenger()->addMessage('Vous avez déjà participé');
                     
-                        return $this->redirect()->toUrl($this->frontendUrl()->fromRoute($game->getClassType().'/result',array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+                        return $this->redirect()->toUrl($this->frontendUrl()->fromRoute($game->getClassType().'/result', array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
                     }
                 }
                 
@@ -344,14 +334,13 @@ class GameController extends AbstractActionController
      * @param \PlaygroundGame\Entity\Entry $lastEntry
      * @param \PlaygroundGame\Entity\Prize $prize
      */
-    public function sendMail($game, $user, $lastEntry, $prize = NULL){
-        if(($user || ($game->getAnonymousAllowed() && $game->getAnonymousIdentifier())) && $game->getMailWinner() && $lastEntry->getWinner()){
-
+    public function sendMail($game, $user, $lastEntry, $prize = null)
+    {
+        if (($user || ($game->getAnonymousAllowed() && $game->getAnonymousIdentifier())) && $game->getMailWinner() && $lastEntry->getWinner()) {
             $this->getGameService()->sendResultMail($game, $user, $lastEntry, 'winner', $prize);
         }
 
-        if(($user || ($game->getAnonymousAllowed() && $game->getAnonymousIdentifier())) && $game->getMailLooser() && !$lastEntry->getWinner()){
-            
+        if (($user || ($game->getAnonymousAllowed() && $game->getAnonymousIdentifier())) && $game->getMailLooser() && !$lastEntry->getWinner()) {
             $this->getGameService()->sendResultMail($game, $user, $lastEntry, 'looser');
         }
     }
@@ -377,16 +366,15 @@ class GameController extends AbstractActionController
                 $user = $view->user;
 
                 // If the user can not be created/retrieved from Facebook info, redirect to login/register form
-                if (!$user){
+                if (!$user) {
                     $redirectUrl = urlencode($this->frontendUrl()->fromRoute(''. $game->getClassType() .'/play', array('id' => $game->getIdentifier(), 'channel' => $channel), array('force_canonical' => true)));
                     $redirect =  $this->redirect()->toUrl($this->frontendUrl()->fromRoute('zfcuser/register', array('channel' => $channel)) . '?redirect='.$redirectUrl);
                 }
-
             }
 
-            if($game->getFbFan()){
-                if ($sg->checkIsFan($game) === false){
-                    $redirect =  $this->redirect()->toRoute($game->getClassType().'/fangate',array('id' => $game->getIdentifier()));
+            if ($game->getFbFan()) {
+                if ($sg->checkIsFan($game) === false) {
+                    $redirect =  $this->redirect()->toRoute($game->getClassType().'/fangate', array('id' => $game->getIdentifier()));
                 }
             }
         }
@@ -400,13 +388,12 @@ class GameController extends AbstractActionController
      */
     public function buildView($game)
     {
-        if ($this->getRequest()->isXmlHttpRequest()){
-
+        if ($this->getRequest()->isXmlHttpRequest()) {
             $viewModel = new JsonModel();
         } else {
             $viewModel = new ViewModel();
 
-            if($game){
+            if ($game) {
                 $this->addMetaTitle($game);
                 $this->addMetaBitly();
                 $this->addGaEvent($game);
@@ -436,7 +423,7 @@ class GameController extends AbstractActionController
             }
         }
         
-        if($game){
+        if ($game) {
             $viewModel->setVariables($this->getShareData($game));
             $viewModel->setVariables(array('game' => $game));
         }
@@ -450,15 +437,14 @@ class GameController extends AbstractActionController
 
         $actionName = $this->getEvent()->getRouteMatch()->getParam('action', 'not-found');
         $stepsViews = json_decode($game->getStepsViews(), true);
-        if($stepsViews && isset($stepsViews[$actionName])){
+        if ($stepsViews && isset($stepsViews[$actionName])) {
             $beforeLayout = $this->layout()->getTemplate();
             $actionData = $stepsViews[$actionName];
-            if(is_string($actionData)){
+            if (is_string($actionData)) {
                 $action = $actionData;
                 $controller = $this->getEvent()->getRouteMatch()->getParam('controller', 'playgroundgame_game');
                 $view = $this->forward()->dispatch($controller, array('action' => $action, 'id' => $game->getIdentifier()));
-                
-            } elseif(is_array($actionData) && count($actionData)>0){
+            } elseif (is_array($actionData) && count($actionData)>0) {
                 $action = key($actionData);
                 $controller = $actionData[$action];
                 $view = $this->forward()->dispatch($controller, array('action' => $action, 'id' => $game->getIdentifier()));
@@ -530,7 +516,7 @@ class GameController extends AbstractActionController
     {
         $fo = $this->getServiceLocator()->get('facebook-opengraph');
         // I change the fbappid if i'm in fb
-        if($this->getEvent()->getRouteMatch()->getParam('channel') === 'facebook'){
+        if ($this->getEvent()->getRouteMatch()->getParam('channel') === 'facebook') {
             $fo->setId($game->getFbAppId());
         }
 
@@ -547,7 +533,7 @@ class GameController extends AbstractActionController
             $fbShareImage = $this->frontendUrl()->fromRoute('', array('channel' => ''), array('force_canonical' => true), false) . $game->getMainImage();
         }
 
-        $secretKey = strtoupper(substr(sha1(uniqid('pg_', true).'####'.time()),0,15));
+        $secretKey = strtoupper(substr(sha1(uniqid('pg_', true).'####'.time()), 0, 15));
 
         // Without bit.ly shortener
         $socialLinkUrl = $this->frontendUrl()->fromRoute($game->getClassType(), array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true));
@@ -598,7 +584,7 @@ class GameController extends AbstractActionController
             return $this->notFoundAction();
         }
 
-        if (count($game->getPrizes()) == 0){
+        if (count($game->getPrizes()) == 0) {
             return $this->notFoundAction();
         }
 
@@ -637,7 +623,6 @@ class GameController extends AbstractActionController
 
     public function gameslistAction()
     {
-
         $layoutViewModel = $this->layout();
 
         $slider = new ViewModel();
@@ -649,7 +634,7 @@ class GameController extends AbstractActionController
 
         $layoutViewModel->addChild($slider, 'slider');
 
-        $games = $this->getGameService()->getActiveGames(false,'','endDate');
+        $games = $this->getGameService()->getActiveGames(false, '', 'endDate');
         if (is_array($games)) {
             $paginator = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\ArrayAdapter($games));
         } else {
@@ -691,7 +676,6 @@ class GameController extends AbstractActionController
 
     public function fangateAction()
     {
-
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
         $sg = $this->getGameService();
         $game = $sg->checkGame($identifier, false);
@@ -785,7 +769,6 @@ class GameController extends AbstractActionController
         $sg->postFbWall($fbId, $game, $user, $entry);
     
         return $this->successJson();
-    
     }
     
     public function fbrequestAction()
@@ -813,7 +796,6 @@ class GameController extends AbstractActionController
         $sg->postFbRequest($fbId, $game, $user, $entry, $to);
     
         return $this->successJson();
-    
     }
     
     public function tweetAction()
@@ -838,7 +820,6 @@ class GameController extends AbstractActionController
         $sg->postTwitter($tweetId, $game, $user, $entry);
     
         return $this->successJson();
-    
     }
     
     public function googleAction()
@@ -865,7 +846,6 @@ class GameController extends AbstractActionController
         $sg->postGoogle($googleId, $game, $user, $entry);
     
         return $this->successJson();
-    
     }
 
     public function optinAction()
@@ -885,7 +865,6 @@ class GameController extends AbstractActionController
             $data['optinPartner'] = ($this->params()->fromPost('optinPartner'))? 1:0;
 
             $this->getUserService()->updateNewsletter($data);
-
         }
 
         return $this->redirect()->toUrl($this->url()->fromRoute('frontend/' . $game->getClassType() . '/index', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
@@ -906,7 +885,6 @@ class GameController extends AbstractActionController
         }
     
         if ($request->isPost()) {
-            
             $form->setData($request->getPost());
             
             if (!$form->isValid()) {
@@ -968,7 +946,7 @@ class GameController extends AbstractActionController
 
                 if ($user || $service->getOptions()->getCreateUserAutoSocial() === true) {
                     //on le dirige vers l'action d'authentification
-                    if(! $redirect && $this->getUserOptions()->getLoginRedirectRoute() != ''){
+                    if (! $redirect && $this->getUserOptions()->getLoginRedirectRoute() != '') {
                         $redirect = $this->url()->fromRoute('frontend/'.$game->getClassType().'/login', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')));
                     }
                     $redir = $this->url()
@@ -983,16 +961,16 @@ class GameController extends AbstractActionController
                 $form->remove('passwordVerify');
 
                 $birthMonth = $infoMe->birthMonth;
-                if (strlen($birthMonth) <= 1){
+                if (strlen($birthMonth) <= 1) {
                     $birthMonth = '0'.$birthMonth;
                 }
                 $birthDay = $infoMe->birthDay;
-                if (strlen($birthDay) <= 1){
+                if (strlen($birthDay) <= 1) {
                     $birthDay = '0'.$birthDay;
                 }
                 $title = '';
                 $gender = $infoMe->gender;
-                if($gender == 'female'){
+                if ($gender == 'female') {
                     $title = 'Me';
                 } else {
                     $title = 'M';
@@ -1050,12 +1028,10 @@ class GameController extends AbstractActionController
         }
 
         if ($service->getOptions()->getEmailVerification()) {
-
             $vm = new ViewModel(array('userEmail' => $user->getEmail()));
             $vm->setTemplate('playground-user/register/registermail');
 
             return $vm;
-
         } elseif ($service->getOptions()->getLoginAfterRegistration()) {
             $identityFields = $service->getOptions()->getAuthIdentityFields();
             if (in_array('email', $identityFields)) {
@@ -1246,5 +1222,4 @@ class GameController extends AbstractActionController
         }
         return $this->userOptions;
     }
-    
 }

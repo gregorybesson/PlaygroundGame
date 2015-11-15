@@ -9,7 +9,6 @@ use Zend\ServiceManager\ServiceManager;
 
 class Game extends ProvidesEventsForm
 {
-
     /**
      *
      * @var ModuleOptions
@@ -18,7 +17,7 @@ class Game extends ProvidesEventsForm
 
     protected $serviceManager;
 
-    public function __construct ($name = null, ServiceManager $sm, Translator $translator)
+    public function __construct($name = null, ServiceManager $sm, Translator $translator)
     {
         parent::__construct($name);
 
@@ -159,11 +158,11 @@ class Game extends ProvidesEventsForm
         ));
 
         $this->add(array(
-        	'type' => 'Zend\Form\Element\Checkbox',
-        	'name' => 'broadcastEmbed',
-       		'options' => array(
-       			'label' => $translator->translate('Publish game on embed mode', 'playgroundgame'),
-       		),
+            'type' => 'Zend\Form\Element\Checkbox',
+            'name' => 'broadcastEmbed',
+               'options' => array(
+                   'label' => $translator->translate('Publish game on embed mode', 'playgroundgame'),
+               ),
         ));
 
         $this->add(array(
@@ -271,7 +270,7 @@ class Game extends ProvidesEventsForm
                 'id' => 'playBonus',
                 'options' => array(
                     'none' => $translator->translate('No bonus entry', 'playgroundgame'),
-                	'one' => $translator->translate('One bonus entry per game', 'playgroundgame'),
+                    'one' => $translator->translate('One bonus entry per game', 'playgroundgame'),
                     'per_entry' => $translator->translate('One bonus entry by entry', 'playgroundgame'),
                 ),
             ),
@@ -413,8 +412,8 @@ class Game extends ProvidesEventsForm
 
         $fbAppIds = $this->getFbAppIds();
         $fbAppIds_label = array();
-        foreach($fbAppIds as $key => $title){
-        	$fbAppIds_label[$key] = $translator->translate($title, 'playgroundgame');
+        foreach ($fbAppIds as $key => $title) {
+            $fbAppIds_label[$key] = $translator->translate($title, 'playgroundgame');
         }
         $this->add(array(
             'type' => 'Zend\Form\Element\Select',
@@ -475,16 +474,16 @@ class Game extends ProvidesEventsForm
         ));
 
         $this->add(array(
-    		'type' => 'Zend\Form\Element\Select',
-    		'name' => 'termsOptin',
-    		'options' => array(
-				//'empty_option' => $translator->translate('Is the answer correct ?', 'playgroundgame'),
-				'value_options' => array(
-					'0' => $translator->translate('No', 'playgroundgame'),
-					'1' => $translator->translate('Yes', 'playgroundgame'),
-				),
-				'label' => $translator->translate('Player must accept the rules', 'playgroundgame'),
-    		),
+            'type' => 'Zend\Form\Element\Select',
+            'name' => 'termsOptin',
+            'options' => array(
+                //'empty_option' => $translator->translate('Is the answer correct ?', 'playgroundgame'),
+                'value_options' => array(
+                    '0' => $translator->translate('No', 'playgroundgame'),
+                    '1' => $translator->translate('Yes', 'playgroundgame'),
+                ),
+                'label' => $translator->translate('Player must accept the rules', 'playgroundgame'),
+            ),
         ));
 
         $this->add(array(
@@ -553,16 +552,16 @@ class Game extends ProvidesEventsForm
         ));
 
         $this->add(array(
-        	'type' => 'Zend\Form\Element\Select',
-        	'name' => 'fbFan',
-       		'options' => array(
-       			//'empty_option' => $translator->translate('Is the answer correct ?', 'playgroundgame'),
-       			'value_options' => array(
-					'0' => $translator->translate('No', 'playgroundgame'),
-       				'1' => $translator->translate('Yes', 'playgroundgame'),
-       			),
-       			'label' => $translator->translate('You must be fan to participate', 'playgroundgame'),
-       		),
+            'type' => 'Zend\Form\Element\Select',
+            'name' => 'fbFan',
+               'options' => array(
+                   //'empty_option' => $translator->translate('Is the answer correct ?', 'playgroundgame'),
+                   'value_options' => array(
+                    '0' => $translator->translate('No', 'playgroundgame'),
+                       '1' => $translator->translate('Yes', 'playgroundgame'),
+                   ),
+                   'label' => $translator->translate('You must be fan to participate', 'playgroundgame'),
+               ),
         ));
 
         $this->add(array(
@@ -642,19 +641,19 @@ class Game extends ProvidesEventsForm
                 )
         ));
 
-        $prizeFieldset = new PrizeFieldset(null,$sm,$translator);
+        $prizeFieldset = new PrizeFieldset(null, $sm, $translator);
         $this->add(array(
-        		'type'    => 'Zend\Form\Element\Collection',
-        		'name'    => 'prizes',
-        		'options' => array(
-        				'id'    => 'prizes',
-        				'label' => $translator->translate('List of prizes', 'playgroundgame'),
-        				'count' => 0,
-        				'should_create_template' => true,
-        				'allow_add' => true,
-        				'allow_remove' => true,
-        				'target_element' => $prizeFieldset
-        		)
+                'type'    => 'Zend\Form\Element\Collection',
+                'name'    => 'prizes',
+                'options' => array(
+                        'id'    => 'prizes',
+                        'label' => $translator->translate('List of prizes', 'playgroundgame'),
+                        'count' => 0,
+                        'should_create_template' => true,
+                        'allow_add' => true,
+                        'allow_remove' => true,
+                        'target_element' => $prizeFieldset
+                )
         ));
 
         $this->add(array(
@@ -698,7 +697,7 @@ class Game extends ProvidesEventsForm
      *
      * @return array
      */
-    public function getPartners ()
+    public function getPartners()
     {
         $partners = array(
             '0' => 'Ce jeu n\'est pas sponsorisé'
@@ -725,7 +724,7 @@ class Game extends ProvidesEventsForm
      *
      * @return array
      */
-    public function getFbAppIds ()
+    public function getFbAppIds()
     {
         $apps = array('' => 'Don\'t deploy on Facebook');
 
@@ -748,7 +747,7 @@ class Game extends ProvidesEventsForm
      *
      * @return array
      */
-    public function getPrizeCategories ()
+    public function getPrizeCategories()
     {
         $categories = array();
         $prizeCategoryService = $this->getServiceManager()->get('playgroundgame_prizecategory_service');
@@ -766,7 +765,7 @@ class Game extends ProvidesEventsForm
      *
      * @return ServiceManager
      */
-    public function getServiceManager ()
+    public function getServiceManager()
     {
         return $this->serviceManager;
     }
@@ -777,7 +776,7 @@ class Game extends ProvidesEventsForm
      * @param  ServiceManager $serviceManager
      * @return Game
      */
-    public function setServiceManager (ServiceManager $serviceManager)
+    public function setServiceManager(ServiceManager $serviceManager)
     {
         $this->serviceManager = $serviceManager;
 

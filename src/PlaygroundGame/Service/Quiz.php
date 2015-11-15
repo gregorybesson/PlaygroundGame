@@ -10,7 +10,6 @@ use Zend\Stdlib\ErrorHandler;
 
 class Quiz extends Game implements ServiceManagerAwareInterface
 {
-
     /**
      * @var QuizMapperInterface
      */
@@ -59,9 +58,9 @@ class Quiz extends Game implements ServiceManagerAwareInterface
         $question->setQuiz($quiz);
 
         // If question is a prediction, no need to calculate max good answers
-        if (!$question->getPrediction()){
+        if (!$question->getPrediction()) {
             // Max points and correct answers calculation for the question
-            if(!$question = $this->calculateMaxAnswersQuestion($question)) {
+            if (!$question = $this->calculateMaxAnswersQuestion($question)) {
                 return false;
             }
         }
@@ -105,9 +104,9 @@ class Quiz extends Game implements ServiceManagerAwareInterface
         }
 
         // If question is a prediction, no need to calculate max good answers
-        if (!$question->getPrediction()){
+        if (!$question->getPrediction()) {
             // Max points and correct answers calculation for the question
-            if(!$question = $this->calculateMaxAnswersQuestion($question)) {
+            if (!$question = $this->calculateMaxAnswersQuestion($question)) {
                 return false;
             }
         }
@@ -120,7 +119,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
             ErrorHandler::stop(true);
         }
 
-        if(isset($data['delete_image']) && empty($data['upload_image']['tmp_name'])) {
+        if (isset($data['delete_image']) && empty($data['upload_image']['tmp_name'])) {
             ErrorHandler::start();
             $image = $question->getImage();
             $image = str_replace($media_url, '', $image);
@@ -241,24 +240,23 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                 if ($answer->getPoints() > $question_max_points) {
                     $question_max_points = $answer->getPoints();
                 }
-                if ( $answer->getCorrect() && $question_max_correct_answers==0) {
+                if ($answer->getCorrect() && $question_max_correct_answers==0) {
                     $question_max_correct_answers=1;
                 }
             }
-            if($question_max_correct_answers == 0) {
+            if ($question_max_correct_answers == 0) {
                 return false;
             }
         // Closed question : Many answers allowed
         } elseif ($question->getType() == 1) {
             foreach ($question->getAnswers() as $answer) {
-
                 $question_max_points += $answer->getPoints();
 
-                if ( $answer->getCorrect() ) {
+                if ($answer->getCorrect()) {
                     ++$question_max_correct_answers;
                 }
             }
-            if($question_max_correct_answers == 0) {
+            if ($question_max_correct_answers == 0) {
                 return false;
             }
         // Not a question : A textarea to fill in
@@ -383,7 +381,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                     $quizCorrectAnswers += 0;
                     $qAnswers = $question->getAnswers();
                     foreach ($qAnswers as $qAnswer) {
-                       if (trim(strip_tags($a)) == trim(strip_tags($qAnswer->getAnswer()))) {
+                        if (trim(strip_tags($a)) == trim(strip_tags($qAnswer->getAnswer()))) {
                             $quizReplyAnswer->setPoints($qAnswer->getPoints());
                             $quizPoints += $qAnswer->getPoints();
                             $quizReplyAnswer->setCorrect($qAnswer->getCorrect());

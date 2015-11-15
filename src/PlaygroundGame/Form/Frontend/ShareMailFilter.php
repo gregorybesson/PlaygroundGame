@@ -8,7 +8,6 @@ class ShareMailFilter extends InputFilter
 {
     public function __construct()
     {
-
         $this->add(array(
             'name'       => 'email1',
             'required'   => false,

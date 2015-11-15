@@ -69,6 +69,5 @@ class Lottery extends Game
                 'placeholder' => $translator->translate('Substitutes number', 'playgroundgame')
             )
         ));
-
     }
 }

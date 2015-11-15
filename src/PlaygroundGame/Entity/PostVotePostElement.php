@@ -58,7 +58,6 @@ class PostVotePostElement implements InputFilterAwareInterface, \JsonSerializabl
 
     public function __construct()
     {
-
     }
 
     /** @PrePersist */
@@ -210,7 +209,7 @@ class PostVotePostElement implements InputFilterAwareInterface, \JsonSerializabl
         $obj_vars = get_object_vars($this);
         // if called from getArrayCopy of PostVotePost, 
         // keeping the post object in each element produce an infinite loop...
-        if (isset($obj_vars['post'])){
+        if (isset($obj_vars['post'])) {
             $obj_vars['post'] = null;
         }
 
@@ -222,10 +221,10 @@ class PostVotePostElement implements InputFilterAwareInterface, \JsonSerializabl
      *
      * @return array
      */
-    public function jsonSerialize ()
+    public function jsonSerialize()
     {
         return $this->getArrayCopy();
-    }    
+    }
 
     /**
      * Populate from an array.
