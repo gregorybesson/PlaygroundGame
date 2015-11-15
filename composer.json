@@ -33,7 +33,7 @@
 		"playground/partnership" : "2.*"
 	},
 	"require-dev" : {
-		"phpunit/phpunit" : "5.*",
+		"phpunit/phpunit" : "4.*",
 		"squizlabs/php_codesniffer": "2.*"
 	},
 	"autoload" : {
