@@ -215,9 +215,9 @@ class PostVoteController extends GameController
 
     public function entryAction()
     {
-        $gameId         = $this->getEvent()->getRouteMatch()->getParam('gameId');
-        $game           = $this->getAdminGameService()->getGameMapper()->findById($gameId);
-        $posts   = $this->getAdminGameService()->getPostVotePostMapper()->findBy(array('postvote' => $game), array('updatedAt' => 'DESC'));
+        $gameId = $this->getEvent()->getRouteMatch()->getParam('gameId');
+        $game   = $this->getAdminGameService()->getGameMapper()->findById($gameId);
+        $posts  = $this->getAdminGameService()->getPostVotePostMapper()->findBy(array('postvote' => $game), array('updatedAt' => 'DESC'));
 
         if (is_array($posts)) {
             $paginator = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\ArrayAdapter($posts));

@@ -2173,6 +2173,117 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         return $form;
     }
 
+    public function download($gameId, $columns = array()){
+
+        $game = $this->getGameMapper()->findById($gameId);
+        $entries = $this->getEntryMapper()->findBy(array('game' => $game));
+
+        $content        = "\xEF\xBB\xBF"; // UTF-8 BOM
+
+        if(!$game) return $content;
+        
+        if (! $game->getAnonymousAllowed()) {
+            $content       .= "ID;Pseudo;Civilité;Nom;Prénom;E-mail;Optin Newsletter;Optin partenaire;Adresse;CP;Ville;Téléphone;Mobile;Date d'inscription;Date de naissance;";
+        }
+        
+        $header = array();
+        if($game->getPlayerForm()){      
+            $formPV = json_decode($game->getPlayerForm()->getForm(),true);
+            foreach ($formPV as $element) {
+                if (isset($element['line_text'][0]['name'])) {
+                    $header[$element['line_text'][0]['name']] = 1;
+                }
+                if (isset($element['line_password'][0]['name'])) {
+                    $header[$element['line_password'][0]['name']] = 1;
+                }
+                if (isset($element['line_hidden'][0]['name'])) {
+                    $header[$element['line_hidden'][0]['name']] = 1;
+                }
+                if (isset($element['line_email'][0]['name'])) {
+                    $header[$element['line_email'][0]['name']] = 1;
+                }
+                if (isset($element['line_radio'][0]['name'])) {
+                    $header[$element['line_radio'][0]['name']] = 1;
+                }
+                if (isset($element['line_checkbox'][0]['name'])) {
+                    $header[$element['line_checkbox'][0]['name']] = 1;
+                }
+                if (isset($element['line_dropdown'][0]['name'])) {
+                    $header[$element['line_dropdown'][0]['name']] = 1;
+                }
+                if (isset($element['line_paragraph'][0]['name'])) {
+                    $header[$element['line_paragraph'][0]['name']] = 1;
+                }
+                if (isset($element['line_upload'][0]['name'])) {
+                    $header[$element['line_upload'][0]['name']] = 1;
+                }
+            }
+        }
+
+        if (count($entries)) {
+
+            foreach ($header as $key => $data) {
+                $content .= $key.';';
+            }
+            $content .= 'A Gagné ?;Date - H'
+                ."\n";
+            foreach ($entries as $e) {
+                if (!$game->getAnonymousAllowed()) {
+                    if($e->getUser()->getAddress2() != '') {
+                        $adress2 = ' - ' . $e->getUser()->getAddress2();
+                    } else {
+                        $adress2 = '';
+                    }
+                    if($e->getUser()->getDob() != NULL) {
+                        $dob = $e->getUser()->getDob()->format('Y-m-d');
+                    } else {
+                        $dob = '';
+                    }
+    
+                    $content   .= $e->getUser()->getId()
+                    . ";" . $e->getUser()->getUsername()
+                    . ";" . $e->getUser()->getTitle()
+                    . ";" . $e->getUser()->getLastname()
+                    . ";" . $e->getUser()->getFirstname()
+                    . ";" . $e->getUser()->getEmail()
+                    . ";" . $e->getUser()->getOptin()
+                    . ";" . $e->getUser()->getOptinPartner()
+                    . ";" . $e->getUser()->getAddress() . $adress2
+                    . ";" . $e->getUser()->getPostalCode()
+                    . ";" . $e->getUser()->getCity()
+                    . ";" . $e->getUser()->getTelephone()
+                    . ";" . $e->getUser()->getMobile()
+                    . ";" . $e->getUser()->getCreatedAt()->format('Y-m-d')
+                    . ";" . $dob
+                    . ";" ;
+                }
+                if ($e->getPlayerData()) {
+                    $entryData = json_decode($e->getPlayerData(),true);
+                    foreach($header as $k=>$v){
+                        if(isset($entryData[$k])){
+                            if (is_array($entryData[$k])) {
+                                $content .= implode(', ', $entryData[$k]).';';
+                            } else {
+                                $content .= $entryData[$k].';';
+                            }
+                        } else{
+                            $content .= ';';
+                        }
+                    }
+                } else {
+                    foreach($header as $k=>$v){
+                        $content .= ';';
+                    }
+                }
+                $content   .= $e->getWinner()
+                . ";" . $e->getCreatedAt()->format('Y-m-d H:i:s')
+                . "\n";
+            }
+
+            return $content;
+        }
+    }
+
     public function getPlayerFormMapper()
     {
         if (null === $this->playerformMapper) {
