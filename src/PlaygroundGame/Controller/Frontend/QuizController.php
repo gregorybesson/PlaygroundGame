@@ -161,11 +161,9 @@ class QuizController extends GameController
 
         $viewModel = $this->buildView($game);
         $viewModel->setVariables(array(
-            'game'      => $game,
             'questions' => $questions,
             'form'      => $form,
             'explanations' => $explanations,
-            'flashMessages' => $this->flashMessenger()->getMessages(),
         ));
 
         return $viewModel;
@@ -289,8 +287,6 @@ class QuizController extends GameController
         $viewModel->setVariables(array(
             'entry'               => $lastEntry,
             'statusMail'          => $statusMail,
-            'game'                => $game,
-            'flashMessages'       => $this->flashMessenger()->getMessages(),
             'form'                => $form,
             'winner'              => $winner,
             'prediction'          => $prediction,

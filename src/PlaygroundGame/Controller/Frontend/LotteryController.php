@@ -100,8 +100,6 @@ class LotteryController extends GameController
 
         $viewModel->setVariables(array(
                 'statusMail'       => $statusMail,
-                'game'             => $game,
-                'flashMessages'    => $this->flashMessenger()->getMessages(),
                 'form'             => $form,
                 'socialLinkUrl'    => $socialLinkUrl,
                 'secretKey'		   => $secretKey,

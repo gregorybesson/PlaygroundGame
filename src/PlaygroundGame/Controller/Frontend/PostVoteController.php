@@ -127,10 +127,8 @@ class PostVoteController extends GameController
 
         $viewModel->setVariables(array(
                 'playerData' => $entry->getPlayerData(),
-                'game' => $game,
                 'form' => $form,
                 'post' => $post,
-                'flashMessages' => $this->flashMessenger()->getMessages(),
             )
         );
 
@@ -177,12 +175,7 @@ class PostVoteController extends GameController
         }
 
         $viewModel = $this->buildView($game);
-        $viewModel->setVariables(array(
-                'game' => $game,
-                'post' => $post,
-                'flashMessages' => $this->flashMessenger()->getMessages(),
-            )
-        );
+        $viewModel->setVariables(array('post' => $post));
 
         return $viewModel;
     }
@@ -271,13 +264,11 @@ class PostVoteController extends GameController
         $viewModel = $this->buildView($game);
         $viewModel->setVariables(
             array(
-                'game'  => $game,
                 'post'  => $post,
                 'voted' => $voted,
                 'form'  => $form,
                 'formModeration' => $formModeration,
                 'statusMail' => $statusMail,
-                'flashMessages' => $this->flashMessenger()->getMessages(),
                 'alreadyVoted' => $alreadyVoted,
                 'reportId' => $reportId,
             )
@@ -346,9 +337,7 @@ class PostVoteController extends GameController
 
         $viewModel->setVariables(array(
                 'statusMail'       => $statusMail,
-                'game'             => $game,
                 'post'             => $post,
-                'flashMessages'    => $this->flashMessenger()->getMessages(),
                 'form'             => $form,
             )
         );
@@ -549,7 +538,6 @@ class PostVoteController extends GameController
         }
         
         $viewModel->setVariables(array(
-                'game' => $game,
                 'posts' => $paginator,
                 'form' => $form,
                 'statusMail' => $statusMail,
@@ -703,7 +691,7 @@ class PostVoteController extends GameController
         $this->getViewHelper('HeadMeta')->setProperty('og:image', $fbShareImage);
 
         $this->getViewHelper('HeadMeta')->setProperty('twitter:card', "photo");
-        $this->getViewHelper('HeadMeta')->setProperty('twitter:site', "@alfie");
+        $this->getViewHelper('HeadMeta')->setProperty('twitter:site', "@playground");
         $this->getViewHelper('HeadMeta')->setProperty('twitter:title', $game->getTwShareMessage());
         $this->getViewHelper('HeadMeta')->setProperty('twitter:description', "");
         $this->getViewHelper('HeadMeta')->setProperty('twitter:image', $fbShareImage);
@@ -711,8 +699,6 @@ class PostVoteController extends GameController
             
         $viewModel->setVariables(array(
             'statusMail'       => $statusMail,
-            'game'             => $game,
-            'flashMessages'    => $this->flashMessenger()->getMessages(),
             'form'             => $form,
             'socialLinkUrl'    => $socialLinkUrl,
             'post'             => $post
