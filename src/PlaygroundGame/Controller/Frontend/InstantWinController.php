@@ -66,9 +66,7 @@ class InstantWinController extends GameController
                 $prize = $winner->getPrize();
             }
             $viewVariables = array(
-                'game' => $game,
                 'winner' => $winner,
-                'flashMessages' => $this->flashMessenger()->getMessages(),
                 'prize' => $prize,
                 'over' => false,
             );
@@ -93,9 +91,7 @@ class InstantWinController extends GameController
                 }
             }
             $viewVariables = array(
-                'game' => $game,
                 'form' => $form,
-                'flashMessages' => $this->flashMessenger()->getMessages(),
             );
         }
         $viewModel = $this->buildView($game);
@@ -172,9 +168,7 @@ class InstantWinController extends GameController
             $viewModel->setVariables(array(
                 'occurrence'       => $occurrence,
                 'statusMail'       => $statusMail,
-                'game'             => $game,
                 'winner'           => $winner,
-                'flashMessages'    => $this->flashMessenger()->getMessages(),
                 'form'             => $form,
                 'socialLinkUrl'    => $socialLinkUrl,
                 'secretKey'        => $secretKey,

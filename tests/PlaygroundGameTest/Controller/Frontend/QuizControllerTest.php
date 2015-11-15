@@ -2091,6 +2091,10 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $f->expects($this->once())
         ->method('checkGame')
         ->will($this->returnValue($game));
+
+        $f->expects($this->any())
+        ->method('getServiceManager')
+        ->will($this->returnValue($serviceManager));
         
     	$this->dispatch('/quiz/gameid/fangate');
 
