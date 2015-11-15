@@ -12,3 +12,4 @@ script:
   - php vendor/bin/phpunit --testsuite playgroundgameF
   - php vendor/bin/phpunit --testsuite playgroundgameM
   - php vendor/bin/phpunit --testsuite playgroundgameS
+  - php vendor/bin/phpcs --standard=PSR2 ./src/ ./tests/
