@@ -15,17 +15,6 @@ class QuizController extends GameController
      */
     protected $gameService;
 
-    /**
-     * --DONE-- 1. try to change the Game Id (redirected to game home)
-     * --DONE-- 2. try to modify questions (the form is recreated and verified
-     * in the controller)
-     * --DONE-- 3. don't answer to questions (form is checked controller side)
-     * --DONE-- 4. try to game the chrono (time is checked server side)
-     * --DONE-- 5. try to play again (check autized # of tries server side
-     * 6. try to change answers
-     * --DONE-- 7. essaie de répondre sans être inscrit (on le redirige vers la
-     * home du jeu)
-     */
     public function playAction ()
     {
         $sg         = $this->getGameService();

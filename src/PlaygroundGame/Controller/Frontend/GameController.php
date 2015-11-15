@@ -59,9 +59,6 @@ class GameController extends AbstractActionController
         $res = 'error/404';
 
         $viewModel = $this->buildView($game);
-        $viewModel->setVariables(array(
-            'game' => $game,
-        ));
         $viewModel->setTemplate( $res );
 
         $this->layout()->setVariable( "content", $viewRender->render( $viewModel ) );
@@ -152,9 +149,7 @@ class GameController extends AbstractActionController
 
         $viewModel = $this->buildView($game);
         $viewModel->setVariables(array(
-            'game'             => $game,
             'isSubscribed'     => $isSubscribed,
-            'flashMessages'    => $this->flashMessenger()->getMessages(),
             'isCtaActive'      => $isCtaActive,
         ));
 
@@ -266,11 +261,9 @@ class GameController extends AbstractActionController
 
         $viewModel = $this->buildView($game);
         $viewModel->setVariables(array(
-            'game' => $game,
             'form' => $form,
             'title' => $game->getPlayerForm()->getTitle(),
             'description' => $game->getPlayerForm()->getDescription(),
-            'flashMessages' => $this->flashMessenger()->getMessages(),
         ));
 
         return $viewModel;
@@ -290,10 +283,6 @@ class GameController extends AbstractActionController
         }
 
         $viewModel = $this->buildView($game);
-        $viewModel->setVariables(array(
-            'game' => $game,
-            'flashMessages' => $this->flashMessenger()->getMessages(),
-        ));
 
         return $viewModel;
     }
@@ -312,10 +301,6 @@ class GameController extends AbstractActionController
         }
 
         $viewModel = $this->buildView($game);
-        $viewModel->setVariables(array(
-            'game' => $game,
-            'flashMessages' => $this->flashMessenger()->getMessages(),
-        ));
 
         return $viewModel;
     }
@@ -345,10 +330,8 @@ class GameController extends AbstractActionController
         $viewModel = $this->buildView($game);
         $viewModel->setVariables(array(
             'rssUrl'         => $rssUrl,
-            'game'           => $game,
             'user'           => $user,
             'availableGames' => $availableGames,
-            'flashMessages'  => $this->flashMessenger()->getMessages(),
         ));
 
         return $viewModel;
@@ -445,7 +428,8 @@ class GameController extends AbstractActionController
                 $this->layout()->setVariables(
                     array(
                         'action' => $this->params('action'),
-                        'game' => $game, 
+                        'game' => $game,
+                        'flashMessages'    => $this->flashMessenger()->getMessages(),
                         'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
                     )
                 );
@@ -454,6 +438,7 @@ class GameController extends AbstractActionController
         
         if($game){
             $viewModel->setVariables($this->getShareData($game));
+            $viewModel->setVariables(array('game' => $game));
         }
 
         return $viewModel;
@@ -618,12 +603,6 @@ class GameController extends AbstractActionController
         }
 
         $viewModel = $this->buildView($game);
-        $viewModel->setVariables(
-            array(
-                'game'             => $game,
-                'flashMessages'    => $this->flashMessenger()->getMessages(),
-            )
-        );
 
         return $viewModel;
     }
@@ -651,13 +630,7 @@ class GameController extends AbstractActionController
 
 
         $viewModel = $this->buildView($game);
-        $viewModel->setVariables(
-            array(
-                'game'             => $game,
-                'prize'            => $prize,
-                'flashMessages'    => $this->flashMessenger()->getMessages(),
-            )
-        );
+        $viewModel->setVariables(array('prize'=> $prize));
 
         return $viewModel;
     }
@@ -726,34 +699,7 @@ class GameController extends AbstractActionController
             return $this->notFoundAction();
         }
 
-        // If this game has a specific layout...
-        if ($game->getLayout()) {
-            $layoutViewModel = $this->layout();
-            $layoutViewModel->setTemplate($game->getLayout());
-        }
-
-        // If this game has a specific stylesheet...
-        if ($game->getStylesheet()) {
-            $this->getViewHelper('HeadLink')->appendStylesheet($this->getRequest()->getBaseUrl(). '/' . $game->getStylesheet());
-        }
-
-        // I change the label in the breadcrumb ...
-        $this->layout()->setVariables(
-            array(
-                'breadcrumbTitle' => $game->getTitle(),
-                'headParams' => array(
-                    'headTitle' => $game->getTitle(),
-                    'headDescription' => $game->getTitle(),
-                ),
-            )
-        );
-
-        $viewModel = new ViewModel(
-            array(
-                'game'             => $game,
-                'flashMessages'    => $this->flashMessenger()->getMessages(),
-            )
-        );
+        $viewModel = $this->buildView($game);
 
         return $viewModel;
     }
@@ -809,8 +755,6 @@ class GameController extends AbstractActionController
     
         $viewModel->setVariables(array(
             'statusMail'       => $statusMail,
-            'game'             => $game,
-            'flashMessages'    => $this->flashMessenger()->getMessages(),
             'form'             => $form,
         ));
     
@@ -988,9 +932,7 @@ class GameController extends AbstractActionController
         $form->setAttribute('action', $this->url()->fromRoute('frontend/'.$game->getClassType().'/login', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
         $viewModel = $this->buildView($game);
         $viewModel->setVariables(array(
-            'game'             => $game,
             'form'             => $form,
-            'flashMessages'    => $this->flashMessenger()->getMessages(),
         ));
         return $viewModel;
     }
@@ -1084,8 +1026,6 @@ class GameController extends AbstractActionController
                 'registerForm' => $form,
                 'enableRegistration' => $this->getUserOptions()->getEnableRegistration(),
                 'redirect' => $redirect,
-                'game'             => $game,
-                'flashMessages'    => $this->flashMessenger()->getMessages(),
             ));
             return $viewModel;
         }
@@ -1104,8 +1044,6 @@ class GameController extends AbstractActionController
                 'registerForm' => $form,
                 'enableRegistration' => $this->getUserOptions()->getEnableRegistration(),
                 'redirect' => $redirect,
-                'game'             => $game,
-                'flashMessages'    => $this->flashMessenger()->getMessages(),
             ));
             
             return $viewModel;
