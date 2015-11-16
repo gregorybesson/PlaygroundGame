@@ -6,7 +6,7 @@ use PlaygroundGameTest\Bootstrap;
 use PlaygroundGame\Form\Admin\Quiz;
 use PlaygroundGame\Entity\Quiz as QuizEntity;
 
-class quizTest extends \PHPUnit_Framework_TestCase
+class QuizTest extends \PHPUnit_Framework_TestCase
 {
     protected $sm;
 
@@ -54,7 +54,6 @@ class quizTest extends \PHPUnit_Framework_TestCase
         );
 
         parent::setUp();
-
     }
 
     public function testCanInsertNewRecord()
@@ -99,7 +98,7 @@ class quizTest extends \PHPUnit_Framework_TestCase
 
         $quiz = new QuizEntity();
         $form = $this->sm->get('playgroundgame_quiz_form');
-        $form->setInputFilter($quiz->getInputFilter()); 
+        $form->setInputFilter($quiz->getInputFilter());
         $form->bind($quiz);
         $form->setData($this->quizData);
         $this->assertTrue($form->isValid());

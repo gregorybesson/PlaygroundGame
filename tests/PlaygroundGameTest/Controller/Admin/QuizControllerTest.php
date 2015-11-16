@@ -22,7 +22,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
     {
         /*
 
-		La vue n'est pas mockable
+        La vue n'est pas mockable
 
 
         $serviceManager = $this->getApplicationServiceLocator();
@@ -49,7 +49,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-		$serviceManager->setService('playgroundgame_quizquestion_form', $adminFormQuiz);
+        $serviceManager->setService('playgroundgame_quizquestion_form', $adminFormQuiz);
 
         $game = new \PlaygroundGame\Entity\Quiz();
         $game->setTitle('CeciEstUnTitre');
@@ -77,9 +77,9 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         //$this->assertMatchedRouteName('frontend/lottery');*/
     }
 
-    public function testRemoveQuestionAction() 
+    public function testRemoveQuestionAction()
     {
-    	$serviceManager = $this->getApplicationServiceLocator();
+        $serviceManager = $this->getApplicationServiceLocator();
         $serviceManager->setAllowOverride(true);
 
         $adminQuizService = $this->getMockBuilder('PlaygroundGame\Service\Quiz')
@@ -121,6 +121,4 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $this->assertControllerClass('QuizController');
         $this->assertActionName('removeQuestion');
     }
-
-
 }

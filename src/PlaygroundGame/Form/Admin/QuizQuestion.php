@@ -10,7 +10,7 @@ use Zend\ServiceManager\ServiceManager;
 
 class QuizQuestion extends ProvidesEventsForm
 {
-    public function __construct($name = null, ServiceManager $serviceManager, Translator $translator)
+    public function __construct($name, ServiceManager $serviceManager, Translator $translator)
     {
         parent::__construct($name);
 
@@ -23,8 +23,8 @@ class QuizQuestion extends ProvidesEventsForm
         $this->setHydrator(new DoctrineHydrator($entityManager, 'PlaygroundGame\Entity\QuizQuestion'));
 
         $this->setAttribute('method', 'post');
-        $this->setAttribute('enctype','multipart/form-data');
-        $this->setAttribute('class','form-horizontal');
+        $this->setAttribute('enctype', 'multipart/form-data');
+        $this->setAttribute('class', 'form-horizontal');
 
         $this->add(array(
             'name' => 'quiz_id',
@@ -192,12 +192,12 @@ class QuizQuestion extends ProvidesEventsForm
                 'name' => 'delete_image',
                 'type' => 'Zend\Form\Element\Hidden',
                 'attributes' => array(
-        	        'value' => '',
-                    'class' => 'delete_image',       
-                ),   
+                    'value' => '',
+                    'class' => 'delete_image',
+                ),
         ));
 
-        $quizAnswerFieldset = new QuizAnswerFieldset(null,$serviceManager,$translator);
+        $quizAnswerFieldset = new QuizAnswerFieldset(null, $serviceManager, $translator);
         $this->add(array(
             'type'    => 'Zend\Form\Element\Collection',
             'name'    => 'answers',
@@ -222,6 +222,5 @@ class QuizQuestion extends ProvidesEventsForm
         $this->add($submitElement, array(
             'priority' => -100,
         ));
-
     }
 }

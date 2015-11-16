@@ -55,9 +55,9 @@ class InstantWinOccurrence implements InputFilterAwareInterface
      **/
     protected $user;
 
-	/**
+    /**
      * @ORM\OneToOne(targetEntity="Entry")
-   	 * @ORM\JoinColumn(name="entry_id", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\JoinColumn(name="entry_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $entry;
 
@@ -140,7 +140,7 @@ class InstantWinOccurrence implements InputFilterAwareInterface
      */
     public function getPrize()
     {
-    	return $this->prize;
+        return $this->prize;
     }
 
     /**
@@ -148,9 +148,9 @@ class InstantWinOccurrence implements InputFilterAwareInterface
      */
     public function setPrize($prize)
     {
-    	$this->prize = $prize;
+        $this->prize = $prize;
 
-    	return $this;
+        return $this;
     }
 
     /**
@@ -230,7 +230,7 @@ class InstantWinOccurrence implements InputFilterAwareInterface
      */
     public function getEntry()
     {
-    	return $this->entry;
+        return $this->entry;
     }
 
     /**
@@ -238,9 +238,9 @@ class InstantWinOccurrence implements InputFilterAwareInterface
      */
     public function setEntry($entry)
     {
-    	$this->entry = $entry;
+        $this->entry = $entry;
 
-    	return $this;
+        return $this;
     }
 
     /**
@@ -332,8 +332,8 @@ class InstantWinOccurrence implements InputFilterAwareInterface
             )));
 
             $inputFilter->add($factory->createInput(array(
-            		'name' => 'prize',
-            		'required' => false,
+                    'name' => 'prize',
+                    'required' => false,
             )));
 
             $this->inputFilter = $inputFilter;

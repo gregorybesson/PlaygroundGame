@@ -329,10 +329,10 @@ class PostVotePost implements InputFilterAwareInterface, \JsonSerializable
      *
      * @return array
      */
-    public function jsonSerialize ()
+    public function jsonSerialize()
     {
         return $this->getArrayCopy();
-    }    
+    }
 
     /**
      * Populate from an array.
@@ -354,7 +354,7 @@ class PostVotePost implements InputFilterAwareInterface, \JsonSerializable
             $inputFilter = new InputFilter();
             $factory = new InputFactory();
 
-            $inputFilter->add($factory->createInput(array('name' => 'id', 'required' => true, 'filters' => array(array('name' => 'Int'),),)));
+            $inputFilter->add($factory->createInput(array('name' => 'id', 'required' => true, 'filters' => array(array('name' => 'Int'), ), )));
 
             $this->inputFilter = $inputFilter;
         }

@@ -78,7 +78,7 @@ class PlayerForm implements InputFilterAwareInterface
         return $this->game;
     }
 
-	/**
+    /**
      * @param field_type $game
      */
     public function setGame($game)
@@ -86,7 +86,7 @@ class PlayerForm implements InputFilterAwareInterface
         $this->game = $game;
     }
 
-	/**
+    /**
      * @return the unknown_type
      */
     public function getTitle()

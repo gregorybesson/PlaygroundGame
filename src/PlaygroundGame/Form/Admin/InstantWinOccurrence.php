@@ -9,7 +9,7 @@ use Zend\ServiceManager\ServiceManager;
 
 class InstantWinOccurrence extends ProvidesEventsForm
 {
-    public function __construct($name = null, ServiceManager $serviceManager, Translator $translator)
+    public function __construct($name, ServiceManager $serviceManager, Translator $translator)
     {
         parent::__construct($name);
 
@@ -70,13 +70,13 @@ class InstantWinOccurrence extends ProvidesEventsForm
 
         $prizes = $this->getPrizes();
         $this->add(array(
-        	'type' => 'Zend\Form\Element\Select',
-        	'name' => 'prize',
-        	'options' => array(
-        		'empty_option' => $translator->translate('Ce jeu n\'a pas de lot associé', 'playgroundgame'),
-        		'value_options' => $prizes,
-        		'label' => $translator->translate('Lots', 'playgroundgame')
-        	)
+            'type' => 'Zend\Form\Element\Select',
+            'name' => 'prize',
+            'options' => array(
+                'empty_option' => $translator->translate('Ce jeu n\'a pas de lot associé', 'playgroundgame'),
+                'value_options' => $prizes,
+                'label' => $translator->translate('Lots', 'playgroundgame')
+            )
         ));
 
         $submitElement = new Element\Button('submit');
@@ -94,17 +94,17 @@ class InstantWinOccurrence extends ProvidesEventsForm
      *
      * @return array
      */
-    public function getPrizes ()
+    public function getPrizes()
     {
-    	$prizes = array();
-    	$prizeService = $this->getServiceManager()->get('playgroundgame_prize_service');
-    	$results = $prizeService->getPrizeMapper()->findAll();
+        $prizes = array();
+        $prizeService = $this->getServiceManager()->get('playgroundgame_prize_service');
+        $results = $prizeService->getPrizeMapper()->findAll();
 
-    	foreach ($results as $result) {
-    		$prizes[$result->getId()] = $result->getTitle();
-    	}
+        foreach ($results as $result) {
+            $prizes[$result->getId()] = $result->getTitle();
+        }
 
-    	return $prizes;
+        return $prizes;
     }
 
     /**
@@ -112,9 +112,9 @@ class InstantWinOccurrence extends ProvidesEventsForm
      *
      * @return ServiceManager
      */
-    public function getServiceManager ()
+    public function getServiceManager()
     {
-    	return $this->serviceManager;
+        return $this->serviceManager;
     }
 
     /**
@@ -123,10 +123,10 @@ class InstantWinOccurrence extends ProvidesEventsForm
      * @param  ServiceManager $serviceManager
      * @return InstantWinOccurrence
      */
-    public function setServiceManager (ServiceManager $serviceManager)
+    public function setServiceManager(ServiceManager $serviceManager)
     {
-    	$this->serviceManager = $serviceManager;
+        $this->serviceManager = $serviceManager;
 
-    	return $this;
+        return $this;
     }
 }

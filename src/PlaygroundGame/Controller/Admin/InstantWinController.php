@@ -12,10 +12,8 @@ use Zend\Paginator\Paginator;
 use PlaygroundCore\ORM\Pagination\LargeTablePaginator;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 
-
 class InstantWinController extends GameController
 {
-
     /**
      * @var GameService
      */
@@ -55,10 +53,10 @@ class InstantWinController extends GameController
         $request = $this->getRequest();
         if ($request->isPost()) {
             $data = array_replace_recursive(
-                    $this->getRequest()->getPost()->toArray(),
-                    $this->getRequest()->getFiles()->toArray()
+                $this->getRequest()->getPost()->toArray(),
+                $this->getRequest()->getFiles()->toArray()
             );
-            if(empty($data['prizes'])){
+            if (empty($data['prizes'])) {
                 $data['prizes'] = array();
             }
             $game = $service->create($data, $instantwin, 'playgroundgame_instantwin_form');
@@ -118,10 +116,10 @@ class InstantWinController extends GameController
 
         if ($this->getRequest()->isPost()) {
             $data = array_replace_recursive(
-                    $this->getRequest()->getPost()->toArray(),
-                    $this->getRequest()->getFiles()->toArray()
+                $this->getRequest()->getPost()->toArray(),
+                $this->getRequest()->getFiles()->toArray()
             );
-            if(empty($data['prizes'])){
+            if (empty($data['prizes'])) {
                 $data['prizes'] = array();
             }
             $result = $service->edit($data, $game, 'playgroundgame_instantwin_form');
@@ -192,8 +190,8 @@ class InstantWinController extends GameController
 
         if ($this->getRequest()->isPost()) {
             $data = array_merge(
-                    $this->getRequest()->getPost()->toArray(),
-                    $this->getRequest()->getFiles()->toArray()
+                $this->getRequest()->getPost()->toArray(),
+                $this->getRequest()->getFiles()->toArray()
             );
 
             // Change the format of the date
@@ -253,11 +251,10 @@ class InstantWinController extends GameController
                 $this->getRequest()->getFiles()->toArray()
             );
             $form->setData($data);
-            if ($form->isValid())
-            {
+            if ($form->isValid()) {
                 $data = $form->getData();
                 $created = $this->getAdminGameService()->importOccurrences($data);
-                if($created){
+                if ($created) {
                     $this->flashMessenger()->setNamespace('playgroundgame')->addMessage($created.' occurrences were created !');
                     return $this->redirect()->toRoute('admin/playgroundgame/instantwin-occurrence-list', array('gameId'=>$gameId));
                 }
@@ -286,7 +283,7 @@ class InstantWinController extends GameController
         $game = $service->getGameMapper()->findById($gameId);
         $occurrence = $service->getInstantWinOccurrenceMapper()->findById($occurrenceId);
         // Si l'occurrence a été utilisée, on ne peut plus la modifier
-        if($occurrence->getUser()){
+        if ($occurrence->getUser()) {
             $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('This occurrence has a winner, you can not update it.');
             return $this->redirect()->toRoute('admin/playgroundgame/instantwin-occurrence-list', array('gameId'=>$gameId));
         }
@@ -334,7 +331,7 @@ class InstantWinController extends GameController
         $occurrence   = $service->getInstantWinOccurrenceMapper()->findById($occurrenceId);
         $instantwinId = $occurrence->getInstantWin()->getId();
 
-        if($occurrence->getActive()){
+        if ($occurrence->getActive()) {
             $service->getInstantWinOccurrenceMapper()->remove($occurrence);
             $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The occurrence was deleted');
         } else {
@@ -364,7 +361,6 @@ class InstantWinController extends GameController
         $response->setHeaders($headers);
         unlink($file);
         return $response;
-
     }
 
     public function entryAction()
@@ -399,7 +395,7 @@ class InstantWinController extends GameController
         }
         $game           = $this->getAdminGameService()->getGameMapper()->findById($gameId);
 
-        $entries = $this->getAdminGameService()->getEntryMapper()->findBy(array('game' => $game,'winner' => 1));
+        $entries = $this->getAdminGameService()->getEntryMapper()->findBy(array('game' => $game, 'winner' => 1));
 
         $content        = "\xEF\xBB\xBF"; // UTF-8 BOM
         if (! $game->getAnonymousAllowed()) {
@@ -415,12 +411,12 @@ class InstantWinController extends GameController
             ."\n";
         foreach ($entries as $e) {
             if (!$game->getAnonymousAllowed()) {
-                if($e->getUser()->getAddress2() != '') {
+                if ($e->getUser()->getAddress2() != '') {
                     $adress2 = ' - ' . $e->getUser()->getAddress2();
                 } else {
                     $adress2 = '';
                 }
-                if($e->getUser()->getDob() != NULL) {
+                if ($e->getUser()->getDob() != null) {
                     $dob = $e->getUser()->getDob()->format('Y-m-d');
                 } else {
                     $dob = '';
@@ -442,11 +438,10 @@ class InstantWinController extends GameController
                 . ";" . $e->getUser()->getCreatedAt()->format('Y-m-d')
                 . ";" . $dob
                 . ";" ;
-
             }
             if ($e->getPlayerData()) {
                 $entryData = json_decode($e->getPlayerData());
-                foreach ( $entryData as $key => $data) {
+                foreach ($entryData as $key => $data) {
                     if (is_array($data)) {
                         $content .= implode(', ', $data).';';
                     } else {

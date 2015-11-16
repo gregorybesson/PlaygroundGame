@@ -8,10 +8,9 @@ use Zend\ServiceManager\ServiceManager;
 
 class PrizeCategoryUser extends ProvidesEventsForm
 {
-
     protected $serviceManager;
 
-    public function __construct ($name = null, ServiceManager $sm, Translator $translator)
+    public function __construct($name, ServiceManager $sm, Translator $translator)
     {
         parent::__construct($name);
 
@@ -50,7 +49,7 @@ class PrizeCategoryUser extends ProvidesEventsForm
         $submitElement->setLabel($translator->translate('Create', 'playgroundgame'))
             ->setAttributes(array(
             'type' => 'submit'
-        ));
+            ));
 
         $this->add($submitElement, array(
             'priority' => - 100
@@ -61,7 +60,7 @@ class PrizeCategoryUser extends ProvidesEventsForm
      *
      * @return array
      */
-    public function getPrizeCategories ()
+    public function getPrizeCategories()
     {
         $prizeCategoryService = $this->getServiceManager()->get('playgroundgame_prizecategory_service');
         $results = $prizeCategoryService->getActivePrizeCategories();
@@ -79,7 +78,7 @@ class PrizeCategoryUser extends ProvidesEventsForm
      *
      * @return ServiceManager
      */
-    public function getServiceManager ()
+    public function getServiceManager()
     {
         return $this->serviceManager;
     }
@@ -90,7 +89,7 @@ class PrizeCategoryUser extends ProvidesEventsForm
      * @param  ServiceManager $serviceManager
      * @return PrizeCategoryUser
      */
-    public function setServiceManager (ServiceManager $serviceManager)
+    public function setServiceManager(ServiceManager $serviceManager)
     {
         $this->serviceManager = $serviceManager;
 

@@ -8,14 +8,13 @@ use Zend\InputFilter\Factory as InputFactory;
 
 class QuizController extends GameController
 {
-
     /**
      *
      * @var gameService
      */
     protected $gameService;
 
-    public function playAction ()
+    public function playAction()
     {
         $sg         = $this->getGameService();
 
@@ -28,7 +27,7 @@ class QuizController extends GameController
         }
 
         $redirectFb = $this->checkFbRegistration($this->zfcUserAuthentication()->getIdentity(), $game, $channel);
-        if($redirectFb){
+        if ($redirectFb) {
             return $redirectFb;
         }
 
@@ -45,7 +44,7 @@ class QuizController extends GameController
             // the user has already taken part of this game and the participation limit has been reached
             $this->flashMessenger()->addMessage('Vous avez déjà participé!');
 
-            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute($game->getClassType() . '/result',array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute($game->getClassType() . '/result', array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
         }
 
         $questions = $game->getQuestions();
@@ -78,7 +77,7 @@ class QuizController extends GameController
                         'position' => $a->getPosition(),
                         'answer' => $a->getAnswer(),
                         );
-                        $explanations[$a->getAnswer()] = $a->getExplanation();
+                    $explanations[$a->getAnswer()] = $a->getExplanation();
                 }
                 sort($values);
                 foreach ($values as $key => $value) {
@@ -88,7 +87,6 @@ class QuizController extends GameController
                 $element->setLabelOptions(array("disable_html_escape"=>true));
 
                 $elementData[$q->getId()] = new Element\Hidden($name.'-data');
-
             } elseif ($q->getType() == 1) {
                 $element = new Element\MultiCheckbox($name);
                 $values = array();
@@ -109,7 +107,6 @@ class QuizController extends GameController
 
                 $element->setValueOptions($valuesSortedByPosition);
                 $element->setLabelOptions(array("disable_html_escape"=>true));
-
             } elseif ($q->getType() == 2) {
                 $element = new Element\Textarea($name);
                 $elementData[$q->getId()] = new Element\Hidden($name.'-data');
@@ -138,7 +135,6 @@ class QuizController extends GameController
 
             $i ++;
             if (($game->getQuestionGrouping() > 0 && $i % $game->getQuestionGrouping() == 0 && $i > 0) || $i == $totalQuestions) {
-
                 $form->add($fieldset);
                 $inputFilter->add($fieldsetFilter, $fieldsetName);
             }
@@ -184,7 +180,7 @@ class QuizController extends GameController
             return $this->notFoundAction();
         }
 
-        $secretKey = strtoupper(substr(sha1(uniqid('pg_', true).'####'.time()),0,15));
+        $secretKey = strtoupper(substr(sha1(uniqid('pg_', true).'####'.time()), 0, 15));
         $socialLinkUrl = $this->frontendUrl()->fromRoute('quiz', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)).'?key='.$secretKey;
         // With core shortener helper
         $socialLinkUrl = $this->shortenUrl()->shortenUrl($socialLinkUrl);
@@ -221,8 +217,8 @@ class QuizController extends GameController
             $ratioCorrectAnswers = 100;
         }
 
-        if($game->getTimer()){
-            $timer = $sg->getEntryMapper()->findOneBy(array('game' => $game , 'user'=> $user));
+        if ($game->getTimer()) {
+            $timer = $sg->getEntryMapper()->findOneBy(array('game' => $game, 'user'=> $user));
             $start = $timer->getCreatedAt()->format('U');
             $end = $timer->getUpdatedAt()->format('U');
             $userTimer = array(
@@ -250,7 +246,7 @@ class QuizController extends GameController
                     
                     if (isset($userAnswers[$q->getId()]) && isset($userAnswers[$q->getId()][$a->getId()])) {
                         $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['yourChoice'] = true;
-                    }else {
+                    } else {
                         $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['yourChoice'] = false;
                     }
 
@@ -264,11 +260,10 @@ class QuizController extends GameController
                     
                     if (isset($userAnswers[$q->getId()]) && isset($userAnswers[$q->getId()][$a->getId()])) {
                         $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['yourChoice'] = true;
-                    }else {
+                    } else {
                         $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['yourChoice'] = false;
                     }
                 }
-
             }
             // if only one question is a prediction, we can't determine if it's a winner or looser
             if ($q->getPrediction()) {
@@ -404,7 +399,7 @@ class QuizController extends GameController
         return $response;
     }
 
-    public function getGameService ()
+    public function getGameService()
     {
         if (! $this->gameService) {
             $this->gameService = $this->getServiceLocator()->get('playgroundgame_quiz_service');

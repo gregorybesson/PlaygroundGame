@@ -6,7 +6,6 @@ use Zend\View\Model\ViewModel;
 
 class PrizeCategoryController extends GameController
 {
-
     protected $gameService;
 
     protected $prizeCategoryService;
@@ -59,10 +58,10 @@ class PrizeCategoryController extends GameController
 
         return new ViewModel(
             array(
-                'games' 			=> $paginator,
-                'prizeCategory' 	=> $prizeCategory,
-                'identifier'		=> $identifier,
-                'flashMessages'    	=> $this->flashMessenger()->getMessages(),
+                'games'            => $paginator,
+                'prizeCategory'    => $prizeCategory,
+                'identifier'        => $identifier,
+                'flashMessages'        => $this->flashMessenger()->getMessages(),
             )
         );
     }
@@ -91,5 +90,4 @@ class PrizeCategoryController extends GameController
 
         return $this;
     }
-
 }

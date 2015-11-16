@@ -12,13 +12,12 @@ use PlaygroundGame\Mapper\PrizeCategory as PrizeCategoryMapper;
 
 class PrizeCategoryUser extends EventProvider implements ServiceManagerAwareInterface
 {
-
     /**
      * @var prizeCategoryUserMapper
      */
     protected $prizeCategoryUserMapper;
-	
-	/**
+    
+    /**
      * @var prizeCategoryMapper
      */
     protected $prizeCategoryMapper;
@@ -35,16 +34,15 @@ class PrizeCategoryUser extends EventProvider implements ServiceManagerAwareInte
 
     public function edit(array $data, $user, $formClass)
     {
-
         $this->getPrizeCategoryUserMapper()->removeAll($user);
-		if(isset($data['prizeCategory']) && $data['prizeCategory']){
-	        foreach ($data['prizeCategory'] as $k => $v) {
-	            $category = $this->getPrizeCategoryMapper()->findById($v);
-	            $userCategory = new PrizeCategoryUserEntity($user, $category);
-	            $this->getPrizeCategoryUserMapper()->insert($userCategory);
-	        }
-        	$this->getEventManager()->trigger(__FUNCTION__.'.post', $this, array('user' => $user, 'data' => $data));
-		}
+        if (isset($data['prizeCategory']) && $data['prizeCategory']) {
+            foreach ($data['prizeCategory'] as $k => $v) {
+                $category = $this->getPrizeCategoryMapper()->findById($v);
+                $userCategory = new PrizeCategoryUserEntity($user, $category);
+                $this->getPrizeCategoryUserMapper()->insert($userCategory);
+            }
+            $this->getEventManager()->trigger(__FUNCTION__.'.post', $this, array('user' => $user, 'data' => $data));
+        }
 
         return true;
     }

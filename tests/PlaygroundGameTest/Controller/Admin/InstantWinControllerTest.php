@@ -186,5 +186,4 @@ class InstantWinControllerTest extends AbstractHttpControllerTestCase
         $this->assertControllerClass('InstantWinController');
         $this->assertActionName('download');
     }
-
 }

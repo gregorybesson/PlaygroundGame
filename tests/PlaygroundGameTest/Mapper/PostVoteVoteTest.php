@@ -5,7 +5,7 @@ namespace PlaygroundGameTest\Mapper;
 use \PlaygroundGame\Entity\PostVoteVote as PostVoteVoteEntity;
 use PlaygroundGameTest\Bootstrap;
 
-class postvotevoteTest extends \PHPUnit_Framework_TestCase
+class PostVoteVoteTest extends \PHPUnit_Framework_TestCase
 {
     protected $traceError = true;
 
@@ -62,7 +62,6 @@ class postvotevoteTest extends \PHPUnit_Framework_TestCase
 
         $postvotevotes = $this->tm->findAll();
         $this->assertEquals(3, count($postvotevotes));
-
     }
 
     public function tearDown()

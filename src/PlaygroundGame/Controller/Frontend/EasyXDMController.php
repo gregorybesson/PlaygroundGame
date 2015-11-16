@@ -7,7 +7,6 @@ use Zend\View\Model\ViewModel;
 
 class EasyXDMController extends AbstractActionController
 {
-
     public function indexAction()
     {
         $viewModel = new ViewModel();
@@ -17,8 +16,8 @@ class EasyXDMController extends AbstractActionController
     
     public function nameAction()
     {
-    	$viewModel = new ViewModel();
-    	$viewModel->setTerminal(true);
-    	return $viewModel;
+        $viewModel = new ViewModel();
+        $viewModel->setTerminal(true);
+        return $viewModel;
     }
 }

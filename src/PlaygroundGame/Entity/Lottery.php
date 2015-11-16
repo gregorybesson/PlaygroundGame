@@ -39,7 +39,7 @@ class Lottery extends Game implements InputFilterAwareInterface
 
     public function __construct()
     {
-    	parent::__construct();
+        parent::__construct();
         $this->setClassType(self::CLASSTYPE);
     }
 
@@ -102,7 +102,6 @@ class Lottery extends Game implements InputFilterAwareInterface
      */
     public function getDrawDate()
     {
-
         return $this->drawDate;
     }
 

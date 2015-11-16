@@ -8,7 +8,7 @@ use Zend\ServiceManager\ServiceManager;
 
 class InstantWin extends Game
 {
-    public function __construct($name = null, ServiceManager $sm, Translator $translator)
+    public function __construct($name, ServiceManager $sm, Translator $translator)
     {
         $this->setServiceManager($sm);
         $entityManager = $sm->get('doctrine.entitymanager.orm_default');
@@ -104,22 +104,22 @@ class InstantWin extends Game
         ));
         
         $this->add(array(
-        		'type' => 'Zend\Form\Element\Select',
-        		'name' => 'occurrenceDrawFrequency',
-        		'attributes' =>  array(
-        				'id' => 'occurrenceDrawFrequency',
-        				'options' => array(
-        						'hour' => $translator->translate('Hour', 'playgroundgame'),
-        						'day' => $translator->translate('Day', 'playgroundgame'),
-        						'week' => $translator->translate('Week', 'playgroundgame'),
-        						'month' => $translator->translate('Month', 'playgroundgame'),
-        						'game' => $translator->translate('Game', 'playgroundgame'),
-        				),
-        		),
-        		'options' => array(
-        				'empty_option' => $translator->translate('Instant win creation frequency ?', 'playgroundgame'),
-        				'label' => $translator->translate('Creation frequency', 'playgroundgame'),
-        		),
+                'type' => 'Zend\Form\Element\Select',
+                'name' => 'occurrenceDrawFrequency',
+                'attributes' =>  array(
+                        'id' => 'occurrenceDrawFrequency',
+                        'options' => array(
+                                'hour' => $translator->translate('Hour', 'playgroundgame'),
+                                'day' => $translator->translate('Day', 'playgroundgame'),
+                                'week' => $translator->translate('Week', 'playgroundgame'),
+                                'month' => $translator->translate('Month', 'playgroundgame'),
+                                'game' => $translator->translate('Game', 'playgroundgame'),
+                        ),
+                ),
+                'options' => array(
+                        'empty_option' => $translator->translate('Instant win creation frequency ?', 'playgroundgame'),
+                        'label' => $translator->translate('Creation frequency', 'playgroundgame'),
+                ),
         ));
 
         // Adding an empty upload field to be able to correctly handle this on

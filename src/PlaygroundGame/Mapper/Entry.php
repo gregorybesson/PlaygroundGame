@@ -53,7 +53,7 @@ class Entry implements ServiceLocatorAwareInterface
     }
 
     public function draw($game, $userClass, $total)
-    { 
+    {
         $sql ='SELECT u.user_id uid, u.username, u.firstname, u.lastname, u.email, u.optin_partner, e.created_at ecreated_at, e.updated_at eupdated_at, e.* FROM game_entry as e
             INNER JOIN user AS u ON e.user_id = u.user_id
             WHERE e.game_id = :game_id
@@ -63,8 +63,8 @@ class Entry implements ServiceLocatorAwareInterface
             LIMIT :total';
         
         $rsm = new \Doctrine\ORM\Query\ResultSetMappingBuilder($this->em);
-        $rsm->addRootEntityFromClassMetadata('\PlaygroundGame\Entity\Entry',  'e',  array('id' => 'id', 'created_at' => 'ecreated_at', 'updated_at' => 'eupdated_at'));
-        $query = $this->em->createNativeQuery($sql,  $rsm);
+        $rsm->addRootEntityFromClassMetadata('\PlaygroundGame\Entity\Entry', 'e', array('id' => 'id', 'created_at' => 'ecreated_at', 'updated_at' => 'eupdated_at'));
+        $query = $this->em->createNativeQuery($sql, $rsm);
         $query->setParameter('game_id', $game->getId());
         $query->setParameter('total', $total);
         
@@ -255,8 +255,8 @@ class Entry implements ServiceLocatorAwareInterface
                 break;
             default:
                 $interval = 'P100Y';
-            $now->sub(new \DateInterval($interval));
-            $dateLimit = $now->format('Y-m-d') . ' 0:0:0';
+                $now->sub(new \DateInterval($interval));
+                $dateLimit = $now->format('Y-m-d') . ' 0:0:0';
         }
 
         $query = $this->em->createQuery(
@@ -283,7 +283,6 @@ class Entry implements ServiceLocatorAwareInterface
      */
     public function checkBonusEntry($game, $user)
     {
-
         $query = $this->em->createQuery('SELECT COUNT(e.id) FROM PlaygroundGame\Entity\Entry e WHERE e.user = :user AND e.game = :game AND (e.bonus = 0 OR e.bonus IS NULL)');
         $query->setParameter('user', $user);
         $query->setParameter('game', $game);
@@ -301,7 +300,7 @@ class Entry implements ServiceLocatorAwareInterface
         return true;
     }
 
-    public function findOneBy($array=array(), $sortBy = array('updated_at' => 'desc'))
+    public function findOneBy($array = array(), $sortBy = array('updated_at' => 'desc'))
     {
         $er = $this->getEntityRepository();
 

@@ -7,7 +7,6 @@ use Zend\Stdlib\ErrorHandler;
 
 class InstantWin extends Game implements ServiceManagerAwareInterface
 {
-
     /**
      * @var InstantWinOccurrenceMapperInterface
      */
@@ -29,12 +28,11 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
         $game = parent::create($data, $entity, $formClass);
         if ($game) {
             if (!empty($data['uploadScratchcardImage']['tmp_name'])) {
-
                 $path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR;
                 $media_url = $this->getOptions()->getMediaUrl() . '/';
 
                 ErrorHandler::start();
-				$data['uploadScratchcardImage']['name'] = $this->fileNewname($path, $game->getId() . "-" . $data['uploadScratchcardImage']['name']);
+                $data['uploadScratchcardImage']['name'] = $this->fileNewname($path, $game->getId() . "-" . $data['uploadScratchcardImage']['name']);
                 move_uploaded_file($data['uploadScratchcardImage']['tmp_name'], $path . $data['uploadScratchcardImage']['name']);
                 $game->setScratchcardImage($media_url . $data['uploadScratchcardImage']['name']);
                 ErrorHandler::stop(true);
@@ -63,13 +61,10 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
         $game = parent::edit($data, $game, $formClass);
 
         if ($game) {
-
             $path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR;
             $media_url = $this->getOptions()->getMediaUrl() . '/';
 
             if (!empty($data['uploadScratchcardImage']['tmp_name'])) {
-
-
                 ErrorHandler::start();
                 $data['uploadScratchcardImage']['name'] = $this->fileNewname($path, $game->getId() . "-" . $data['uploadScratchcardImage']['name']);
                 move_uploaded_file($data['uploadScratchcardImage']['tmp_name'], $path . $data['uploadScratchcardImage']['name']);
@@ -79,8 +74,7 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                 $game = $this->getGameMapper()->update($game);
             }
 
-            if(isset($data['deleteScratchcardImage']) && $data['deleteScratchcardImage'] && empty($data['uploadScratchcardImage']['tmp_name'])) {
-
+            if (isset($data['deleteScratchcardImage']) && $data['deleteScratchcardImage'] && empty($data['uploadScratchcardImage']['tmp_name'])) {
                 ErrorHandler::start();
                 $image = $game->getScratchcardImage();
                 $image = str_replace($media_url, '', $image);
@@ -117,20 +111,18 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
     {
         $available_characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-';
         $last_character_index = strlen($available_characters)-1;
-        if(!$game->getWinningOccurrenceNumber())
-        {
+        if (!$game->getWinningOccurrenceNumber()) {
             $game->setWinningOccurrenceNumber($game->getOccurrenceNumber());
         }
-        if(empty($data['occurrenceValueSize']))
-        {
+        if (empty($data['occurrenceValueSize'])) {
             $data['occurrenceValueSize'] = 8;
         }
         $created = 0;
         $numOccurrences = $game->getOccurrenceNumber();
         
-        for ($i=0; $i < $numOccurrences ; $i++) {
+        for ($i=0; $i < $numOccurrences; $i++) {
             $code = '';
-            while(strlen($code)<$data['occurrenceValueSize']){
+            while (strlen($code)<$data['occurrenceValueSize']) {
                 $code .= $available_characters[rand(0, $last_character_index)];
             }
             $occurrence = new \PlaygroundGame\Entity\InstantWinOccurrence();
@@ -138,7 +130,7 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
             $occurrence->setValue($code);
             $occurrence->setActive(1);
             $occurrence->setWinning($created < $game->getWinningOccurrenceNumber());
-            if($this->getInstantWinOccurrenceMapper()->insert($occurrence)){
+            if ($this->getInstantWinOccurrenceMapper()->insert($occurrence)) {
                 $created++;
             }
         }
@@ -168,18 +160,18 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
         $transitions = $timezone->getTransitions($beginning->getTimestamp(), $end->getTimestamp());
 
         // There is a time transition between these datetimes()
-        if(count($transitions) == 2){
+        if (count($transitions) == 2) {
             $shift = $transitions[0]['offset'] - $transitions[1]['offset'];
-            if($shift > 0){
+            if ($shift > 0) {
                 $end->sub(new \DateInterval('PT'.abs($shift).'S'));
-            } else{
+            } else {
                 $end->add(new \DateInterval('PT'.abs($shift).'S'));
             }
         }
 
         // DateInterval takes the day @ 00:00 to calculate the difference between the dates, so 1 day is always missing
         // as we consider the last day @ 23:59:59 in Playground :)
-        if($end->format('His') == 0){
+        if ($end->format('His') == 0) {
             $end->add(new \DateInterval('P1D'));
         }
 
@@ -192,7 +184,7 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                 $occurrences = $this->getInstantWinOccurrenceMapper()->findBy(array('instantwin' => $game));
                 $nbOccurencesToCreate = $game->getOccurrenceNumber() - count($occurrences);
                 if ($nbOccurencesToCreate > 0) {
-                    for ($i=1;$i<=$nbOccurencesToCreate;$i++) {
+                    for ($i=1; $i<=$nbOccurencesToCreate; $i++) {
                         $randomDate = $this->getRandomDate($beginning->format('U'), $end->format('U'));
                         $randomDate = \DateTime::createFromFormat('Y-m-d H:i:s', $randomDate);
                         $occurrence  = new \PlaygroundGame\Entity\InstantWinOccurrence();
@@ -206,17 +198,16 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
 
                 break;
             case 'hour':
-
                 $occurrences = $this->getInstantWinOccurrenceMapper()->findBy(array('instantwin' => $game));
                 $nbExistingOccurrences = count($occurrences);
                 $nbOccurencesToCreate = 0;
                 $nbInterval = (int) ($dateInterval/60);
 
                 // If a hour don't last 60min, I consider it as a hour anyway.
-                if($dateInterval%60 > 0){
+                if ($dateInterval%60 > 0) {
                     ++$nbInterval;
                 }
-                if($nbInterval > 0){
+                if ($nbInterval > 0) {
                     $nbOccurencesToCreate = $game->getOccurrenceNumber() - floor($nbExistingOccurrences/$nbInterval);
                 }
 
@@ -224,8 +215,8 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                 $endDrawDate = \DateTime::createFromFormat('m/d/Y H:i:s', $beginning->format('m/d/Y H'). ':59:59');
 
                 if ($nbOccurencesToCreate > 0) {
-                    for ($d=1;$d<=$nbInterval;$d++){
-                        for ($i=1;$i<=$nbOccurencesToCreate;$i++) {
+                    for ($d=1; $d<=$nbInterval; $d++) {
+                        for ($i=1; $i<=$nbOccurencesToCreate; $i++) {
                             $randomDate = $this->getRandomDate($beginningDrawDate->format('U'), $endDrawDate->format('U'));
                             $randomDate = \DateTime::createFromFormat('Y-m-d H:i:s', $randomDate);
                             $occurrence  = new \PlaygroundGame\Entity\InstantWinOccurrence();
@@ -244,7 +235,6 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
 
                 break;
             case 'day':
-
                 $occurrences = $this->getInstantWinOccurrenceMapper()->findBy(array('instantwin' => $game));
                 $nbExistingOccurrences = count($occurrences);
                 $nbOccurencesToCreate = 0;
@@ -253,19 +243,19 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                 // Prise en compte des changements d'horaires
                 // If a day don't last 24h, I consider it as a day anyway
 
-                if($dateInterval%(60*24) > 0){
+                if ($dateInterval%(60*24) > 0) {
                     ++$nbInterval;
                 }
 
-                if($nbInterval > 0){
+                if ($nbInterval > 0) {
                     $nbOccurencesToCreate = $game->getOccurrenceNumber() - floor($nbExistingOccurrences/$nbInterval);
                 }
 
                 $beginningDrawDate = \DateTime::createFromFormat('m/d/Y H:i:s', $beginning->format('m/d/Y H:i:s'));
                 $endDrawDate = \DateTime::createFromFormat('m/d/Y H:i:s', $beginning->format('m/d/Y'). ' 23:59:59');
                 if ($nbOccurencesToCreate > 0) {
-                    for ($d=1;$d<=$nbInterval;$d++){
-                        for ($i=1;$i<=$nbOccurencesToCreate;$i++) {
+                    for ($d=1; $d<=$nbInterval; $d++) {
+                        for ($i=1; $i<=$nbOccurencesToCreate; $i++) {
                             $randomDate = $this->getRandomDate($beginningDrawDate->format('U'), $endDrawDate->format('U'));
                             $randomDate = \DateTime::createFromFormat('Y-m-d H:i:s', $randomDate);
                             $occurrence  = new \PlaygroundGame\Entity\InstantWinOccurrence();
@@ -290,19 +280,19 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                 $nbOccurencesToCreate = $game->getOccurrenceNumber() - count($occurences);
                 $nbWeeksInterval = (int) ($dateInterval/(60*24*7));
                 // If a week don't last 7d, I consider it as a week anyway.
-                if($dateInterval%(60*24*7) > 0){
+                if ($dateInterval%(60*24*7) > 0) {
                     ++$nbWeeksInterval;
                 }
                 $beginningDrawDate = \DateTime::createFromFormat('m/d/Y H:i:s', $beginning->format('m/d/Y'). ' 00:00:00');
                 $endDrawDate = \DateTime::createFromFormat('m/d/Y H:i:s', $beginning->format('m/d/Y'). ' 23:59:59');
                 $endDrawDate->add(new \DateInterval('P6D'));
-                if($endDrawDate > $end){
+                if ($endDrawDate > $end) {
                     $endDrawDate = $end;
                 }
 
                 if ($nbOccurencesToCreate > 0) {
-                    for ($d=1;$d<=$nbWeeksInterval;$d++){
-                        for ($i=1;$i<=$nbOccurencesToCreate;$i++) {
+                    for ($d=1; $d<=$nbWeeksInterval; $d++) {
+                        for ($i=1; $i<=$nbOccurencesToCreate; $i++) {
                             $randomDate = $this->getRandomDate($beginningDrawDate->format('U'), $endDrawDate->format('U'));
                             $randomDate = \DateTime::createFromFormat('Y-m-d H:i:s', $randomDate);
                             $occurrence  = new \PlaygroundGame\Entity\InstantWinOccurrence();
@@ -314,7 +304,7 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                         }
                         $beginningDrawDate->add(new \DateInterval('P1W'));
                         $endDrawDate->add(new \DateInterval('P1W'));
-                        if($endDrawDate > $end){
+                        if ($endDrawDate > $end) {
                             $endDrawDate = $end;
                         }
                     }
@@ -326,20 +316,20 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                 $nbOccurencesToCreate = $game->getOccurrenceNumber() - count($occurences);
                 $nbMonthsInterval = (int) ($dateInterval/(60*24*30));
                 // If a week don't last 30d, I consider it as a month anyway.
-                if($dateInterval%(60*24*30) > 0){
+                if ($dateInterval%(60*24*30) > 0) {
                     ++$nbMonthsInterval;
                 }
                 $beginningDrawDate = \DateTime::createFromFormat('m/d/Y H:i:s', $beginning->format('m/d/Y'). ' 00:00:00');
                 $endDrawDate = \DateTime::createFromFormat('m/d/Y H:i:s', $beginning->format('m/d/Y'). ' 23:59:59');
                 $endDrawDate->add(new \DateInterval('P1M'));
                 $endDrawDate->sub(new \DateInterval('P1D'));
-                if($endDrawDate > $end){
+                if ($endDrawDate > $end) {
                     $endDrawDate = $end;
                 }
 
                 if ($nbOccurencesToCreate > 0) {
-                    for ($d=1;$d<=$nbMonthsInterval;$d++){
-                        for ($i=1;$i<=$nbOccurencesToCreate;$i++) {
+                    for ($d=1; $d<=$nbMonthsInterval; $d++) {
+                        for ($i=1; $i<=$nbOccurencesToCreate; $i++) {
                             $randomDate = $this->getRandomDate($beginningDrawDate->format('U'), $endDrawDate->format('U'));
                             $randomDate = \DateTime::createFromFormat('Y-m-d H:i:s', $randomDate);
                             $occurrence  = new \PlaygroundGame\Entity\InstantWinOccurrence();
@@ -351,7 +341,7 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                         }
                         $beginningDrawDate->add(new \DateInterval('P1M'));
                         $endDrawDate->add(new \DateInterval('P1M'));
-                        if($endDrawDate > $end){
+                        if ($endDrawDate > $end) {
                             $endDrawDate = $end;
                         }
                     }
@@ -375,11 +365,12 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
      */
     public function getOccurencesFromCSV($fileName)
     {
-        if (file_exists($fileName)){
+        if (file_exists($fileName)) {
             $csvFile = fopen($fileName, 'r');
-            if ($csvFile){
-                while (!feof($csvFile) )
+            if ($csvFile) {
+                while (!feof($csvFile)) {
                     $csvContent[] = fgetcsv($csvFile);
+                }
                 fclose($csvFile);
                 return $csvContent;
             }
@@ -392,7 +383,7 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
         $path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR;
         $fileName = $path.'occurences-'.$game->getId().'.csv';
         $csvFile = fopen($fileName, 'w');
-        if ($csvFile){
+        if ($csvFile) {
             $occurrences = $this->getInstantWinOccurrenceMapper()->findByGameId($game);
             foreach ($occurrences as $occurrence) {
                 fputcsv($csvFile, array($occurrence->getValue(), $occurrence->getWinning()));
@@ -415,10 +406,10 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
             move_uploaded_file($data['file']['tmp_name'], $path . $data['file']['name']);
             ErrorHandler::stop(true);
             $csv_content = $this->getOccurencesFromCSV($real_media_path.$data['file']['name']);
-            if ($csv_content){
+            if ($csv_content) {
                 $created = 0;
-                foreach ($csv_content as $line){
-                    if($line){
+                foreach ($csv_content as $line) {
+                    if ($line) {
                         $occurrence = $this->updateOccurrence(array(
                             'id' => '',
                             'instant_win_id' => $data['instant_win_id'],
@@ -427,7 +418,7 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
                             'winning' => ((bool) $line[1]) ? 1 : 0,
                             'prize_id' => $data['prize'],
                         ), null);
-                        if($occurrence){
+                        if ($occurrence) {
                             $created++;
                         }
                     }
@@ -460,7 +451,7 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
 
         $instantwin = $this->getGameMapper()->findById($data['instant_win_id']);
         $prize = null;
-        if(isset($data['prize'])){
+        if (isset($data['prize'])) {
             $prize = $this->getPrizeMapper()->findById($data['prize']);
         }
 
@@ -529,8 +520,7 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
             $occurrence = $occurrenceMapper->update($occurrence);
             if ($occurrence->getWinning()) {
                 $entry->setWinner(true);
-            }
-            else {
+            } else {
                 $entry->setPoints(0);
                 $entry->setWinner(false);
             }

@@ -120,7 +120,7 @@ class QuizReply implements InputFilterAwareInterface
         return $this;
     }
 
-	/**
+    /**
      * @return integer $totalCorrectAnswers
      */
     public function getTotalCorrectAnswers()
@@ -128,7 +128,7 @@ class QuizReply implements InputFilterAwareInterface
         return $this->totalCorrectAnswers;
     }
 
-	/**
+    /**
      * @param integer $totalCorrectAnswers
      */
     public function setTotalCorrectAnswers($totalCorrectAnswers)
@@ -138,7 +138,7 @@ class QuizReply implements InputFilterAwareInterface
         return $this;
     }
 
-	/**
+    /**
      * @return the $maxCorrectAnswers
      */
     public function getMaxCorrectAnswers()
@@ -146,7 +146,7 @@ class QuizReply implements InputFilterAwareInterface
         return $this->maxCorrectAnswers;
     }
 
-	/**
+    /**
      * @param field_type $maxCorrectAnswers
      */
     public function setMaxCorrectAnswers($maxCorrectAnswers)
@@ -156,7 +156,7 @@ class QuizReply implements InputFilterAwareInterface
         return $this;
     }
 
-	/**
+    /**
      * @return integer $totalQuestions
      */
     public function getTotalQuestions()
@@ -164,7 +164,7 @@ class QuizReply implements InputFilterAwareInterface
         return $this->totalQuestions;
     }
 
-	/**
+    /**
      * @param integer $totalQuestions
      */
     public function setTotalQuestions($totalQuestions)
@@ -174,7 +174,7 @@ class QuizReply implements InputFilterAwareInterface
         return $this;
     }
 
-	/**
+    /**
      * @return ArrayCollection $answers
      */
     public function getAnswers()
@@ -182,7 +182,7 @@ class QuizReply implements InputFilterAwareInterface
         return $this->answers;
     }
 
-	/**
+    /**
      * frm collection solution
      * @param ArrayCollection $answers
      */

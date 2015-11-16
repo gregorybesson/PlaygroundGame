@@ -5,7 +5,7 @@ namespace PlaygroundGameTest\Entity;
 use PlaygroundGameTest\Bootstrap;
 use PlaygroundGame\Entity\QuizQuestion;
 
-class quizQuestionTest extends \PHPUnit_Framework_TestCase
+class QuizQuestionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Service Manager
@@ -66,7 +66,7 @@ class quizQuestionTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
-     * 
+     *
      * @depends testCanInsertNewRecord
      */
     public function testCanUpdateInsertedRecord($id)
@@ -89,7 +89,6 @@ class quizQuestionTest extends \PHPUnit_Framework_TestCase
         
         $this->assertEquals($data['audio'], $quizQuestion->getAudio());
         $this->assertEquals($data['autoplay'], $quizQuestion->getAutoplay());
-
     }
     
     /**
@@ -125,7 +124,7 @@ class quizQuestionTest extends \PHPUnit_Framework_TestCase
     {
         $dbh = $this->em->getConnection();
         //$result = $dbh->exec("UPDATE sqlite_sequence SET seq = 10 WHERE name='album';");
-    
+
         unset($this->sm);
         unset($this->em);
         parent::tearDown();

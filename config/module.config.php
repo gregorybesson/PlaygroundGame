@@ -284,7 +284,7 @@ return array(
                         )
                     ),
 
-     				/*'game' => array(
+                     /*'game' => array(
        					'type' => 'Zend\Mvc\Router\Http\Regex',
        					'options' => array(
        						'regex'    => 'game/(?<controller>[a-zA-Z0-9-]+)_(?<id>[a-zA-Z0-9-]+)(_)?(?<action>[a-zA-Z0-9-]+)?(_)?(?<channel>[embed|facebook|platform|mobile]+)?(\.html)?',
@@ -296,7 +296,7 @@ return array(
        					),
        				),*/
                     
-		            'quiz' => array(
+                    'quiz' => array(
                         'type' => 'Segment',
                         'options' => array(
                             // 'regex'

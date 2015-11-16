@@ -19,7 +19,6 @@ class HomeController extends AbstractActionController
     
     public function indexAction()
     {
-
         $layoutViewModel = $this->layout();
 
         $slider = new ViewModel();
@@ -43,7 +42,7 @@ class HomeController extends AbstractActionController
 
         // I merge both types of articles and sort them in reverse order of their key
         // And as their key is some sort of... date !, It means I sort it in date reverse order ;)
-        $items = array_merge($games,$pages);
+        $items = array_merge($games, $pages);
         krsort($items);
 
         if (is_array($items)) {
@@ -56,13 +55,13 @@ class HomeController extends AbstractActionController
 
         $this->layout()->setVariables(
             array(
-                'sliderItems'	=> $sliderItems,
+                'sliderItems'    => $sliderItems,
             )
         );
 
         return new ViewModel(
             array(
-                'items'	=> $paginator,
+                'items'    => $paginator,
                )
         );
     }

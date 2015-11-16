@@ -37,13 +37,13 @@ class LotteryController extends GameController
                 $this->getRequest()->getPost()->toArray(),
                 $this->getRequest()->getFiles()->toArray()
             );
-            if(empty($data['prizes'])){
+            if (empty($data['prizes'])) {
                 $data['prizes'] = array();
             }
             if (isset($data['drawDate']) && $data['drawDate']) {
                 $data['drawDate'] = \DateTime::createFromFormat('d/m/Y', $data['drawDate']);
             }
-               $game = $service->create($data, $lottery, 'playgroundgame_lottery_form');
+            $game = $service->create($data, $lottery, 'playgroundgame_lottery_form');
             if ($game) {
                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The game was created');
 
@@ -97,7 +97,7 @@ class LotteryController extends GameController
                 $this->getRequest()->getPost()->toArray(),
                 $this->getRequest()->getFiles()->toArray()
             );
-            if(empty($data['prizes'])){
+            if (empty($data['prizes'])) {
                 $data['prizes'] = array();
             }
             if (isset($data['drawDate']) && $data['drawDate']) {

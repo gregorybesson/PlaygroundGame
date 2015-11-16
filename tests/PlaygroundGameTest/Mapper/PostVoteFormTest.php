@@ -41,7 +41,7 @@ class PostVoteFormTest extends \PHPUnit_Framework_TestCase
     public function testRemove()
     {
         $self = $this;
-        $this->em->transactional(function($em) use ($self) {
+        $this->em->transactional(function ($em) use ($self) {
             $postvoteform = new PostVoteFormEntity();
             $postvoteform->setTitle('Ceci est un titre');
             $postvoteform = $self->tm->insert($postvoteform);
@@ -58,7 +58,7 @@ class PostVoteFormTest extends \PHPUnit_Framework_TestCase
     {
         // It has to work with 5.3.x and closure don't support direct $this referencing
         $self = $this;
-        $this->em->transactional(function($em) use ($self) {
+        $this->em->transactional(function ($em) use ($self) {
             $postvoteform = new PostVoteFormEntity();
             $postvoteform->setTitle("test 1");
             $self->tm->insert($postvoteform);
@@ -67,7 +67,7 @@ class PostVoteFormTest extends \PHPUnit_Framework_TestCase
         $this->em->flush();
         $this->em->clear();
             
-        $this->em->transactional(function($em) use ($self) {
+        $this->em->transactional(function ($em) use ($self) {
             $postvoteform = new PostVoteFormEntity();
             $postvoteform->setTitle("test 2");
             $self->tm->insert($postvoteform);
@@ -76,7 +76,7 @@ class PostVoteFormTest extends \PHPUnit_Framework_TestCase
         $this->em->flush();
         $this->em->clear();
         
-        $this->em->transactional(function($em) use ($self) {
+        $this->em->transactional(function ($em) use ($self) {
             $postvoteform = new PostVoteFormEntity();
             $postvoteform->setTitle("test 2");
             $self->tm->insert($postvoteform);

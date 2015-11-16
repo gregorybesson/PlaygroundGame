@@ -78,9 +78,9 @@ class PrizeCategoryTest extends \PHPUnit_Framework_TestCase
 
     public function testFindAll()
     {
-        // It has to work with 5.3.x and closure don't support direct $this referencing 
+        // It has to work with 5.3.x and closure don't support direct $this referencing
         $self = $this;
-        $this->em->transactional(function($em) use ($self) {
+        $this->em->transactional(function ($em) use ($self) {
             $prizeCategory = new PrizeCategoryEntity();
             $prizeCategory->setIdentifier('iden 1');
             $prizeCategory->setTitle('Un Titre');
@@ -90,7 +90,7 @@ class PrizeCategoryTest extends \PHPUnit_Framework_TestCase
         $this->em->flush();
         $this->em->clear();
         
-        $this->em->transactional(function($em) use ($self) {
+        $this->em->transactional(function ($em) use ($self) {
             $prizeCategory = new PrizeCategoryEntity();
             $prizeCategory->setIdentifier('iden 2');
             $prizeCategory->setTitle('Un Titre');
@@ -100,7 +100,7 @@ class PrizeCategoryTest extends \PHPUnit_Framework_TestCase
         $this->em->flush();
         $this->em->clear();
             
-        $this->em->transactional(function($em) use ($self) {
+        $this->em->transactional(function ($em) use ($self) {
             $prizeCategory = new PrizeCategoryEntity();
             $prizeCategory->setIdentifier('iden 3');
             $prizeCategory->setTitle('Un Titre');

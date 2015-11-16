@@ -35,7 +35,7 @@ class InstantWinOccurrence
 
     public function findByEntry($entry)
     {
-    	return $this->getEntityRepository()->findOneBy(array('entry' => $entry));
+        return $this->getEntityRepository()->findOneBy(array('entry' => $entry));
     }
 
     public function findByGameId($instant_win, $sortArray = array())
@@ -90,7 +90,7 @@ class InstantWinOccurrence
         $now = $now->format('Y-m-d H:i:s');
 
         $query = $this->em->createQuery(
-                'SELECT i FROM PlaygroundGame\Entity\InstantWinOccurrence i
+            'SELECT i FROM PlaygroundGame\Entity\InstantWinOccurrence i
                 WHERE i.instantwin = :game
                 AND i.active = 1
                 AND i.value <= :now
@@ -170,16 +170,18 @@ class InstantWinOccurrence
         return $this->er;
     }
 
-    public function assertNoOther($instantwin, $value){
+    public function assertNoOther($instantwin, $value)
+    {
         $query = $this->em->createQuery(
-                'SELECT i FROM PlaygroundGame\Entity\InstantWinOccurrence i
+            'SELECT i FROM PlaygroundGame\Entity\InstantWinOccurrence i
                 WHERE i.instantwin = :game
                 AND i.value = :value'
         );
         $query->setParameter('game', $instantwin);
         $query->setParameter('value', $value);
-        if ($query->getResult())
+        if ($query->getResult()) {
             return false;
+        }
         return true;
     }
 }

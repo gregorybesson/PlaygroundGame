@@ -62,7 +62,6 @@ class QuizAnswerTest extends \PHPUnit_Framework_TestCase
 
         $quizanswers = $this->tm->findAll();
         $this->assertEquals(3, count($quizanswers));
-
     }
 
     public function tearDown()

@@ -11,7 +11,6 @@ use Zend\Stdlib\ErrorHandler;
 
 class PrizeCategory extends EventProvider implements ServiceManagerAwareInterface
 {
-
     /**
      * @var prizeCategoryMapper
      */
@@ -37,7 +36,6 @@ class PrizeCategory extends EventProvider implements ServiceManagerAwareInterfac
      */
     public function create(array $data, $prizeCategory, $formClass)
     {
-
         $form  = $this->getServiceManager()->get($formClass);
         $form->bind($prizeCategory);
 
@@ -72,7 +70,6 @@ class PrizeCategory extends EventProvider implements ServiceManagerAwareInterfac
      */
     public function edit(array $data, $prizeCategory, $formClass)
     {
-
         $form  = $this->getServiceManager()->get($formClass);
         $form->bind($prizeCategory);
 

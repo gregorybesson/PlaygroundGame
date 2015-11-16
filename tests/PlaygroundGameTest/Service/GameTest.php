@@ -15,150 +15,149 @@ class GameTest extends \PHPUnit_Framework_TestCase
 
     public function testAllowBonusNull()
     {
-		$game = new GameEntity();
-		$gs = new \PlaygroundGame\Service\Game();
+        $game = new GameEntity();
+        $gs = new \PlaygroundGame\Service\Game();
 
-		$this->assertFalse($gs->allowBonus($game, null));
+        $this->assertFalse($gs->allowBonus($game, null));
     }
 
     public function testAllowBonusNonExistentValue()
     {
-    	$game = new GameEntity();
-    	$game->setPlayBonus('non_existent_value');
+        $game = new GameEntity();
+        $game->setPlayBonus('non_existent_value');
 
-    	$gs = new \PlaygroundGame\Service\Game();
+        $gs = new \PlaygroundGame\Service\Game();
 
-    	$this->assertFalse($gs->allowBonus($game, null));
+        $this->assertFalse($gs->allowBonus($game, null));
     }
 
     public function testAllowBonusOnePlayed()
     {
-
         $mapper = $this->getMockBuilder('PlaygroundGame\Mapper\Entry')
         ->disableOriginalConstructor()
         ->getMock();
 
-    	$game = new GameEntity();
-    	$game->setPlayBonus('one');
+        $game = new GameEntity();
+        $game->setPlayBonus('one');
 
-    	$gs = new \PlaygroundGame\Service\Game();
-    	$gs->setEntryMapper($mapper);
+        $gs = new \PlaygroundGame\Service\Game();
+        $gs->setEntryMapper($mapper);
 
-    	$gs->getEntryMapper()
-    	->expects($this->once())
-    	->method('findOneBy')
-    	->will($this->returnValue(true));
+        $gs->getEntryMapper()
+        ->expects($this->once())
+        ->method('findOneBy')
+        ->will($this->returnValue(true));
 
-    	$this->assertFalse($gs->allowBonus($game, null));
+        $this->assertFalse($gs->allowBonus($game, null));
     }
 
 
     public function testAllowBonusOneNotPlayed()
     {
-    	$mapper = $this->getMockBuilder('PlaygroundGame\Mapper\Entry')
+        $mapper = $this->getMockBuilder('PlaygroundGame\Mapper\Entry')
         ->disableOriginalConstructor()
         ->getMock();
 
-    	$game = new GameEntity();
-    	$game->setPlayBonus('one');
+        $game = new GameEntity();
+        $game->setPlayBonus('one');
 
-    	$gs = new \PlaygroundGame\Service\Game();
-    	$gs->setEntryMapper($mapper);
+        $gs = new \PlaygroundGame\Service\Game();
+        $gs->setEntryMapper($mapper);
 
-    	$gs->getEntryMapper()
-    	->expects($this->once())
-    	->method('findOneBy')
-    	->will($this->returnValue(false));
+        $gs->getEntryMapper()
+        ->expects($this->once())
+        ->method('findOneBy')
+        ->will($this->returnValue(false));
 
-    	$this->assertTrue($gs->allowBonus($game, null));
+        $this->assertTrue($gs->allowBonus($game, null));
     }
 
     public function testAllowBonusPerEntryPlayed()
     {
-    	$mapper = $this->getMockBuilder('PlaygroundGame\Mapper\Entry')
+        $mapper = $this->getMockBuilder('PlaygroundGame\Mapper\Entry')
         ->disableOriginalConstructor()
         ->getMock();
 
-    	$game = new GameEntity();
-    	$game->setPlayBonus('per_entry');
+        $game = new GameEntity();
+        $game->setPlayBonus('per_entry');
 
-    	$gs = new \PlaygroundGame\Service\Game();
-    	$gs->setEntryMapper($mapper);
+        $gs = new \PlaygroundGame\Service\Game();
+        $gs->setEntryMapper($mapper);
 
-    	$gs->getEntryMapper()
-    	->expects($this->once())
-    	->method('checkBonusEntry')
-    	->will($this->returnValue(false));
+        $gs->getEntryMapper()
+        ->expects($this->once())
+        ->method('checkBonusEntry')
+        ->will($this->returnValue(false));
 
-    	$this->assertFalse($gs->allowBonus($game, null));
+        $this->assertFalse($gs->allowBonus($game, null));
     }
 
     public function testAllowBonusPerEntryNotPlayed()
     {
-    	$mapper = $this->getMockBuilder('PlaygroundGame\Mapper\Entry')
+        $mapper = $this->getMockBuilder('PlaygroundGame\Mapper\Entry')
         ->disableOriginalConstructor()
         ->getMock();
 
-    	$game = new GameEntity();
-    	$game->setPlayBonus('per_entry');
+        $game = new GameEntity();
+        $game->setPlayBonus('per_entry');
 
-    	$gs = new \PlaygroundGame\Service\Game();
-    	$gs->setEntryMapper($mapper);
+        $gs = new \PlaygroundGame\Service\Game();
+        $gs->setEntryMapper($mapper);
 
-    	$gs->getEntryMapper()
-    	->expects($this->once())
-    	->method('checkBonusEntry')
-    	->will($this->returnValue(true));
+        $gs->getEntryMapper()
+        ->expects($this->once())
+        ->method('checkBonusEntry')
+        ->will($this->returnValue(true));
 
-    	$this->assertTrue($gs->allowBonus($game, null));
+        $this->assertTrue($gs->allowBonus($game, null));
     }
 
     public function testAddAnotherChanceAllowed()
     {
-    	$mapper = $this->getMockBuilder('PlaygroundGame\Mapper\Entry')
-    	->disableOriginalConstructor()
-    	->getMock();
+        $mapper = $this->getMockBuilder('PlaygroundGame\Mapper\Entry')
+        ->disableOriginalConstructor()
+        ->getMock();
 
-    	$game = new GameEntity();
-    	$game->setPlayBonus('one');
+        $game = new GameEntity();
+        $game->setPlayBonus('one');
 
-    	$gs = new \PlaygroundGame\Service\Game();
-    	$gs->setEntryMapper($mapper);
+        $gs = new \PlaygroundGame\Service\Game();
+        $gs->setEntryMapper($mapper);
 
-    	// return false : The user has not played yet the bonus game
-    	$gs->getEntryMapper()
-    	->expects($this->once())
-    	->method('findOneBy')
-    	->will($this->returnValue(false));
+        // return false : The user has not played yet the bonus game
+        $gs->getEntryMapper()
+        ->expects($this->once())
+        ->method('findOneBy')
+        ->will($this->returnValue(false));
 
-    	$gs->getEntryMapper()
-    	->expects($this->once())
-    	->method('insert')
-    	->with($this->isInstanceOf('\PlaygroundGame\Entity\Entry'))
-    	->will($this->returnValue(true));
+        $gs->getEntryMapper()
+        ->expects($this->once())
+        ->method('insert')
+        ->with($this->isInstanceOf('\PlaygroundGame\Entity\Entry'))
+        ->will($this->returnValue(true));
 
-    	$this->assertTrue($gs->addAnotherChance($game, null,0));
+        $this->assertTrue($gs->addAnotherChance($game, null, 0));
     }
 
     public function testAddAnotherChanceNotAllowed()
     {
-    	$mapper = $this->getMockBuilder('PlaygroundGame\Mapper\Entry')
-    	->disableOriginalConstructor()
-    	->getMock();
+        $mapper = $this->getMockBuilder('PlaygroundGame\Mapper\Entry')
+        ->disableOriginalConstructor()
+        ->getMock();
 
-    	$game = new GameEntity();
-    	$game->setPlayBonus('one');
+        $game = new GameEntity();
+        $game->setPlayBonus('one');
 
-    	$gs = new \PlaygroundGame\Service\Game();
-    	$gs->setEntryMapper($mapper);
+        $gs = new \PlaygroundGame\Service\Game();
+        $gs->setEntryMapper($mapper);
 
-    	// return false : The user has already played the bonus game
-    	$gs->getEntryMapper()
-    	->expects($this->once())
-    	->method('findOneBy')
-    	->will($this->returnValue(true));
+        // return false : The user has already played the bonus game
+        $gs->getEntryMapper()
+        ->expects($this->once())
+        ->method('findOneBy')
+        ->will($this->returnValue(true));
 
-    	$this->assertFalse($gs->addAnotherChance($game, null,0));
+        $this->assertFalse($gs->addAnotherChance($game, null, 0));
     }
 
     public function testPlayAgainAllowed()
@@ -185,7 +184,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
         ->with($this->isInstanceOf('\PlaygroundGame\Entity\Entry'))
         ->will($this->returnValue(true));
 
-        $this->assertTrue($gs->addAnotherChance($game, null,0));
+        $this->assertTrue($gs->addAnotherChance($game, null, 0));
     }
 
     public function testPlayAgainNotAllowed()
@@ -206,242 +205,241 @@ class GameTest extends \PHPUnit_Framework_TestCase
         ->method('findOneBy')
         ->will($this->returnValue(true));
 
-        $this->assertFalse($gs->addAnotherChance($game, null,0));
+        $this->assertFalse($gs->addAnotherChance($game, null, 0));
     }
 
     public function testCheckExistingEntryNoUser()
     {
-    	$mapper = $this->getMockBuilder('PlaygroundGame\Mapper\Entry')
-    	->disableOriginalConstructor()
-    	->getMock();
+        $mapper = $this->getMockBuilder('PlaygroundGame\Mapper\Entry')
+        ->disableOriginalConstructor()
+        ->getMock();
 
-    	$game = new GameEntity();
-    	$game->setAnonymousAllowed(false);
+        $game = new GameEntity();
+        $game->setAnonymousAllowed(false);
 
-    	$gs = new \PlaygroundGame\Service\Game();
-    	$gs->setEntryMapper($mapper);
+        $gs = new \PlaygroundGame\Service\Game();
+        $gs->setEntryMapper($mapper);
 
-    	// return false : The user has already played the bonus game
-    	$gs->getEntryMapper()
-    	->expects($this->once())
-    	->method('findOneBy')
-    	->will($this->returnValue(false));
+        // return false : The user has already played the bonus game
+        $gs->getEntryMapper()
+        ->expects($this->once())
+        ->method('findOneBy')
+        ->will($this->returnValue(false));
 
-    	$this->assertFalse($gs->checkExistingEntry($game, null, null));
+        $this->assertFalse($gs->checkExistingEntry($game, null, null));
     }
 
     public function testCheckExistingEntryUserAndInactive()
     {
-    	$mapper = $this->getMockBuilder('PlaygroundGame\Mapper\Entry')
-    	->disableOriginalConstructor()
-    	->getMock();
+        $mapper = $this->getMockBuilder('PlaygroundGame\Mapper\Entry')
+        ->disableOriginalConstructor()
+        ->getMock();
 
-    	$game = new GameEntity();
+        $game = new GameEntity();
 
-    	$gs = new \PlaygroundGame\Service\Game();
-    	$gs->setEntryMapper($mapper);
+        $gs = new \PlaygroundGame\Service\Game();
+        $gs->setEntryMapper($mapper);
 
-    	// I check that the array in findOneBy doesn't contain the parameter
-    	$gs->getEntryMapper()
-    	->expects($this->once())
-    	->method('findOneBy')
-    	->with($this->callback(function($o) {
-	        $ok = false;
-    	    if ($o['game']){
-    	        $game = $o['game'];
-    	        if (!$game->getActive()) $ok = true; 
-    	    }
-    		return $ok;
-	    }))
-    	->will($this->returnValue($this->getMock('PlaygroundGame\Entity\Entry')));
+        // I check that the array in findOneBy doesn't contain the parameter
+        $gs->getEntryMapper()
+        ->expects($this->once())
+        ->method('findOneBy')
+        ->with($this->callback(function ($o) {
+            $ok = false;
+            if ($o['game']) {
+                $game = $o['game'];
+                if (!$game->getActive()) {
+                    $ok = true;
+                }
+            }
+            return $ok;
+        }))
+        ->will($this->returnValue($this->getMock('PlaygroundGame\Entity\Entry')));
 
-    	$gs->checkExistingEntry($game, true, null);
+        $gs->checkExistingEntry($game, true, null);
     }
 
     public function testCheckExistingEntryUserAndActive()
     {
-    	$mapper = $this->getMockBuilder('PlaygroundGame\Mapper\Entry')
-    	->disableOriginalConstructor()
-    	->getMock();
+        $mapper = $this->getMockBuilder('PlaygroundGame\Mapper\Entry')
+        ->disableOriginalConstructor()
+        ->getMock();
 
-    	$game = new GameEntity();
-    	$game->setActive(true);
+        $game = new GameEntity();
+        $game->setActive(true);
 
-    	$gs = new \PlaygroundGame\Service\Game();
-    	$gs->setEntryMapper($mapper);
+        $gs = new \PlaygroundGame\Service\Game();
+        $gs->setEntryMapper($mapper);
 
-    	// I check that the array in findOneBy contains the parameter 'active' = 1
-    	$gs->getEntryMapper()
-    	->expects($this->once())
-    	->method('findOneBy')
-    	->with($this->callback(function($o) {
-    	    $ok = false;
-    	    if ($o['game']){
-    	        $game = $o['game'];
-    	        if ($game->getActive()) $ok = true; 
-    	    }
-    		return $ok;
-    	}))
-    	->will($this->returnValue($this->getMock('PlaygroundGame\Entity\Entry')));
+        // I check that the array in findOneBy contains the parameter 'active' = 1
+        $gs->getEntryMapper()
+        ->expects($this->once())
+        ->method('findOneBy')
+        ->with($this->callback(function ($o) {
+            $ok = false;
+            if ($o['game']) {
+                $game = $o['game'];
+                if ($game->getActive()) {
+                    $ok = true;
+                }
+            }
+            return $ok;
+        }))
+        ->will($this->returnValue($this->getMock('PlaygroundGame\Entity\Entry')));
 
-    	$gs->checkExistingEntry($game, true, null, 1);
+        $gs->checkExistingEntry($game, true, null, 1);
     }
 
     public function testCheckIsFanNotOnFacebook()
     {
-    	$game = new GameEntity();
-    	$gs = new \PlaygroundGame\Service\Game();
+        $game = new GameEntity();
+        $gs = new \PlaygroundGame\Service\Game();
 
-    	$this->assertTrue($gs->checkIsFan($game));
+        $this->assertTrue($gs->checkIsFan($game));
     }
 
     public function testCheckIsFanOnFacebookNotFan()
     {
-    	$game = new GameEntity();
-    	$gs = new \PlaygroundGame\Service\Game();
+        $game = new GameEntity();
+        $gs = new \PlaygroundGame\Service\Game();
 
-    	$session = new \Zend\Session\Container('facebook');
+        $session = new \Zend\Session\Container('facebook');
 
-    	$data = array('page' => array('liked' => 0));
-    	$session->offsetSet('signed_request',$data);
+        $data = array('page' => array('liked' => 0));
+        $session->offsetSet('signed_request', $data);
 
-    	$this->assertFalse($gs->checkIsFan($game));
+        $this->assertFalse($gs->checkIsFan($game));
     }
 
     public function testCheckIsFanOnFacebookFan()
     {
-    	$game = new GameEntity();
-    	$gs = new \PlaygroundGame\Service\Game();
+        $game = new GameEntity();
+        $gs = new \PlaygroundGame\Service\Game();
 
-    	$session = new \Zend\Session\Container('facebook');
+        $session = new \Zend\Session\Container('facebook');
 
-    	$data = array('page' => array('liked' => 1));
-    	$session->offsetSet('signed_request',$data);
+        $data = array('page' => array('liked' => 1));
+        $session->offsetSet('signed_request', $data);
 
-    	$this->assertTrue($gs->checkIsFan($game));
+        $this->assertTrue($gs->checkIsFan($game));
     }
 
     public function testPlayExistingEntry()
     {
-    	$mapper = $this->getMockBuilder('PlaygroundGame\Mapper\Entry')
-    	->disableOriginalConstructor()
-    	->getMock();
+        $mapper = $this->getMockBuilder('PlaygroundGame\Mapper\Entry')
+        ->disableOriginalConstructor()
+        ->getMock();
 
-    	$game = new GameEntity();
+        $game = new GameEntity();
 
-    	//mocking the method checkExistingEntry
-    	$f = $this->getMockBuilder('PlaygroundGame\Service\Game')
-    	->setMethods(array('checkExistingEntry'))
-    	->disableOriginalConstructor()
-    	->getMock();
+        $gs = new \PlaygroundGame\Service\Game();
+        $gs->setEntryMapper($mapper);
 
-    	$f->setEntryMapper($mapper);
+        $gs->getEntryMapper()
+        ->expects($this->once())
+        ->method('findOneBy')
+        ->will($this->returnValue(new \PlaygroundGame\Entity\Entry));
 
-    	// I check that the array in findOneBy contains the parameter 'active' = 1
-    	$f->expects($this->once())
-    	->method('checkExistingEntry')
-    	->will($this->returnValue($this->getMock('PlaygroundGame\Entity\Entry')));
+        $entry = $gs->play($game, null);
 
-		$entry = $f->play($game, null);
-
-    	$this->assertInstanceOf('\PlaygroundGame\Entity\Entry', $entry);
+        $this->assertInstanceOf('\PlaygroundGame\Entity\Entry', $entry);
     }
 
     public function testPlayNonExistingEntry()
     {
-    	$mapper = $this->getMockBuilder('PlaygroundGame\Mapper\Entry')
-    	->disableOriginalConstructor()
-    	->getMock();
+        $mapper = $this->getMockBuilder('PlaygroundGame\Mapper\Entry')
+        ->disableOriginalConstructor()
+        ->getMock();
 
-    	$game = new GameEntity();
+        $game = new GameEntity();
 
-    	//mocking the method checkExistingEntry
-    	$f = $this->getMockBuilder('PlaygroundGame\Service\Game')
-    	->setMethods(array('checkExistingEntry'))
-    	->disableOriginalConstructor()
-    	->getMock();
+        //mocking the method checkExistingEntry
+        $f = $this->getMockBuilder('PlaygroundGame\Service\Game')
+        ->setMethods(array('checkExistingEntry'))
+        ->disableOriginalConstructor()
+        ->getMock();
 
-    	$f->setEntryMapper($mapper);
+        $f->setEntryMapper($mapper);
 
-    	// I check that the array in findOneBy contains the parameter 'active' = 1
-    	$f->expects($this->once())
-    	->method('checkExistingEntry')
-    	->will($this->returnValue(false));
+        // I check that the array in findOneBy contains the parameter 'active' = 1
+        $f->expects($this->once())
+        ->method('checkExistingEntry')
+        ->will($this->returnValue(false));
 
-    	$f->getEntryMapper()
-    	->expects($this->once())
-    	->method('insert')
-    	->will($this->returnValue($this->getMock('PlaygroundGame\Entity\Entry')));
+        $f->getEntryMapper()
+        ->expects($this->once())
+        ->method('insert')
+        ->will($this->returnValue(new \PlaygroundGame\Entity\Entry));
 
-		$entry = $f->play($game, null);
+        $entry = $f->play($game, null);
 
-    	$this->assertInstanceOf('\PlaygroundGame\Entity\Entry', $entry);
+        $this->assertInstanceOf('\PlaygroundGame\Entity\Entry', $entry);
     }
 
     public function testPlayNonExistingEntryWithOverLimit()
     {
-    	$mapper = $this->getMockBuilder('PlaygroundGame\Mapper\Entry')
-    	->disableOriginalConstructor()
-    	->getMock();
+        $mapper = $this->getMockBuilder('PlaygroundGame\Mapper\Entry')
+        ->disableOriginalConstructor()
+        ->getMock();
 
-    	$game = new GameEntity();
-    	$game->setPlayLimit(1);
-    	$game->setPlayLimitScale('always');
+        $game = new GameEntity();
+        $game->setPlayLimit(1);
+        $game->setPlayLimitScale('always');
 
-    	//mocking the method checkExistingEntry
-    	$f = $this->getMockBuilder('PlaygroundGame\Service\Game')
-    	->setMethods(array('checkExistingEntry', 'findLastEntries'))
-    	->disableOriginalConstructor()
-    	->getMock();
+        //mocking the method checkExistingEntry
+        $f = $this->getMockBuilder('PlaygroundGame\Service\Game')
+        ->setMethods(array('checkExistingEntry', 'findLastEntries'))
+        ->disableOriginalConstructor()
+        ->getMock();
 
-    	$f->setEntryMapper($mapper);
+        $f->setEntryMapper($mapper);
 
-    	// I check that the array in findOneBy contains the parameter 'active' = 1
-    	$f->expects($this->once())
-    	->method('checkExistingEntry')
-    	->will($this->returnValue(false));
-    	
-    	$f->expects($this->once())
-    	->method('findLastEntries')
-    	->will($this->returnValue(2));
+        // I check that the array in findOneBy contains the parameter 'active' = 1
+        $f->expects($this->once())
+        ->method('checkExistingEntry')
+        ->will($this->returnValue(false));
+        
+        $f->expects($this->once())
+        ->method('findLastEntries')
+        ->will($this->returnValue(2));
 
-    	$this->assertFalse($entry = $f->play($game, null));
+        $this->assertFalse($entry = $f->play($game, null));
     }
 
     public function testPlayNonExistingEntryWithUnderLimit()
     {
-    	$mapper = $this->getMockBuilder('PlaygroundGame\Mapper\Entry')
-    	->disableOriginalConstructor()
-    	->getMock();
+        $mapper = $this->getMockBuilder('PlaygroundGame\Mapper\Entry')
+        ->disableOriginalConstructor()
+        ->getMock();
 
-    	$game = new GameEntity();
-    	$game->setPlayLimit(1);
-    	$game->setPlayLimitScale('always');
+        $game = new GameEntity();
+        $game->setPlayLimit(1);
+        $game->setPlayLimitScale('always');
 
-    	//mocking the method checkExistingEntry
-    	$f = $this->getMockBuilder('PlaygroundGame\Service\Game')
-    	->setMethods(array('checkExistingEntry', 'findLastEntries'))
-    	->disableOriginalConstructor()
-    	->getMock();
+        //mocking the method checkExistingEntry
+        $f = $this->getMockBuilder('PlaygroundGame\Service\Game')
+        ->setMethods(array('checkExistingEntry', 'findLastEntries'))
+        ->disableOriginalConstructor()
+        ->getMock();
 
-    	$f->setEntryMapper($mapper);
+        $f->setEntryMapper($mapper);
 
-    	// I check that the array in findOneBy contains the parameter 'active' = 1
-    	$f->expects($this->once())
-    	->method('checkExistingEntry')
-    	->will($this->returnValue(false));
-    	
-    	$f->expects($this->once())
-    	->method('findLastEntries')
-    	->will($this->returnValue(0));
+        // I check that the array in findOneBy contains the parameter 'active' = 1
+        $f->expects($this->once())
+        ->method('checkExistingEntry')
+        ->will($this->returnValue(false));
+        
+        $f->expects($this->once())
+        ->method('findLastEntries')
+        ->will($this->returnValue(0));
 
-    	$f->getEntryMapper()
-    	->expects($this->once())
-    	->method('insert')
-    	->will($this->returnValue($this->getMock('PlaygroundGame\Entity\Entry')));
+        $f->getEntryMapper()
+        ->expects($this->once())
+        ->method('insert')
+        ->will($this->returnValue(new \PlaygroundGame\Entity\Entry));
 
-    	$entry = $f->play($game, null);
+        $entry = $f->play($game, null);
 
-    	$this->assertInstanceOf('\PlaygroundGame\Entity\Entry', $entry);
+        $this->assertInstanceOf('\PlaygroundGame\Entity\Entry', $entry);
     }
 }
