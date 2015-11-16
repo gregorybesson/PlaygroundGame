@@ -39,7 +39,7 @@ class PostVoteFormTest extends \PHPUnit_Framework_TestCase
     }
 
     public function testRemove()
-    {        
+    {
         $postvoteform = new PostVoteFormEntity();
         $postvoteform->setTitle('Ceci est un titre');
         $postvoteform = $this->tm->insert($postvoteform);
