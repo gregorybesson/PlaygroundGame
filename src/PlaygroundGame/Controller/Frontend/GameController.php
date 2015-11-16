@@ -41,7 +41,7 @@ class GameController extends AbstractActionController
      * view can be defined in design/frontend/default/custom/$slug/playground_game/$gametype/404.phtml
      *
      *
-     * @return array
+     * @return \Zend\Stdlib\ResponseInterface
      */
     public function notFoundAction()
     {
@@ -431,6 +431,9 @@ class GameController extends AbstractActionController
         return $viewModel;
     }
 
+    /**
+     * @param \PlaygroundGame\Entity\Game $game
+     */
     public function addAdditionalView($game)
     {
         $view = false;
@@ -467,6 +470,9 @@ class GameController extends AbstractActionController
         $this->getViewHelper('HeadMeta')->setProperty('bt:key', $bitlykey);
     }
 
+    /**
+     * @param \PlaygroundGame\Entity\Game $game
+     */
     public function addGaEvent($game)
     {
         // Google Analytics event
@@ -476,6 +482,9 @@ class GameController extends AbstractActionController
         $ga->addEvent($event);
     }
 
+    /**
+     * @param \PlaygroundGame\Entity\Game $game
+     */
     public function addMetaTitle($game)
     {
         $sg = $this->getGameService();
@@ -498,6 +507,9 @@ class GameController extends AbstractActionController
         );
     }
 
+    /**
+     * @param \PlaygroundGame\Entity\Game $game
+     */
     public function customizeGameDesign($game)
     {
         // If this game has a specific layout...
@@ -512,6 +524,9 @@ class GameController extends AbstractActionController
         }
     }
 
+    /**
+     * @param \PlaygroundGame\Entity\Game $game
+     */
     public function getShareData($game)
     {
         $fo = $this->getServiceLocator()->get('facebook-opengraph');
@@ -1202,7 +1217,7 @@ class GameController extends AbstractActionController
      * set options
      *
      * @param UserControllerOptionsInterface $options
-     * @return UserController
+     * @return GameController
      */
     public function setUserOptions(UserControllerOptionsInterface $options)
     {
