@@ -332,20 +332,15 @@ class GameTest extends \PHPUnit_Framework_TestCase
 
         $game = new GameEntity();
 
-        //mocking the method checkExistingEntry
-        $f = $this->getMockBuilder('PlaygroundGame\Service\Game')
-        ->setMethods(array('checkExistingEntry'))
-        ->disableOriginalConstructor()
-        ->getMock();
+        $gs = new \PlaygroundGame\Service\Game();
+        $gs->setEntryMapper($mapper);
 
-        $f->setEntryMapper($mapper);
+        $gs->getEntryMapper()
+        ->expects($this->once())
+        ->method('findOneBy')
+        ->will($this->returnValue(new \PlaygroundGame\Entity\Entry));
 
-        // I check that the array in findOneBy contains the parameter 'active' = 1
-        $f->expects($this->once())
-        ->method('checkExistingEntry')
-        ->will($this->returnValue($this->getMock('PlaygroundGame\Entity\Entry')));
-
-        $entry = $f->play($game, null);
+        $entry = $gs->play($game, null);
 
         $this->assertInstanceOf('\PlaygroundGame\Entity\Entry', $entry);
     }
@@ -374,7 +369,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
         $f->getEntryMapper()
         ->expects($this->once())
         ->method('insert')
-        ->will($this->returnValue($this->getMock('PlaygroundGame\Entity\Entry')));
+        ->will($this->returnValue(new \PlaygroundGame\Entity\Entry));
 
         $entry = $f->play($game, null);
 
@@ -441,7 +436,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
         $f->getEntryMapper()
         ->expects($this->once())
         ->method('insert')
-        ->will($this->returnValue($this->getMock('PlaygroundGame\Entity\Entry')));
+        ->will($this->returnValue(new \PlaygroundGame\Entity\Entry));
 
         $entry = $f->play($game, null);
 
