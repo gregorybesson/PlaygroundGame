@@ -14,7 +14,7 @@ class Register extends \PlaygroundUser\Form\Register
 
     protected $serviceManager;
 
-    public function __construct($name = null, RegistrationOptionsInterface $registerOptions, Translator $translator, $serviceManager)
+    public function __construct($name, RegistrationOptionsInterface $registerOptions, Translator $translator, $serviceManager)
     {
         $this->setServiceManager($serviceManager);
         parent::__construct($name, $registerOptions, $translator, $serviceManager);

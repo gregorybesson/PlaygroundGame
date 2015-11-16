@@ -8,7 +8,7 @@ use Zend\ServiceManager\ServiceManager;
 
 class PostVote extends Game
 {
-    public function __construct($name = null, ServiceManager $sm, Translator $translator)
+    public function __construct($name, ServiceManager $sm, Translator $translator)
     {
         $this->setServiceManager($sm);
         $entityManager = $sm->get('doctrine.entitymanager.orm_default');

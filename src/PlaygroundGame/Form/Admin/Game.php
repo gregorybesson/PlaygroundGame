@@ -17,7 +17,7 @@ class Game extends ProvidesEventsForm
 
     protected $serviceManager;
 
-    public function __construct($name = null, ServiceManager $sm, Translator $translator)
+    public function __construct($name, ServiceManager $sm, Translator $translator)
     {
         parent::__construct($name);
 

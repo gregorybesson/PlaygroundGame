@@ -10,7 +10,7 @@ class InstantWinOccurrenceCode extends ProvidesEventsForm
     protected $inputFilter;
     protected $serviceManager;
 
-    public function __construct($name = null, ServiceManager $sm, Translator $translator)
+    public function __construct($name, ServiceManager $sm, Translator $translator)
     {
         parent::__construct($name);
 

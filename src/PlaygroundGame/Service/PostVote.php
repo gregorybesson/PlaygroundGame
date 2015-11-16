@@ -339,8 +339,10 @@ class PostVote extends Game implements ServiceManagerAwareInterface
                 break;
             case 'date':
                 $qb->orderBy('p.createdAt', 'DESC');
+                break;
             case 'push':
                 $qb->orderBy('p.createdAt', 'DESC');
+                break;
         }
         
         $query = $qb->getQuery();
@@ -367,7 +369,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
         return $arrayPosts;
     }
 
-    public function addVote($user = null, $ipAddress = '', $post)
+    public function addVote($user, $ipAddress, $post)
     {
         $postvoteVoteMapper = $this->getPostVoteVoteMapper();
         $postId = $post->getId();
