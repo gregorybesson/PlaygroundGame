@@ -343,7 +343,7 @@ class QuizController extends GameController
             } else {
                 $adress2 = '';
             }
-            if ($e->getUser()->getDob() != null) {
+            if ($e->getUser()->getDob() !== null) {
                 $dob = $e->getUser()->getDob()->format('Y-m-d');
             } else {
                 $dob = '';
