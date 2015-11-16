@@ -39,50 +39,29 @@ class PostVoteFormTest extends \PHPUnit_Framework_TestCase
     }
 
     public function testRemove()
-    {
-        $self = $this;
-        $this->em->transactional(function ($em) use ($self) {
-            $postvoteform = new PostVoteFormEntity();
-            $postvoteform->setTitle('Ceci est un titre');
-            $postvoteform = $self->tm->insert($postvoteform);
-            $id = $postvoteform->getId();
-            $self->tm->remove($postvoteform);
-            $self->assertNull($self->tm->findById($id));
-        });
-        
-        $this->em->flush();
-        $this->em->clear();
+    {        
+        $postvoteform = new PostVoteFormEntity();
+        $postvoteform->setTitle('Ceci est un titre');
+        $postvoteform = $this->tm->insert($postvoteform);
+        $id = $postvoteform->getId();
+        $this->tm->remove($postvoteform);
+        $this->assertNull($this->tm->findById($id));
     }
 
     public function testFindAll()
     {
 
-        $this->em->transactional(function ($em) {
-            $postvoteform = new PostVoteFormEntity();
-            $postvoteform->setTitle("test 1");
-            $this->tm->insert($postvoteform);
-        });
-        
-        $this->em->flush();
-        $this->em->clear();
-            
-        $this->em->transactional(function ($em) {
-            $postvoteform = new PostVoteFormEntity();
-            $postvoteform->setTitle("test 2");
-            $this->tm->insert($postvoteform);
-        });
-        
-        $this->em->flush();
-        $this->em->clear();
-        
-        $this->em->transactional(function ($em) {
-            $postvoteform = new PostVoteFormEntity();
-            $postvoteform->setTitle("test 2");
-            $this->tm->insert($postvoteform);
-        });
-       
-        $this->em->flush();
-        $this->em->clear();
+        $postvoteform = new PostVoteFormEntity();
+        $postvoteform->setTitle("test 1");
+        $this->tm->insert($postvoteform);
+
+        $postvoteform = new PostVoteFormEntity();
+        $postvoteform->setTitle("test 2");
+        $this->tm->insert($postvoteform);
+
+        $postvoteform = new PostVoteFormEntity();
+        $postvoteform->setTitle("test 2");
+        $this->tm->insert($postvoteform);
 
         $postvoteforms = $this->tm->findAll();
         $this->assertEquals(3, count($postvoteforms));
