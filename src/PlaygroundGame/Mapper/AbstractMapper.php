@@ -3,6 +3,7 @@
 namespace PlaygroundGame\Mapper;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\DBAL\DBALException;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use PlaygroundGame\Options\ModuleOptions;

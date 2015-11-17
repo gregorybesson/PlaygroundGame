@@ -2,10 +2,6 @@
 
 namespace PlaygroundGame\Mapper;
 
-use Doctrine\ORM\EntityManager;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use PlaygroundGame\Options\ModuleOptions;
 use PlaygroundGame\Mapper\AbstractMapper;
 
 class Entry extends AbstractMapper

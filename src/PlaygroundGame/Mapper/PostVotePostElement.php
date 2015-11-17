@@ -2,8 +2,6 @@
 
 namespace PlaygroundGame\Mapper;
 
-use Doctrine\ORM\EntityManager;
-use PlaygroundGame\Options\ModuleOptions;
 use PlaygroundGame\Mapper\AbstractMapper;
 
 class PostVotePostElement extends AbstractMapper

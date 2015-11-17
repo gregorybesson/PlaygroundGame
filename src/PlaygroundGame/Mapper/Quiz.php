@@ -2,9 +2,6 @@
 
 namespace PlaygroundGame\Mapper;
 
-use Doctrine\ORM\EntityManager;
-use PlaygroundGame\Options\ModuleOptions;
-
 class Quiz extends Game
 {
 
