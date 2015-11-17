@@ -866,13 +866,54 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
     
     public function findLastEntries($game, $user, $limitScale)
     {
+        $limitDate = $this->getLimitDate($limitScale);
+
         if ($user) {
-            return $this->getEntryMapper()->findLastEntriesByUser($game, $user, $limitScale);
+            return $this->getEntryMapper()->findLastEntriesByUser($game, $user, $limitDate);
         } elseif ($this->getAnonymousIdentifier()) {
-            return $this->getEntryMapper()->findLastEntriesByAnonymousIdentifier($game, $this->getAnonymousIdentifier(), $limitScale);
+            return $this->getEntryMapper()->findLastEntriesByAnonymousIdentifier($game, $this->getAnonymousIdentifier(), $limitDate);
         } else {
-            return $this->getEntryMapper()->findLastEntriesByIp($game, $this->getIp(), $limitScale);
+            return $this->getEntryMapper()->findLastEntriesByIp($game, $this->getIp(), $limitDate);
         }
+    }
+
+    /**
+    *
+    *
+    */
+    public function getLimitDate($limitScale){
+        $now = new \DateTime("now");
+        switch ($limitScale) {
+            case 'always':
+                $interval = 'P100Y';
+                $now->sub(new \DateInterval($interval));
+                $dateLimit = $now->format('Y-m-d') . ' 0:0:0';
+                break;
+            case 'day':
+                $dateLimit = $now->format('Y-m-d') . ' 0:0:0';
+                break;
+            case 'week':
+                $interval = 'P7D';
+                $now->sub(new \DateInterval($interval));
+                $dateLimit = $now->format('Y-m-d') . ' 0:0:0';
+                break;
+            case 'month':
+                $interval = 'P1M';
+                $now->sub(new \DateInterval($interval));
+                $dateLimit = $now->format('Y-m-d') . ' 0:0:0';
+                break;
+            case 'year':
+                $interval = 'P1Y';
+                $now->sub(new \DateInterval($interval));
+                $dateLimit = $now->format('Y-m-d') . ' 0:0:0';
+                break;
+            default:
+                $interval = 'P100Y';
+                $now->sub(new \DateInterval($interval));
+                $dateLimit = $now->format('Y-m-d') . ' 0:0:0';
+        }
+
+        return $dateLimit;
     }
 
     public function findLastActiveEntry($game, $user)

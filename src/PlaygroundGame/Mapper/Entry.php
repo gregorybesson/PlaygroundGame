@@ -52,39 +52,8 @@ class Entry extends AbstractMapper
      * @param unknown_type $user
      * @param unknown_type $limitScale
      */
-    public function findLastEntriesByUser($game, $user, $limitScale)
+    public function findLastEntriesByUser($game, $user, $dateLimit)
     {
-        $now = new \DateTime("now");
-        switch ($limitScale) {
-            case 'always':
-                $interval = 'P100Y';
-                $now->sub(new \DateInterval($interval));
-                $dateLimit = $now->format('Y-m-d') . ' 0:0:0';
-                break;
-            case 'day':
-                $dateLimit = $now->format('Y-m-d') . ' 0:0:0';
-                break;
-            case 'week':
-                $interval = 'P7D';
-                $now->sub(new \DateInterval($interval));
-                $dateLimit = $now->format('Y-m-d') . ' 0:0:0';
-                break;
-            case 'month':
-                $interval = 'P1M';
-                $now->sub(new \DateInterval($interval));
-                $dateLimit = $now->format('Y-m-d') . ' 0:0:0';
-                break;
-            case 'year':
-                $interval = 'P1Y';
-                $now->sub(new \DateInterval($interval));
-                $dateLimit = $now->format('Y-m-d') . ' 0:0:0';
-                break;
-            default:
-                $interval = 'P100Y';
-                $now->sub(new \DateInterval($interval));
-                $dateLimit = $now->format('Y-m-d') . ' 0:0:0';
-        }
-
         $query = $this->em->createQuery('SELECT COUNT(e.id) FROM PlaygroundGame\Entity\Entry e WHERE e.user = :user AND e.game = :game AND (e.bonus = 0 OR e.bonus IS NULL) AND e.created_at >= :date');
         $query->setParameter('user', $user);
         $query->setParameter('game', $game);
@@ -95,38 +64,8 @@ class Entry extends AbstractMapper
         return $total;
     }
     
-    public function findLastEntriesByAnonymousIdentifier($game, $anonymousIdentifier, $limitScale)
+    public function findLastEntriesByAnonymousIdentifier($game, $anonymousIdentifier, $dateLimit)
     {
-        $now = new \DateTime("now");
-        switch ($limitScale) {
-            case 'always':
-                $interval = 'P100Y';
-                $now->sub(new \DateInterval($interval));
-                $dateLimit = $now->format('Y-m-d') . ' 0:0:0';
-                break;
-            case 'day':
-                $dateLimit = $now->format('Y-m-d') . ' 0:0:0';
-                break;
-            case 'week':
-                $interval = 'P7D';
-                $now->sub(new \DateInterval($interval));
-                $dateLimit = $now->format('Y-m-d') . ' 0:0:0';
-                break;
-            case 'month':
-                $interval = 'P1M';
-                $now->sub(new \DateInterval($interval));
-                $dateLimit = $now->format('Y-m-d') . ' 0:0:0';
-                break;
-            case 'year':
-                $interval = 'P1Y';
-                $now->sub(new \DateInterval($interval));
-                $dateLimit = $now->format('Y-m-d') . ' 0:0:0';
-                break;
-            default:
-                $interval = 'P100Y';
-                $now->sub(new \DateInterval($interval));
-                $dateLimit = $now->format('Y-m-d') . ' 0:0:0';
-        }
     
         $query = $this->em->createQuery('SELECT COUNT(e.id) FROM PlaygroundGame\Entity\Entry e WHERE e.anonymousIdentifier = :anonymousIdentifier AND e.game = :game AND (e.bonus = 0 OR e.bonus IS NULL) AND e.created_at >= :date');
         $query->setParameter('anonymousIdentifier', $anonymousIdentifier);

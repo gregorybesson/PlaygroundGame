@@ -24,6 +24,7 @@ class PostVotePostElementTest extends \PHPUnit_Framework_TestCase
     public function testFindById()
     {
         $postvotePost = new PostVotePostEntity();
+        $postvotePost = $this->tm->insert($postvotePost);
         $postvotepostelement = new PostVotePostElementEntity();
         $postvotepostelement->setName('Name');
         $postvotepostelement->setPost($postvotePost);
