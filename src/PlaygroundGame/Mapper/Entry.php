@@ -6,45 +6,11 @@ use Doctrine\ORM\EntityManager;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use PlaygroundGame\Options\ModuleOptions;
+use PlaygroundGame\Mapper\AbstractMapper;
 
-class Entry implements ServiceLocatorAwareInterface
+class Entry extends AbstractMapper
 {
-    /**
-     * @var \Doctrine\ORM\EntityManager
-     */
-    protected $em;
-
-    /**
-     * @var \Doctrine\ORM\EntityRepository
-     */
-    protected $er;
     
-    /**
-     * @var ServiceLocatorInterface
-     */
-    protected $serviceLocator;
-
-    /**
-     * @var \PlaygroundGame\Options\ModuleOptions
-     */
-    protected $options;
-
-    public function __construct(EntityManager $em, ModuleOptions $options)
-    {
-        $this->em      = $em;
-        $this->options = $options;
-    }
-
-    public function findById($id)
-    {
-        return $this->getEntityRepository()->find($id);
-    }
-
-    public function findBy($filter, $order = null, $limit = null, $offset = null)
-    {
-        return $this->getEntityRepository()->findBy($filter, $order, $limit, $offset);
-    }
-
     public function countByGame(\PlaygroundGame\Entity\Game $game)
     {
         $query = $this->em->createQuery('SELECT COUNT(e.id) FROM PlaygroundGame\Entity\Entry e WHERE e.game = :game');
@@ -300,42 +266,6 @@ class Entry implements ServiceLocatorAwareInterface
         return true;
     }
 
-    public function findOneBy($array = array(), $sortBy = array('updated_at' => 'desc'))
-    {
-        $er = $this->getEntityRepository();
-
-        return $er->findOneBy($array, $sortBy);
-    }
-
-    public function insert($entity)
-    {
-        return $this->persist($entity);
-    }
-
-    public function update($entity)
-    {
-        return $this->persist($entity);
-    }
-
-    protected function persist($entity)
-    {
-        $this->em->persist($entity);
-        $this->em->flush();
-
-        return $entity;
-    }
-
-    public function findAll()
-    {
-        return $this->getEntityRepository()->findAll();
-    }
-
-    public function remove($entity)
-    {
-        $this->em->remove($entity);
-        $this->em->flush();
-    }
-
     public function getEntityRepository()
     {
         if (null === $this->er) {
@@ -343,26 +273,5 @@ class Entry implements ServiceLocatorAwareInterface
         }
 
         return $this->er;
-    }
-    
-    /**
-     * Set serviceManager instance
-     *
-     * @param  ServiceLocatorInterface $serviceLocator
-     * @return void
-     */
-    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
-    {
-        $this->serviceLocator = $serviceLocator;
-    }
-
-    /**
-     * Retrieve serviceManager instance
-     *
-     * @return ServiceLocatorInterface
-     */
-    public function getServiceLocator()
-    {
-        return $this->serviceLocator;
     }
 }
