@@ -99,8 +99,6 @@ class PostVote extends Game implements ServiceManagerAwareInterface
 
     /**
      *
-     *
-     *
      * @param  array                  $data
      * @return \PlaygroundGame\Entity\Game
      */

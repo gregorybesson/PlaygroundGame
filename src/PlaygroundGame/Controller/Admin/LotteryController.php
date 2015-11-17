@@ -28,7 +28,13 @@ class LotteryController extends GameController
         $form = $this->getServiceLocator()->get('playgroundgame_lottery_form');
         $form->bind($lottery);
         $form->get('submit')->setAttribute('label', 'Add');
-        $form->setAttribute('action', $this->url()->fromRoute('admin/playgroundgame/create-lottery', array('gameId' => 0)));
+        $form->setAttribute(
+            'action', 
+            $this->url()->fromRoute(
+                'admin/playgroundgame/create-lottery', 
+                array('gameId' => 0)
+            )
+        );
         $form->setAttribute('method', 'post');
 
         $request = $this->getRequest();
@@ -73,7 +79,13 @@ class LotteryController extends GameController
         $gameForm->setTemplate('playground-game/game/game-form');
 
         $form   = $this->getServiceLocator()->get('playgroundgame_lottery_form');
-        $form->setAttribute('action', $this->url()->fromRoute('admin/playgroundgame/edit-lottery', array('gameId' => $gameId)));
+        $form->setAttribute(
+            'action', 
+            $this->url()->fromRoute(
+                'admin/playgroundgame/edit-lottery', 
+                array('gameId' => $gameId)
+            )
+        );
         $form->setAttribute('method', 'post');
         if ($game->getFbAppId()) {
             $appIds = $form->get('fbAppId')->getOption('value_options');

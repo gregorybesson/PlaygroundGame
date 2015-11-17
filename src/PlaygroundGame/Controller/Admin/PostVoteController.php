@@ -24,7 +24,13 @@ class PostVoteController extends GameController
         $form = $service->getPostVoteFormMapper()->findByGame($game);
 
         // I use the wonderful Form Generator to create the Post & Vote form
-        $this->forward()->dispatch('PlaygroundCore\Controller\Formgen', array('controller' => 'PlaygroundCore\Controller\Formgen', 'action' => 'create'));
+        $this->forward()->dispatch(
+            'PlaygroundCore\Controller\Formgen', 
+            array(
+                'controller' => 'PlaygroundCore\Controller\Formgen', 
+                'action' => 'create'
+            )
+        );
 
         if ($this->getRequest()->isPost()) {
             $data = $this->getRequest()->getPost()->toArray();
@@ -60,7 +66,13 @@ class PostVoteController extends GameController
         $form = $this->getServiceLocator()->get('playgroundgame_postvote_form');
         $form->bind($postVote);
         $form->get('submit')->setAttribute('label', 'Add');
-        $form->setAttribute('action', $this->url()->fromRoute('admin/playgroundgame/create-postvote', array('gameId' => 0)));
+        $form->setAttribute(
+            'action', 
+            $this->url()->fromRoute(
+                'admin/playgroundgame/create-postvote', 
+                array('gameId' => 0)
+            )
+        );
         $form->setAttribute('method', 'post');
 
         $request = $this->getRequest();
@@ -102,7 +114,13 @@ class PostVoteController extends GameController
         $gameForm->setTemplate('playground-game/game/game-form');
 
         $form   = $this->getServiceLocator()->get('playgroundgame_postvote_form');
-        $form->setAttribute('action', $this->url()->fromRoute('admin/playgroundgame/edit-postvote', array('gameId' => $gameId)));
+        $form->setAttribute(
+            'action', 
+            $this->url()->fromRoute(
+                'admin/playgroundgame/edit-postvote', 
+                array('gameId' => $gameId)
+            )
+        );
         $form->setAttribute('method', 'post');
         
         if ($game->getFbAppId()) {
@@ -179,12 +197,22 @@ class PostVoteController extends GameController
             $post->setStatus(2);
             $service->getPostVotePostMapper()->update($post);
 
-            return $this->redirect()->toUrl($this->url()->fromRoute('admin/postvote/entry', array('gameId' => $game->getId())));
+            return $this->redirect()->toUrl(
+                $this->url()->fromRoute(
+                    'admin/postvote/entry', 
+                    array('gameId' => $game->getId())
+                )
+            );
         } elseif ($status && $status=='rejection') {
             $post->setStatus(9);
             $service->getPostVotePostMapper()->update($post);
 
-            return $this->redirect()->toUrl($this->url()->fromRoute('admin/postvote/entry', array('gameId' => $game->getId())));
+            return $this->redirect()->toUrl(
+                $this->url()->fromRoute(
+                    'admin/postvote/entry', 
+                    array('gameId' => $game->getId())
+                )
+            );
         }
 
         return array('game' => $game, 'post' => $post);
@@ -216,7 +244,10 @@ class PostVoteController extends GameController
     {
         $gameId = $this->getEvent()->getRouteMatch()->getParam('gameId');
         $game   = $this->getAdminGameService()->getGameMapper()->findById($gameId);
-        $posts  = $this->getAdminGameService()->getPostVotePostMapper()->findBy(array('postvote' => $game), array('updatedAt' => 'DESC'));
+        $posts  = $this->getAdminGameService()->getPostVotePostMapper()->findBy(
+            array('postvote' => $game), 
+            array('updatedAt' => 'DESC')
+        );
 
         if (is_array($posts)) {
             $paginator = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\ArrayAdapter($posts));

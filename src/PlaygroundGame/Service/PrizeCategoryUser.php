@@ -2,35 +2,16 @@
 
 namespace PlaygroundGame\Service;
 
-use Zend\ServiceManager\ServiceManagerAwareInterface;
-use Zend\ServiceManager\ServiceManager;
-use ZfcBase\EventManager\EventProvider;
-use PlaygroundGame\Options\ModuleOptions;
 use PlaygroundGame\Entity\PrizeCategoryUser as PrizeCategoryUserEntity;
 use PlaygroundGame\Mapper\PrizeCategoryUser as PrizeCategoryUserMapper;
-use PlaygroundGame\Mapper\PrizeCategory as PrizeCategoryMapper;
+use PlaygroundGame\Service\PrizeCategory as PrizeCategoryService;
 
-class PrizeCategoryUser extends EventProvider implements ServiceManagerAwareInterface
+class PrizeCategoryUser extends PrizeCategoryService
 {
     /**
      * @var prizeCategoryUserMapper
      */
     protected $prizeCategoryUserMapper;
-    
-    /**
-     * @var prizeCategoryMapper
-     */
-    protected $prizeCategoryMapper;
-
-    /**
-     * @var ServiceManager
-     */
-    protected $serviceManager;
-
-    /**
-     * @var UserServiceOptionsInterface
-     */
-    protected $options;
 
     public function edit(array $data, $user, $formClass)
     {
@@ -70,72 +51,6 @@ class PrizeCategoryUser extends EventProvider implements ServiceManagerAwareInte
     public function setPrizeCategoryUserMapper(PrizeCategoryUserMapper $prizeCategoryUserMapper)
     {
         $this->prizeCategoryUserMapper = $prizeCategoryUserMapper;
-
-        return $this;
-    }
-
-    /**
-     * getPrizeCategoryMapper
-     *
-     * @return PrizeCategoryMapper
-     */
-    public function getPrizeCategoryMapper()
-    {
-        if (null === $this->prizeCategoryMapper) {
-            $this->prizeCategoryMapper = $this->getServiceManager()->get('playgroundgame_prizecategory_mapper');
-        }
-
-        return $this->prizeCategoryMapper;
-    }
-
-    /**
-     * setPrizeCategoryMapper
-     *
-     * @param  PrizeCategoryMapper $prizeCategoryMapper
-     * @return PrizeCategoryUser
-     */
-    public function setPrizeCategoryMapper(PrizeCategoryMapper $prizeCategoryMapper)
-    {
-        $this->prizeCategoryMapper = $prizeCategoryMapper;
-
-        return $this;
-    }
-
-    public function setOptions(ModuleOptions $options)
-    {
-        $this->options = $options;
-
-        return $this;
-    }
-
-    public function getOptions()
-    {
-        if (!$this->options instanceof ModuleOptions) {
-            $this->setOptions($this->getServiceManager()->get('playgroundgame_module_options'));
-        }
-
-        return $this->options;
-    }
-
-    /**
-     * Retrieve service manager instance
-     *
-     * @return ServiceManager
-     */
-    public function getServiceManager()
-    {
-        return $this->serviceManager;
-    }
-
-    /**
-     * Set service manager instance
-     *
-     * @param  ServiceManager $serviceManager
-     * @return PrizeCategoryUser
-     */
-    public function setServiceManager(ServiceManager $serviceManager)
-    {
-        $this->serviceManager = $serviceManager;
 
         return $this;
     }
