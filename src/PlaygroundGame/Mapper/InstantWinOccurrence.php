@@ -2,36 +2,10 @@
 
 namespace PlaygroundGame\Mapper;
 
-use Doctrine\ORM\EntityManager;
-use PlaygroundGame\Options\ModuleOptions;
+use PlaygroundGame\Mapper\AbstractMapper;
 
-class InstantWinOccurrence
+class InstantWinOccurrence extends AbstractMapper
 {
-    /**
-     * @var \Doctrine\ORM\EntityManager
-     */
-    protected $em;
-
-    /**
-     * @var \Doctrine\ORM\EntityRepository
-     */
-    protected $er;
-
-    /**
-     * @var \PlaygroundGame\Options\ModuleOptions
-     */
-    protected $options;
-
-    public function __construct(EntityManager $em, ModuleOptions $options)
-    {
-        $this->em      = $em;
-        $this->options = $options;
-    }
-
-    public function findById($id)
-    {
-        return $this->getEntityRepository()->find($id);
-    }
 
     public function findByEntry($entry)
     {
@@ -74,11 +48,6 @@ class InstantWinOccurrence
         );
         $query->setParameter('game', $instant_win);
         return $query;
-    }
-
-    public function findBy($filter, $order = null, $limit = null, $offset = null)
-    {
-        return $this->getEntityRepository()->findBy($filter, $order, $limit, $offset);
     }
 
     /**
@@ -132,44 +101,6 @@ class InstantWinOccurrence
         }
     }
 
-    public function insert($entity)
-    {
-        return $this->persist($entity);
-    }
-
-    public function update($entity)
-    {
-        return $this->persist($entity);
-    }
-
-    protected function persist($entity)
-    {
-        $this->em->persist($entity);
-        $this->em->flush();
-
-        return $entity;
-    }
-
-    public function findAll()
-    {
-        return $this->getEntityRepository()->findAll();
-    }
-
-    public function remove($entity)
-    {
-        $this->em->remove($entity);
-        $this->em->flush();
-    }
-
-    public function getEntityRepository()
-    {
-        if (null === $this->er) {
-            $this->er = $this->em->getRepository('PlaygroundGame\Entity\InstantWinOccurrence');
-        }
-
-        return $this->er;
-    }
-
     public function assertNoOther($instantwin, $value)
     {
         $query = $this->em->createQuery(
@@ -183,5 +114,14 @@ class InstantWinOccurrence
             return false;
         }
         return true;
+    }
+
+    public function getEntityRepository()
+    {
+        if (null === $this->er) {
+            $this->er = $this->em->getRepository('PlaygroundGame\Entity\InstantWinOccurrence');
+        }
+
+        return $this->er;
     }
 }
