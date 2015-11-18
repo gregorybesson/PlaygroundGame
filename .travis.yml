@@ -8,6 +8,7 @@ before_script:
   - composer install --prefer-source
   - php vendor/bin/phpcs --config-set ignore_warnings_on_exit 1
 script:
+  - mkdir -p build/coverage
   - php vendor/bin/phpunit --testsuite playgroundgameC
   - php vendor/bin/phpunit --testsuite playgroundgameE
   - php vendor/bin/phpunit --testsuite playgroundgameF
