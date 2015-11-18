@@ -881,7 +881,8 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
     *
     *
     */
-    public function getLimitDate($limitScale){
+    public function getLimitDate($limitScale)
+    {
         $now = new \DateTime("now");
         switch ($limitScale) {
             case 'always':

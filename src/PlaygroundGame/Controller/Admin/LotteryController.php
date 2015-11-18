@@ -29,9 +29,9 @@ class LotteryController extends GameController
         $form->bind($lottery);
         $form->get('submit')->setAttribute('label', 'Add');
         $form->setAttribute(
-            'action', 
+            'action',
             $this->url()->fromRoute(
-                'admin/playgroundgame/create-lottery', 
+                'admin/playgroundgame/create-lottery',
                 array('gameId' => 0)
             )
         );
@@ -80,9 +80,9 @@ class LotteryController extends GameController
 
         $form   = $this->getServiceLocator()->get('playgroundgame_lottery_form');
         $form->setAttribute(
-            'action', 
+            'action',
             $this->url()->fromRoute(
-                'admin/playgroundgame/edit-lottery', 
+                'admin/playgroundgame/edit-lottery',
                 array('gameId' => $gameId)
             )
         );

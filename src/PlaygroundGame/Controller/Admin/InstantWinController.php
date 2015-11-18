@@ -95,8 +95,9 @@ class InstantWinController extends GameController
 
         $form   = $this->getServiceLocator()->get('playgroundgame_instantwin_form');
         $form->setAttribute(
-            'action', $this->url()->fromRoute(
-                'admin/playgroundgame/edit-instantwin', 
+            'action',
+            $this->url()->fromRoute(
+                'admin/playgroundgame/edit-instantwin',
                 array('gameId' => $gameId)
             )
         );
@@ -189,9 +190,9 @@ class InstantWinController extends GameController
         $form->get('submit')->setAttribute('label', 'Add');
 
         $form->setAttribute(
-            'action', 
+            'action',
             $this->url()->fromRoute(
-                'admin/playgroundgame/instantwin-occurrence-add', 
+                'admin/playgroundgame/instantwin-occurrence-add',
                 array('gameId' => $gameId)
             )
         );
@@ -215,7 +216,7 @@ class InstantWinController extends GameController
                 // Redirect to list of games
                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The occurrence was created');
                 return $this->redirect()->toRoute(
-                    'admin/playgroundgame/instantwin-occurrence-list', 
+                    'admin/playgroundgame/instantwin-occurrence-list',
                     array('gameId'=>$gameId)
                 );
             }
@@ -242,9 +243,9 @@ class InstantWinController extends GameController
 
         $form->get('submit')->setAttribute('label', 'Import');
         $form->setAttribute(
-            'action', 
+            'action',
             $this->url()->fromRoute(
-                'admin/playgroundgame/instantwin-occurrences-import', 
+                'admin/playgroundgame/instantwin-occurrences-import',
                 array('gameId' => $gameId)
             )
         );
@@ -278,7 +279,7 @@ class InstantWinController extends GameController
                 if ($created) {
                     $this->flashMessenger()->setNamespace('playgroundgame')->addMessage($created.' occurrences were created !');
                     return $this->redirect()->toRoute(
-                        'admin/playgroundgame/instantwin-occurrence-list', 
+                        'admin/playgroundgame/instantwin-occurrence-list',
                         array('gameId'=>$gameId)
                     );
                 }
@@ -310,7 +311,7 @@ class InstantWinController extends GameController
         if ($occurrence->getUser()) {
             $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('This occurrence has a winner, you can not update it.');
             return $this->redirect()->toRoute(
-                'admin/playgroundgame/instantwin-occurrence-list', 
+                'admin/playgroundgame/instantwin-occurrence-list',
                 array('gameId'=>$gameId)
             );
         }
@@ -335,7 +336,7 @@ class InstantWinController extends GameController
                 // Redirect to list of games
                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The occurrence was edited');
                 return $this->redirect()->toRoute(
-                    'admin/playgroundgame/instantwin-occurrence-list', 
+                    'admin/playgroundgame/instantwin-occurrence-list',
                     array('gameId'=>$gameId)
                 );
             }
@@ -369,7 +370,7 @@ class InstantWinController extends GameController
         }
 
         return $this->redirect()->toRoute(
-            'admin/playgroundgame/instantwin-occurrence-list', 
+            'admin/playgroundgame/instantwin-occurrence-list',
             array('gameId'=>$instantwinId)
         );
     }

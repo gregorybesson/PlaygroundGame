@@ -25,9 +25,9 @@ class PostVoteController extends GameController
 
         // I use the wonderful Form Generator to create the Post & Vote form
         $this->forward()->dispatch(
-            'PlaygroundCore\Controller\Formgen', 
+            'PlaygroundCore\Controller\Formgen',
             array(
-                'controller' => 'PlaygroundCore\Controller\Formgen', 
+                'controller' => 'PlaygroundCore\Controller\Formgen',
                 'action' => 'create'
             )
         );
@@ -67,9 +67,9 @@ class PostVoteController extends GameController
         $form->bind($postVote);
         $form->get('submit')->setAttribute('label', 'Add');
         $form->setAttribute(
-            'action', 
+            'action',
             $this->url()->fromRoute(
-                'admin/playgroundgame/create-postvote', 
+                'admin/playgroundgame/create-postvote',
                 array('gameId' => 0)
             )
         );
@@ -115,9 +115,9 @@ class PostVoteController extends GameController
 
         $form   = $this->getServiceLocator()->get('playgroundgame_postvote_form');
         $form->setAttribute(
-            'action', 
+            'action',
             $this->url()->fromRoute(
-                'admin/playgroundgame/edit-postvote', 
+                'admin/playgroundgame/edit-postvote',
                 array('gameId' => $gameId)
             )
         );
@@ -199,7 +199,7 @@ class PostVoteController extends GameController
 
             return $this->redirect()->toUrl(
                 $this->url()->fromRoute(
-                    'admin/postvote/entry', 
+                    'admin/postvote/entry',
                     array('gameId' => $game->getId())
                 )
             );
@@ -209,7 +209,7 @@ class PostVoteController extends GameController
 
             return $this->redirect()->toUrl(
                 $this->url()->fromRoute(
-                    'admin/postvote/entry', 
+                    'admin/postvote/entry',
                     array('gameId' => $game->getId())
                 )
             );
@@ -245,7 +245,7 @@ class PostVoteController extends GameController
         $gameId = $this->getEvent()->getRouteMatch()->getParam('gameId');
         $game   = $this->getAdminGameService()->getGameMapper()->findById($gameId);
         $posts  = $this->getAdminGameService()->getPostVotePostMapper()->findBy(
-            array('postvote' => $game), 
+            array('postvote' => $game),
             array('updatedAt' => 'DESC')
         );
 
