@@ -88,18 +88,8 @@ class PrizeCategoryTest extends \PHPUnit_Framework_TestCase
         $prizeCategory->setTitle('Un Titre');
         $prizeCategory = $this->tm->insert($prizeCategory);
 
-        $prizeCategory = new PrizeCategoryEntity();
-        $prizeCategory->setIdentifier('iden 3');
-        $prizeCategory->setTitle('Un Titre');
-        $prizeCategory = $this->tm->insert($prizeCategory);
-
-        $prizeCategory = new PrizeCategoryEntity();
-        $prizeCategory->setIdentifier('iden 3');
-        $prizeCategory->setTitle('Un Titre');
-        $prizeCategory = $this->tm->insert($prizeCategory);
-
         $prizeCategories = $this->tm->findAll();
-        $this->assertEquals(4, count($prizeCategories));
+        $this->assertEquals(2, count($prizeCategories));
 
         foreach ($this->tm->findAll() as $prizeCategory) {
             $this->tm->remove($prizeCategory);
