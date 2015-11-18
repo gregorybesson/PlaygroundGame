@@ -85,17 +85,17 @@ class PrizeCategoryTest extends \PHPUnit_Framework_TestCase
 
         var_dump($prizeCategory);
 
-        $prizeCategory = new PrizeCategoryEntity();
-        $prizeCategory->setIdentifier('iden 2');
-        $prizeCategory->setTitle('Un Titre 2');
-        $prizeCategory = $this->tm->insert($prizeCategory);
+        $prizeCategory2 = new PrizeCategoryEntity();
+        $prizeCategory2->setIdentifier('iden 2');
+        $prizeCategory2->setTitle('Un Titre 2');
+        $prizeCategory2 = $this->tm->insert($prizeCategory2);
 
-        var_dump($prizeCategory);
+        var_dump($prizeCategory2);
 
-        $prizeCategory = new PrizeCategoryEntity();
-        $prizeCategory->setIdentifier('iden 3');
-        $prizeCategory->setTitle('Un Titre 3');
-        $prizeCategory = $this->tm->insert($prizeCategory);
+        $prizeCategory3 = new PrizeCategoryEntity();
+        $prizeCategory3->setIdentifier('iden 3');
+        $prizeCategory3->setTitle('Un Titre 3');
+        $prizeCategory3 = $this->tm->insert($prizeCategory3);
 
         var_dump($prizeCategory);
 
