@@ -22,7 +22,6 @@
     <filter>
         <whitelist>
             <directory suffix=".php">./src/PlaygroundGame</directory>
-            <directory suffix=".phtml">./view</directory>
             <exclude>
                 <directory suffix=".php">./tests/</directory>
             </exclude>
