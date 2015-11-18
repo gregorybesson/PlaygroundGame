@@ -78,31 +78,29 @@ class PrizeCategoryTest extends \PHPUnit_Framework_TestCase
 
     public function testFindAll()
     {
-        $self = $this;
-        $this->em->transactional(function($em) use ($self) {
-            $prizeCategory = new PrizeCategoryEntity();
-            $prizeCategory->setIdentifier('iden 1');
-            $prizeCategory->setTitle('Un Titre');
-            $prizeCategory = $self->tm->insert($prizeCategory);
-        });
-        
-        $this->em->transactional(function($em) use ($self) {
-            $prizeCategory = new PrizeCategoryEntity();
-            $prizeCategory->setIdentifier('iden 2');
-            $prizeCategory->setTitle('Un Titre');
-            $prizeCategory = $self->tm->insert($prizeCategory);
-        });
-            
-        $this->em->transactional(function($em) use ($self) {
-            $prizeCategory = new PrizeCategoryEntity();
-            $prizeCategory->setIdentifier('iden 3');
-            $prizeCategory->setTitle('Un Titre');
-            $prizeCategory = $self->tm->insert($prizeCategory);
-        });
+        $prizeCategory = new PrizeCategoryEntity();
+        $prizeCategory->setIdentifier('iden 1');
+        $prizeCategory->setTitle('Un Titre');
+        $prizeCategory = $this->tm->insert($prizeCategory);
+
+        $prizeCategory = new PrizeCategoryEntity();
+        $prizeCategory->setIdentifier('iden 2');
+        $prizeCategory->setTitle('Un Titre');
+        $prizeCategory = $this->tm->insert($prizeCategory);
+
+        $prizeCategory = new PrizeCategoryEntity();
+        $prizeCategory->setIdentifier('iden 3');
+        $prizeCategory->setTitle('Un Titre');
+        $prizeCategory = $this->tm->insert($prizeCategory);
+
+        $prizeCategory = new PrizeCategoryEntity();
+        $prizeCategory->setIdentifier('iden 3');
+        $prizeCategory->setTitle('Un Titre');
+        $prizeCategory = $this->tm->insert($prizeCategory);
 
         $prizeCategories = $this->tm->findAll();
-        $this->assertEquals(3, count($prizeCategories));
-        
+        $this->assertEquals(4, count($prizeCategories));
+
         foreach ($this->tm->findAll() as $prizeCategory) {
             $this->tm->remove($prizeCategory);
         }
