@@ -28,7 +28,10 @@ class GameTest extends \PHPUnit_Framework_TestCase
         $game->setWinners(2);
         $game->setSubstitutes(2);
         $game = $this->tm->insert($game);
-        $this->assertEquals($game->getIdentifier(), $this->tm->findByIdentifier($game->getIdentifier())->getIdentifier());
+        $this->assertEquals(
+            $game->getIdentifier(), 
+            $this->tm->findByIdentifier($game->getIdentifier())->getIdentifier()
+        );
     }
 
     public function testFindById()
