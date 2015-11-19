@@ -20,27 +20,6 @@ class GameController extends AbstractActionController
      */
     protected $adminGameService;
 
-    public function indexAction()
-    {
-        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-        if (!$identifier) {
-            return $this->notFoundAction();
-        }
-
-        $service = $this->getAdminGameService();
-        $game = $service->getGameMapper()->findByIdentifier($identifier);
-
-        if (!$game) {
-            return $this->notFoundAction();
-        }
-
-        $viewModel = new ViewModel(
-            array('game' => $game)
-        );
-
-        return $viewModel;
-    }
-
     public function listAction()
     {
         $filter    = $this->getEvent()->getRouteMatch()->getParam('filter');
