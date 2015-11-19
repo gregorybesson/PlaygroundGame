@@ -29,7 +29,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
         $game->setSubstitutes(2);
         $game = $this->tm->insert($game);
         $this->assertEquals(
-            $game->getIdentifier(), 
+            $game->getIdentifier(),
             $this->tm->findByIdentifier($game->getIdentifier())->getIdentifier()
         );
     }

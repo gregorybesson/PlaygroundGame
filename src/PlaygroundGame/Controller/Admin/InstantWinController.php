@@ -47,7 +47,10 @@ class InstantWinController extends GameController
 
         $form = $this->getServiceLocator()->get('playgroundgame_instantwin_form');
         $form->bind($instantwin);
-        $form->setAttribute('action', $this->url()->fromRoute('admin/playgroundgame/create-instantwin', array('gameId' => 0)));
+        $form->setAttribute(
+            'action',
+            $this->url()->fromRoute('admin/playgroundgame/create-instantwin', array('gameId' => 0))
+        );
         $form->setAttribute('method', 'post');
 
         $request = $this->getRequest();
@@ -277,7 +280,9 @@ class InstantWinController extends GameController
                 $data = $form->getData();
                 $created = $this->getAdminGameService()->importOccurrences($data);
                 if ($created) {
-                    $this->flashMessenger()->setNamespace('playgroundgame')->addMessage($created.' occurrences were created !');
+                    $this->flashMessenger()->setNamespace('playgroundgame')->addMessage(
+                        $created.' occurrences were created !'
+                    );
                     return $this->redirect()->toRoute(
                         'admin/playgroundgame/instantwin-occurrence-list',
                         array('gameId'=>$gameId)
@@ -309,7 +314,9 @@ class InstantWinController extends GameController
         $occurrence = $service->getInstantWinOccurrenceMapper()->findById($occurrenceId);
         // Si l'occurrence a été utilisée, on ne peut plus la modifier
         if ($occurrence->getUser()) {
-            $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('This occurrence has a winner, you can not update it.');
+            $this->flashMessenger()->setNamespace('playgroundgame')->addMessage(
+                'This occurrence has a winner, you can not update it.'
+            );
             return $this->redirect()->toRoute(
                 'admin/playgroundgame/instantwin-occurrence-list',
                 array('gameId'=>$gameId)
@@ -366,7 +373,9 @@ class InstantWinController extends GameController
             $service->getInstantWinOccurrenceMapper()->remove($occurrence);
             $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The occurrence was deleted');
         } else {
-            $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('Il y a un participant à cet instant gagnant. Vous ne pouvez plus le supprimer');
+            $this->flashMessenger()->setNamespace('playgroundgame')->addMessage(
+                'Il y a un participant à cet instant gagnant. Vous ne pouvez plus le supprimer'
+            );
         }
 
         return $this->redirect()->toRoute(
@@ -441,7 +450,8 @@ class InstantWinController extends GameController
 
         $content        = "\xEF\xBB\xBF"; // UTF-8 BOM
         if (! $game->getAnonymousAllowed()) {
-            $content       .= "ID;Pseudo;Civilité;Nom;Prénom;E-mail;Optin Newsletter;Optin partenaire;Adresse;CP;Ville;Téléphone;Mobile;Date d'inscription;Date de naissance;";
+            $content .= "ID;Pseudo;Civilité;Nom;Prénom;E-mail;Optin Newsletter;Optin partenaire;";
+            $content .= "Adresse;CP;Ville;Téléphone;Mobile;Date d'inscription;Date de naissance;";
         }
         if (current($entries)->getPlayerData()) {
             $entryData = json_decode(current($entries)->getPlayerData());

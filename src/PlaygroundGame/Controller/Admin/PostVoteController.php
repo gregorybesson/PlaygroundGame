@@ -237,7 +237,12 @@ class PostVoteController extends GameController
         $post->setPushed($pushed);
         $service->getPostVotePostMapper()->update($post);
     
-        return $this->redirect()->toUrl($this->url()->fromRoute('admin/postvote/entry', array('gameId' => $game->getId())));
+        return $this->redirect()->toUrl(
+            $this->url()->fromRoute(
+                'admin/postvote/entry',
+                array('gameId' => $game->getId())
+            )
+        );
     }
 
     public function entryAction()

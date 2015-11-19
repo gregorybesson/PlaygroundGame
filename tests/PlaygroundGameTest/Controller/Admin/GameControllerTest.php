@@ -5,11 +5,11 @@ namespace PlaygroundGameTest\Controller\Admin;
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use PlaygroundGameTest\Bootstrap;
 use \PlaygroundGame\Entity\Game as GameEntity;
-use PlaygroundGame\Controller\Admin\GameController,
-    Zend\Http\Request,
-    Zend\Http\Response,
-    Zend\Mvc\MvcEvent,
-    Zend\Mvc\Router\RouteMatch;
+use PlaygroundGame\Controller\Admin\GameController;
+use Zend\Http\Request;
+use Zend\Http\Response;
+use Zend\Mvc\MvcEvent;
+use Zend\Mvc\Router\RouteMatch;
 
 class GameControllerTest extends AbstractHttpControllerTestCase
 {
@@ -47,7 +47,7 @@ class GameControllerTest extends AbstractHttpControllerTestCase
         $this->controller->setEvent($this->event);
 
         $result = $this->controller->listAction();
-        $this->assertInternalType('array',$result);
+        $this->assertInternalType('array', $result);
         //$this->assertInstanceOf('Zend\View\Model\ViewModel', $result);
  
         // Test the parameters contained in the View model

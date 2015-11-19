@@ -27,7 +27,9 @@ class QuizController extends GameController
             return $this->redirect()->toRoute('admin/playgroundgame/list');
         }
         $game           = $this->getAdminGameService()->getGameMapper()->findById($gameId);
-        $adapter = new DoctrineAdapter(new ORMPaginator($this->getAdminGameService()->getEntryMapper()->queryByGame($game)));
+        $adapter = new DoctrineAdapter(
+            new ORMPaginator($this->getAdminGameService()->getEntryMapper()->queryByGame($game))
+        );
         $paginator = new Paginator($adapter);
         $paginator->setItemCountPerPage(10);
         $paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
@@ -86,7 +88,10 @@ class QuizController extends GameController
         $form = $this->getServiceLocator()->get('playgroundgame_quizquestion_form');
         $form->get('submit')->setAttribute('label', 'Ajouter');
         $form->get('quiz_id')->setAttribute('value', $quizId);
-        $form->setAttribute('action', $this->url()->fromRoute('admin/playgroundgame/quiz-question-add', array('quizId' => $quizId)));
+        $form->setAttribute(
+            'action',
+            $this->url()->fromRoute('admin/playgroundgame/quiz-question-add', array('quizId' => $quizId))
+        );
         $form->setAttribute('method', 'post');
 
         $question = new QuizQuestion();
@@ -105,7 +110,9 @@ class QuizController extends GameController
 
                 return $this->redirect()->toRoute('admin/playgroundgame/quiz-question-list', array('quizId'=>$quizId));
             } else { // Creation failed
-                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The question was not updated - create at least one good answer');
+                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage(
+                    'The question was not updated - create at least one good answer'
+                );
             }
         }
 
@@ -128,7 +135,10 @@ class QuizController extends GameController
         $form = $this->getServiceLocator()->get('playgroundgame_quizquestion_form');
         $form->get('submit')->setAttribute('label', 'Mettre à jour');
         $form->get('quiz_id')->setAttribute('value', $quizId);
-        $form->setAttribute('action', $this->url()->fromRoute('admin/playgroundgame/quiz-question-edit', array('questionId' => $questionId)));
+        $form->setAttribute(
+            'action',
+            $this->url()->fromRoute('admin/playgroundgame/quiz-question-edit', array('questionId' => $questionId))
+        );
         $form->setAttribute('method', 'post');
 
         $form->bind($question);
@@ -146,7 +156,9 @@ class QuizController extends GameController
 
                 return $this->redirect()->toRoute('admin/playgroundgame/quiz-question-list', array('quizId'=>$quizId));
             } else {
-                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The question was not updated - create at least one good answer');
+                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage(
+                    'The question was not updated - create at least one good answer'
+                );
             }
         }
 
@@ -284,7 +296,8 @@ class QuizController extends GameController
                     $questionArray[$i]['q'] = $q->getId();
                     $questionArray[$i]['a'] = $a->getId();
                     $questionArray[$i]['open'] = false;
-                    $label .= ";" . strip_tags(str_replace("\r\n", "", $q->getQuestion())) . " - " .strip_tags(str_replace("\r\n", "", $a->getAnswer()));
+                    $label .= ";" . strip_tags(str_replace("\r\n", "", $q->getQuestion()));
+                    $label .= " - " .strip_tags(str_replace("\r\n", "", $a->getAnswer()));
                     $i++;
                 }
             } elseif ($q->getType() == 2) {
@@ -300,8 +313,9 @@ class QuizController extends GameController
 
         $entries = $this->getAdminGameService()->getEntryMapper()->findBy(array('game' => $game));
 
-        $content        = "\xEF\xBB\xBF"; // UTF-8 BOM
-        $content       .= "ID;Pseudo;Civilité;Nom;Prénom;E-mail;Optin Newsletter;Optin partenaire;Eligible TAS ?" . $label . ";Date - H;Adresse;CP;Ville;Téléphone;Mobile;Date d'inscription;Date de naissance;\n";
+        $content  = "\xEF\xBB\xBF"; // UTF-8 BOM
+        $content .= "ID;Pseudo;Civilité;Nom;Prénom;E-mail;Optin Newsletter;Optin partenaire;Eligible TAS ?";
+        $content .= $label . ";Date - H;Adresse;CP;Ville;Téléphone;Mobile;Date d'inscription;Date de naissance;\n";
         foreach ($entries as $e) {
             $answers = array();
             $replies   = $sg->getQuizReplyMapper()->getLastGameReply($e);

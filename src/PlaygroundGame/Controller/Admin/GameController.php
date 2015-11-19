@@ -50,7 +50,9 @@ class GameController extends AbstractActionController
         }
 
         $game = $this->getAdminGameService()->getGameMapper()->findById($gameId);
-        $adapter = new DoctrineAdapter(new ORMPaginator($this->getAdminGameService()->getEntryMapper()->queryByGame($game)));
+        $adapter = new DoctrineAdapter(
+            new ORMPaginator($this->getAdminGameService()->getEntryMapper()->queryByGame($game))
+        );
         $paginator = new Paginator($adapter);
         $paginator->setItemCountPerPage(10);
         $paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
@@ -202,7 +204,9 @@ class GameController extends AbstractActionController
                 $service->getGameMapper()->remove($game);
                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The game has been edited');
             } catch (\Doctrine\DBAL\DBALException $e) {
-                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('Il y a déjà eu des participants à ce jeu. Vous ne pouvez plus le supprimer');
+                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage(
+                    'Il y a déjà eu des participants à ce jeu. Vous ne pouvez plus le supprimer'
+                );
             }
         }
 
@@ -235,7 +239,13 @@ class GameController extends AbstractActionController
         $form = $service->getPlayerFormMapper()->findOneBy(array('game' => $game));
 
         // I use the wonderful Form Generator to create the Post & Vote form
-        $this->forward()->dispatch('PlaygroundCore\Controller\Formgen', array('controller' => 'PlaygroundCore\Controller\Formgen', 'action' => 'create'));
+        $this->forward()->dispatch(
+            'PlaygroundCore\Controller\Formgen',
+            array(
+                'controller' => 'PlaygroundCore\Controller\Formgen',
+                'action' => 'create'
+            )
+        );
 
         if ($this->getRequest()->isPost()) {
             $data = $this->getRequest()->getPost()->toArray();
