@@ -3,6 +3,7 @@ PlaygroundGame [![SensioLabsInsight](https://insight.sensiolabs.com/projects/4e1
 
 [![Develop Branch Build Status](https://travis-ci.org/gregorybesson/PlaygroundGame.svg)](http://travis-ci.org/gregorybesson/PlaygroundGame)
 [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/gregorybesson/PlaygroundGame/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/gregorybesson/PlaygroundGame/)
+[![Coverage Status](https://coveralls.io/repos/gregorybesson/PlaygroundGame/badge.svg?branch=develop&service=github)](https://coveralls.io/github/gregorybesson/PlaygroundGame?branch=develop)
 
 
 The Game module : This module currently propose 4 types of games:
