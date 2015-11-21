@@ -1,5 +1,6 @@
-PlaygroundGame [![SensioLabsInsight](https://insight.sensiolabs.com/projects/4e1ce35f-3756-44fd-82e3-11c3a01767b4/big.png)](https://insight.sensiolabs.com/projects/4e1ce35f-3756-44fd-82e3-11c3a01767b4)
+PlaygroundGame
 =========
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/4e1ce35f-3756-44fd-82e3-11c3a01767b4/big.png)](https://insight.sensiolabs.com/projects/4e1ce35f-3756-44fd-82e3-11c3a01767b4)
 
 [![Develop Branch Build Status](https://travis-ci.org/gregorybesson/PlaygroundGame.svg)](http://travis-ci.org/gregorybesson/PlaygroundGame)
 [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/gregorybesson/PlaygroundGame/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/gregorybesson/PlaygroundGame/)
