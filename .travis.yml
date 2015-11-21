@@ -3,12 +3,18 @@ language: php
 php:
   - 5.5
   - 5.6
+  - 7.0
+
+before_install:
+  # Disable XDebug speed up test execution. (Ignore failures if platform does not had the extension installed)
+  - phpenv config-rm xdebug.ini || return 0
+
 before_script:
   - composer self-update
   - composer install --prefer-source
   - php vendor/bin/phpcs --config-set ignore_warnings_on_exit 1
 script:
-  - mkdir -p build/coverage
+  - mkdir -p build/logs
   - php vendor/bin/phpunit --testsuite playgroundgameC
   - php vendor/bin/phpunit --testsuite playgroundgameE
   - php vendor/bin/phpunit --testsuite playgroundgameF
@@ -16,4 +22,4 @@ script:
   - php vendor/bin/phpunit --testsuite playgroundgameS
   - php vendor/bin/phpcs --standard=PSR2 ./src/ ./tests/
 after_script:
-  - php vendor/bin/coveralls
+  - php vendor/bin/coveralls -v
