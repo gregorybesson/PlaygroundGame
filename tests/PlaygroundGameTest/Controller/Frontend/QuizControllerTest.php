@@ -644,7 +644,16 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
 //     	$entry = new \PlaygroundGame\Entity\Entry();
 
 //     	$f = $this->getMockBuilder('PlaygroundGame\Service\Game')
-//     	->setMethods(array('checkGame', 'checkIsFan', 'checkExistingEntry', 'getEntryMapper', 'getServiceManager', 'play'))
+//     	->setMethods(
+    //     array(
+    //         'checkGame',
+    //         'checkIsFan',
+    //         'checkExistingEntry',
+    //         'getEntryMapper',
+    //         'getServiceManager',
+    //         'play'
+    //     )
+    // )
 //     	->disableOriginalConstructor()
 //     	->getMock();
 
@@ -717,7 +726,17 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $entry = new \PlaygroundGame\Entity\Entry();
 
         $f = $this->getMockBuilder('PlaygroundGame\Service\Game')
-        ->setMethods(array('checkGame', 'checkIsFan', 'postFbWall', 'checkExistingEntry', 'getEntryMapper', 'getServiceManager', 'play'))
+        ->setMethods(
+            array(
+                'checkGame',
+                'checkIsFan',
+                'postFbWall',
+                'checkExistingEntry',
+                'getEntryMapper',
+                'getServiceManager',
+                'play'
+            )
+        )
         ->disableOriginalConstructor()
         ->getMock();
 
@@ -776,7 +795,17 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $entry = new \PlaygroundGame\Entity\Entry();
 
         $f = $this->getMockBuilder('PlaygroundGame\Service\Game')
-        ->setMethods(array('checkGame', 'checkIsFan', 'postFbWall', 'checkExistingEntry', 'getEntryMapper', 'getServiceManager', 'play'))
+        ->setMethods(
+            array(
+                'checkGame',
+                'checkIsFan',
+                'postFbWall',
+                'checkExistingEntry',
+                'getEntryMapper',
+                'getServiceManager',
+                'play'
+            )
+        )
         ->disableOriginalConstructor()
         ->getMock();
 
@@ -839,7 +868,17 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $entry = new \PlaygroundGame\Entity\Entry();
 
         $f = $this->getMockBuilder('PlaygroundGame\Service\Game')
-        ->setMethods(array('checkGame', 'checkIsFan', 'postFbWall', 'checkExistingEntry', 'getEntryMapper', 'getServiceManager', 'play'))
+        ->setMethods(
+            array(
+                'checkGame',
+                'checkIsFan',
+                'postFbWall',
+                'checkExistingEntry',
+                'getEntryMapper',
+                'getServiceManager',
+                'play'
+            )
+        )
         ->disableOriginalConstructor()
         ->getMock();
 
@@ -902,7 +941,19 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $entry = new \PlaygroundGame\Entity\Entry();
 
         $f = $this->getMockBuilder('PlaygroundGame\Service\Game')
-        ->setMethods(array('checkGame', 'checkIsFan', 'addAnotherChance', 'checkExistingEntry', 'postFbWall', 'getEntryMapper', 'getServiceManager', 'play', 'findLastInactiveEntry'))
+        ->setMethods(
+            array(
+                'checkGame',
+                'checkIsFan',
+                'addAnotherChance',
+                'checkExistingEntry',
+                'postFbWall',
+                'getEntryMapper',
+                'getServiceManager',
+                'play',
+                'findLastInactiveEntry'
+            )
+        )
         ->disableOriginalConstructor()
         ->getMock();
 
@@ -971,7 +1022,19 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $entry->setWinner(true);
 
         $f = $this->getMockBuilder('PlaygroundGame\Service\Game')
-        ->setMethods(array('checkGame', 'checkIsFan', 'addAnotherChance', 'checkExistingEntry', 'postFbWall', 'getEntryMapper', 'getServiceManager', 'play', 'findLastInactiveEntry'))
+        ->setMethods(
+            array(
+                'checkGame',
+                'checkIsFan',
+                'addAnotherChance',
+                'checkExistingEntry',
+                'postFbWall',
+                'getEntryMapper',
+                'getServiceManager',
+                'play',
+                'findLastInactiveEntry'
+            )
+        )
         ->disableOriginalConstructor()
         ->getMock();
 
@@ -1043,7 +1106,17 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $entry = new \PlaygroundGame\Entity\Entry();
 
         $f = $this->getMockBuilder('PlaygroundGame\Service\Game')
-        ->setMethods(array('checkGame', 'checkIsFan', 'postTwitter', 'checkExistingEntry', 'getEntryMapper', 'getServiceManager', 'play'))
+        ->setMethods(
+            array(
+                'checkGame',
+                'checkIsFan',
+                'postTwitter',
+                'checkExistingEntry',
+                'getEntryMapper',
+                'getServiceManager',
+                'play'
+            )
+        )
         ->disableOriginalConstructor()
         ->getMock();
 
@@ -1102,7 +1175,17 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $entry = new \PlaygroundGame\Entity\Entry();
 
         $f = $this->getMockBuilder('PlaygroundGame\Service\Game')
-        ->setMethods(array('checkGame', 'checkIsFan', 'postTwitter', 'checkExistingEntry', 'getEntryMapper', 'getServiceManager', 'play'))
+        ->setMethods(
+            array(
+                'checkGame',
+                'checkIsFan',
+                'postTwitter',
+                'checkExistingEntry',
+                'getEntryMapper',
+                'getServiceManager',
+                'play'
+            )
+        )
         ->disableOriginalConstructor()
         ->getMock();
 
@@ -1165,7 +1248,17 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $entry = new \PlaygroundGame\Entity\Entry();
 
         $f = $this->getMockBuilder('PlaygroundGame\Service\Game')
-        ->setMethods(array('checkGame', 'checkIsFan', 'postTwitter', 'checkExistingEntry', 'getEntryMapper', 'getServiceManager', 'play'))
+        ->setMethods(
+            array(
+                'checkGame',
+                'checkIsFan',
+                'postTwitter',
+                'checkExistingEntry',
+                'getEntryMapper',
+                'getServiceManager',
+                'play'
+            )
+        )
         ->disableOriginalConstructor()
         ->getMock();
 
@@ -1228,7 +1321,19 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $entry = new \PlaygroundGame\Entity\Entry();
 
         $f = $this->getMockBuilder('PlaygroundGame\Service\Game')
-         ->setMethods(array('checkGame', 'checkIsFan', 'addAnotherChance', 'checkExistingEntry', 'postTwitter', 'getEntryMapper', 'getServiceManager', 'play', 'findLastInactiveEntry'))
+         ->setMethods(
+             array(
+                'checkGame',
+                'checkIsFan',
+                'addAnotherChance',
+                'checkExistingEntry',
+                'postTwitter',
+                'getEntryMapper',
+                'getServiceManager',
+                'play',
+                'findLastInactiveEntry'
+             )
+         )
          ->disableOriginalConstructor()
          ->getMock();
 
@@ -1297,7 +1402,19 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $entry->setWinner(true);
 
         $f = $this->getMockBuilder('PlaygroundGame\Service\Game')
-        ->setMethods(array('checkGame', 'checkIsFan', 'addAnotherChance', 'checkExistingEntry', 'postTwitter', 'getEntryMapper', 'getServiceManager', 'play', 'findLastInactiveEntry'))
+        ->setMethods(
+            array(
+                'checkGame',
+                'checkIsFan',
+                'addAnotherChance',
+                'checkExistingEntry',
+                'postTwitter',
+                'getEntryMapper',
+                'getServiceManager',
+                'play',
+                'findLastInactiveEntry'
+            )
+        )
         ->disableOriginalConstructor()
         ->getMock();
 
@@ -1369,7 +1486,17 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $entry = new \PlaygroundGame\Entity\Entry();
 
         $f = $this->getMockBuilder('PlaygroundGame\Service\Game')
-        ->setMethods(array('checkGame', 'checkIsFan', 'postGoogle', 'checkExistingEntry', 'getEntryMapper', 'getServiceManager', 'play'))
+        ->setMethods(
+            array(
+                'checkGame',
+                'checkIsFan',
+                'postGoogle',
+                'checkExistingEntry',
+                'getEntryMapper',
+                'getServiceManager',
+                'play'
+            )
+        )
         ->disableOriginalConstructor()
         ->getMock();
 
@@ -1428,7 +1555,17 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $entry = new \PlaygroundGame\Entity\Entry();
 
         $f = $this->getMockBuilder('PlaygroundGame\Service\Game')
-        ->setMethods(array('checkGame', 'checkIsFan', 'postGoogle', 'checkExistingEntry', 'getEntryMapper', 'getServiceManager', 'play'))
+        ->setMethods(
+            array(
+                'checkGame',
+                'checkIsFan',
+                'postGoogle',
+                'checkExistingEntry',
+                'getEntryMapper',
+                'getServiceManager',
+                'play'
+            )
+        )
         ->disableOriginalConstructor()
         ->getMock();
 
@@ -1491,7 +1628,17 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $entry = new \PlaygroundGame\Entity\Entry();
 
         $f = $this->getMockBuilder('PlaygroundGame\Service\Game')
-        ->setMethods(array('checkGame', 'checkIsFan', 'postGoogle', 'checkExistingEntry', 'getEntryMapper', 'getServiceManager', 'play'))
+        ->setMethods(
+            array(
+                'checkGame',
+                'checkIsFan',
+                'postGoogle',
+                'checkExistingEntry',
+                'getEntryMapper',
+                'getServiceManager',
+                'play'
+            )
+        )
         ->disableOriginalConstructor()
         ->getMock();
 
@@ -1554,7 +1701,19 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $entry = new \PlaygroundGame\Entity\Entry();
 
         $f = $this->getMockBuilder('PlaygroundGame\Service\Game')
-        ->setMethods(array('checkGame', 'checkIsFan', 'addAnotherChance', 'findLastInactiveEntry', 'checkExistingEntry', 'postGoogle', 'getEntryMapper', 'getServiceManager', 'play'))
+        ->setMethods(
+            array(
+                'checkGame',
+                'checkIsFan',
+                'addAnotherChance',
+                'findLastInactiveEntry',
+                'checkExistingEntry',
+                'postGoogle',
+                'getEntryMapper',
+                'getServiceManager',
+                'play'
+            )
+        )
         ->disableOriginalConstructor()
         ->getMock();
 
@@ -1623,7 +1782,19 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $entry->setWinner(true);
 
         $f = $this->getMockBuilder('PlaygroundGame\Service\Game')
-        ->setMethods(array('checkGame', 'checkIsFan', 'addAnotherChance', 'findLastInactiveEntry', 'checkExistingEntry', 'postGoogle', 'getEntryMapper', 'getServiceManager', 'play'))
+        ->setMethods(
+            array(
+                'checkGame',
+                'checkIsFan',
+                'addAnotherChance',
+                'findLastInactiveEntry',
+                'checkExistingEntry',
+                'postGoogle',
+                'getEntryMapper',
+                'getServiceManager',
+                'play'
+            )
+        )
         ->disableOriginalConstructor()
         ->getMock();
 
@@ -2019,7 +2190,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $game->setIdentifier('gameid');
         $game->setClassType('quiz');
         $game->setStylesheet('skin');
-        $game->setConditionsBlock('<h2 id="subtitle-test">Ut placerat lorem sed quam luctus, in egestas diam pretium.</h2><p>Pellentesque pellentesque eros sit amet mi egestas malesuada. Nunc pellentesque libero in felis tristique molestie. Aliquam dolor libero, consectetur at neque quis, egestas tempor nulla. Pellentesque massa ante, imperdiet vulputate mauris id, dignissim dapibus urna.</p>');
+        $game->setConditionsBlock('<h2 id="subtitle-test">condition</h2>block</p>');
         $game->setTitle('title');
 
         $f = $this->getMockBuilder('PlaygroundGame\Service\Game')
@@ -2224,7 +2395,16 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $game->addPrize($prize);
 
         $f = $this->getMockBuilder('PlaygroundGame\Service\Game')
-        ->setMethods(array('checkGame', 'checkIsFan', 'checkExistingEntry', 'getEntryMapper', 'getServiceManager', 'play'))
+        ->setMethods(
+            array(
+                'checkGame',
+                'checkIsFan',
+                'checkExistingEntry',
+                'getEntryMapper',
+                'getServiceManager',
+                'play'
+            )
+        )
         ->disableOriginalConstructor()
         ->getMock();
 

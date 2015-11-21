@@ -20,27 +20,6 @@ class GameController extends AbstractActionController
      */
     protected $adminGameService;
 
-    public function indexAction()
-    {
-        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-        if (!$identifier) {
-            return $this->notFoundAction();
-        }
-
-        $service = $this->getAdminGameService();
-        $game = $service->getGameMapper()->findByIdentifier($identifier);
-
-        if (!$game) {
-            return $this->notFoundAction();
-        }
-
-        $viewModel = new ViewModel(
-            array('game' => $game)
-        );
-
-        return $viewModel;
-    }
-
     public function listAction()
     {
         $filter    = $this->getEvent()->getRouteMatch()->getParam('filter');
@@ -71,7 +50,9 @@ class GameController extends AbstractActionController
         }
 
         $game = $this->getAdminGameService()->getGameMapper()->findById($gameId);
-        $adapter = new DoctrineAdapter(new ORMPaginator($this->getAdminGameService()->getEntryMapper()->queryByGame($game)));
+        $adapter = new DoctrineAdapter(
+            new ORMPaginator($this->getAdminGameService()->getEntryMapper()->queryByGame($game))
+        );
         $paginator = new Paginator($adapter);
         $paginator->setItemCountPerPage(10);
         $paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
@@ -223,7 +204,9 @@ class GameController extends AbstractActionController
                 $service->getGameMapper()->remove($game);
                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The game has been edited');
             } catch (\Doctrine\DBAL\DBALException $e) {
-                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('Il y a déjà eu des participants à ce jeu. Vous ne pouvez plus le supprimer');
+                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage(
+                    'Il y a déjà eu des participants à ce jeu. Vous ne pouvez plus le supprimer'
+                );
             }
         }
 
@@ -256,7 +239,13 @@ class GameController extends AbstractActionController
         $form = $service->getPlayerFormMapper()->findOneBy(array('game' => $game));
 
         // I use the wonderful Form Generator to create the Post & Vote form
-        $this->forward()->dispatch('PlaygroundCore\Controller\Formgen', array('controller' => 'PlaygroundCore\Controller\Formgen', 'action' => 'create'));
+        $this->forward()->dispatch(
+            'PlaygroundCore\Controller\Formgen',
+            array(
+                'controller' => 'PlaygroundCore\Controller\Formgen',
+                'action' => 'create'
+            )
+        );
 
         if ($this->getRequest()->isPost()) {
             $data = $this->getRequest()->getPost()->toArray();

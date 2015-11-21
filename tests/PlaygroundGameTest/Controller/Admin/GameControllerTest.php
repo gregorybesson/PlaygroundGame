@@ -3,7 +3,13 @@
 namespace PlaygroundGameTest\Controller\Admin;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
+use PlaygroundGameTest\Bootstrap;
 use \PlaygroundGame\Entity\Game as GameEntity;
+use PlaygroundGame\Controller\Admin\GameController;
+use Zend\Http\Request;
+use Zend\Http\Response;
+use Zend\Mvc\MvcEvent;
+use Zend\Mvc\Router\RouteMatch;
 
 class GameControllerTest extends AbstractHttpControllerTestCase
 {
@@ -15,7 +21,38 @@ class GameControllerTest extends AbstractHttpControllerTestCase
             include __DIR__ . '/../../../TestConfig.php'
         );
 
+        $this->sm = Bootstrap::getServiceManager();
+        $this->em = $this->sm->get('doctrine.entitymanager.orm_default');
+        $this->tm = $this->sm->get('playgroundgame_entry_mapper');
+        $tool = new \Doctrine\ORM\Tools\SchemaTool($this->em);
+        $classes = $this->em->getMetadataFactory()->getAllMetadata();
+        $tool->dropSchema($classes);
+        $tool->createSchema($classes);
+
+        $serviceManager = Bootstrap::getServiceManager();
+        $this->controller = new GameController();
+        $this->request    = new Request();
+        $this->routeMatch = new RouteMatch(array('controller' => 'playgroundgame_admin_game'));
+        $this->event      = new MvcEvent();
+
+        $this->controller->setServiceLocator($serviceManager);
+
         parent::setUp();
+    }
+
+    public function testListAction()
+    {
+        $this->routeMatch->setParam('type', 'value');
+        $this->event->setRouteMatch($this->routeMatch);
+        $this->controller->setEvent($this->event);
+
+        $result = $this->controller->listAction();
+        $this->assertInternalType('array', $result);
+        //$this->assertInstanceOf('Zend\View\Model\ViewModel', $result);
+ 
+        // Test the parameters contained in the View model
+        //$vars = $result->getVariables();
+        $this->assertTrue(isset($result['type']));
     }
 
     public function testDownloadAction()

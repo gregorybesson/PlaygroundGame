@@ -79,7 +79,8 @@ class QuizTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test pour vérifier si le formulaire est valide si le champ VictoryConditions est vide (car uniquement pour pronostique)
+     * Test to check if the form is valid and victoryConditions field
+     * is empty (only for bet type)
      */
     public function testCanInsertNewRecordWithVictoryConditionsNull()
     {
