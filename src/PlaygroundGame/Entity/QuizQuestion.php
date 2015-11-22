@@ -613,9 +613,9 @@ class QuizQuestion implements InputFilterAwareInterface
                 'name'     => 'prediction',
                 'required' => false,
                 'allowEmpty' => true,
-                'filters'    => array(
-                    array('name' => 'Boolean'),
-                ),
+                // 'filters'    => array(
+                //     array('name' => 'Boolean'),
+                // ),
             )));
 
             $inputFilter->add($factory->createInput(array(
@@ -659,9 +659,9 @@ class QuizQuestion implements InputFilterAwareInterface
                 'name'       => 'timer',
                 'required'   => false,
                 'allowEmpty' => true,
-                'filters'    => array(
-                    array('name' => 'Boolean'),
-                ),
+                // 'filters'    => array(
+                //     array('name' => 'Boolean'),
+                // ),
             )));
 
             $inputFilter->add($factory->createInput(array(
@@ -695,9 +695,9 @@ class QuizQuestion implements InputFilterAwareInterface
                 'name'       => 'autoplay',
                 'required'   => false,
                 'allowEmpty' => true,
-                'filters'    => array(
-                    array('name' => 'Boolean'),
-                ),
+                // 'filters'    => array(
+                //     array('name' => 'Boolean'),
+                // ),
             )));
 
             $this->inputFilter = $inputFilter;

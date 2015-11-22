@@ -446,6 +446,50 @@ class Quiz extends Game implements ServiceManagerAwareInterface
         return $winner;
     }
 
+    public function getEntriesHeader($game){
+        $header = parent::getEntriesHeader($game);
+        $header['totalCorrectAnswers'] = 1;
+
+        return $header;
+    }
+
+    public function getEntriesQuery($game){
+        $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
+
+        $qb = $em->createQueryBuilder();
+        $qb->select('
+            r.id,
+            u.username,
+            u.title,
+            u.firstname,
+            u.lastname,
+            u.email,
+            u.optin,
+            u.optinPartner,
+            u.address,
+            u.address2,
+            u.postalCode,
+            u.city,
+            u.telephone,
+            u.mobile,
+            u.created_at,
+            u.dob,
+            e.winner,
+            e.socialShares,
+            e.playerData,
+            e.updated_at,
+            r.totalCorrectAnswers
+            ')
+            ->from('PlaygroundGame\Entity\QuizReply', 'r')
+            ->innerJoin('r.entry', 'e')
+            ->leftJoin('e.user', 'u')
+            ->where($qb->expr()->eq('e.game', ':game'));
+        
+        $qb->setParameter('game', $game);
+
+        return $qb->getQuery();
+    }
+
     public function getGameEntity()
     {
         return new \PlaygroundGame\Entity\Quiz;

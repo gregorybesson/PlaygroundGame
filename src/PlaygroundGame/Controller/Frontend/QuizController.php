@@ -61,13 +61,13 @@ class QuizController extends GameController
         $explanations = array();
 
         foreach ($questions as $q) {
-            if (($game->getQuestionGrouping() > 0 && $i % $game->getQuestionGrouping() == 0) || ($i == 0 && $game->getQuestionGrouping() == 0)) {
+            if (($game->getQuestionGrouping() > 0 && $i % $game->getQuestionGrouping() === 0) || ($i === 0 && $game->getQuestionGrouping() === 0)) {
                 $fieldsetName = 'questionGroup' . ++ $j;
                 $fieldset = new Fieldset($fieldsetName);
             }
             $name = 'q' . $q->getId();
             $fieldsetFilter = new \Zend\InputFilter\InputFilter();
-            if ($q->getType() == 0) {
+            if ($q->getType() === 0) {
                 $element = new Element\Radio($name);
                 $values = array();
                 $valuesSortedByPosition = array();
@@ -87,7 +87,7 @@ class QuizController extends GameController
                 $element->setLabelOptions(array("disable_html_escape"=>true));
 
                 $elementData[$q->getId()] = new Element\Hidden($name.'-data');
-            } elseif ($q->getType() == 1) {
+            } elseif ($q->getType() === 1) {
                 $element = new Element\MultiCheckbox($name);
                 $values = array();
                 $valuesSortedByPosition = array();

@@ -246,7 +246,7 @@ class Module
      * @param  EventManager $e
      * @return array
      */
-    public function updateDynareas($e)
+    public function updateDynareas(MvcEvent $e)
     {
         $dynareas = $e->getParam('dynareas');
 
@@ -268,7 +268,7 @@ class Module
      * @param  EventManager $e
      * @return array
      */
-    public function addCronjob($e)
+    public function addCronjob(MvcEvent $e)
     {
         $cronjobs = $e->getParam('cronjobs');
 
@@ -531,7 +531,7 @@ class Module
                     return $form;
                 },
 
-                'playgroundgame_register_form' => function ($sm) {
+                'playgroundgame_register_form' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $translator = $sm->get('translator');
                     $zfcUserOptions = $sm->get('zfcuser_module_options');
                     $form = new Form\Frontend\Register(null, $zfcUserOptions, $translator, $sm);
