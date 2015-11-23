@@ -335,10 +335,10 @@ class GameController extends AbstractActionController
                 // Get Playground user from Facebook info
                 $beforeLayout = $this->layout()->getTemplate();
                 $view = $this->forward()->dispatch(
-                    'playgrounduser_user', 
+                    'playgrounduser_user',
                     array(
-                        'controller' => 'playgrounduser_user', 
-                        'action' => 'registerFacebookUser', 
+                        'controller' => 'playgrounduser_user',
+                        'action' => 'registerFacebookUser',
                         'provider' => $channel
                     )
                 );
@@ -350,17 +350,17 @@ class GameController extends AbstractActionController
                 if (!$user) {
                     $redirectUrl = urlencode(
                         $this->frontendUrl()->fromRoute(
-                            $game->getClassType() .'/play', 
+                            $game->getClassType() .'/play',
                             array(
-                                'id' => $game->getIdentifier(), 
+                                'id' => $game->getIdentifier(),
                                 'channel' => $channel
-                            ), 
+                            ),
                             array('force_canonical' => true)
                         )
                     );
                     $redirect =  $this->redirect()->toUrl(
                         $this->frontendUrl()->fromRoute(
-                            'zfcuser/register', 
+                            'zfcuser/register',
                             array('channel' => $channel)
                         ) . '?redirect='.$redirectUrl
                     );
@@ -370,7 +370,7 @@ class GameController extends AbstractActionController
             if ($game->getFbFan()) {
                 if ($sg->checkIsFan($game) === false) {
                     $redirect =  $this->redirect()->toRoute(
-                        $game->getClassType().'/fangate', 
+                        $game->getClassType().'/fangate',
                         array('id' => $game->getIdentifier())
                     );
                 }
