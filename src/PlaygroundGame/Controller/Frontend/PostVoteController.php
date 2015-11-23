@@ -329,7 +329,6 @@ class PostVoteController extends GameController
             return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('postvote', array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
         }
 
-        // buildView must be before sendMail because it adds the game template path to the templateStack
         $viewModel = $this->buildView($game);
 
         $viewModel->setVariables(array(
@@ -664,8 +663,7 @@ class PostVoteController extends GameController
                 }
             }
         }
-    
-        // buildView must be before sendMail because it adds the game template path to the templateStack
+
         $viewModel = $this->buildView($game);
     
         foreach ($post->getPostElements() as $element) {

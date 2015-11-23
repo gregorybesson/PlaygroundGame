@@ -225,7 +225,7 @@ class InstantWinController extends GameController
         // buildView must be before sendMail because it adds the game template path to the templateStack
         $viewModel = $this->buildView($game);
         
-        $this->sendMail($game, $user, $lastEntry, $prize);
+        $this->getGameService()->sendMail($game, $user, $lastEntry, $prize);
 
         if ($viewModel instanceof \Zend\View\Model\ViewModel) {
             $viewModel->setVariables(array(

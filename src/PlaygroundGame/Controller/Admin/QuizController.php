@@ -263,20 +263,4 @@ class QuizController extends GameController
 
         return $this;
     }
-
-    public function getQuizReplyAnswerMapper()
-    {
-        if (!$this->quizReplyAnswerMapper) {
-            $this->quizReplyAnswerMapper = $this->getServiceLocator()->get('playgroundgame_quizreplyanswer_mapper');
-        }
-        return $this->quizReplyAnswerMapper;
-    }
-
-    public function getQuizReplyMapper()
-    {
-        if (!$this->quizReplyMapper) {
-            $this->quizReplyMapper = $this->getServiceLocator()->get('playgroundgame_quizreply_mapper');
-        }
-        return $this->quizReplyMapper;
-    }
 }
