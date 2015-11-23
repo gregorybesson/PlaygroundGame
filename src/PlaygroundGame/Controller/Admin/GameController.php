@@ -16,7 +16,7 @@ class GameController extends AbstractActionController
     protected $options;
 
     /**
-     * @var GameService
+     * @var PlaygroundGame\Service\Game
      */
     protected $adminGameService;
 
@@ -50,7 +50,6 @@ class GameController extends AbstractActionController
         }
 
         $game = $this->getAdminGameService()->getGameMapper()->findById($gameId);
-        $header = $this->getAdminGameService()->getEntriesHeader($game);
 
         $adapter = new DoctrineAdapter(
             new LargeTablePaginator(
@@ -190,18 +189,19 @@ class GameController extends AbstractActionController
             if (! empty($data['import_file']['tmp_name'])) {
                 ErrorHandler::start();
                 $game = unserialize(file_get_contents($data['import_file']['tmp_name']));
+                $game->setId(null);
+                if ($data['slug']) {
+                    $game->setIdentifier($data['slug']);
+                }
+                $duplicate = $this->getAdminGameService()->getGameMapper()->findByIdentifier($game->getIdentifier());
+                if (!$duplicate) {
+                    $this->getAdminGameService()->getGameMapper()->insert($game);
+                }
+
                 ErrorHandler::stop(true);
             }
-            $game->setId(null);
-            if ($data['slug']) {
-                $game->setIdentifier($data['slug']);
-            }
             
-            $duplicate = $this->getAdminGameService()->getGameMapper()->findByIdentifier($game->getIdentifier());
-            if (!$duplicate) {
-                $this->getAdminGameService()->getGameMapper()->insert($game);
-                return $this->redirect()->toRoute('admin/playgroundgame/list');
-            }
+            return $this->redirect()->toRoute('admin/playgroundgame/list');
         }
         
         return array(
