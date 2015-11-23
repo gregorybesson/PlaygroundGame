@@ -4,10 +4,10 @@ namespace PlaygroundGame\Controller\Admin;
 
 use PlaygroundGame\Service\Game as AdminGameService;
 use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
 use PlaygroundGame\Options\ModuleOptions;
 use Zend\Paginator\Paginator;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
+use PlaygroundCore\ORM\Pagination\LargeTablePaginator;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use Zend\Stdlib\ErrorHandler;
 
@@ -50,21 +50,29 @@ class GameController extends AbstractActionController
         }
 
         $game = $this->getAdminGameService()->getGameMapper()->findById($gameId);
+        $header = $this->getAdminGameService()->getEntriesHeader($game);
+
         $adapter = new DoctrineAdapter(
-            new ORMPaginator($this->getAdminGameService()->getEntryMapper()->queryByGame($game))
+            new LargeTablePaginator(
+                $this->getAdminGameService()->getEntriesQuery($game)
+            )
         );
         $paginator = new Paginator($adapter);
         $paginator->setItemCountPerPage(10);
         $paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
 
+        $header = $this->getAdminGameService()->getEntriesHeader($game);
+        $entries = $this->getAdminGameService()->getGameEntries($header, $paginator, $game);
+
         return array(
-            'entries' => $paginator,
+            'paginator' => $paginator,
+            'entries' => $entries,
+            'header' => $header,
             'game' => $game,
             'gameId' => $gameId
         );
     }
 
-    // Used for Lottery, TreasureHunt and redifined for Quiz and InstantWin because it's slightly different
     public function downloadAction()
     {
         $gameId = $this->getEvent()->getRouteMatch()->getParam('gameId');
@@ -72,7 +80,18 @@ class GameController extends AbstractActionController
             return $this->redirect()->toRoute('admin/playgroundgame/list');
         }
 
-        $content = $this->getAdminGameService()->download($gameId);
+        $game = $this->getAdminGameService()->getGameMapper()->findById($gameId);
+        $header = $this->getAdminGameService()->getEntriesHeader($game);
+        $query = $this->getAdminGameService()->getEntriesQuery($game);
+
+        $content = "\xEF\xBB\xBF"; // UTF-8 BOM
+        $content .= $this->getAdminGameService()->getCSV(
+            $this->getAdminGameService()->getGameEntries(
+                $header,
+                $query->getResult(),
+                $game
+            )
+        );
 
         $response = $this->getResponse();
         $headers = $response->getHeaders();

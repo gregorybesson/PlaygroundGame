@@ -74,7 +74,10 @@ class Quiz extends Game implements ServiceManagerAwareInterface
 
         if (!empty($data['upload_image']['tmp_name'])) {
             ErrorHandler::start();
-            $data['upload_image']['name'] = $this->fileNewname($path, $question->getId() . "-" . $data['upload_image']['name']);
+            $data['upload_image']['name'] = $this->fileNewname(
+                $path,
+                $question->getId() . "-" . $data['upload_image']['name']
+            );
             move_uploaded_file($data['upload_image']['tmp_name'], $path . $data['upload_image']['name']);
             $question->setImage($media_url . $data['upload_image']['name']);
             ErrorHandler::stop(true);
@@ -134,8 +137,14 @@ class Quiz extends Game implements ServiceManagerAwareInterface
         foreach ($question->getAnswers() as $answer) {
             if (!empty($data['answers'][$i]['upload_image']['tmp_name'])) {
                 ErrorHandler::start();
-                $data['answers'][$i]['upload_image']['name'] = $this->fileNewname($path, $question->getId() . "-" . $data['answers'][$i]['upload_image']['name']);
-                move_uploaded_file($data['answers'][$i]['upload_image']['tmp_name'], $path . $data['answers'][$i]['upload_image']['name']);
+                $data['answers'][$i]['upload_image']['name'] = $this->fileNewname(
+                    $path,
+                    $question->getId() . "-" . $data['answers'][$i]['upload_image']['name']
+                );
+                move_uploaded_file(
+                    $data['answers'][$i]['upload_image']['tmp_name'],
+                    $path . $data['answers'][$i]['upload_image']['name']
+                );
                 $answer->setImage($media_url . $data['answers'][$i]['upload_image']['name']);
                 ErrorHandler::stop(true);
             }
@@ -179,7 +188,10 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                 $quizReplies = $this->getQuizReplyMapper()->findByEntry($entry);
                 if ($quizReplies) {
                     foreach ($quizReplies as $reply) {
-                        $quizReplyAnswers = $this->getQuizReplyAnswerMapper()->findByReplyAndQuestion($reply, $question->getId());
+                        $quizReplyAnswers = $this->getQuizReplyAnswerMapper()->findByReplyAndQuestion(
+                            $reply,
+                            $question->getId()
+                        );
                         $quizPoints = 0;
                         $quizCorrectAnswers = 0;
                         if ($quizReplyAnswers) {
@@ -218,12 +230,24 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                 $entry = $this->getEntryMapper()->update($entry);
             }
 
-            $this->getEventManager()->trigger(__FUNCTION__.'.prediction', $this, array('question' => $question, 'data' => $data));
+            $this->getEventManager()->trigger(
+                __FUNCTION__.'.prediction',
+                $this,
+                array('question' => $question, 'data' => $data)
+            );
         }
 
-        $this->getEventManager()->trigger(__FUNCTION__, $this, array('question' => $question, 'data' => $data));
+        $this->getEventManager()->trigger(
+            __FUNCTION__,
+            $this,
+            array('question' => $question, 'data' => $data)
+        );
         $this->getQuizQuestionMapper()->update($question);
-        $this->getEventManager()->trigger(__FUNCTION__.'.post', $this, array('question' => $question, 'data' => $data));
+        $this->getEventManager()->trigger(
+            __FUNCTION__.'.post',
+            $this,
+            array('question' => $question, 'data' => $data)
+        );
 
         $this->getQuizMapper()->update($quiz);
 
@@ -386,7 +410,6 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                             $quizPoints += $qAnswer->getPoints();
                             $quizReplyAnswer->setCorrect($qAnswer->getCorrect());
                             $quizCorrectAnswers += $qAnswer->getCorrect();
-                            // $quizReplyAnswer = $this->getQuizReplyAnswerMapper()->update($quizReplyAnswer);
                             break;
                         }
                     }
@@ -415,7 +438,11 @@ class Quiz extends Game implements ServiceManagerAwareInterface
 
         $quizReplyMapper->insert($quizReply);
 
-        $this->getEventManager()->trigger('complete_quiz.post', $this, array('user' => $user, 'entry' => $entry, 'reply' => $quizReply, 'game' => $game));
+        $this->getEventManager()->trigger(
+            'complete_quiz.post',
+            $this,
+            array('user' => $user, 'entry' => $entry, 'reply' => $quizReply, 'game' => $game)
+        );
 
         return $entry;
     }
@@ -444,6 +471,52 @@ class Quiz extends Game implements ServiceManagerAwareInterface
             }
         }
         return $winner;
+    }
+
+    public function getEntriesHeader($game)
+    {
+        $header = parent::getEntriesHeader($game);
+        $header['totalCorrectAnswers'] = 1;
+
+        return $header;
+    }
+
+    public function getEntriesQuery($game)
+    {
+        $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
+
+        $qb = $em->createQueryBuilder();
+        $qb->select('
+            r.id,
+            u.username,
+            u.title,
+            u.firstname,
+            u.lastname,
+            u.email,
+            u.optin,
+            u.optinPartner,
+            u.address,
+            u.address2,
+            u.postalCode,
+            u.city,
+            u.telephone,
+            u.mobile,
+            u.created_at,
+            u.dob,
+            e.winner,
+            e.socialShares,
+            e.playerData,
+            e.updated_at,
+            r.totalCorrectAnswers
+            ')
+            ->from('PlaygroundGame\Entity\QuizReply', 'r')
+            ->innerJoin('r.entry', 'e')
+            ->leftJoin('e.user', 'u')
+            ->where($qb->expr()->eq('e.game', ':game'));
+        
+        $qb->setParameter('game', $game);
+
+        return $qb->getQuery();
     }
 
     public function getGameEntity()

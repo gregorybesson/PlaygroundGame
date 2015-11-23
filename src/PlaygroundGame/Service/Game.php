@@ -571,6 +571,109 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         return $games;
     }
 
+    public function getEntriesQuery($game)
+    {
+        $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
+
+        $qb = $em->createQueryBuilder();
+        $qb->select('
+            e.id,
+            u.username,
+            u.title,
+            u.firstname,
+            u.lastname,
+            u.email,
+            u.optin,
+            u.optinPartner,
+            u.address,
+            u.address2,
+            u.postalCode,
+            u.city,
+            u.telephone,
+            u.mobile,
+            u.created_at,
+            u.dob,
+            e.winner,
+            e.socialShares,
+            e.playerData,
+            e.updated_at
+            ')
+            ->from('PlaygroundGame\Entity\Entry', 'e')
+            ->leftJoin('e.user', 'u')
+            ->where($qb->expr()->eq('e.game', ':game'));
+        
+        $qb->setParameter('game', $game);
+
+        return $qb->getQuery();
+    }
+
+    public function getEntriesHeader($game)
+    {
+        if ($game->getPlayerForm()) {
+            $formPV = json_decode($game->getPlayerForm()->getForm(), true);
+            $header = array('id'=> 1);
+            foreach ($formPV as $element) {
+                foreach ($element as $k => $v) {
+                    if ($k !== 'form_properties') {
+                        $header[$v[0]['name']] = 1;
+                    }
+                }
+            }
+        } else {
+            $header = array(
+                'id' => 1,
+                'username' => 1,
+                'title' => 1,
+                'firstname' => 1,
+                'lastname' => 1,
+                'email' => 1,
+                'optin' => 1,
+                'optinPartner' => 1,
+                'address' => 1,
+                'address2' => 1,
+                'postalCode' => 1,
+                'city' => 1,
+                'telephone' => 1,
+                'mobile' => 1,
+                'created_at' => 1,
+                'dob' => 1,
+                'winner' => 1
+            );
+        }
+        $header['winner'] = 1;
+        $header['socialShares'] = 1;
+        $header['updated_at'] = 1;
+
+        return $header;
+    }
+
+    /**
+    * getGameEntries : I create an array of entries based on playerData + header
+    *
+    * @return Array of PlaygroundGame\Entity\Game
+    */
+    public function getGameEntries($header, $entries, $game)
+    {
+        $header = $this->getEntriesHeader($game);
+
+        $results = array();
+
+        foreach ($entries as $k => $entry) {
+            $entryData = json_decode($entry['playerData'], true);
+            foreach ($header as $key => $v) {
+                if (isset($entryData[$key])) {
+                    $results[$k][$key] = (is_array($entryData[$key]))?implode(', ', $entryData[$key]):$entryData[$key];
+                } elseif (array_key_exists($key, $entry)) {
+                    $results[$k][$key] = ($entry[$key] instanceof \DateTime)?$entry[$key]->format('Y-m-d'):$entry[$key];
+                } else {
+                    $results[$k][$key] = '';
+                }
+            }
+        }
+
+        return $results;
+    }
+
     /**
      * getActiveSliderGames
      *
@@ -1764,6 +1867,21 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
         return $form;
     }
+
+    /**
+     *  getCSV creates lines of CSV and returns it.
+     */
+    public function getCSV($array)
+    {
+        ob_start(); // buffer the output ...
+        $out = fopen('php://output', 'w');
+        fputcsv($out, array_keys($array[0]), ";");
+        foreach ($array as $line) {
+            fputcsv($out, $line, ";");
+        }
+        fclose($out);
+        return ob_get_clean(); // ... then return it as a string!
+    }
     
     /**
      * Create a ZF2 Form from json data
@@ -2188,118 +2306,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $form->setInputFilter($inputFilter);
         
         return $form;
-    }
-
-    public function download($gameId, $columns = array())
-    {
-        $game = $this->getGameMapper()->findById($gameId);
-        $entries = $this->getEntryMapper()->findBy(array('game' => $game));
-
-        $content        = "\xEF\xBB\xBF"; // UTF-8 BOM
-
-        if (!$game) {
-            return $content;
-        }
-        
-        if (! $game->getAnonymousAllowed()) {
-            $content       .= "ID;Pseudo;Civilité;Nom;Prénom;E-mail;Optin Newsletter;Optin partenaire;Adresse;CP;Ville;Téléphone;Mobile;Date d'inscription;Date de naissance;";
-        }
-        
-        $header = array();
-        if ($game->getPlayerForm()) {
-            $formPV = json_decode($game->getPlayerForm()->getForm(), true);
-            foreach ($formPV as $element) {
-                if (isset($element['line_text'][0]['name'])) {
-                    $header[$element['line_text'][0]['name']] = 1;
-                }
-                if (isset($element['line_password'][0]['name'])) {
-                    $header[$element['line_password'][0]['name']] = 1;
-                }
-                if (isset($element['line_hidden'][0]['name'])) {
-                    $header[$element['line_hidden'][0]['name']] = 1;
-                }
-                if (isset($element['line_email'][0]['name'])) {
-                    $header[$element['line_email'][0]['name']] = 1;
-                }
-                if (isset($element['line_radio'][0]['name'])) {
-                    $header[$element['line_radio'][0]['name']] = 1;
-                }
-                if (isset($element['line_checkbox'][0]['name'])) {
-                    $header[$element['line_checkbox'][0]['name']] = 1;
-                }
-                if (isset($element['line_dropdown'][0]['name'])) {
-                    $header[$element['line_dropdown'][0]['name']] = 1;
-                }
-                if (isset($element['line_paragraph'][0]['name'])) {
-                    $header[$element['line_paragraph'][0]['name']] = 1;
-                }
-                if (isset($element['line_upload'][0]['name'])) {
-                    $header[$element['line_upload'][0]['name']] = 1;
-                }
-            }
-        }
-
-        if (count($entries)) {
-            foreach ($header as $key => $data) {
-                $content .= $key.';';
-            }
-            $content .= 'A Gagné ?;Date - H'
-                ."\n";
-            foreach ($entries as $e) {
-                if (!$game->getAnonymousAllowed()) {
-                    if ($e->getUser()->getAddress2() != '') {
-                        $adress2 = ' - ' . $e->getUser()->getAddress2();
-                    } else {
-                        $adress2 = '';
-                    }
-                    if ($e->getUser()->getDob() !== null) {
-                        $dob = $e->getUser()->getDob()->format('Y-m-d');
-                    } else {
-                        $dob = '';
-                    }
-    
-                    $content   .= $e->getUser()->getId()
-                    . ";" . $e->getUser()->getUsername()
-                    . ";" . $e->getUser()->getTitle()
-                    . ";" . $e->getUser()->getLastname()
-                    . ";" . $e->getUser()->getFirstname()
-                    . ";" . $e->getUser()->getEmail()
-                    . ";" . $e->getUser()->getOptin()
-                    . ";" . $e->getUser()->getOptinPartner()
-                    . ";" . $e->getUser()->getAddress() . $adress2
-                    . ";" . $e->getUser()->getPostalCode()
-                    . ";" . $e->getUser()->getCity()
-                    . ";" . $e->getUser()->getTelephone()
-                    . ";" . $e->getUser()->getMobile()
-                    . ";" . $e->getUser()->getCreatedAt()->format('Y-m-d')
-                    . ";" . $dob
-                    . ";" ;
-                }
-                if ($e->getPlayerData()) {
-                    $entryData = json_decode($e->getPlayerData(), true);
-                    foreach ($header as $k => $v) {
-                        if (isset($entryData[$k])) {
-                            if (is_array($entryData[$k])) {
-                                $content .= implode(', ', $entryData[$k]).';';
-                            } else {
-                                $content .= $entryData[$k].';';
-                            }
-                        } else {
-                            $content .= ';';
-                        }
-                    }
-                } else {
-                    foreach ($header as $k => $v) {
-                        $content .= ';';
-                    }
-                }
-                $content   .= $e->getWinner()
-                . ";" . $e->getCreatedAt()->format('Y-m-d H:i:s')
-                . "\n";
-            }
-
-            return $content;
-        }
     }
 
     public function getPlayerFormMapper()

@@ -599,7 +599,7 @@ class PostVoteController extends GameController
             $image = './data/captcha/' . $id;
 
             if (file_exists($image) !== false) {
-                $imagegetcontent = @file_get_contents($image);
+                $imagegetcontent = file_get_contents($image);
 
                 $response->setStatusCode(200);
                 $response->setContent($imagegetcontent);

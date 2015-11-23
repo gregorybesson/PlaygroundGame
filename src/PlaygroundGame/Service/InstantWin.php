@@ -100,9 +100,11 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
      */
     public function scheduleOccurrences($game, array $data)
     {
-        if ($game->getOccurrenceType() == 'code') {
+        // It will be quite long to create these occurrences !
+        set_time_limit(0);
+        if ($game->getOccurrenceType() === 'code') {
             return $this->scheduleCodeOccurrences($game, $data);
-        } elseif ($game->getOccurrenceType() == 'datetime') {
+        } elseif ($game->getOccurrenceType() === 'datetime') {
             return $this->scheduleDateOccurrences($game);
         }
     }
@@ -532,6 +534,52 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
         $this->getEventManager()->trigger('complete_instantwin.post', $this, array('user' => $user, 'game' => $game, 'entry' => $entry));
 
         return $occurrence;
+    }
+
+    public function getEntriesHeader($game)
+    {
+        $header = parent::getEntriesHeader($game);
+        $header['value'] = 1;
+        $header['prize'] = 1;
+
+        return $header;
+    }
+
+    /**
+    * getGameEntries : All entries of a game
+    *
+    * @return Array of PlaygroundGame\Entity\Game
+    */
+    public function getGameEntries($header, $entries, $game)
+    {
+        
+        $results = array();
+
+        foreach ($entries as $k => $entry) {
+            $entryData = json_decode($entry['playerData'], true);
+            $winner = $entry['winner'];
+
+            foreach ($header as $key => $v) {
+                if (isset($entryData[$key]) && $key !=='id') {
+                    $results[$k][$key] = (is_array($entryData[$key]))?implode(', ', $entryData[$key]):$entryData[$key];
+                } elseif (array_key_exists($key, $entry)) {
+                    $results[$k][$key] = ($entry[$key] instanceof \DateTime)?$entry[$key]->format('Y-m-d'):$entry[$key];
+                } else {
+                    $results[$k][$key] = '';
+                }
+            }
+            // If the occurrenceType is code, this will be triggered for every entry. To be improved.
+            if ($game->getOccurrenceType() === 'code' || ($game->getOccurrenceType() === 'datetime' && $winner)) {
+                $entry = $this->getEntryMapper()->findById($entry['id']);
+                $occurrence = $this->getInstantWinOccurrenceMapper()->findByEntry($entry);
+                $results[$k]['value'] = $occurrence->getValue();
+                if ($occurrence->getPrize()) {
+                    $results[$k]['prize'] = $occurrence->getPrize()->getTitle();
+                }
+            }
+        }
+
+        return $results;
     }
 
     public function getGameEntity()

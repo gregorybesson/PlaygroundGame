@@ -13,45 +13,6 @@ class PostVoteController extends GameController
      */
     protected $adminGameService;
 
-    public function formAction()
-    {
-        $service = $this->getAdminGameService();
-        $gameId = $this->getEvent()->getRouteMatch()->getParam('gameId');
-        if (!$gameId) {
-            return $this->redirect()->toRoute('admin/playgroundgame/list');
-        }
-        $game = $service->getGameMapper()->findById($gameId);
-        $form = $service->getPostVoteFormMapper()->findByGame($game);
-
-        // I use the wonderful Form Generator to create the Post & Vote form
-        $this->forward()->dispatch(
-            'PlaygroundCore\Controller\Formgen',
-            array(
-                'controller' => 'PlaygroundCore\Controller\Formgen',
-                'action' => 'create'
-            )
-        );
-
-        if ($this->getRequest()->isPost()) {
-            $data = $this->getRequest()->getPost()->toArray();
-            $form = $service->createForm($data, $game, $form);
-            if ($form) {
-                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The form was created');
-            }
-        }
-        $formTemplate='';
-        if ($form) {
-            $formTemplate = $form->getFormTemplate();
-        }
-
-        return array(
-            'form' => $form,
-            'formTemplate' => $formTemplate,
-            'gameId' => $gameId,
-            'game' => $game,
-        );
-    }
-
     public function createPostVoteAction()
     {
         $service = $this->getAdminGameService();
@@ -242,30 +203,6 @@ class PostVoteController extends GameController
                 'admin/postvote/entry',
                 array('gameId' => $game->getId())
             )
-        );
-    }
-
-    public function entryAction()
-    {
-        $gameId = $this->getEvent()->getRouteMatch()->getParam('gameId');
-        $game   = $this->getAdminGameService()->getGameMapper()->findById($gameId);
-        $posts  = $this->getAdminGameService()->getPostVotePostMapper()->findBy(
-            array('postvote' => $game),
-            array('updatedAt' => 'DESC')
-        );
-
-        if (is_array($posts)) {
-            $paginator = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\ArrayAdapter($posts));
-            $paginator->setItemCountPerPage(10);
-            $paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
-        } else {
-            $paginator = $posts;
-        }
-
-        return array(
-                'posts' => $paginator,
-                'game' => $game,
-                'gameId' => $gameId
         );
     }
 

@@ -23,7 +23,7 @@ class InstantWinControllerTest extends AbstractHttpControllerTestCase
         $serviceManager->setAllowOverride(true);
 
         $adminGameService = $this->getMockBuilder('PlaygroundGame\Service\InstantWin')
-        ->setMethods(array('getGameMapper', 'getEntryMapper', 'getInstantWinOccurrenceMapper'))
+        ->setMethods(array('getGameMapper', 'getEntriesHeader', 'getEntriesQuery', 'getGameEntries', 'getCSV'))
         ->disableOriginalConstructor()
         ->getMock();
 
@@ -35,18 +35,9 @@ class InstantWinControllerTest extends AbstractHttpControllerTestCase
         ->disableOriginalConstructor()
         ->getMock();
 
-        $adminGameOccurrenceMapper = $this->getMockBuilder('PlaygroundGame\Mapper\InstantWinOccurrence')
-        ->setMethods(array('findByEntry'))
-        ->disableOriginalConstructor()
-        ->getMock();
-
         $adminGameService->expects($this->any())
         ->method('getGameMapper')
         ->will($this->returnValue($adminGameMapper));
-
-        $adminGameService->expects($this->any())
-        ->method('getInstantWinOccurrenceMapper')
-        ->will($this->returnValue($adminGameOccurrenceMapper));
 
         $game = new \PlaygroundGame\Entity\InstantWin();
         $game->setTitle('CeciEstUnTitre');
@@ -58,14 +49,30 @@ class InstantWinControllerTest extends AbstractHttpControllerTestCase
         ->method('findById')
         ->will($this->returnValue($game));
 
-        $adminEntryMapper = $this->getMockBuilder('PlaygroundGame\Mapper\Entry')
-        ->setMethods(array('findBy'))
-        ->disableOriginalConstructor()
-        ->getMock();
+        $adminGameService->expects($this->any())
+            ->method('getEntriesHeader')
+            ->will($this->returnValue(array()));
+
+        $query = $this->getMockBuilder('Query')
+            ->setMethods(array('getResult'))
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $query->expects($this->any())
+            ->method('getResult')
+            ->will($this->returnValue(true));
 
         $adminGameService->expects($this->any())
-        ->method('getEntryMapper')
-        ->will($this->returnValue($adminEntryMapper));
+            ->method('getEntriesQuery')
+            ->will($this->returnValue($query));
+
+        $adminGameService->expects($this->any())
+            ->method('getGameEntries')
+            ->will($this->returnValue(array()));
+
+        $adminGameService->expects($this->any())
+            ->method('getCSV')
+            ->will($this->returnValue(''));
 
         $now = new \DateTime();
         $entry = new \PlaygroundGame\Entity\Entry();
@@ -91,14 +98,6 @@ class InstantWinControllerTest extends AbstractHttpControllerTestCase
         $occurrence->setPrize($prize);
         $occurrence->setEntry($entry);
 
-        $adminGameOccurrenceMapper->expects($this->any())
-        ->method('findByEntry')
-        ->will($this->returnValue($occurrence));
-
-        $adminEntryMapper->expects($this->any())
-        ->method('findBy')
-        ->will($this->returnValue(array($entry)));
-
         $response = $this->dispatch('/admin/instantwin/download/1');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('playgroundgame');
@@ -112,7 +111,7 @@ class InstantWinControllerTest extends AbstractHttpControllerTestCase
         $serviceManager->setAllowOverride(true);
 
         $adminGameService = $this->getMockBuilder('PlaygroundGame\Service\InstantWin')
-        ->setMethods(array('getGameMapper', 'getEntryMapper', 'getInstantWinOccurrenceMapper'))
+        ->setMethods(array('getGameMapper', 'getEntriesHeader', 'getEntriesQuery', 'getGameEntries', 'getCSV'))
         ->disableOriginalConstructor()
         ->getMock();
 
@@ -124,18 +123,9 @@ class InstantWinControllerTest extends AbstractHttpControllerTestCase
         ->disableOriginalConstructor()
         ->getMock();
 
-        $adminGameOccurrenceMapper = $this->getMockBuilder('PlaygroundGame\Mapper\InstantWinOccurrence')
-        ->setMethods(array('findByEntry'))
-        ->disableOriginalConstructor()
-        ->getMock();
-
         $adminGameService->expects($this->any())
         ->method('getGameMapper')
         ->will($this->returnValue($adminGameMapper));
-
-        $adminGameService->expects($this->any())
-        ->method('getInstantWinOccurrenceMapper')
-        ->will($this->returnValue($adminGameOccurrenceMapper));
 
         $game = new \PlaygroundGame\Entity\InstantWin();
         $game->setTitle('CeciEstUnTitre');
@@ -147,14 +137,30 @@ class InstantWinControllerTest extends AbstractHttpControllerTestCase
         ->method('findById')
         ->will($this->returnValue($game));
 
-        $adminEntryMapper = $this->getMockBuilder('PlaygroundGame\Mapper\Entry')
-        ->setMethods(array('findBy'))
-        ->disableOriginalConstructor()
-        ->getMock();
+        $adminGameService->expects($this->any())
+            ->method('getEntriesHeader')
+            ->will($this->returnValue(array()));
+
+        $query = $this->getMockBuilder('Query')
+            ->setMethods(array('getResult'))
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $query->expects($this->any())
+            ->method('getResult')
+            ->will($this->returnValue(true));
 
         $adminGameService->expects($this->any())
-        ->method('getEntryMapper')
-        ->will($this->returnValue($adminEntryMapper));
+            ->method('getEntriesQuery')
+            ->will($this->returnValue($query));
+
+        $adminGameService->expects($this->any())
+            ->method('getGameEntries')
+            ->will($this->returnValue(array()));
+
+        $adminGameService->expects($this->any())
+            ->method('getCSV')
+            ->will($this->returnValue(''));
 
         $now = new \DateTime();
         $entry = new \PlaygroundGame\Entity\Entry();
@@ -171,14 +177,6 @@ class InstantWinControllerTest extends AbstractHttpControllerTestCase
         $occurrence->setId(1);
         $occurrence->setPrize($prize);
         $occurrence->setEntry($entry);
-
-        $adminGameOccurrenceMapper->expects($this->any())
-        ->method('findByEntry')
-        ->will($this->returnValue($occurrence));
-
-        $adminEntryMapper->expects($this->any())
-        ->method('findBy')
-        ->will($this->returnValue(array($entry)));
 
         $response = $this->dispatch('/admin/instantwin/download/1');
         $this->assertResponseStatusCode(200);
