@@ -571,7 +571,8 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         return $games;
     }
 
-    public function getEntriesQuery($game){
+    public function getEntriesQuery($game)
+    {
         $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
 
         $qb = $em->createQueryBuilder();
@@ -606,14 +607,16 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         return $qb->getQuery();
     }
 
-    public function getEntriesHeader($game){
+    public function getEntriesHeader($game)
+    {
         if ($game->getPlayerForm()) {
             $formPV = json_decode($game->getPlayerForm()->getForm(), true);
             $header = array('id'=> 1);
             foreach ($formPV as $element) {
-                foreach($element as $k => $v){
-                    if($k !== 'form_properties')
+                foreach ($element as $k => $v) {
+                    if ($k !== 'form_properties') {
                         $header[$v[0]['name']] = 1;
+                    }
                 }
             }
         } else {
@@ -655,12 +658,12 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
         $results = array();
 
-        foreach ($entries as $k=>$entry) {
+        foreach ($entries as $k => $entry) {
             $entryData = json_decode($entry['playerData'], true);
             foreach ($header as $key => $v) {
                 if (isset($entryData[$key])) {
-                    $results[$k][$key] = (is_array($entryData[$key]))?implode(', ',$entryData[$key]):$entryData[$key];
-                } elseif (array_key_exists($key,$entry) ){
+                    $results[$k][$key] = (is_array($entryData[$key]))?implode(', ', $entryData[$key]):$entryData[$key];
+                } elseif (array_key_exists($key, $entry)) {
                     $results[$k][$key] = ($entry[$key] instanceof \DateTime)?$entry[$key]->format('Y-m-d'):$entry[$key];
                 } else {
                     $results[$k][$key] = '';
@@ -1866,13 +1869,14 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
     }
 
     /**
-     *  getCSV creates lines of CSV and returns it. 
+     *  getCSV creates lines of CSV and returns it.
      */
-    public function getCSV($array) {
+    public function getCSV($array)
+    {
         ob_start(); // buffer the output ...
         $out = fopen('php://output', 'w');
         fputcsv($out, array_keys($array[0]), ";");
-        foreach($array as $line) {
+        foreach ($array as $line) {
             fputcsv($out, $line, ";");
         }
         fclose($out);

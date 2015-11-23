@@ -73,7 +73,6 @@ class GameController extends AbstractActionController
         );
     }
 
-    // Used for Lottery, TreasureHunt and redifined for Quiz and InstantWin because it's slightly different
     public function downloadAction()
     {
         $gameId = $this->getEvent()->getRouteMatch()->getParam('gameId');
@@ -88,7 +87,7 @@ class GameController extends AbstractActionController
         $content = "\xEF\xBB\xBF"; // UTF-8 BOM
         $content .= $this->getAdminGameService()->getCSV(
             $this->getAdminGameService()->getGameEntries(
-                $header, 
+                $header,
                 $query->getResult(),
                 $game
             )

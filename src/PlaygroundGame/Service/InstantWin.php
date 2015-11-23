@@ -536,7 +536,8 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
         return $occurrence;
     }
 
-    public function getEntriesHeader($game){
+    public function getEntriesHeader($game)
+    {
         $header = parent::getEntriesHeader($game);
         $header['value'] = 1;
         $header['prize'] = 1;
@@ -554,26 +555,25 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
         
         $results = array();
 
-        foreach ($entries as $k=>$entry) {
-
+        foreach ($entries as $k => $entry) {
             $entryData = json_decode($entry['playerData'], true);
             $winner = $entry['winner'];
 
             foreach ($header as $key => $v) {
                 if (isset($entryData[$key]) && $key !=='id') {
-                    $results[$k][$key] = (is_array($entryData[$key]))?implode(', ',$entryData[$key]):$entryData[$key];
-                } elseif (array_key_exists($key,$entry) ){
+                    $results[$k][$key] = (is_array($entryData[$key]))?implode(', ', $entryData[$key]):$entryData[$key];
+                } elseif (array_key_exists($key, $entry)) {
                     $results[$k][$key] = ($entry[$key] instanceof \DateTime)?$entry[$key]->format('Y-m-d'):$entry[$key];
                 } else {
                     $results[$k][$key] = '';
                 }
             }
             // If the occurrenceType is code, this will be triggered for every entry. To be improved.
-            if ($game->getOccurrenceType() === 'code' || ($game->getOccurrenceType() === 'datetime' && $winner)){
+            if ($game->getOccurrenceType() === 'code' || ($game->getOccurrenceType() === 'datetime' && $winner)) {
                 $entry = $this->getEntryMapper()->findById($entry['id']);
                 $occurrence = $this->getInstantWinOccurrenceMapper()->findByEntry($entry);
                 $results[$k]['value'] = $occurrence->getValue();
-                if($occurrence->getPrize()){
+                if ($occurrence->getPrize()) {
                     $results[$k]['prize'] = $occurrence->getPrize()->getTitle();
                 }
             }

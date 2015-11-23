@@ -61,7 +61,7 @@ class GameControllerTest extends AbstractHttpControllerTestCase
         $serviceManager->setAllowOverride(true);
 
         $adminGameService = $this->getMockBuilder('PlaygroundGame\Service\Game')
-            ->setMethods(array('getGameMapper', 'getEntryMapper'))
+            ->setMethods(array('getGameMapper', 'getEntriesHeader', 'getEntriesQuery', 'getGameEntries', 'getCSV'))
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -88,14 +88,31 @@ class GameControllerTest extends AbstractHttpControllerTestCase
             ->method('findById')
             ->will($this->returnValue($game));
 
-        $adminEntryMapper = $this->getMockBuilder('PlaygroundGame\Mapper\Entry')
-            ->setMethods(array('findBy'))
+        $adminGameService->expects($this->any())
+            ->method('getEntriesHeader')
+            ->will($this->returnValue(array()));
+
+        $query = $this->getMockBuilder('Query')
+            ->setMethods(array('getResult'))
             ->disableOriginalConstructor()
             ->getMock();
 
+        $query->expects($this->any())
+            ->method('getResult')
+            ->will($this->returnValue(true));
+
         $adminGameService->expects($this->any())
-            ->method('getEntryMapper')
-            ->will($this->returnValue($adminEntryMapper));
+            ->method('getEntriesQuery')
+            ->will($this->returnValue($query));
+
+        $adminGameService->expects($this->any())
+            ->method('getGameEntries')
+            ->will($this->returnValue(array()));
+
+        $adminGameService->expects($this->any())
+            ->method('getCSV')
+            ->will($this->returnValue(''));
+
 
         $entry = new \PlaygroundGame\Entity\Entry();
         $entry->setPoints(1);
@@ -111,16 +128,11 @@ class GameControllerTest extends AbstractHttpControllerTestCase
         $entry->setWinner('Winners');
         $entry->setCreatedAt($now);
 
-        $adminEntryMapper->expects($this->any())
-            ->method('findBy')
-            ->will($this->returnValue(array($entry)));
-
         $this->dispatch('/admin/game/download/1');
         $this->assertModuleName('playgroundgame');
         $this->assertControllerName('playgroundgame_admin_game');
         $this->assertControllerClass('GameController');
         $this->assertActionName('download');
-        //$this->assertMatchedRouteName('frontend/lottery');
     }
 
     public function testDownloadGameEntryNotAnonymousAction()
@@ -130,7 +142,7 @@ class GameControllerTest extends AbstractHttpControllerTestCase
             $serviceManager->setAllowOverride(true);
 
             $adminGameService = $this->getMockBuilder('PlaygroundGame\Service\\'.$type)
-            ->setMethods(array('getGameMapper', 'getEntryMapper'))
+            ->setMethods(array('getGameMapper', 'getEntriesHeader', 'getEntriesQuery', 'getGameEntries', 'getCSV'))
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -157,14 +169,30 @@ class GameControllerTest extends AbstractHttpControllerTestCase
             ->method('findById')
             ->will($this->returnValue($game));
 
-            $adminEntryMapper = $this->getMockBuilder('PlaygroundGame\Mapper\Entry')
-            ->setMethods(array('findBy'))
-            ->disableOriginalConstructor()
-            ->getMock();
+            $adminGameService->expects($this->any())
+            ->method('getEntriesHeader')
+            ->will($this->returnValue(array()));
+
+            $query = $this->getMockBuilder('Query')
+                ->setMethods(array('getResult'))
+                ->disableOriginalConstructor()
+                ->getMock();
+
+            $query->expects($this->any())
+                ->method('getResult')
+                ->will($this->returnValue(true));
 
             $adminGameService->expects($this->any())
-            ->method('getEntryMapper')
-            ->will($this->returnValue($adminEntryMapper));
+                ->method('getEntriesQuery')
+                ->will($this->returnValue($query));
+
+            $adminGameService->expects($this->any())
+                ->method('getGameEntries')
+                ->will($this->returnValue(array()));
+
+            $adminGameService->expects($this->any())
+                ->method('getCSV')
+                ->will($this->returnValue(''));
 
             $now = new \DateTime();
             $entry = new \PlaygroundGame\Entity\Entry();
@@ -181,10 +209,6 @@ class GameControllerTest extends AbstractHttpControllerTestCase
             $entry->setWinner('Winners');
             $entry->setCreatedAt($now);
 
-            $adminEntryMapper->expects($this->any())
-            ->method('findBy')
-            ->will($this->returnValue(array($entry)));
-
             $response = $this->dispatch('/admin/'.strtolower($type).'/download/1');
             $this->assertResponseStatusCode(200);
             $this->assertModuleName('playgroundgame');
@@ -200,7 +224,7 @@ class GameControllerTest extends AbstractHttpControllerTestCase
             $serviceManager->setAllowOverride(true);
 
             $adminGameService = $this->getMockBuilder('PlaygroundGame\Service\\'.$type)
-            ->setMethods(array('getGameMapper', 'getEntryMapper'))
+            ->setMethods(array('getGameMapper', 'getEntriesHeader', 'getEntriesQuery', 'getGameEntries', 'getCSV'))
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -226,14 +250,30 @@ class GameControllerTest extends AbstractHttpControllerTestCase
             ->method('findById')
             ->will($this->returnValue($game));
 
-            $adminEntryMapper = $this->getMockBuilder('PlaygroundGame\Mapper\Entry')
-            ->setMethods(array('findBy'))
-            ->disableOriginalConstructor()
-            ->getMock();
+            $adminGameService->expects($this->any())
+            ->method('getEntriesHeader')
+            ->will($this->returnValue(array()));
+
+            $query = $this->getMockBuilder('Query')
+                ->setMethods(array('getResult'))
+                ->disableOriginalConstructor()
+                ->getMock();
+
+            $query->expects($this->any())
+                ->method('getResult')
+                ->will($this->returnValue(true));
 
             $adminGameService->expects($this->any())
-            ->method('getEntryMapper')
-            ->will($this->returnValue($adminEntryMapper));
+                ->method('getEntriesQuery')
+                ->will($this->returnValue($query));
+
+            $adminGameService->expects($this->any())
+                ->method('getGameEntries')
+                ->will($this->returnValue(array()));
+
+            $adminGameService->expects($this->any())
+                ->method('getCSV')
+                ->will($this->returnValue(''));
 
             $now = new \DateTime();
             $entry = new \PlaygroundGame\Entity\Entry();
@@ -241,10 +281,6 @@ class GameControllerTest extends AbstractHttpControllerTestCase
             $entry->setWinner('Winners');
             $entry->setCreatedAt($now);
             $entry->setPlayerData('{"name":"User Name", "other":"some data"}');
-
-            $adminEntryMapper->expects($this->any())
-            ->method('findBy')
-            ->will($this->returnValue(array($entry)));
 
             $response = $this->dispatch('/admin/'.strtolower($type).'/download/1');
             $this->assertResponseStatusCode(200);

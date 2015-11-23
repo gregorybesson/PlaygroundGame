@@ -396,14 +396,16 @@ class PostVote extends Game implements ServiceManagerAwareInterface
         }
     }
 
-    public function getEntriesHeader($game){
+    public function getEntriesHeader($game)
+    {
         $header = parent::getEntriesHeader($game);
         if ($game->getForm()) {
             $form = json_decode($game->getForm()->getForm(), true);
             foreach ($form as $element) {
-                foreach($element as $k => $v){
-                    if($k !== 'form_properties')
+                foreach ($element as $k => $v) {
+                    if ($k !== 'form_properties') {
                         $header[$v[0]['name']] = 1;
+                    }
                 }
             }
         }
@@ -411,7 +413,8 @@ class PostVote extends Game implements ServiceManagerAwareInterface
         return $header;
     }
 
-    public function getEntriesQuery($game){
+    public function getEntriesQuery($game)
+    {
         $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
 
         $qb = $em->createQueryBuilder();
@@ -459,23 +462,22 @@ class PostVote extends Game implements ServiceManagerAwareInterface
         
         $results = array();
 
-        foreach ($entries as $k=>$entry) {
-
+        foreach ($entries as $k => $entry) {
             $entryData = json_decode($entry['playerData'], true);
             $postElements = $entry[0]->getPostElements();
 
             foreach ($header as $key => $v) {
                 if (isset($entryData[$key]) && $key !=='id') {
-                    $results[$k][$key] = (is_array($entryData[$key]))?implode(', ',$entryData[$key]):$entryData[$key];
-                } elseif (array_key_exists($key,$entry) ){
+                    $results[$k][$key] = (is_array($entryData[$key]))?implode(', ', $entryData[$key]):$entryData[$key];
+                } elseif (array_key_exists($key, $entry)) {
                     $results[$k][$key] = ($entry[$key] instanceof \DateTime)?$entry[$key]->format('Y-m-d'):$entry[$key];
                 } else {
                     $results[$k][$key] = '';
                 }
 
-                foreach($postElements as $e){
-                    if($key === $e->getName()){
-                        $results[$k][$key] = (is_array($e->getValue()))?implode(', ', $e->getValue()):$e->getValue(); 
+                foreach ($postElements as $e) {
+                    if ($key === $e->getName()) {
+                        $results[$k][$key] = (is_array($e->getValue()))?implode(', ', $e->getValue()):$e->getValue();
                         break;
                     }
                 }
