@@ -410,7 +410,6 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                             $quizPoints += $qAnswer->getPoints();
                             $quizReplyAnswer->setCorrect($qAnswer->getCorrect());
                             $quizCorrectAnswers += $qAnswer->getCorrect();
-                            // $quizReplyAnswer = $this->getQuizReplyAnswerMapper()->update($quizReplyAnswer);
                             break;
                         }
                     }

@@ -8,8 +8,6 @@ use PlaygroundGame\Controller\Admin\GameController;
 use PlaygroundGame\Service\Game as AdminGameService;
 use Zend\View\Model\ViewModel;
 use Zend\Paginator\Paginator;
-use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
-use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 
 class QuizController extends GameController
 {
