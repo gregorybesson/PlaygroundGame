@@ -10,6 +10,7 @@ PlaygroundGame
 [![Latest Stable Version](https://poser.pugx.org/playground/game/v/stable)](https://packagist.org/packages/playground/game) [![Total Downloads](https://poser.pugx.org/playground/game/downloads)](https://packagist.org/packages/playground/game) [![Latest Unstable Version](https://poser.pugx.org/playground/game/v/unstable)](https://packagist.org/packages/playground/game) [![License](https://poser.pugx.org/playground/game/license)](https://packagist.org/packages/playground/game)
 
 [![Stories in Ready](https://badge.waffle.io/gregorybesson/PlaygroundGame.svg?label=ready&title=Ready)](http://waffle.io/gregorybesson/PlaygroundGame)
+
 [![Throughput Graph](https://graphs.waffle.io/gregorybesson/PlaygroundGame/throughput.svg)](https://waffle.io/gregorybesson/PlaygroundGame/metrics)
 
 The Game module : This module currently propose 4 types of games:
