@@ -2308,6 +2308,24 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         return $form;
     }
 
+    /**
+     * Send mail for winner and/or loser
+     * @param \PlaygroundGame\Entity\Game $game
+     * @param \PlaygroundUser\Entity\User $user
+     * @param \PlaygroundGame\Entity\Entry $lastEntry
+     * @param \PlaygroundGame\Entity\Prize $prize
+     */
+    public function sendMail($game, $user, $lastEntry, $prize = null)
+    {
+        if (($user || ($game->getAnonymousAllowed() && $game->getAnonymousIdentifier())) && $game->getMailWinner() && $lastEntry->getWinner()) {
+            $this->sendResultMail($game, $user, $lastEntry, 'winner', $prize);
+        }
+
+        if (($user || ($game->getAnonymousAllowed() && $game->getAnonymousIdentifier())) && $game->getMailLooser() && !$lastEntry->getWinner()) {
+            $this->sendResultMail($game, $user, $lastEntry, 'looser');
+        }
+    }
+
     public function getPlayerFormMapper()
     {
         if (null === $this->playerformMapper) {

@@ -95,7 +95,7 @@ class LotteryController extends GameController
         // buildView must be before sendMail because it adds the game template path to the templateStack
         $viewModel = $this->buildView($game);
         
-        $this->sendMail($game, $user, $lastEntry);
+        $this->getGameService()->sendMail($game, $user, $lastEntry);
 
         $viewModel->setVariables(array(
                 'statusMail'       => $statusMail,

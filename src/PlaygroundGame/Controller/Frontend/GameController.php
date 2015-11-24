@@ -22,14 +22,6 @@ class GameController extends AbstractActionController
     protected $prizeService;
 
     protected $options;
-    
-    protected $loginForm;
-    
-    protected $registerForm;
-    
-    protected $userService;
-    
-    protected $userOptions;
 
     /**
      * Action called if matched action does not exist
@@ -328,24 +320,6 @@ class GameController extends AbstractActionController
     }
 
     /**
-     * Send mail for winner and/or loser
-     * @param \PlaygroundGame\Entity\Game $game
-     * @param \PlaygroundUser\Entity\User $user
-     * @param \PlaygroundGame\Entity\Entry $lastEntry
-     * @param \PlaygroundGame\Entity\Prize $prize
-     */
-    public function sendMail($game, $user, $lastEntry, $prize = null)
-    {
-        if (($user || ($game->getAnonymousAllowed() && $game->getAnonymousIdentifier())) && $game->getMailWinner() && $lastEntry->getWinner()) {
-            $this->getGameService()->sendResultMail($game, $user, $lastEntry, 'winner', $prize);
-        }
-
-        if (($user || ($game->getAnonymousAllowed() && $game->getAnonymousIdentifier())) && $game->getMailLooser() && !$lastEntry->getWinner()) {
-            $this->getGameService()->sendResultMail($game, $user, $lastEntry, 'looser');
-        }
-    }
-
-    /**
      *
      * @param \PlaygroundGame\Entity\Game $game
      * @param \PlaygroundUser\Entity\User $user
@@ -360,21 +334,45 @@ class GameController extends AbstractActionController
             if (!$user) {
                 // Get Playground user from Facebook info
                 $beforeLayout = $this->layout()->getTemplate();
-                $view = $this->forward()->dispatch('playgrounduser_user', array('controller' => 'playgrounduser_user', 'action' => 'registerFacebookUser', 'provider' => $channel));
+                $view = $this->forward()->dispatch(
+                    'playgrounduser_user',
+                    array(
+                        'controller' => 'playgrounduser_user',
+                        'action' => 'registerFacebookUser',
+                        'provider' => $channel
+                    )
+                );
 
                 $this->layout()->setTemplate($beforeLayout);
                 $user = $view->user;
 
                 // If the user can not be created/retrieved from Facebook info, redirect to login/register form
                 if (!$user) {
-                    $redirectUrl = urlencode($this->frontendUrl()->fromRoute(''. $game->getClassType() .'/play', array('id' => $game->getIdentifier(), 'channel' => $channel), array('force_canonical' => true)));
-                    $redirect =  $this->redirect()->toUrl($this->frontendUrl()->fromRoute('zfcuser/register', array('channel' => $channel)) . '?redirect='.$redirectUrl);
+                    $redirectUrl = urlencode(
+                        $this->frontendUrl()->fromRoute(
+                            $game->getClassType() .'/play',
+                            array(
+                                'id' => $game->getIdentifier(),
+                                'channel' => $channel
+                            ),
+                            array('force_canonical' => true)
+                        )
+                    );
+                    $redirect =  $this->redirect()->toUrl(
+                        $this->frontendUrl()->fromRoute(
+                            'zfcuser/register',
+                            array('channel' => $channel)
+                        ) . '?redirect='.$redirectUrl
+                    );
                 }
             }
 
             if ($game->getFbFan()) {
                 if ($sg->checkIsFan($game) === false) {
-                    $redirect =  $this->redirect()->toRoute($game->getClassType().'/fangate', array('id' => $game->getIdentifier()));
+                    $redirect =  $this->redirect()->toRoute(
+                        $game->getClassType().'/fangate',
+                        array('id' => $game->getIdentifier())
+                    );
                 }
             }
         }
@@ -750,7 +748,7 @@ class GameController extends AbstractActionController
         // buildView must be before sendMail because it adds the game template path to the templateStack
         $viewModel = $this->buildView($game);
     
-        $this->sendMail($game, $user, $lastEntry);
+        $this->getGameService()->sendMail($game, $user, $lastEntry);
     
         $viewModel->setVariables(array(
             'statusMail'       => $statusMail,
@@ -867,6 +865,7 @@ class GameController extends AbstractActionController
     {
         $request = $this->getRequest();
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
+        $userService = $this->getServiceLocator()->get('zfcuser_user_service');
     
         $sg = $this->getGameService();
     
@@ -879,7 +878,7 @@ class GameController extends AbstractActionController
             $data['optin'] = ($this->params()->fromPost('optin'))? 1:0;
             $data['optinPartner'] = ($this->params()->fromPost('optinPartner'))? 1:0;
 
-            $this->getUserService()->updateNewsletter($data);
+            $userService->updateNewsletter($data);
         }
 
         return $this->redirect()->toUrl($this->url()->fromRoute('frontend/' . $game->getClassType() . '/index', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
@@ -888,7 +887,7 @@ class GameController extends AbstractActionController
     public function loginAction()
     {
         $request = $this->getRequest();
-        $form    = $this->getLoginForm();
+        $form    = $this->getServiceLocator()->get('zfcuser_login_form');
         
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
         
@@ -935,18 +934,20 @@ class GameController extends AbstractActionController
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
         $sg = $this->getGameService();
         $game = $sg->checkGame($identifier, false);
+        $userOptions = $this->getServiceLocator()->get('zfcuser_module_options');
+
         if ($this->zfcUserAuthentication()->hasIdentity()) {
             return $this->redirect()->toUrl($this->url()->fromRoute('frontend/'.$game->getClassType().'/'.$game->nextStep('index'), array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
         }
         $request = $this->getRequest();
-        $service = $this->getUserService();
-        $form = $this->getRegisterForm();
+        $service = $this->getServiceLocator()->get('zfcuser_user_service');
+        $form = $this->getServiceLocator()->get('playgroundgame_register_form');
         $socialnetwork = $this->params()->fromRoute('socialnetwork', false);
         $form->setAttribute('action', $this->url()->fromRoute('frontend/'.$game->getClassType().'/user-register', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
         $params = array();
         $socialCredentials = array();
 
-        if ($this->getUserOptions()->getUseRedirectParameterIfPresent() && $request->getQuery()->get('redirect')) {
+        if ($userOptions->getUseRedirectParameterIfPresent() && $request->getQuery()->get('redirect')) {
             $redirect = $request->getQuery()->get('redirect');
         } else {
             $redirect = false;
@@ -961,7 +962,7 @@ class GameController extends AbstractActionController
 
                 if ($user || $service->getOptions()->getCreateUserAutoSocial() === true) {
                     //on le dirige vers l'action d'authentification
-                    if (! $redirect && $this->getUserOptions()->getLoginRedirectRoute() != '') {
+                    if (! $redirect && $userOptions->getLoginRedirectRoute() != '') {
                         $redirect = $this->url()->fromRoute('frontend/'.$game->getClassType().'/login', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')));
                     }
                     $redir = $this->url()
@@ -1017,7 +1018,7 @@ class GameController extends AbstractActionController
             $viewModel = $this->buildView($game);
             $viewModel->setVariables(array(
                 'registerForm' => $form,
-                'enableRegistration' => $this->getUserOptions()->getEnableRegistration(),
+                'enableRegistration' => $userOptions->getEnableRegistration(),
                 'redirect' => $redirect,
             ));
             return $viewModel;
@@ -1035,7 +1036,7 @@ class GameController extends AbstractActionController
             $viewModel = $this->buildView($game);
             $viewModel->setVariables(array(
                 'registerForm' => $form,
-                'enableRegistration' => $this->getUserOptions()->getEnableRegistration(),
+                'enableRegistration' => $userOptions->getEnableRegistration(),
                 'redirect' => $redirect,
             ));
             
@@ -1160,81 +1161,5 @@ class GameController extends AbstractActionController
         $this->options = $options;
 
         return $this;
-    }
-    
-    public function getLoginForm()
-    {
-        if (!$this->loginForm) {
-            $this->setLoginForm($this->getServiceLocator()->get('zfcuser_login_form'));
-        }
-        return $this->loginForm;
-    }
-    
-    public function setLoginForm($loginForm)
-    {
-        $this->loginForm = $loginForm;
-        $fm = $this->flashMessenger()->setNamespace('zfcuser-login-form')->getMessages();
-        if (isset($fm[0])) {
-            $this->loginForm->setMessages(
-                array('identity' => array($fm[0]))
-            );
-        }
-        return $this;
-    }
-    
-    public function getRegisterForm()
-    {
-        if (!$this->registerForm) {
-            $this->setRegisterForm($this->getServiceLocator()->get('playgroundgame_register_form'));
-        }
-        return $this->registerForm;
-    }
-    
-    public function setRegisterForm($registerForm)
-    {
-        $this->registerForm = $registerForm;
-    }
-    
-    /**
-     * Getters/setters for DI stuff
-     */
-    
-    public function getUserService()
-    {
-        if (!$this->userService) {
-            $this->userService = $this->getServiceLocator()->get('zfcuser_user_service');
-        }
-        return $this->userService;
-    }
-    
-    public function setUserService($userService)
-    {
-        $this->userService = $userService;
-        return $this;
-    }
-    
-    /**
-     * set options
-     *
-     * @param UserControllerOptionsInterface $options
-     * @return GameController
-     */
-    public function setUserOptions(UserControllerOptionsInterface $options)
-    {
-        $this->userOptions = $options;
-        return $this;
-    }
-    
-    /**
-     * get options
-     *
-     * @return UserControllerOptionsInterface
-     */
-    public function getUserOptions()
-    {
-        if (!$this->userOptions instanceof UserControllerOptionsInterface) {
-            $this->setUserOptions($this->getServiceLocator()->get('zfcuser_module_options'));
-        }
-        return $this->userOptions;
     }
 }
