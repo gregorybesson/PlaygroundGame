@@ -66,60 +66,10 @@ class LotteryController extends GameController
     {
         $this->checkGame();
 
-        $viewModel = new ViewModel();
-        $viewModel->setTemplate('playground-game/lottery/lottery');
-
-        $gameForm = new ViewModel();
-        $gameForm->setTemplate('playground-game/game/game-form');
-
-        $form = $this->getServiceLocator()->get('playgroundgame_lottery_form');
-        $form->setAttribute(
-            'action',
-            $this->url()->fromRoute(
-                'admin/playgroundgame/edit-lottery',
-                array('gameId' => $this->game->getId())
-            )
+        return $this->editGame(
+            'playground-game/lottery/lottery',
+            'playgroundgame_lottery_form'
         );
-        $form->setAttribute('method', 'post');
-        if ($this->game->getFbAppId()) {
-            $appIds = $form->get('fbAppId')->getOption('value_options');
-            $appIds[$this->game->getFbAppId()] = $this->game->getFbAppId();
-            $form->get('fbAppId')->setAttribute('options', $appIds);
-        }
-
-        $gameOptions = $this->getAdminGameService()->getOptions();
-        $gameStylesheet = $gameOptions->getMediaPath() . '/' . 'stylesheet_'. $this->game->getId(). '.css';
-        if (is_file($gameStylesheet)) {
-            $values = $form->get('stylesheet')->getValueOptions();
-            $values[$gameStylesheet] = 'Style personnalisé de ce jeu';
-
-            $form->get('stylesheet')->setAttribute('options', $values);
-        }
-
-        $form->bind($this->game);
-
-        if ($this->getRequest()->isPost()) {
-            $data = array_replace_recursive(
-                $this->getRequest()->getPost()->toArray(),
-                $this->getRequest()->getFiles()->toArray()
-            );
-            if (empty($data['prizes'])) {
-                $data['prizes'] = array();
-            }
-            if (isset($data['drawDate']) && $data['drawDate']) {
-                $data['drawDate'] = \DateTime::createFromFormat('d/m/Y', $data['drawDate']);
-            }
-            $result = $service->edit($data, $this->game, 'playgroundgame_lottery_form');
-
-            if ($result) {
-                return $this->redirect()->toRoute('admin/playgroundgame/list');
-            }
-        }
-
-        $gameForm->setVariables(array('form' => $form, 'game' => $this->game));
-        $viewModel->addChild($gameForm, 'game_form');
-
-        return $viewModel->setVariables(array('form' => $form, 'title' => 'Edit lottery'));
     }
 
     public function getAdminGameService()

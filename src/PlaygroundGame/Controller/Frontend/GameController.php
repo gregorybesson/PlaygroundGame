@@ -8,7 +8,6 @@ use Zend\Session\Container;
 use PlaygroundGame\Service\GameService;
 use PlaygroundGame\Service\Prize as PrizeService;
 use Zend\View\Model\JsonModel;
-use ZfcUser\Options\UserControllerOptionsInterface;
 use Zend\Http\PhpEnvironment\Response;
 use Zend\Stdlib\Parameters;
 

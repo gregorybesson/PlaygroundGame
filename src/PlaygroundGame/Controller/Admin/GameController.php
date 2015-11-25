@@ -4,6 +4,7 @@ namespace PlaygroundGame\Controller\Admin;
 
 use PlaygroundGame\Service\Game as AdminGameService;
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\View\Model\ViewModel;
 use PlaygroundGame\Options\ModuleOptions;
 use Zend\Paginator\Paginator;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
@@ -65,6 +66,72 @@ class GameController extends AbstractActionController
             'gameId' => $this->game->getId(),
             'game' => $this->game,
         );
+    }
+
+    public function editGame($templatePath, $formId)
+    {
+
+        $viewModel = new ViewModel();
+        $viewModel->setTemplate($templatePath);
+
+        $gameForm = new ViewModel();
+        $gameForm->setTemplate('playground-game/game/game-form');
+
+        $form   = $this->getServiceLocator()->get($formId);
+        $form->setAttribute(
+            'action',
+            $this->url()->fromRoute(
+                'admin/playgroundgame/edit-' . $this->game->getClassType(),
+                array('gameId' => $this->game->getId())
+            )
+        );
+        $form->setAttribute('method', 'post');
+
+        if ($this->game->getFbAppId()) {
+            $appIds = $form->get('fbAppId')->getOption('value_options');
+            $appIds[$this->game->getFbAppId()] = $this->game->getFbAppId();
+            $form->get('fbAppId')->setAttribute('options', $appIds);
+        }
+
+        $gameOptions = $this->getAdminGameService()->getOptions();
+        $gameStylesheet = $gameOptions->getMediaPath() . '/' . 'stylesheet_'. $this->game->getId(). '.css';
+        if (is_file($gameStylesheet)) {
+            $values = $form->get('stylesheet')->getValueOptions();
+            $values[$gameStylesheet] = 'Style personnalisé de ce jeu';
+
+            $form->get('stylesheet')->setAttribute('options', $values);
+        }
+
+        $form->bind($this->game);
+
+        if ($this->getRequest()->isPost()) {
+            $data = array_replace_recursive(
+                $this->getRequest()->getPost()->toArray(),
+                $this->getRequest()->getFiles()->toArray()
+            );
+            if (empty($data['prizes'])) {
+                $data['prizes'] = array();
+            }
+            if (isset($data['drawDate']) && $data['drawDate']) {
+                $data['drawDate'] = \DateTime::createFromFormat('d/m/Y', $data['drawDate']);
+            }
+            $result = $this->getAdminGameService()->edit($data, $this->game, $formId);
+
+            if ($result) {
+                return $this->redirect()->toRoute('admin/playgroundgame/list');
+            }
+        }
+
+        $gameForm->setVariables(array('form' => $form, 'game' => $this->game));
+        $viewModel->addChild($gameForm, 'game_form');
+
+        return $viewModel->setVariables(
+            array(
+                'form' => $form,
+                'title' => 'Edit this game',
+            )
+        );
+    
     }
 
     public function listAction()
