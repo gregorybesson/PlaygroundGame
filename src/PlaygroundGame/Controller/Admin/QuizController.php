@@ -165,7 +165,13 @@ class QuizController extends GameController
         $form = $this->getServiceLocator()->get('playgroundgame_quiz_form');
         $form->bind($quiz);
         $form->get('submit')->setAttribute('label', 'Add');
-        $form->setAttribute('action', $this->url()->fromRoute('admin/playgroundgame/create-quiz', array('gameId' => 0)));
+        $form->setAttribute(
+            'action',
+            $this->url()->fromRoute(
+                'admin/playgroundgame/create-quiz',
+                array('gameId' => 0)
+            )
+        );
         $form->setAttribute('method', 'post');
 
         $request = $this->getRequest();
@@ -201,7 +207,13 @@ class QuizController extends GameController
         $gameForm->setTemplate('playground-game/game/game-form');
 
         $form   = $this->getServiceLocator()->get('playgroundgame_quiz_form');
-        $form->setAttribute('action', $this->url()->fromRoute('admin/playgroundgame/edit-quiz', array('gameId' => $this->game->getId())));
+        $form->setAttribute(
+            'action',
+            $this->url()->fromRoute(
+                'admin/playgroundgame/edit-quiz',
+                array('gameId' => $this->game->getId())
+            )
+        );
         $form->setAttribute('method', 'post');
 
         if ($this->game->getFbAppId()) {

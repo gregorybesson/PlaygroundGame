@@ -47,7 +47,11 @@ class PrizeCategoryController extends AbstractActionController
                 $request->getPost()->toArray(),
                 $request->getFiles()->toArray()
             );
-            $category = $this->getPrizeCategoryService()->create($data, $category, 'playgroundgame_prizecategory_form');
+            $category = $this->getPrizeCategoryService()->create(
+                $data,
+                $category,
+                'playgroundgame_prizecategory_form'
+            );
             if ($category) {
                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('la catégorie a été créée');
 
@@ -77,9 +81,15 @@ class PrizeCategoryController extends AbstractActionController
                 $request->getPost()->toArray(),
                 $request->getFiles()->toArray()
             );
-            $category = $this->getPrizeCategoryService()->edit($data, $category, 'playgroundgame_prizecategory_form');
+            $category = $this->getPrizeCategoryService()->edit(
+                $data,
+                $category,
+                'playgroundgame_prizecategory_form'
+            );
             if ($category) {
-                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('La catégorie a été mise à jour');
+                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage(
+                    'La catégorie a été mise à jour'
+                );
 
                 return $this->redirect()->toRoute('admin/playgroundgame/prize-category-list');
             }
@@ -110,7 +120,9 @@ class PrizeCategoryController extends AbstractActionController
     public function getPrizeCategoryService()
     {
         if (!$this->prizeCategoryService) {
-            $this->prizeCategoryService = $this->getServiceLocator()->get('playgroundgame_prizecategory_service');
+            $this->prizeCategoryService = $this->getServiceLocator()->get(
+                'playgroundgame_prizecategory_service'
+            );
         }
 
         return $this->prizeCategoryService;

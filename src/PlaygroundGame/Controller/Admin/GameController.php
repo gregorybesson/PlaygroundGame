@@ -22,7 +22,8 @@ class GameController extends AbstractActionController
 
     protected $game;
 
-    public function checkGame(){
+    public function checkGame()
+    {
         $gameId = $this->getEvent()->getRouteMatch()->getParam('gameId');
         if (!$gameId) {
             return $this->redirect()->toRoute('admin/playgroundgame/list');
@@ -35,7 +36,8 @@ class GameController extends AbstractActionController
         $this->game = $game;
     }
 
-    public function createForm($form){
+    public function createForm($form)
+    {
         // I use the wonderful Form Generator to create the Post & Vote form
         $this->forward()->dispatch(
             'PlaygroundCore\Controller\Formgen',
@@ -188,7 +190,10 @@ class GameController extends AbstractActionController
         $headers = $response->getHeaders();
         $headers->addHeaderLine('Content-Encoding: UTF-8');
         $headers->addHeaderLine('Content-Type', 'text/plain; charset=UTF-8');
-        $headers->addHeaderLine('Content-Disposition', "attachment; filename=\"". $this->game->getIdentifier() .".txt\"");
+        $headers->addHeaderLine(
+            'Content-Disposition',
+            "attachment; filename=\"". $this->game->getIdentifier() .".txt\""
+        );
         $headers->addHeaderLine('Accept-Ranges', 'bytes');
         $headers->addHeaderLine('Content-Length', strlen($content));
     
