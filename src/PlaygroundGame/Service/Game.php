@@ -817,7 +817,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             $search['bonus'] = $bonus;
         }
 
-        $entry = $this->getEntryMapper()->findOneBy($search);
+        $entry = $this->getEntryMapper()->findOneBy($search, array('updated_at' => 'desc'));
 
         return $entry;
     }
