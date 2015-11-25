@@ -16,9 +16,54 @@ class GameController extends AbstractActionController
     protected $options;
 
     /**
-     * @var PlaygroundGame\Service\Game
+     * @var \PlaygroundGame\Service\Game
      */
     protected $adminGameService;
+
+    protected $game;
+
+    public function checkGame(){
+        $gameId = $this->getEvent()->getRouteMatch()->getParam('gameId');
+        if (!$gameId) {
+            return $this->redirect()->toRoute('admin/playgroundgame/list');
+        }
+        $service = $this->getAdminGameService();
+        $game = $service->getGameMapper()->findById($gameId);
+        if (!$game) {
+            return $this->redirect()->toRoute('admin/playgroundgame/list');
+        }
+        $this->game = $game;
+    }
+
+    public function createForm($form){
+        // I use the wonderful Form Generator to create the Post & Vote form
+        $this->forward()->dispatch(
+            'PlaygroundCore\Controller\Formgen',
+            array(
+                'controller' => 'PlaygroundCore\Controller\Formgen',
+                'action' => 'create'
+            )
+        );
+
+        if ($this->getRequest()->isPost()) {
+            $data = $this->getRequest()->getPost()->toArray();
+            $form = $service->createForm($data, $game, $form);
+            if ($form) {
+                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The form was created');
+            }
+        }
+        $formTemplate='';
+        if ($form) {
+            $formTemplate = $form->getFormTemplate();
+        }
+
+        return array(
+            'form' => $form,
+            'formTemplate' => $formTemplate,
+            'gameId' => $this->game->getId(),
+            'game' => $this->game,
+        );
+    }
 
     public function listAction()
     {
@@ -44,51 +89,41 @@ class GameController extends AbstractActionController
 
     public function entryAction()
     {
-        $gameId         = $this->getEvent()->getRouteMatch()->getParam('gameId');
-        if (!$gameId) {
-            return $this->redirect()->toRoute('admin/playgroundgame/list');
-        }
-
-        $game = $this->getAdminGameService()->getGameMapper()->findById($gameId);
+        $this->checkGame();
 
         $adapter = new DoctrineAdapter(
             new LargeTablePaginator(
-                $this->getAdminGameService()->getEntriesQuery($game)
+                $this->getAdminGameService()->getEntriesQuery($this->game)
             )
         );
         $paginator = new Paginator($adapter);
         $paginator->setItemCountPerPage(10);
         $paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
 
-        $header = $this->getAdminGameService()->getEntriesHeader($game);
-        $entries = $this->getAdminGameService()->getGameEntries($header, $paginator, $game);
+        $header = $this->getAdminGameService()->getEntriesHeader($this->game);
+        $entries = $this->getAdminGameService()->getGameEntries($header, $paginator, $this->game);
 
         return array(
             'paginator' => $paginator,
             'entries' => $entries,
             'header' => $header,
-            'game' => $game,
-            'gameId' => $gameId
+            'game' => $this->game,
+            'gameId' => $this->game->getId()
         );
     }
 
     public function downloadAction()
     {
-        $gameId = $this->getEvent()->getRouteMatch()->getParam('gameId');
-        if (!$gameId) {
-            return $this->redirect()->toRoute('admin/playgroundgame/list');
-        }
-
-        $game = $this->getAdminGameService()->getGameMapper()->findById($gameId);
-        $header = $this->getAdminGameService()->getEntriesHeader($game);
-        $query = $this->getAdminGameService()->getEntriesQuery($game);
+        $this->checkGame();
+        $header = $this->getAdminGameService()->getEntriesHeader($this->game);
+        $query = $this->getAdminGameService()->getEntriesQuery($this->game);
 
         $content = "\xEF\xBB\xBF"; // UTF-8 BOM
         $content .= $this->getAdminGameService()->getCSV(
             $this->getAdminGameService()->getGameEntries(
                 $header,
                 $query->getResult(),
-                $game
+                $this->game
             )
         );
 
@@ -108,17 +143,12 @@ class GameController extends AbstractActionController
     // Only used for Quiz and Lottery
     public function drawAction()
     {
-        // magically create $content as a string containing CSV data
-        $gameId         = $this->getEvent()->getRouteMatch()->getParam('gameId');
-        if (!$gameId) {
-            return $this->redirect()->toRoute('admin/playgroundgame/list');
-        }
-        $game           = $this->getAdminGameService()->getGameMapper()->findById($gameId);
+        $this->checkGame();
 
-        $winningEntries = $this->getAdminGameService()->draw($game);
+        $winningEntries = $this->getAdminGameService()->draw($this->game);
 
-        $content        = "\xEF\xBB\xBF"; // UTF-8 BOM
-        $content       .= "ID;Pseudo;Nom;Prenom;E-mail;Etat\n";
+        $content = "\xEF\xBB\xBF"; // UTF-8 BOM
+        $content .= "ID;Pseudo;Nom;Prenom;E-mail;Etat\n";
 
         foreach ($winningEntries as $e) {
             $etat = 'gagnant';
@@ -151,16 +181,14 @@ class GameController extends AbstractActionController
      */
     public function exportAction()
     {
-        // magically create $content as a string containing CSV data
-        $gameId  = $this->getEvent()->getRouteMatch()->getParam('gameId');
-        $game    = $this->getAdminGameService()->getGameMapper()->findById($gameId);
-        $content = serialize($game);
+        $this->checkGame();
+        $content = serialize($this->game);
 
         $response = $this->getResponse();
         $headers = $response->getHeaders();
         $headers->addHeaderLine('Content-Encoding: UTF-8');
         $headers->addHeaderLine('Content-Type', 'text/plain; charset=UTF-8');
-        $headers->addHeaderLine('Content-Disposition', "attachment; filename=\"". $game->getIdentifier() .".txt\"");
+        $headers->addHeaderLine('Content-Disposition', "attachment; filename=\"". $this->game->getIdentifier() .".txt\"");
         $headers->addHeaderLine('Accept-Ranges', 'bytes');
         $headers->addHeaderLine('Content-Length', strlen($content));
     
@@ -211,22 +239,15 @@ class GameController extends AbstractActionController
 
     public function removeAction()
     {
-        $service = $this->getAdminGameService();
-        $gameId = $this->getEvent()->getRouteMatch()->getParam('gameId');
-        if (!$gameId) {
-            return $this->redirect()->toRoute('admin/playgroundgame/list');
-        }
+        $this->checkGame();
 
-        $game = $service->getGameMapper()->findById($gameId);
-        if ($game) {
-            try {
-                $service->getGameMapper()->remove($game);
-                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The game has been edited');
-            } catch (\Doctrine\DBAL\DBALException $e) {
-                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage(
-                    'Il y a déjà eu des participants à ce jeu. Vous ne pouvez plus le supprimer'
-                );
-            }
+        try {
+            $this->getAdminGameService()->getGameMapper()->remove($this->game);
+            $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The game has been edited');
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            $this->flashMessenger()->setNamespace('playgroundgame')->addMessage(
+                'Il y a déjà eu des participants à ce jeu. Vous ne pouvez plus le supprimer'
+            );
         }
 
         return $this->redirect()->toRoute('admin/playgroundgame/list');
@@ -234,56 +255,21 @@ class GameController extends AbstractActionController
 
     public function setActiveAction()
     {
-        $service = $this->getAdminGameService();
-        $gameId = (int)$this->getEvent()->getRouteMatch()->getParam('gameId');
-        if (!$gameId) {
-            return $this->redirect()->toRoute('admin/playgroundgame/list');
-        }
+        $this->checkGame();
 
-        $game = $service->getGameMapper()->findById($gameId);
-        $game->setActive(!$game->getActive());
-        $service->getGameMapper()->update($game);
+        $this->game->setActive(!$this->game->getActive());
+        $this->getAdminGameService()->getGameMapper()->update($game);
 
         return $this->redirect()->toRoute('admin/playgroundgame/list');
     }
 
     public function formAction()
     {
-        $service = $this->getAdminGameService();
-        $gameId = $this->getEvent()->getRouteMatch()->getParam('gameId');
-        if (!$gameId) {
-            return $this->redirect()->toRoute('admin/playgroundgame/list');
-        }
-        $game = $service->getGameMapper()->findById($gameId);
-        $form = $service->getPlayerFormMapper()->findOneBy(array('game' => $game));
+        $this->checkGame();
+        
+        $form = $this->game->getPlayerForm();
 
-        // I use the wonderful Form Generator to create the Post & Vote form
-        $this->forward()->dispatch(
-            'PlaygroundCore\Controller\Formgen',
-            array(
-                'controller' => 'PlaygroundCore\Controller\Formgen',
-                'action' => 'create'
-            )
-        );
-
-        if ($this->getRequest()->isPost()) {
-            $data = $this->getRequest()->getPost()->toArray();
-            $form = $service->createForm($data, $game, $form);
-            if ($form) {
-                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The form was created');
-            }
-        }
-        $formTemplate='';
-        if ($form) {
-            $formTemplate = $form->getFormTemplate();
-        }
-
-        return array(
-            'form' => $form,
-            'formTemplate' => $formTemplate,
-            'gameId' => $gameId,
-            'game' => $game,
-        );
+        return $this->createForm($form);
     }
 
     public function setOptions(ModuleOptions $options)

@@ -192,14 +192,8 @@ class QuizController extends GameController
 
     public function editQuizAction()
     {
-        $service = $this->getAdminGameService();
-        $gameId = $this->getEvent()->getRouteMatch()->getParam('gameId');
+        $this->checkGame();
 
-        if (!$gameId) {
-            return $this->redirect()->toRoute('admin/playgroundgame/create-quiz');
-        }
-
-        $game = $service->getGameMapper()->findById($gameId);
         $viewModel = new ViewModel();
         $viewModel->setTemplate('playground-game/quiz/quiz');
 
@@ -207,12 +201,12 @@ class QuizController extends GameController
         $gameForm->setTemplate('playground-game/game/game-form');
 
         $form   = $this->getServiceLocator()->get('playgroundgame_quiz_form');
-        $form->setAttribute('action', $this->url()->fromRoute('admin/playgroundgame/edit-quiz', array('gameId' => $gameId)));
+        $form->setAttribute('action', $this->url()->fromRoute('admin/playgroundgame/edit-quiz', array('gameId' => $this->game->getId())));
         $form->setAttribute('method', 'post');
 
-        if ($game->getFbAppId()) {
+        if ($this->game->getFbAppId()) {
             $appIds = $form->get('fbAppId')->getOption('value_options');
-            $appIds[$game->getFbAppId()] = $game->getFbAppId();
+            $appIds[$this->game->getFbAppId()] = $this->game->getFbAppId();
             $form->get('fbAppId')->setAttribute('options', $appIds);
         }
 
@@ -225,7 +219,7 @@ class QuizController extends GameController
             $form->get('stylesheet')->setAttribute('options', $values);
         }
 
-        $form->bind($game);
+        $form->bind($this->game);
 
         if ($this->getRequest()->isPost()) {
             $data = array_replace_recursive(
@@ -235,14 +229,14 @@ class QuizController extends GameController
             if (empty($data['prizes'])) {
                 $data['prizes'] = array();
             }
-            $result = $service->edit($data, $game, 'playgroundgame_quiz_form');
+            $result = $service->edit($data, $this->game, 'playgroundgame_quiz_form');
 
             if ($result) {
                 return $this->redirect()->toRoute('admin/playgroundgame/list');
             }
         }
 
-        $gameForm->setVariables(array('form' => $form, 'game' => $game));
+        $gameForm->setVariables(array('form' => $form, 'game' => $this->game));
         $viewModel->addChild($gameForm, 'game_form');
 
         return $viewModel->setVariables(array('form' => $form, 'title' => 'Edit quiz'));
