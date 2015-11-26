@@ -252,7 +252,7 @@ class QuizReplyAnswer implements InputFilterAwareInterface
     }
 
     /**
-     * @param string $playerData
+     * @param string $answerData
      */
     public function setAnswerData($answerData)
     {

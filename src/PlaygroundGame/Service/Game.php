@@ -1029,6 +1029,10 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         return false;
     }
     
+    /**
+     * @param \PlaygroundGame\Entity\Game $game
+     * @param \PlaygroundUser\Entity\UserInterface $user
+     */
     public function findLastEntries($game, $user, $limitScale)
     {
         $limitDate = $this->getLimitDate($limitScale);
@@ -1286,6 +1290,12 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         return false;
     }
 
+    /**
+     * @param \PlaygroundGame\Entity\Game $game
+     * @param \PlaygroundUser\Entity\User $user
+     * @param Entry $entry
+     * @param \PlaygroundGame\Entity\Prize $prize
+     */
     public function sendResultMail($game, $user, $entry, $template = 'entry', $prize = null)
     {
         $mailService = $this->getServiceManager()->get('playgroundgame_message');

@@ -1440,7 +1440,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
 
     /**
      *
-     * @return the unknown_type
+     * @return string unknown_type
      */
     public function getFbRequestMessage()
     {
