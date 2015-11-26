@@ -265,6 +265,9 @@ class Quiz extends Game implements ServiceManagerAwareInterface
         return $question;
     }
 
+    /**
+     * @return string
+     */
     public function calculateMaxAnswersQuestion($question)
     {
         $question_max_points = 0;

@@ -65,7 +65,6 @@ class Entry extends AbstractMapper
      *
      * @param unknown_type $game
      * @param unknown_type $user
-     * @param unknown_type $limitScale
      */
     public function findLastEntriesByUser($game, $user, $dateLimit)
     {

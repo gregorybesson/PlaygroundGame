@@ -260,7 +260,7 @@ class Module
      * This method get the games and add them as Dynareas to PlaygroundCms
      * so that blocks can be dynamically added to the games.
      *
-     * @param  EventManager $e
+     * @param  MvcEvent $e
      * @return array
      */
     public function updateDynareas(MvcEvent $e)
@@ -288,7 +288,7 @@ class Module
     /**
      * This method get the cron config for this module an add them to the listener
      *
-     * @param  EventManager $e
+     * @param  MvcEvent $e
      * @return array
      */
     public function addCronjob(MvcEvent $e)

@@ -68,6 +68,10 @@ class GameController extends AbstractActionController
         );
     }
 
+    /**
+     * @param string $templatePath
+     * @param string $formId
+     */
     public function editGame($templatePath, $formId)
     {
 

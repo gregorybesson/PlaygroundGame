@@ -251,6 +251,9 @@ class PrizeCategory
         throw new \Exception("Not used");
     }
 
+    /**
+     * @return InputFilterInterface
+     */
     public function getInputFilter()
     {
         if (!$this->inputFilter) {
