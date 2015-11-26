@@ -29,8 +29,8 @@ class GameController extends AbstractActionController
         if (!$gameId) {
             return $this->redirect()->toRoute('admin/playgroundgame/list');
         }
-        $service = $this->getAdminGameService();
-        $game = $service->getGameMapper()->findById($gameId);
+        
+        $game = $this->getAdminGameService()->getGameMapper()->findById($gameId);
         if (!$game) {
             return $this->redirect()->toRoute('admin/playgroundgame/list');
         }
@@ -50,7 +50,7 @@ class GameController extends AbstractActionController
 
         if ($this->getRequest()->isPost()) {
             $data = $this->getRequest()->getPost()->toArray();
-            $form = $service->createForm($data, $game, $form);
+            $form = $this->getAdminGameService()->createForm($data, $this->game, $form);
             if ($form) {
                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The form was created');
             }
