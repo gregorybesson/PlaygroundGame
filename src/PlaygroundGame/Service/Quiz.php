@@ -116,7 +116,10 @@ class Quiz extends Game implements ServiceManagerAwareInterface
 
         if (!empty($data['upload_image']['tmp_name'])) {
             ErrorHandler::start();
-            $data['upload_image']['name'] = $this->fileNewname($path, $question->getId() . "-" . $data['upload_image']['name']);
+            $data['upload_image']['name'] = $this->fileNewname(
+                $path,
+                $question->getId() . "-" . $data['upload_image']['name']
+            );
             move_uploaded_file($data['upload_image']['tmp_name'], $path . $data['upload_image']['name']);
             $question->setImage($media_url . $data['upload_image']['name']);
             ErrorHandler::stop(true);
@@ -180,7 +183,8 @@ class Quiz extends Game implements ServiceManagerAwareInterface
             // Refactorer findByEntryAndQuestion pour qu'elle fonctionne avec QuizReplyAnswer
             /**
              * 1. Je recherche $this->getQuizReplyMapper()->findByEntry($entry)
-             * 2. Pour chaque entrée trouvée, je recherche $this->getQuizReplyAnswerMapper()->findByReplyAndQuestion($reply, $question->getId())
+             * 2. Pour chaque entrée trouvée, je recherche
+             * $this->getQuizReplyAnswerMapper()->findByReplyAndQuestion($reply, $question->getId())
              * 3. Je mets à jour reply avec le nb de bonnes réponses
              * 4. Je trigger une story ?
              */
@@ -203,18 +207,25 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                                         $quizPoints += $updatedAnswer->getPoints();
                                         $quizReplyAnswer->setCorrect($updatedAnswer->getCorrect());
                                         $quizCorrectAnswers += $updatedAnswer->getCorrect();
-                                        $quizReplyAnswer = $this->getQuizReplyAnswerMapper()->update($quizReplyAnswer);
+                                        $quizReplyAnswer = $this->getQuizReplyAnswerMapper()->update(
+                                            $quizReplyAnswer
+                                        );
                                     }
                                 } else {
                                     // question is a textarea
                                     // search for a matching answer
                                     foreach ($answers as $answer) {
-                                        if (trim(strip_tags($answer->getAnswer())) == trim(strip_tags($quizReplyAnswer->getAnswer()))) {
+                                        if (trim(strip_tags($answer->getAnswer())) == trim(
+                                            strip_tags($quizReplyAnswer->getAnswer())
+                                        )
+                                        ) {
                                             $quizReplyAnswer->setPoints($answer->getPoints());
                                             $quizPoints += $answer->getPoints();
                                             $quizReplyAnswer->setCorrect($answer->getCorrect());
                                             $quizCorrectAnswers += $answer->getCorrect();
-                                            $quizReplyAnswer = $this->getQuizReplyAnswerMapper()->update($quizReplyAnswer);
+                                            $quizReplyAnswer = $this->getQuizReplyAnswerMapper()->update(
+                                                $quizReplyAnswer
+                                            );
                                             break;
                                         }
                                     }
@@ -254,6 +265,9 @@ class Quiz extends Game implements ServiceManagerAwareInterface
         return $question;
     }
 
+    /**
+     * @return string
+     */
     public function calculateMaxAnswersQuestion($question)
     {
         $question_max_points = 0;

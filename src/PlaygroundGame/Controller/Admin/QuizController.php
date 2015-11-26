@@ -165,7 +165,13 @@ class QuizController extends GameController
         $form = $this->getServiceLocator()->get('playgroundgame_quiz_form');
         $form->bind($quiz);
         $form->get('submit')->setAttribute('label', 'Add');
-        $form->setAttribute('action', $this->url()->fromRoute('admin/playgroundgame/create-quiz', array('gameId' => 0)));
+        $form->setAttribute(
+            'action',
+            $this->url()->fromRoute(
+                'admin/playgroundgame/create-quiz',
+                array('gameId' => 0)
+            )
+        );
         $form->setAttribute('method', 'post');
 
         $request = $this->getRequest();
@@ -192,60 +198,12 @@ class QuizController extends GameController
 
     public function editQuizAction()
     {
-        $service = $this->getAdminGameService();
-        $gameId = $this->getEvent()->getRouteMatch()->getParam('gameId');
+        $this->checkGame();
 
-        if (!$gameId) {
-            return $this->redirect()->toRoute('admin/playgroundgame/create-quiz');
-        }
-
-        $game = $service->getGameMapper()->findById($gameId);
-        $viewModel = new ViewModel();
-        $viewModel->setTemplate('playground-game/quiz/quiz');
-
-        $gameForm = new ViewModel();
-        $gameForm->setTemplate('playground-game/game/game-form');
-
-        $form   = $this->getServiceLocator()->get('playgroundgame_quiz_form');
-        $form->setAttribute('action', $this->url()->fromRoute('admin/playgroundgame/edit-quiz', array('gameId' => $gameId)));
-        $form->setAttribute('method', 'post');
-
-        if ($game->getFbAppId()) {
-            $appIds = $form->get('fbAppId')->getOption('value_options');
-            $appIds[$game->getFbAppId()] = $game->getFbAppId();
-            $form->get('fbAppId')->setAttribute('options', $appIds);
-        }
-
-        $gameOptions = $this->getAdminGameService()->getOptions();
-        $gameStylesheet = $gameOptions->getMediaPath() . '/' . 'stylesheet_'. $game->getId(). '.css';
-        if (is_file($gameStylesheet)) {
-            $values = $form->get('stylesheet')->getValueOptions();
-            $values[$gameStylesheet] = 'Style personnalisé de ce jeu';
-
-            $form->get('stylesheet')->setAttribute('options', $values);
-        }
-
-        $form->bind($game);
-
-        if ($this->getRequest()->isPost()) {
-            $data = array_replace_recursive(
-                $this->getRequest()->getPost()->toArray(),
-                $this->getRequest()->getFiles()->toArray()
-            );
-            if (empty($data['prizes'])) {
-                $data['prizes'] = array();
-            }
-            $result = $service->edit($data, $game, 'playgroundgame_quiz_form');
-
-            if ($result) {
-                return $this->redirect()->toRoute('admin/playgroundgame/list');
-            }
-        }
-
-        $gameForm->setVariables(array('form' => $form, 'game' => $game));
-        $viewModel->addChild($gameForm, 'game_form');
-
-        return $viewModel->setVariables(array('form' => $form, 'title' => 'Edit quiz'));
+        return $this->editGame(
+            'playground-game/quiz/quiz',
+            'playgroundgame_quiz_form'
+        );
     }
 
     public function getAdminGameService()

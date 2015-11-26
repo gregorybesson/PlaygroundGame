@@ -28,9 +28,20 @@ class LotteryController extends GameController
 
         $user       = $this->zfcUserAuthentication()->getIdentity();
         if (!$user && !$game->getAnonymousAllowed()) {
-            $redirect = urlencode($this->frontendUrl()->fromRoute(''. $game->getClassType() . '/play', array('id' => $game->getIdentifier(), 'channel' => $channel), array('force_canonical' => true)));
+            $redirect = urlencode(
+                $this->frontendUrl()->fromRoute(
+                    $game->getClassType() . '/play',
+                    array('id' => $game->getIdentifier(), 'channel' => $channel),
+                    array('force_canonical' => true)
+                )
+            );
 
-            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('zfcuser/register', array('channel' => $channel)) . '?redirect='.$redirect);
+            return $this->redirect()->toUrl(
+                $this->frontendUrl()->fromRoute(
+                    'zfcuser/register',
+                    array('channel' => $channel)
+                ) . '?redirect='.$redirect
+            );
         }
 
         $entry = $sg->play($game, $user);
@@ -38,7 +49,12 @@ class LotteryController extends GameController
             // the user has already taken part of this game and the participation limit has been reached
             $this->flashMessenger()->addMessage('Vous avez déjà participé');
 
-            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('lottery/result', array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+            return $this->redirect()->toUrl(
+                $this->frontendUrl()->fromRoute(
+                    'lottery/result',
+                    array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))
+                )
+            );
         }
 
         // Every entry is eligible to draw
@@ -46,7 +62,12 @@ class LotteryController extends GameController
         $entry->setActive(false);
         $sg->getEntryMapper()->update($entry);
 
-        return $this->redirect()->toUrl($this->frontendUrl()->fromRoute(''. $game->getClassType() . '/'. $game->nextStep($this->params('action')), array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+        return $this->redirect()->toUrl(
+            $this->frontendUrl()->fromRoute(
+                $game->getClassType() . '/'. $game->nextStep($this->params('action')),
+                array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))
+            )
+        );
     }
 
     public function resultAction()
@@ -63,18 +84,44 @@ class LotteryController extends GameController
         }
 
         $secretKey = strtoupper(substr(sha1(uniqid('pg_', true).'####'.time()), 0, 15));
-        $socialLinkUrl = $this->frontendUrl()->fromRoute('lottery', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)).'?key='.$secretKey;
+        $socialLinkUrl = $this->frontendUrl()->fromRoute(
+            'lottery',
+            array(
+                'id' => $game->getIdentifier(),
+                'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+            ),
+            array('force_canonical' => true)
+        ).'?key='.$secretKey;
         // With core shortener helper
         $socialLinkUrl = $this->shortenUrl()->shortenUrl($socialLinkUrl);
 
         $lastEntry = $sg->findLastInactiveEntry($game, $user);
         if (!$lastEntry) {
-            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('lottery', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)));
+            return $this->redirect()->toUrl(
+                $this->frontendUrl()->fromRoute(
+                    'lottery',
+                    array(
+                        'id' => $game->getIdentifier(),
+                        'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                    ),
+                    array('force_canonical' => true)
+                )
+            );
         }
 
         if (!$user && !$game->getAnonymousAllowed()) {
-            $redirect = urlencode($this->frontendUrl()->fromRoute('lottery/result', array('id' => $game->getIdentifier(), 'channel' => $channel)));
-            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('zfcuser/register', array('channel' => $channel)) . '?redirect='.$redirect);
+            $redirect = urlencode(
+                $this->frontendUrl()->fromRoute(
+                    'lottery/result',
+                    array('id' => $game->getIdentifier(), 'channel' => $channel)
+                )
+            );
+            return $this->redirect()->toUrl(
+                $this->frontendUrl()->fromRoute(
+                    'zfcuser/register',
+                    array('channel' => $channel)
+                ) . '?redirect='.$redirect
+            );
         }
 
         $form = $this->getServiceLocator()->get('playgroundgame_sharemail_form');

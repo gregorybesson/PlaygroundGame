@@ -13,43 +13,14 @@ class PostVoteController extends GameController
      */
     protected $adminGameService;
 
+    
     public function formAction()
     {
-        $service = $this->getAdminGameService();
-        $gameId = $this->getEvent()->getRouteMatch()->getParam('gameId');
-        if (!$gameId) {
-            return $this->redirect()->toRoute('admin/playgroundgame/list');
-        }
-        $game = $service->getGameMapper()->findById($gameId);
-        $form = $service->getPostVoteFormMapper()->findByGame($game);
+        $this->checkGame();
+        
+        $form = $this->game->getForm();
 
-        // I use the wonderful Form Generator to create the Post & Vote form
-        $this->forward()->dispatch(
-            'PlaygroundCore\Controller\Formgen',
-            array(
-                'controller' => 'PlaygroundCore\Controller\Formgen',
-                'action' => 'create'
-            )
-        );
-
-        if ($this->getRequest()->isPost()) {
-            $data = $this->getRequest()->getPost()->toArray();
-            $form = $service->createForm($data, $game, $form);
-            if ($form) {
-                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The form was created');
-            }
-        }
-        $formTemplate='';
-        if ($form) {
-            $formTemplate = $form->getFormTemplate();
-        }
-
-        return array(
-            'form' => $form,
-            'formTemplate' => $formTemplate,
-            'gameId' => $gameId,
-            'game' => $game,
-        );
+        return $this->createForm($form);
     }
     
     public function createPostVoteAction()
@@ -99,66 +70,12 @@ class PostVoteController extends GameController
 
     public function editPostVoteAction()
     {
-        $service = $this->getAdminGameService();
-        $gameId = $this->getEvent()->getRouteMatch()->getParam('gameId');
+        $this->checkGame();
 
-        if (!$gameId) {
-            return $this->redirect()->toRoute('admin/playgroundgame/create-postvote');
-        }
-
-        $game = $service->getGameMapper()->findById($gameId);
-        $viewModel = new ViewModel();
-        $viewModel->setTemplate('playground-game/post-vote/postvote');
-
-        $gameForm = new ViewModel();
-        $gameForm->setTemplate('playground-game/game/game-form');
-
-        $form   = $this->getServiceLocator()->get('playgroundgame_postvote_form');
-        $form->setAttribute(
-            'action',
-            $this->url()->fromRoute(
-                'admin/playgroundgame/edit-postvote',
-                array('gameId' => $gameId)
-            )
+        return $this->editGame(
+            'playground-game/post-vote/postvote',
+            'playgroundgame_postvote_form'
         );
-        $form->setAttribute('method', 'post');
-        
-        if ($game->getFbAppId()) {
-            $appIds = $form->get('fbAppId')->getOption('value_options');
-            $appIds[$game->getFbAppId()] = $game->getFbAppId();
-            $form->get('fbAppId')->setAttribute('options', $appIds);
-        }
-
-        $gameOptions = $this->getAdminGameService()->getOptions();
-        $gameStylesheet = $gameOptions->getMediaPath() . '/' . 'stylesheet_'. $game->getId(). '.css';
-        if (is_file($gameStylesheet)) {
-            $values = $form->get('stylesheet')->getValueOptions();
-            $values[$gameStylesheet] = 'Style personnalisé de ce jeu';
-
-            $form->get('stylesheet')->setAttribute('options', $values);
-        }
-
-        $form->bind($game);
-
-        if ($this->getRequest()->isPost()) {
-            $data = array_replace_recursive(
-                $this->getRequest()->getPost()->toArray(),
-                $this->getRequest()->getFiles()->toArray()
-            );
-            if (empty($data['prizes'])) {
-                $data['prizes'] = array();
-            }
-            $result = $service->edit($data, $game, 'playgroundgame_postvote_form');
-
-            if ($result) {
-                return $this->redirect()->toRoute('admin/playgroundgame/list');
-            }
-        }
-
-        $gameForm->setVariables(array('form' => $form, 'game' => $game));
-        $viewModel->addChild($gameForm, 'game_form');
-
-        return $viewModel->setVariables(array('form' => $form, 'title' => 'Edit Post & Vote'));
     }
 
     public function modListAction()

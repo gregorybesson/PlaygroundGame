@@ -268,7 +268,15 @@ class InstantWin extends Game implements InputFilterAwareInterface
 
             $inputFilter = parent::getInputFilter();
 
-            $inputFilter->add($factory->createInput(array('name' => 'id', 'required' => true, 'filters' => array(array('name' => 'Int'), ), )));
+            $inputFilter->add(
+                $factory->createInput(
+                    array(
+                        'name' => 'id',
+                        'required' => true,
+                        'filters' => array(array('name' => 'Int'))
+                    )
+                )
+            );
 
             $inputFilter->add($factory->createInput(array(
                 'name' => 'occurrenceNumber',

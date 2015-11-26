@@ -190,7 +190,7 @@ class PostVotePost implements InputFilterAwareInterface, \JsonSerializable
     }
 
     /**
-     * @return PostVotePostEntry[] unknown_type
+     * @return ArrayCollection unknown_type
      */
     public function getPostElements()
     {
@@ -354,7 +354,15 @@ class PostVotePost implements InputFilterAwareInterface, \JsonSerializable
             $inputFilter = new InputFilter();
             $factory = new InputFactory();
 
-            $inputFilter->add($factory->createInput(array('name' => 'id', 'required' => true, 'filters' => array(array('name' => 'Int'), ), )));
+            $inputFilter->add(
+                $factory->createInput(
+                    array(
+                        'name' => 'id',
+                        'required' => true,
+                        'filters' => array(array('name' => 'Int'))
+                    )
+                )
+            );
 
             $this->inputFilter = $inputFilter;
         }

@@ -144,7 +144,9 @@ class Lottery extends Game implements InputFilterAwareInterface
         if (isset($data['drawAuto']) && $data['drawAuto'] !== null) {
             $this->drawAuto = $data['drawAuto'];
         }
-        $this->drawDate = (isset($data['drawDate']) && $data['drawDate'] !== null) ? \DateTime::createFromFormat('d/m/Y', $data['drawDate']) : null;
+        $this->drawDate = (isset($data['drawDate']) && $data['drawDate'] !== null) ?
+            \DateTime::createFromFormat('d/m/Y', $data['drawDate']) :
+            null;
     }
 
     public function setInputFilter(InputFilterInterface $inputFilter)

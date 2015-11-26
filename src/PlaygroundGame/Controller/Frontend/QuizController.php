@@ -34,9 +34,20 @@ class QuizController extends GameController
         $user       = $this->zfcUserAuthentication()->getIdentity();
 
         if (!$user && !$game->getAnonymousAllowed()) {
-            $redirect = urlencode($this->frontendUrl()->fromRoute($game->getClassType() . '/play', array('id' => $game->getIdentifier(), 'channel' => $channel), array('force_canonical' => true)));
+            $redirect = urlencode(
+                $this->frontendUrl()->fromRoute(
+                    $game->getClassType() . '/play',
+                    array('id' => $game->getIdentifier(), 'channel' => $channel),
+                    array('force_canonical' => true)
+                )
+            );
 
-            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('zfcuser/register', array('channel' => $channel)) . '?redirect='.$redirect);
+            return $this->redirect()->toUrl(
+                $this->frontendUrl()->fromRoute(
+                    'zfcuser/register',
+                    array('channel' => $channel)
+                ) . '?redirect='.$redirect
+            );
         }
 
         $entry = $sg->play($game, $user);
@@ -44,7 +55,12 @@ class QuizController extends GameController
             // the user has already taken part of this game and the participation limit has been reached
             $this->flashMessenger()->addMessage('Vous avez déjà participé!');
 
-            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute($game->getClassType() . '/result', array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+            return $this->redirect()->toUrl(
+                $this->frontendUrl()->fromRoute(
+                    $game->getClassType() . '/result',
+                    array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))
+                )
+            );
         }
 
         $questions = $game->getQuestions();
@@ -61,7 +77,9 @@ class QuizController extends GameController
         $explanations = array();
 
         foreach ($questions as $q) {
-            if (($game->getQuestionGrouping() > 0 && $i % $game->getQuestionGrouping() === 0) || ($i === 0 && $game->getQuestionGrouping() === 0)) {
+            if (($game->getQuestionGrouping() > 0 && $i % $game->getQuestionGrouping() === 0) ||
+                ($i === 0 && $game->getQuestionGrouping() === 0)
+            ) {
                 $fieldsetName = 'questionGroup' . ++ $j;
                 $fieldset = new Fieldset($fieldsetName);
             }
@@ -134,7 +152,9 @@ class QuizController extends GameController
             )));
 
             $i ++;
-            if (($game->getQuestionGrouping() > 0 && $i % $game->getQuestionGrouping() == 0 && $i > 0) || $i == $totalQuestions) {
+            if (($game->getQuestionGrouping() > 0 && $i % $game->getQuestionGrouping() == 0 && $i > 0) ||
+                $i == $totalQuestions
+            ) {
                 $form->add($fieldset);
                 $inputFilter->add($fieldsetFilter, $fieldsetName);
             }
@@ -152,7 +172,15 @@ class QuizController extends GameController
                 $entry = $this->getGameService()->createQuizReply($data, $game, $user);
             }
 
-            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute(''. $game->getClassType() . '/'. $game->nextStep($this->params('action')), array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+            return $this->redirect()->toUrl(
+                $this->frontendUrl()->fromRoute(
+                    $game->getClassType() . '/'. $game->nextStep($this->params('action')),
+                    array(
+                        'id' => $game->getIdentifier(),
+                        'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                    )
+                )
+            );
         }
 
         $viewModel = $this->buildView($game);
@@ -181,13 +209,29 @@ class QuizController extends GameController
         }
 
         $secretKey = strtoupper(substr(sha1(uniqid('pg_', true).'####'.time()), 0, 15));
-        $socialLinkUrl = $this->frontendUrl()->fromRoute('quiz', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)).'?key='.$secretKey;
+        $socialLinkUrl = $this->frontendUrl()->fromRoute(
+            'quiz',
+            array(
+                'id' => $game->getIdentifier(),
+                'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+            ),
+            array('force_canonical' => true)
+        ).'?key='.$secretKey;
         // With core shortener helper
         $socialLinkUrl = $this->shortenUrl()->shortenUrl($socialLinkUrl);
 
         $lastEntry = $sg->findLastInactiveEntry($game, $user);
         if (!$lastEntry) {
-            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('quiz', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)));
+            return $this->redirect()->toUrl(
+                $this->frontendUrl()->fromRoute(
+                    'quiz',
+                    array(
+                        'id' => $game->getIdentifier(),
+                        'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                    ),
+                    array('force_canonical' => true)
+                )
+            );
         }
 
         // je compte les bonnes réponses et le ratio
@@ -228,40 +272,44 @@ class QuizController extends GameController
         }
 
         // Je prépare le tableau des bonnes réponses trouvées et non trouvées
-        $gameCorrectAnswers = array();
+        $ga = array();
         $questions = $game->getQuestions();
         foreach ($questions as $q) {
             foreach ($q->getAnswers() as $a) {
                 if ($a->getCorrect()) {
-                    $gameCorrectAnswers[$q->getId()]['question'] = $q;
-                    $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['answer'] = $a->getAnswer();
-                    $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['explanation'] = $a->getExplanation();
-                    $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['userAnswer'] = isset($userAnswers[$q->getId()]) ? $userAnswers[$q->getId()]['answer'] : false;
+                    $ga[$q->getId()]['question'] = $q;
+                    $ga[$q->getId()]['answers'][$a->getId()]['answer'] = $a->getAnswer();
+                    $ga[$q->getId()]['answers'][$a->getId()]['explanation'] = $a->getExplanation();
+                    $ga[$q->getId()]['answers'][$a->getId()]['userAnswer'] = isset($userAnswers[$q->getId()]) ?
+                        $userAnswers[$q->getId()]['answer'] :
+                        false;
 
                     if (isset($correctAnswers[$q->getId()]) && isset($correctAnswers[$q->getId()][$a->getId()])) {
-                        $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['found'] = true;
+                        $ga[$q->getId()]['answers'][$a->getId()]['found'] = true;
                     } else {
-                        $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['found'] = false;
+                        $ga[$q->getId()]['answers'][$a->getId()]['found'] = false;
                     }
                     
                     if (isset($userAnswers[$q->getId()]) && isset($userAnswers[$q->getId()][$a->getId()])) {
-                        $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['yourChoice'] = true;
+                        $ga[$q->getId()]['answers'][$a->getId()]['yourChoice'] = true;
                     } else {
-                        $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['yourChoice'] = false;
+                        $ga[$q->getId()]['answers'][$a->getId()]['yourChoice'] = false;
                     }
 
-                    $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['correctAnswers'] = true;
+                    $ga[$q->getId()]['answers'][$a->getId()]['correctAnswers'] = true;
                 } else {
-                    $gameCorrectAnswers[$q->getId()]['question'] = $q;
-                    $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['answer'] = $a->getAnswer();
-                    $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['explanation'] = $a->getExplanation();
-                    $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['correctAnswers'] = false;
-                    $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['userAnswer'] = isset($userAnswers[$q->getId()]) ? $userAnswers[$q->getId()]['answer'] : false;
+                    $ga[$q->getId()]['question'] = $q;
+                    $ga[$q->getId()]['answers'][$a->getId()]['answer'] = $a->getAnswer();
+                    $ga[$q->getId()]['answers'][$a->getId()]['explanation'] = $a->getExplanation();
+                    $ga[$q->getId()]['answers'][$a->getId()]['correctAnswers'] = false;
+                    $ga[$q->getId()]['answers'][$a->getId()]['userAnswer'] = isset($userAnswers[$q->getId()]) ?
+                        $userAnswers[$q->getId()]['answer'] :
+                        false;
                     
                     if (isset($userAnswers[$q->getId()]) && isset($userAnswers[$q->getId()][$a->getId()])) {
-                        $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['yourChoice'] = true;
+                        $ga[$q->getId()]['answers'][$a->getId()]['yourChoice'] = true;
                     } else {
-                        $gameCorrectAnswers[$q->getId()]['answers'][$a->getId()]['yourChoice'] = false;
+                        $ga[$q->getId()]['answers'][$a->getId()]['yourChoice'] = false;
                     }
                 }
             }
@@ -288,7 +336,7 @@ class QuizController extends GameController
             'userCorrectAnswers'  => $userCorrectAnswers,
             'maxCorrectAnswers'   => $maxCorrectAnswers,
             'ratioCorrectAnswers' => $ratioCorrectAnswers,
-            'gameCorrectAnswers'  => $gameCorrectAnswers,
+            'gameCorrectAnswers'  => $ga,
             'socialLinkUrl'       => $socialLinkUrl,
             'secretKey'           => $secretKey,
             'userTimer'           => $userTimer,

@@ -63,7 +63,8 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $entityManager = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
 
         $form = $this->getServiceManager()->get($formClass);
-        // I force the following format because this is the only one accepted by new DateTime($value) used by Doctrine when persisting
+        // I force the following format because this is the only one accepted
+        // by new DateTime($value) used by Doctrine when persisting
         $form->get('publicationDate')->setOptions(array(
             'format' => 'Y-m-d'
         ));
@@ -93,7 +94,8 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
         $identifierInput->getValidatorChain()->addValidator($noObjectExistsValidator);
 
-        // I must switch from original format to the Y-m-d format because this is the only one accepted by new DateTime($value)
+        // I must switch from original format to the Y-m-d format because
+        // this is the only one accepted by new DateTime($value)
         if (isset($data['publicationDate']) && $data['publicationDate']) {
             $tmpDate = \DateTime::createFromFormat('d/m/Y', $data['publicationDate']);
             $data['publicationDate'] = $tmpDate->format('Y-m-d');
@@ -176,7 +178,10 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
         if (! empty($data['uploadMainImage']['tmp_name'])) {
             ErrorHandler::start();
-            $data['uploadMainImage']['name'] = $this->fileNewname($path, $game->getId() . "-" . $data['uploadMainImage']['name']);
+            $data['uploadMainImage']['name'] = $this->fileNewname(
+                $path,
+                $game->getId() . "-" . $data['uploadMainImage']['name']
+            );
             move_uploaded_file($data['uploadMainImage']['tmp_name'], $path . $data['uploadMainImage']['name']);
             $game->setMainImage($media_url . $data['uploadMainImage']['name']);
             ErrorHandler::stop(true);
@@ -184,7 +189,10 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
         if (! empty($data['uploadSecondImage']['tmp_name'])) {
             ErrorHandler::start();
-            $data['uploadSecondImage']['name'] = $this->fileNewname($path, $game->getId() . "-" . $data['uploadSecondImage']['name']);
+            $data['uploadSecondImage']['name'] = $this->fileNewname(
+                $path,
+                $game->getId() . "-" . $data['uploadSecondImage']['name']
+            );
             move_uploaded_file($data['uploadSecondImage']['tmp_name'], $path . $data['uploadSecondImage']['name']);
             $game->setSecondImage($media_url . $data['uploadSecondImage']['name']);
             ErrorHandler::stop(true);
@@ -192,7 +200,10 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
         if (! empty($data['uploadFbShareImage']['tmp_name'])) {
             ErrorHandler::start();
-            $data['uploadFbShareImage']['name'] = $this->fileNewname($path, $game->getId() . "-" . $data['uploadFbShareImage']['name']);
+            $data['uploadFbShareImage']['name'] = $this->fileNewname(
+                $path,
+                $game->getId() . "-" . $data['uploadFbShareImage']['name']
+            );
             move_uploaded_file($data['uploadFbShareImage']['tmp_name'], $path . $data['uploadFbShareImage']['name']);
             $game->setFbShareImage($media_url . $data['uploadFbShareImage']['name']);
             ErrorHandler::stop(true);
@@ -202,7 +213,14 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             ErrorHandler::start();
             $extension = $this->getExtension(strtolower($data['uploadFbPageTabImage']['name']));
             $src = $this->getSrc($extension, $data['uploadFbPageTabImage']['tmp_name']);
-            $this->resize($data['uploadFbPageTabImage']['tmp_name'], $extension, $path . $game->getId() . "-" . $data['uploadFbPageTabImage']['name'], $src, 111, 74);
+            $this->resize(
+                $data['uploadFbPageTabImage']['tmp_name'],
+                $extension,
+                $path . $game->getId() . "-" . $data['uploadFbPageTabImage']['name'],
+                $src,
+                111,
+                74
+            );
 
             $game->setFbPageTabImage($media_url . $game->getId() . "-" . $data['uploadFbPageTabImage']['name']);
             ErrorHandler::stop(true);
@@ -227,7 +245,8 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                         }
                     }
                     ErrorHandler::start();
-                    $filename = "game-" . $game->getId() . "-prize-" . $prize->getId() . "-" . $prize_data['picture']['name'];
+                    $filename = "game-" . $game->getId() . "-prize-";
+                    $filename .= $prize->getId() . "-" . $prize_data['picture']['name'];
                     move_uploaded_file($prize_data['picture']['tmp_name'], $path . $filename);
                     $prize->setPicture($media_url . $filename);
                     ErrorHandler::stop(true);
@@ -283,7 +302,8 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             $identifierInput->getValidatorChain()->addValidator($noObjectExistsValidator);
         }
 
-        // I must switch from original format to the Y-m-d format because this is the only one accepted by new DateTime($value)
+        // I must switch from original format to the Y-m-d format because
+        // this is the only one accepted by new DateTime($value)
         if (isset($data['publicationDate']) && $data['publicationDate']) {
             $tmpDate = \DateTime::createFromFormat('d/m/Y', $data['publicationDate']);
             $data['publicationDate'] = $tmpDate->format('Y-m-d');
@@ -302,7 +322,9 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         }
 
         // If publicationDate is null, I update it with the startDate if not nul neither
-        if ((! isset($data['publicationDate']) || $data['publicationDate'] == '') && (isset($data['startDate']) && $data['startDate'] != '')) {
+        if ((! isset($data['publicationDate']) || $data['publicationDate'] == '') &&
+            (isset($data['startDate']) && $data['startDate'] != '')
+        ) {
             $data['publicationDate'] = $data['startDate'];
         }
 
@@ -359,13 +381,19 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
         if (! empty($data['uploadMainImage']['tmp_name'])) {
             ErrorHandler::start();
-            $data['uploadMainImage']['name'] = $this->fileNewname($path, $game->getId() . "-" . $data['uploadMainImage']['name']);
+            $data['uploadMainImage']['name'] = $this->fileNewname(
+                $path,
+                $game->getId() . "-" . $data['uploadMainImage']['name']
+            );
             move_uploaded_file($data['uploadMainImage']['tmp_name'], $path . $data['uploadMainImage']['name']);
             $game->setMainImage($media_url . $data['uploadMainImage']['name']);
             ErrorHandler::stop(true);
         }
 
-        if (isset($data['deleteMainImage']) && $data['deleteMainImage'] && empty($data['uploadMainImage']['tmp_name'])) {
+        if (isset($data['deleteMainImage']) &&
+            $data['deleteMainImage'] &&
+            empty($data['uploadMainImage']['tmp_name'])
+        ) {
             ErrorHandler::start();
             $image = $game->getMainImage();
             $image = str_replace($media_url, '', $image);
@@ -376,13 +404,19 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
         if (! empty($data['uploadSecondImage']['tmp_name'])) {
             ErrorHandler::start();
-            $data['uploadSecondImage']['name'] = $this->fileNewname($path, $game->getId() . "-" . $data['uploadSecondImage']['name']);
+            $data['uploadSecondImage']['name'] = $this->fileNewname(
+                $path,
+                $game->getId() . "-" . $data['uploadSecondImage']['name']
+            );
             move_uploaded_file($data['uploadSecondImage']['tmp_name'], $path . $data['uploadSecondImage']['name']);
             $game->setSecondImage($media_url . $data['uploadSecondImage']['name']);
             ErrorHandler::stop(true);
         }
 
-        if (isset($data['deleteSecondImage']) && $data['deleteSecondImage'] && empty($data['uploadSecondImage']['tmp_name'])) {
+        if (isset($data['deleteSecondImage']) &&
+            $data['deleteSecondImage'] &&
+            empty($data['uploadSecondImage']['tmp_name'])
+        ) {
             ErrorHandler::start();
             $image = $game->getSecondImage();
             $image = str_replace($media_url, '', $image);
@@ -400,13 +434,19 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
         if (! empty($data['uploadFbShareImage']['tmp_name'])) {
             ErrorHandler::start();
-            $data['uploadFbShareImage']['name'] = $this->fileNewname($path, $game->getId() . "-" . $data['uploadFbShareImage']['name']);
+            $data['uploadFbShareImage']['name'] = $this->fileNewname(
+                $path,
+                $game->getId() . "-" . $data['uploadFbShareImage']['name']
+            );
             move_uploaded_file($data['uploadFbShareImage']['tmp_name'], $path . $data['uploadFbShareImage']['name']);
             $game->setFbShareImage($media_url . $data['uploadFbShareImage']['name']);
             ErrorHandler::stop(true);
         }
 
-        if (isset($data['deleteFbShareImage']) && $data['deleteFbShareImage'] && empty($data['uploadFbShareImage']['tmp_name'])) {
+        if (isset($data['deleteFbShareImage']) &&
+            $data['deleteFbShareImage'] &&
+            empty($data['uploadFbShareImage']['tmp_name'])
+        ) {
             ErrorHandler::start();
             $image = $game->getFbShareImage();
             $image = str_replace($media_url, '', $image);
@@ -420,13 +460,23 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
             $extension = $this->getExtension(strtolower($data['uploadFbPageTabImage']['name']));
             $src = $this->getSrc($extension, $data['uploadFbPageTabImage']['tmp_name']);
-            $this->resize($data['uploadFbPageTabImage']['tmp_name'], $extension, $path . $game->getId() . "-" . $data['uploadFbPageTabImage']['name'], $src, 111, 74);
+            $this->resize(
+                $data['uploadFbPageTabImage']['tmp_name'],
+                $extension,
+                $path . $game->getId() . "-" . $data['uploadFbPageTabImage']['name'],
+                $src,
+                111,
+                74
+            );
 
             $game->setFbPageTabImage($media_url . $game->getId() . "-" . $data['uploadFbPageTabImage']['name']);
             ErrorHandler::stop(true);
         }
 
-        if (isset($data['deleteFbPageTabImage']) && $data['deleteFbPageTabImage'] && empty($data['uploadFbPageTabImage']['tmp_name'])) {
+        if (isset($data['deleteFbPageTabImage']) &&
+            $data['deleteFbPageTabImage'] &&
+            empty($data['uploadFbPageTabImage']['tmp_name'])
+        ) {
             ErrorHandler::start();
             $image = $game->getFbPageTabImage();
             $image = str_replace($media_url, '', $image);
@@ -461,7 +511,8 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                     }
                     // Upload and set new
                     ErrorHandler::start();
-                    $filename = "game-" . $game->getId() . "-prize-" . $prize->getId() . "-" . $prize_data['picture_file']['name'];
+                    $filename = "game-" . $game->getId() . "-prize-";
+                    $filename .= $prize->getId() . "-" . $prize_data['picture_file']['name'];
                     move_uploaded_file($prize_data['picture_file']['tmp_name'], $path . $filename);
                     $prize->setPicture($media_url . $filename);
                     ErrorHandler::stop(true);
@@ -533,12 +584,13 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $arrayGames = array();
         foreach ($games as $game) {
             if ($game->getPublicationDate()) {
-                $key = $game->getPublicationDate()->format('Ymd') . $game->getUpdatedAt()->format('Ymd') . '-' . $game->getId();
+                $key = $game->getPublicationDate()->format('Ymd');
             } elseif ($game->getStartDate()) {
-                $key = $game->getStartDate()->format('Ymd') . $game->getUpdatedAt()->format('Ymd') . '-' . $game->getId();
+                $key = $game->getStartDate()->format('Ymd');
             } else {
-                $key = $game->getUpdatedAt()->format('Ymd') . $game->getUpdatedAt()->format('Ymd') . '-' . $game->getId();
+                $key = $game->getUpdatedAt()->format('Ymd');
             }
+            $key .= $game->getUpdatedAt()->format('Ymd') . '-' . $game->getId();
             $arrayGames[$key] = $game;
         }
 
@@ -556,7 +608,8 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $today = new \DateTime("now");
         $today = $today->format('Y-m-d') . ' 23:59:59';
 
-        // Game active with a start_date before today (or without start_date) and end_date after today (or without end-date)
+        // Game active with a start_date before today (or without start_date)
+        // and end_date after today (or without end-date)
         $query = $em->createQuery('SELECT g FROM PlaygroundGame\Entity\Game g
                 WHERE NOT EXISTS (SELECT l FROM PlaygroundGame\Entity\Entry l WHERE l.game = g AND l.user = :user)
                 AND (g.startDate <= :date OR g.startDate IS NULL)
@@ -664,7 +717,9 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                 if (isset($entryData[$key])) {
                     $results[$k][$key] = (is_array($entryData[$key]))?implode(', ', $entryData[$key]):$entryData[$key];
                 } elseif (array_key_exists($key, $entry)) {
-                    $results[$k][$key] = ($entry[$key] instanceof \DateTime)?$entry[$key]->format('Y-m-d'):$entry[$key];
+                    $results[$k][$key] = ($entry[$key] instanceof \DateTime)?
+                        $entry[$key]->format('Y-m-d'):
+                        $entry[$key];
                 } else {
                     $results[$k][$key] = '';
                 }
@@ -685,7 +740,8 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $today = new \DateTime("now");
         $today = $today->format('Y-m-d') . ' 23:59:59';
 
-        // Game active with a start_date before today (or without start_date) and end_date after today (or without end-date)
+        // Game active with a start_date before today (or without start_date)
+        // and end_date after today (or without end-date)
         $query = $em->createQuery('SELECT g FROM PlaygroundGame\Entity\Game g
             WHERE (g.publicationDate <= :date OR g.publicationDate IS NULL)
             AND (g.closeDate >= :date OR g.closeDate IS NULL)
@@ -698,12 +754,13 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $arrayGames = array();
         foreach ($games as $game) {
             if ($game->getPublicationDate()) {
-                $key = $game->getPublicationDate()->format('Ymd') . $game->getUpdatedAt()->format('Ymd') . '-' . $game->getId();
+                $key = $game->getPublicationDate()->format('Ymd');
             } elseif ($game->getStartDate()) {
-                $key = $game->getStartDate()->format('Ymd') . $game->getUpdatedAt()->format('Ymd') . '-' . $game->getId();
+                $key = $game->getStartDate()->format('Ymd');
             } else {
-                $key = $game->getUpdatedAt()->format('Ymd') . $game->getUpdatedAt()->format('Ymd') . '-' . $game->getId();
+                $key = $game->getUpdatedAt()->format('Ymd');
             }
+            $key .= $game->getUpdatedAt()->format('Ymd') . '-' . $game->getId();
             $arrayGames[$key] = $game;
         }
 
@@ -754,7 +811,8 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             $game->setPublicationDate(null);
             $game->setBroadcastPlatform(true);
 
-            // I don't want the game to be updated through any update during the preview mode. I mark it as readonly for Doctrine
+            // I don't want the game to be updated through any update during the preview mode.
+            // I mark it as readonly for Doctrine
             $this->getServiceManager()
                 ->get('doctrine.entitymanager.orm_default')
                 ->getUnitOfWork()
@@ -848,7 +906,10 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         if ($form->isValid()) {
             $dataJson = json_encode($form->getData());
 
-            if ($game->getAnonymousAllowed() && $game->getAnonymousIdentifier() && isset($data[$game->getAnonymousIdentifier()])) {
+            if ($game->getAnonymousAllowed() &&
+                $game->getAnonymousIdentifier() &&
+                isset($data[$game->getAnonymousIdentifier()])
+            ) {
                 $session = new \Zend\Session\Container('anonymous_identifier');
                 if (empty($session->offsetGet('anonymous_identifier'))) {
                     $anonymousIdentifier = $data[$game->getAnonymousIdentifier()];
@@ -917,7 +978,8 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
     public function play($game, $user)
     {
 
-        // certaines participations peuvent rester ouvertes. On autorise alors le joueur à reprendre là ou il en était
+        // certaines participations peuvent rester ouvertes.
+        // On autorise alors le joueur à reprendre là ou il en était
         // par exemple les postvote...
         $entry = $this->checkExistingEntry($game, $user, true);
 
@@ -967,6 +1029,10 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         return false;
     }
     
+    /**
+     * @param \PlaygroundGame\Entity\Game $game
+     * @param \PlaygroundUser\Entity\UserInterface $user
+     */
     public function findLastEntries($game, $user, $limitScale)
     {
         $limitDate = $this->getLimitDate($limitScale);
@@ -974,7 +1040,11 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         if ($user) {
             return $this->getEntryMapper()->findLastEntriesByUser($game, $user, $limitDate);
         } elseif ($this->getAnonymousIdentifier()) {
-            return $this->getEntryMapper()->findLastEntriesByAnonymousIdentifier($game, $this->getAnonymousIdentifier(), $limitDate);
+            return $this->getEntryMapper()->findLastEntriesByAnonymousIdentifier(
+                $game,
+                $this->getAnonymousIdentifier(),
+                $limitDate
+            );
         } else {
             return $this->getEntryMapper()->findLastEntriesByIp($game, $this->getIp(), $limitDate);
         }
@@ -1035,8 +1105,16 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         return $this->checkExistingEntry($game, $user, null, false);
     }
 
-    public function sendShareMail($data, $game, $user, $entry, $template = 'share_game', $topic = null, $userTimer = array())
-    {
+    public function sendShareMail(
+        $data,
+        $game,
+        $user,
+        $entry,
+        $template = 'share_game',
+        $topic = null,
+        $userTimer = array()
+    ) {
+    
         $mailService = $this->getServiceManager()->get('playgroundgame_message');
         $mailSent = false;
         $from = $this->getOptions()->getEmailFromAddress();
@@ -1071,13 +1149,19 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         
         if ($data['email1']) {
             $mailSent = true;
-            $message = $mailService->createHtmlMessage($from, $data['email1'], $subject, 'playground-game/email/' . $template, array(
-                'game' => $game,
-                'email' => $email,
-                'secretKey' => $secretKey,
-                'skinUrl' => $skinUrl,
-                'userTimer' => $userTimer
-            ));
+            $message = $mailService->createHtmlMessage(
+                $from,
+                $data['email1'],
+                $subject,
+                'playground-game/email/' . $template,
+                array(
+                    'game' => $game,
+                    'email' => $email,
+                    'secretKey' => $secretKey,
+                    'skinUrl' => $skinUrl,
+                    'userTimer' => $userTimer
+                )
+            );
             $mailService->send($message);
             
             if (!isset($shares['mail'])) {
@@ -1088,13 +1172,19 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         }
         if ($data['email2'] && $data['email2'] != $data['email1']) {
             $mailSent = true;
-            $message = $mailService->createHtmlMessage($from, $data['email2'], $subject, 'playground-game/email/' . $template, array(
-                'game' => $game,
-                'email' => $email,
-                'secretKey' => $secretKey,
-                'skinUrl' => $skinUrl,
-                'userTimer' => $userTimer
-            ));
+            $message = $mailService->createHtmlMessage(
+                $from,
+                $data['email2'],
+                $subject,
+                'playground-game/email/' . $template,
+                array(
+                    'game' => $game,
+                    'email' => $email,
+                    'secretKey' => $secretKey,
+                    'skinUrl' => $skinUrl,
+                    'userTimer' => $userTimer
+                )
+            );
             $mailService->send($message);
             
             if (!isset($shares['mail'])) {
@@ -1105,13 +1195,19 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         }
         if ($data['email3'] && $data['email3'] != $data['email2'] && $data['email3'] != $data['email1']) {
             $mailSent = true;
-            $message = $mailService->createHtmlMessage($from, $data['email3'], $subject, 'playground-game/email/' . $template, array(
-                'game' => $game,
-                'email' => $email,
-                'secretKey' => $secretKey,
-                'skinUrl' => $skinUrl,
-                'userTimer' => $userTimer
-            ));
+            $message = $mailService->createHtmlMessage(
+                $from,
+                $data['email3'],
+                $subject,
+                'playground-game/email/' . $template,
+                array(
+                    'game' => $game,
+                    'email' => $email,
+                    'secretKey' => $secretKey,
+                    'skinUrl' => $skinUrl,
+                    'userTimer' => $userTimer
+                )
+            );
             $mailService->send($message);
             
             if (!isset($shares['mail'])) {
@@ -1120,15 +1216,25 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                 $shares['mail'] += 1;
             }
         }
-        if ($data['email4'] && $data['email4'] != $data['email3'] && $data['email4'] != $data['email2'] && $data['email4'] != $data['email1']) {
+        if ($data['email4'] &&
+            $data['email4'] != $data['email3'] &&
+            $data['email4'] != $data['email2'] &&
+            $data['email4'] != $data['email1']
+        ) {
             $mailSent = true;
-            $message = $mailService->createHtmlMessage($from, $data['email4'], $subject, 'playground-game/email/' . $template, array(
-                'game' => $game,
-                'email' => $email,
-                'secretKey' => $secretKey,
-                'skinUrl' => $skinUrl,
-                'userTimer' => $userTimer
-            ));
+            $message = $mailService->createHtmlMessage(
+                $from,
+                $data['email4'],
+                $subject,
+                'playground-game/email/' . $template,
+                array(
+                    'game' => $game,
+                    'email' => $email,
+                    'secretKey' => $secretKey,
+                    'skinUrl' => $skinUrl,
+                    'userTimer' => $userTimer
+                )
+            );
             $mailService->send($message);
         
             if (!isset($shares['mail'])) {
@@ -1137,15 +1243,26 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                 $shares['mail'] += 1;
             }
         }
-        if ($data['email5'] && $data['email5'] != $data['email4'] && $data['email5'] != $data['email3'] && $data['email5'] != $data['email2'] && $data['email5'] != $data['email1']) {
+        if ($data['email5'] &&
+            $data['email5'] != $data['email4'] &&
+            $data['email5'] != $data['email3'] &&
+            $data['email5'] != $data['email2'] &&
+            $data['email5'] != $data['email1']
+        ) {
             $mailSent = true;
-            $message = $mailService->createHtmlMessage($from, $data['email5'], $subject, 'playground-game/email/' . $template, array(
-                'game' => $game,
-                'email' => $email,
-                'secretKey' => $secretKey,
-                'skinUrl' => $skinUrl,
-                'userTimer' => $userTimer
-            ));
+            $message = $mailService->createHtmlMessage(
+                $from,
+                $data['email5'],
+                $subject,
+                'playground-game/email/' . $template,
+                array(
+                    'game' => $game,
+                    'email' => $email,
+                    'secretKey' => $secretKey,
+                    'skinUrl' => $skinUrl,
+                    'userTimer' => $userTimer
+                )
+            );
             $mailService->send($message);
         
             if (!isset($shares['mail'])) {
@@ -1173,6 +1290,12 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         return false;
     }
 
+    /**
+     * @param \PlaygroundGame\Entity\Game $game
+     * @param \PlaygroundUser\Entity\User $user
+     * @param Entry $entry
+     * @param \PlaygroundGame\Entity\Prize $prize
+     */
     public function sendResultMail($game, $user, $entry, $template = 'entry', $prize = null)
     {
         $mailService = $this->getServiceManager()->get('playgroundgame_message');
@@ -1775,7 +1898,18 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
         $new_image_mini = imagecreatetruecolor($mini_width, $mini_height);
 
-        imagecopyresampled($new_image_mini, $src, 0 - ($new_width_mini - $mini_width) / 2, 0 - ($new_height_mini - $mini_height) / 2, 0, 0, $new_width_mini, $new_height_mini, $src_width, $src_height);
+        imagecopyresampled(
+            $new_image_mini,
+            $src,
+            0 - ($new_width_mini - $mini_width) / 2,
+            0 - ($new_height_mini - $mini_height) / 2,
+            0,
+            0,
+            $new_width_mini,
+            $new_height_mini,
+            $src_width,
+            $src_height
+        );
         imagejpeg($new_image_mini, $rep);
 
         imagedestroy($new_image_mini);
@@ -1931,7 +2065,15 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                 if ($lengthMax && $lengthMax > $lengthMin) {
                     $options['max'] = $lengthMax;
                     $element->setAttribute('maxlength', $lengthMax);
-                    $options['messages'] = array(\Zend\Validator\StringLength::TOO_LONG => sprintf($this->getServiceLocator()->get('translator')->translate('This field contains more than %s characters', 'playgroundgame'), $lengthMax));
+                    $options['messages'] = array(
+                        \Zend\Validator\StringLength::TOO_LONG => sprintf(
+                            $this->getServiceLocator()->get('translator')->translate(
+                                'This field contains more than %s characters',
+                                'playgroundgame'
+                            ),
+                            $lengthMax
+                        )
+                    );
                 }
 
                 $validators = array(
@@ -1943,7 +2085,14 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                 if ($validator) {
                     $regex = "/.*\(([^)]*)\)/";
                     preg_match($regex, $validator, $matches);
-                    $valArray = array('name' => str_replace('('.$matches[1].')', '', $validator), 'options' => array($matches[1]));
+                    $valArray = array(
+                        'name' => str_replace(
+                            '('.$matches[1].')',
+                            '',
+                            $validator
+                        ),
+                        'options' => array($matches[1])
+                    );
                     $validators[] = $valArray;
                 }
 
@@ -1962,7 +2111,10 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                 $name        = isset($attributes->name)? $attributes->name : '';
                 $placeholder = isset($attributes->data->placeholder)? $attributes->data->placeholder : '';
                 $label       = isset($attributes->data->label)? $attributes->data->label : '';
-                $required    = (isset($attributes->data->required) && $attributes->data->required == 'true') ? true : false ;
+                $required    = (
+                    isset($attributes->data->required) &&
+                    $attributes->data->required == 'true'
+                ) ? true : false ;
                 $class       = isset($attributes->data->class)? $attributes->data->class : '';
                 $id          = isset($attributes->data->id)? $attributes->data->id : '';
                 $lengthMin   = isset($attributes->data->length)? $attributes->data->length->min : '';
@@ -1988,7 +2140,15 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                 if ($lengthMax && $lengthMax > $lengthMin) {
                     $options['max'] = $lengthMax;
                     $element->setAttribute('maxlength', $lengthMax);
-                    $options['messages'] = array(\Zend\Validator\StringLength::TOO_LONG => sprintf($this->getServiceLocator()->get('translator')->translate('This field contains more than %s characters', 'playgroundgame'), $lengthMax));
+                    $options['messages'] = array(
+                        \Zend\Validator\StringLength::TOO_LONG => sprintf(
+                            $this->getServiceLocator()->get('translator')->translate(
+                                'This field contains more than %s characters',
+                                'playgroundgame'
+                            ),
+                            $lengthMax
+                        )
+                    );
                 }
                 $inputFilter->add($factory->createInput(array(
                     'name'     => $name,
@@ -2034,7 +2194,15 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                 if ($lengthMax && $lengthMax > $lengthMin) {
                     $options['max'] = $lengthMax;
                     $element->setAttribute('maxlength', $lengthMax);
-                    $options['messages'] = array(\Zend\Validator\StringLength::TOO_LONG => sprintf($this->getServiceLocator()->get('translator')->translate('This field contains more than %s characters', 'playgroundgame'), $lengthMax));
+                    $options['messages'] = array(
+                        \Zend\Validator\StringLength::TOO_LONG => sprintf(
+                            $this->getServiceLocator()->get('translator')->translate(
+                                'This field contains more than %s characters',
+                                'playgroundgame'
+                            ),
+                            $lengthMax
+                        )
+                    );
                 }
                 $inputFilter->add($factory->createInput(array(
                     'name'     => $name,
@@ -2081,7 +2249,15 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                 if ($lengthMax && $lengthMax > $lengthMin) {
                     $options['max'] = $lengthMax;
                     $element->setAttribute('maxlength', $lengthMax);
-                    $options['messages'] = array(\Zend\Validator\StringLength::TOO_LONG => sprintf($this->getServiceLocator()->get('translator')->translate('This field contains more than %s characters', 'playgroundgame'), $lengthMax));
+                    $options['messages'] = array(
+                        \Zend\Validator\StringLength::TOO_LONG => sprintf(
+                            $this->getServiceLocator()->get('translator')->translate(
+                                'This field contains more than %s characters',
+                                'playgroundgame'
+                            ),
+                            $lengthMax
+                        )
+                    );
                 }
                 $inputFilter->add($factory->createInput(array(
                     'name'     => $name,
@@ -2193,7 +2369,9 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                 $id          = isset($attributes->data->id)? $attributes->data->id : '';
                 $lengthMin   = isset($attributes->data->length)? $attributes->data->length->min : '';
                 $lengthMax   = isset($attributes->data->length)? $attributes->data->length->max : '';
-                $dropdownValues   = isset($attributes->data->dropdownValues)? $attributes->data->dropdownValues : array();
+                $dropdownValues   = isset($attributes->data->dropdownValues)?
+                    $attributes->data->dropdownValues :
+                    array();
         
                 $element = new Element\Select($name);
                 $element->setLabel($label);
@@ -2294,9 +2472,18 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                     'name'     => $name,
                     'required' => $required,
                     'validators' => array(
-                        array('name' => '\Zend\Validator\File\Size', 'options' => array('min' => $filesizeMin, 'max' => $filesizeMax)),
-                        array('name' => '\Zend\Validator\File\Extension', 'options'  => array('png,PNG,jpg,JPG,jpeg,JPEG,gif,GIF', 'messages' => array(
-                            \Zend\Validator\File\Extension::FALSE_EXTENSION => 'Veuillez télécharger une image' ))
+                        array(
+                            'name' => '\Zend\Validator\File\Size',
+                            'options' => array('min' => $filesizeMin, 'max' => $filesizeMax)
+                        ),
+                        array(
+                            'name' => '\Zend\Validator\File\Extension',
+                            'options'  => array(
+                                'png,PNG,jpg,JPG,jpeg,JPEG,gif,GIF',
+                                'messages' => array(
+                                    \Zend\Validator\File\Extension::FALSE_EXTENSION =>'Veuillez télécharger une image'
+                                )
+                            )
                         ),
                     ),
                 )));
@@ -2317,11 +2504,17 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      */
     public function sendMail($game, $user, $lastEntry, $prize = null)
     {
-        if (($user || ($game->getAnonymousAllowed() && $game->getAnonymousIdentifier())) && $game->getMailWinner() && $lastEntry->getWinner()) {
+        if (($user || ($game->getAnonymousAllowed() && $game->getAnonymousIdentifier())) &&
+            $game->getMailWinner() &&
+            $lastEntry->getWinner()
+        ) {
             $this->sendResultMail($game, $user, $lastEntry, 'winner', $prize);
         }
 
-        if (($user || ($game->getAnonymousAllowed() && $game->getAnonymousIdentifier())) && $game->getMailLooser() && !$lastEntry->getWinner()) {
+        if (($user || ($game->getAnonymousAllowed() && $game->getAnonymousIdentifier())) &&
+            $game->getMailLooser() &&
+            !$lastEntry->getWinner()
+        ) {
             $this->sendResultMail($game, $user, $lastEntry, 'looser');
         }
     }

@@ -348,7 +348,10 @@ class Game extends ProvidesEventsForm
         $layoutArray = array(
             '' => $translator->translate('Use layout per default', 'playgroundgame')
         );
-        if (isset($options['core_layout']) && isset($options['core_layout']['PlaygroundGame']) && isset($options['core_layout']['PlaygroundGame']['models'])) {
+        if (isset($options['core_layout']) &&
+            isset($options['core_layout']['PlaygroundGame']) &&
+            isset($options['core_layout']['PlaygroundGame']['models'])
+        ) {
             $layoutOptions = array();
             $layoutOptions = $options['core_layout']['PlaygroundGame']['models'];
             foreach ($layoutOptions as $k => $v) {
