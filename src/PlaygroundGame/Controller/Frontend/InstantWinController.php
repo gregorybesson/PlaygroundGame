@@ -49,57 +49,26 @@ class InstantWinController extends GameController
         }
 
         if ($game->getOccurrenceType()=='datetime') {
-            if ($this->getRequest()->isPost()) {
-                // En post, je reçois la maj du form pour les gagnants.
-                // Je n'ai pas à créer une nouvelle participation mais vérifier la précédente
-                $lastEntry = $sg->findLastInactiveEntry($game, $user);
-                if (!$lastEntry) {
-                    return $this->redirect()->toUrl(
-                        $this->frontendUrl()->fromRoute(
-                            'instantwin',
-                            array(
-                                'id' => $game->getIdentifier(),
-                                'channel' => $channel
-                            ),
-                            array('force_canonical' => true)
-                        )
-                    );
-                }
-                $winner = $lastEntry->getWinner();
-                // if not winner, I'm not authorized to call this page in POST mode.
-                if (!$winner) {
-                    return $this->redirect()->toUrl(
-                        $this->frontendUrl()->fromRoute(
-                            'instantwin',
-                            array(
-                                'id' => $game->getIdentifier(),
-                                'channel' => $channel
-                            ),
-                            array('force_canonical' => true)
-                        )
-                    );
-                }
-            } else {
-                // J'arrive sur le jeu, j'essaie donc de participer
-                $entry = $sg->play($game, $user);
-                if (!$entry) {
-                    // the user has already taken part of this game and the participation limit has been reached
-                    $this->flashMessenger()->addMessage('Vous avez déjà participé');
+            
+            $entry = $sg->play($game, $user);
+            if (!$entry) {
+                // the user has already taken part of this game and the participation limit has been reached
+                $this->flashMessenger()->addMessage('Vous avez déjà participé');
 
-                    return $this->redirect()->toUrl(
-                        $this->frontendUrl()->fromRoute(
-                            'instantwin/result',
-                            array(
-                                'id' => $game->getIdentifier(),
-                                'channel' => $channel
-                            )
+                return $this->redirect()->toUrl(
+                    $this->frontendUrl()->fromRoute(
+                        'instantwin/result',
+                        array(
+                            'id' => $game->getIdentifier(),
+                            'channel' => $channel
                         )
-                    );
-                }
-
-                // update the winner attribute in entry.
-                $winner = $sg->IsInstantWinner($game, $user);
+                    )
+                );
             }
+
+            // update the winner attribute in entry.
+            $winner = $sg->IsInstantWinner($game, $user);
+
             $prize = null;
             if ($winner) {
                 $prize = $winner->getPrize();

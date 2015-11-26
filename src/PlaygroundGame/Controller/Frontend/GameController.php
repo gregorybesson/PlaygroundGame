@@ -271,9 +271,12 @@ class GameController extends AbstractActionController
                 
                 $sg->updateEntryPlayerForm($form->getData(), $game, $user, $entry);
 
+                $path = (empty($game->nextStep($this->params('action'))))?
+                    $game->getClassType():
+                    $game->getClassType() .'/' . $game->nextStep($this->params('action'));
                 return $this->redirect()->toUrl(
                     $this->frontendUrl()->fromRoute(
-                        $game->getClassType() .'/' . $game->nextStep($this->params('action')),
+                        $path,
                         array(
                             'id' => $game->getIdentifier(),
                             'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
@@ -431,6 +434,12 @@ class GameController extends AbstractActionController
     {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $viewModel = new JsonModel();
+            if ($game) {
+                $view = $this->addAdditionalView($game);
+                if ($view && $view instanceof \Zend\View\Model\ViewModel) {
+                    $viewModel->setVariables($view->getVariables());
+                }
+            }
         } else {
             $viewModel = new ViewModel();
 

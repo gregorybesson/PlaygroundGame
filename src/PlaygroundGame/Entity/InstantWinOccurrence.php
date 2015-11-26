@@ -17,7 +17,7 @@ use Zend\InputFilter\InputFilterInterface;
  * @ORM\Entity @HasLifecycleCallbacks
  * @ORM\Table(name="game_instantwin_occurrence")
  */
-class InstantWinOccurrence implements InputFilterAwareInterface
+class InstantWinOccurrence implements InputFilterAwareInterface, \JsonSerializable
 {
     protected $inputFilter;
 
@@ -288,6 +288,16 @@ class InstantWinOccurrence implements InputFilterAwareInterface
     {
         $obj_vars = get_object_vars($this);
         return $obj_vars;
+    }
+
+    /**
+    * Convert the object to json.
+    *
+    * @return array
+    */
+    public function jsonSerialize()
+    {
+        return $this->getArrayCopy();
     }
 
     /**
