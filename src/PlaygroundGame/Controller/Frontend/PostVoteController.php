@@ -40,9 +40,20 @@ class PostVoteController extends GameController
         $user       = $this->zfcUserAuthentication()->getIdentity();
 
         if (!$user && !$game->getAnonymousAllowed()) {
-            $redirect = urlencode($this->frontendUrl()->fromRoute(''. $game->getClassType() . '/play', array('id' => $game->getIdentifier(), 'channel' => $channel), array('force_canonical' => true)));
+            $redirect = urlencode(
+                $this->frontendUrl()->fromRoute(
+                    $game->getClassType() . '/play',
+                    array('id' => $game->getIdentifier(), 'channel' => $channel),
+                    array('force_canonical' => true)
+                )
+            );
 
-            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('zfcuser/register', array('channel' => $channel)) . '?redirect='.$redirect);
+            return $this->redirect()->toUrl(
+                $this->frontendUrl()->fromRoute(
+                    'zfcuser/register',
+                    array('channel' => $channel)
+                ) . '?redirect='.$redirect
+            );
         }
 
         $entry = $sg->play($game, $user);
@@ -50,7 +61,15 @@ class PostVoteController extends GameController
         if (!$entry) {
             $lastEntry = $sg->findLastInactiveEntry($game, $user);
             if ($lastEntry === null) {
-                return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('postvote', array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+                return $this->redirect()->toUrl(
+                    $this->frontendUrl()->fromRoute(
+                        'postvote',
+                        array(
+                            'id' => $identifier,
+                            'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                        )
+                    )
+                );
             }
 
             $lastEntryId = $lastEntry->getId();
@@ -58,18 +77,48 @@ class PostVoteController extends GameController
             $postId = $lastPost->getId();
             if ($lastPost->getStatus() == 2) {
                 // the user has already taken part of this game and the participation limit has been reached
-                $this->flashMessenger()->addMessage($this->getServiceLocator()->get('translator')->translate('You have already a Post'));
+                $this->flashMessenger()->addMessage(
+                    $this->getServiceLocator()->get('translator')->translate('You have already a Post')
+                );
 
-                return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('postvote/post', array('id' => $identifier, 'post' => $postId, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+                return $this->redirect()->toUrl(
+                    $this->frontendUrl()->fromRoute(
+                        'postvote/post',
+                        array(
+                            'id' => $identifier,
+                            'post' => $postId,
+                            'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                        )
+                    )
+                );
             } else {
-                $this->flashMessenger()->addMessage($this->getServiceLocator()->get('translator')->translate('Your Post is waiting for validation'));
+                $this->flashMessenger()->addMessage(
+                    $this->getServiceLocator()->get('translator')->translate('Your Post is waiting for validation')
+                );
 
-                return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('postvote/post', array('id' => $identifier, 'post' => $postId, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+                return $this->redirect()->toUrl(
+                    $this->frontendUrl()->fromRoute(
+                        'postvote/post',
+                        array(
+                            'id' => $identifier,
+                            'post' => $postId,
+                            'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                        )
+                    )
+                );
             }
         }
 
         if (! $game->getForm()) {
-            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('postvote', array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+            return $this->redirect()->toUrl(
+                $this->frontendUrl()->fromRoute(
+                    'postvote',
+                    array(
+                        'id' => $identifier,
+                        'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                    )
+                )
+            );
         }
 
         $form = $sg->createFormFromJson($game->getForm()->getForm(), 'postvoteForm');
@@ -110,7 +159,13 @@ class PostVoteController extends GameController
 
                 if ($post && !empty($game->nextStep('play'))) {
                     // determine the route where the user should go
-                    $redirectUrl = $this->frontendUrl()->fromRoute('postvote/'.$game->nextStep('play'), array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')));
+                    $redirectUrl = $this->frontendUrl()->fromRoute(
+                        'postvote/'.$game->nextStep('play'),
+                        array(
+                            'id' => $game->getIdentifier(),
+                            'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                        )
+                    );
 
                     return $this->redirect()->toUrl($redirectUrl);
                 }
@@ -148,14 +203,30 @@ class PostVoteController extends GameController
          
         if (!$entry) {
             // the user has already taken part of this game and the participation limit has been reached
-            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('postvote/'.$game->nextStep('preview'), array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+            return $this->redirect()->toUrl(
+                $this->frontendUrl()->fromRoute(
+                    'postvote/'.$game->nextStep('preview'),
+                    array(
+                        'id' => $identifier,
+                        'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                    )
+                )
+            );
         }
 
         // Je recherche le post associé à entry + status == 0. Si non trouvé, je redirige vers home du jeu.
         $post = $sg->getPostVotePostMapper()->findOneBy(array('entry' => $entry, 'status' => 0));
 
         if (! $post) {
-            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('postvote', array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+            return $this->redirect()->toUrl(
+                $this->frontendUrl()->fromRoute(
+                    'postvote',
+                    array(
+                        'id' => $identifier,
+                        'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                    )
+                )
+            );
         }
 
         if ($this->getRequest()->isPost()) {
@@ -165,7 +236,13 @@ class PostVoteController extends GameController
                 if (!($step = $game->nextStep('play'))) {
                     $step = 'result';
                 }
-                $redirectUrl = $this->frontendUrl()->fromRoute('postvote/'.$step, array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')));
+                $redirectUrl = $this->frontendUrl()->fromRoute(
+                    'postvote/'.$step,
+                    array(
+                        'id' => $game->getIdentifier(),
+                        'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                    )
+                );
 
                 return $this->redirect()->toUrl($redirectUrl);
             }
@@ -192,7 +269,13 @@ class PostVoteController extends GameController
         $statusMail = false;
         $mailService = $this->getServiceLocator()->get('playgroundgame_message');
         $to = '';
-        $skinUrl = $sg->getServiceManager()->get('ViewRenderer')->url('frontend', array('channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true));
+        $skinUrl = $sg->getServiceManager()->get('ViewRenderer')->url(
+            'frontend',
+            array(
+                'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+            ),
+            array('force_canonical' => true)
+        );
         $config = $this->getGameService()->getServiceManager()->get('config');
         if (isset($config['moderation']['email'])) {
             $to = $config['moderation']['email'];
@@ -208,7 +291,15 @@ class PostVoteController extends GameController
         $post = $sg->getPostVotePostMapper()->findById($postId);
 
         if (! $post || $post->getStatus() === 9) {
-            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('postvote', array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+            return $this->redirect()->toUrl(
+                $this->frontendUrl()->fromRoute(
+                    'postvote',
+                    array(
+                        'id' => $identifier,
+                        'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                    )
+                )
+            );
         }
 
         $formModeration = new Form();
@@ -222,7 +313,16 @@ class PostVoteController extends GameController
             ),
         ));
 
-        $form = new \PlaygroundGame\Form\Frontend\PostVoteVote($this->frontendUrl()->fromRoute('postvote/post/captcha', array('id' => $identifier, 'post' => $postId, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+        $form = new \PlaygroundGame\Form\Frontend\PostVoteVote(
+            $this->frontendUrl()->fromRoute(
+                'postvote/post/captcha',
+                array(
+                    'id' => $identifier,
+                    'post' => $postId,
+                    'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                )
+            )
+        );
 
         if ($user) {
             $form->remove('captcha');
@@ -239,7 +339,13 @@ class PostVoteController extends GameController
                 if ($formModeration->isValid()) {
                     $from = $to;
                     $subject= 'Moderation Post and Vote';
-                    $result = $mailService->createHtmlMessage($from, $to, $subject, 'playground-game/email/moderation', array('data' => $data, 'skinUrl' => $skinUrl));
+                    $result = $mailService->createHtmlMessage(
+                        $from,
+                        $to,
+                        $subject,
+                        'playground-game/email/moderation',
+                        array('data' => $data, 'skinUrl' => $skinUrl)
+                    );
                     $mailService->send($result);
                     if ($result) {
                         $statusMail = true;
@@ -300,12 +406,33 @@ class PostVoteController extends GameController
         $lastEntry = $this->getGameService()->findLastInactiveEntry($game, $user);
 
         if ($lastEntry === null) {
-            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('postvote', array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+            return $this->redirect()->toUrl(
+                $this->frontendUrl()->fromRoute(
+                    'postvote',
+                    array(
+                        'id' => $identifier,
+                        'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                    )
+                )
+            );
         }
 
         if (!$user && !$game->getAnonymousAllowed()) {
-            $redirect = urlencode($this->frontendUrl()->fromRoute('postvote/result', array('id' => $game->getIdentifier(), 'channel' => $channel)));
-            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('zfcuser/register', array('channel' => $channel)) . '?redirect='.$redirect);
+            $redirect = urlencode(
+                $this->frontendUrl()->fromRoute(
+                    'postvote/result',
+                    array(
+                        'id' => $game->getIdentifier(),
+                        'channel' => $channel
+                    )
+                )
+            );
+            return $this->redirect()->toUrl(
+                $this->frontendUrl()->fromRoute(
+                    'zfcuser/register',
+                    array('channel' => $channel)
+                ) . '?redirect='.$redirect
+            );
         }
 
         $form = $this->getServiceLocator()->get('playgroundgame_sharemail_form');
@@ -326,15 +453,23 @@ class PostVoteController extends GameController
         $post = $this->getGameService()->getPostVotePostMapper()->findOneBy(array('entry' => $lastEntry));
 
         if (! $post) {
-            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('postvote', array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+            return $this->redirect()->toUrl(
+                $this->frontendUrl()->fromRoute(
+                    'postvote',
+                    array(
+                        'id' => $identifier,
+                        'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                    )
+                )
+            );
         }
 
         $viewModel = $this->buildView($game);
 
         $viewModel->setVariables(array(
-                'statusMail'       => $statusMail,
-                'post'             => $post,
-                'form'             => $form,
+                'statusMail' => $statusMail,
+                'post' => $post,
+                'form' => $form,
             ));
 
         return $viewModel;
@@ -454,7 +589,11 @@ class PostVoteController extends GameController
         $statusMail = false;
         $mailService = $this->getServiceLocator()->get('playgroundgame_message');
         $to = '';
-        $skinUrl = $sg->getServiceManager()->get('ViewRenderer')->url('frontend', array('channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true));
+        $skinUrl = $sg->getServiceManager()->get('ViewRenderer')->url(
+            'frontend',
+            array('channel' => $this->getEvent()->getRouteMatch()->getParam('channel')),
+            array('force_canonical' => true)
+        );
         $config = $this->getGameService()->getServiceManager()->get('config');
         if (isset($config['moderation']['email'])) {
             $to = $config['moderation']['email'];
@@ -494,7 +633,13 @@ class PostVoteController extends GameController
             if (isset($data['moderation'])) {
                 $from = $to;
                 $subject= 'Moderation Post and Vote';
-                $result = $mailService->createHtmlMessage($from, $to, $subject, 'playground-game/email/moderation', array('data' => $data, 'skinUrl' => $skinUrl));
+                $result = $mailService->createHtmlMessage(
+                    $from,
+                    $to,
+                    $subject,
+                    'playground-game/email/moderation',
+                    array('data' => $data, 'skinUrl' => $skinUrl)
+                );
                 $mailService->send($result);
                 if ($result) {
                     $statusMail = true;
@@ -509,14 +654,27 @@ class PostVoteController extends GameController
             $postTarget = $sg->getPostVotePostMapper()->findById($postId);
             if ($postTarget) {
                 foreach ($postTarget->getPostElements() as $element) {
-                    $fbShareImage = $this->frontendUrl()->fromRoute('', array('channel' => ''), array('force_canonical' => true), false) . $element->getValue();
+                    $fbShareImage = $this->frontendUrl()->fromRoute(
+                        '',
+                        array('channel' => ''),
+                        array('force_canonical' => true),
+                        false
+                    ) . $element->getValue();
                     break;
                 }
                 
                 $secretKey = strtoupper(substr(sha1(uniqid('pg_', true).'####'.time()), 0, 15));
                 
                 // Without bit.ly shortener
-                $socialLinkUrl = $this->frontendUrl()->fromRoute('postvote/list', array('id' => $game->getIdentifier(), 'filter' => 'date', 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)).'?id='.$postTarget->getId().'&key='.$secretKey;
+                $socialLinkUrl = $this->frontendUrl()->fromRoute(
+                    'postvote/list',
+                    array(
+                        'id' => $game->getIdentifier(),
+                        'filter' => 'date',
+                        'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                    ),
+                    array('force_canonical' => true)
+                ).'?id='.$postTarget->getId().'&key='.$secretKey;
                 // With core shortener helper
                 $socialLinkUrl = $this->shortenUrl()->shortenUrl($socialLinkUrl);
                 
@@ -635,19 +793,45 @@ class PostVoteController extends GameController
         $lastEntry = $this->getGameService()->findLastInactiveEntry($game, $user);
     
         if ($lastEntry === null) {
-            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('postvote', array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
+            return $this->redirect()->toUrl(
+                $this->frontendUrl()->fromRoute(
+                    'postvote',
+                    array(
+                        'id' => $identifier,
+                        'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                    )
+                )
+            );
         }
     
         $post = $sg->getPostVotePostMapper()->findOneBy(array('entry' => $lastEntry));
     
         $secretKey = strtoupper(substr(sha1(uniqid('pg_', true).'####'.time()), 0, 15));
-        $socialLinkUrl = $this->frontendUrl()->fromRoute('postvote/post', array('id' => $identifier, 'post' => $post->getId(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)).'?key='.$secretKey;
+        $socialLinkUrl = $this->frontendUrl()->fromRoute(
+            'postvote/post',
+            array(
+                'id' => $identifier,
+                'post' => $post->getId(),
+                'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+            ),
+            array('force_canonical' => true)
+        ).'?key='.$secretKey;
         // With core shortener helper
         $socialLinkUrl = $this->shortenUrl()->shortenUrl($socialLinkUrl);
     
         if (!$user && !$game->getAnonymousAllowed()) {
-            $redirect = urlencode($this->frontendUrl()->fromRoute('postvote/result', array('id' => $game->getIdentifier(), 'channel' => $channel)));
-            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('zfcuser/register', array('channel' => $channel)) . '?redirect='.$redirect);
+            $redirect = urlencode(
+                $this->frontendUrl()->fromRoute(
+                    'postvote/result',
+                    array('id' => $game->getIdentifier(), 'channel' => $channel)
+                )
+            );
+            return $this->redirect()->toUrl(
+                $this->frontendUrl()->fromRoute(
+                    'zfcuser/register',
+                    array('channel' => $channel)
+                ) . '?redirect='.$redirect
+            );
         }
     
         $form = $this->getServiceLocator()->get('playgroundgame_sharemail_form');
@@ -667,14 +851,27 @@ class PostVoteController extends GameController
         $viewModel = $this->buildView($game);
     
         foreach ($post->getPostElements() as $element) {
-            $fbShareImage = $this->frontendUrl()->fromRoute('', array('channel' => ''), array('force_canonical' => true), false) . $element->getValue();
+            $fbShareImage = $this->frontendUrl()->fromRoute(
+                '',
+                array('channel' => ''),
+                array('force_canonical' => true),
+                false
+            ) . $element->getValue();
             break;
         }
     
         $secretKey = strtoupper(substr(sha1(uniqid('pg_', true).'####'.time()), 0, 15));
 
         // Without bit.ly shortener
-        $socialLinkUrl = $this->frontendUrl()->fromRoute('postvote/list', array('id' => $game->getIdentifier(), 'filter' => 'date', 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)).'?id='.$post->getId().'&key='.$secretKey;
+        $socialLinkUrl = $this->frontendUrl()->fromRoute(
+            'postvote/list',
+            array(
+                'id' => $game->getIdentifier(),
+                'filter' => 'date',
+                'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+            ),
+            array('force_canonical' => true)
+        ).'?id='.$post->getId().'&key='.$secretKey;
         // With core shortener helper
         $socialLinkUrl = $this->shortenUrl()->shortenUrl($socialLinkUrl);
 

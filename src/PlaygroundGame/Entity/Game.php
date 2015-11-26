@@ -1621,14 +1621,22 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
         $this->stylesheet       = (isset($data['stylesheet'])) ? $data['stylesheet'] : null;
 
         $this->pushHome         = (isset($data['pushHome']) && $data['pushHome'] !== null) ? $data['pushHome'] : 0;
-        $this->displayHome      = (isset($data['displayHome']) && $data['displayHome'] !== null) ? $data['displayHome'] : 0;
+        $this->displayHome      = (isset($data['displayHome']) && $data['displayHome'] !== null) ?
+            $data['displayHome'] :
+            0;
 
         $this->canal            = (isset($data['canal'])) ? $data['canal'] : null;
         $this->prizeCategory   = (isset($data['prizeCategory'])) ? $data['prizeCategory'] : null;
 
-        $this->publicationDate  = (isset($data['publicationDate']) && $data['publicationDate'] !== null) ? DateTime::createFromFormat('d/m/Y', $data['publicationDate']) : null;
-        $this->endDate         = (isset($data['endDate']) && $data['endDate'] !== null) ? DateTime::createFromFormat('d/m/Y', $data['endDate']) : null;
-        $this->startDate       = (isset($data['startDate']) && $data['startDate'] !== null) ? DateTime::createFromFormat('d/m/Y', $data['startDate']) : null;
+        $this->publicationDate  = (isset($data['publicationDate']) && $data['publicationDate'] !== null) ?
+            DateTime::createFromFormat('d/m/Y', $data['publicationDate']) :
+            null;
+        $this->endDate         = (isset($data['endDate']) && $data['endDate'] !== null) ?
+            DateTime::createFromFormat('d/m/Y', $data['endDate']) :
+            null;
+        $this->startDate       = (isset($data['startDate']) && $data['startDate'] !== null) ?
+            DateTime::createFromFormat('d/m/Y', $data['startDate']) :
+            null;
 
         $this->identifier       = (isset($data['identifier'])) ? $data['identifier'] : null;
         $this->welcomeBlock    = (isset($data['welcomeBlock'])) ? $data['welcomeBlock'] : null;

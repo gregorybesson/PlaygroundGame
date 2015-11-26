@@ -52,7 +52,13 @@ class Cron extends EventProvider implements ServiceManagerAwareInterface
         // On recherche les joueurs qui n'ont pas partagé leur qquiz après avoir joué
         // entry join user join game : distinct user et game et game_entry = 0 et updated_at <= jour-1 et > jour - 2
 
-        $message = $mailService->createTextMessage($from, $to, $subject, 'playground-game/email/share_reminder', array('game' => $game));
+        $message = $mailService->createTextMessage(
+            $from,
+            $to,
+            $subject,
+            'playground-game/email/share_reminder',
+            array('game' => $game)
+        );
 
         $mailService->send($message);
     }
@@ -89,7 +95,13 @@ class Cron extends EventProvider implements ServiceManagerAwareInterface
         foreach ($arrayUsers as $k => $entry) {
             $user = $entry['user'];
             $game = $entry['game'];
-            $message = $mailService->createHtmlMessage($from, $user->getEmail(), $subject, 'playground-game/email/game_instantwin_reminder', array('game' => $game, 'user' => $user));
+            $message = $mailService->createHtmlMessage(
+                $from,
+                $user->getEmail(),
+                $subject,
+                'playground-game/email/game_instantwin_reminder',
+                array('game' => $game, 'user' => $user)
+            );
             $mailService->send($message);
         }
     }

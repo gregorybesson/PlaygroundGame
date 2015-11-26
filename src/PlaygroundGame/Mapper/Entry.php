@@ -16,16 +16,31 @@ class Entry extends AbstractMapper
 
     public function draw($game, $userClass, $total)
     {
-        $sql ='SELECT u.user_id uid, u.username, u.firstname, u.lastname, u.email, u.optin_partner, e.created_at ecreated_at, e.updated_at eupdated_at, e.* FROM game_entry as e
+        $sql ='
+            SELECT 
+                u.user_id uid, 
+                u.username, 
+                u.firstname, 
+                u.lastname, 
+                u.email, 
+                u.optin_partner, 
+                e.created_at ecreated_at, 
+                e.updated_at eupdated_at, 
+                e.* 
+            FROM game_entry as e
             INNER JOIN user AS u ON e.user_id = u.user_id
-            WHERE e.game_id = :game_id
-            AND e.drawable = 1
+            WHERE e.game_id = :game_id AND e.drawable = 1
             GROUP BY u.user_id
             ORDER BY RAND()
-            LIMIT :total';
+            LIMIT :total
+        ';
         
         $rsm = new \Doctrine\ORM\Query\ResultSetMappingBuilder($this->em);
-        $rsm->addRootEntityFromClassMetadata('\PlaygroundGame\Entity\Entry', 'e', array('id' => 'id', 'created_at' => 'ecreated_at', 'updated_at' => 'eupdated_at'));
+        $rsm->addRootEntityFromClassMetadata(
+            '\PlaygroundGame\Entity\Entry',
+            'e',
+            array('id' => 'id', 'created_at' => 'ecreated_at', 'updated_at' => 'eupdated_at')
+        );
         $query = $this->em->createNativeQuery($sql, $rsm);
         $query->setParameter('game_id', $game->getId());
         $query->setParameter('total', $total);
@@ -54,7 +69,10 @@ class Entry extends AbstractMapper
      */
     public function findLastEntriesByUser($game, $user, $dateLimit)
     {
-        $query = $this->em->createQuery('SELECT COUNT(e.id) FROM PlaygroundGame\Entity\Entry e WHERE e.user = :user AND e.game = :game AND (e.bonus = 0 OR e.bonus IS NULL) AND e.created_at >= :date');
+        $query = $this->em->createQuery(
+            'SELECT COUNT(e.id) FROM PlaygroundGame\Entity\Entry e 
+             WHERE e.user = :user AND e.game = :game AND (e.bonus = 0 OR e.bonus IS NULL) AND e.created_at >= :date'
+        );
         $query->setParameter('user', $user);
         $query->setParameter('game', $game);
         $query->setParameter('date', $dateLimit);
@@ -67,7 +85,11 @@ class Entry extends AbstractMapper
     public function findLastEntriesByAnonymousIdentifier($game, $anonymousIdentifier, $dateLimit)
     {
     
-        $query = $this->em->createQuery('SELECT COUNT(e.id) FROM PlaygroundGame\Entity\Entry e WHERE e.anonymousIdentifier = :anonymousIdentifier AND e.game = :game AND (e.bonus = 0 OR e.bonus IS NULL) AND e.created_at >= :date');
+        $query = $this->em->createQuery(
+            'SELECT COUNT(e.id) FROM PlaygroundGame\Entity\Entry e 
+             WHERE e.anonymousIdentifier = :anonymousIdentifier AND e.game = :game 
+             AND (e.bonus = 0 OR e.bonus IS NULL) AND e.created_at >= :date'
+        );
         $query->setParameter('anonymousIdentifier', $anonymousIdentifier);
         $query->setParameter('game', $game);
         $query->setParameter('date', $dateLimit);
@@ -110,7 +132,10 @@ class Entry extends AbstractMapper
                 $dateLimit = $now->format('Y-m-d') . ' 0:0:0';
         }
     
-        $query = $this->em->createQuery('SELECT COUNT(e.id) FROM PlaygroundGame\Entity\Entry e WHERE e.ip = :ip AND e.game = :game AND (e.bonus = 0 OR e.bonus IS NULL) AND e.created_at >= :date');
+        $query = $this->em->createQuery(
+            'SELECT COUNT(e.id) FROM PlaygroundGame\Entity\Entry e 
+             WHERE e.ip = :ip AND e.game = :game AND (e.bonus = 0 OR e.bonus IS NULL) AND e.created_at >= :date'
+        );
         $query->setParameter('ip', $ip);
         $query->setParameter('game', $game);
         $query->setParameter('date', $dateLimit);
@@ -184,12 +209,18 @@ class Entry extends AbstractMapper
      */
     public function checkBonusEntry($game, $user)
     {
-        $query = $this->em->createQuery('SELECT COUNT(e.id) FROM PlaygroundGame\Entity\Entry e WHERE e.user = :user AND e.game = :game AND (e.bonus = 0 OR e.bonus IS NULL)');
+        $query = $this->em->createQuery(
+            'SELECT COUNT(e.id) FROM PlaygroundGame\Entity\Entry e 
+             WHERE e.user = :user AND e.game = :game AND (e.bonus = 0 OR e.bonus IS NULL)'
+        );
         $query->setParameter('user', $user);
         $query->setParameter('game', $game);
         $nbEntries = $query->getSingleScalarResult();
 
-        $query = $this->em->createQuery('SELECT COUNT(e.id) FROM PlaygroundGame\Entity\Entry e WHERE e.user = :user AND e.game = :game AND e.bonus = 1');
+        $query = $this->em->createQuery(
+            'SELECT COUNT(e.id) FROM PlaygroundGame\Entity\Entry e 
+             WHERE e.user = :user AND e.game = :game AND e.bonus = 1'
+        );
         $query->setParameter('user', $user);
         $query->setParameter('game', $game);
         $nbBonusEntries = $query->getSingleScalarResult();

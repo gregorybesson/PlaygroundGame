@@ -50,7 +50,8 @@ class InstantWinController extends GameController
 
         if ($game->getOccurrenceType()=='datetime') {
             if ($this->getRequest()->isPost()) {
-                // En post, je reçois la maj du form pour les gagnants. Je n'ai pas à créer une nouvelle participation mais vérifier la précédente
+                // En post, je reçois la maj du form pour les gagnants.
+                // Je n'ai pas à créer une nouvelle participation mais vérifier la précédente
                 $lastEntry = $sg->findLastInactiveEntry($game, $user);
                 if (!$lastEntry) {
                     return $this->redirect()->toUrl(
@@ -179,24 +180,46 @@ class InstantWinController extends GameController
 
         $lastEntry = $sg->findLastInactiveEntry($game, $user);
         if (!$lastEntry) {
-            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('instantwin', array('id' => $game->getIdentifier(), 'channel' => $channel), array('force_canonical' => true)));
+            return $this->redirect()->toUrl(
+                $this->frontendUrl()->fromRoute(
+                    'instantwin',
+                    array('id' => $game->getIdentifier(), 'channel' => $channel),
+                    array('force_canonical' => true)
+                )
+            );
         }
         $winner = $lastEntry->getWinner();
         $occurrence = null;
 
         // On tente de récupèrer l'occurrence si elle existe pour avoir accés au lot associé
-        $occurrences = $sg->getInstantWinOccurrenceMapper()->findBy(array('instantwin' => $game->getId(), 'entry' => $lastEntry->getId(), ));
+        $occurrences = $sg->getInstantWinOccurrenceMapper()->findBy(
+            array('instantwin' => $game->getId(), 'entry' => $lastEntry->getId())
+        );
         if (!empty($occurrences)) {
             $occurrence = current($occurrences);
         }
 
         if (!$user && !$game->getAnonymousAllowed()) {
-            $redirect = urlencode($this->frontendUrl()->fromRoute('instantwin/result', array('id' => $game->getIdentifier(), 'channel' => $channel)));
-            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('zfcuser/register', array('channel' => $channel)) . '?redirect='.$redirect);
+            $redirect = urlencode(
+                $this->frontendUrl()->fromRoute(
+                    'instantwin/result',
+                    array('id' => $game->getIdentifier(), 'channel' => $channel)
+                )
+            );
+            return $this->redirect()->toUrl(
+                $this->frontendUrl()->fromRoute(
+                    'zfcuser/register',
+                    array('channel' => $channel)
+                ) . '?redirect='.$redirect
+            );
         }
 
         $secretKey = strtoupper(substr(sha1(uniqid('pg_', true).'####'.time()), 0, 15));
-        $socialLinkUrl = $this->frontendUrl()->fromRoute('instantwin', array('id' => $game->getIdentifier(), 'channel' => $channel), array('force_canonical' => true)).'?key='.$secretKey;
+        $socialLinkUrl = $this->frontendUrl()->fromRoute(
+            'instantwin',
+            array('id' => $game->getIdentifier(), 'channel' => $channel),
+            array('force_canonical' => true)
+        ).'?key='.$secretKey;
         // With core shortener helper
         $socialLinkUrl = $this->shortenUrl()->shortenUrl($socialLinkUrl);
 

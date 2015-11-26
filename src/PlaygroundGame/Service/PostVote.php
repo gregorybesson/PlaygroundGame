@@ -40,7 +40,8 @@ class PostVote extends Game implements ServiceManagerAwareInterface
             $post = $postvotePostMapper->insert($post);
         }
 
-        $path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR . 'game' . $game->getId() . DIRECTORY_SEPARATOR;
+        $path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR;
+        $path .= 'game' . $game->getId() . DIRECTORY_SEPARATOR;
         if (!is_dir($path)) {
             mkdir($path, 0777, true);
         }
@@ -49,7 +50,8 @@ class PostVote extends Game implements ServiceManagerAwareInterface
             mkdir($path, 0777, true);
         }
 
-        $media_url = $this->getOptions()->getMediaUrl() . '/' . 'game' . $game->getId() . '/' . 'post'. $post->getId() . '/';
+        $media_url = $this->getOptions()->getMediaUrl() . '/';
+        $media_url .= 'game' . $game->getId() . '/' . 'post'. $post->getId() . '/';
 
         $key = key($data);
         $uploadFile = $this->uploadFile($path, $data[$key]);
@@ -123,7 +125,8 @@ class PostVote extends Game implements ServiceManagerAwareInterface
             $post = $postvotePostMapper->insert($post);
         }
 
-        $path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR . 'game' . $game->getId() . DIRECTORY_SEPARATOR;
+        $path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR;
+        $path .= 'game' . $game->getId() . DIRECTORY_SEPARATOR;
         if (!is_dir($path)) {
             mkdir($path, 0777, true);
         }
@@ -132,7 +135,8 @@ class PostVote extends Game implements ServiceManagerAwareInterface
             mkdir($path, 0777, true);
         }
 
-        $media_url = $this->getOptions()->getMediaUrl() . '/' . 'game' . $game->getId() . '/' . 'post'. $post->getId() . '/';
+        $media_url = $this->getOptions()->getMediaUrl() . '/';
+        $media_url .= 'game' . $game->getId() . '/' . 'post'. $post->getId() . '/';
         $position=1;
 
         foreach ($data as $name => $value) {
@@ -390,7 +394,11 @@ class PostVote extends Game implements ServiceManagerAwareInterface
 
             $postvoteVoteMapper->insert($vote);
             $game = $post->getPostvote();
-            $this->getEventManager()->trigger('vote_postvote.post', $this, array('user' => $user, 'game' => $game, 'post' => $post, 'vote' => $vote));
+            $this->getEventManager()->trigger(
+                'vote_postvote.post',
+                $this,
+                array('user' => $user, 'game' => $game, 'post' => $post, 'vote' => $vote)
+            );
 
             return true;
         }
@@ -506,7 +514,9 @@ class PostVote extends Game implements ServiceManagerAwareInterface
     public function getPostVotePostElementMapper()
     {
         if (null === $this->postVotePostElementMapper) {
-            $this->postVotePostElementMapper = $this->getServiceManager()->get('playgroundgame_postvotepostelement_mapper');
+            $this->postVotePostElementMapper = $this->getServiceManager()->get(
+                'playgroundgame_postvotepostelement_mapper'
+            );
         }
 
         return $this->postVotePostElementMapper;
