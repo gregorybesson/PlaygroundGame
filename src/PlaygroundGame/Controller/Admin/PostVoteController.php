@@ -9,7 +9,7 @@ use Zend\View\Model\ViewModel;
 class PostVoteController extends GameController
 {
     /**
-     * @var GameService
+     * @var \PlaygroundGame\Service\Game
      */
     protected $adminGameService;
 

@@ -113,7 +113,10 @@ class LotteryController extends GameController
             $redirect = urlencode(
                 $this->frontendUrl()->fromRoute(
                     'lottery/result',
-                    array('id' => $game->getIdentifier(), 'channel' => $channel)
+                    array(
+                        'id' => $game->getIdentifier(),
+                        'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                    )
                 )
             );
             return $this->redirect()->toUrl(

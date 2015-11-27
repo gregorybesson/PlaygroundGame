@@ -12,7 +12,7 @@ use Zend\Paginator\Paginator;
 class QuizController extends GameController
 {
     /**
-     * @var GameService
+     * @var \PlaygroundGame\Service\Game
      */
     protected $adminGameService;
     protected $quizReplyAnswerMapper;

@@ -92,7 +92,6 @@ class InstantWinController extends GameController
                 )
             );
 
-            $occurrence = null;
             if ($this->getRequest()->isPost()) {
                 $form->setData($this->getRequest()->getPost());
                 if ($form->isValid()) {
