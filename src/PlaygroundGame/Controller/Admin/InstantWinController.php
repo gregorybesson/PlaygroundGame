@@ -15,14 +15,14 @@ use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 class InstantWinController extends GameController
 {
     /**
-     * @var GameService
+     * @var \PlaygroundGame\Service\Game
      */
     protected $adminGameService;
 
     public function removeAction()
     {
         $this->checkGame();
-        $service->getGameMapper()->remove($this->game);
+        $this->getAdminGameService()->getGameMapper()->remove($this->game);
         $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The game has been removed');
 
         return $this->redirect()->toRoute('admin/playgroundgame/list');
@@ -90,7 +90,7 @@ class InstantWinController extends GameController
 
         $adapter = new DoctrineAdapter(
             new LargeTablePaginator(
-                $service->getInstantWinOccurrenceMapper()->queryByGame($this->game)
+                $this->getAdminGameService()->getInstantWinOccurrenceMapper()->queryByGame($this->game)
             )
         );
         $paginator = new Paginator($adapter);
@@ -138,7 +138,7 @@ class InstantWinController extends GameController
             $value = \DateTime::createFromFormat('d/m/Y H:i', $data['value']);
             $data['value'] = $value->format('Y-m-d H:i:s');
             
-            $occurrence = $service->updateOccurrence($data, $occurrence->getId());
+            $occurrence = $this->getAdminGameService()->updateOccurrence($data, $occurrence->getId());
             if ($occurrence) {
                 // Redirect to list of games
                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The occurrence was created');

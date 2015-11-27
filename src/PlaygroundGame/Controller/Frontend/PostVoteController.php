@@ -710,6 +710,8 @@ class PostVoteController extends GameController
         $postId     = $this->getEvent()->getRouteMatch()->getParam('post');
         $user        = $this->zfcUserAuthentication()->getIdentity();
         $sg = $this->getGameService();
+        $request = $this->getRequest();
+        $response = $this->getResponse();
 
         $game = $sg->checkGame($identifier);
         if (! $game) {
@@ -719,9 +721,6 @@ class PostVoteController extends GameController
 
             return $response;
         }
-
-        $request = $this->getRequest();
-        $response = $this->getResponse();
 
         if (!$this->zfcUserAuthentication()->hasIdentity()) {
             $response->setContent(\Zend\Json\Json::encode(array(
@@ -823,13 +822,16 @@ class PostVoteController extends GameController
             $redirect = urlencode(
                 $this->frontendUrl()->fromRoute(
                     'postvote/result',
-                    array('id' => $game->getIdentifier(), 'channel' => $channel)
+                    array(
+                        'id' => $game->getIdentifier(),
+                        'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                    )
                 )
             );
             return $this->redirect()->toUrl(
                 $this->frontendUrl()->fromRoute(
                     'zfcuser/register',
-                    array('channel' => $channel)
+                    array('channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))
                 ) . '?redirect='.$redirect
             );
         }
@@ -859,21 +861,6 @@ class PostVoteController extends GameController
             ) . $element->getValue();
             break;
         }
-    
-        $secretKey = strtoupper(substr(sha1(uniqid('pg_', true).'####'.time()), 0, 15));
-
-        // Without bit.ly shortener
-        $socialLinkUrl = $this->frontendUrl()->fromRoute(
-            'postvote/list',
-            array(
-                'id' => $game->getIdentifier(),
-                'filter' => 'date',
-                'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
-            ),
-            array('force_canonical' => true)
-        ).'?id='.$post->getId().'&key='.$secretKey;
-        // With core shortener helper
-        $socialLinkUrl = $this->shortenUrl()->shortenUrl($socialLinkUrl);
 
         $this->getViewHelper('HeadMeta')->setProperty('og:image', $fbShareImage);
 

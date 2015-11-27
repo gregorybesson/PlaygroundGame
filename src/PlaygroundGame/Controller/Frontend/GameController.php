@@ -14,7 +14,7 @@ use Zend\Stdlib\Parameters;
 class GameController extends AbstractActionController
 {
     /**
-     * @var gameService
+     * @var \PlaygroundGame\Service\GameService
      */
     protected $gameService;
 
@@ -831,14 +831,14 @@ class GameController extends AbstractActionController
                     'postvote/result',
                     array(
                         'id' => $game->getIdentifier(),
-                        'channel' => $channel
+                        'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
                     )
                 )
             );
             return $this->redirect()->toUrl(
                 $this->frontendUrl()->fromRoute(
                     'zfcuser/register',
-                    array('channel' => $channel)
+                    array('channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))
                 ) . '?redirect='.$redirect
             );
         }
@@ -1025,7 +1025,8 @@ class GameController extends AbstractActionController
                 $this->flashMessenger()->setNamespace('zfcuser-login-form')->addMessage(
                     'Authentication failed. Please try again.'
                 );
-            
+                
+
                 return $this->redirect()->toUrl(
                     $this->frontendUrl()->fromRoute(
                         $game->getClassType() . '/login',
@@ -1033,7 +1034,7 @@ class GameController extends AbstractActionController
                             'id' => $game->getIdentifier(),
                             'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
                         )
-                    ).($redirect ? '?redirect='.$redirect : '')
+                    )
                 );
             }
             
@@ -1128,7 +1129,6 @@ class GameController extends AbstractActionController
         }
 
         if ($socialnetwork) {
-            $infoMe = null;
             $infoMe = $this->getProviderService()->getInfoMe($socialnetwork);
 
             if (!empty($infoMe)) {
@@ -1182,7 +1182,7 @@ class GameController extends AbstractActionController
                 if (strlen($birthDay) <= 1) {
                     $birthDay = '0'.$birthDay;
                 }
-                $title = '';
+
                 $gender = $infoMe->gender;
                 if ($gender == 'female') {
                     $title = 'Me';

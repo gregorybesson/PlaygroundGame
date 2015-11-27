@@ -334,7 +334,7 @@ class GameController extends AbstractActionController
         $this->checkGame();
 
         $this->game->setActive(!$this->game->getActive());
-        $this->getAdminGameService()->getGameMapper()->update($game);
+        $this->getAdminGameService()->getGameMapper()->update($this->game);
 
         return $this->redirect()->toRoute('admin/playgroundgame/list');
     }

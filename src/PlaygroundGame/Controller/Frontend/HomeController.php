@@ -8,12 +8,12 @@ use Zend\View\Model\ViewModel;
 class HomeController extends AbstractActionController
 {
     /**
-     * @var gameService
+     * @var \PlaygroundGame\Service\GameService
      */
     protected $gameService;
     
     /**
-     * @var pageService
+     * @var \PlaygroundCms\Service\Page
      */
     protected $pageService;
     

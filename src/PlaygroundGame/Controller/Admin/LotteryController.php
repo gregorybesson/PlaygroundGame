@@ -10,7 +10,7 @@ use Zend\View\Model\ViewModel;
 class LotteryController extends GameController
 {
     /**
-     * @var GameService
+     * @var \PlaygroundGame\Service\Game
      */
     protected $adminGameService;
 

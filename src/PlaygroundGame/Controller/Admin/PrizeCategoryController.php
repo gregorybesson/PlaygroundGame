@@ -13,7 +13,7 @@ class PrizeCategoryController extends AbstractActionController
     protected $options;
 
     /**
-     * @var prizeCategoryService
+     * @var \PlaygroundGame\Service\PrizeCategory
      */
     protected $prizeCategoryService;
 
