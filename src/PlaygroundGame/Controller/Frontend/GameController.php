@@ -223,18 +223,41 @@ class GameController extends AbstractActionController
             $form->setData($data);
 
             if ($form->isValid()) {
+                // steps of the game
                 $steps = $game->getStepsArray();
+                // sub steps of the game
                 $viewSteps = $game->getStepsViewsArray();
+
+                // register position
                 $key = array_search($this->params('action'), $viewSteps);
                 if (!$key) {
+                    // register is not a substep of the game so it's a step
                     $key = array_search($this->params('action'), $steps);
+                    $keyStep = true;
+                } else {
+                    // register was a substep, i search the index of its parent
+                    $key = array_search($key, $steps);
+                    $keyStep = false;
                 }
-                $keyplay = array_search('play', $steps);
+
+                // play position
+                $keyplay = array_search('play', $viewSteps);
+
+                if (!$keyplay) {
+                    // play is not a substep, so it's a step
+                    $keyplay = array_search('play', $steps);
+                    $keyplayStep = true;
+                } else {
+                    // play is a substep so I search the index of its parent
+                    $keyplay = array_search($keyplay, $steps);
+                    $keyplayStep = false;
+                }
 
                 // If register step before play, I don't have no entry yet. I have to create one
                 // If register after play step, I search for the last entry created by play step.
 
-                if ($key && $key < $keyplay) {
+                if ($key < $keyplay || ($keyStep && !$keyplayStep && $key <= $keyplay)) {
+
                     $entry = $sg->play($game, $user);
                     if (!$entry) {
                         // the user has already taken part of this game and the participation limit has been reached
@@ -268,30 +291,27 @@ class GameController extends AbstractActionController
                         );
                     }
                 }
-                
+
                 $sg->updateEntryPlayerForm($form->getData(), $game, $user, $entry);
 
-                $path = (empty($game->nextStep($this->params('action'))))?
-                    $game->getClassType():
-                    $game->getClassType() .'/' . $game->nextStep($this->params('action'));
-                return $this->redirect()->toUrl(
-                    $this->frontendUrl()->fromRoute(
-                        $path,
-                        array(
-                            'id' => $game->getIdentifier(),
-                            'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
-                        ),
-                        array('force_canonical' => true)
-                    )
-                );
+                if(!empty($game->nextStep($this->params('action')))){
+                    return $this->redirect()->toUrl(
+                        $this->frontendUrl()->fromRoute(
+                            $game->getClassType() .'/' . $game->nextStep($this->params('action')),
+                            array(
+                                'id' => $game->getIdentifier(),
+                                'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                            ),
+                            array('force_canonical' => true)
+                        )
+                    );
+                }
             }
         }
 
         $viewModel = $this->buildView($game);
         $viewModel->setVariables(array(
-            'form' => $form,
-            'title' => $game->getPlayerForm()->getTitle(),
-            'description' => $game->getPlayerForm()->getDescription(),
+            'form' => $form
         ));
 
         return $viewModel;

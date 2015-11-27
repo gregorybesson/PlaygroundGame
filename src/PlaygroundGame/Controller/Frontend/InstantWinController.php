@@ -67,16 +67,11 @@ class InstantWinController extends GameController
             }
 
             // update the winner attribute in entry.
-            $winner = $sg->IsInstantWinner($game, $user);
+            $occurrence = $sg->IsInstantWinner($game, $user);
 
-            $prize = null;
-            if ($winner) {
-                $prize = $winner->getPrize();
-            }
             $viewVariables = array(
-                'winner' => $winner,
-                'prize' => $prize,
-                'over' => false,
+                'occurrence' => $occurrence,
+                'entry' => $entry
             );
         } elseif ($game->getOccurrenceType()=='code') {
             $form = $this->getServiceLocator()->get('playgroundgame_instantwinoccurrencecode_form');
