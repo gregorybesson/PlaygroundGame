@@ -294,7 +294,7 @@ class GameController extends AbstractActionController
 
                 $sg->updateEntryPlayerForm($form->getData(), $game, $user, $entry);
 
-                if(!empty($game->nextStep($this->params('action')))){
+                if (!empty($game->nextStep($this->params('action')))) {
                     return $this->redirect()->toUrl(
                         $this->frontendUrl()->fromRoute(
                             $game->getClassType() .'/' . $game->nextStep($this->params('action')),
