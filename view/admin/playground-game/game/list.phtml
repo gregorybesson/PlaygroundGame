@@ -74,7 +74,7 @@ if (isset($fm[0]))
                 | <a href='<?php echo $editLink ?>'><?php echo $this->translate('Edit'); ?></a> 
                 | <a href='<?php echo $deleteLink ?>'><?php echo $this->translate('Delete'); ?></a><?php if($optionLink != ''):?> 
                 | <a href='<?php echo $optionLink ?>'><?php echo $optionLinkName ?></a><?php endif;?> 
-                | <a target="_blank" href='<?php echo $this->url('frontend/' . $game->getClassType(), array('id' => $game->getIdentifier(), 'channel' => 'preview'), array('force_canonical' => true));?>'><?php echo $this->translate('Preview'); ?></a> 
+                | <a target="_blank" href='<?php echo $this->url('frontend/' . $game->getClassType(), array('id' => $game->getIdentifier()), array('force_canonical' => true));?>'><?php echo $this->translate('Preview'); ?></a> 
                 | <a href='<?php echo $this->url('admin/playgroundgame/set-active', array('gameId' => $game->getId())); ?>'><?php echo $activeString; ?></a>
                 | <a href='<?php echo $this->url('admin/playgroundgame/player-form', array('gameId' => $game->getId())); ?>'><?php echo $this->translate('Create the player form'); ?></a>
                 | <a href='<?php echo $this->url('admin/playgroundgame/export', array('gameId' => $game->getId())); ?>'><?php echo $this->translate('export the game'); ?></a>

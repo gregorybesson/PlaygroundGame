@@ -1,9 +1,5 @@
 <?php $this->plugin('translate')->setTranslatorTextDomain('playgroundgame');// Pour le texte ?>
 <div id="terms" class="game-quiz row-fluid">
 	<h1>Règlement</h1>
-	
-	<?php if($this->channel === 'facebook'): ?><div class="fb-target"><?php endif ?>
-		<?php echo $this->game->getTermsBlock();?>
-	<?php if($this->channel === 'facebook'): ?></div><?php endif ?>
-
+	<?php echo $this->game->getTermsBlock();?>
 </div>

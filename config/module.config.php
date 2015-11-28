@@ -148,14 +148,6 @@ return array(
             'modules' => array(
                 'playgroundgame' => array(
                     'layout' => 'layout/game-2columns-right.phtml',
-                    'channel' => array(
-                        'facebook' => array(
-                            'layout' => 'layout/1column-facebook.phtml'
-                        ),
-                        'embed' => array(
-                            'layout' => 'layout/1column-embed.phtml'
-                        )
-                    ),
                     'controllers' => array(
                         'playgroundgame_lottery' => array(
                             'children_views' => array(
@@ -283,33 +275,15 @@ return array(
                             )
                         )
                     ),
-
-                     /*'game' => array(
-       					'type' => 'Zend\Mvc\Router\Http\Regex',
-       					'options' => array(
-       						'regex'    => 'game/(?<controller>[a-zA-Z0-9-]+)_(?<id>[a-zA-Z0-9-]+)(_)?(?<action>[a-zA-Z0-9-]+)?(_)?(?<channel>[embed|facebook|platform|mobile]+)?(\.html)?',
-       						'defaults' => array(
-      							'controller' => 'quiz',
-      							'action'     => 'index',
-       						),
-       						'spec' => 'game/%controller%_%id%_%channel%_%action%.html',
-       					),
-       				),*/
                     
                     'quiz' => array(
                         'type' => 'Segment',
                         'options' => array(
-                            // 'regex'
-                            // =>
-                            // 'quiz/(?<id>[a-zA-Z0-9-]+)(\/)?(?<action>[a-zA-Z0-9-]+)?(_)?(?<channel>[embed|facebook|platform|mobile]+)?(\.html)?',
                             'route' => 'quiz[/:id]',
                             'defaults' => array(
                                 'controller' => 'playgroundgame_quiz',
                                 'action' => 'home'
                             )
-                        // 'spec'
-                        // =>
-                        // 'quiz/%id%/%action%%channel%.html',
                         ),
                         'may_terminate' => true,
                         'child_routes' => array(

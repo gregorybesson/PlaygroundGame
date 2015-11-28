@@ -10,12 +10,10 @@
 		'game' => $game,
 		'user' => $user,
 		'gameType' => 'Ce tirage au sort',
-		'channel' => $this->channel,
 		'isSubscriber' => $this->partnerSubscriber($game->getPartner(), $user) )
 	);?>
 	
 	<!-- OTHER GAMES -->
-	<?php if($this->channel === ''){?>
 	<div class="row-fluid other-games">
 		<h2 class="title">
 			<?php if($availableGames): ?>
@@ -28,7 +26,6 @@
 		<?php $this->partialLoop()->setObjectKey('game')?>
 		<?php echo $this->partialLoop('playground-game/partial/game.phtml', $availableGames) ?>
 	</div>
-	<?php } ?>
 	
 	<!-- RSS FEED -->
 	<?php echo $this->partial('playground-game/partial/news-feed', array('rssUrl' => $this->rssUrl)); ?>

@@ -54,7 +54,6 @@ return array(
     'Post & Vote game'    => 'Post & Vote game',
     'Main image'        => 'Main image',
     'Secondary image'    => 'Secondary image',
-    'Channel'            => 'Channel',
     'Start date'        => 'Start date',
     'End date'            => 'End date',
     'Game Mechanics'    => 'Game Mechanics',

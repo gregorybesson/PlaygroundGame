@@ -96,8 +96,7 @@ class GameController extends AbstractActionController
             array(
                 'controller' => 'playgroundgame_'.$game->getClassType(),
                 'action' => $game->firstStep(),
-                'id' => $identifier,
-                'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                'id' => $identifier
             )
         );
     }
@@ -110,7 +109,6 @@ class GameController extends AbstractActionController
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
         $user = $this->zfcUserAuthentication()->getIdentity();
         $sg = $this->getGameService();
-        $channel = $this->getEvent()->getRouteMatch()->getParam('channel');
         $isSubscribed = false;
 
          // Determine if the play button should be a CTA button (call to action)
@@ -121,28 +119,6 @@ class GameController extends AbstractActionController
             return $this->notFoundAction();
         }
 
-        // If on Facebook, check if you have to be a FB fan to play the game
-
-        if ($channel == 'facebook') {
-            if ($game->getFbFan()) {
-                $isFan = $sg->checkIsFan($game);
-                if (!$isFan) {
-                    return $this->redirect()->toUrl(
-                        $this->frontendUrl()->fromRoute(
-                            $game->getClassType().'/fangate',
-                            array(
-                                'id' => $game->getIdentifier(),
-                                'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
-                            )
-                        )
-                    );
-                }
-            }
-
-            $isCtaActive = true;
-        }
-
-
         $entry = $sg->checkExistingEntry($game, $user);
         if ($entry) {
             $isSubscribed = true;
@@ -150,8 +126,7 @@ class GameController extends AbstractActionController
 
         $viewModel = $this->buildView($game);
         $viewModel->setVariables(array(
-            'isSubscribed'     => $isSubscribed,
-            'isCtaActive'      => $isCtaActive,
+            'isSubscribed'     => $isSubscribed
         ));
 
         return $viewModel;
@@ -257,7 +232,6 @@ class GameController extends AbstractActionController
                 // If register after play step, I search for the last entry created by play step.
 
                 if ($key < $keyplay || ($keyStep && !$keyplayStep && $key <= $keyplay)) {
-
                     $entry = $sg->play($game, $user);
                     if (!$entry) {
                         // the user has already taken part of this game and the participation limit has been reached
@@ -268,7 +242,7 @@ class GameController extends AbstractActionController
                                 $game->getClassType().'/result',
                                 array(
                                     'id' => $identifier,
-                                    'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                                    
                                 )
                             )
                         );
@@ -285,7 +259,7 @@ class GameController extends AbstractActionController
                                 $game->getClassType().'/result',
                                 array(
                                     'id' => $identifier,
-                                    'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                                    
                                 )
                             )
                         );
@@ -294,14 +268,11 @@ class GameController extends AbstractActionController
 
                 $sg->updateEntryPlayerForm($form->getData(), $game, $user, $entry);
 
-                if(!empty($game->nextStep($this->params('action')))){
+                if (!empty($game->nextStep($this->params('action')))) {
                     return $this->redirect()->toUrl(
                         $this->frontendUrl()->fromRoute(
                             $game->getClassType() .'/' . $game->nextStep($this->params('action')),
-                            array(
-                                'id' => $game->getIdentifier(),
-                                'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
-                            ),
+                            array('id' => $game->getIdentifier()),
                             array('force_canonical' => true)
                         )
                     );
@@ -389,14 +360,13 @@ class GameController extends AbstractActionController
      *
      * @param \PlaygroundGame\Entity\Game $game
      * @param \PlaygroundUser\Entity\User $user
-     * @param string $channel
      */
-    public function checkFbRegistration($user, $game, $channel)
+    public function checkFbRegistration($user, $game)
     {
         $redirect = false;
         $session = new Container('facebook');
         $sg = $this->getGameService();
-        if ($channel == 'facebook' && $session->offsetExists('signed_request')) {
+        if ($session->offsetExists('signed_request')) {
             if (!$user) {
                 // Get Playground user from Facebook info
                 $beforeLayout = $this->layout()->getTemplate();
@@ -405,7 +375,7 @@ class GameController extends AbstractActionController
                     array(
                         'controller' => 'playgrounduser_user',
                         'action' => 'registerFacebookUser',
-                        'provider' => $channel
+                        'provider' => 'facebook'
                     )
                 );
 
@@ -417,17 +387,13 @@ class GameController extends AbstractActionController
                     $redirectUrl = urlencode(
                         $this->frontendUrl()->fromRoute(
                             $game->getClassType() .'/play',
-                            array(
-                                'id' => $game->getIdentifier(),
-                                'channel' => $channel
-                            ),
+                            array('id' => $game->getIdentifier()),
                             array('force_canonical' => true)
                         )
                     );
                     $redirect =  $this->redirect()->toUrl(
                         $this->frontendUrl()->fromRoute(
-                            'zfcuser/register',
-                            array('channel' => $channel)
+                            'zfcuser/register'
                         ) . '?redirect='.$redirectUrl
                     );
                 }
@@ -488,7 +454,7 @@ class GameController extends AbstractActionController
                         'action' => $this->params('action'),
                         'game' => $game,
                         'flashMessages'    => $this->flashMessenger()->getMessages(),
-                        'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                        
                     )
                 );
             }
@@ -615,8 +581,10 @@ class GameController extends AbstractActionController
     public function getShareData($game)
     {
         $fo = $this->getServiceLocator()->get('facebook-opengraph');
+        $session = new Container('facebook');
+
         // I change the fbappid if i'm in fb
-        if ($this->getEvent()->getRouteMatch()->getParam('channel') === 'facebook') {
+        if ($session->offsetExists('signed_request')) {
             $fo->setId($game->getFbAppId());
         }
 
@@ -634,14 +602,14 @@ class GameController extends AbstractActionController
         if ($game->getFbShareImage()) {
             $fbShareImage = $this->frontendUrl()->fromRoute(
                 '',
-                array('channel' => ''),
+                array(),
                 array('force_canonical' => true),
                 false
             ) . $game->getFbShareImage();
         } else {
             $fbShareImage = $this->frontendUrl()->fromRoute(
                 '',
-                array('channel' => ''),
+                array(),
                 array('force_canonical' => true),
                 false
             ) . $game->getMainImage();
@@ -652,10 +620,7 @@ class GameController extends AbstractActionController
         // Without bit.ly shortener
         $socialLinkUrl = $this->frontendUrl()->fromRoute(
             $game->getClassType(),
-            array(
-                'id' => $game->getIdentifier(),
-                'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
-            ),
+            array('id' => $game->getIdentifier()),
             array('force_canonical' => true)
         );
         // With core shortener helper
@@ -839,7 +804,7 @@ class GameController extends AbstractActionController
                     'postvote',
                     array(
                         'id' => $identifier,
-                        'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                        
                     )
                 )
             );
@@ -851,14 +816,14 @@ class GameController extends AbstractActionController
                     'postvote/result',
                     array(
                         'id' => $game->getIdentifier(),
-                        'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                        
                     )
                 )
             );
             return $this->redirect()->toUrl(
                 $this->frontendUrl()->fromRoute(
                     'zfcuser/register',
-                    array('channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))
+                    array()
                 ) . '?redirect='.$redirect
             );
         }
@@ -1018,7 +983,7 @@ class GameController extends AbstractActionController
                 'frontend/' . $game->getClassType() . '/index',
                 array(
                     'id' => $game->getIdentifier(),
-                    'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                    
                 )
             )
         );
@@ -1052,7 +1017,7 @@ class GameController extends AbstractActionController
                         $game->getClassType() . '/login',
                         array(
                             'id' => $game->getIdentifier(),
-                            'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                            
                         )
                     )
                 );
@@ -1070,7 +1035,7 @@ class GameController extends AbstractActionController
                         $game->getClassType() . '/' . $game->nextStep('index'),
                         array(
                             'id' => $game->getIdentifier(),
-                            'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                            
                         )
                     )
                 );
@@ -1083,7 +1048,7 @@ class GameController extends AbstractActionController
                         $game->getClassType() . '/login',
                         array(
                             'id' => $game->getIdentifier(),
-                            'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                            
                         )
                     )
                 );
@@ -1096,7 +1061,7 @@ class GameController extends AbstractActionController
                 $game->getClassType().'/login',
                 array(
                     'id' => $game->getIdentifier(),
-                    'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                    
                 )
             )
         );
@@ -1120,7 +1085,7 @@ class GameController extends AbstractActionController
                     $game->getClassType().'/'.$game->nextStep('index'),
                     array(
                         'id' => $game->getIdentifier(),
-                        'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                        
                     )
                 )
             );
@@ -1135,7 +1100,7 @@ class GameController extends AbstractActionController
                 $game->getClassType().'/user-register',
                 array(
                     'id' => $game->getIdentifier(),
-                    'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                    
                 )
             )
         );
@@ -1164,7 +1129,7 @@ class GameController extends AbstractActionController
                             $game->getClassType().'/login',
                             array(
                                 'id' => $game->getIdentifier(),
-                                'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                                
                             )
                         );
                     }
@@ -1172,7 +1137,7 @@ class GameController extends AbstractActionController
                         $game->getClassType().'/login',
                         array(
                             'id' => $game->getIdentifier(),
-                            'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                            
                         )
                     ) .'/' . $socialnetwork . ($redirect ? '?redirect=' . $redirect : '');
 
@@ -1187,7 +1152,7 @@ class GameController extends AbstractActionController
                         array(
                             'id' => $game->getIdentifier(),
                             'socialnetwork' => $socialnetwork,
-                            'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                            
                         )
                     )
                 );
@@ -1230,7 +1195,7 @@ class GameController extends AbstractActionController
             $game->getClassType().'/user-register',
             array(
                 'id' => $game->getIdentifier(),
-                'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                
             )
         ) .($socialnetwork ? '/' . $socialnetwork : ''). ($redirect ? '?redirect=' . $redirect : '');
         $prg = $this->prg($redirectUrl, true);
@@ -1294,7 +1259,7 @@ class GameController extends AbstractActionController
                         $game->getClassType() . '/' . $game->nextStep('index'),
                         array(
                             'id' => $game->getIdentifier(),
-                            'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                            
                         )
                     )
                 );
@@ -1307,7 +1272,7 @@ class GameController extends AbstractActionController
                         $game->getClassType() . '/login',
                         array(
                             'id' => $game->getIdentifier(),
-                            'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                            
                         )
                     )
                 );
@@ -1318,7 +1283,7 @@ class GameController extends AbstractActionController
             $game->getClassType().'/login',
             array(
                 'id' => $game->getIdentifier(),
-                'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                
             )
         ) . ($socialnetwork ? '/' . $socialnetwork : ''). ($redirect ? '?redirect=' . $redirect : '');
 

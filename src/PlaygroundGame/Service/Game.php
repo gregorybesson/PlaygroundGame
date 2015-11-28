@@ -800,11 +800,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             return false;
         }
 
-        if ($this->getServiceManager()
-            ->get('Application')
-            ->getMvcEvent()
-            ->getRouteMatch()
-            ->getParam('channel') === 'preview' && $this->isAllowed('game', 'edit')) {
+        if ($this->isAllowed('game', 'edit')) {
             $game->setActive(true);
             $game->setStartDate(null);
             $game->setEndDate(null);
@@ -1129,15 +1125,8 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         }
         $skinUrl = $renderer->url(
             'frontend',
-            array('channel' => $this->getServiceManager()
-                ->get('Application')
-                ->getMvcEvent()
-                ->getRouteMatch()
-                ->getParam('channel')
-            ),
-            array(
-                'force_canonical' => true
-            )
+            array(),
+            array('force_canonical' => true)
         );
         $secretKey = strtoupper(substr(sha1(uniqid('pg_', true) . '####' . time()), 0, 15));
 
@@ -1311,15 +1300,8 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $renderer = $this->getServiceManager()->get('Zend\View\Renderer\RendererInterface');
         $skinUrl = $renderer->url(
             'frontend',
-            array('channel' => $this->getServiceManager()
-                ->get('Application')
-                ->getMvcEvent()
-                ->getRouteMatch()
-                ->getParam('channel')
-            ),
-            array(
-                'force_canonical' => true
-            )
+            array(),
+            array('force_canonical' => true)
         );
         $message = $mailService->createHtmlMessage($from, $to, $subject, 'playground-game/email/' . $template, array(
             'game' => $game,
@@ -1339,15 +1321,8 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $renderer = $this->getServiceManager()->get('Zend\View\Renderer\RendererInterface');
         $skinUrl = $renderer->url(
             'frontend',
-            array('channel' => $this->getServiceManager()
-                ->get('Application')
-                ->getMvcEvent()
-                ->getRouteMatch()
-                ->getParam('channel')
-            ),
-            array(
-                'force_canonical' => true
-            )
+            array(),
+            array('force_canonical' => true)
         );
 
         $message = $mailService->createHtmlMessage($from, $to, $subject, 'playground-game/email/' . $template, array(

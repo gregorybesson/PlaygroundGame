@@ -108,16 +108,6 @@ class Game extends ProvidesEventsForm
             ),
         ));
 
-        $this->add(array(
-            'name' => 'canal',
-            'options' => array(
-                'label' => $translator->translate('Channel', 'playgroundgame')
-            ),
-            'attributes' => array(
-                'type' => 'text'
-            )
-        ));
-
         $categories = $this->getPrizeCategories();
         $this->add(array(
             'type' => 'Zend\Form\Element\Select',

@@ -25,14 +25,14 @@ class PostVoteController extends GameController
         $sg         = $this->getGameService();
 
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-        $channel = $this->getEvent()->getRouteMatch()->getParam('channel');
+        
 
         $game = $sg->checkGame($identifier);
         if (! $game || $game->isClosed()) {
             return $this->notFoundAction();
         }
 
-        $redirectFb = $this->checkFbRegistration($this->zfcUserAuthentication()->getIdentity(), $game, $channel);
+        $redirectFb = $this->checkFbRegistration($this->zfcUserAuthentication()->getIdentity(), $game);
         if ($redirectFb) {
             return $redirectFb;
         }
@@ -43,7 +43,7 @@ class PostVoteController extends GameController
             $redirect = urlencode(
                 $this->frontendUrl()->fromRoute(
                     $game->getClassType() . '/play',
-                    array('id' => $game->getIdentifier(), 'channel' => $channel),
+                    array('id' => $game->getIdentifier(), ),
                     array('force_canonical' => true)
                 )
             );
@@ -51,7 +51,7 @@ class PostVoteController extends GameController
             return $this->redirect()->toUrl(
                 $this->frontendUrl()->fromRoute(
                     'zfcuser/register',
-                    array('channel' => $channel)
+                    array()
                 ) . '?redirect='.$redirect
             );
         }
@@ -66,7 +66,7 @@ class PostVoteController extends GameController
                         'postvote',
                         array(
                             'id' => $identifier,
-                            'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                            
                         )
                     )
                 );
@@ -87,7 +87,7 @@ class PostVoteController extends GameController
                         array(
                             'id' => $identifier,
                             'post' => $postId,
-                            'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                            
                         )
                     )
                 );
@@ -102,7 +102,7 @@ class PostVoteController extends GameController
                         array(
                             'id' => $identifier,
                             'post' => $postId,
-                            'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                            
                         )
                     )
                 );
@@ -115,7 +115,7 @@ class PostVoteController extends GameController
                     'postvote',
                     array(
                         'id' => $identifier,
-                        'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                        
                     )
                 )
             );
@@ -163,7 +163,7 @@ class PostVoteController extends GameController
                         'postvote/'.$game->nextStep('play'),
                         array(
                             'id' => $game->getIdentifier(),
-                            'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                            
                         )
                     );
 
@@ -208,7 +208,7 @@ class PostVoteController extends GameController
                     'postvote/'.$game->nextStep('preview'),
                     array(
                         'id' => $identifier,
-                        'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                        
                     )
                 )
             );
@@ -223,7 +223,7 @@ class PostVoteController extends GameController
                     'postvote',
                     array(
                         'id' => $identifier,
-                        'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                        
                     )
                 )
             );
@@ -240,7 +240,7 @@ class PostVoteController extends GameController
                     'postvote/'.$step,
                     array(
                         'id' => $game->getIdentifier(),
-                        'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                        
                     )
                 );
 
@@ -272,7 +272,7 @@ class PostVoteController extends GameController
         $skinUrl = $sg->getServiceManager()->get('ViewRenderer')->url(
             'frontend',
             array(
-                'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                
             ),
             array('force_canonical' => true)
         );
@@ -296,7 +296,7 @@ class PostVoteController extends GameController
                     'postvote',
                     array(
                         'id' => $identifier,
-                        'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                        
                     )
                 )
             );
@@ -319,7 +319,7 @@ class PostVoteController extends GameController
                 array(
                     'id' => $identifier,
                     'post' => $postId,
-                    'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                    
                 )
             )
         );
@@ -387,7 +387,7 @@ class PostVoteController extends GameController
     {
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
         $user = $this->zfcUserAuthentication()->getIdentity();
-        $channel = $this->getEvent()->getRouteMatch()->getParam('channel');
+        
 
         $statusMail = null;
 
@@ -411,7 +411,7 @@ class PostVoteController extends GameController
                     'postvote',
                     array(
                         'id' => $identifier,
-                        'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                        
                     )
                 )
             );
@@ -423,14 +423,14 @@ class PostVoteController extends GameController
                     'postvote/result',
                     array(
                         'id' => $game->getIdentifier(),
-                        'channel' => $channel
+                        
                     )
                 )
             );
             return $this->redirect()->toUrl(
                 $this->frontendUrl()->fromRoute(
                     'zfcuser/register',
-                    array('channel' => $channel)
+                    array()
                 ) . '?redirect='.$redirect
             );
         }
@@ -458,7 +458,7 @@ class PostVoteController extends GameController
                     'postvote',
                     array(
                         'id' => $identifier,
-                        'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                        
                     )
                 )
             );
@@ -591,7 +591,7 @@ class PostVoteController extends GameController
         $to = '';
         $skinUrl = $sg->getServiceManager()->get('ViewRenderer')->url(
             'frontend',
-            array('channel' => $this->getEvent()->getRouteMatch()->getParam('channel')),
+            array(),
             array('force_canonical' => true)
         );
         $config = $this->getGameService()->getServiceManager()->get('config');
@@ -656,7 +656,7 @@ class PostVoteController extends GameController
                 foreach ($postTarget->getPostElements() as $element) {
                     $fbShareImage = $this->frontendUrl()->fromRoute(
                         '',
-                        array('channel' => ''),
+                        array(),
                         array('force_canonical' => true),
                         false
                     ) . $element->getValue();
@@ -671,7 +671,7 @@ class PostVoteController extends GameController
                     array(
                         'id' => $game->getIdentifier(),
                         'filter' => 'date',
-                        'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                        
                     ),
                     array('force_canonical' => true)
                 ).'?id='.$postTarget->getId().'&key='.$secretKey;
@@ -797,7 +797,7 @@ class PostVoteController extends GameController
                     'postvote',
                     array(
                         'id' => $identifier,
-                        'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                        
                     )
                 )
             );
@@ -811,7 +811,7 @@ class PostVoteController extends GameController
             array(
                 'id' => $identifier,
                 'post' => $post->getId(),
-                'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                
             ),
             array('force_canonical' => true)
         ).'?key='.$secretKey;
@@ -824,14 +824,14 @@ class PostVoteController extends GameController
                     'postvote/result',
                     array(
                         'id' => $game->getIdentifier(),
-                        'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                        
                     )
                 )
             );
             return $this->redirect()->toUrl(
                 $this->frontendUrl()->fromRoute(
                     'zfcuser/register',
-                    array('channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))
+                    array()
                 ) . '?redirect='.$redirect
             );
         }
@@ -855,7 +855,7 @@ class PostVoteController extends GameController
         foreach ($post->getPostElements() as $element) {
             $fbShareImage = $this->frontendUrl()->fromRoute(
                 '',
-                array('channel' => ''),
+                array(),
                 array('force_canonical' => true),
                 false
             ) . $element->getValue();

@@ -2,9 +2,5 @@
 
 <div id="conditions" class="game-instantwin row-fluid">
 	<h1>Mentions légales</h1>
-	
-	<?php if($this->channel === 'facebook'): ?><div class="fb-target"><?php endif ?>
-		<?php echo $this->game->getConditionsBlock();?>
-	<?php if($this->channel === 'facebook'): ?></div><?php endif ?>
-
+	<?php echo $this->game->getConditionsBlock();?>
 </div>

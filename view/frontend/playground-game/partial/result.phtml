@@ -47,15 +47,14 @@
 		            'socialLinkUrl' => $socialLinkUrl,
 		            'form'			=> $this->form,
 		            'statusMail'    => $statusMail,
-		            'gameType'		=> $this->game->getClassType(), 
-					'channel'       => $this->channel,
+		            'gameType'		=> $this->game->getClassType()
 		    )); ?>
             <?php if(isset($this->game) && $this->game->lastStep() !== 'result') : ?>
                 <!-- terminer -->
                 <div id="terminer" class="row" >
                 	<div class="col-md-12">
                 	    <span class="btn btn-default">
-                            <a href="<?php echo $this->url('frontend/'. $this->game->getClassType() . '/bounce', array('id' => $this->game->getIdentifier(), 'channel' => $this->channel));?>">
+                            <a href="<?php echo $this->url('frontend/'. $this->game->getClassType() . '/bounce', array('id' => $this->game->getIdentifier()));?>">
                                 <?php echo $this->translate('Finish'); ?>
                             </a>
                         </span>

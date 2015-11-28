@@ -60,13 +60,12 @@ class PostVotePostElementTest extends \PHPUnit_Framework_TestCase
         $postvotepostelement = new PostVotePostElementEntity();
         $postvotepostelement->setName('Name 2');
         $postvotepostelement = $this->tm->insert($postvotepostelement);
-        $postvotepostelement = new PostVotePostElementEntity();
-        $postvotepostelement->setName('Name 3');
-        ;
-        $postvotepostelement = $this->tm->insert($postvotepostelement);
+        // $postvotepostelement = new PostVotePostElementEntity();
+        // $postvotepostelement->setName('Name 3');
+        // $postvotepostelement = $this->tm->insert($postvotepostelement);
 
         $postvotepostelements = $this->tm->findAll();
-        $this->assertEquals(3, count($postvotepostelements));
+        $this->assertEquals(2, count($postvotepostelements));
     }
 
     public function tearDown()
