@@ -15,8 +15,8 @@
 			<img src="<?php echo $this->frontendAssetPath('images/common/logo-hd.png')?>" border="0" width="137" alt="Logo" />
 		</div>
 		<?php if(!$user->getAvatar() || !$user->getAddress() || !$user->getCity() || !$user->getTelephone() || !$user->getChildren()):?>
-			<div class="span3<?php if($this->channel === 'facebook'): echo ' fb-target'; endif ?>">
-		    	<a href="<?php if($this->channel === '') : echo $this->url('frontend/zfcuser/profile'); else : echo 'http://'.$this->channel['platform'].$this->url('frontend/zfcuser/profile'); endif; ?>">
+			<div class="span3">
+		    	<a href="<?php echo $this->url('frontend/zfcuser/profile'); ?>">
 			        <img src="<?php echo $this->frontendAssetPath('images/common/round-pencil.png')?>" border="0" width="70" height="70" />
 	                <div>Remplir mes <br> coordonnées<br><span class="points">et gagnez des points</span></div>
 	           	</a>

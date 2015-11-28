@@ -14,14 +14,13 @@ class InstantWinController extends GameController
         $sg = $this->getGameService();
 
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-        $channel = $this->getEvent()->getRouteMatch()->getParam('channel');
 
         $game = $sg->checkGame($identifier);
         if (!$game || $game->isClosed()) {
             return $this->notFoundAction();
         }
 
-        $redirectFb = $this->checkFbRegistration($this->zfcUserAuthentication()->getIdentity(), $game, $channel);
+        $redirectFb = $this->checkFbRegistration($this->zfcUserAuthentication()->getIdentity(), $game);
         if ($redirectFb) {
             return $redirectFb;
         }
@@ -32,10 +31,7 @@ class InstantWinController extends GameController
             $redirect = urlencode(
                 $this->frontendUrl()->fromRoute(
                     $game->getClassType() . '/play',
-                    array(
-                        'id' => $game->getIdentifier(),
-                        'channel' => $channel
-                    ),
+                    array('id' => $game->getIdentifier()),
                     array('force_canonical' => true)
                 )
             );
@@ -43,13 +39,12 @@ class InstantWinController extends GameController
             return $this->redirect()->toUrl(
                 $this->frontendUrl()->fromRoute(
                     'zfcuser/register',
-                    array('channel' => $channel)
+                    array()
                 ) . '?redirect='.$redirect
             );
         }
 
         if ($game->getOccurrenceType()=='datetime') {
-            
             $entry = $sg->play($game, $user);
             if (!$entry) {
                 // the user has already taken part of this game and the participation limit has been reached
@@ -58,10 +53,7 @@ class InstantWinController extends GameController
                 return $this->redirect()->toUrl(
                     $this->frontendUrl()->fromRoute(
                         'instantwin/result',
-                        array(
-                            'id' => $game->getIdentifier(),
-                            'channel' => $channel
-                        )
+                        array('id' => $game->getIdentifier())
                     )
                 );
             }
@@ -79,10 +71,7 @@ class InstantWinController extends GameController
                 'action',
                 $this->frontendUrl()->fromRoute(
                     'instantwin/play',
-                    array(
-                        'id' => $game->getIdentifier(),
-                        'channel' => $channel
-                    ),
+                    array('id' => $game->getIdentifier()),
                     array('force_canonical' => true)
                 )
             );
@@ -98,10 +87,7 @@ class InstantWinController extends GameController
                         return $this->redirect()->toUrl(
                             $this->frontendUrl()->fromRoute(
                                 'instantwin/play',
-                                array(
-                                    'id' => $game->getIdentifier(),
-                                    'channel' => $channel
-                                ),
+                                array('id' => $game->getIdentifier()),
                                 array('force_canonical' => true)
                             )
                         );
@@ -109,10 +95,7 @@ class InstantWinController extends GameController
                         return $this->redirect()->toUrl(
                             $this->frontendUrl()->fromRoute(
                                 'instantwin/result',
-                                array(
-                                    'id' => $game->getIdentifier(),
-                                    'channel' => $channel
-                                )
+                                array('id' => $game->getIdentifier())
                             )
                         );
                     }
@@ -132,7 +115,7 @@ class InstantWinController extends GameController
     public function resultAction()
     {
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-        $channel = $this->getEvent()->getRouteMatch()->getParam('channel');
+        
         $user   = $this->zfcUserAuthentication()->getIdentity();
         $sg     = $this->getGameService();
 
@@ -146,7 +129,7 @@ class InstantWinController extends GameController
             return $this->redirect()->toUrl(
                 $this->frontendUrl()->fromRoute(
                     'instantwin',
-                    array('id' => $game->getIdentifier(), 'channel' => $channel),
+                    array('id' => $game->getIdentifier(), ),
                     array('force_canonical' => true)
                 )
             );
@@ -166,13 +149,13 @@ class InstantWinController extends GameController
             $redirect = urlencode(
                 $this->frontendUrl()->fromRoute(
                     'instantwin/result',
-                    array('id' => $game->getIdentifier(), 'channel' => $channel)
+                    array('id' => $game->getIdentifier(), )
                 )
             );
             return $this->redirect()->toUrl(
                 $this->frontendUrl()->fromRoute(
                     'zfcuser/register',
-                    array('channel' => $channel)
+                    array()
                 ) . '?redirect='.$redirect
             );
         }
@@ -180,7 +163,7 @@ class InstantWinController extends GameController
         $secretKey = strtoupper(substr(sha1(uniqid('pg_', true).'####'.time()), 0, 15));
         $socialLinkUrl = $this->frontendUrl()->fromRoute(
             'instantwin',
-            array('id' => $game->getIdentifier(), 'channel' => $channel),
+            array('id' => $game->getIdentifier(), ),
             array('force_canonical' => true)
         ).'?key='.$secretKey;
         // With core shortener helper

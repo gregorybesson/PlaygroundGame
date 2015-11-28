@@ -16,8 +16,7 @@ $nextStep = $nextStep ? $nextStep : 'result'
                 'maxCorrectAnswers'  =>$this->maxCorrectAnswers,
                 'ratioCorrectAnswers'=>$this->ratioCorrectAnswers,
                 'prediction'         =>$this->prediction,
-                'flashMessages'      =>$this->flashMessages, 
-                'channel' => $this->channel
+                'flashMessages'      =>$this->flashMessages
             ));?>
         <?php else:?>
             <?php echo $this->partial('playground-game/quiz/partial/looser', array(
@@ -25,15 +24,13 @@ $nextStep = $nextStep ? $nextStep : 'result'
                 'userCorrectAnswers' =>$this->userCorrectAnswers,
                 'maxCorrectAnswers'  =>$this->maxCorrectAnswers,
                 'ratioCorrectAnswers'=>$this->ratioCorrectAnswers,
-                'flashMessages'      =>$this->flashMessages, 
-                'channel' => $this->channel
+                'flashMessages'      =>$this->flashMessages
             ));?>
         <?php endif;?>
     
         <?php if($this->userCorrectAnswers < $this->maxCorrectAnswers && $this->game->getVictoryConditions()>0):?>
             <?php echo $this->partial('playground-game/quiz/partial/answers', array(
-                'gameCorrectAnswers' =>$this->gameCorrectAnswers, 
-                'channel' => $this->channel
+                'gameCorrectAnswers' =>$this->gameCorrectAnswers
             ));?>
         <?php endif;?>
     <?php endif;?>
@@ -76,11 +73,10 @@ $nextStep = $nextStep ? $nextStep : 'result'
                         'socialLinkUrl' => $socialLinkUrl,
                         'form'          => $this->form,
                         'statusMail'    => $statusMail,
-                        'gameType'      => $this->game->getClassType(),
-                        'channel'       => $this->channel,
+                        'gameType'      => $this->game->getClassType()
                 )); ?>
                 <div class="col-md-12 text-center">
-                    <a class="btn btn-default btn-green" href="<?php echo $this->frontendUrl(''. $this->game->getClassType() . '/' . $nextStep, array('id' => $this->game->getIdentifier(), 'channel' => $this->channel));?>">
+                    <a class="btn btn-default btn-green" href="<?php echo $this->frontendUrl(''. $this->game->getClassType() . '/' . $nextStep, array('id' => $this->game->getIdentifier()));?>">
                         <?php echo $this->translate('Finish'); ?>
                     </a>
                 </div>

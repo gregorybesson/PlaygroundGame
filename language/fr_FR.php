@@ -56,7 +56,6 @@ return array(
     'Post & Vote game'    => 'Créer un Post & Vote',
     'Main image'        => 'Image de couverture',
     'Secondary image'    => 'Image secondaire',
-    'Channel'            => 'Canal de diffusion',
     'Start date'        => 'Date de début',
     'End date'            => 'Date de fin',
     'Game Mechanics'    => 'Mécanique du jeu',

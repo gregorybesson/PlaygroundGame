@@ -14,14 +14,14 @@ class LotteryController extends GameController
         $sg         = $this->getGameService();
 
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-        $channel = $this->getEvent()->getRouteMatch()->getParam('channel');
+        
 
         $game = $sg->checkGame($identifier);
         if (! $game || $game->isClosed()) {
             return $this->notFoundAction();
         }
 
-        $redirectFb = $this->checkFbRegistration($this->zfcUserAuthentication()->getIdentity(), $game, $channel);
+        $redirectFb = $this->checkFbRegistration($this->zfcUserAuthentication()->getIdentity(), $game);
         if ($redirectFb) {
             return $redirectFb;
         }
@@ -31,7 +31,7 @@ class LotteryController extends GameController
             $redirect = urlencode(
                 $this->frontendUrl()->fromRoute(
                     $game->getClassType() . '/play',
-                    array('id' => $game->getIdentifier(), 'channel' => $channel),
+                    array('id' => $game->getIdentifier(), ),
                     array('force_canonical' => true)
                 )
             );
@@ -39,7 +39,7 @@ class LotteryController extends GameController
             return $this->redirect()->toUrl(
                 $this->frontendUrl()->fromRoute(
                     'zfcuser/register',
-                    array('channel' => $channel)
+                    array()
                 ) . '?redirect='.$redirect
             );
         }
@@ -52,7 +52,7 @@ class LotteryController extends GameController
             return $this->redirect()->toUrl(
                 $this->frontendUrl()->fromRoute(
                     'lottery/result',
-                    array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))
+                    array('id' => $identifier, )
                 )
             );
         }
@@ -65,7 +65,7 @@ class LotteryController extends GameController
         return $this->redirect()->toUrl(
             $this->frontendUrl()->fromRoute(
                 $game->getClassType() . '/'. $game->nextStep($this->params('action')),
-                array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))
+                array('id' => $identifier, )
             )
         );
     }
@@ -86,10 +86,7 @@ class LotteryController extends GameController
         $secretKey = strtoupper(substr(sha1(uniqid('pg_', true).'####'.time()), 0, 15));
         $socialLinkUrl = $this->frontendUrl()->fromRoute(
             'lottery',
-            array(
-                'id' => $game->getIdentifier(),
-                'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
-            ),
+            array('id' => $game->getIdentifier()),
             array('force_canonical' => true)
         ).'?key='.$secretKey;
         // With core shortener helper
@@ -102,7 +99,7 @@ class LotteryController extends GameController
                     'lottery',
                     array(
                         'id' => $game->getIdentifier(),
-                        'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                        
                     ),
                     array('force_canonical' => true)
                 )
@@ -115,14 +112,14 @@ class LotteryController extends GameController
                     'lottery/result',
                     array(
                         'id' => $game->getIdentifier(),
-                        'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                        
                     )
                 )
             );
             return $this->redirect()->toUrl(
                 $this->frontendUrl()->fromRoute(
                     'zfcuser/register',
-                    array('channel' => $channel)
+                    array()
                 ) . '?redirect='.$redirect
             );
         }

@@ -91,11 +91,6 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
     protected $secondImage;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    protected $canal;
-
-    /**
      * @ORM\Column(name="broadcast_facebook",type="boolean", nullable=true)
      */
     protected $broadcastFacebook = 0;
@@ -566,27 +561,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
 
     /**
      *
-     * @return the $canal
-     */
-    public function getCanal()
-    {
-        return $this->canal;
-    }
-
-    /**
-     *
-     * @param field_type $canal
-     */
-    public function setCanal($canal)
-    {
-        $this->canal = $canal;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return integer $canal
+     * @return integer $broadcastFacebook
      */
     public function getBroadcastFacebook()
     {
@@ -606,7 +581,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
 
     /**
      *
-     * @return integer $canal
+     * @return integer $broadcastPlatform
      */
     public function getBroadcastPlatform()
     {
@@ -1624,8 +1599,6 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
         $this->displayHome      = (isset($data['displayHome']) && $data['displayHome'] !== null) ?
             $data['displayHome'] :
             0;
-
-        $this->canal            = (isset($data['canal'])) ? $data['canal'] : null;
         $this->prizeCategory   = (isset($data['prizeCategory'])) ? $data['prizeCategory'] : null;
 
         $this->publicationDate  = (isset($data['publicationDate']) && $data['publicationDate'] !== null) ?

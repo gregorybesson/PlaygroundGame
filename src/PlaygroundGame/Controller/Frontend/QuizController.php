@@ -19,14 +19,14 @@ class QuizController extends GameController
         $sg         = $this->getGameService();
 
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-        $channel = $this->getEvent()->getRouteMatch()->getParam('channel');
+        
 
         $game = $sg->checkGame($identifier);
         if (! $game || $game->isClosed()) {
             return $this->notFoundAction();
         }
 
-        $redirectFb = $this->checkFbRegistration($this->zfcUserAuthentication()->getIdentity(), $game, $channel);
+        $redirectFb = $this->checkFbRegistration($this->zfcUserAuthentication()->getIdentity(), $game);
         if ($redirectFb) {
             return $redirectFb;
         }
@@ -37,7 +37,7 @@ class QuizController extends GameController
             $redirect = urlencode(
                 $this->frontendUrl()->fromRoute(
                     $game->getClassType() . '/play',
-                    array('id' => $game->getIdentifier(), 'channel' => $channel),
+                    array('id' => $game->getIdentifier(), ),
                     array('force_canonical' => true)
                 )
             );
@@ -45,7 +45,7 @@ class QuizController extends GameController
             return $this->redirect()->toUrl(
                 $this->frontendUrl()->fromRoute(
                     'zfcuser/register',
-                    array('channel' => $channel)
+                    array()
                 ) . '?redirect='.$redirect
             );
         }
@@ -58,7 +58,7 @@ class QuizController extends GameController
             return $this->redirect()->toUrl(
                 $this->frontendUrl()->fromRoute(
                     $game->getClassType() . '/result',
-                    array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))
+                    array('id' => $identifier, )
                 )
             );
         }
@@ -177,7 +177,7 @@ class QuizController extends GameController
                     $game->getClassType() . '/'. $game->nextStep($this->params('action')),
                     array(
                         'id' => $game->getIdentifier(),
-                        'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                        
                     )
                 )
             );
@@ -213,7 +213,7 @@ class QuizController extends GameController
             'quiz',
             array(
                 'id' => $game->getIdentifier(),
-                'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                
             ),
             array('force_canonical' => true)
         ).'?key='.$secretKey;
@@ -227,7 +227,7 @@ class QuizController extends GameController
                     'quiz',
                     array(
                         'id' => $game->getIdentifier(),
-                        'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')
+                        
                     ),
                     array('force_canonical' => true)
                 )

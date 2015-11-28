@@ -192,30 +192,21 @@ class Module
                     $areaName        = ($areaName == 'frontend' || $areaName == 'admin')? $areaName : 'frontend';
                     $controllerName  = $match->getParam('controller', 'not-found');
                     $actionName      = $match->getParam('action', 'not-found');
-                    $channel         = $match->getParam('channel', 'not-found');
                     $slug            = $match->getParam('id', '');
                     $viewModel       = $e->getViewModel();
-                     
+                    
                     //echo ' slug:' . $slug . " route:" . $routeName . ' area:' . $areaName . ' module:' . $moduleName . ' ctrl:' . $controllerName . ' action:' . $actionName . "\n";
 
                     /**
                      * Assign the correct layout
                     */
                     if (!empty($slug)) {
-                        if (isset($config['custom_games'][$slug]['core_layout'][$areaName]['modules'][$moduleName]['controllers'][$controllerName]['actions'][$actionName]['channel'][$channel]['layout'])) {
-                            $controller->layout($config['custom_games'][$slug]['core_layout'][$areaName]['modules'][$moduleName]['controllers'][$controllerName]['actions'][$actionName]['channel'][$channel]['layout']);
-                        } elseif (isset($config['custom_games'][$slug]['core_layout'][$areaName]['modules'][$moduleName]['controllers'][$controllerName]['actions'][$actionName]['layout'])) {
+                        if (isset($config['custom_games'][$slug]['core_layout'][$areaName]['modules'][$moduleName]['controllers'][$controllerName]['actions'][$actionName]['layout'])) {
                             $controller->layout($config['custom_games'][$slug]['core_layout'][$areaName]['modules'][$moduleName]['controllers'][$controllerName]['actions'][$actionName]['layout']);
-                        } elseif (isset($config['custom_games'][$slug]['core_layout'][$areaName]['modules'][$moduleName]['controllers'][$controllerName]['channel'][$channel]['layout'])) {
-                            $controller->layout($config['custom_games'][$slug]['core_layout'][$areaName]['modules'][$moduleName]['controllers'][$controllerName]['channel'][$channel]['layout']);
                         } elseif (isset($config['custom_games'][$slug]['core_layout'][$areaName]['modules'][$moduleName]['controllers'][$controllerName]['layout'])) {
                             $controller->layout($config['custom_games'][$slug]['core_layout'][$areaName]['modules'][$moduleName]['controllers'][$controllerName]['layout']);
-                        } elseif (isset($config['custom_games'][$slug]['core_layout'][$areaName]['modules'][$moduleName]['channel'][$channel]['layout'])) {
-                            $controller->layout($config['custom_games'][$slug]['core_layout'][$areaName]['modules'][$moduleName]['channel'][$channel]['layout']);
                         } elseif (isset($config['custom_games'][$slug]['core_layout'][$areaName]['modules'][$moduleName]['layout'])) {
                             $controller->layout($config['custom_games'][$slug]['core_layout'][$areaName]['modules'][$moduleName]['layout']);
-                        } elseif (isset($config['custom_games'][$slug]['core_layout'][$areaName]['channel'][$channel]['layout'])) {
-                            $controller->layout($config['custom_games'][$slug]['core_layout'][$areaName]['channel'][$channel]['layout']);
                         } elseif (isset($config['custom_games'][$slug]['core_layout'][$areaName]['layout'])) {
                             $controller->layout($config['custom_games'][$slug]['core_layout'][$areaName]['layout']);
                         }
