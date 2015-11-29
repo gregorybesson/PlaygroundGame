@@ -18,19 +18,32 @@ class PostVote extends Game implements ServiceManagerAwareInterface
         return new \PlaygroundGame\Entity\PostVote;
     }
 
-    public function uploadFileToPost($data, $game, $user)
+    public function getPath($post)
     {
-        $result = false;
-        $postvotePostMapper = $this->getPostVotePostMapper();
-        $postVotePostElementMapper = $this->getPostVotePostElementMapper();
-
-        $entry = $this->findLastActiveEntry($game, $user);
-
-        if (!$entry) {
-            return '0';
+        $path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR;
+        $path .= 'game' . $post->getPostVote()->getId() . DIRECTORY_SEPARATOR;
+        if (!is_dir($path)) {
+            mkdir($path, 0777, true);
+        }
+        $path .= 'post'. $post->getId() . DIRECTORY_SEPARATOR;
+        if (!is_dir($path)) {
+            mkdir($path, 0777, true);
         }
 
-        $post = $postvotePostMapper->findOneBy(array('entry' => $entry));
+        return $path;
+    }
+
+    public function getMediaUrl($post)
+    {
+        $media_url = $this->getOptions()->getMediaUrl() . '/';
+        $media_url .= 'game' . $post->getPostVote()->getId() . '/' . 'post'. $post->getId() . '/';
+
+        return $media_url;
+    }
+
+    public function checkPost($entry)
+    {
+        $post = $this->getPostVotePostMapper()->findOneBy(array('entry' => $entry));
 
         if (! $post) {
             $post = new \PlaygroundGame\Entity\PostVotePost();
@@ -40,24 +53,27 @@ class PostVote extends Game implements ServiceManagerAwareInterface
             $post = $postvotePostMapper->insert($post);
         }
 
-        $path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR;
-        $path .= 'game' . $game->getId() . DIRECTORY_SEPARATOR;
-        if (!is_dir($path)) {
-            mkdir($path, 0777, true);
-        }
-        $path .= 'post'. $post->getId() . DIRECTORY_SEPARATOR;
-        if (!is_dir($path)) {
-            mkdir($path, 0777, true);
+        return $post;
+    }
+
+    public function uploadFileToPost($data, $game, $user)
+    {
+        $result = false;
+        $entry = $this->findLastActiveEntry($game, $user);
+
+        if (!$entry) {
+            return '0';
         }
 
-        $media_url = $this->getOptions()->getMediaUrl() . '/';
-        $media_url .= 'game' . $game->getId() . '/' . 'post'. $post->getId() . '/';
+        $post = $this->checkPost($entry);
+        $path = $this->getPath($post);
+        $media_url = $this->getMediaUrl($post);
 
         $key = key($data);
         $uploadFile = $this->uploadFile($path, $data[$key]);
 
         if ($uploadFile) {
-            $postElement = $postVotePostElementMapper->findOneBy(array('post' => $post, 'name' => $key));
+            $postElement = $this->getPostVotePostElementMapper()->findOneBy(array('post' => $post, 'name' => $key));
             if (! $postElement) {
                 $postElement = new \PlaygroundGame\Entity\PostVotePostElement();
             }
@@ -65,7 +81,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
             $postElement->setPosition(0);
             $postElement->setValue($media_url.$uploadFile);
             $postElement->setPost($post);
-            $postElement = $postVotePostElementMapper->insert($postElement);
+            $postElement = $this->getPostVotePostElementMapper()->insert($postElement);
 
             $result = $media_url.$uploadFile;
         }
@@ -101,7 +117,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
 
     /**
      *
-     * @param  array                  $data
+     * @param  array $data
      * @return \PlaygroundGame\Entity\Game
      */
     public function createPost(array $data, $game, $user, $form)
@@ -115,28 +131,9 @@ class PostVote extends Game implements ServiceManagerAwareInterface
             return false;
         }
 
-        $post = $postvotePostMapper->findOneBy(array('entry' => $entry));
-
-        if (! $post) {
-            $post = new \PlaygroundGame\Entity\PostVotePost();
-            $post->setPostvote($game);
-            $post->setUser($user);
-            $post->setEntry($entry);
-            $post = $postvotePostMapper->insert($post);
-        }
-
-        $path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR;
-        $path .= 'game' . $game->getId() . DIRECTORY_SEPARATOR;
-        if (!is_dir($path)) {
-            mkdir($path, 0777, true);
-        }
-        $path .= 'post'. $post->getId() . DIRECTORY_SEPARATOR;
-        if (!is_dir($path)) {
-            mkdir($path, 0777, true);
-        }
-
-        $media_url = $this->getOptions()->getMediaUrl() . '/';
-        $media_url .= 'game' . $game->getId() . '/' . 'post'. $post->getId() . '/';
+        $post = $this->checkPost($entry);
+        $path = $this->getPath($post);
+        $media_url = $this->getMediaUrl($post);
         $position=1;
 
         foreach ($data as $name => $value) {

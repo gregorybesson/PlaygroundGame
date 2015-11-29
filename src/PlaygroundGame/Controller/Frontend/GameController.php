@@ -111,9 +111,6 @@ class GameController extends AbstractActionController
         $sg = $this->getGameService();
         $isSubscribed = false;
 
-         // Determine if the play button should be a CTA button (call to action)
-        $isCtaActive = false;
-
         $game = $sg->checkGame($identifier, false);
         if (!$game) {
             return $this->notFoundAction();
