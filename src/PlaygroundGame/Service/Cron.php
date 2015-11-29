@@ -4,7 +4,6 @@ namespace PlaygroundGame\Service;
 
 use Zend\ServiceManager\ServiceManagerAwareInterface;
 use Zend\ServiceManager\ServiceManager;
-use PlaygroundGame\Options\ModuleOptions;
 use PlaygroundGame\Mapper\GameInterface as GameMapperInterface;
 
 class Cron extends Game implements ServiceManagerAwareInterface
@@ -84,7 +83,7 @@ class Cron extends Game implements ServiceManagerAwareInterface
         $arrayUsers = array();
         foreach ($games as $game) {
             $limitScale = $game->getPlayLimitScale();
-            $limitDate = $this->getLimitDate($limitScale);
+            $limitDate = $gameService->getLimitDate($limitScale);
             $entries = $gameService->getEntryMapper()->findPlayersWithOneEntryBy($game, $limitDate);
             foreach ($entries as $e) {
                 $arrayUsers[$e->getUser()->getId()]['user'] = $e->getUser();
