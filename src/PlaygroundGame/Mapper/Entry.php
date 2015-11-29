@@ -98,45 +98,8 @@ class Entry extends AbstractMapper
         return $total;
     }
 
-    public function getDateLimit($limitScale)
+    public function findLastEntriesByIp($game, $ip, $dateLimit)
     {
-        $now = new \DateTime("now");
-        switch ($limitScale) {
-            case 'always':
-                $interval = 'P100Y';
-                $now->sub(new \DateInterval($interval));
-                $dateLimit = $now->format('Y-m-d') . ' 0:0:0';
-                break;
-            case 'day':
-                $dateLimit = $now->format('Y-m-d') . ' 0:0:0';
-                break;
-            case 'week':
-                $interval = 'P7D';
-                $now->sub(new \DateInterval($interval));
-                $dateLimit = $now->format('Y-m-d') . ' 0:0:0';
-                break;
-            case 'month':
-                $interval = 'P1M';
-                $now->sub(new \DateInterval($interval));
-                $dateLimit = $now->format('Y-m-d') . ' 0:0:0';
-                break;
-            case 'year':
-                $interval = 'P1Y';
-                $now->sub(new \DateInterval($interval));
-                $dateLimit = $now->format('Y-m-d') . ' 0:0:0';
-                break;
-            default:
-                $interval = 'P100Y';
-                $now->sub(new \DateInterval($interval));
-                $dateLimit = $now->format('Y-m-d') . ' 0:0:0';
-        }
-
-        return $dateLimit;
-    }
-
-    public function findLastEntriesByIp($game, $ip, $limitScale)
-    {
-        $dateLimit = $this->getDateLimit($limitScale);
     
         $query = $this->em->createQuery(
             'SELECT COUNT(e.id) FROM PlaygroundGame\Entity\Entry e 
@@ -157,10 +120,8 @@ class Entry extends AbstractMapper
      *
      * @param unknown_type $game
      */
-    public function findPlayersWithOneEntryBy($game)
+    public function findPlayersWithOneEntryBy($game, $dateLimit)
     {
-        $dateLimit = $this->getDateLimit($game->getPlayLimitScale());
-
         $query = $this->em->createQuery(
             'SELECT e, u FROM PlaygroundGame\Entity\Entry e
             JOIN e.user u
