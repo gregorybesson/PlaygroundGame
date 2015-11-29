@@ -1515,32 +1515,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         return false;
     }
 
-    public static function cronMail()
-    {
-        $configuration = require 'config/application.config.php';
-        $smConfig = isset($configuration['service_manager']) ? $configuration['service_manager'] : array();
-        $sm = new \Zend\ServiceManager\ServiceManager(new \Zend\Mvc\Service\ServiceManagerConfig($smConfig));
-        $sm->setService('ApplicationConfig', $configuration);
-        $sm->get('ModuleManager')->loadModules();
-        $sm->get('Application')->bootstrap();
-
-        $mailService = $sm->get('playgrounduser_message');
-        $gameService = $sm->get('playgroundgame_quiz_service');
-
-        $from = "admin@playground.fr";
-        $subject = "sujet game";
-
-        $to = "gbesson@test.com";
-
-        $game = $gameService->checkGame('qooqo');
-
-        $message = $mailService->createTextMessage($from, $to, $subject, 'playground-game/email/share_reminder', array(
-            'game' => $game
-        ));
-
-        $mailService->send($message);
-    }
-
     /**
      * @param string $path
      */

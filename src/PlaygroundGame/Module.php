@@ -288,7 +288,7 @@ class Module
 
         $cronjobs['adfagame_email'] = array(
             'frequency' => '*/15 * * * *',
-            'callback'  => '\PlaygroundGame\Service\Game::cronMail',
+            'callback'  => '\PlaygroundGame\Service\Cron::cronMail',
             'args'      => array('bar', 'baz'),
         );
 

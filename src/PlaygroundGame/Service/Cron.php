@@ -8,7 +8,7 @@ use ZfcBase\EventManager\EventProvider;
 use PlaygroundGame\Options\ModuleOptions;
 use PlaygroundGame\Mapper\GameInterface as GameMapperInterface;
 
-class Cron extends EventProvider implements ServiceManagerAwareInterface
+class Cron extends Game implements ServiceManagerAwareInterface
 {
     /**
      * @var GameMapperInterface
