@@ -55,7 +55,7 @@ class PostVoteController extends GameController
             if (empty($data['prizes'])) {
                 $data['prizes'] = array();
             }
-            $game = $service->create($data, $postVote, 'playgroundgame_postvote_form');
+            $game = $service->createOrUpdate($data, $postVote, 'playgroundgame_postvote_form');
             if ($game) {
                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The game was created');
 
