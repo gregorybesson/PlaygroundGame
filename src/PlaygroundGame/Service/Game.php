@@ -57,219 +57,10 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      * @param string $formClass
      * @return \PlaygroundGame\Entity\Game
      */
-    public function create(array $data, $entity, $formClass)
-    {
-        $game = new $entity();
-        $entityManager = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
-
-        $form = $this->getServiceManager()->get($formClass);
-        // I force the following format because this is the only one accepted
-        // by new DateTime($value) used by Doctrine when persisting
-        $form->get('publicationDate')->setOptions(array(
-            'format' => 'Y-m-d'
-        ));
-        $form->get('startDate')->setOptions(array(
-            'format' => 'Y-m-d'
-        ));
-        $form->get('endDate')->setOptions(array(
-            'format' => 'Y-m-d'
-        ));
-        $form->get('closeDate')->setOptions(array(
-            'format' => 'Y-m-d'
-        ));
-
-        $form->bind($game);
-
-        $path = $this->getOptions()->getMediaPath() . '/';
-        $media_url = $this->getOptions()->getMediaUrl() . '/';
-
-        $identifierInput = $form->getInputFilter()->get('identifier');
-        $noObjectExistsValidator = new NoObjectExistsValidator(array(
-            'object_repository' => $entityManager->getRepository('PlaygroundGame\Entity\Game'),
-            'fields' => 'identifier',
-            'messages' => array(
-                'objectFound' => 'This url already exists !'
-            )
-        ));
-
-        $identifierInput->getValidatorChain()->addValidator($noObjectExistsValidator);
-
-        // I must switch from original format to the Y-m-d format because
-        // this is the only one accepted by new DateTime($value)
-        if (isset($data['publicationDate']) && $data['publicationDate']) {
-            $tmpDate = \DateTime::createFromFormat('d/m/Y', $data['publicationDate']);
-            $data['publicationDate'] = $tmpDate->format('Y-m-d');
-        }
-        if (isset($data['startDate']) && $data['startDate']) {
-            $tmpDate = \DateTime::createFromFormat('d/m/Y', $data['startDate']);
-            $data['startDate'] = $tmpDate->format('Y-m-d');
-        }
-        if (isset($data['endDate']) && $data['endDate']) {
-            $tmpDate = \DateTime::createFromFormat('d/m/Y', $data['endDate']);
-            $data['endDate'] = $tmpDate->format('Y-m-d');
-        }
-        if (isset($data['closeDate']) && $data['closeDate']) {
-            $tmpDate = \DateTime::createFromFormat('d/m/Y', $data['closeDate']);
-            $data['closeDate'] = $tmpDate->format('Y-m-d');
-        }
-
-        // If publicationDate is null, I update it with the startDate if not null neither
-        if (! isset($data['publicationDate']) && isset($data['startDate'])) {
-            $data['publicationDate'] = $data['startDate'];
-        }
-
-        // If the identifier has not been set, I use the title to create one.
-        if (empty($data['identifier']) && ! empty($data['title'])) {
-            $data['identifier'] = $data['title'];
-        }
-
-        $form->setData($data);
-
-        if (! $form->isValid()) {
-            if (isset($data['publicationDate']) && $data['publicationDate']) {
-                $tmpDate = \DateTime::createFromFormat('Y-m-d', $data['publicationDate']);
-                $data['publicationDate'] = $tmpDate->format('d/m/Y');
-                $form->setData(array(
-                    'publicationDate' => $data['publicationDate']
-                ));
-            }
-            if (isset($data['startDate']) && $data['startDate']) {
-                $tmpDate = \DateTime::createFromFormat('Y-m-d', $data['startDate']);
-                $data['startDate'] = $tmpDate->format('d/m/Y');
-                $form->setData(array(
-                    'startDate' => $data['startDate']
-                ));
-            }
-            if (isset($data['endDate']) && $data['endDate']) {
-                $tmpDate = \DateTime::createFromFormat('Y-m-d', $data['endDate']);
-                $data['endDate'] = $tmpDate->format('d/m/Y');
-                $form->setData(array(
-                    'endDate' => $data['endDate']
-                ));
-            }
-            if (isset($data['closeDate']) && $data['closeDate']) {
-                $tmpDate = \DateTime::createFromFormat('Y-m-d', $data['closeDate']);
-                $data['closeDate'] = $tmpDate->format('d/m/Y');
-                $form->setData(array(
-                    'closeDate' => $data['closeDate']
-                ));
-            }
-            return false;
-        }
-
-        $game = $form->getData();
-        $game = $this->getGameMapper()->insert($game);
-
-        // If I receive false, it means that the FB Id was not available anymore
-        $result = $this->getEventManager()->trigger(__FUNCTION__, $this, array(
-            'game' => $game
-        ));
-        if (! $result) {
-            return false;
-        }
-
-            // I wait for the game to be saved to obtain its ID.
-        if (! empty($data['uploadStylesheet']['tmp_name'])) {
-            ErrorHandler::start();
-            move_uploaded_file($data['uploadStylesheet']['tmp_name'], $path . 'stylesheet_' . $game->getId() . '.css');
-            $game->setStylesheet($media_url . 'stylesheet_' . $game->getId() . '.css');
-            ErrorHandler::stop(true);
-        }
-
-        if (! empty($data['uploadMainImage']['tmp_name'])) {
-            ErrorHandler::start();
-            $data['uploadMainImage']['name'] = $this->fileNewname(
-                $path,
-                $game->getId() . "-" . $data['uploadMainImage']['name']
-            );
-            move_uploaded_file($data['uploadMainImage']['tmp_name'], $path . $data['uploadMainImage']['name']);
-            $game->setMainImage($media_url . $data['uploadMainImage']['name']);
-            ErrorHandler::stop(true);
-        }
-
-        if (! empty($data['uploadSecondImage']['tmp_name'])) {
-            ErrorHandler::start();
-            $data['uploadSecondImage']['name'] = $this->fileNewname(
-                $path,
-                $game->getId() . "-" . $data['uploadSecondImage']['name']
-            );
-            move_uploaded_file($data['uploadSecondImage']['tmp_name'], $path . $data['uploadSecondImage']['name']);
-            $game->setSecondImage($media_url . $data['uploadSecondImage']['name']);
-            ErrorHandler::stop(true);
-        }
-
-        if (! empty($data['uploadFbShareImage']['tmp_name'])) {
-            ErrorHandler::start();
-            $data['uploadFbShareImage']['name'] = $this->fileNewname(
-                $path,
-                $game->getId() . "-" . $data['uploadFbShareImage']['name']
-            );
-            move_uploaded_file($data['uploadFbShareImage']['tmp_name'], $path . $data['uploadFbShareImage']['name']);
-            $game->setFbShareImage($media_url . $data['uploadFbShareImage']['name']);
-            ErrorHandler::stop(true);
-        }
-
-        if (! empty($data['uploadFbPageTabImage']['tmp_name'])) {
-            ErrorHandler::start();
-            $extension = $this->getExtension(strtolower($data['uploadFbPageTabImage']['name']));
-            $src = $this->getSrc($extension, $data['uploadFbPageTabImage']['tmp_name']);
-            $this->resize(
-                $data['uploadFbPageTabImage']['tmp_name'],
-                $extension,
-                $path . $game->getId() . "-" . $data['uploadFbPageTabImage']['name'],
-                $src,
-                111,
-                74
-            );
-
-            $game->setFbPageTabImage($media_url . $game->getId() . "-" . $data['uploadFbPageTabImage']['name']);
-            ErrorHandler::stop(true);
-        }
-        $game = $this->getGameMapper()->update($game);
-
-        $prize_mapper = $this->getServiceManager()->get('playgroundgame_prize_mapper');
-        if (isset($data['prizes'])) {
-            foreach ($data['prizes'] as $prize_data) {
-                if (! empty($prize_data['picture']['tmp_name'])) {
-                    if ($prize_data['id']) {
-                        $prize = $prize_mapper->findById($prize_data['id']);
-                    } else {
-                        $some_prizes = $prize_mapper->findBy(array(
-                            'game' => $game,
-                            'title' => $prize_data['title']
-                        ));
-                        if (count($some_prizes) == 1) {
-                            $prize = $some_prizes[0];
-                        } else {
-                            return false;
-                        }
-                    }
-                    ErrorHandler::start();
-                    $filename = "game-" . $game->getId() . "-prize-";
-                    $filename .= $prize->getId() . "-" . $prize_data['picture']['name'];
-                    move_uploaded_file($prize_data['picture']['tmp_name'], $path . $filename);
-                    $prize->setPicture($media_url . $filename);
-                    ErrorHandler::stop(true);
-                    $prize = $prize_mapper->update($prize);
-                }
-            }
-        }
-
-        return $game;
-    }
-
-    /**
-     *
-     *
-     * This service is ready for all types of games
-     *
-     * @param array $data
-     * @param string $formClass
-     * @return \PlaygroundGame\Entity\Game
-     */
-    public function edit(array $data, $game, $formClass)
+    public function createOrUpdate(array $data, $game, $formClass)
     {
         $entityManager = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
+
         $form = $this->getServiceManager()->get($formClass);
         $form->get('publicationDate')->setOptions(array(
             'format' => 'Y-m-d'
@@ -321,13 +112,14 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             $data['closeDate'] = $tmpDate->format('Y-m-d');
         }
 
-        // If publicationDate is null, I update it with the startDate if not nul neither
+        // If publicationDate is null, I update it with the startDate if not null neither
         if ((! isset($data['publicationDate']) || $data['publicationDate'] == '') &&
             (isset($data['startDate']) && $data['startDate'] != '')
         ) {
             $data['publicationDate'] = $data['startDate'];
         }
 
+        // If the identifier has not been set, I use the title to create one.
         if ((! isset($data['identifier']) || empty($data['identifier'])) && isset($data['title'])) {
             $data['identifier'] = $data['title'];
         }
@@ -379,6 +171,10 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             return false;
         }
 
+        $game = $form->getData();
+        $game = $this->getGameMapper()->insert($game);
+
+        // I wait for the game to be saved to obtain its ID.
         if (! empty($data['uploadMainImage']['tmp_name'])) {
             ErrorHandler::start();
             $data['uploadMainImage']['name'] = $this->fileNewname(
@@ -457,7 +253,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
         if (! empty($data['uploadFbPageTabImage']['tmp_name'])) {
             ErrorHandler::start();
-
             $extension = $this->getExtension(strtolower($data['uploadFbPageTabImage']['name']));
             $src = $this->getSrc($extension, $data['uploadFbPageTabImage']['tmp_name']);
             $this->resize(
@@ -527,7 +322,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
         return $game;
     }
-
+    
     /**
      * getActiveGames
      *

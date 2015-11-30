@@ -119,7 +119,7 @@ class GameController extends AbstractActionController
             if (isset($data['drawDate']) && $data['drawDate']) {
                 $data['drawDate'] = \DateTime::createFromFormat('d/m/Y', $data['drawDate']);
             }
-            $result = $this->getAdminGameService()->edit($data, $this->game, $formId);
+            $result = $this->getAdminGameService()->createOrUpdate($data, $this->game, $formId);
 
             if ($result) {
                 return $this->redirect()->toRoute('admin/playgroundgame/list');
