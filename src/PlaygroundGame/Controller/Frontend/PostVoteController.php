@@ -11,31 +11,6 @@ class PostVoteController extends GameController
      */
     protected $gameService;
 
-    protected $user;
-
-    public function checkUser($game){
-        $user = $this->zfcUserAuthentication()->getIdentity();
-        if (!$user && !$game->getAnonymousAllowed()) {
-            $redirect = urlencode(
-                $this->frontendUrl()->fromRoute(
-                    'postvote/result',
-                    array(
-                        'id' => $game->getIdentifier(),
-                        
-                    )
-                )
-            );
-            return $this->redirect()->toUrl(
-                $this->frontendUrl()->fromRoute(
-                    'zfcuser/register',
-                    array()
-                ) . '?redirect='.$redirect
-            );
-        }
-
-        $this->user = $user;
-    }
-
     /**
      * --DONE-- 1. try to change the Game Id (on le redirige vers la home du jeu)
      * --DONE-- 2. try to modify questions (the form is recreated and verified in the controller)
@@ -424,10 +399,27 @@ class PostVoteController extends GameController
             return $this->notFoundAction();
         }
 
-        $this->checkUser($game);
+        $user = $this->zfcUserAuthentication()->getIdentity();
+        if (!$user && !$game->getAnonymousAllowed()) {
+            $redirect = urlencode(
+                $this->frontendUrl()->fromRoute(
+                    'postvote/result',
+                    array(
+                        'id' => $game->getIdentifier(),
+                        
+                    )
+                )
+            );
+            return $this->redirect()->toUrl(
+                $this->frontendUrl()->fromRoute(
+                    'zfcuser/register',
+                    array()
+                ) . '?redirect='.$redirect
+            );
+        }
 
         // Has the user finished the game ?
-        $lastEntry = $this->getGameService()->findLastInactiveEntry($game, $this->user);
+        $lastEntry = $this->getGameService()->findLastInactiveEntry($game, $user);
 
         if ($lastEntry === null) {
             return $this->redirect()->toUrl(
@@ -445,7 +437,7 @@ class PostVoteController extends GameController
             $data = $this->getRequest()->getPost()->toArray();
             $form->setData($data);
             if ($form->isValid()) {
-                $result = $this->getGameService()->sendShareMail($data, $game, $this->user, $lastEntry);
+                $result = $this->getGameService()->sendShareMail($data, $game, $user, $lastEntry);
                 if ($result) {
                     $statusMail = true;
                 }
@@ -766,7 +758,6 @@ class PostVoteController extends GameController
     public function shareAction()
     {
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-        $user = $this->zfcUserAuthentication()->getIdentity();
         $sg = $this->getGameService();
     
         $statusMail = null;
@@ -782,10 +773,27 @@ class PostVoteController extends GameController
             return $this->notFoundAction();
         }
 
-        $this->checkUser($game);
+        $user = $this->zfcUserAuthentication()->getIdentity();
+        if (!$user && !$game->getAnonymousAllowed()) {
+            $redirect = urlencode(
+                $this->frontendUrl()->fromRoute(
+                    'postvote/result',
+                    array(
+                        'id' => $game->getIdentifier(),
+                        
+                    )
+                )
+            );
+            return $this->redirect()->toUrl(
+                $this->frontendUrl()->fromRoute(
+                    'zfcuser/register',
+                    array()
+                ) . '?redirect='.$redirect
+            );
+        }
     
         // Has the user finished the game ?
-        $lastEntry = $this->getGameService()->findLastInactiveEntry($game, $this->user);
+        $lastEntry = $this->getGameService()->findLastInactiveEntry($game, $user);
     
         if ($lastEntry === null) {
             return $this->redirect()->toUrl(
@@ -818,7 +826,7 @@ class PostVoteController extends GameController
             $data = $this->getRequest()->getPost()->toArray();
             $form->setData($data);
             if ($form->isValid()) {
-                $result = $this->getGameService()->sendShareMail($data, $game, $this->user, $lastEntry);
+                $result = $this->getGameService()->sendShareMail($data, $game, $user, $lastEntry);
                 if ($result) {
                     $statusMail = true;
                 }
