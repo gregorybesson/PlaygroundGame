@@ -21,7 +21,8 @@ class InstantWinOccurrence extends AbstractMapper
     {
         $query = $this->em->createQuery(
             'SELECT i FROM PlaygroundGame\Entity\InstantWinOccurrence i
-                WHERE i.instantwin = :game'
+                WHERE i.instantwin = :game
+                ORDER BY i.value ASC'
         );
         $query->setParameter('game', $instant_win);
         return $query;
