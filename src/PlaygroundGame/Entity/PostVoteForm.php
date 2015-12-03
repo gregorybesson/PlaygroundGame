@@ -53,14 +53,6 @@ class PostVoteForm implements InputFilterAwareInterface
     }
 
     /**
-     * @return the unknown_type
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
      * @param unknown_type $id
      */
     public function setId($id)
@@ -68,6 +60,14 @@ class PostVoteForm implements InputFilterAwareInterface
         $this->id = $id;
 
         return $this;
+    }
+
+    /**
+     * @return the unknown_type
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 
     /**
@@ -89,14 +89,6 @@ class PostVoteForm implements InputFilterAwareInterface
     }
 
     /**
-     * @return the unknown_type
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
      * @param unknown_type $title
      */
     public function setTitle($title)
@@ -104,6 +96,14 @@ class PostVoteForm implements InputFilterAwareInterface
         $this->title = $title;
 
         return $this;
+    }
+
+    /**
+     * @return the unknown_type
+     */
+    public function getTitle()
+    {
+        return $this->title;
     }
 
     /**
@@ -142,20 +142,20 @@ class PostVoteForm implements InputFilterAwareInterface
     }
 
     /**
-     * @return the unknown_type
-     */
-    public function getFormTemplate()
-    {
-        return $this->formTemplate;
-    }
-
-    /**
      */
     public function setFormTemplate($formTemplate)
     {
         $this->formTemplate = $formTemplate;
 
         return $this;
+    }
+
+    /**
+     * @return the unknown_type
+     */
+    public function getFormTemplate()
+    {
+        return $this->formTemplate;
     }
 
     /**

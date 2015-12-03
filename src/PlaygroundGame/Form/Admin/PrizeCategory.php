@@ -18,14 +18,6 @@ class PrizeCategory extends ProvidesEventsForm
         $this->setAttribute('enctype', 'multipart/form-data');
 
         $this->add(array(
-            'name' => 'id',
-            'type'  => 'Zend\Form\Element\Hidden',
-            'attributes' => array(
-                'value' => 0,
-            ),
-        ));
-
-        $this->add(array(
             'name' => 'title',
             'options' => array(
                 'label' => $translator->translate('Title', 'playgroundgame'),
@@ -33,6 +25,14 @@ class PrizeCategory extends ProvidesEventsForm
             'attributes' => array(
                 'type' => 'text',
                 'placeholder' => $translator->translate('Title', 'playgroundgame'),
+            ),
+        ));
+
+        $this->add(array(
+            'name' => 'id',
+            'type'  => 'Zend\Form\Element\Hidden',
+            'attributes' => array(
+                'value' => 0,
             ),
         ));
 

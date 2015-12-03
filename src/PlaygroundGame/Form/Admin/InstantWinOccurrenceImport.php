@@ -77,6 +77,29 @@ class InstantWinOccurrenceImport extends ProvidesEventsForm
             'priority' => -100,
         ));
     }
+    
+    /**
+     * Set service manager instance
+     *
+     * @param  ServiceManager $serviceManager
+     * @return InstantWinOccurrenceImport
+     */
+    public function setServiceManager(ServiceManager $serviceManager)
+    {
+        $this->serviceManager = $serviceManager;
+
+        return $this;
+    }
+
+    /**
+     * Retrieve service manager instance
+     *
+     * @return ServiceManager
+     */
+    public function getServiceManager()
+    {
+        return $this->serviceManager;
+    }
 
     /**
      *
@@ -93,28 +116,5 @@ class InstantWinOccurrenceImport extends ProvidesEventsForm
         }
 
         return $prizes;
-    }
-
-    /**
-     * Retrieve service manager instance
-     *
-     * @return ServiceManager
-     */
-    public function getServiceManager()
-    {
-        return $this->serviceManager;
-    }
-
-    /**
-     * Set service manager instance
-     *
-     * @param  ServiceManager $serviceManager
-     * @return InstantWinOccurrenceImport
-     */
-    public function setServiceManager(ServiceManager $serviceManager)
-    {
-        $this->serviceManager = $serviceManager;
-
-        return $this;
     }
 }

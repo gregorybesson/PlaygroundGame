@@ -637,20 +637,21 @@ class GameController extends AbstractActionController
 
             $logged = $this->forward()->dispatch('playgrounduser_user', array('action' => 'ajaxauthenticate'));
 
-            if ($logged) {
+            if (!$logged) {
+                $this->flashMessenger()->setNamespace('zfcuser-login-form')->addMessage(
+                    'Authentication failed. Please try again.'
+                );
+                
                 return $this->redirect()->toUrl(
                     $this->frontendUrl()->fromRoute(
-                        $this->game->getClassType() . '/' . $this->game->nextStep('index'),
+                        $this->game->getClassType() . '/login',
                         array('id' => $this->game->getIdentifier())
                     )
                 );
             } else {
-                $this->flashMessenger()->setNamespace('zfcuser-login-form')->addMessage(
-                    'Authentication failed. Please try again.'
-                );
                 return $this->redirect()->toUrl(
                     $this->frontendUrl()->fromRoute(
-                        $this->game->getClassType() . '/login',
+                        $this->game->getClassType() . '/' . $this->game->nextStep('index'),
                         array('id' => $this->game->getIdentifier())
                     )
                 );
@@ -838,10 +839,7 @@ class GameController extends AbstractActionController
                 return $this->redirect()->toUrl(
                     $this->frontendUrl()->fromRoute(
                         $this->game->getClassType() . '/' . $this->game->nextStep('index'),
-                        array(
-                            'id' => $this->game->getIdentifier(),
-                            
-                        )
+                        array('id' => $this->game->getIdentifier())
                     )
                 );
             } else {
@@ -851,10 +849,7 @@ class GameController extends AbstractActionController
                 return $this->redirect()->toUrl(
                     $this->frontendUrl()->fromRoute(
                         $this->game->getClassType() . '/login',
-                        array(
-                            'id' => $this->game->getIdentifier(),
-                            
-                        )
+                        array('id' => $this->game->getIdentifier())
                     )
                 );
             }
