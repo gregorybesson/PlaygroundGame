@@ -348,8 +348,7 @@ class PostVoteController extends GameController
     public function resultAction()
     {
         $statusMail = null;
-        $postVoteMapper = $this->getGameService()->getPostVoteMapper();
-
+        
         $user = $this->zfcUserAuthentication()->getIdentity();
         if (!$user && !$this->game->getAnonymousAllowed()) {
             $redirect = urlencode(

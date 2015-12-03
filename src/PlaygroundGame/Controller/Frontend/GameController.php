@@ -61,7 +61,7 @@ class GameController extends AbstractActionController
         parent::setEventManager($events);
 
         $controller = $this;
-        $events->attach('dispatch', function ($e) use ($controller) {
+        $events->attach('dispatch', function (\Zend\Mvc\MvcEvent $e) use ($controller) {
             $identifier = $e->getRouteMatch()->getParam('id');
             $controller->game = $this->getGameService()->checkGame($identifier, false);
             if (!$controller->game &&
