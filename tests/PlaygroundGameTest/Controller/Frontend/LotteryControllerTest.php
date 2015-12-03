@@ -2312,7 +2312,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         $this->assertMatchedRouteName('frontend/lottery/prizes/prize');
     }
 
-        public function tearDown()
+    public function tearDown()
     {
 
         parent::tearDown();

@@ -83,9 +83,8 @@ class GameController extends AbstractActionController
             }
 
             $controller->user = $controller->zfcUserAuthentication()->getIdentity();
-            if (
-                $controller->game &&
-                !$controller->user && 
+            if ($controller->game &&
+                !$controller->user &&
                 !$controller->game->getAnonymousAllowed() &&
                 in_array($controller->params('action'), $controller->withAnyUser)
             ) {
