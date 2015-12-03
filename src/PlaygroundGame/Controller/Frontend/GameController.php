@@ -54,7 +54,11 @@ class GameController extends AbstractActionController
         'result'
     );
 
-    protected $withUser = array();
+    protected $withAnyUser = array(
+        'share',
+        'result',
+        'play'
+    );
 
     public function setEventManager(\Zend\EventManager\EventManagerInterface $events)
     {
@@ -62,8 +66,9 @@ class GameController extends AbstractActionController
 
         $controller = $this;
         $events->attach('dispatch', function (\Zend\Mvc\MvcEvent $e) use ($controller) {
+
             $identifier = $e->getRouteMatch()->getParam('id');
-            $controller->game = $this->getGameService()->checkGame($identifier, false);
+            $controller->game = $controller->getGameService()->checkGame($identifier, false);
             if (!$controller->game &&
                 in_array($controller->params('action'), $controller->withGame)
             ) {
@@ -75,6 +80,27 @@ class GameController extends AbstractActionController
                 in_array($controller->params('action'), $controller->withOnlineGame)
             ) {
                 return $controller->notFoundAction();
+            }
+
+            $controller->user = $controller->zfcUserAuthentication()->getIdentity();
+            if (
+                $controller->game &&
+                !$controller->user && 
+                !$controller->game->getAnonymousAllowed() &&
+                in_array($controller->params('action'), $controller->withAnyUser)
+            ) {
+                $redirect = urlencode(
+                    $controller->url()->fromRoute(
+                        'frontend/'.$this->game->getClassType() . '/' . $controller->params('action'),
+                        array('id' => $controller->game->getIdentifier())
+                    )
+                );
+                return $controller->redirect()->toUrl(
+                    $controller->url()->fromRoute(
+                        'frontend/zfcuser/register',
+                        array()
+                    ) . '?redirect='.$redirect
+                );
             }
 
             return;
@@ -152,10 +178,9 @@ class GameController extends AbstractActionController
      */
     public function indexAction()
     {
-        $user = $this->zfcUserAuthentication()->getIdentity();
         $isSubscribed = false;
 
-        $entry = $this->getGameService()->checkExistingEntry($this->game, $user);
+        $entry = $this->getGameService()->checkExistingEntry($this->game, $this->user);
         if ($entry) {
             $isSubscribed = true;
         }
@@ -204,7 +229,6 @@ class GameController extends AbstractActionController
      */
     public function registerAction()
     {
-        $user = $this->zfcUserAuthentication()->getIdentity();
         $form = $this->getGameService()->createFormFromJson($this->game->getPlayerForm()->getForm(), 'playerForm');
 
         if ($this->getRequest()->isPost()) {
@@ -251,7 +275,7 @@ class GameController extends AbstractActionController
                 // If register after play step, I search for the last entry created by play step.
 
                 if ($key < $keyplay || ($keyStep && !$keyplayStep && $key <= $keyplay)) {
-                    $entry = $this->getGameService()->play($this->game, $user);
+                    $entry = $this->getGameService()->play($this->game, $this->user);
                     if (!$entry) {
                         // the user has already taken part of this game and the participation limit has been reached
                         $this->flashMessenger()->addMessage('Vous avez déjà participé');
@@ -268,8 +292,8 @@ class GameController extends AbstractActionController
                     }
                 } else {
                     // I'm looking for an entry without anonymousIdentifier (the active entry in fact).
-                    $entry = $this->getGameService()->findLastEntry($this->game, $user);
-                    if ($this->getGameService()->hasReachedPlayLimit($this->game, $user)) {
+                    $entry = $this->getGameService()->findLastEntry($this->game, $this->user);
+                    if ($this->getGameService()->hasReachedPlayLimit($this->game, $this->user)) {
                         // the user has already taken part of this game and the participation limit has been reached
                         $this->flashMessenger()->addMessage('Vous avez déjà participé');
                     
@@ -285,7 +309,7 @@ class GameController extends AbstractActionController
                     }
                 }
 
-                $this->getGameService()->updateEntryPlayerForm($form->getData(), $this->game, $user, $entry);
+                $this->getGameService()->updateEntryPlayerForm($form->getData(), $this->game, $this->user, $entry);
 
                 if (!empty($this->game->nextStep($this->params('action')))) {
                     return $this->redirect()->toUrl(
@@ -332,9 +356,7 @@ class GameController extends AbstractActionController
      */
     public function bounceAction()
     {
-        $user = $this->zfcUserAuthentication()->getIdentity();
-
-        $availableGames = $this->getGameService()->getAvailableGames($user);
+        $availableGames = $this->getGameService()->getAvailableGames($this->user);
 
         $rssUrl = '';
         $config = $this->getGameService()->getServiceManager()->get('config');
@@ -345,7 +367,7 @@ class GameController extends AbstractActionController
         $viewModel = $this->buildView($this->game);
         $viewModel->setVariables(array(
             'rssUrl'         => $rssUrl,
-            'user'           => $user,
+            'user'           => $this->user,
             'availableGames' => $availableGames,
         ));
 
@@ -442,11 +464,10 @@ class GameController extends AbstractActionController
     
     public function shareAction()
     {
-        $user = $this->zfcUserAuthentication()->getIdentity();
         $statusMail = null;
     
         // Has the user finished the game ?
-        $lastEntry = $this->getGameService()->findLastInactiveEntry($this->game, $user);
+        $lastEntry = $this->getGameService()->findLastInactiveEntry($this->game, $this->user);
     
         if ($lastEntry === null) {
             return $this->redirect()->toUrl(
@@ -457,24 +478,6 @@ class GameController extends AbstractActionController
             );
         }
     
-        if (!$user && !$this->game->getAnonymousAllowed()) {
-            $redirect = urlencode(
-                $this->frontendUrl()->fromRoute(
-                    'postvote/result',
-                    array(
-                        'id' => $this->game->getIdentifier(),
-                        
-                    )
-                )
-            );
-            return $this->redirect()->toUrl(
-                $this->frontendUrl()->fromRoute(
-                    'zfcuser/register',
-                    array()
-                ) . '?redirect='.$redirect
-            );
-        }
-    
         $form = $this->getServiceLocator()->get('playgroundgame_sharemail_form');
         $form->setAttribute('method', 'post');
     
@@ -482,7 +485,7 @@ class GameController extends AbstractActionController
             $data = $this->getRequest()->getPost()->toArray();
             $form->setData($data);
             if ($form->isValid()) {
-                $result = $this->getGameService()->sendShareMail($data, $this->game, $user, $lastEntry);
+                $result = $this->getGameService()->sendShareMail($data, $this->game, $this->user, $lastEntry);
                 if ($result) {
                     $statusMail = true;
                 }
@@ -492,7 +495,7 @@ class GameController extends AbstractActionController
         // buildView must be before sendMail because it adds the game template path to the templateStack
         $viewModel = $this->buildView($this->game);
     
-        $this->getGameService()->sendMail($this->game, $user, $lastEntry);
+        $this->getGameService()->sendMail($this->game, $this->user, $lastEntry);
     
         $viewModel->setVariables(array(
             'statusMail'       => $statusMail,
@@ -507,11 +510,10 @@ class GameController extends AbstractActionController
         $viewModel = new JsonModel();
         $viewModel->setTerminal(true);
         $fbId = $this->params()->fromQuery('fbId');
-        $user = $this->zfcUserAuthentication()->getIdentity();
         if (!$this->game) {
             return $this->errorJson();
         }
-        $entry = $this->getGameService()->checkExistingEntry($this->game, $user);
+        $entry = $this->getGameService()->checkExistingEntry($this->game, $this->user);
         if (! $entry) {
             return $this->errorJson();
         }
@@ -519,7 +521,7 @@ class GameController extends AbstractActionController
             return $this->errorJson();
         }
     
-        $this->getGameService()->postFbWall($fbId, $this->game, $user, $entry);
+        $this->getGameService()->postFbWall($fbId, $this->game, $this->user, $entry);
     
         return $this->successJson();
     }
@@ -530,12 +532,11 @@ class GameController extends AbstractActionController
         $viewModel->setTerminal(true);
         $fbId = $this->params()->fromQuery('fbId');
         $to = $this->params()->fromQuery('to');
-        $user = $this->zfcUserAuthentication()->getIdentity();
     
         if (!$this->game) {
             return $this->errorJson();
         }
-        $entry = $this->getGameService()->checkExistingEntry($this->game, $user);
+        $entry = $this->getGameService()->checkExistingEntry($this->game, $this->user);
         if (! $entry) {
             return $this->errorJson();
         }
@@ -543,7 +544,7 @@ class GameController extends AbstractActionController
             return $this->errorJson();
         }
     
-        $this->getGameService()->postFbRequest($fbId, $this->game, $user, $entry, $to);
+        $this->getGameService()->postFbRequest($fbId, $this->game, $this->user, $entry, $to);
     
         return $this->successJson();
     }
@@ -551,12 +552,11 @@ class GameController extends AbstractActionController
     public function tweetAction()
     {
         $tweetId = $this->params()->fromQuery('tweetId');
-        $user = $this->zfcUserAuthentication()->getIdentity();
     
         if (!$this->game) {
             return $this->errorJson();
         }
-        $entry = $this->getGameService()->checkExistingEntry($this->game, $user);
+        $entry = $this->getGameService()->checkExistingEntry($this->game, $this->user);
         if (! $entry) {
             return $this->errorJson();
         }
@@ -564,7 +564,7 @@ class GameController extends AbstractActionController
             return $this->errorJson();
         }
     
-        $this->getGameService()->postTwitter($tweetId, $this->game, $user, $entry);
+        $this->getGameService()->postTwitter($tweetId, $this->game, $this->user, $entry);
     
         return $this->successJson();
     }
@@ -574,12 +574,11 @@ class GameController extends AbstractActionController
         $viewModel = new ViewModel();
         $viewModel->setTerminal(true);
         $googleId = $this->params()->fromQuery('googleId');
-        $user = $this->zfcUserAuthentication()->getIdentity();
 
         if (!$this->game) {
             return $this->errorJson();
         }
-        $entry = $this->getGameService()->checkExistingEntry($this->game, $user);
+        $entry = $this->getGameService()->checkExistingEntry($this->game, $this->user);
         if (! $entry) {
             return $this->errorJson();
         }
@@ -587,7 +586,7 @@ class GameController extends AbstractActionController
             return $this->errorJson();
         }
     
-        $this->getGameService()->postGoogle($googleId, $this->game, $user, $entry);
+        $this->getGameService()->postGoogle($googleId, $this->game, $this->user, $entry);
     
         return $this->successJson();
     }
@@ -614,7 +613,7 @@ class GameController extends AbstractActionController
     public function loginAction()
     {
         $request = $this->getRequest();
-        $form    = $this->getServiceLocator()->get('zfcuser_login_form');
+        $form = $this->getServiceLocator()->get('zfcuser_login_form');
     
         if ($request->isPost()) {
             $form->setData($request->getPost());
@@ -643,10 +642,7 @@ class GameController extends AbstractActionController
                 return $this->redirect()->toUrl(
                     $this->frontendUrl()->fromRoute(
                         $this->game->getClassType() . '/' . $this->game->nextStep('index'),
-                        array(
-                            'id' => $this->game->getIdentifier(),
-                            
-                        )
+                        array('id' => $this->game->getIdentifier())
                     )
                 );
             } else {

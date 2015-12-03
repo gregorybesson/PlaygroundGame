@@ -11,30 +11,12 @@ class LotteryController extends GameController
 
     public function playAction()
     {
-        $redirectFb = $this->checkFbRegistration($this->zfcUserAuthentication()->getIdentity(), $this->game);
+        $redirectFb = $this->checkFbRegistration($this->user, $this->game);
         if ($redirectFb) {
             return $redirectFb;
         }
 
-        $user = $this->zfcUserAuthentication()->getIdentity();
-        if (!$user && !$this->game->getAnonymousAllowed()) {
-            $redirect = urlencode(
-                $this->frontendUrl()->fromRoute(
-                    $this->game->getClassType() . '/play',
-                    array('id' => $this->game->getIdentifier(), ),
-                    array('force_canonical' => true)
-                )
-            );
-
-            return $this->redirect()->toUrl(
-                $this->frontendUrl()->fromRoute(
-                    'zfcuser/register',
-                    array()
-                ) . '?redirect='.$redirect
-            );
-        }
-
-        $entry = $this->getGameService()->play($this->game, $user);
+        $entry = $this->getGameService()->play($this->game, $this->user);
         if (!$entry) {
             // the user has already taken part of this game and the participation limit has been reached
             $this->flashMessenger()->addMessage('Vous avez déjà participé');
@@ -62,7 +44,6 @@ class LotteryController extends GameController
 
     public function resultAction()
     {
-        $user = $this->zfcUserAuthentication()->getIdentity();
         $statusMail = null;
         $secretKey = strtoupper(substr(sha1(uniqid('pg_', true).'####'.time()), 0, 15));
         $socialLinkUrl = $this->frontendUrl()->fromRoute(
@@ -73,7 +54,7 @@ class LotteryController extends GameController
         // With core shortener helper
         $socialLinkUrl = $this->shortenUrl()->shortenUrl($socialLinkUrl);
 
-        $lastEntry = $this->getGameService()->findLastInactiveEntry($this->game, $user);
+        $lastEntry = $this->getGameService()->findLastInactiveEntry($this->game, $this->user);
         if (!$lastEntry) {
             return $this->redirect()->toUrl(
                 $this->frontendUrl()->fromRoute(
@@ -84,24 +65,6 @@ class LotteryController extends GameController
             );
         }
 
-        if (!$user && !$this->game->getAnonymousAllowed()) {
-            $redirect = urlencode(
-                $this->frontendUrl()->fromRoute(
-                    'lottery/result',
-                    array(
-                        'id' => $this->game->getIdentifier(),
-                        
-                    )
-                )
-            );
-            return $this->redirect()->toUrl(
-                $this->frontendUrl()->fromRoute(
-                    'zfcuser/register',
-                    array()
-                ) . '?redirect='.$redirect
-            );
-        }
-
         $form = $this->getServiceLocator()->get('playgroundgame_sharemail_form');
         $form->setAttribute('method', 'post');
 
@@ -109,10 +72,10 @@ class LotteryController extends GameController
             $data = $this->getRequest()->getPost()->toArray();
             $form->setData($data);
             if ($form->isValid()) {
-                $result = $this->getGameService()->sendShareMail($data, $this->game, $user, $lastEntry);
+                $result = $this->getGameService()->sendShareMail($data, $this->game, $this->user, $lastEntry);
                 if ($result) {
                     $statusMail = true;
-                    $this->getGameService()->addAnotherChance($this->game, $user, 1);
+                    $this->getGameService()->addAnotherChance($this->game, $this->user, 1);
                 }
             }
         }
@@ -120,7 +83,7 @@ class LotteryController extends GameController
         // buildView must be before sendMail because it adds the game template path to the templateStack
         $viewModel = $this->buildView($this->game);
         
-        $this->getGameService()->sendMail($this->game, $user, $lastEntry);
+        $this->getGameService()->sendMail($this->game, $this->user, $lastEntry);
 
         $viewModel->setVariables(array(
                 'statusMail'    => $statusMail,
@@ -138,8 +101,7 @@ class LotteryController extends GameController
         $bonusEntry = false;
 
         if ($result->getVariable('success')) {
-            $user = $this->zfcUserAuthentication()->getIdentity();
-            $bonusEntry = $this->getGameService()->addAnotherChance($this->game, $user, 1);
+            $bonusEntry = $this->getGameService()->addAnotherChance($this->game, $this->user, 1);
         }
 
         $response = $this->getResponse();
@@ -157,8 +119,7 @@ class LotteryController extends GameController
         $bonusEntry = false;
 
         if ($result->getVariable('success')) {
-            $user = $this->zfcUserAuthentication()->getIdentity();
-            $bonusEntry = $this->getGameService()->addAnotherChance($this->game, $user, 1);
+            $bonusEntry = $this->getGameService()->addAnotherChance($this->game, $this->user, 1);
         }
 
         $response = $this->getResponse();
@@ -176,8 +137,7 @@ class LotteryController extends GameController
         $bonusEntry = false;
 
         if ($result->getVariable('success')) {
-            $user = $this->zfcUserAuthentication()->getIdentity();
-            $bonusEntry = $this->getGameService()->addAnotherChance($this->game, $user, 1);
+            $bonusEntry = $this->getGameService()->addAnotherChance($this->game, $this->user, 1);
         }
 
         $response = $this->getResponse();
@@ -195,8 +155,7 @@ class LotteryController extends GameController
         $bonusEntry = false;
 
         if ($result->getVariable('success')) {
-            $user = $this->zfcUserAuthentication()->getIdentity();
-            $bonusEntry = $this->getGameService()->addAnotherChance($this->game, $user, 1);
+            $bonusEntry = $this->getGameService()->addAnotherChance($this->game, $this->user, 1);
         }
 
         $response = $this->getResponse();

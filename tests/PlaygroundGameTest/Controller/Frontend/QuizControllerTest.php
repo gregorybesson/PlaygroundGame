@@ -2241,6 +2241,8 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
     {
         $serviceManager = $this->getApplicationServiceLocator();
         $serviceManager->setAllowOverride(true);
+
+        $pluginManager    = $this->getApplicationServiceLocator()->get('ControllerPluginManager');
         
         $game = new GameEntity();
         
@@ -2250,6 +2252,16 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         ->getMock();
         
         $serviceManager->setService('playgroundgame_quiz_service', $f);
+
+        $ZfcUserMock = $this->getMock('PlaygroundUser\Entity\User');
+
+        $authMock = $this->getMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+
+        $authMock->expects($this->any())
+        ->method('getIdentity')
+        ->will($this->returnValue(false));
+
+        $pluginManager->setService('zfcUserAuthentication', $authMock);
         
         // I check that the array in findOneBy contains the parameter 'active' = 1
         $f->expects($this->once())
@@ -2642,5 +2654,10 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $this->assertControllerClass('QuizController');
         $this->assertActionName('prize');
         $this->assertMatchedRouteName('frontend/quiz/prizes/prize');
+    }
+
+    public function tearDown()
+    {
+        parent::tearDown();
     }
 }

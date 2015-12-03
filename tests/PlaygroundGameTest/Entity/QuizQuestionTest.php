@@ -36,7 +36,6 @@ class QuizQuestionTest extends \PHPUnit_Framework_TestCase
         $tool->dropSchema($classes);
     
         $tool->createSchema($classes);
-        
     
         $this->quizQuestionData = array(
             'type' => '1',
@@ -117,14 +116,14 @@ class QuizQuestionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(null, $quizQuestion->getAudio());
         $this->assertEquals(null, $quizQuestion->getAutoplay());
     }
-    
-    
-    
+        
     public function tearDown()
     {
-        $dbh = $this->em->getConnection();
-        //$result = $dbh->exec("UPDATE sqlite_sequence SET seq = 10 WHERE name='album';");
-
+        $tool = new \Doctrine\ORM\Tools\SchemaTool($this->em);
+        $classes = $this->em->getMetadataFactory()->getAllMetadata();
+        $tool->dropSchema($classes);
+        $this->sm = null;
+        $this->em = null;
         unset($this->sm);
         unset($this->em);
         parent::tearDown();

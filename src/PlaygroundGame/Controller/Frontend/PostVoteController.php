@@ -27,25 +27,6 @@ class PostVoteController extends GameController
             return $redirectFb;
         }
 
-        $user = $this->zfcUserAuthentication()->getIdentity();
-
-        if (!$user && !$this->game->getAnonymousAllowed()) {
-            $redirect = urlencode(
-                $this->frontendUrl()->fromRoute(
-                    $this->game->getClassType() . '/play',
-                    array('id' => $this->game->getIdentifier()),
-                    array('force_canonical' => true)
-                )
-            );
-
-            return $this->redirect()->toUrl(
-                $this->frontendUrl()->fromRoute(
-                    'zfcuser/register',
-                    array()
-                ) . '?redirect='.$redirect
-            );
-        }
-
         $entry = $this->getGameService()->play($this->game, $user);
 
         if (!$entry) {
@@ -348,25 +329,6 @@ class PostVoteController extends GameController
     public function resultAction()
     {
         $statusMail = null;
-        
-        $user = $this->zfcUserAuthentication()->getIdentity();
-        if (!$user && !$this->game->getAnonymousAllowed()) {
-            $redirect = urlencode(
-                $this->frontendUrl()->fromRoute(
-                    'postvote/result',
-                    array(
-                        'id' => $this->game->getIdentifier(),
-                        
-                    )
-                )
-            );
-            return $this->redirect()->toUrl(
-                $this->frontendUrl()->fromRoute(
-                    'zfcuser/register',
-                    array()
-                ) . '?redirect='.$redirect
-            );
-        }
 
         // Has the user finished the game ?
         $lastEntry = $this->getGameService()->findLastInactiveEntry($this->game, $user);
@@ -697,20 +659,6 @@ class PostVoteController extends GameController
     {
         $statusMail = null;
         $user = $this->zfcUserAuthentication()->getIdentity();
-        if (!$user && !$this->game->getAnonymousAllowed()) {
-            $redirect = urlencode(
-                $this->frontendUrl()->fromRoute(
-                    'postvote/result',
-                    array('id' => $this->game->getIdentifier())
-                )
-            );
-            return $this->redirect()->toUrl(
-                $this->frontendUrl()->fromRoute(
-                    'zfcuser/register',
-                    array()
-                ) . '?redirect='.$redirect
-            );
-        }
     
         // Has the user finished the game ?
         $lastEntry = $this->getGameService()->findLastInactiveEntry($this->game, $user);

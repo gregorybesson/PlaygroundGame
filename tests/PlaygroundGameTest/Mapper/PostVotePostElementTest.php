@@ -46,7 +46,7 @@ class PostVotePostElementTest extends \PHPUnit_Framework_TestCase
     {
         $postvotepostelement = new PostVotePostElementEntity();
         $postvotepostelement->setName('Name');
-        $postvotepostelement = $this->tm->insert($postvotepostelement);
+        $postvotepostelement = $this->tm->update($postvotepostelement);
         $id = $postvotepostelement->getId();
         $this->tm->remove($postvotepostelement);
         $this->assertNull($this->tm->findById($id));
@@ -70,6 +70,13 @@ class PostVotePostElementTest extends \PHPUnit_Framework_TestCase
 
     public function tearDown()
     {
+        $tool = new \Doctrine\ORM\Tools\SchemaTool($this->em);
+        $classes = $this->em->getMetadataFactory()->getAllMetadata();
+        $tool->dropSchema($classes);
+        $this->sm = null;
+        $this->em = null;
+        unset($this->sm);
+        unset($this->em);
         parent::tearDown();
     }
 }

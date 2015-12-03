@@ -159,4 +159,16 @@ class QuizTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($form->isValid());
         $this->assertEquals(2, count($form->getMessages()));
     }
+
+    public function tearDown()
+    {
+        $tool = new \Doctrine\ORM\Tools\SchemaTool($this->em);
+        $classes = $this->em->getMetadataFactory()->getAllMetadata();
+        $tool->dropSchema($classes);
+        $this->sm = null;
+        $this->em = null;
+        unset($this->sm);
+        unset($this->em);
+        parent::tearDown();
+    }
 }

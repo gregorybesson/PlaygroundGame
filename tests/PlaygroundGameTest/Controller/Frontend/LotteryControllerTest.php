@@ -479,19 +479,9 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue($game));
 
-        $ZfcUserMock = $this->getMock('PlaygroundUser\Entity\User');
-
-        $ZfcUserMock->expects($this->any())
-        ->method('getId')
-        ->will($this->returnValue('1'));
-
         $authMock = $this->getMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
 
-        $authMock->expects($this->any())
-        ->method('hasIdentity')
-        -> will($this->returnValue(true));
-
-        $authMock->expects($this->any())
+        $authMock->expects($this->exactly(1))
         ->method('getIdentity')
         ->will($this->returnValue(false));
 
@@ -1925,6 +1915,16 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         ->getMock();
         
         $serviceManager->setService('playgroundgame_lottery_service', $f);
+
+        $ZfcUserMock = $this->getMock('PlaygroundUser\Entity\User');
+
+        $authMock = $this->getMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+
+        $authMock->expects($this->any())
+        ->method('getIdentity')
+        ->will($this->returnValue(false));
+
+        $pluginManager->setService('zfcUserAuthentication', $authMock);
         
         // I check that the array in findOneBy contains the parameter 'active' = 1
         $f->expects($this->once())
@@ -2310,5 +2310,11 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         $this->assertControllerClass('LotteryController');
         $this->assertActionName('prize');
         $this->assertMatchedRouteName('frontend/lottery/prizes/prize');
+    }
+
+        public function tearDown()
+    {
+
+        parent::tearDown();
     }
 }
