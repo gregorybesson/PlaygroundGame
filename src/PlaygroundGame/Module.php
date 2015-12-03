@@ -194,8 +194,6 @@ class Module
                     $actionName      = $match->getParam('action', 'not-found');
                     $slug            = $match->getParam('id', '');
                     $viewModel       = $e->getViewModel();
-                    
-                    //echo ' slug:' . $slug . " route:" . $routeName . ' area:' . $areaName . ' module:' . $moduleName . ' ctrl:' . $controllerName . ' action:' . $actionName . "\n";
 
                     /**
                      * Assign the correct layout
@@ -551,7 +549,6 @@ class Module
                     $translator = $sm->get('translator');
                     $zfcUserOptions = $sm->get('zfcuser_module_options');
                     $form = new Form\Frontend\Register(null, $zfcUserOptions, $translator, $sm);
-                    //$form->setCaptchaElement($sm->get('zfcuser_captcha_element'));
                     $form->setInputFilter(new \ZfcUser\Form\RegisterFilter(
                         new \ZfcUser\Validator\NoRecordExists(array(
                             'mapper' => $sm->get('zfcuser_user_mapper'),
