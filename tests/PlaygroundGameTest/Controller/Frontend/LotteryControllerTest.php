@@ -34,7 +34,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         $serviceManager->setService('playgroundgame_lottery_service', $f);
 
         // I check that the array in findOneBy contains the parameter 'active' = 1
-        $f->expects($this->exactly(2))
+        $f->expects($this->exactly(1))
         ->method('checkGame')
         ->will($this->returnValue(false));
 
@@ -265,7 +265,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         $serviceManager->setService('playgroundgame_lottery_service', $f);
 
         // I check that the array in findOneBy contains the parameter 'active' = 1
-         $f->expects($this->exactly(2))
+         $f->expects($this->exactly(1))
          ->method('checkGame')
          ->will($this->returnValue(false));
 
@@ -375,7 +375,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         $serviceManager->setService('playgroundgame_lottery_service', $f);
 
         // I check that the array in findOneBy contains the parameter 'active' = 1
-         $f->expects($this->exactly(2))
+         $f->expects($this->exactly(1))
          ->method('checkGame')
          ->will($this->returnValue(false));
 
@@ -422,7 +422,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         $serviceManager->setService('playgroundgame_lottery_service', $f);
 
         // I check that the array in findOneBy contains the parameter 'active' = 1
-        $f->expects($this->exactly(2))
+        $f->expects($this->exactly(1))
         ->method('checkGame')
         ->will($this->returnValue(false));
 
@@ -889,7 +889,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         $serviceManager->setService('playgroundgame_lottery_service', $f);
 
         // I check that the array in findOneBy contains the parameter 'active' = 1
-        $f->expects($this->exactly(2))
+        $f->expects($this->exactly(1))
         ->method('checkGame')
         ->will($this->returnValue($game));
 
@@ -1183,7 +1183,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         $serviceManager->setService('playgroundgame_lottery_service', $f);
 
         // I check that the array in findOneBy contains the parameter 'active' = 1
-        $f->expects($this->exactly(2))
+        $f->expects($this->exactly(1))
         ->method('checkGame')
         ->will($this->returnValue($game));
 
@@ -1477,7 +1477,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         $serviceManager->setService('playgroundgame_lottery_service', $f);
 
         // I check that the array in findOneBy contains the parameter 'active' = 1
-        $f->expects($this->exactly(2))
+        $f->expects($this->exactly(1))
         ->method('checkGame')
         ->will($this->returnValue($game));
 
@@ -1540,7 +1540,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         $serviceManager->setService('playgroundgame_lottery_service', $f);
 
         // I check that the array in findOneBy contains the parameter 'active' = 1
-        $f->expects($this->exactly(2))
+        $f->expects($this->exactly(1))
         ->method('checkGame')
         ->will($this->returnValue(false));
 
@@ -1587,7 +1587,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         $serviceManager->setService('playgroundgame_lottery_service', $f);
 
         // I check that the array in findOneBy contains the parameter 'active' = 1
-        $f->expects($this->exactly(2))
+        $f->expects($this->exactly(1))
         ->method('checkGame')
         ->will($this->returnValue(false));
 
@@ -1708,7 +1708,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         $serviceManager->setService('playgroundgame_lottery_service', $f);
 
         // I check that the array in findOneBy contains the parameter 'active' = 1
-        $f->expects($this->exactly(2))
+        $f->expects($this->exactly(1))
         ->method('checkGame')
         ->will($this->returnValue(false));
 
@@ -1817,7 +1817,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         $serviceManager->setService('playgroundgame_lottery_service', $f);
 
         // I check that the array in findOneBy contains the parameter 'active' = 1
-        $f->expects($this->exactly(2))
+        $f->expects($this->exactly(1))
         ->method('checkGame')
         ->will($this->returnValue(false));
 
@@ -1961,7 +1961,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         $serviceManager->setService('playgroundgame_lottery_service', $f);
 
         // I check that the array in findOneBy contains the parameter 'active' = 1
-        $f->expects($this->exactly(2))
+        $f->expects($this->exactly(1))
         ->method('checkGame')
         ->will($this->returnValue(false));
 
@@ -2013,7 +2013,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         $serviceManager->setService('playgroundgame_lottery_service', $f);
 
         // I check that the array in findOneBy contains the parameter 'active' = 1
-        $f->expects($this->exactly(2))
+        $f->expects($this->exactly(1))
         ->method('checkGame')
         ->will($this->returnValue($game));
 
@@ -2131,7 +2131,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         $serviceManager->setService('playgroundgame_lottery_service', $f);
 
         // I check that the array in findOneBy contains the parameter 'active' = 1
-        $f->expects($this->exactly(2))
+        $f->expects($this->exactly(1))
         ->method('checkGame')
         ->will($this->returnValue(false));
 
@@ -2201,7 +2201,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         $serviceManager->setService('playgroundgame_prize_service', $p);
 
         // I check that the array in findOneBy contains the parameter 'active' = 1
-        $f->expects($this->exactly(2))
+        $f->expects($this->exactly(1))
         ->method('checkGame')
         ->will($this->returnValue($game));
 
