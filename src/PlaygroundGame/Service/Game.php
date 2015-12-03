@@ -1788,6 +1788,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
     public function decorate($element, $attr, $inputFilter)
     {
+        $factory = new InputFactory();
         $element->setAttributes(
             array(
                 'placeholder'   => $attr['placeholder'],
@@ -1903,7 +1904,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                     )
                 );
                 $values = array();
-                foreach ($innerData as $value) {
+                foreach ($attr['innerData'] as $value) {
                     $values[] = $value->label;
                 }
                 $element->setValueOptions($values);

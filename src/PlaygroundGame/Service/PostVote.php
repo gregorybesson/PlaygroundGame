@@ -47,10 +47,10 @@ class PostVote extends Game implements ServiceManagerAwareInterface
 
         if (! $post) {
             $post = new \PlaygroundGame\Entity\PostVotePost();
-            $post->setPostvote($game);
-            $post->setUser($user);
+            $post->setPostvote($entry->getGame());
+            $post->setUser($entry->getUser());
             $post->setEntry($entry);
-            $post = $postvotePostMapper->insert($post);
+            $post = $this->getPostVotePostMapper()->insert($post);
         }
 
         return $post;
