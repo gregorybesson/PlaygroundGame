@@ -57,219 +57,10 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      * @param string $formClass
      * @return \PlaygroundGame\Entity\Game
      */
-    public function create(array $data, $entity, $formClass)
-    {
-        $game = new $entity();
-        $entityManager = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
-
-        $form = $this->getServiceManager()->get($formClass);
-        // I force the following format because this is the only one accepted
-        // by new DateTime($value) used by Doctrine when persisting
-        $form->get('publicationDate')->setOptions(array(
-            'format' => 'Y-m-d'
-        ));
-        $form->get('startDate')->setOptions(array(
-            'format' => 'Y-m-d'
-        ));
-        $form->get('endDate')->setOptions(array(
-            'format' => 'Y-m-d'
-        ));
-        $form->get('closeDate')->setOptions(array(
-            'format' => 'Y-m-d'
-        ));
-
-        $form->bind($game);
-
-        $path = $this->getOptions()->getMediaPath() . '/';
-        $media_url = $this->getOptions()->getMediaUrl() . '/';
-
-        $identifierInput = $form->getInputFilter()->get('identifier');
-        $noObjectExistsValidator = new NoObjectExistsValidator(array(
-            'object_repository' => $entityManager->getRepository('PlaygroundGame\Entity\Game'),
-            'fields' => 'identifier',
-            'messages' => array(
-                'objectFound' => 'This url already exists !'
-            )
-        ));
-
-        $identifierInput->getValidatorChain()->addValidator($noObjectExistsValidator);
-
-        // I must switch from original format to the Y-m-d format because
-        // this is the only one accepted by new DateTime($value)
-        if (isset($data['publicationDate']) && $data['publicationDate']) {
-            $tmpDate = \DateTime::createFromFormat('d/m/Y', $data['publicationDate']);
-            $data['publicationDate'] = $tmpDate->format('Y-m-d');
-        }
-        if (isset($data['startDate']) && $data['startDate']) {
-            $tmpDate = \DateTime::createFromFormat('d/m/Y', $data['startDate']);
-            $data['startDate'] = $tmpDate->format('Y-m-d');
-        }
-        if (isset($data['endDate']) && $data['endDate']) {
-            $tmpDate = \DateTime::createFromFormat('d/m/Y', $data['endDate']);
-            $data['endDate'] = $tmpDate->format('Y-m-d');
-        }
-        if (isset($data['closeDate']) && $data['closeDate']) {
-            $tmpDate = \DateTime::createFromFormat('d/m/Y', $data['closeDate']);
-            $data['closeDate'] = $tmpDate->format('Y-m-d');
-        }
-
-        // If publicationDate is null, I update it with the startDate if not null neither
-        if (! isset($data['publicationDate']) && isset($data['startDate'])) {
-            $data['publicationDate'] = $data['startDate'];
-        }
-
-        // If the identifier has not been set, I use the title to create one.
-        if (empty($data['identifier']) && ! empty($data['title'])) {
-            $data['identifier'] = $data['title'];
-        }
-
-        $form->setData($data);
-
-        if (! $form->isValid()) {
-            if (isset($data['publicationDate']) && $data['publicationDate']) {
-                $tmpDate = \DateTime::createFromFormat('Y-m-d', $data['publicationDate']);
-                $data['publicationDate'] = $tmpDate->format('d/m/Y');
-                $form->setData(array(
-                    'publicationDate' => $data['publicationDate']
-                ));
-            }
-            if (isset($data['startDate']) && $data['startDate']) {
-                $tmpDate = \DateTime::createFromFormat('Y-m-d', $data['startDate']);
-                $data['startDate'] = $tmpDate->format('d/m/Y');
-                $form->setData(array(
-                    'startDate' => $data['startDate']
-                ));
-            }
-            if (isset($data['endDate']) && $data['endDate']) {
-                $tmpDate = \DateTime::createFromFormat('Y-m-d', $data['endDate']);
-                $data['endDate'] = $tmpDate->format('d/m/Y');
-                $form->setData(array(
-                    'endDate' => $data['endDate']
-                ));
-            }
-            if (isset($data['closeDate']) && $data['closeDate']) {
-                $tmpDate = \DateTime::createFromFormat('Y-m-d', $data['closeDate']);
-                $data['closeDate'] = $tmpDate->format('d/m/Y');
-                $form->setData(array(
-                    'closeDate' => $data['closeDate']
-                ));
-            }
-            return false;
-        }
-
-        $game = $form->getData();
-        $game = $this->getGameMapper()->insert($game);
-
-        // If I receive false, it means that the FB Id was not available anymore
-        $result = $this->getEventManager()->trigger(__FUNCTION__, $this, array(
-            'game' => $game
-        ));
-        if (! $result) {
-            return false;
-        }
-
-            // I wait for the game to be saved to obtain its ID.
-        if (! empty($data['uploadStylesheet']['tmp_name'])) {
-            ErrorHandler::start();
-            move_uploaded_file($data['uploadStylesheet']['tmp_name'], $path . 'stylesheet_' . $game->getId() . '.css');
-            $game->setStylesheet($media_url . 'stylesheet_' . $game->getId() . '.css');
-            ErrorHandler::stop(true);
-        }
-
-        if (! empty($data['uploadMainImage']['tmp_name'])) {
-            ErrorHandler::start();
-            $data['uploadMainImage']['name'] = $this->fileNewname(
-                $path,
-                $game->getId() . "-" . $data['uploadMainImage']['name']
-            );
-            move_uploaded_file($data['uploadMainImage']['tmp_name'], $path . $data['uploadMainImage']['name']);
-            $game->setMainImage($media_url . $data['uploadMainImage']['name']);
-            ErrorHandler::stop(true);
-        }
-
-        if (! empty($data['uploadSecondImage']['tmp_name'])) {
-            ErrorHandler::start();
-            $data['uploadSecondImage']['name'] = $this->fileNewname(
-                $path,
-                $game->getId() . "-" . $data['uploadSecondImage']['name']
-            );
-            move_uploaded_file($data['uploadSecondImage']['tmp_name'], $path . $data['uploadSecondImage']['name']);
-            $game->setSecondImage($media_url . $data['uploadSecondImage']['name']);
-            ErrorHandler::stop(true);
-        }
-
-        if (! empty($data['uploadFbShareImage']['tmp_name'])) {
-            ErrorHandler::start();
-            $data['uploadFbShareImage']['name'] = $this->fileNewname(
-                $path,
-                $game->getId() . "-" . $data['uploadFbShareImage']['name']
-            );
-            move_uploaded_file($data['uploadFbShareImage']['tmp_name'], $path . $data['uploadFbShareImage']['name']);
-            $game->setFbShareImage($media_url . $data['uploadFbShareImage']['name']);
-            ErrorHandler::stop(true);
-        }
-
-        if (! empty($data['uploadFbPageTabImage']['tmp_name'])) {
-            ErrorHandler::start();
-            $extension = $this->getExtension(strtolower($data['uploadFbPageTabImage']['name']));
-            $src = $this->getSrc($extension, $data['uploadFbPageTabImage']['tmp_name']);
-            $this->resize(
-                $data['uploadFbPageTabImage']['tmp_name'],
-                $extension,
-                $path . $game->getId() . "-" . $data['uploadFbPageTabImage']['name'],
-                $src,
-                111,
-                74
-            );
-
-            $game->setFbPageTabImage($media_url . $game->getId() . "-" . $data['uploadFbPageTabImage']['name']);
-            ErrorHandler::stop(true);
-        }
-        $game = $this->getGameMapper()->update($game);
-
-        $prize_mapper = $this->getServiceManager()->get('playgroundgame_prize_mapper');
-        if (isset($data['prizes'])) {
-            foreach ($data['prizes'] as $prize_data) {
-                if (! empty($prize_data['picture']['tmp_name'])) {
-                    if ($prize_data['id']) {
-                        $prize = $prize_mapper->findById($prize_data['id']);
-                    } else {
-                        $some_prizes = $prize_mapper->findBy(array(
-                            'game' => $game,
-                            'title' => $prize_data['title']
-                        ));
-                        if (count($some_prizes) == 1) {
-                            $prize = $some_prizes[0];
-                        } else {
-                            return false;
-                        }
-                    }
-                    ErrorHandler::start();
-                    $filename = "game-" . $game->getId() . "-prize-";
-                    $filename .= $prize->getId() . "-" . $prize_data['picture']['name'];
-                    move_uploaded_file($prize_data['picture']['tmp_name'], $path . $filename);
-                    $prize->setPicture($media_url . $filename);
-                    ErrorHandler::stop(true);
-                    $prize = $prize_mapper->update($prize);
-                }
-            }
-        }
-
-        return $game;
-    }
-
-    /**
-     *
-     *
-     * This service is ready for all types of games
-     *
-     * @param array $data
-     * @param string $formClass
-     * @return \PlaygroundGame\Entity\Game
-     */
-    public function edit(array $data, $game, $formClass)
+    public function createOrUpdate(array $data, $game, $formClass)
     {
         $entityManager = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
+
         $form = $this->getServiceManager()->get($formClass);
         $form->get('publicationDate')->setOptions(array(
             'format' => 'Y-m-d'
@@ -321,13 +112,14 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             $data['closeDate'] = $tmpDate->format('Y-m-d');
         }
 
-        // If publicationDate is null, I update it with the startDate if not nul neither
+        // If publicationDate is null, I update it with the startDate if not null neither
         if ((! isset($data['publicationDate']) || $data['publicationDate'] == '') &&
             (isset($data['startDate']) && $data['startDate'] != '')
         ) {
             $data['publicationDate'] = $data['startDate'];
         }
 
+        // If the identifier has not been set, I use the title to create one.
         if ((! isset($data['identifier']) || empty($data['identifier'])) && isset($data['title'])) {
             $data['identifier'] = $data['title'];
         }
@@ -379,6 +171,10 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             return false;
         }
 
+        $game = $form->getData();
+        $game = $this->getGameMapper()->insert($game);
+
+        // I wait for the game to be saved to obtain its ID.
         if (! empty($data['uploadMainImage']['tmp_name'])) {
             ErrorHandler::start();
             $data['uploadMainImage']['name'] = $this->fileNewname(
@@ -457,7 +253,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
         if (! empty($data['uploadFbPageTabImage']['tmp_name'])) {
             ErrorHandler::start();
-
             $extension = $this->getExtension(strtolower($data['uploadFbPageTabImage']['name']));
             $src = $this->getSrc($extension, $data['uploadFbPageTabImage']['tmp_name']);
             $this->resize(
@@ -527,7 +322,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
         return $game;
     }
-
+    
     /**
      * getActiveGames
      *
@@ -1515,32 +1310,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         return false;
     }
 
-    public static function cronMail()
-    {
-        $configuration = require 'config/application.config.php';
-        $smConfig = isset($configuration['service_manager']) ? $configuration['service_manager'] : array();
-        $sm = new \Zend\ServiceManager\ServiceManager(new \Zend\Mvc\Service\ServiceManagerConfig($smConfig));
-        $sm->setService('ApplicationConfig', $configuration);
-        $sm->get('ModuleManager')->loadModules();
-        $sm->get('Application')->bootstrap();
-
-        $mailService = $sm->get('playgrounduser_message');
-        $gameService = $sm->get('playgroundgame_quiz_service');
-
-        $from = "admin@playground.fr";
-        $subject = "sujet game";
-
-        $to = "gbesson@test.com";
-
-        $game = $gameService->checkGame('qooqo');
-
-        $message = $mailService->createTextMessage($from, $to, $subject, 'playground-game/email/share_reminder', array(
-            'game' => $game
-        ));
-
-        $mailService->send($message);
-    }
-
     /**
      * @param string $path
      */
@@ -1992,6 +1761,94 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         return ob_get_clean(); // ... then return it as a string!
     }
     
+    public function getAttributes($attributes)
+    {
+        $a = array();
+
+        $a['name']          = isset($attributes->name)? $attributes->name : '';
+        $a['placeholder']   = isset($attributes->data->placeholder)? $attributes->data->placeholder : '';
+        $a['label']         = isset($attributes->data->label)? $attributes->data->label : '';
+        $a['required']      = (isset($attributes->data->required) && $attributes->data->required == 'true')?
+            true:
+            false;
+        $a['class']         = isset($attributes->data->class)? $attributes->data->class : '';
+        $a['id']            = isset($attributes->data->id)? $attributes->data->id : '';
+        $a['lengthMin']     = isset($attributes->data->length)? $attributes->data->length->min : '';
+        $a['lengthMax']     = isset($attributes->data->length)? $attributes->data->length->max : '';
+        $a['validator']     = isset($attributes->data->validator)? $attributes->data->validator : '';
+        $a['innerData']     = isset($attributes->data->innerData)? $attributes->data->innerData : array();
+        $a['dropdownValues']= isset($attributes->data->dropdownValues)?
+            $attributes->data->dropdownValues :
+            array();
+        $a['filesizeMin']   = isset($attributes->data->filesize)? $attributes->data->filesize->min : 0;
+        $a['filesizeMax']   = isset($attributes->data->filesize)? $attributes->data->filesize->max : 10*1024*1024;
+
+        return $a;
+    }
+
+    public function decorate($element, $attr, $inputFilter)
+    {
+        $factory = new InputFactory();
+        $element->setAttributes(
+            array(
+                'placeholder'   => $attr['placeholder'],
+                'required'      => $attr['required'],
+                'class'         => $attr['class'],
+                'id'            => $attr['id']
+            )
+        );
+
+        $options = array();
+        $options['encoding'] = 'UTF-8';
+        if ($attr['lengthMin'] && $attr['lengthMin'] > 0) {
+            $options['min'] = $attr['lengthMin'];
+        }
+        if ($attr['lengthMax'] && $attr['lengthMax'] > $attr['lengthMin']) {
+            $options['max'] = $attr['lengthMax'];
+            $element->setAttribute('maxlength', $attr['lengthMax']);
+            $options['messages'] = array(
+                \Zend\Validator\StringLength::TOO_LONG => sprintf(
+                    $this->getServiceLocator()->get('translator')->translate(
+                        'This field contains more than %s characters',
+                        'playgroundgame'
+                    ),
+                    $attr['lengthMax']
+                )
+            );
+        }
+
+        $validators = array(
+            array(
+                'name'    => 'StringLength',
+                'options' => $options,
+            ),
+        );
+        if ($attr['validator']) {
+            $regex = "/.*\(([^)]*)\)/";
+            preg_match($regex, $attr['validator'], $matches);
+            $valArray = array(
+                'name' => str_replace(
+                    '('.$matches[1].')',
+                    '',
+                    $attr['validator']
+                ),
+                'options' => array($matches[1])
+            );
+            $validators[] = $valArray;
+        }
+
+        $inputFilter->add($factory->createInput(array(
+            'name'     => $attr['name'],
+            'required' => $attr['required'],
+            'filters'  => array(
+                array('name' => 'StripTags'),
+                array('name' => 'StringTrim'),
+            ),
+            'validators' => $validators,
+        )));
+
+        return $element;
+    }
     /**
      * Create a ZF2 Form from json data
      * @return Form
@@ -2009,271 +1866,45 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         
         foreach ($formPV as $element) {
             if (isset($element->line_text)) {
-                $attributes  = $element->line_text[0];
-                $name        = isset($attributes->name)? $attributes->name : '';
-                $placeholder = isset($attributes->data->placeholder)? $attributes->data->placeholder : '';
-                $label       = isset($attributes->data->label)? $attributes->data->label : '';
-                $required    = ($attributes->data->required == 'true') ? true : false ;
-                $class       = isset($attributes->data->class)? $attributes->data->class : '';
-                $id          = isset($attributes->data->id)? $attributes->data->id : '';
-                $lengthMin   = isset($attributes->data->length)? $attributes->data->length->min : '';
-                $lengthMax   = isset($attributes->data->length)? $attributes->data->length->max : '';
-                $validator   = isset($attributes->data->validator)? $attributes->data->validator : '';
-        
-                $element = new Element\Text($name);
-                $element->setLabel($label);
-                $element->setAttributes(
-                    array(
-                        'placeholder'    => $placeholder,
-                        'required'        => $required,
-                        'class'        => $class,
-                        'id'            => $id
-                    )
-                );
+                $attr  = $this->getAttributes($element->line_text[0]);
+                $element = new Element\Text($attr['name']);
+                $element = $this->decorate($element, $attr, $inputFilter);
                 $form->add($element);
-        
-                $options = array();
-                $options['encoding'] = 'UTF-8';
-                if ($lengthMin && $lengthMin > 0) {
-                    $options['min'] = $lengthMin;
-                }
-                if ($lengthMax && $lengthMax > $lengthMin) {
-                    $options['max'] = $lengthMax;
-                    $element->setAttribute('maxlength', $lengthMax);
-                    $options['messages'] = array(
-                        \Zend\Validator\StringLength::TOO_LONG => sprintf(
-                            $this->getServiceLocator()->get('translator')->translate(
-                                'This field contains more than %s characters',
-                                'playgroundgame'
-                            ),
-                            $lengthMax
-                        )
-                    );
-                }
-
-                $validators = array(
-                    array(
-                        'name'    => 'StringLength',
-                        'options' => $options,
-                    ),
-                );
-                if ($validator) {
-                    $regex = "/.*\(([^)]*)\)/";
-                    preg_match($regex, $validator, $matches);
-                    $valArray = array(
-                        'name' => str_replace(
-                            '('.$matches[1].')',
-                            '',
-                            $validator
-                        ),
-                        'options' => array($matches[1])
-                    );
-                    $validators[] = $valArray;
-                }
-
-                $inputFilter->add($factory->createInput(array(
-                    'name'     => $name,
-                    'required' => $required,
-                    'filters'  => array(
-                        array('name' => 'StripTags'),
-                        array('name' => 'StringTrim'),
-                    ),
-                    'validators' => $validators,
-                )));
             }
             if (isset($element->line_password)) {
-                $attributes  = $element->line_password[0];
-                $name        = isset($attributes->name)? $attributes->name : '';
-                $placeholder = isset($attributes->data->placeholder)? $attributes->data->placeholder : '';
-                $label       = isset($attributes->data->label)? $attributes->data->label : '';
-                $required    = (
-                    isset($attributes->data->required) &&
-                    $attributes->data->required == 'true'
-                ) ? true : false ;
-                $class       = isset($attributes->data->class)? $attributes->data->class : '';
-                $id          = isset($attributes->data->id)? $attributes->data->id : '';
-                $lengthMin   = isset($attributes->data->length)? $attributes->data->length->min : '';
-                $lengthMax   = isset($attributes->data->length)? $attributes->data->length->max : '';
-        
-                $element = new Element\Password($name);
-                $element->setLabel($label);
-                $element->setAttributes(
-                    array(
-                        'placeholder'   => $placeholder,
-                        'required'      => $required,
-                        'class'         => $class,
-                        'id'            => $id
-                    )
-                );
+                $attr = $this->getAttributes($element->line_password[0]);
+                $element = new Element\Password($attr['name']);
+                $element = $this->decorate($element, $attr, $inputFilter);
                 $form->add($element);
-        
-                $options = array();
-                $options['encoding'] = 'UTF-8';
-                if ($lengthMin && $lengthMin > 0) {
-                    $options['min'] = $lengthMin;
-                }
-                if ($lengthMax && $lengthMax > $lengthMin) {
-                    $options['max'] = $lengthMax;
-                    $element->setAttribute('maxlength', $lengthMax);
-                    $options['messages'] = array(
-                        \Zend\Validator\StringLength::TOO_LONG => sprintf(
-                            $this->getServiceLocator()->get('translator')->translate(
-                                'This field contains more than %s characters',
-                                'playgroundgame'
-                            ),
-                            $lengthMax
-                        )
-                    );
-                }
-                $inputFilter->add($factory->createInput(array(
-                    'name'     => $name,
-                    'required' => $required,
-                    'filters'  => array(
-                        array('name' => 'StripTags'),
-                        array('name' => 'StringTrim'),
-                    ),
-                    'validators' => array(
-                        array(
-                            'name'    => 'StringLength',
-                            'options' => $options,
-                        ),
-                    ),
-                )));
             }
             if (isset($element->line_hidden)) {
-                $attributes  = $element->line_hidden[0];
-                $name        = isset($attributes->name)? $attributes->name : '';
-                $label       = isset($attributes->data->label)? $attributes->data->label : '';
-                $required    = ($attributes->data->required == 'true') ? true : false ;
-                $class       = isset($attributes->data->class)? $attributes->data->class : '';
-                $id          = isset($attributes->data->id)? $attributes->data->id : '';
-                $lengthMin   = isset($attributes->data->length)? $attributes->data->length->min : '';
-                $lengthMax   = isset($attributes->data->length)? $attributes->data->length->max : '';
-        
-                $element = new Element\Hidden($name);
-                $element->setLabel($label);
-                $element->setAttributes(
-                    array(
-                        'required'      => $required,
-                        'class'         => $class,
-                        'id'            => $id
-                    )
-                );
+                $attr = $this->getAttributes($element->line_hidden[0]);
+                $element = new Element\Hidden($attr['name']);
+                $element = $this->decorate($element, $attr, $inputFilter);
                 $form->add($element);
-        
-                $options = array();
-                $options['encoding'] = 'UTF-8';
-                if ($lengthMin && $lengthMin > 0) {
-                    $options['min'] = $lengthMin;
-                }
-                if ($lengthMax && $lengthMax > $lengthMin) {
-                    $options['max'] = $lengthMax;
-                    $element->setAttribute('maxlength', $lengthMax);
-                    $options['messages'] = array(
-                        \Zend\Validator\StringLength::TOO_LONG => sprintf(
-                            $this->getServiceLocator()->get('translator')->translate(
-                                'This field contains more than %s characters',
-                                'playgroundgame'
-                            ),
-                            $lengthMax
-                        )
-                    );
-                }
-                $inputFilter->add($factory->createInput(array(
-                    'name'     => $name,
-                    'required' => $required,
-                    'filters'  => array(
-                        array('name' => 'StripTags'),
-                        array('name' => 'StringTrim'),
-                    ),
-                    'validators' => array(
-                        array(
-                            'name'    => 'StringLength',
-                            'options' => $options,
-                        ),
-                    ),
-                )));
             }
             if (isset($element->line_email)) {
-                $attributes  = $element->line_email[0];
-                $name        = isset($attributes->name)? $attributes->name : '';
-                $placeholder = isset($attributes->data->placeholder)? $attributes->data->placeholder : '';
-                $label       = isset($attributes->data->label)? $attributes->data->label : '';
-                $class       = isset($attributes->data->class)? $attributes->data->class : '';
-                $id          = isset($attributes->data->id)? $attributes->data->id : '';
-                $lengthMin   = isset($attributes->data->length)? $attributes->data->length->min : '';
-                $lengthMax   = isset($attributes->data->length)? $attributes->data->length->max : '';
-        
-                $element = new Element\Email($name);
-                $element->setLabel($label);
-                $element->setAttributes(
-                    array(
-                        'placeholder'    => $placeholder,
-                        'required'        => $required,
-                        'class'        => $class,
-                        'id'            => $id
-                    )
-                );
+                $attr = $this->getAttributes($element->line_email[0]);
+                $element = new Element\Email($attr['name']);
+                $element = $this->decorate($element, $attr, $inputFilter);
                 $form->add($element);
-        
-                $options = array();
-                $options['encoding'] = 'UTF-8';
-                if ($lengthMin && $lengthMin > 0) {
-                    $options['min'] = $lengthMin;
-                }
-                if ($lengthMax && $lengthMax > $lengthMin) {
-                    $options['max'] = $lengthMax;
-                    $element->setAttribute('maxlength', $lengthMax);
-                    $options['messages'] = array(
-                        \Zend\Validator\StringLength::TOO_LONG => sprintf(
-                            $this->getServiceLocator()->get('translator')->translate(
-                                'This field contains more than %s characters',
-                                'playgroundgame'
-                            ),
-                            $lengthMax
-                        )
-                    );
-                }
-                $inputFilter->add($factory->createInput(array(
-                    'name'     => $name,
-                    'required' => $required,
-                    'filters'  => array(
-                        array('name' => 'StripTags'),
-                        array('name' => 'StringTrim'),
-                    ),
-                    'validators' => array(
-                        array(
-                            'name'    => 'StringLength',
-                            'options' => $options,
-                        ),
-                    ),
-                )));
             }
             if (isset($element->line_radio)) {
-                $attributes  = $element->line_radio[0];
-                $name        = isset($attributes->name)? $attributes->name : '';
-                $label       = isset($attributes->data->label)? $attributes->data->label : '';
-        
-                $required = false;
-                $class       = isset($attributes->data->class)? $attributes->data->class : '';
-                $id          = isset($attributes->data->id)? $attributes->data->id : '';
-                $lengthMin   = isset($attributes->data->length)? $attributes->data->length->min : '';
-                $lengthMax   = isset($attributes->data->length)? $attributes->data->length->max : '';
-                $innerData   = isset($attributes->data->innerData)? $attributes->data->innerData : array();
-        
-                $element = new Element\Radio($name);
-                $element->setLabel($label);
+                $attr = $this->getAttributes($element->line_radio[0]);
+                $element = new Element\Radio($attr['name']);
+
+                $element->setLabel($attr['label']);
                 $element->setAttributes(
                     array(
-                        'name'          => $name,
-                        'required'        => $required,
-                        'allowEmpty'    => !$required,
-                        'class'        => $class,
-                        'id'            => $id
+                        'name'      => $attr['name'],
+                        'required'  => $attr['required'],
+                        'allowEmpty'=> !$attr['required'],
+                        'class'     => $attr['class'],
+                        'id'        => $attr['id']
                     )
                 );
                 $values = array();
-                foreach ($innerData as $value) {
+                foreach ($attr['innerData'] as $value) {
                     $values[] = $value->label;
                 }
                 $element->setValueOptions($values);
@@ -2287,36 +1918,28 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                 $form->add($element);
         
                 $inputFilter->add($factory->createInput(array(
-                    'name'     => $name,
-                    'required' => $required,
-                    'allowEmpty' => !$required,
+                    'name'     => $attr['name'],
+                    'required' => $attr['required'],
+                    'allowEmpty' => !$attr['required'],
                 )));
             }
             if (isset($element->line_checkbox)) {
-                $attributes  = $element->line_checkbox[0];
-                $name        = isset($attributes->name)? $attributes->name : '';
-                $label       = isset($attributes->data->label)? $attributes->data->label : '';
+                $attr = $this->getAttributes($element->line_checkbox[0]);
+                $element = new Element\MultiCheckbox($attr['name']);
         
-                $required = false;
-                $class       = isset($attributes->data->class)? $attributes->data->class : '';
-                $id          = isset($attributes->data->id)? $attributes->data->id : '';
-                $lengthMin   = isset($attributes->data->length)? $attributes->data->length->min : '';
-                $lengthMax   = isset($attributes->data->length)? $attributes->data->length->max : '';
-                $innerData   = isset($attributes->data->innerData)? $attributes->data->innerData : array();
-        
-                $element = new Element\MultiCheckbox($name);
-                $element->setLabel($label);
+                $element->setLabel($attr['label']);
                 $element->setAttributes(
                     array(
-                        'name'     => $name,
-                        'required'        => $required,
-                        'allowEmpty'    => !$required,
-                        'class'        => $class,
-                        'id'            => $id
+                        'name'      => $attr['name'],
+                        'required'  => $attr['required'],
+                        'allowEmpty'=> !$attr['required'],
+                        'class'     => $attr['class'],
+                        'id'        => $attr['id']
                     )
                 );
+
                 $values = array();
-                foreach ($innerData as $value) {
+                foreach ($attr['innerData'] as $value) {
                     $values[] = $value->label;
                 }
                 $element->setValueOptions($values);
@@ -2329,38 +1952,27 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                 $element->setOptions($options);
         
                 $inputFilter->add($factory->createInput(array(
-                    'name'     => $name,
-                    'required' => $required,
-                    'allowEmpty' => !$required,
+                    'name'      => $attr['name'],
+                    'required'  => $attr['required'],
+                    'allowEmpty'=> !$attr['required'],
                 )));
             }
             if (isset($element->line_dropdown)) {
-                $attributes  = $element->line_dropdown[0];
-                $name        = isset($attributes->name)? $attributes->name : '';
-                $label       = isset($attributes->data->label)? $attributes->data->label : '';
-        
-                $required = false;
-                $class       = isset($attributes->data->class)? $attributes->data->class : '';
-                $id          = isset($attributes->data->id)? $attributes->data->id : '';
-                $lengthMin   = isset($attributes->data->length)? $attributes->data->length->min : '';
-                $lengthMax   = isset($attributes->data->length)? $attributes->data->length->max : '';
-                $dropdownValues   = isset($attributes->data->dropdownValues)?
-                    $attributes->data->dropdownValues :
-                    array();
-        
-                $element = new Element\Select($name);
-                $element->setLabel($label);
+                $attr = $this->getAttributes($element->line_dropdown[0]);
+                $element = new Element\Select($attr['name']);
+
+                $element->setLabel($attr['label']);
                 $element->setAttributes(
                     array(
-                        'name'     => $name,
-                        'required'      => $required,
-                        'allowEmpty'    => !$required,
-                        'class'         => $class,
-                        'id'            => $id
+                        'name'      => $attr['name'],
+                        'required'  => $attr['required'],
+                        'allowEmpty'=> !$attr['required'],
+                        'class'     => $attr['class'],
+                        'id'        => $attr['id']
                     )
                 );
                 $values = array();
-                foreach ($dropdownValues as $value) {
+                foreach ($attr['dropdownValues'] as $value) {
                     $values[] = $value->dropdown_label;
                 }
                 $element->setValueOptions($values);
@@ -2373,83 +1985,39 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                 $element->setOptions($options);
         
                 $inputFilter->add($factory->createInput(array(
-                    'name'     => $name,
-                    'required' => $required,
-                    'allowEmpty' => !$required,
+                    'name'     => $attr['name'],
+                    'required' => $attr['required'],
+                    'allowEmpty' => !$attr['required'],
                 )));
             }
             if (isset($element->line_paragraph)) {
-                $attributes  = $element->line_paragraph[0];
-                $name        = isset($attributes->name)? $attributes->name : '';
-                $placeholder = isset($attributes->data->placeholder)? $attributes->data->placeholder : '';
-                $label       = isset($attributes->data->label)? $attributes->data->label : '';
-                $required    = ($attributes->data->required == 'true') ? true : false ;
-                $class       = isset($attributes->data->class)? $attributes->data->class : '';
-                $id          = isset($attributes->data->id)? $attributes->data->id : '';
-        
-                $element = new Element\Textarea($name);
-                $element->setLabel($label);
-                $element->setAttributes(
-                    array(
-                        'placeholder'    => $placeholder,
-                        'required'        => $required,
-                        'class'        => $class,
-                        'id'            => $id
-                    )
-                );
+                $attr = $this->getAttributes($element->line_paragraph[0]);
+                $element = new Element\Textarea($attr['name']);
+                $element = $this->decorate($element, $attr, $inputFilter);
                 $form->add($element);
-        
-                $options = array();
-                $options['encoding'] = 'UTF-8';
-                if ($lengthMin && $lengthMin > 0) {
-                    $options['min'] = $lengthMin;
-                }
-                if ($lengthMax && $lengthMax > $lengthMin) {
-                    $options['max'] = $lengthMax;
-                    $element->setAttribute('maxlength', $lengthMax);
-                }
-                $inputFilter->add($factory->createInput(array(
-                    'name'     => $name,
-                    'required' => $required,
-                    'filters'  => array(
-                        array('name' => 'StripTags'),
-                        array('name' => 'StringTrim'),
-                    ),
-                    'validators' => array(
-                        array(
-                            'name'    => 'StringLength',
-                            'options' => $options,
-                        ),
-                    ),
-                )));
             }
             if (isset($element->line_upload)) {
-                $attributes  = $element->line_upload[0];
-                $name        = isset($attributes->name)? $attributes->name : '';
-                $label       = isset($attributes->data->label)? $attributes->data->label : '';
-                $required    = ($attributes->data->required == 'true') ? true : false ;
-                $class       = isset($attributes->data->class)? $attributes->data->class : '';
-                $id          = isset($attributes->data->id)? $attributes->data->id : '';
-                $filesizeMin = isset($attributes->data->filesize)? $attributes->data->filesize->min : 0;
-                $filesizeMax = isset($attributes->data->filesize)? $attributes->data->filesize->max : 10*1024*1024;
-                $element = new Element\File($name);
-                $element->setLabel($label);
+                $attr = $this->getAttributes($element->line_upload[0]);
+                $element = new Element\File($attr['name']);
+
+                $element->setLabel($attr['label']);
                 $element->setAttributes(
                     array(
-                        'required'    => $required,
-                        'class'    => $class,
-                        'id'        => $id
+                        'name'      => $attr['name'],
+                        'required'  => $attr['required'],
+                        'class'     => $attr['class'],
+                        'id'        => $attr['id']
                     )
                 );
                 $form->add($element);
         
                 $inputFilter->add($factory->createInput(array(
-                    'name'     => $name,
-                    'required' => $required,
+                    'name'     => $attr['name'],
+                    'required' => $attr['required'],
                     'validators' => array(
                         array(
                             'name' => '\Zend\Validator\File\Size',
-                            'options' => array('min' => $filesizeMin, 'max' => $filesizeMax)
+                            'options' => array('min' => $attr['filesizeMin'], 'max' => $attr['filesizeMax'])
                         ),
                         array(
                             'name' => '\Zend\Validator\File\Extension',

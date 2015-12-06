@@ -16,54 +16,25 @@ class QuizController extends GameController
 
     public function playAction()
     {
-        $sg         = $this->getGameService();
-
-        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-        
-
-        $game = $sg->checkGame($identifier);
-        if (! $game || $game->isClosed()) {
-            return $this->notFoundAction();
-        }
-
-        $redirectFb = $this->checkFbRegistration($this->zfcUserAuthentication()->getIdentity(), $game);
+        $redirectFb = $this->checkFbRegistration($this->user, $this->game);
         if ($redirectFb) {
             return $redirectFb;
         }
 
-        $user       = $this->zfcUserAuthentication()->getIdentity();
-
-        if (!$user && !$game->getAnonymousAllowed()) {
-            $redirect = urlencode(
-                $this->frontendUrl()->fromRoute(
-                    $game->getClassType() . '/play',
-                    array('id' => $game->getIdentifier(), ),
-                    array('force_canonical' => true)
-                )
-            );
-
-            return $this->redirect()->toUrl(
-                $this->frontendUrl()->fromRoute(
-                    'zfcuser/register',
-                    array()
-                ) . '?redirect='.$redirect
-            );
-        }
-
-        $entry = $sg->play($game, $user);
+        $entry = $this->getGameService()->play($this->game, $this->user);
         if (!$entry) {
             // the user has already taken part of this game and the participation limit has been reached
             $this->flashMessenger()->addMessage('Vous avez déjà participé!');
 
             return $this->redirect()->toUrl(
                 $this->frontendUrl()->fromRoute(
-                    $game->getClassType() . '/result',
-                    array('id' => $identifier, )
+                    $this->game->getClassType() . '/result',
+                    array('id' => $this->game->getIdentifier())
                 )
             );
         }
 
-        $questions = $game->getQuestions();
+        $questions = $this->game->getQuestions();
         $totalQuestions = count($questions);
 
         $form = new Form();
@@ -77,8 +48,8 @@ class QuizController extends GameController
         $explanations = array();
 
         foreach ($questions as $q) {
-            if (($game->getQuestionGrouping() > 0 && $i % $game->getQuestionGrouping() === 0) ||
-                ($i === 0 && $game->getQuestionGrouping() === 0)
+            if (($this->game->getQuestionGrouping() > 0 && $i % $this->game->getQuestionGrouping() === 0) ||
+                ($i === 0 && $this->game->getQuestionGrouping() === 0)
             ) {
                 $fieldsetName = 'questionGroup' . ++ $j;
                 $fieldset = new Fieldset($fieldsetName);
@@ -152,7 +123,7 @@ class QuizController extends GameController
             )));
 
             $i ++;
-            if (($game->getQuestionGrouping() > 0 && $i % $game->getQuestionGrouping() == 0 && $i > 0) ||
+            if (($this->game->getQuestionGrouping() > 0 && $i % $this->game->getQuestionGrouping() == 0 && $i > 0) ||
                 $i == $totalQuestions
             ) {
                 $form->add($fieldset);
@@ -167,23 +138,23 @@ class QuizController extends GameController
             $form->setData($data);
 
             // Improve it : I don't validate the form in a timer quiz as no answer is mandatory
-            if ($game->getTimer() || $form->isValid()) {
+            if ($this->game->getTimer() || $form->isValid()) {
                 unset($data['submitForm']);
-                $entry = $this->getGameService()->createQuizReply($data, $game, $user);
+                $entry = $this->getGameService()->createQuizReply($data, $this->game, $this->user);
             }
 
             return $this->redirect()->toUrl(
                 $this->frontendUrl()->fromRoute(
-                    $game->getClassType() . '/'. $game->nextStep($this->params('action')),
+                    $this->game->getClassType() . '/'. $this->game->nextStep($this->params('action')),
                     array(
-                        'id' => $game->getIdentifier(),
+                        'id' => $this->game->getIdentifier(),
                         
                     )
                 )
             );
         }
 
-        $viewModel = $this->buildView($game);
+        $viewModel = $this->buildView($this->game);
         $viewModel->setVariables(array(
             'questions' => $questions,
             'form'      => $form,
@@ -195,49 +166,33 @@ class QuizController extends GameController
 
     public function resultAction()
     {
-        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-        $user = $this->zfcUserAuthentication()->getIdentity();
-        $sg = $this->getGameService();
-
         $statusMail = null;
         $prediction = false;
         $userTimer = array();
-
-        $game = $sg->checkGame($identifier);
-        if (!$game || $game->isClosed()) {
-            return $this->notFoundAction();
-        }
-
         $secretKey = strtoupper(substr(sha1(uniqid('pg_', true).'####'.time()), 0, 15));
         $socialLinkUrl = $this->frontendUrl()->fromRoute(
             'quiz',
-            array(
-                'id' => $game->getIdentifier(),
-                
-            ),
+            array('id' => $this->game->getIdentifier()),
             array('force_canonical' => true)
         ).'?key='.$secretKey;
         // With core shortener helper
         $socialLinkUrl = $this->shortenUrl()->shortenUrl($socialLinkUrl);
 
-        $lastEntry = $sg->findLastInactiveEntry($game, $user);
+        $lastEntry = $this->getGameService()->findLastInactiveEntry($this->game, $this->user);
         if (!$lastEntry) {
             return $this->redirect()->toUrl(
                 $this->frontendUrl()->fromRoute(
                     'quiz',
-                    array(
-                        'id' => $game->getIdentifier(),
-                        
-                    ),
+                    array('id' => $this->game->getIdentifier()),
                     array('force_canonical' => true)
                 )
             );
         }
 
         // je compte les bonnes réponses et le ratio
-        $maxCorrectAnswers = $game->getMaxCorrectAnswers();
+        $maxCorrectAnswers = $this->game->getMaxCorrectAnswers();
         $winner = $lastEntry->getWinner();
-        $replies    = $sg->getQuizReplyMapper()->getLastGameReply($lastEntry);
+        $replies    = $this->getGameService()->getQuizReplyMapper()->getLastGameReply($lastEntry);
         $userCorrectAnswers = 0;
         $correctAnswers = array();
         $userAnswers = array();
@@ -261,8 +216,10 @@ class QuizController extends GameController
             $ratioCorrectAnswers = 100;
         }
 
-        if ($game->getTimer()) {
-            $timer = $sg->getEntryMapper()->findOneBy(array('game' => $game, 'user'=> $user));
+        if ($this->game->getTimer()) {
+            $timer = $this->getGameService()->getEntryMapper()->findOneBy(
+                array('game' => $this->game, 'user'=> $this->user)
+            );
             $start = $timer->getCreatedAt()->format('U');
             $end = $timer->getUpdatedAt()->format('U');
             $userTimer = array(
@@ -273,7 +230,7 @@ class QuizController extends GameController
 
         // Je prépare le tableau des bonnes réponses trouvées et non trouvées
         $ga = array();
-        $questions = $game->getQuestions();
+        $questions = $this->game->getQuestions();
         foreach ($questions as $q) {
             foreach ($q->getAnswers() as $a) {
                 if ($a->getCorrect()) {
@@ -323,9 +280,9 @@ class QuizController extends GameController
         $form->setAttribute('method', 'post');
 
         // buildView must be before sendMail because it adds the game template path to the templateStack
-        $viewModel = $this->buildView($game);
+        $viewModel = $this->buildView($this->game);
         
-        $sg->sendMail($game, $user, $lastEntry);
+        $this->getGameService()->sendMail($this->game, $this->user, $lastEntry);
 
         $viewModel->setVariables(array(
             'entry'               => $lastEntry,
@@ -348,18 +305,14 @@ class QuizController extends GameController
 
     public function fbshareAction()
     {
-        $sg = $this->getGameService();
         $result = parent::fbshareAction();
         $bonusEntry = false;
 
         if ($result->getVariable('success')) {
-            $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-            $user = $this->zfcUserAuthentication()->getIdentity();
-            $game = $sg->checkGame($identifier);
             // Improve this thing
-            $lastEntry = $sg->findLastInactiveEntry($game, $user);
+            $lastEntry = $this->getGameService()->findLastInactiveEntry($this->game, $this->user);
             if ($lastEntry && $lastEntry->getWinner()) {
-                $bonusEntry = $sg->addAnotherChance($game, $user, 1);
+                $bonusEntry = $this->getGameService()->addAnotherChance($this->game, $this->user, 1);
             }
         }
 
@@ -374,24 +327,20 @@ class QuizController extends GameController
 
     public function fbrequestAction()
     {
-        $sg = $this->getGameService();
         $result = parent::fbrequestAction();
         $bonusEntry = false;
 
         if ($result->getVariable('success')) {
-            $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-            $user = $this->zfcUserAuthentication()->getIdentity();
-            $game = $sg->checkGame($identifier);
-            $lastEntry = $sg->findLastInactiveEntry($game, $user);
+            $lastEntry = $this->getGameService()->findLastInactiveEntry($this->game, $this->user);
             if ($lastEntry && $lastEntry->getWinner()) {
-                $bonusEntry = $sg->addAnotherChance($game, $user, 1);
+                $bonusEntry = $this->getGameService()->addAnotherChance($this->game, $this->user, 1);
             }
         }
 
         $response = $this->getResponse();
         $response->setContent(\Zend\Json\Json::encode(array(
-                'success' => $result,
-                'playBonus' => $bonusEntry
+            'success' => $result,
+            'playBonus' => $bonusEntry
         )));
 
         return $response;
@@ -399,24 +348,20 @@ class QuizController extends GameController
 
     public function tweetAction()
     {
-        $sg = $this->getGameService();
         $result = parent::tweetAction();
         $bonusEntry = false;
 
         if ($result->getVariable('success')) {
-            $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-            $user = $this->zfcUserAuthentication()->getIdentity();
-            $game = $sg->checkGame($identifier);
-            $lastEntry = $sg->findLastInactiveEntry($game, $user);
+            $lastEntry = $this->getGameService()->findLastInactiveEntry($this->game, $this->user);
             if ($lastEntry && $lastEntry->getWinner()) {
-                $bonusEntry = $sg->addAnotherChance($game, $user, 1);
+                $bonusEntry = $this->getGameService()->addAnotherChance($this->game, $this->user, 1);
             }
         }
 
         $response = $this->getResponse();
         $response->setContent(\Zend\Json\Json::encode(array(
-                'success' => $result,
-                'playBonus' => $bonusEntry
+            'success' => $result,
+            'playBonus' => $bonusEntry
         )));
 
         return $response;
@@ -424,24 +369,20 @@ class QuizController extends GameController
 
     public function googleAction()
     {
-        $sg = $this->getGameService();
         $result = parent::googleAction();
         $bonusEntry = false;
 
         if ($result->getVariable('success')) {
-            $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-            $user = $this->zfcUserAuthentication()->getIdentity();
-            $game = $sg->checkGame($identifier);
-            $lastEntry = $sg->findLastInactiveEntry($game, $user);
+            $lastEntry = $this->getGameService()->findLastInactiveEntry($this->game, $this->user);
             if ($lastEntry && $lastEntry->getWinner()) {
-                $bonusEntry = $sg->addAnotherChance($game, $user, 1);
+                $bonusEntry = $this->getGameService()->addAnotherChance($this->game, $this->user, 1);
             }
         }
 
         $response = $this->getResponse();
         $response->setContent(\Zend\Json\Json::encode(array(
-                'success' => $result,
-                'playBonus' => $bonusEntry
+            'success' => $result,
+            'playBonus' => $bonusEntry
         )));
 
         return $response;

@@ -183,7 +183,7 @@ class QuizController extends GameController
             if (empty($data['prizes'])) {
                 $data['prizes'] = array();
             }
-            $game = $service->create($data, $quiz, 'playgroundgame_quiz_form');
+            $game = $service->createOrUpdate($data, $quiz, 'playgroundgame_quiz_form');
             if ($game) {
                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The game was created');
 

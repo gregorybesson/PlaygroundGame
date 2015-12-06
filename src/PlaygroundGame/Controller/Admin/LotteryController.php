@@ -49,7 +49,7 @@ class LotteryController extends GameController
             if (isset($data['drawDate']) && $data['drawDate']) {
                 $data['drawDate'] = \DateTime::createFromFormat('d/m/Y', $data['drawDate']);
             }
-            $game = $service->create($data, $lottery, 'playgroundgame_lottery_form');
+            $game = $service->createOrUpdate($data, $lottery, 'playgroundgame_lottery_form');
             if ($game) {
                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The game was created');
 

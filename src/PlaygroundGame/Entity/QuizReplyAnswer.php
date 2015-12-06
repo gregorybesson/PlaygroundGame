@@ -264,24 +264,6 @@ class QuizReplyAnswer implements InputFilterAwareInterface
     /**
      * @return the unknown_type
      */
-    public function getCreatedAt()
-    {
-        return $this->created_at;
-    }
-
-    /**
-     * @param unknown_type $created_at
-     */
-    public function setCreatedAt($created_at)
-    {
-        $this->created_at = $created_at;
-
-        return $this;
-    }
-
-    /**
-     * @return the unknown_type
-     */
     public function getUpdatedAt()
     {
         return $this->updated_at;
@@ -293,6 +275,24 @@ class QuizReplyAnswer implements InputFilterAwareInterface
     public function setUpdatedAt($updated_at)
     {
         $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    /**
+     * @return the unknown_type
+     */
+    public function getCreatedAt()
+    {
+        return $this->created_at;
+    }
+
+    /**
+     * @param unknown_type $created_at
+     */
+    public function setCreatedAt($created_at)
+    {
+        $this->created_at = $created_at;
 
         return $this;
     }

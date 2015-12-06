@@ -4,11 +4,9 @@ namespace PlaygroundGame\Service;
 
 use Zend\ServiceManager\ServiceManagerAwareInterface;
 use Zend\ServiceManager\ServiceManager;
-use ZfcBase\EventManager\EventProvider;
-use PlaygroundGame\Options\ModuleOptions;
 use PlaygroundGame\Mapper\GameInterface as GameMapperInterface;
 
-class Cron extends EventProvider implements ServiceManagerAwareInterface
+class Cron extends Game implements ServiceManagerAwareInterface
 {
     /**
      * @var GameMapperInterface
@@ -84,7 +82,9 @@ class Cron extends EventProvider implements ServiceManagerAwareInterface
         // Je recherche les joueurs qui ont deja joué une seule fois au jeu mais pas rejoué dans le laps autorisé
         $arrayUsers = array();
         foreach ($games as $game) {
-            $entries = $gameService->getEntryMapper()->findPlayersWithOneEntryBy($game);
+            $limitScale = $game->getPlayLimitScale();
+            $limitDate = $gameService->getLimitDate($limitScale);
+            $entries = $gameService->getEntryMapper()->findPlayersWithOneEntryBy($game, $limitDate);
             foreach ($entries as $e) {
                 $arrayUsers[$e->getUser()->getId()]['user'] = $e->getUser();
                 $arrayUsers[$e->getUser()->getId()]['game'] = $game;
@@ -104,98 +104,5 @@ class Cron extends EventProvider implements ServiceManagerAwareInterface
             );
             $mailService->send($message);
         }
-    }
-
-    /**
-     * getGameMapper
-     *
-     * @return GameMapperInterface
-     */
-    public function getGameMapper()
-    {
-        if (null === $this->gameMapper) {
-            $this->gameMapper = $this->getServiceManager()->get('playgroundgame_game_mapper');
-        }
-
-        return $this->gameMapper;
-    }
-
-    /**
-     * setGameMapper
-     *
-     * @param  GameMapperInterface $gameMapper
-     * @return Cron
-     */
-    public function setGameMapper(GameMapperInterface $gameMapper)
-    {
-        $this->gameMapper = $gameMapper;
-
-        return $this;
-    }
-
-    /**
-     * getEntryMapper
-     *
-     * @return EntryMapperInterface
-     */
-    public function getEntryMapper()
-    {
-        if (null === $this->entryMapper) {
-            $this->entryMapper = $this->getServiceManager()->get('playgroundgame_entry_mapper');
-        }
-
-        return $this->entryMapper;
-    }
-
-    /**
-     * setEntryMapper
-     *
-     * @param  EntryMapperInterface $entryMapper
-     * @return Cron
-     */
-    public function setEntryMapper($entryMapper)
-    {
-        $this->entryMapper = $entryMapper;
-
-        return $this;
-    }
-
-    public function setOptions(ModuleOptions $options)
-    {
-        $this->options = $options;
-
-        return $this;
-    }
-
-    public function getOptions()
-    {
-        if (!$this->options instanceof ModuleOptions) {
-            $this->setOptions($this->getServiceManager()->get('playgroundgame_module_options'));
-        }
-
-        return $this->options;
-    }
-
-    /**
-     * Retrieve service manager instance
-     *
-     * @return ServiceManager
-     */
-    public function getServiceManager()
-    {
-        return $this->serviceManager;
-    }
-
-    /**
-     * Set service manager instance
-     *
-     * @param  ServiceManager $serviceManager
-     * @return Cron
-     */
-    public function setServiceManager(ServiceManager $serviceManager)
-    {
-        $this->serviceManager = $serviceManager;
-
-        return $this;
     }
 }

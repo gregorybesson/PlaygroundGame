@@ -373,4 +373,16 @@ class GameControllerTest extends AbstractHttpControllerTestCase
 
         $this->assertRedirectTo('/admin/game/list/createdAt/DESC');*/
     }
+
+    public function tearDown()
+    {
+        $tool = new \Doctrine\ORM\Tools\SchemaTool($this->em);
+        $classes = $this->em->getMetadataFactory()->getAllMetadata();
+        $tool->dropSchema($classes);
+        $this->sm = null;
+        $this->em = null;
+        unset($this->sm);
+        unset($this->em);
+        parent::tearDown();
+    }
 }

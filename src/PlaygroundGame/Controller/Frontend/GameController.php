@@ -22,6 +22,90 @@ class GameController extends AbstractActionController
 
     protected $options;
 
+    protected $game;
+
+    protected $user;
+
+    protected $withGame = array(
+        'home',
+        'index',
+        'terms',
+        'conditions',
+        'leaderboard',
+        'register',
+        'bounce',
+        'prizes',
+        'prize',
+        'fangate',
+        'share',
+        'optin',
+        'login',
+        'play',
+        'result',
+        'preview',
+        'list'
+    );
+
+    protected $withOnlineGame = array(
+        'leaderboard',
+        'register',
+        'bounce',
+        'play',
+        'result'
+    );
+
+    protected $withAnyUser = array(
+        'share',
+        'result',
+        'play'
+    );
+
+    public function setEventManager(\Zend\EventManager\EventManagerInterface $events)
+    {
+        parent::setEventManager($events);
+
+        $controller = $this;
+        $events->attach('dispatch', function (\Zend\Mvc\MvcEvent $e) use ($controller) {
+
+            $identifier = $e->getRouteMatch()->getParam('id');
+            $controller->game = $controller->getGameService()->checkGame($identifier, false);
+            if (!$controller->game &&
+                in_array($controller->params('action'), $controller->withGame)
+            ) {
+                return $controller->notFoundAction();
+            }
+
+            if ($controller->game &&
+                $controller->game->isClosed() &&
+                in_array($controller->params('action'), $controller->withOnlineGame)
+            ) {
+                return $controller->notFoundAction();
+            }
+
+            $controller->user = $controller->zfcUserAuthentication()->getIdentity();
+            if ($controller->game &&
+                !$controller->user &&
+                !$controller->game->getAnonymousAllowed() &&
+                in_array($controller->params('action'), $controller->withAnyUser)
+            ) {
+                $redirect = urlencode(
+                    $controller->url()->fromRoute(
+                        'frontend/'.$this->game->getClassType() . '/' . $controller->params('action'),
+                        array('id' => $controller->game->getIdentifier())
+                    )
+                );
+                return $controller->redirect()->toUrl(
+                    $controller->url()->fromRoute(
+                        'frontend/zfcuser/register',
+                        array()
+                    ) . '?redirect='.$redirect
+                );
+            }
+
+            return;
+        }, 100); // execute before executing action logic
+    }
+
     /**
      * Action called if matched action does not exist
      * For this view not to be catched by Zend\Mvc\View\RouteNotFoundStrategy
@@ -36,18 +120,14 @@ class GameController extends AbstractActionController
      */
     public function notFoundAction()
     {
-        $sg             = $this->getGameService();
-        $identifier     = $this->getEvent()->getRouteMatch()->getParam('id');
         $viewRender     = $this->getServiceLocator()->get('ViewRenderer');
 
         $this->getEvent()->getRouteMatch()->setParam('action', 'not-found');
         $this->response->setStatusCode(404);
 
-        $game = $sg->checkGame($identifier);
-
         $res = 'error/404';
 
-        $viewModel = $this->buildView($game);
+        $viewModel = $this->buildView($this->game);
         $viewModel->setTemplate($res);
 
         $this->layout()->setVariable("content", $viewRender->render($viewModel));
@@ -61,15 +141,6 @@ class GameController extends AbstractActionController
      */
     public function homeAction()
     {
-        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-
-        $sg = $this->getGameService();
-
-        $game = $sg->checkGame($identifier, false);
-        if (!$game) {
-            return $this->notFoundAction();
-        }
-
         // This fix exists only for safari in FB on Windows : we need to redirect the user to the page
         // outside of iframe for the cookie to be accepted. PlaygroundCore redirects to the FB Iframed page when
         // it discovers that the user arrives for the first time on the game in FB.
@@ -78,7 +149,7 @@ class GameController extends AbstractActionController
         // Now the cookie will be accepted by Safari...
         $pageId = $this->params()->fromQuery('redir_fb_page_id');
         if (!empty($pageId)) {
-            $appId = 'app_'.$game->getFbAppId();
+            $appId = 'app_'.$this->game->getFbAppId();
             $url = '//www.facebook.com/pages/game/'.$pageId.'?sk='.$appId;
 
             return $this->redirect()->toUrl($url);
@@ -92,11 +163,11 @@ class GameController extends AbstractActionController
         }
         
         return $this->forward()->dispatch(
-            'playgroundgame_'.$game->getClassType(),
+            'playgroundgame_'.$this->game->getClassType(),
             array(
-                'controller' => 'playgroundgame_'.$game->getClassType(),
-                'action' => $game->firstStep(),
-                'id' => $identifier
+                'controller' => 'playgroundgame_'.$this->game->getClassType(),
+                'action' => $this->game->firstStep(),
+                'id' => $this->game->getIdentifier()
             )
         );
     }
@@ -106,27 +177,16 @@ class GameController extends AbstractActionController
      */
     public function indexAction()
     {
-        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-        $user = $this->zfcUserAuthentication()->getIdentity();
-        $sg = $this->getGameService();
         $isSubscribed = false;
 
-         // Determine if the play button should be a CTA button (call to action)
-        $isCtaActive = false;
-
-        $game = $sg->checkGame($identifier, false);
-        if (!$game) {
-            return $this->notFoundAction();
-        }
-
-        $entry = $sg->checkExistingEntry($game, $user);
+        $entry = $this->getGameService()->checkExistingEntry($this->game, $this->user);
         if ($entry) {
             $isSubscribed = true;
         }
 
-        $viewModel = $this->buildView($game);
+        $viewModel = $this->buildView($this->game);
         $viewModel->setVariables(array(
-            'isSubscribed'     => $isSubscribed
+            'isSubscribed' => $isSubscribed
         ));
 
         return $viewModel;
@@ -139,14 +199,6 @@ class GameController extends AbstractActionController
       */
     public function leaderboardAction()
     {
-        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-        $sg = $this->getGameService();
-
-        $game = $sg->checkGame($identifier);
-        if (!$game || $game->isClosed()) {
-            return $this->notFoundAction();
-        }
-
         $filter = $this->getEvent()->getRouteMatch()->getParam('filter');
         $p = $this->getEvent()->getRouteMatch()->getParam('p');
 
@@ -163,7 +215,7 @@ class GameController extends AbstractActionController
         $templatePathResolver = $this->getServiceLocator()->get('Zend\View\Resolver\TemplatePathStack');
         $l = $templatePathResolver->getPaths();
 
-        $templatePathResolver->addPath($l[0].'custom/'.$game->getIdentifier());
+        $templatePathResolver->addPath($l[0].'custom/'.$this->game->getIdentifier());
 
         return $subViewModel;
     }
@@ -176,17 +228,7 @@ class GameController extends AbstractActionController
      */
     public function registerAction()
     {
-        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-        $sg = $this->getGameService();
-
-        $game = $sg->checkGame($identifier);
-        if (!$game || $game->isClosed()) {
-            return $this->notFoundAction();
-        }
-
-        $user = $this->zfcUserAuthentication()->getIdentity();
-
-        $form = $sg->createFormFromJson($game->getPlayerForm()->getForm(), 'playerForm');
+        $form = $this->getGameService()->createFormFromJson($this->game->getPlayerForm()->getForm(), 'playerForm');
 
         if ($this->getRequest()->isPost()) {
             // POST Request: Process form
@@ -199,9 +241,9 @@ class GameController extends AbstractActionController
 
             if ($form->isValid()) {
                 // steps of the game
-                $steps = $game->getStepsArray();
+                $steps = $this->game->getStepsArray();
                 // sub steps of the game
-                $viewSteps = $game->getStepsViewsArray();
+                $viewSteps = $this->game->getStepsViewsArray();
 
                 // register position
                 $key = array_search($this->params('action'), $viewSteps);
@@ -232,16 +274,16 @@ class GameController extends AbstractActionController
                 // If register after play step, I search for the last entry created by play step.
 
                 if ($key < $keyplay || ($keyStep && !$keyplayStep && $key <= $keyplay)) {
-                    $entry = $sg->play($game, $user);
+                    $entry = $this->getGameService()->play($this->game, $this->user);
                     if (!$entry) {
                         // the user has already taken part of this game and the participation limit has been reached
                         $this->flashMessenger()->addMessage('Vous avez déjà participé');
                     
                         return $this->redirect()->toUrl(
                             $this->frontendUrl()->fromRoute(
-                                $game->getClassType().'/result',
+                                $this->game->getClassType().'/result',
                                 array(
-                                    'id' => $identifier,
+                                    'id' => $this->game->getIdentifier(),
                                     
                                 )
                             )
@@ -249,16 +291,16 @@ class GameController extends AbstractActionController
                     }
                 } else {
                     // I'm looking for an entry without anonymousIdentifier (the active entry in fact).
-                    $entry = $sg->findLastEntry($game, $user);
-                    if ($sg->hasReachedPlayLimit($game, $user)) {
+                    $entry = $this->getGameService()->findLastEntry($this->game, $this->user);
+                    if ($this->getGameService()->hasReachedPlayLimit($this->game, $this->user)) {
                         // the user has already taken part of this game and the participation limit has been reached
                         $this->flashMessenger()->addMessage('Vous avez déjà participé');
                     
                         return $this->redirect()->toUrl(
                             $this->frontendUrl()->fromRoute(
-                                $game->getClassType().'/result',
+                                $this->game->getClassType().'/result',
                                 array(
-                                    'id' => $identifier,
+                                    'id' => $this->game->getIdentifier(),
                                     
                                 )
                             )
@@ -266,13 +308,13 @@ class GameController extends AbstractActionController
                     }
                 }
 
-                $sg->updateEntryPlayerForm($form->getData(), $game, $user, $entry);
+                $this->getGameService()->updateEntryPlayerForm($form->getData(), $this->game, $this->user, $entry);
 
-                if (!empty($game->nextStep($this->params('action')))) {
+                if (!empty($this->game->nextStep($this->params('action')))) {
                     return $this->redirect()->toUrl(
                         $this->frontendUrl()->fromRoute(
-                            $game->getClassType() .'/' . $game->nextStep($this->params('action')),
-                            array('id' => $game->getIdentifier()),
+                            $this->game->getClassType() .'/' . $this->game->nextStep($this->params('action')),
+                            array('id' => $this->game->getIdentifier()),
                             array('force_canonical' => true)
                         )
                     );
@@ -280,7 +322,7 @@ class GameController extends AbstractActionController
             }
         }
 
-        $viewModel = $this->buildView($game);
+        $viewModel = $this->buildView($this->game);
         $viewModel->setVariables(array(
             'form' => $form
         ));
@@ -293,15 +335,7 @@ class GameController extends AbstractActionController
      */
     public function termsAction()
     {
-        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-        $sg = $this->getGameService();
-
-        $game = $sg->checkGame($identifier, false);
-        if (!$game) {
-            return $this->notFoundAction();
-        }
-
-        $viewModel = $this->buildView($game);
+        $viewModel = $this->buildView($this->game);
 
         return $viewModel;
     }
@@ -311,15 +345,7 @@ class GameController extends AbstractActionController
      */
     public function conditionsAction()
     {
-        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-        $sg = $this->getGameService();
-
-        $game = $sg->checkGame($identifier, false);
-        if (!$game) {
-            return $this->notFoundAction();
-        }
-
-        $viewModel = $this->buildView($game);
+        $viewModel = $this->buildView($this->game);
 
         return $viewModel;
     }
@@ -329,31 +355,515 @@ class GameController extends AbstractActionController
      */
     public function bounceAction()
     {
-        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-        $user = $this->zfcUserAuthentication()->getIdentity();
-        $sg = $this->getGameService();
-
-        $game = $sg->checkGame($identifier);
-        if (!$game || $game->isClosed()) {
-            return $this->notFoundAction();
-        }
-
-        $availableGames = $sg->getAvailableGames($user);
+        $availableGames = $this->getGameService()->getAvailableGames($this->user);
 
         $rssUrl = '';
-        $config = $sg->getServiceManager()->get('config');
+        $config = $this->getGameService()->getServiceManager()->get('config');
         if (isset($config['rss']['url'])) {
             $rssUrl = $config['rss']['url'];
         }
 
-        $viewModel = $this->buildView($game);
+        $viewModel = $this->buildView($this->game);
         $viewModel->setVariables(array(
             'rssUrl'         => $rssUrl,
-            'user'           => $user,
+            'user'           => $this->user,
             'availableGames' => $availableGames,
         ));
 
         return $viewModel;
+    }
+
+
+    /**
+     * This action displays the Prizes page associated to the game
+     */
+    public function prizesAction()
+    {
+        if (count($this->game->getPrizes()) == 0) {
+            return $this->notFoundAction();
+        }
+
+        $viewModel = $this->buildView($this->game);
+
+        return $viewModel;
+    }
+
+    /**
+     * This action displays a specific Prize page among those associated to the game
+     */
+    public function prizeAction()
+    {
+        $prizeIdentifier = $this->getEvent()->getRouteMatch()->getParam('prize');
+        $prize = $this->getPrizeService()->getPrizeMapper()->findByIdentifier($prizeIdentifier);
+        
+        if (!$prize) {
+            return $this->notFoundAction();
+        }
+
+        $viewModel = $this->buildView($this->game);
+        $viewModel->setVariables(array('prize'=> $prize));
+
+        return $viewModel;
+    }
+
+    public function gameslistAction()
+    {
+        $layoutViewModel = $this->layout();
+
+        $slider = new ViewModel();
+        $slider->setTemplate('playground-game/common/top_promo');
+
+        $sliderItems = $this->getGameService()->getActiveSliderGames();
+
+        $slider->setVariables(array('sliderItems' => $sliderItems));
+
+        $layoutViewModel->addChild($slider, 'slider');
+
+        $games = $this->getGameService()->getActiveGames(false, '', 'endDate');
+        if (is_array($games)) {
+            $paginator = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\ArrayAdapter($games));
+        } else {
+            $paginator = $games;
+        }
+
+        $paginator->setItemCountPerPage(7);
+        $paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
+
+        $bitlyclient = $this->getOptions()->getBitlyUrl();
+        $bitlyuser = $this->getOptions()->getBitlyUsername();
+        $bitlykey = $this->getOptions()->getBitlyApiKey();
+
+        $this->getViewHelper('HeadMeta')->setProperty('bt:client', $bitlyclient);
+        $this->getViewHelper('HeadMeta')->setProperty('bt:user', $bitlyuser);
+        $this->getViewHelper('HeadMeta')->setProperty('bt:key', $bitlykey);
+
+        $this->layout()->setVariables(
+            array(
+            'sliderItems'   => $sliderItems,
+            'currentPage' => array(
+                'pageGames' => 'games',
+                'pageWinners' => ''
+            ),
+            )
+        );
+
+        return new ViewModel(
+            array(
+                'games'       => $paginator
+            )
+        );
+    }
+
+    public function fangateAction()
+    {
+        $viewModel = $this->buildView($this->game);
+
+        return $viewModel;
+    }
+    
+    public function shareAction()
+    {
+        $statusMail = null;
+    
+        // Has the user finished the game ?
+        $lastEntry = $this->getGameService()->findLastInactiveEntry($this->game, $this->user);
+    
+        if ($lastEntry === null) {
+            return $this->redirect()->toUrl(
+                $this->frontendUrl()->fromRoute(
+                    'postvote',
+                    array('id' => $this->game->getIdentifier())
+                )
+            );
+        }
+    
+        $form = $this->getServiceLocator()->get('playgroundgame_sharemail_form');
+        $form->setAttribute('method', 'post');
+    
+        if ($this->getRequest()->isPost()) {
+            $data = $this->getRequest()->getPost()->toArray();
+            $form->setData($data);
+            if ($form->isValid()) {
+                $result = $this->getGameService()->sendShareMail($data, $this->game, $this->user, $lastEntry);
+                if ($result) {
+                    $statusMail = true;
+                }
+            }
+        }
+    
+        // buildView must be before sendMail because it adds the game template path to the templateStack
+        $viewModel = $this->buildView($this->game);
+    
+        $this->getGameService()->sendMail($this->game, $this->user, $lastEntry);
+    
+        $viewModel->setVariables(array(
+            'statusMail'       => $statusMail,
+            'form'             => $form,
+        ));
+    
+        return $viewModel;
+    }
+    
+    public function fbshareAction()
+    {
+        $viewModel = new JsonModel();
+        $viewModel->setTerminal(true);
+        $fbId = $this->params()->fromQuery('fbId');
+        if (!$this->game) {
+            return $this->errorJson();
+        }
+        $entry = $this->getGameService()->checkExistingEntry($this->game, $this->user);
+        if (! $entry) {
+            return $this->errorJson();
+        }
+        if (!$fbId) {
+            return $this->errorJson();
+        }
+    
+        $this->getGameService()->postFbWall($fbId, $this->game, $this->user, $entry);
+    
+        return $this->successJson();
+    }
+    
+    public function fbrequestAction()
+    {
+        $viewModel = new ViewModel();
+        $viewModel->setTerminal(true);
+        $fbId = $this->params()->fromQuery('fbId');
+        $to = $this->params()->fromQuery('to');
+    
+        if (!$this->game) {
+            return $this->errorJson();
+        }
+        $entry = $this->getGameService()->checkExistingEntry($this->game, $this->user);
+        if (! $entry) {
+            return $this->errorJson();
+        }
+        if (!$fbId) {
+            return $this->errorJson();
+        }
+    
+        $this->getGameService()->postFbRequest($fbId, $this->game, $this->user, $entry, $to);
+    
+        return $this->successJson();
+    }
+    
+    public function tweetAction()
+    {
+        $tweetId = $this->params()->fromQuery('tweetId');
+    
+        if (!$this->game) {
+            return $this->errorJson();
+        }
+        $entry = $this->getGameService()->checkExistingEntry($this->game, $this->user);
+        if (! $entry) {
+            return $this->errorJson();
+        }
+        if (!$tweetId) {
+            return $this->errorJson();
+        }
+    
+        $this->getGameService()->postTwitter($tweetId, $this->game, $this->user, $entry);
+    
+        return $this->successJson();
+    }
+    
+    public function googleAction()
+    {
+        $viewModel = new ViewModel();
+        $viewModel->setTerminal(true);
+        $googleId = $this->params()->fromQuery('googleId');
+
+        if (!$this->game) {
+            return $this->errorJson();
+        }
+        $entry = $this->getGameService()->checkExistingEntry($this->game, $this->user);
+        if (! $entry) {
+            return $this->errorJson();
+        }
+        if (!$googleId) {
+            return $this->errorJson();
+        }
+    
+        $this->getGameService()->postGoogle($googleId, $this->game, $this->user, $entry);
+    
+        return $this->successJson();
+    }
+
+    public function optinAction()
+    {
+        $userService = $this->getServiceLocator()->get('zfcuser_user_service');
+
+        if ($this->getRequest()->isPost()) {
+            $data['optin'] = ($this->params()->fromPost('optin'))? 1:0;
+            $data['optinPartner'] = ($this->params()->fromPost('optinPartner'))? 1:0;
+
+            $userService->updateNewsletter($data);
+        }
+
+        return $this->redirect()->toUrl(
+            $this->frontendUrl()->fromRoute(
+                'frontend/' . $this->game->getClassType() . '/index',
+                array('id' => $this->game->getIdentifier())
+            )
+        );
+    }
+    
+    public function loginAction()
+    {
+        $request = $this->getRequest();
+        $form = $this->getServiceLocator()->get('zfcuser_login_form');
+    
+        if ($request->isPost()) {
+            $form->setData($request->getPost());
+            
+            if (!$form->isValid()) {
+                $this->flashMessenger()->setNamespace('zfcuser-login-form')->addMessage(
+                    'Authentication failed. Please try again.'
+                );
+                
+
+                return $this->redirect()->toUrl(
+                    $this->frontendUrl()->fromRoute(
+                        $this->game->getClassType() . '/login',
+                        array('id' => $this->game->getIdentifier())
+                    )
+                );
+            }
+            
+            // clear adapters
+            $this->zfcUserAuthentication()->getAuthAdapter()->resetAdapters();
+            $this->zfcUserAuthentication()->getAuthService()->clearIdentity();
+
+            $logged = $this->forward()->dispatch('playgrounduser_user', array('action' => 'ajaxauthenticate'));
+
+            if (!$logged) {
+                $this->flashMessenger()->setNamespace('zfcuser-login-form')->addMessage(
+                    'Authentication failed. Please try again.'
+                );
+                
+                return $this->redirect()->toUrl(
+                    $this->frontendUrl()->fromRoute(
+                        $this->game->getClassType() . '/login',
+                        array('id' => $this->game->getIdentifier())
+                    )
+                );
+            } else {
+                return $this->redirect()->toUrl(
+                    $this->frontendUrl()->fromRoute(
+                        $this->game->getClassType() . '/' . $this->game->nextStep('index'),
+                        array('id' => $this->game->getIdentifier())
+                    )
+                );
+            }
+        }
+        
+        $form->setAttribute(
+            'action',
+            $this->frontendUrl()->fromRoute(
+                $this->game->getClassType().'/login',
+                array('id' => $this->game->getIdentifier())
+            )
+        );
+        $viewModel = $this->buildView($this->game);
+        $viewModel->setVariables(array(
+            'form' => $form,
+        ));
+        return $viewModel;
+    }
+
+    public function userregisterAction()
+    {
+        $userOptions = $this->getServiceLocator()->get('zfcuser_module_options');
+
+        if ($this->zfcUserAuthentication()->hasIdentity()) {
+            return $this->redirect()->toUrl(
+                $this->frontendUrl()->fromRoute(
+                    $this->game->getClassType().'/'.$this->game->nextStep('index'),
+                    array('id' => $this->game->getIdentifier())
+                )
+            );
+        }
+        $request = $this->getRequest();
+        $service = $this->getServiceLocator()->get('zfcuser_user_service');
+        $form = $this->getServiceLocator()->get('playgroundgame_register_form');
+        $socialnetwork = $this->params()->fromRoute('socialnetwork', false);
+        $form->setAttribute(
+            'action',
+            $this->frontendUrl()->fromRoute(
+                $this->game->getClassType().'/user-register',
+                array('id' => $this->game->getIdentifier())
+            )
+        );
+        $params = array();
+        $socialCredentials = array();
+
+        if ($userOptions->getUseRedirectParameterIfPresent() && $request->getQuery()->get('redirect')) {
+            $redirect = $request->getQuery()->get('redirect');
+        } else {
+            $redirect = false;
+        }
+
+        if ($socialnetwork) {
+            $infoMe = $this->getProviderService()->getInfoMe($socialnetwork);
+
+            if (!empty($infoMe)) {
+                $user = $this->getProviderService()->getUserProviderMapper()->findUserByProviderId(
+                    $infoMe->identifier,
+                    $socialnetwork
+                );
+
+                if ($user || $service->getOptions()->getCreateUserAutoSocial() === true) {
+                    //on le dirige vers l'action d'authentification
+                    if (! $redirect && $userOptions->getLoginRedirectRoute() != '') {
+                        $redirect = $this->frontendUrl()->fromRoute(
+                            $this->game->getClassType().'/login',
+                            array('id' => $this->game->getIdentifier())
+                        );
+                    }
+                    $redir = $this->frontendUrl()->fromRoute(
+                        $this->game->getClassType().'/login',
+                        array('id' => $this->game->getIdentifier())
+                    ) .'/' . $socialnetwork . ($redirect ? '?redirect=' . $redirect : '');
+
+                    return $this->redirect()->toUrl($redir);
+                }
+
+                // Je retire la saisie du login/mdp
+                $form->setAttribute(
+                    'action',
+                    $this->frontendUrl()->fromRoute(
+                        $this->game->getClassType().'/user-register',
+                        array(
+                            'id' => $this->game->getIdentifier(),
+                            'socialnetwork' => $socialnetwork,
+                            
+                        )
+                    )
+                );
+                $form->remove('password');
+                $form->remove('passwordVerify');
+
+                $birthMonth = $infoMe->birthMonth;
+                if (strlen($birthMonth) <= 1) {
+                    $birthMonth = '0'.$birthMonth;
+                }
+                $birthDay = $infoMe->birthDay;
+                if (strlen($birthDay) <= 1) {
+                    $birthDay = '0'.$birthDay;
+                }
+
+                $gender = $infoMe->gender;
+                if ($gender == 'female') {
+                    $title = 'Me';
+                } else {
+                    $title = 'M';
+                }
+
+                $params = array(
+                    //'birth_year'  => $infoMe->birthYear,
+                    'title'      => $title,
+                    'dob'      => $birthDay.'/'.$birthMonth.'/'.$infoMe->birthYear,
+                    'firstname'   => $infoMe->firstName,
+                    'lastname'    => $infoMe->lastName,
+                    'email'       => $infoMe->email,
+                    'postalCode' => $infoMe->zip,
+                );
+                $socialCredentials = array(
+                    'socialNetwork' => strtolower($socialnetwork),
+                    'socialId'      => $infoMe->identifier,
+                );
+            }
+        }
+
+        $redirectUrl = $this->frontendUrl()->fromRoute(
+            $this->game->getClassType().'/user-register',
+            array('id' => $this->game->getIdentifier())
+        ) .($socialnetwork ? '/' . $socialnetwork : ''). ($redirect ? '?redirect=' . $redirect : '');
+        $prg = $this->prg($redirectUrl, true);
+
+        if ($prg instanceof Response) {
+            return $prg;
+        } elseif ($prg === false) {
+            $form->setData($params);
+            $viewModel = $this->buildView($this->game);
+            $viewModel->setVariables(array(
+                'registerForm' => $form,
+                'enableRegistration' => $userOptions->getEnableRegistration(),
+                'redirect' => $redirect,
+            ));
+            return $viewModel;
+        }
+
+        $post = $prg;
+        $post = array_merge(
+            $post,
+            $socialCredentials
+        );
+
+        $user = $service->register($post, 'playgroundgame_register_form');
+
+        if (! $user) {
+            $viewModel = $this->buildView($this->game);
+            $viewModel->setVariables(array(
+                'registerForm' => $form,
+                'enableRegistration' => $userOptions->getEnableRegistration(),
+                'redirect' => $redirect,
+            ));
+            
+            return $viewModel;
+        }
+
+        if ($service->getOptions()->getEmailVerification()) {
+            $vm = new ViewModel(array('userEmail' => $user->getEmail()));
+            $vm->setTemplate('playground-user/register/registermail');
+
+            return $vm;
+        } elseif ($service->getOptions()->getLoginAfterRegistration()) {
+            $identityFields = $service->getOptions()->getAuthIdentityFields();
+            if (in_array('email', $identityFields)) {
+                $post['identity'] = $user->getEmail();
+            } elseif (in_array('username', $identityFields)) {
+                $post['identity'] = $user->getUsername();
+            }
+            $post['credential'] = isset($post['password'])?$post['password']:'';
+            $request->setPost(new Parameters($post));
+
+            // clear adapters
+            $this->zfcUserAuthentication()->getAuthAdapter()->resetAdapters();
+            $this->zfcUserAuthentication()->getAuthService()->clearIdentity();
+
+            $logged = $this->forward()->dispatch('playgrounduser_user', array('action' => 'ajaxauthenticate'));
+
+            if ($logged) {
+                return $this->redirect()->toUrl(
+                    $this->frontendUrl()->fromRoute(
+                        $this->game->getClassType() . '/' . $this->game->nextStep('index'),
+                        array('id' => $this->game->getIdentifier())
+                    )
+                );
+            } else {
+                $this->flashMessenger()->setNamespace('zfcuser-login-form')->addMessage(
+                    'Authentication failed. Please try again.'
+                );
+                return $this->redirect()->toUrl(
+                    $this->frontendUrl()->fromRoute(
+                        $this->game->getClassType() . '/login',
+                        array('id' => $this->game->getIdentifier())
+                    )
+                );
+            }
+        }
+
+        $redirect = $this->frontendUrl()->fromRoute(
+            $this->game->getClassType().'/login',
+            array(
+                'id' => $this->game->getIdentifier(),
+                
+            )
+        ) . ($socialnetwork ? '/' . $socialnetwork : ''). ($redirect ? '?redirect=' . $redirect : '');
+
+        return $this->redirect()->toUrl($redirect);
     }
 
     /**
@@ -365,7 +875,6 @@ class GameController extends AbstractActionController
     {
         $redirect = false;
         $session = new Container('facebook');
-        $sg = $this->getGameService();
         if ($session->offsetExists('signed_request')) {
             if (!$user) {
                 // Get Playground user from Facebook info
@@ -400,7 +909,7 @@ class GameController extends AbstractActionController
             }
 
             if ($game->getFbFan()) {
-                if ($sg->checkIsFan($game) === false) {
+                if ($this->getGameService()->checkIsFan($game) === false) {
                     $redirect =  $this->redirect()->toRoute(
                         $game->getClassType().'/fangate',
                         array('id' => $game->getIdentifier())
@@ -536,9 +1045,8 @@ class GameController extends AbstractActionController
      */
     public function addMetaTitle($game)
     {
-        $sg = $this->getGameService();
         $title = $this->translate($game->getTitle());
-        $sg->getServiceManager()->get('ViewHelperManager')->get('HeadTitle')->set($title);
+        $this->getGameService()->getServiceManager()->get('ViewHelperManager')->get('HeadTitle')->set($title);
         // Meta set in the layout
         $this->layout()->setVariables(
             array(
@@ -663,631 +1171,6 @@ class GameController extends AbstractActionController
         );
 
         return $data;
-    }
-
-    /**
-     * This action displays the Prizes page associated to the game
-     */
-    public function prizesAction()
-    {
-        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-        $sg = $this->getGameService();
-
-        $game = $sg->checkGame($identifier);
-        if (!$game) {
-            return $this->notFoundAction();
-        }
-
-        if (count($game->getPrizes()) == 0) {
-            return $this->notFoundAction();
-        }
-
-        $viewModel = $this->buildView($game);
-
-        return $viewModel;
-    }
-
-    /**
-     * This action displays a specific Prize page among those associated to the game
-     */
-    public function prizeAction()
-    {
-        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-        $prizeIdentifier = $this->getEvent()->getRouteMatch()->getParam('prize');
-        $sg = $this->getGameService();
-        $sp = $this->getPrizeService();
-
-        $game = $sg->checkGame($identifier);
-        if (!$game) {
-            return $this->notFoundAction();
-        }
-
-        $prize = $sp->getPrizeMapper()->findByIdentifier($prizeIdentifier);
-        
-        if (!$prize) {
-            return $this->notFoundAction();
-        }
-
-
-        $viewModel = $this->buildView($game);
-        $viewModel->setVariables(array('prize'=> $prize));
-
-        return $viewModel;
-    }
-
-    public function gameslistAction()
-    {
-        $layoutViewModel = $this->layout();
-
-        $slider = new ViewModel();
-        $slider->setTemplate('playground-game/common/top_promo');
-
-        $sliderItems = $this->getGameService()->getActiveSliderGames();
-
-        $slider->setVariables(array('sliderItems' => $sliderItems));
-
-        $layoutViewModel->addChild($slider, 'slider');
-
-        $games = $this->getGameService()->getActiveGames(false, '', 'endDate');
-        if (is_array($games)) {
-            $paginator = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\ArrayAdapter($games));
-        } else {
-            $paginator = $games;
-        }
-
-        $paginator->setItemCountPerPage(7);
-        $paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
-
-        $bitlyclient = $this->getOptions()->getBitlyUrl();
-        $bitlyuser = $this->getOptions()->getBitlyUsername();
-        $bitlykey = $this->getOptions()->getBitlyApiKey();
-
-        $this->getViewHelper('HeadMeta')->setProperty('bt:client', $bitlyclient);
-        $this->getViewHelper('HeadMeta')->setProperty('bt:user', $bitlyuser);
-        $this->getViewHelper('HeadMeta')->setProperty('bt:key', $bitlykey);
-
-        $this->layout()->setVariables(
-            array(
-            'sliderItems'   => $sliderItems,
-            'currentPage' => array(
-                'pageGames' => 'games',
-                'pageWinners' => ''
-            ),
-            )
-        );
-
-        return new ViewModel(
-            array(
-                'games'       => $paginator
-            )
-        );
-    }
-
-    public function fangateAction()
-    {
-        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-        $sg = $this->getGameService();
-        $game = $sg->checkGame($identifier, false);
-        if (!$game) {
-            return $this->notFoundAction();
-        }
-
-        $viewModel = $this->buildView($game);
-
-        return $viewModel;
-    }
-    
-    public function shareAction()
-    {
-        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-        $user = $this->zfcUserAuthentication()->getIdentity();
-    
-        $statusMail = null;
-    
-        if (!$identifier) {
-            return $this->notFoundAction();
-        }
-    
-        $gameMapper = $this->getGameService()->getGameMapper();
-        $game = $gameMapper->findByIdentifier($identifier);
-    
-        if (!$game || $game->isClosed()) {
-            return $this->notFoundAction();
-        }
-    
-        // Has the user finished the game ?
-        $lastEntry = $this->getGameService()->findLastInactiveEntry($game, $user);
-    
-        if ($lastEntry === null) {
-            return $this->redirect()->toUrl(
-                $this->frontendUrl()->fromRoute(
-                    'postvote',
-                    array(
-                        'id' => $identifier,
-                        
-                    )
-                )
-            );
-        }
-    
-        if (!$user && !$game->getAnonymousAllowed()) {
-            $redirect = urlencode(
-                $this->frontendUrl()->fromRoute(
-                    'postvote/result',
-                    array(
-                        'id' => $game->getIdentifier(),
-                        
-                    )
-                )
-            );
-            return $this->redirect()->toUrl(
-                $this->frontendUrl()->fromRoute(
-                    'zfcuser/register',
-                    array()
-                ) . '?redirect='.$redirect
-            );
-        }
-    
-        $form = $this->getServiceLocator()->get('playgroundgame_sharemail_form');
-        $form->setAttribute('method', 'post');
-    
-        if ($this->getRequest()->isPost()) {
-            $data = $this->getRequest()->getPost()->toArray();
-            $form->setData($data);
-            if ($form->isValid()) {
-                $result = $this->getGameService()->sendShareMail($data, $game, $user, $lastEntry);
-                if ($result) {
-                    $statusMail = true;
-                }
-            }
-        }
-    
-        // buildView must be before sendMail because it adds the game template path to the templateStack
-        $viewModel = $this->buildView($game);
-    
-        $this->getGameService()->sendMail($game, $user, $lastEntry);
-    
-        $viewModel->setVariables(array(
-            'statusMail'       => $statusMail,
-            'form'             => $form,
-        ));
-    
-        return $viewModel;
-    }
-    
-    public function fbshareAction()
-    {
-        $viewModel = new JsonModel();
-        $viewModel->setTerminal(true);
-        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-        $fbId = $this->params()->fromQuery('fbId');
-        $user = $this->zfcUserAuthentication()->getIdentity();
-        $sg = $this->getGameService();
-    
-        $game = $sg->checkGame($identifier);
-        if (!$game) {
-            return $this->errorJson();
-        }
-        $entry = $sg->checkExistingEntry($game, $user);
-        if (! $entry) {
-            return $this->errorJson();
-        }
-        if (!$fbId) {
-            return $this->errorJson();
-        }
-    
-        $sg->postFbWall($fbId, $game, $user, $entry);
-    
-        return $this->successJson();
-    }
-    
-    public function fbrequestAction()
-    {
-        $viewModel = new ViewModel();
-        $viewModel->setTerminal(true);
-        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-        $fbId = $this->params()->fromQuery('fbId');
-        $to = $this->params()->fromQuery('to');
-        $user = $this->zfcUserAuthentication()->getIdentity();
-        $sg = $this->getGameService();
-    
-        $game = $sg->checkGame($identifier);
-        if (!$game) {
-            return $this->errorJson();
-        }
-        $entry = $sg->checkExistingEntry($game, $user);
-        if (! $entry) {
-            return $this->errorJson();
-        }
-        if (!$fbId) {
-            return $this->errorJson();
-        }
-    
-        $sg->postFbRequest($fbId, $game, $user, $entry, $to);
-    
-        return $this->successJson();
-    }
-    
-    public function tweetAction()
-    {
-        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-        $tweetId = $this->params()->fromQuery('tweetId');
-        $user = $this->zfcUserAuthentication()->getIdentity();
-        $sg = $this->getGameService();
-    
-        $game = $sg->checkGame($identifier);
-        if (!$game) {
-            return $this->errorJson();
-        }
-        $entry = $sg->checkExistingEntry($game, $user);
-        if (! $entry) {
-            return $this->errorJson();
-        }
-        if (!$tweetId) {
-            return $this->errorJson();
-        }
-    
-        $sg->postTwitter($tweetId, $game, $user, $entry);
-    
-        return $this->successJson();
-    }
-    
-    public function googleAction()
-    {
-        $viewModel = new ViewModel();
-        $viewModel->setTerminal(true);
-        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-        $googleId = $this->params()->fromQuery('googleId');
-        $user = $this->zfcUserAuthentication()->getIdentity();
-        $sg = $this->getGameService();
-    
-        $game = $sg->checkGame($identifier);
-        if (!$game) {
-            return $this->errorJson();
-        }
-        $entry = $sg->checkExistingEntry($game, $user);
-        if (! $entry) {
-            return $this->errorJson();
-        }
-        if (!$googleId) {
-            return $this->errorJson();
-        }
-    
-        $sg->postGoogle($googleId, $game, $user, $entry);
-    
-        return $this->successJson();
-    }
-
-    public function optinAction()
-    {
-        $request = $this->getRequest();
-        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-        $userService = $this->getServiceLocator()->get('zfcuser_user_service');
-    
-        $sg = $this->getGameService();
-    
-        $game = $sg->checkGame($identifier, false);
-        if (!$game) {
-            return $this->notFoundAction();
-        }
-
-        if ($request->isPost()) {
-            $data['optin'] = ($this->params()->fromPost('optin'))? 1:0;
-            $data['optinPartner'] = ($this->params()->fromPost('optinPartner'))? 1:0;
-
-            $userService->updateNewsletter($data);
-        }
-
-        return $this->redirect()->toUrl(
-            $this->frontendUrl()->fromRoute(
-                'frontend/' . $game->getClassType() . '/index',
-                array(
-                    'id' => $game->getIdentifier(),
-                    
-                )
-            )
-        );
-    }
-    
-    public function loginAction()
-    {
-        $request = $this->getRequest();
-        $form    = $this->getServiceLocator()->get('zfcuser_login_form');
-        
-        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-        
-        $sg = $this->getGameService();
-        
-        $game = $sg->checkGame($identifier, false);
-        if (!$game) {
-            return $this->notFoundAction();
-        }
-    
-        if ($request->isPost()) {
-            $form->setData($request->getPost());
-            
-            if (!$form->isValid()) {
-                $this->flashMessenger()->setNamespace('zfcuser-login-form')->addMessage(
-                    'Authentication failed. Please try again.'
-                );
-                
-
-                return $this->redirect()->toUrl(
-                    $this->frontendUrl()->fromRoute(
-                        $game->getClassType() . '/login',
-                        array(
-                            'id' => $game->getIdentifier(),
-                            
-                        )
-                    )
-                );
-            }
-            
-            // clear adapters
-            $this->zfcUserAuthentication()->getAuthAdapter()->resetAdapters();
-            $this->zfcUserAuthentication()->getAuthService()->clearIdentity();
-
-            $logged = $this->forward()->dispatch('playgrounduser_user', array('action' => 'ajaxauthenticate'));
-
-            if ($logged) {
-                return $this->redirect()->toUrl(
-                    $this->frontendUrl()->fromRoute(
-                        $game->getClassType() . '/' . $game->nextStep('index'),
-                        array(
-                            'id' => $game->getIdentifier(),
-                            
-                        )
-                    )
-                );
-            } else {
-                $this->flashMessenger()->setNamespace('zfcuser-login-form')->addMessage(
-                    'Authentication failed. Please try again.'
-                );
-                return $this->redirect()->toUrl(
-                    $this->frontendUrl()->fromRoute(
-                        $game->getClassType() . '/login',
-                        array(
-                            'id' => $game->getIdentifier(),
-                            
-                        )
-                    )
-                );
-            }
-        }
-        
-        $form->setAttribute(
-            'action',
-            $this->frontendUrl()->fromRoute(
-                $game->getClassType().'/login',
-                array(
-                    'id' => $game->getIdentifier(),
-                    
-                )
-            )
-        );
-        $viewModel = $this->buildView($game);
-        $viewModel->setVariables(array(
-            'form' => $form,
-        ));
-        return $viewModel;
-    }
-
-    public function userregisterAction()
-    {
-        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-        $sg = $this->getGameService();
-        $game = $sg->checkGame($identifier, false);
-        $userOptions = $this->getServiceLocator()->get('zfcuser_module_options');
-
-        if ($this->zfcUserAuthentication()->hasIdentity()) {
-            return $this->redirect()->toUrl(
-                $this->frontendUrl()->fromRoute(
-                    $game->getClassType().'/'.$game->nextStep('index'),
-                    array(
-                        'id' => $game->getIdentifier(),
-                        
-                    )
-                )
-            );
-        }
-        $request = $this->getRequest();
-        $service = $this->getServiceLocator()->get('zfcuser_user_service');
-        $form = $this->getServiceLocator()->get('playgroundgame_register_form');
-        $socialnetwork = $this->params()->fromRoute('socialnetwork', false);
-        $form->setAttribute(
-            'action',
-            $this->frontendUrl()->fromRoute(
-                $game->getClassType().'/user-register',
-                array(
-                    'id' => $game->getIdentifier(),
-                    
-                )
-            )
-        );
-        $params = array();
-        $socialCredentials = array();
-
-        if ($userOptions->getUseRedirectParameterIfPresent() && $request->getQuery()->get('redirect')) {
-            $redirect = $request->getQuery()->get('redirect');
-        } else {
-            $redirect = false;
-        }
-
-        if ($socialnetwork) {
-            $infoMe = $this->getProviderService()->getInfoMe($socialnetwork);
-
-            if (!empty($infoMe)) {
-                $user = $this->getProviderService()->getUserProviderMapper()->findUserByProviderId(
-                    $infoMe->identifier,
-                    $socialnetwork
-                );
-
-                if ($user || $service->getOptions()->getCreateUserAutoSocial() === true) {
-                    //on le dirige vers l'action d'authentification
-                    if (! $redirect && $userOptions->getLoginRedirectRoute() != '') {
-                        $redirect = $this->frontendUrl()->fromRoute(
-                            $game->getClassType().'/login',
-                            array(
-                                'id' => $game->getIdentifier(),
-                                
-                            )
-                        );
-                    }
-                    $redir = $this->frontendUrl()->fromRoute(
-                        $game->getClassType().'/login',
-                        array(
-                            'id' => $game->getIdentifier(),
-                            
-                        )
-                    ) .'/' . $socialnetwork . ($redirect ? '?redirect=' . $redirect : '');
-
-                    return $this->redirect()->toUrl($redir);
-                }
-
-                // Je retire la saisie du login/mdp
-                $form->setAttribute(
-                    'action',
-                    $this->frontendUrl()->fromRoute(
-                        $game->getClassType().'/user-register',
-                        array(
-                            'id' => $game->getIdentifier(),
-                            'socialnetwork' => $socialnetwork,
-                            
-                        )
-                    )
-                );
-                $form->remove('password');
-                $form->remove('passwordVerify');
-
-                $birthMonth = $infoMe->birthMonth;
-                if (strlen($birthMonth) <= 1) {
-                    $birthMonth = '0'.$birthMonth;
-                }
-                $birthDay = $infoMe->birthDay;
-                if (strlen($birthDay) <= 1) {
-                    $birthDay = '0'.$birthDay;
-                }
-
-                $gender = $infoMe->gender;
-                if ($gender == 'female') {
-                    $title = 'Me';
-                } else {
-                    $title = 'M';
-                }
-
-                $params = array(
-                    //'birth_year'  => $infoMe->birthYear,
-                    'title'      => $title,
-                    'dob'      => $birthDay.'/'.$birthMonth.'/'.$infoMe->birthYear,
-                    'firstname'   => $infoMe->firstName,
-                    'lastname'    => $infoMe->lastName,
-                    'email'       => $infoMe->email,
-                    'postalCode' => $infoMe->zip,
-                );
-                $socialCredentials = array(
-                    'socialNetwork' => strtolower($socialnetwork),
-                    'socialId'      => $infoMe->identifier,
-                );
-            }
-        }
-
-        $redirectUrl = $this->frontendUrl()->fromRoute(
-            $game->getClassType().'/user-register',
-            array(
-                'id' => $game->getIdentifier(),
-                
-            )
-        ) .($socialnetwork ? '/' . $socialnetwork : ''). ($redirect ? '?redirect=' . $redirect : '');
-        $prg = $this->prg($redirectUrl, true);
-
-        if ($prg instanceof Response) {
-            return $prg;
-        } elseif ($prg === false) {
-            $form->setData($params);
-            $viewModel = $this->buildView($game);
-            $viewModel->setVariables(array(
-                'registerForm' => $form,
-                'enableRegistration' => $userOptions->getEnableRegistration(),
-                'redirect' => $redirect,
-            ));
-            return $viewModel;
-        }
-
-        $post = $prg;
-        $post = array_merge(
-            $post,
-            $socialCredentials
-        );
-
-        $user = $service->register($post, 'playgroundgame_register_form');
-
-        if (! $user) {
-            $viewModel = $this->buildView($game);
-            $viewModel->setVariables(array(
-                'registerForm' => $form,
-                'enableRegistration' => $userOptions->getEnableRegistration(),
-                'redirect' => $redirect,
-            ));
-            
-            return $viewModel;
-        }
-
-        if ($service->getOptions()->getEmailVerification()) {
-            $vm = new ViewModel(array('userEmail' => $user->getEmail()));
-            $vm->setTemplate('playground-user/register/registermail');
-
-            return $vm;
-        } elseif ($service->getOptions()->getLoginAfterRegistration()) {
-            $identityFields = $service->getOptions()->getAuthIdentityFields();
-            if (in_array('email', $identityFields)) {
-                $post['identity'] = $user->getEmail();
-            } elseif (in_array('username', $identityFields)) {
-                $post['identity'] = $user->getUsername();
-            }
-            $post['credential'] = isset($post['password'])?$post['password']:'';
-            $request->setPost(new Parameters($post));
-
-            // clear adapters
-            $this->zfcUserAuthentication()->getAuthAdapter()->resetAdapters();
-            $this->zfcUserAuthentication()->getAuthService()->clearIdentity();
-
-            $logged = $this->forward()->dispatch('playgrounduser_user', array('action' => 'ajaxauthenticate'));
-
-            if ($logged) {
-                return $this->redirect()->toUrl(
-                    $this->frontendUrl()->fromRoute(
-                        $game->getClassType() . '/' . $game->nextStep('index'),
-                        array(
-                            'id' => $game->getIdentifier(),
-                            
-                        )
-                    )
-                );
-            } else {
-                $this->flashMessenger()->setNamespace('zfcuser-login-form')->addMessage(
-                    'Authentication failed. Please try again.'
-                );
-                return $this->redirect()->toUrl(
-                    $this->frontendUrl()->fromRoute(
-                        $game->getClassType() . '/login',
-                        array(
-                            'id' => $game->getIdentifier(),
-                            
-                        )
-                    )
-                );
-            }
-        }
-
-        $redirect = $this->frontendUrl()->fromRoute(
-            $game->getClassType().'/login',
-            array(
-                'id' => $game->getIdentifier(),
-                
-            )
-        ) . ($socialnetwork ? '/' . $socialnetwork : ''). ($redirect ? '?redirect=' . $redirect : '');
-
-        return $this->redirect()->toUrl($redirect);
     }
     
     /**

@@ -154,6 +154,20 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
         return true;
     }
 
+    public function createRandomOccurrences($game, $beginning, $end, $quantity)
+    {
+        for ($i=1; $i<=$quantity; $i++) {
+            $randomDate = $this->getRandomDate($beginning->format('U'), $end->format('U'));
+            $randomDate = \DateTime::createFromFormat('Y-m-d H:i:s', $randomDate);
+            $occurrence  = new \PlaygroundGame\Entity\InstantWinOccurrence();
+            $occurrence->setInstantwin($game);
+            $occurrence->setValue($randomDate->format('Y-m-d H:i:s'));
+            $occurrence->setActive(1);
+
+            $this->getInstantWinOccurrenceMapper()->insert($occurrence);
+        }
+    }
+
     public function scheduleDateOccurrences($game)
     {
         $f = $game->getOccurrenceDrawFrequency();
@@ -194,30 +208,21 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
 
         $dateInterval = (int)(($end->getTimestamp() - $beginning->getTimestamp())/60);
 
+        // Je recherche tous les IG non gagnés
+        $occurrences = $this->getInstantWinOccurrenceMapper()->findBy(array('instantwin' => $game));
+        $nbExistingOccurrences = count($occurrences);
+        $nbOccurencesToCreate = 0;
+
         switch ($f) {
             case null:
             case 'game':
-                // Je recherche tous les IG non gagnés
-                $occurrences = $this->getInstantWinOccurrenceMapper()->findBy(array('instantwin' => $game));
-                $nbOccurencesToCreate = $game->getOccurrenceNumber() - count($occurrences);
+                $nbOccurencesToCreate = $game->getOccurrenceNumber() - $nbExistingOccurrences;
                 if ($nbOccurencesToCreate > 0) {
-                    for ($i=1; $i<=$nbOccurencesToCreate; $i++) {
-                        $randomDate = $this->getRandomDate($beginning->format('U'), $end->format('U'));
-                        $randomDate = \DateTime::createFromFormat('Y-m-d H:i:s', $randomDate);
-                        $occurrence  = new \PlaygroundGame\Entity\InstantWinOccurrence();
-                        $occurrence->setInstantwin($game);
-                        $occurrence->setValue($randomDate->format('Y-m-d H:i:s'));
-                        $occurrence->setActive(1);
-
-                        $this->getInstantWinOccurrenceMapper()->insert($occurrence);
-                    }
+                    $this->createRandomOccurrences($game, $beginning, $end, $nbOccurencesToCreate);
                 }
 
                 break;
             case 'hour':
-                $occurrences = $this->getInstantWinOccurrenceMapper()->findBy(array('instantwin' => $game));
-                $nbExistingOccurrences = count($occurrences);
-                $nbOccurencesToCreate = 0;
                 $nbInterval = (int) ($dateInterval/60);
 
                 // If a hour don't last 60min, I consider it as a hour anyway.
@@ -230,23 +235,15 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
 
                 $beginningDrawDate = \DateTime::createFromFormat('m/d/Y H:i:s', $beginning->format('m/d/Y H:i:s'));
                 $endDrawDate = \DateTime::createFromFormat('m/d/Y H:i:s', $beginning->format('m/d/Y H'). ':59:59');
-
+                
                 if ($nbOccurencesToCreate > 0) {
                     for ($d=1; $d<=$nbInterval; $d++) {
-                        for ($i=1; $i<=$nbOccurencesToCreate; $i++) {
-                            $randomDate = $this->getRandomDate(
-                                $beginningDrawDate->format('U'),
-                                $endDrawDate->format('U')
-                            );
-                            $randomDate = \DateTime::createFromFormat('Y-m-d H:i:s', $randomDate);
-                            $occurrence  = new \PlaygroundGame\Entity\InstantWinOccurrence();
-                            $occurrence->setInstantwin($game);
-
-                            $occurrence->setValue($randomDate->format('Y-m-d H:i:s'));
-                            $occurrence->setActive(1);
-
-                            $this->getInstantWinOccurrenceMapper()->insert($occurrence);
-                        }
+                        $this->createRandomOccurrences(
+                            $game,
+                            $beginningDrawDate,
+                            $endDrawDate,
+                            $nbOccurencesToCreate
+                        );
                         $beginningDrawDate = \DateTime::createFromFormat(
                             'm/d/Y H:i:s',
                             $beginningDrawDate->format('m/d/Y H'). ':00:00'
@@ -258,9 +255,6 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
 
                 break;
             case 'day':
-                $occurrences = $this->getInstantWinOccurrenceMapper()->findBy(array('instantwin' => $game));
-                $nbExistingOccurrences = count($occurrences);
-                $nbOccurencesToCreate = 0;
                 $nbInterval = (int) ($dateInterval/(60*24));
 
                 // Prise en compte des changements d'horaires
@@ -276,21 +270,15 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
 
                 $beginningDrawDate = \DateTime::createFromFormat('m/d/Y H:i:s', $beginning->format('m/d/Y H:i:s'));
                 $endDrawDate = \DateTime::createFromFormat('m/d/Y H:i:s', $beginning->format('m/d/Y'). ' 23:59:59');
+                
                 if ($nbOccurencesToCreate > 0) {
                     for ($d=1; $d<=$nbInterval; $d++) {
-                        for ($i=1; $i<=$nbOccurencesToCreate; $i++) {
-                            $randomDate = $this->getRandomDate(
-                                $beginningDrawDate->format('U'),
-                                $endDrawDate->format('U')
-                            );
-                            $randomDate = \DateTime::createFromFormat('Y-m-d H:i:s', $randomDate);
-                            $occurrence  = new \PlaygroundGame\Entity\InstantWinOccurrence();
-                            $occurrence->setInstantwin($game);
-                            $occurrence->setValue($randomDate->format('Y-m-d H:i:s'));
-                            $occurrence->setActive(1);
-
-                            $this->getInstantWinOccurrenceMapper()->insert($occurrence);
-                        }
+                        $this->createRandomOccurrences(
+                            $game,
+                            $beginningDrawDate,
+                            $endDrawDate,
+                            $nbOccurencesToCreate
+                        );
                         // As the first beginning date was not @ midnight,
                         // I recreate the beginning date
                         $beginningDrawDate = \DateTime::createFromFormat(
@@ -304,9 +292,7 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
 
                 break;
             case 'week':
-                // Rechercher tous les IG non gagnés pour chaque jour puis soustrais à ceux à créer
-                $occurences = $this->getInstantWinOccurrenceMapper()->findBy(array('instantwin' => $game));
-                $nbOccurencesToCreate = $game->getOccurrenceNumber() - count($occurences);
+                $nbOccurencesToCreate = $game->getOccurrenceNumber() - $nbExistingOccurrences;
                 $nbWeeksInterval = (int) ($dateInterval/(60*24*7));
                 // If a week don't last 7d, I consider it as a week anyway.
                 if ($dateInterval%(60*24*7) > 0) {
@@ -327,19 +313,12 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
 
                 if ($nbOccurencesToCreate > 0) {
                     for ($d=1; $d<=$nbWeeksInterval; $d++) {
-                        for ($i=1; $i<=$nbOccurencesToCreate; $i++) {
-                            $randomDate = $this->getRandomDate(
-                                $beginningDrawDate->format('U'),
-                                $endDrawDate->format('U')
-                            );
-                            $randomDate = \DateTime::createFromFormat('Y-m-d H:i:s', $randomDate);
-                            $occurrence  = new \PlaygroundGame\Entity\InstantWinOccurrence();
-                            $occurrence->setInstantwin($game);
-                            $occurrence->setValue($randomDate->format('Y-m-d H:i:s'));
-                            $occurrence->setActive(1);
-
-                            $this->getInstantWinOccurrenceMapper()->insert($occurrence);
-                        }
+                        $this->createRandomOccurrences(
+                            $game,
+                            $beginningDrawDate,
+                            $endDrawDate,
+                            $nbOccurencesToCreate
+                        );
                         $beginningDrawDate->add(new \DateInterval('P1W'));
                         $endDrawDate->add(new \DateInterval('P1W'));
                         if ($endDrawDate > $end) {
@@ -350,8 +329,7 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
 
                 break;
             case 'month':
-                $occurences = $this->getInstantWinOccurrenceMapper()->findBy(array('instantwin' => $game));
-                $nbOccurencesToCreate = $game->getOccurrenceNumber() - count($occurences);
+                $nbOccurencesToCreate = $game->getOccurrenceNumber() - $nbExistingOccurrences;
                 $nbMonthsInterval = (int) ($dateInterval/(60*24*30));
                 // If a week don't last 30d, I consider it as a month anyway.
                 if ($dateInterval%(60*24*30) > 0) {
@@ -370,19 +348,12 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
 
                 if ($nbOccurencesToCreate > 0) {
                     for ($d=1; $d<=$nbMonthsInterval; $d++) {
-                        for ($i=1; $i<=$nbOccurencesToCreate; $i++) {
-                            $randomDate = $this->getRandomDate(
-                                $beginningDrawDate->format('U'),
-                                $endDrawDate->format('U')
-                            );
-                            $randomDate = \DateTime::createFromFormat('Y-m-d H:i:s', $randomDate);
-                            $occurrence  = new \PlaygroundGame\Entity\InstantWinOccurrence();
-                            $occurrence->setInstantwin($game);
-                            $occurrence->setValue($randomDate->format('Y-m-d H:i:s'));
-                            $occurrence->setActive(1);
-
-                            $this->getInstantWinOccurrenceMapper()->insert($occurrence);
-                        }
+                        $this->createRandomOccurrences(
+                            $game,
+                            $beginningDrawDate,
+                            $endDrawDate,
+                            $nbOccurencesToCreate
+                        );
                         $beginningDrawDate->add(new \DateInterval('P1M'));
                         $endDrawDate->add(new \DateInterval('P1M'));
                         if ($endDrawDate > $end) {

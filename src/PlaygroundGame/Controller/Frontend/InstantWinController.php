@@ -11,41 +11,13 @@ class InstantWinController extends GameController
 
     public function playAction()
     {
-        $sg = $this->getGameService();
-
-        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-
-        $game = $sg->checkGame($identifier);
-        if (!$game || $game->isClosed()) {
-            return $this->notFoundAction();
-        }
-
-        $redirectFb = $this->checkFbRegistration($this->zfcUserAuthentication()->getIdentity(), $game);
+        $redirectFb = $this->checkFbRegistration($this->user, $this->game);
         if ($redirectFb) {
             return $redirectFb;
         }
 
-        $user = $this->zfcUserAuthentication()->getIdentity();
-
-        if (!$user && !$game->getAnonymousAllowed()) {
-            $redirect = urlencode(
-                $this->frontendUrl()->fromRoute(
-                    $game->getClassType() . '/play',
-                    array('id' => $game->getIdentifier()),
-                    array('force_canonical' => true)
-                )
-            );
-
-            return $this->redirect()->toUrl(
-                $this->frontendUrl()->fromRoute(
-                    'zfcuser/register',
-                    array()
-                ) . '?redirect='.$redirect
-            );
-        }
-
-        if ($game->getOccurrenceType()=='datetime') {
-            $entry = $sg->play($game, $user);
+        if ($this->game->getOccurrenceType()=='datetime') {
+            $entry = $this->getGameService()->play($this->game, $this->user);
             if (!$entry) {
                 // the user has already taken part of this game and the participation limit has been reached
                 $this->flashMessenger()->addMessage('Vous avez déjà participé');
@@ -53,25 +25,25 @@ class InstantWinController extends GameController
                 return $this->redirect()->toUrl(
                     $this->frontendUrl()->fromRoute(
                         'instantwin/result',
-                        array('id' => $game->getIdentifier())
+                        array('id' => $this->game->getIdentifier())
                     )
                 );
             }
 
             // update the winner attribute in entry.
-            $occurrence = $sg->IsInstantWinner($game, $user);
+            $occurrence = $this->getGameService()->IsInstantWinner($this->game, $this->user);
 
             $viewVariables = array(
                 'occurrence' => $occurrence,
                 'entry' => $entry
             );
-        } elseif ($game->getOccurrenceType()=='code') {
+        } elseif ($this->game->getOccurrenceType()=='code') {
             $form = $this->getServiceLocator()->get('playgroundgame_instantwinoccurrencecode_form');
             $form->setAttribute(
                 'action',
                 $this->frontendUrl()->fromRoute(
                     'instantwin/play',
-                    array('id' => $game->getIdentifier()),
+                    array('id' => $this->game->getIdentifier()),
                     array('force_canonical' => true)
                 )
             );
@@ -81,13 +53,13 @@ class InstantWinController extends GameController
                 if ($form->isValid()) {
                     $data =  $form->getData('code-input');
                     $code = filter_var($data['code-input'], FILTER_SANITIZE_STRING);
-                    $occurrence = $this->getGameService()->isInstantWinner($game, $user, $code);
+                    $occurrence = $this->getGameService()->isInstantWinner($this->game, $this->user, $code);
                     if (!$occurrence) {
                         $this->flashMessenger()->addMessage('Le code entré est invalide ou a déjà été utilisé !');
                         return $this->redirect()->toUrl(
                             $this->frontendUrl()->fromRoute(
                                 'instantwin/play',
-                                array('id' => $game->getIdentifier()),
+                                array('id' => $this->game->getIdentifier()),
                                 array('force_canonical' => true)
                             )
                         );
@@ -95,7 +67,7 @@ class InstantWinController extends GameController
                         return $this->redirect()->toUrl(
                             $this->frontendUrl()->fromRoute(
                                 'instantwin/result',
-                                array('id' => $game->getIdentifier())
+                                array('id' => $this->game->getIdentifier())
                             )
                         );
                     }
@@ -104,7 +76,7 @@ class InstantWinController extends GameController
             $viewVariables = array('form' => $form);
         }
         
-        $viewModel = $this->buildView($game);
+        $viewModel = $this->buildView($this->game);
         if ($viewModel instanceof \Zend\View\Model\ViewModel) {
             $viewModel->setVariables($viewVariables);
         }
@@ -114,22 +86,13 @@ class InstantWinController extends GameController
 
     public function resultAction()
     {
-        $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-        
-        $user   = $this->zfcUserAuthentication()->getIdentity();
-        $sg     = $this->getGameService();
+        $lastEntry = $this->getGameService()->findLastInactiveEntry($this->game, $this->user);
 
-        $game = $sg->checkGame($identifier);
-        if (!$game || $game->isClosed()) {
-            return $this->notFoundAction();
-        }
-
-        $lastEntry = $sg->findLastInactiveEntry($game, $user);
         if (!$lastEntry) {
             return $this->redirect()->toUrl(
                 $this->frontendUrl()->fromRoute(
                     'instantwin',
-                    array('id' => $game->getIdentifier(), ),
+                    array('id' => $this->game->getIdentifier(), ),
                     array('force_canonical' => true)
                 )
             );
@@ -138,32 +101,17 @@ class InstantWinController extends GameController
         $occurrence = null;
 
         // On tente de récupèrer l'occurrence si elle existe pour avoir accés au lot associé
-        $occurrences = $sg->getInstantWinOccurrenceMapper()->findBy(
-            array('instantwin' => $game->getId(), 'entry' => $lastEntry->getId())
+        $occurrences = $this->getGameService()->getInstantWinOccurrenceMapper()->findBy(
+            array('instantwin' => $this->game->getId(), 'entry' => $lastEntry->getId())
         );
         if (!empty($occurrences)) {
             $occurrence = current($occurrences);
         }
 
-        if (!$user && !$game->getAnonymousAllowed()) {
-            $redirect = urlencode(
-                $this->frontendUrl()->fromRoute(
-                    'instantwin/result',
-                    array('id' => $game->getIdentifier(), )
-                )
-            );
-            return $this->redirect()->toUrl(
-                $this->frontendUrl()->fromRoute(
-                    'zfcuser/register',
-                    array()
-                ) . '?redirect='.$redirect
-            );
-        }
-
         $secretKey = strtoupper(substr(sha1(uniqid('pg_', true).'####'.time()), 0, 15));
         $socialLinkUrl = $this->frontendUrl()->fromRoute(
             'instantwin',
-            array('id' => $game->getIdentifier(), ),
+            array('id' => $this->game->getIdentifier(), ),
             array('force_canonical' => true)
         ).'?key='.$secretKey;
         // With core shortener helper
@@ -178,7 +126,7 @@ class InstantWinController extends GameController
             $form->setData($data);
             if ($form->isValid()) {
                 if (isset($data['email1']) || isset($data['email2']) || isset($data['email3'])) {
-                    $result = $this->getGameService()->sendShareMail($data, $game, $user, $lastEntry);
+                    $result = $this->getGameService()->sendShareMail($data, $this->game, $this->user, $lastEntry);
                     if ($result) {
                         $statusMail = true;
                     }
@@ -192,9 +140,9 @@ class InstantWinController extends GameController
         }
         
         // buildView must be before sendMail because it adds the game template path to the templateStack
-        $viewModel = $this->buildView($game);
+        $viewModel = $this->buildView($this->game);
         
-        $this->getGameService()->sendMail($game, $user, $lastEntry, $prize);
+        $this->getGameService()->sendMail($this->game, $this->user, $lastEntry, $prize);
 
         if ($viewModel instanceof \Zend\View\Model\ViewModel) {
             $viewModel->setVariables(array(
