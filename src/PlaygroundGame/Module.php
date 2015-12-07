@@ -96,7 +96,9 @@ class Module
                                     ),
                                 );
                     
-                                $coreLayoutModel = $config['core_layout']['frontend'];
+                                $coreLayoutModel = isset($config['core_layout']['frontend'])?
+                                    $config['core_layout']['frontend']:
+                                    [];
                                 $config['core_layout']['frontend.'.$url] = $coreLayoutModel;
                             }
                         }

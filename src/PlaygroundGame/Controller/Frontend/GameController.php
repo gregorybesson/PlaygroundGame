@@ -96,28 +96,20 @@ class GameController extends AbstractActionController
                     )
                 );
 
-                $urlRegister = ($controller->game->getAnonymousAllowed())?
-                    $controller->url()->fromRoute(
-                        'frontend/'.$controller->game->getClassType().'/register',
-                        array()
-                    ) . '?redirect='.$redirect :
-                    $controller->url()->fromRoute(
-                        'frontend/zfcuser/register',
-                        array(),
-                        array('force_canonical' => true)
-                    ) . '?redirect='.$redirect;
+                $urlRegister = $controller->url()->fromRoute(
+                    'frontend/zfcuser/register',
+                    array(),
+                    array('force_canonical' => true)
+                ) . '?redirect='.$redirect;
 
-                $config = $controller->getGameService()->getServiceManager()->get('config');
-                $customUrl = str_replace('frontend.', '', $e->getRouteMatch()->getParam('area'));
-                // custom game
-                if(
-                    $config['custom_games'][$controller->game->getIdentifier()] && 
-                    $controller->getRequest()->getUri()->getHost() === $customUrl
-                ){
-                    return $controller->redirect()->toUrl($urlRegister);
-                } else {
-                    return $controller->redirect()->toUrl($urlRegister);
-                }
+                // code permettant d'identifier un custom game
+                // ligne $config = $controller->getGameService()->getServiceManager()->get('config');
+                // ligne $customUrl = str_replace('frontend.', '', $e->getRouteMatch()->getParam('area', ''));
+                // ligne if ($config['custom_games'][$controller->game->getIdentifier()] &&
+                // ligne    $controller->getRequest()->getUri()->getHost() === $customUrl
+                // ligne ) {
+                return $controller->redirect()->toUrl($urlRegister);
+
             }
 
             return;
