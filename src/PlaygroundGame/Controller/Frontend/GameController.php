@@ -90,16 +90,34 @@ class GameController extends AbstractActionController
             ) {
                 $redirect = urlencode(
                     $controller->url()->fromRoute(
-                        'frontend/'.$this->game->getClassType() . '/' . $controller->params('action'),
-                        array('id' => $controller->game->getIdentifier())
+                        'frontend/'.$controller->game->getClassType() . '/' . $controller->params('action'),
+                        array('id' => $controller->game->getIdentifier()),
+                        array('force_canonical' => true)
                     )
                 );
-                return $controller->redirect()->toUrl(
+
+                $urlRegister = ($controller->game->getAnonymousAllowed())?
+                    $controller->url()->fromRoute(
+                        'frontend/'.$controller->game->getClassType().'/register',
+                        array()
+                    ) . '?redirect='.$redirect :
                     $controller->url()->fromRoute(
                         'frontend/zfcuser/register',
-                        array()
-                    ) . '?redirect='.$redirect
-                );
+                        array(),
+                        array('force_canonical' => true)
+                    ) . '?redirect='.$redirect;
+
+                $config = $controller->getGameService()->getServiceManager()->get('config');
+                $customUrl = str_replace('frontend.', '', $e->getRouteMatch()->getParam('area'));
+                // custom game
+                if(
+                    $config['custom_games'][$controller->game->getIdentifier()] && 
+                    $controller->getRequest()->getUri()->getHost() === $customUrl
+                ){
+                    return $controller->redirect()->toUrl($urlRegister);
+                } else {
+                    return $controller->redirect()->toUrl($urlRegister);
+                }
             }
 
             return;
