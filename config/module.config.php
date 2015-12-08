@@ -195,7 +195,10 @@ return array(
         'template_path_stack' => array(
             __DIR__ . '/../view/admin',
             __DIR__ . '/../view/frontend'
-        )
+        ),
+        'strategies' => array(
+            'ViewJsonStrategy',
+        ),
     ),
 
     'translator' => array(
