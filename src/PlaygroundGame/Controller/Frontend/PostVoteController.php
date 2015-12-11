@@ -296,7 +296,11 @@ class PostVoteController extends GameController
             } else {
                 $form->setData($request->getPost());
                 if ($form->isValid()) {
-                    if ($this->getGameService()->addVote($this->user, $this->getRequest()->getServer('REMOTE_ADDR'), $post)) {
+                    if ($this->getGameService()->addVote(
+                        $this->user,
+                        $this->getRequest()->getServer('REMOTE_ADDR'),
+                        $post
+                    )) {
                         $voted = true;
                     } else {
                         $alreadyVoted = 'Vous avez déjà voté!';
@@ -497,7 +501,7 @@ class PostVoteController extends GameController
 
         if (is_array($posts)) {
             $paginator = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\ArrayAdapter($posts));
-            $paginator->setItemCountPerPage($game->getPostDisplayNumber());
+            $paginator->setItemCountPerPage($this->game->getPostDisplayNumber());
             $paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
         } else {
             $paginator = $posts;
@@ -610,7 +614,11 @@ class PostVoteController extends GameController
         } else {
             if ($request->isPost()) {
                 $post = $this->getGameService()->getPostvotePostMapper()->findById($postId);
-                if ($this->getGameService()->addVote($this->user, $this->getRequest()->getServer('REMOTE_ADDR'), $post)) {
+                if ($this->getGameService()->addVote(
+                    $this->user,
+                    $this->getRequest()->getServer('REMOTE_ADDR'),
+                    $post
+                )) {
                     $response->setContent(\Zend\Json\Json::encode(array(
                         'success' => 1
                     )));
