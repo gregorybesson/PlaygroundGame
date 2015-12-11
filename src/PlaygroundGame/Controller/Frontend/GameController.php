@@ -449,7 +449,7 @@ class GameController extends AbstractActionController
 
         return new ViewModel(
             array(
-                'games'       => $paginator
+                'games' => $paginator
             )
         );
     }

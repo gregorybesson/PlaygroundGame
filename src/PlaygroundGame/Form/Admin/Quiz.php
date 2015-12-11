@@ -21,43 +21,41 @@ class Quiz extends Game
 
         parent::__construct($name, $sm, $translator);
 
-        $entityManager = $sm->get('doctrine.entitymanager.orm_default');
-
         $this->add(array(
-                'type' => 'Zend\Form\Element\Select',
-                'name' => 'drawAuto',
-                'attributes' =>  array(
-                        'id' => 'drawAuto',
-                        'options' => array(
-                                '0' => $translator->translate('No', 'playgroundgame'),
-                                '1' => $translator->translate('Yes', 'playgroundgame'),
-                        ),
-                ),
+            'type' => 'Zend\Form\Element\Select',
+            'name' => 'drawAuto',
+            'attributes' =>  array(
+                'id' => 'drawAuto',
                 'options' => array(
-                        'label' => $translator->translate('Automatic drawing out', 'playgroundgame'),
+                    '0' => $translator->translate('No', 'playgroundgame'),
+                    '1' => $translator->translate('Yes', 'playgroundgame'),
                 ),
+            ),
+            'options' => array(
+                'label' => $translator->translate('Automatic drawing out', 'playgroundgame'),
+            ),
         ));
 
         $this->add(array(
-                'name' => 'winners',
-                'options' => array(
-                        'label' => $translator->translate('Winners number', 'playgroundgame')
-                ),
-                'attributes' => array(
-                        'type' => 'text',
-                        'placeholder' => $translator->translate('Winners number', 'playgroundgame')
-                )
+            'name' => 'winners',
+            'options' => array(
+                'label' => $translator->translate('Winners number', 'playgroundgame')
+            ),
+            'attributes' => array(
+                'type' => 'text',
+                'placeholder' => $translator->translate('Winners number', 'playgroundgame')
+            )
         ));
 
         $this->add(array(
-                'name' => 'substitutes',
-                'options' => array(
-                        'label' => $translator->translate('Substitutes number', 'playgroundgame')
-                ),
-                'attributes' => array(
-                        'type' => 'text',
-                        'placeholder' => $translator->translate('Substitutes number', 'playgroundgame')
-                )
+            'name' => 'substitutes',
+            'options' => array(
+                'label' => $translator->translate('Substitutes number', 'playgroundgame')
+            ),
+            'attributes' => array(
+                'type' => 'text',
+                'placeholder' => $translator->translate('Substitutes number', 'playgroundgame')
+            )
         ));
 
         $this->add(array(
