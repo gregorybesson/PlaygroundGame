@@ -311,12 +311,12 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                     move_uploaded_file($prize_data['picture_file']['tmp_name'], $path . $filename);
                     $prize->setPicture($media_url . $filename);
                     ErrorHandler::stop(true);
-                    $prize = $prize_mapper->update($prize);
+                    $prize_mapper->update($prize);
                 }
             }
         }
         // If I receive false, it means that the FB Id was not available anymore
-        $result = $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array(
+        $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array(
             'game' => $game
         ));
 
@@ -646,7 +646,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      */
     public function checkExistingEntry($game, $user = null, $active = null, $bonus = null)
     {
-        $entry = false;
         $search = array('game'  => $game);
 
         if ($user) {

@@ -46,7 +46,8 @@ class Module
                     // add custom language directory
                     $config['translator']['translation_file_patterns'][] = array(
                         'type' => 'phpArray',
-                        'base_dir' => __DIR__ . '/../../../../../design/frontend/'. $parentTheme[0] .'/'. $parentTheme[1] . '/custom/' . $k . '/language',
+                        'base_dir' => __DIR__ . '/../../../../../design/frontend/'. $parentTheme[0] .
+                            '/'. $parentTheme[1] . '/custom/' . $k . '/language',
                         'pattern' => '%s.php',
                         'text_domain' => $k
                     );
@@ -66,7 +67,10 @@ class Module
                     
                                 // and removing the trailing slash for each subsequent route
                                 foreach ($routeModel['child_routes'] as $id => $ar) {
-                                    $routeModel['child_routes'][$id]['options']['route'] = ltrim($ar['options']['route'], '/');
+                                    $routeModel['child_routes'][$id]['options']['route'] = ltrim(
+                                        $ar['options']['route'],
+                                        '/'
+                                    );
                                 }
                     
                                 // then create the hostname route + appending the model updated
@@ -96,14 +100,18 @@ class Module
                                     ),
                                 );
                     
-                                $coreLayoutModel = $config['core_layout']['frontend'];
+                                $coreLayoutModel = isset($config['core_layout']['frontend'])?
+                                    $config['core_layout']['frontend']:
+                                    [];
                                 $config['core_layout']['frontend.'.$url] = $coreLayoutModel;
                             }
                         }
                     }
                     if (isset($v['assetic_configuration'])) {
                         foreach ($v['assetic_configuration']['modules'] as $m => $d) {
-                            $v['assetic_configuration']['modules'][$m]['root_path'][] = __DIR__ . '/../../../../../design/frontend/'. $parentTheme[0] .'/'. $parentTheme[1] . '/custom/' . $k . '/assets';
+                            $v['assetic_configuration']['modules'][$m]['root_path'][] = __DIR__ .
+                                '/../../../../../design/frontend/'. $parentTheme[0] .'/'. $parentTheme[1] .
+                                '/custom/' . $k . '/assets';
                         }
                         
                         // I specialize the route config to the game !
@@ -187,7 +195,9 @@ class Module
                     $moduleName      = strtolower(substr($controllerClass, 0, strpos($controllerClass, '\\')));
                     $match           = $e->getRouteMatch();
                     $routeName       = $match->getMatchedRouteName();
-                    $areaName        = (strpos($routeName, '/'))?substr($routeName, 0, strpos($routeName, '/')):$routeName;
+                    $areaName        = (strpos($routeName, '/'))?
+                        substr($routeName, 0, strpos($routeName, '/')):
+                        $routeName;
                     $areaName        = (strpos($areaName, '.'))?substr($areaName, 0, strpos($areaName, '.')):$areaName;
                     $areaName        = ($areaName == 'frontend' || $areaName == 'admin')? $areaName : 'frontend';
                     $controllerName  = $match->getParam('controller', 'not-found');
@@ -212,7 +222,9 @@ class Module
 
                         // the area needs to be updated if I'm in a custom game for frontendUrl to work
                         if (isset($config['custom_games'][$slug])) {
-                            $url = (is_array($config['custom_games'][$slug]['url']))? $config['custom_games'][$slug]['url']:array($config['custom_games'][$slug]['url']);
+                            $url = (is_array($config['custom_games'][$slug]['url']))?
+                                $config['custom_games'][$slug]['url']:
+                                array($config['custom_games'][$slug]['url']);
                             $from = strtolower($e->getRequest()->getUri()->getHost());
                             $areaName = ($areaName === 'frontend' && in_array($from, $url))? $areaName.'.'.$from:$areaName;
                         }
