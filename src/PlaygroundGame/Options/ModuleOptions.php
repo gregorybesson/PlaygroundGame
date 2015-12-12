@@ -48,6 +48,12 @@ class ModuleOptions extends AbstractOptions implements GameEditOptionsInterface
 
     /**
      * @var string
+     * The field associated with the invitation request Id
+     */
+    protected $onInvitationField = 'password';
+
+    /**
+     * @var string
      */
     protected $gameEntityClass = 'PlaygroundGame\Entity\Game';
 
@@ -159,6 +165,16 @@ class ModuleOptions extends AbstractOptions implements GameEditOptionsInterface
     public function getShareSubjectLine()
     {
         return $this->shareSubjectLine;
+    }
+
+    public function setOnInvitationField($onInvitationField)
+    {
+        $this->onInvitationField = $onInvitationField;
+    }
+
+    public function getOnInvitationField()
+    {
+        return $this->onInvitationField;
     }
 
     /**

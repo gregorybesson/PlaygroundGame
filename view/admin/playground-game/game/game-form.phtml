@@ -51,6 +51,11 @@ $form->prepare();
         <?php echo $this->formSelect($form->get('active')); ?>
         <?php echo $this->formElementErrors($form->get('active')) ?>
 	</div>
+    <div class="label-input">
+        <?php echo $this->formLabel($form->get('onInvitation')); ?>
+        <?php echo $this->formSelect($form->get('onInvitation')); ?>
+        <?php echo $this->formElementErrors($form->get('onInvitation')) ?>
+    </div>
     <?php //echo $this->formLabel($form->get('canal')); ?>
     <?php //echo $this->formInput($form->get('canal')); ?>
     <?php //echo $this->formElementErrors($form->get('canal')) ?>

@@ -44,6 +44,8 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
     protected $options;
 
     protected $playerformMapper;
+
+    protected $invitationMapper;
     
     protected $anonymousIdentifier = null;
 
@@ -2073,6 +2075,22 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
     public function setPlayerFormMapper($playerformMapper)
     {
         $this->playerformMapper = $playerformMapper;
+
+        return $this;
+    }
+
+    public function getInvitationMapper()
+    {
+        if (null === $this->invitationMapper) {
+            $this->invitationMapper = $this->getServiceManager()->get('playgroundgame_invitation_mapper');
+        }
+
+        return $this->invitationMapper;
+    }
+
+    public function setInvitationMapper($invitationMapper)
+    {
+        $this->invitationMapper = $invitationMapper;
 
         return $this;
     }

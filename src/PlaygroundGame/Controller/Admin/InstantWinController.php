@@ -56,7 +56,7 @@ class InstantWinController extends GameController
             if (empty($data['prizes'])) {
                 $data['prizes'] = array();
             }
-            $game = $service->create($data, $instantwin, 'playgroundgame_instantwin_form');
+            $game = $service->createOrUpdate($data, $instantwin, 'playgroundgame_instantwin_form');
             if ($game) {
                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The game was created');
 

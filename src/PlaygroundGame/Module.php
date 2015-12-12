@@ -548,6 +548,15 @@ class Module
                     return $mapper;
                 },
 
+                'playgroundgame_invitation_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
+                    $mapper = new \PlaygroundGame\Mapper\Invitation(
+                        $sm->get('doctrine.entitymanager.orm_default'),
+                        $sm->get('playgroundgame_module_options')
+                    );
+
+                    return $mapper;
+                },
+
                 'playgroundgame_game_form' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $translator = $sm->get('translator');
                     $form = new Form\Admin\Game(null, $sm, $translator);

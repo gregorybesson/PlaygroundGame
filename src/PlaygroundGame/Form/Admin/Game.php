@@ -285,6 +285,18 @@ class Game extends ProvidesEventsForm
 
         $this->add(array(
             'type' => 'Zend\Form\Element\Select',
+            'name' => 'onInvitation',
+            'options' => array(
+                'value_options' => array(
+                    '0' => $translator->translate('No', 'playgroundgame'),
+                    '1' => $translator->translate('Yes', 'playgroundgame')
+                ),
+                'label' => $translator->translate('On Invitation', 'playgroundgame')
+            )
+        ));
+
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Select',
             'name' => 'mailWinner',
             'options' => array(
                 'value_options' => array(
