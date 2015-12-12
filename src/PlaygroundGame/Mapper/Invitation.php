@@ -1,10 +1,6 @@
 <?php
 namespace PlaygroundGame\Mapper;
 
-use Doctrine\ORM\EntityManager;
-use PlaygroundGame\Options\ModuleOptions;
-use Zend\Stdlib\Hydrator\HydratorInterface;
-use ZfcBase\EventManager\EventProvider;
 use PlaygroundGame\Mapper\AbstractMapper;
 
 class Invitation extends AbstractMapper
