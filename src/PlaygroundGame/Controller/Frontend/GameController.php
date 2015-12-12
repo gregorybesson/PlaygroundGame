@@ -481,7 +481,7 @@ class GameController extends AbstractActionController
         if ($lastEntry === null) {
             return $this->redirect()->toUrl(
                 $this->frontendUrl()->fromRoute(
-                    'postvote',
+                    $this->game->getClassType(),
                     array('id' => $this->game->getIdentifier())
                 )
             );
@@ -628,8 +628,6 @@ class GameController extends AbstractActionController
             $form->setData($request->getPost());
             
             if (!$form->isValid()) {
-                var_dump($form->getMessages());
-                die('---');
                 $this->flashMessenger()->setNamespace('zfcuser-login-form')->addMessage(
                     'Authentication failed. Please try again.'
                 );

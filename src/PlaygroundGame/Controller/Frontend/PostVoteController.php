@@ -330,34 +330,6 @@ class PostVoteController extends GameController
      */
     public function resultAction()
     {
-        $statusMail = null;
-
-        // Has the user finished the game ?
-        $lastEntry = $this->getGameService()->findLastInactiveEntry($this->game, $this->user);
-
-        if ($lastEntry === null) {
-            return $this->redirect()->toUrl(
-                $this->frontendUrl()->fromRoute(
-                    'postvote',
-                    array('id' => $this->game->getIdentifier())
-                )
-            );
-        }
-
-        $form = $this->getServiceLocator()->get('playgroundgame_sharemail_form');
-        $form->setAttribute('method', 'post');
-
-        if ($this->getRequest()->isPost()) {
-            $data = $this->getRequest()->getPost()->toArray();
-            $form->setData($data);
-            if ($form->isValid()) {
-                $result = $this->getGameService()->sendShareMail($data, $this->game, $this->user, $lastEntry);
-                if ($result) {
-                    $statusMail = true;
-                }
-            }
-        }
-
         // Je recherche le post associé à entry + status == 0. Si non trouvé, je redirige vers home du jeu.
         $post = $this->getGameService()->getPostVotePostMapper()->findOneBy(array('entry' => $lastEntry));
 
@@ -370,15 +342,35 @@ class PostVoteController extends GameController
             );
         }
 
-        $viewModel = $this->buildView($this->game);
+        $view = $this->forward()->dispatch(
+            'playgroundgame_'.$this->game->getClassType(),
+            array(
+                'controller' => 'playgroundgame_'.$this->game->getClassType(),
+                'action' => 'share',
+                'id' => $this->game->getIdentifier()
+            )
+        );
 
-        $viewModel->setVariables(array(
-                'statusMail' => $statusMail,
-                'post' => $post,
-                'form' => $form,
-            ));
+        if ($view && $view instanceof \Zend\View\Model\ViewModel) {
+            $view->setVariables(array('post' => $post));
 
-        return $viewModel;
+            return $view;
+        } elseif ($view && $view instanceof \Zend\Http\PhpEnvironment\Response) {
+            return $view;
+        } else {
+            $form = $this->getServiceLocator()->get('playgroundgame_sharemail_form');
+            $form->setAttribute('method', 'post');
+
+            $viewModel = $this->buildView($this->game);
+
+            $viewModel->setVariables(array(
+                    'statusMail' => null,
+                    'post' => $post,
+                    'form' => $form,
+                ));
+
+            return $viewModel;
+        }
     }
 
     /**
