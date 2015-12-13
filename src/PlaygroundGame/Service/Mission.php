@@ -48,30 +48,34 @@ class Mission extends Game implements ServiceManagerAwareInterface
      *
      * @return Collection de MissionGame $missionGames
      */
-    public function findGamesByMission($mission){
+    public function findGamesByMission($mission)
+    {
         return $this->getMissionGameMapper()->findBy(array('mission'=>$mission));
     }
     
     public function checkMissionCondition($game, $winner, $prediction, $entry)
     {
         $missionGame = $this->findMissionGameByGame($game);
-        if(empty($missionGame)){
+        if (empty($missionGame)) {
             return false;
         }
     
-        if($missionGame->getMission()->getActive() === false){
+        if ($missionGame->getMission()->getActive() === false) {
             return false;
         }
     
-        $nextMissionGame = $this->getMissionGameMapper()->getNextGame($missionGame->getMission(), $missionGame->getPosition());
+        $nextMissionGame = $this->getMissionGameMapper()->getNextGame(
+            $missionGame->getMission(),
+            $missionGame->getPosition()
+        );
     
-        if(empty($nextMissionGame)){
+        if (empty($nextMissionGame)) {
             return false;
         }
     
         $missionGameConditions = $this->findMissionGameConditionByMissionGame($nextMissionGame);
     
-        if(empty($missionGameConditions)){
+        if (empty($missionGameConditions)) {
             return false;
         }
     
@@ -83,14 +87,14 @@ class Mission extends Game implements ServiceManagerAwareInterface
     
             // On passe au suivant si on a gagné
             if ($missionGameCondition->getAttribute() == MissionGameConditionEntity::VICTORY) {
-                if(!($winner || $prediction)){
+                if (!($winner || $prediction)) {
                     return false;
                 }
             }
     
             // On passe au suivant si on a perdu
             if ($missionGameCondition->getAttribute() == MissionGameConditionEntity::DEFEAT) {
-                if($winner || $prediction){
+                if ($winner || $prediction) {
                     return false;
                 }
             }
@@ -100,7 +104,7 @@ class Mission extends Game implements ServiceManagerAwareInterface
                 if (!$entry) {
                     return false;
                 }
-                if(!($entry->getPoints() > $missionGameCondition->getValue())){
+                if (!($entry->getPoints() > $missionGameCondition->getValue())) {
                     return false;
                 }
             }
@@ -110,7 +114,7 @@ class Mission extends Game implements ServiceManagerAwareInterface
                 if (!$entry) {
                     return false;
                 }
-                if(!($entry->getPoints() < $missionGameCondition->getValue())){
+                if (!($entry->getPoints() < $missionGameCondition->getValue())) {
                     return false;
                 }
             }

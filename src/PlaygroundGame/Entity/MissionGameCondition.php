@@ -25,12 +25,12 @@ class MissionGameCondition implements InputFilterAwareInterface
     * var $conditions
     * Tableau des types de conditions du jeu précendant pour passer au suivant.
     */
-    public static $conditions = array(self::NONE     => 'none', // On passe directement au jeu suivant
-                                      self::VICTORY  => 'victory', // Il faut une victoire pour passer au suivant
-                                      self::DEFEAT   => 'defeat', // Il  faut une defaite pour passer au suivant
-                                      self::GREATER  => 'greater than x points', // Il faut un nombre de points supérieur à x points pour passer au suivant 
-                                      self::LESS     => 'less than x points'
-                                ); // Il faut un nombre de points inférieur à x points pour passer au suivant
+    public static $conditions = array(self::NONE     => 'none', // Go to next game
+                                      self::VICTORY  => 'victory', // A victory is mandatory to go on
+                                      self::DEFEAT   => 'defeat', // A defeat is mandatory to go on
+                                      self::GREATER  => 'greater than x points', // x points to go on
+                                      self::LESS     => 'less than x points' // < x points to go on
+                                );
     protected $inputFilter;
     
     /**
@@ -42,7 +42,7 @@ class MissionGameCondition implements InputFilterAwareInterface
 
     /**
      * @ORM\ManyToOne(targetEntity="MissionGame", inversedBy="conditions")
-     * 
+     *
      **/
     protected $missionGame;
     
@@ -74,7 +74,8 @@ class MissionGameCondition implements InputFilterAwareInterface
     /**
      * Constructor
      */
-    public function __construct() {
+    public function __construct()
+    {
     }
 
      /**
@@ -85,7 +86,7 @@ class MissionGameCondition implements InputFilterAwareInterface
         return $this->id;
     }
 
-	/**
+    /**
      * @param field_type $id
      */
     public function setId($id)
@@ -95,7 +96,7 @@ class MissionGameCondition implements InputFilterAwareInterface
         return $this;
     }
 
-	/**
+    /**
      * @param $id
      * @return MissionGameCondition
      */
@@ -184,12 +185,12 @@ class MissionGameCondition implements InputFilterAwareInterface
         $this->updatedAt = new \DateTime("now");
     }
 
-    public function setInputFilter (InputFilterInterface $inputFilter)
+    public function setInputFilter(InputFilterInterface $inputFilter)
     {
         throw new \Exception("Not used");
     }
    
-    public function getInputFilter ()
+    public function getInputFilter()
     {
         if (! $this->inputFilter) {
             $inputFilter = new InputFilter();

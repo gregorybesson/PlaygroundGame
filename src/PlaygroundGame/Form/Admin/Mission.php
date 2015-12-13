@@ -11,7 +11,7 @@ use PlaygroundGame\Form\Admin\Game;
 
 class Mission extends Game
 {
-    public function __construct($name = null, ServiceManager $sm, Translator $translator)
+    public function __construct($name, ServiceManager $sm, Translator $translator)
     {
         $this->setServiceManager($sm);
         $entityManager = $sm->get('doctrine.entitymanager.orm_default');
@@ -29,7 +29,7 @@ class Mission extends Game
 
         parent::__construct($name, $sm, $translator);
 
-        $gameMissionFieldset = new MissionGameFieldset(null,$sm,$translator);
+        $gameMissionFieldset = new MissionGameFieldset(null, $sm, $translator);
         $this->add(array(
             'type'    => 'Zend\Form\Element\Collection',
             'name'    => 'missionGames',

@@ -102,7 +102,7 @@ class Mission extends Game implements InputFilterAwareInterface
 
     }
 
-    public function getInputFilter ()
+    public function getInputFilter()
     {
         if (! $this->inputFilter) {
             $inputFilter = new InputFilter();

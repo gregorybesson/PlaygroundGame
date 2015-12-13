@@ -58,7 +58,7 @@ class MissionGame extends AbstractMapper
 
         $nextGame =  $query->getResult();
         
-        if(empty($nextGame)) {
+        if (empty($nextGame)) {
             return false;
         }
 

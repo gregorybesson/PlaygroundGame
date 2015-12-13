@@ -47,12 +47,12 @@ class MissionController extends GameController
         $subGameIdentifier = $this->getEvent()->getRouteMatch()->getParam('gameId');
         $subGame = $this->getGameService()->checkGame($subGameIdentifier);
 
-        if(!$subGame){
+        if (!$subGame) {
             $games = $this->getGameService()->getMissionGames($this->game, $this->user);
-            foreach($games as $k=>$v){
+            foreach ($games as $k => $v) {
                 $g = $v['game'];
                 $entry = $v['entry'];
-                if($g->getGame()->isStarted() && $g->getGame()->isOnline()){
+                if ($g->getGame()->isStarted() && $g->getGame()->isOnline()) {
                     $subGame = $g->getGame();
                     $subGameIdentifier = $subGame->getIdentifier();
                     break;
@@ -69,8 +69,8 @@ class MissionController extends GameController
         $session = new Container('facebook');
         // Redirect to fan gate if the game require to 'like' the page before playing
         if ($session->offsetExists('signed_request')) {
-            if($this->game->getFbFan()){
-                if ($this->getGameService()->checkIsFan($this->game) === false){
+            if ($this->game->getFbFan()) {
+                if ($this->getGameService()->checkIsFan($this->game) === false) {
                     return $this->redirect()->toRoute(
                         $this->game->getClassType().'/fangate',
                         array('id' => $this->game->getIdentifier())
@@ -101,7 +101,7 @@ class MissionController extends GameController
                 $this->user = $view->user;
 
                 // If the user cannot be created/retrieved from Facebook info, redirect to login/register form
-                if (!$this->user){
+                if (!$this->user) {
                     $redirect = urlencode(
                         $this->frontendUrl()->fromRoute(
                             'mission/play',
@@ -109,7 +109,7 @@ class MissionController extends GameController
                             array('force_canonical' => true)
                         )
                     );
-                    if(array_search('login', $this->game->getStepsArray())){
+                    if (array_search('login', $this->game->getStepsArray())) {
                         return $this->redirect()->toUrl(
                             $this->frontendUrl()->fromRoute('mission/login') . '?redirect='.$redirect
                         );
@@ -117,12 +117,12 @@ class MissionController extends GameController
                         return $this->redirect()->toUrl(
                             $this->frontendUrl()->fromRoute('zfcuser/register') . '?redirect='.$redirect
                         );
-                    } 
+                    }
                 }
 
                 // The game is not played from Facebook : redirect to login/register form
 
-            } elseif(!$this->game->getAnonymousAllowed()) {
+            } elseif (!$this->game->getAnonymousAllowed()) {
                 $redirect = urlencode(
                     $this->frontendUrl()->fromRoute(
                         'mission/play',
@@ -131,7 +131,7 @@ class MissionController extends GameController
                     )
                 );
 
-                if(array_search('login', $this->game->getStepsArray())){
+                if (array_search('login', $this->game->getStepsArray())) {
                     return $this->redirect()->toUrl(
                         $this->frontendUrl()->fromRoute('mission/login') . '?redirect='.$redirect
                     );
@@ -166,7 +166,7 @@ class MissionController extends GameController
             )
         );
         
-        if($this->getResponse()->getStatusCode() == 302){
+        if ($this->getResponse()->getStatusCode() == 302) {
             return $this->redirect()->toUrl(
                 $this->frontendUrl()->fromRoute(
                     'mission/result',
@@ -200,7 +200,7 @@ class MissionController extends GameController
         $subGameIdentifier = $this->getEvent()->getRouteMatch()->getParam('gameId');
         $subGame = $this->getGameService()->checkGame($subGameIdentifier);
 
-        $secretKey = strtoupper(substr(sha1(uniqid('pg_', true).'####'.time()),0,15));
+        $secretKey = strtoupper(substr(sha1(uniqid('pg_', true).'####'.time()), 0, 15));
         $socialLinkUrl = $this->frontendUrl()->fromRoute(
             'mission',
             array('id' => $game->getIdentifier()),
@@ -211,9 +211,14 @@ class MissionController extends GameController
         $socialLinkUrl = $this->shortenUrl()->shortenUrl($socialLinkUrl);
 
         //TODO check existence of an active entry
-        /*$lastEntry = $this->getGameService()->findLastInactiveEntry($game, $user, $this->params()->fromQuery('anonymous_identifier'));
+        /*$lastEntry = $this->getGameService()->findLastInactiveEntry(
+        $game, $user, $this->params()->fromQuery('anonymous_identifier')
+        );
         if (!$lastEntry) {
-            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('mission', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)));
+            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute(
+                'mission', array('id' => $game->getIdentifier()),
+                array('force_canonical' => true)
+            ));
         }*/
 
         if (!$this->user && !$this->game->getAnonymousAllowed()) {
@@ -265,7 +270,7 @@ class MissionController extends GameController
             )
         );
         
-        if($this->getResponse()->getStatusCode() == 302){
+        if ($this->getResponse()->getStatusCode() == 302) {
             $this->getResponse()->setStatusCode('200');
             $urlRedirect = $this->getResponse()->getHeaders()->get('Location');
             
@@ -297,12 +302,12 @@ class MissionController extends GameController
          $result = parent::fbshareAction();
          $bonusEntry = false;
 
-         if ($result) {
-             $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-             $user = $this->zfcUserAuthentication()->getIdentity();
-             $game = $sg->checkGame($identifier);
-             $bonusEntry = $sg->addAnotherChance($game, $user, 1);
-         }
+        if ($result) {
+            $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
+            $user = $this->zfcUserAuthentication()->getIdentity();
+            $game = $sg->checkGame($identifier);
+            $bonusEntry = $sg->addAnotherChance($game, $user, 1);
+        }
 
          $response = $this->getResponse();
          $response->setContent(\Zend\Json\Json::encode(array(

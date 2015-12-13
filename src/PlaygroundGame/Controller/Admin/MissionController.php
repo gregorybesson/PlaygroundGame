@@ -33,7 +33,13 @@ class MissionController extends GameController
         $form = $this->getServiceLocator()->get('playgroundgame_mission_form');
         $form->bind($mission);
         $form->get('submit')->setAttribute('label', 'Add');
-        $form->setAttribute('action', $this->url()->fromRoute('admin/playgroundgame/create-mission', array('gameId' => 0)));
+        $form->setAttribute(
+            'action',
+            $this->url()->fromRoute(
+                'admin/playgroundgame/create-mission',
+                array('gameId' => 0)
+            )
+        );
         $form->setAttribute('method', 'post');
 
         $request = $this->getRequest();
@@ -42,7 +48,7 @@ class MissionController extends GameController
                 $this->getRequest()->getPost()->toArray(),
                 $this->getRequest()->getFiles()->toArray()
             );
-            if(empty($data['prizes'])){
+            if (empty($data['prizes'])) {
                 $data['prizes'] = array();
             }
 
@@ -78,7 +84,13 @@ class MissionController extends GameController
         $gameForm->setTemplate('playground-game/game/game-form');
 
         $form   = $this->getServiceLocator()->get('playgroundgame_mission_form');
-        $form->setAttribute('action', $this->url()->fromRoute('admin/playgroundgame/edit-mission', array('gameId' => $gameId)));
+        $form->setAttribute(
+            'action',
+            $this->url()->fromRoute(
+                'admin/playgroundgame/edit-mission',
+                array('gameId' => $gameId)
+            )
+        );
         $form->setAttribute('method', 'post');
         if ($game->getFbAppId()) {
             $appIds = $form->get('fbAppId')->getOption('value_options');
@@ -102,7 +114,7 @@ class MissionController extends GameController
                 $this->getRequest()->getPost()->toArray(),
                 $this->getRequest()->getFiles()->toArray()
             );
-            if(empty($data['prizes'])){
+            if (empty($data['prizes'])) {
                 $data['prizes'] = array();
             }
             

@@ -11,7 +11,7 @@ use Zend\InputFilter\InputFilterProviderInterface;
 
 class MissionGameFieldset extends Fieldset implements InputFilterProviderInterface
 {
-    public function __construct($name = null,ServiceManager $serviceManager, Translator $translator)
+    public function __construct($name, ServiceManager $serviceManager, Translator $translator)
     {
         parent::__construct($name);
         $entityManager = $serviceManager->get('doctrine.entitymanager.orm_default');
@@ -48,7 +48,7 @@ class MissionGameFieldset extends Fieldset implements InputFilterProviderInterfa
             ),
         ));
         
-        $gameMissionConditionFieldset = new MissionGameConditionFieldset(null,$serviceManager,$translator);
+        $gameMissionConditionFieldset = new MissionGameConditionFieldset(null, $serviceManager, $translator);
         $this->add(array(
             'type'    => 'Zend\Form\Element\Collection',
             'name'    => 'conditions',
@@ -76,7 +76,8 @@ class MissionGameFieldset extends Fieldset implements InputFilterProviderInterfa
 
     }
     
-    public function getInputFilterSpecification() {
+    public function getInputFilterSpecification()
+    {
         return array('game' => array('required' => true));
     }
 }

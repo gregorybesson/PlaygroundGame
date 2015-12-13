@@ -560,8 +560,8 @@ class Module
 
                 'playgroundgame_mission_mapper' => function ($sm) {
                     $mapper = new Mapper\Mission(
-                            $sm->get('doctrine.entitymanager.orm_default'),
-                            $sm->get('playgroundgame_module_options')
+                        $sm->get('doctrine.entitymanager.orm_default'),
+                        $sm->get('playgroundgame_module_options')
                     );
 
                     return $mapper;
@@ -585,7 +585,7 @@ class Module
                     return $mapper;
                 },
 
-                'playgroundgame_mission_form' => function($sm) {
+                'playgroundgame_mission_form' => function ($sm) {
                     $translator = $sm->get('translator');
                     $form = new Form\Admin\Mission(null, $sm, $translator);
                     $mission = new Entity\Mission();
@@ -594,7 +594,7 @@ class Module
                     return $form;
                 },
                 
-                'playgroundgame_mission_game_form' => function(\Zend\ServiceManager\ServiceManager $sm) {
+                'playgroundgame_mission_game_form' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $translator = $sm->get('translator');
                     $form = new Form\Admin\MissionGameFieldset(null, $sm, $translator);
                     $missionGame = new Entity\MissionGame();

@@ -48,7 +48,7 @@ class MissionGame implements InputFilterAwareInterface
      * position
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
-    protected $position; 
+    protected $position;
 
     /**
      * @ORM\Column(name="created_at", type="datetime", nullable=true)
@@ -168,7 +168,7 @@ class MissionGame implements InputFilterAwareInterface
         return $this->conditions;
     }
 
-	/**
+    /**
      * @param field_type $conditions
      */
     public function setConditions($conditions)
@@ -205,7 +205,7 @@ class MissionGame implements InputFilterAwareInterface
         $this->conditions[] = $condition;
     }
 
-	/**
+    /**
      *
      * @return \DateTime $createdAt
      */
@@ -245,12 +245,12 @@ class MissionGame implements InputFilterAwareInterface
         return $this;
     }
 
-    public function setInputFilter (InputFilterInterface $inputFilter)
+    public function setInputFilter(InputFilterInterface $inputFilter)
     {
         throw new \Exception("Not used");
     }
 
-    public function getInputFilter ()
+    public function getInputFilter()
     {
         if (! $this->inputFilter) {
             $inputFilter = new InputFilter();

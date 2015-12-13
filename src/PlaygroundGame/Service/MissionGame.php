@@ -37,20 +37,20 @@ class MissionGame extends EventProvider implements ServiceManagerAwareInterface
     {
 
         $nbGames = count($dataGames);
-        for ($i=0; $i < $nbGames; $i++) { 
-            if(!empty($dataGames[$i+1])){
-                $game1 = $this->getGameMapper()->findById($dataGames[$i]['games']); 
-                $game2 = $this->getGameMapper()->findById($dataGames[$i+1]['games']); 
+        for ($i=0; $i < $nbGames; $i++) {
+            if (!empty($dataGames[$i+1])) {
+                $game1 = $this->getGameMapper()->findById($dataGames[$i]['games']);
+                $game2 = $this->getGameMapper()->findById($dataGames[$i+1]['games']);
 
                 if ($game2->getEndDate() === null) {
                     continue;
                 }
 
                 // Si la date de fin du jeu 2 est inférieur a la date du jeu 1
-                if($game2->getEndDate()->getTimestamp() < $game1->getStartDate()->getTimestamp()){            
+                if ($game2->getEndDate()->getTimestamp() < $game1->getStartDate()->getTimestamp()) {
                     return false;
                 }
-            }   
+            }
         }
 
         return true;
@@ -61,20 +61,19 @@ class MissionGame extends EventProvider implements ServiceManagerAwareInterface
     {
         $gamesId = array();
         $nbGames = count($dataGames);
-        for ($i=0; $i < $nbGames; $i++) { 
-            $gamesId[] = $dataGames[$i]['games']; 
-        }        
+        for ($i=0; $i < $nbGames; $i++) {
+            $gamesId[] = $dataGames[$i]['games'];
+        }
 
         $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
 
         $query = $em->createQuery('SELECT mg 
                                    FROM PlaygroundGame\Entity\MissionGame mg
-                                   WHERE mg.game IN (:gamesId)'
-        );
+                                   WHERE mg.game IN (:gamesId)');
         $query->setParameter('gamesId', $gamesId);
         $games = $query->getResult();
 
-        if(count($games) > 0) {
+        if (count($games) > 0) {
             return false;
         }
 
@@ -82,7 +81,7 @@ class MissionGame extends EventProvider implements ServiceManagerAwareInterface
     }
     /**
     * associate : Permet d'associer des jeux et des conditions à une mission
-    * @param array $data 
+    * @param array $data
     * @param Mission $mission
     *
     * @return MissionGameEntity $missionGameEntity
@@ -94,13 +93,13 @@ class MissionGame extends EventProvider implements ServiceManagerAwareInterface
         $missionGameEntity->setGame($game);
         $missionGameEntity->setPosition($data['position']);
         $missionGameEntity->setMission($mission);
-        $missionGameEntity = $this->getMissionGameMapper()->insert($missionGameEntity); 
+        $missionGameEntity = $this->getMissionGameMapper()->insert($missionGameEntity);
 
         $missionGameConditionEntity = new MissionGameConditionEntity;
         $missionGameConditionEntity->setMissionGame($missionGameEntity);
         $missionGameConditionEntity->setAttribute($data['conditions']);
         $missionGameConditionEntity->setValue($data['points']);
-        $missionGameConditionEntity = $this->getMissionGameConditionMapper()->insert($missionGameConditionEntity); 
+        $missionGameConditionEntity = $this->getMissionGameConditionMapper()->insert($missionGameConditionEntity);
 
         return $missionGameEntity;
     }
@@ -113,7 +112,7 @@ class MissionGame extends EventProvider implements ServiceManagerAwareInterface
     {
         $missionGames = $this->findMissionGameByMission($mission);
         foreach ($missionGames as $missionGames) {
-            $this->getMissionGameMapper()->remove($missionGames); 
+            $this->getMissionGameMapper()->remove($missionGames);
         }
     }
 
@@ -121,23 +120,26 @@ class MissionGame extends EventProvider implements ServiceManagerAwareInterface
     public function checkCondition($game, $winner, $prediction, $entry)
     {
         $missionGame = $this->findMissionGameByGame($game);
-        if(empty($missionGame)){
+        if (empty($missionGame)) {
             return false;
         }
 
-        if($missionGame->getMission()->getActive() === false){
+        if ($missionGame->getMission()->getActive() === false) {
             return false;
         }
 
-        $nextMissionGame = $this->getMissionGameMapper()->getNextGame($missionGame->getMission(), $missionGame->getPosition());
+        $nextMissionGame = $this->getMissionGameMapper()->getNextGame(
+            $missionGame->getMission(),
+            $missionGame->getPosition()
+        );
         
-        if(empty($nextMissionGame)){
+        if (empty($nextMissionGame)) {
             return false;
         }
 
         $missionGameConditions = $this->findMissionGameConditionByMissionGame($nextMissionGame);
         
-        if(empty($missionGameConditions)){
+        if (empty($missionGameConditions)) {
             return false;
         }
 
@@ -149,14 +151,14 @@ class MissionGame extends EventProvider implements ServiceManagerAwareInterface
 
             // On passe au suivant si on a gagné
             if ($missionGameCondition->getAttribute() == MissionGameConditionEntity::VICTORY) {
-                if(!($winner || $prediction)){
+                if (!($winner || $prediction)) {
                     return false;
                 }
             }
 
             // On passe au suivant si on a perdu
             if ($missionGameCondition->getAttribute() == MissionGameConditionEntity::DEFEAT) {
-                if($winner || $prediction){
+                if ($winner || $prediction) {
                     return false;
                 }
             }
@@ -166,7 +168,7 @@ class MissionGame extends EventProvider implements ServiceManagerAwareInterface
                 if (!$entry) {
                     return false;
                 }
-                if(!($entry->getPoints() > $missionGameCondition->getValue())){
+                if (!($entry->getPoints() > $missionGameCondition->getValue())) {
                     return false;
                 }
             }
@@ -176,7 +178,7 @@ class MissionGame extends EventProvider implements ServiceManagerAwareInterface
                 if (!$entry) {
                     return false;
                 }
-                if(!($entry->getPoints() < $missionGameCondition->getValue())){
+                if (!($entry->getPoints() < $missionGameCondition->getValue())) {
                     return false;
                 }
             }
@@ -191,7 +193,8 @@ class MissionGame extends EventProvider implements ServiceManagerAwareInterface
     *
     * @return Collection de MissionGame $missionGames
     */
-    public function findMissionGameByMission($mission){
+    public function findMissionGameByMission($mission)
+    {
         return $this->getMissionGameMapper()->findBy(array('mission'=>$mission));
     }
 
@@ -200,7 +203,8 @@ class MissionGame extends EventProvider implements ServiceManagerAwareInterface
     *
     * @return Collection de MissionGame $missionGames
     */
-    public function findMissionGameByGame($game){
+    public function findMissionGameByGame($game)
+    {
         return $this->getMissionGameMapper()->findOneBy(array('game'=>$game));
     }
 
@@ -213,7 +217,7 @@ class MissionGame extends EventProvider implements ServiceManagerAwareInterface
     public function findMissionGameConditionByMissionGame($missionGame)
     {
         return $this->getMissionGameConditionMapper()->findBy(array('missionGame'=>$missionGame));
-    } 
+    }
 
     /**
      * Retrieve service manager instance
@@ -245,10 +249,12 @@ class MissionGame extends EventProvider implements ServiceManagerAwareInterface
     public function getMissionGameConditionMapper()
     {
         if (null === $this->missionGameConditionMapper) {
-            $this->missionGameConditionMapper = $this->getServiceManager()->get('playgroundgame_mission_game_condition_mapper');
+            $this->missionGameConditionMapper = $this->getServiceManager()->get(
+                'playgroundgame_mission_game_condition_mapper'
+            );
         }
 
-        return $this->missionGameConditionMapper;   
+        return $this->missionGameConditionMapper;
     }
 
     /**
