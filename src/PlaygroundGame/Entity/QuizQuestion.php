@@ -274,7 +274,7 @@ class QuizQuestion implements InputFilterAwareInterface
     }
 
     /**
-     * @param unknown_type $image
+     * @param string $image
      */
     public function setImage($image)
     {

@@ -20,7 +20,7 @@ use Zend\InputFilter\InputFilterInterface;
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="type", type="string")
  * @ORM\DiscriminatorMap({"quiz" = "Quiz", "lottery" = "Lottery", "instantwin" =
- * "InstantWin", "postvote" = "PostVote"})
+ * "InstantWin", "postvote" = "PostVote", "mission" = "Mission"})
  * @ORM\Table(name="game")
  * @Gedmo\TranslationEntity(class="PlaygroundGame\Entity\GameTranslation")
  */
@@ -141,6 +141,16 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      * @ORM\Column(type="boolean", nullable=false)
      */
     protected $active = 0;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=false)
+     */
+    protected $onInvitation = false;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Invitation", mappedBy="game", cascade={"persist","remove"}, orphanRemoval=true)
+     */
+    private $invitations;
 
     /**
      * @ORM\Column(name="anonymous_allowed",type="boolean", nullable=true)
@@ -348,6 +358,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
     public function __construct()
     {
         $this->prizes = new ArrayCollection();
+        $this->invitations = new ArrayCollection();
     }
 
     /**
@@ -1315,6 +1326,72 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
 
     /**
      *
+     * @return boolean $onInvitation
+     */
+    public function getOnInvitation()
+    {
+        return $this->onInvitation;
+    }
+
+    /**
+     *
+     * @param boolean $onInvitation
+     */
+    public function setOnInvitation($onInvitation)
+    {
+        $this->onInvitation = $onInvitation;
+
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection unknown_type
+     */
+    public function getInvitations()
+    {
+        return $this->invitations;
+    }
+
+    /**
+     * @param ArrayCollection $invitations
+     */
+    public function setInvitations(ArrayCollection $invitations)
+    {
+        $this->invitations = $invitations;
+
+        return $this;
+    }
+
+    public function addInvitations(ArrayCollection $invitations)
+    {
+        foreach ($invitations as $invitation) {
+            $invitation->setGame($this);
+            $this->invitations->add($invitation);
+        }
+    }
+
+    public function removeInvitations(ArrayCollection $invitations)
+    {
+        foreach ($invitations as $invitation) {
+            $prize->setGame(null);
+            $this->invitations->removeElement($invitation);
+        }
+    }
+
+    /**
+     * Add an invitation to the game.
+     *
+     * @param Invitation $invitation
+     *
+     * @return void
+     */
+    public function addInvitation($invitation)
+    {
+        $this->invitations[] = $invitation;
+    }
+
+    /**
+     *
      * @return string the Facebook app_id
      */
     public function getFbAppId()
@@ -1647,8 +1724,8 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
             )));
 
             $inputFilter->add($factory->createInput(array(
-                    'name' => 'partner',
-                    'required' => false
+                'name' => 'partner',
+                'required' => false
             )));
 
             $inputFilter->add($factory->createInput(array(
@@ -1657,17 +1734,22 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
             )));
 
             $inputFilter->add($factory->createInput(array(
-                   'name' => 'fbFan',
-                   'required' => false
+               'name' => 'fbFan',
+               'required' => false
             )));
 
             $inputFilter->add($factory->createInput(array(
-                    'name' => 'fbFanGate',
-                    'required' => false
+                'name' => 'fbFanGate',
+                'required' => false
             )));
 
             $inputFilter->add($factory->createInput(array(
                 'name' => 'prizes',
+                'required' => false
+            )));
+
+            $inputFilter->add($factory->createInput(array(
+                'name' => 'invitations',
                 'required' => false
             )));
 
@@ -1695,8 +1777,8 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
             )));
 
             $inputFilter->add($factory->createInput(array(
-                    'name' => 'publicationDate',
-                    'required' => false,
+                'name' => 'publicationDate',
+                'required' => false,
             )));
 
             $inputFilter->add($factory->createInput(array(
@@ -1788,6 +1870,11 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
             $inputFilter->add($factory->createInput(array(
                 'name' => 'active',
                 'required' => true
+            )));
+
+            $inputFilter->add($factory->createInput(array(
+                'name' => 'onInvitation',
+                'required' => false
             )));
 
             $inputFilter->add($factory->createInput(array(

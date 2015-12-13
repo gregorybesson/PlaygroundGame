@@ -481,7 +481,7 @@ class GameController extends AbstractActionController
         if ($lastEntry === null) {
             return $this->redirect()->toUrl(
                 $this->frontendUrl()->fromRoute(
-                    'postvote',
+                    $this->game->getClassType(),
                     array('id' => $this->game->getIdentifier())
                 )
             );
@@ -631,7 +631,6 @@ class GameController extends AbstractActionController
                 $this->flashMessenger()->setNamespace('zfcuser-login-form')->addMessage(
                     'Authentication failed. Please try again.'
                 );
-                
 
                 return $this->redirect()->toUrl(
                     $this->frontendUrl()->fromRoute(
@@ -661,7 +660,7 @@ class GameController extends AbstractActionController
             } else {
                 return $this->redirect()->toUrl(
                     $this->frontendUrl()->fromRoute(
-                        $this->game->getClassType() . '/' . $this->game->nextStep('index'),
+                        $this->game->getClassType() . '/index',
                         array('id' => $this->game->getIdentifier())
                     )
                 );
@@ -678,6 +677,7 @@ class GameController extends AbstractActionController
         $viewModel = $this->buildView($this->game);
         $viewModel->setVariables(array(
             'form' => $form,
+            'flashMessages' => $this->flashMessenger()->getMessages(),
         ));
         return $viewModel;
     }
@@ -811,6 +811,32 @@ class GameController extends AbstractActionController
             $socialCredentials
         );
 
+        if ($this->game->getOnInvitation()) {
+            $credential = trim(
+                $post[$this->getGameService()->getOptions()->getOnInvitationField()]
+            );
+            if (!$credential) {
+                $credential = $this->params()->fromQuery(
+                    $this->getGameService()->getOptions()->getOnInvitationField()
+                );
+            }
+            $found = $this->getGameService()->getInvitationMapper()->findOneBy(array('requestKey'=>$credential));
+
+            if (!$found || !empty($found->getUser())) {
+                $form->setData($post);
+                $viewModel = $this->buildView($this->game);
+                $viewModel->setVariables(array(
+                    'registerForm' => $form,
+                    'enableRegistration' => $userOptions->getEnableRegistration(),
+                    'redirect' => $redirect,
+                    'flashMessages'    => $this->flashMessenger()->getMessages(),
+                    'flashErrors'      => $this->flashMessenger()->getErrorMessages(),
+                ));
+
+                return $viewModel;
+            }
+        }
+
         $user = $service->register($post, 'playgroundgame_register_form');
 
         if (! $user) {
@@ -822,6 +848,12 @@ class GameController extends AbstractActionController
             ));
             
             return $viewModel;
+        }
+
+        if ($this->game->getOnInvitation()) {
+            // user has been created, associate the code with the userId
+            $found->setUser($user);
+            $this->getGameService()->getInvitationMapper()->update($found);
         }
 
         if ($service->getOptions()->getEmailVerification()) {

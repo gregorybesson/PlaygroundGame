@@ -159,7 +159,7 @@ class Game extends ProvidesEventsForm
                 'type' => 'Zend\Form\Element\Checkbox',
                 'name' => 'displayHome',
                 'options' => array(
-                        'label' => $translator->translate('Publish game on home page', 'playgroundgame'),
+                    'label' => $translator->translate('Publish game on home page', 'playgroundgame'),
                 ),
         ));
 
@@ -235,22 +235,22 @@ class Game extends ProvidesEventsForm
         ));
 
         $this->add(array(
-                'type' => 'Zend\Form\Element\Select',
-                'name' => 'playLimitScale',
-                'attributes' =>  array(
-                        'id' => 'playLimitScale',
-                        'options' => array(
-                                'day' => $translator->translate('Day', 'playgroundgame'),
-                                'week' => $translator->translate('Week', 'playgroundgame'),
-                                'month' => $translator->translate('Month', 'playgroundgame'),
-                                'year' => $translator->translate('Year', 'playgroundgame'),
-                                'always' => $translator->translate('Everytime', 'playgroundgame'),
-                        ),
-                ),
+            'type' => 'Zend\Form\Element\Select',
+            'name' => 'playLimitScale',
+            'attributes' =>  array(
+                'id' => 'playLimitScale',
                 'options' => array(
-                        'empty_option' => $translator->translate('Limitation time', 'playgroundgame'),
-                        'label' => $translator->translate('Limit time', 'playgroundgame'),
+                    'day' => $translator->translate('Day', 'playgroundgame'),
+                    'week' => $translator->translate('Week', 'playgroundgame'),
+                    'month' => $translator->translate('Month', 'playgroundgame'),
+                    'year' => $translator->translate('Year', 'playgroundgame'),
+                    'always' => $translator->translate('Everytime', 'playgroundgame'),
                 ),
+            ),
+            'options' => array(
+                    'empty_option' => $translator->translate('Limitation time', 'playgroundgame'),
+                    'label' => $translator->translate('Limit time', 'playgroundgame'),
+            ),
         ));
 
         $this->add(array(
@@ -280,6 +280,21 @@ class Game extends ProvidesEventsForm
                     '1' => $translator->translate('Yes', 'playgroundgame')
                 ),
                 'label' => $translator->translate('Active', 'playgroundgame')
+            )
+        ));
+
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Select',
+            'name' => 'onInvitation',
+            'options' => array(
+                'value_options' => array(
+                    '0' => $translator->translate('No', 'playgroundgame'),
+                    '1' => $translator->translate('Yes', 'playgroundgame')
+                ),
+                'label' => $translator->translate('On Invitation', 'playgroundgame')
+            ),
+            'attributes' => array(
+                'id' => 'onInvitation'
             )
         ));
 

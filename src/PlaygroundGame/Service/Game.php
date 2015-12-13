@@ -44,6 +44,8 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
     protected $options;
 
     protected $playerformMapper;
+
+    protected $invitationMapper;
     
     protected $anonymousIdentifier = null;
 
@@ -53,7 +55,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      * This service is ready for all types of games
      *
      * @param array $data
-     * @param string $entity
      * @param string $formClass
      * @return \PlaygroundGame\Entity\Game
      */
@@ -1785,6 +1786,9 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         return $a;
     }
 
+    /**
+     * @param \Zend\InputFilter\InputFilter $inputFilter
+     */
     public function decorate($element, $attr, $inputFilter)
     {
         $factory = new InputFactory();
@@ -2073,6 +2077,22 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
     public function setPlayerFormMapper($playerformMapper)
     {
         $this->playerformMapper = $playerformMapper;
+
+        return $this;
+    }
+
+    public function getInvitationMapper()
+    {
+        if (null === $this->invitationMapper) {
+            $this->invitationMapper = $this->getServiceManager()->get('playgroundgame_invitation_mapper');
+        }
+
+        return $this->invitationMapper;
+    }
+
+    public function setInvitationMapper($invitationMapper)
+    {
+        $this->invitationMapper = $invitationMapper;
 
         return $this;
     }
