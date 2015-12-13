@@ -41,6 +41,9 @@ class PostVote extends Game implements ServiceManagerAwareInterface
         return $media_url;
     }
 
+    /**
+     * @param boolean $entry
+     */
     public function checkPost($entry)
     {
         $post = $this->getPostVotePostMapper()->findOneBy(array('entry' => $entry));

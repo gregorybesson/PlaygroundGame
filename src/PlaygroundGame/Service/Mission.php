@@ -146,7 +146,7 @@ class Mission extends Game implements ServiceManagerAwareInterface
      * setMissionMapper
      *
      * @param  MissionMapperInterface $missionMapper
-     * @return User
+     * @return Mission
      */
     public function setMissionMapper($missionMapper)
     {
@@ -172,8 +172,8 @@ class Mission extends Game implements ServiceManagerAwareInterface
     /**
      * setMissionMapper
      *
-     * @param  MissionMapperInterface $missionMapper
-     * @return User
+     * @param  MissionMapperInterface $missionGameMapper
+     * @return Mission
      */
     public function setMissionGameMapper($missionGameMapper)
     {
