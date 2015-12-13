@@ -55,7 +55,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      * This service is ready for all types of games
      *
      * @param array $data
-     * @param string $entity
      * @param string $formClass
      * @return \PlaygroundGame\Entity\Game
      */
@@ -1787,6 +1786,9 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         return $a;
     }
 
+    /**
+     * @param \Zend\InputFilter\InputFilter $inputFilter
+     */
     public function decorate($element, $attr, $inputFilter)
     {
         $factory = new InputFactory();

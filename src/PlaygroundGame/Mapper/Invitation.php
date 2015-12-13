@@ -16,7 +16,6 @@ class Invitation extends AbstractMapper
     }
 
     /**
-     * @param string $id
      * @return \Heineken\Entity\Invitation
      */
     public function findByGame($game)
