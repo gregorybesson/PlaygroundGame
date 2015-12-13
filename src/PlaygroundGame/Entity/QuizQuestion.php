@@ -75,7 +75,7 @@ class QuizQuestion implements InputFilterAwareInterface
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
-    protected $autoplay = false;
+    protected $autoplay = 0;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -90,7 +90,7 @@ class QuizQuestion implements InputFilterAwareInterface
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
-    protected $timer = false;
+    protected $timer = 0;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
