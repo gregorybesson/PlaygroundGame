@@ -241,6 +241,13 @@ return array(
     'Occurrence Date'    => 'Occurrence Date',
     'Edit occurrence'    => 'Edit occurrence',
 
+    // Admin Mission
+    'Missions'           => 'Missions',
+    'Add new mission'    => 'Add new mission',
+    'Linked games'       => 'Linked games',
+    'Link games'         => 'Link games',
+    'Hide Mission header' => 'Hide Mission header',
+
     // Front post&vote email moderation
     'This post has been reported in a game.' => 'This post has been reported in a game.',
 

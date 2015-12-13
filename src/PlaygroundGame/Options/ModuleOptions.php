@@ -50,7 +50,7 @@ class ModuleOptions extends AbstractOptions implements GameEditOptionsInterface
      * @var string
      * The field associated with the invitation request Id
      */
-    protected $onInvitationField = 'password';
+    protected $onInvitationField = 'code';
 
     /**
      * @var string

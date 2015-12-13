@@ -17,7 +17,7 @@ $playgroundgame = array(
         'emailFromAddress' => 'no-reply@to.me',
         'participationSubjectLine' => 'Jeu concours',
         'shareSubjectLine' => 'Venez découvrir le jeu concours',
-        'onInvitationField' => 'password'
+        'onInvitationField' => 'code'
 );
 
 /**

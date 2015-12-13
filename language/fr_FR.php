@@ -249,6 +249,13 @@ return array(
     'Create lottery' => 'Créer un tirage au sort',
     'Edit lottery'    => 'Editer un tirage au sort',
 
+    // Admin Mission
+    'Missions'           => 'Missions',
+    'Add new mission'    => 'Ajouter une nouvelle mission',
+    'Linked games'       => 'Jeux associés',
+    'Link games'         => 'Associer des jeux',
+    'Hide Mission header' => 'Cacher l\'en-tête de mission',
+
     // State
     'schedule' => '<span class="label label-important">Programmé</span>',
     'launching' => '<span class="label label-warning">Lancement</span>',

@@ -1,0 +1,57 @@
+<?php $this->plugin('translate')->setTranslatorTextDomain('playgroundgame'); ?>
+<?php
+$fm = $this->flashMessenger()->setNamespace('playgroundgame')->getMessages();
+if (isset($fm[0]))
+{
+    print '<span class=>' . $fm[0] . '</span>';
+}
+?>
+
+<ul class="liste-buttons">
+    <li class="btn btn-default right margin-left10"><a href="<?php echo $this->url('admin/mission/create');?>"><?php echo $this->translate('Add new mission'); ?></a></li>
+</ul>
+
+<h1><?php echo $this->translate('Missions'); ?></h1>
+
+<table class="table table-hover table-striped">
+    <thead>
+        <tr>
+            <th><?php echo $this->translate('Title'); ?></th>
+            <th><?php echo $this->translate('Linked games'); ?></th>
+            <th><?php echo $this->translate('Active'); ?></th>
+            <th></th>
+        </tr>
+        <?php foreach ($missions as $mission) : ?>
+            <tr>
+                <th><?php echo $mission->getTitle(); ?></th>
+                <th>
+                     <?php foreach($mission->getMissionGames() as $missionGame): ?>
+                        <?php echo $missionGame->getGame()->getTitle() . " > ";?>
+                     <?php endforeach;?>  
+                </th>
+                <th>
+                     <?php if ($mission->getActive() == 0): ?>
+                        <span class="label label-important"><?php echo $this->translate('No'); ?></span>
+                     <?php else : ?>
+                        <span class="label label-success"><?php echo $this->translate('Yes'); ?></span>
+                     <?php endif; ?>   
+                </th>
+                <th>
+
+                    <?php if($mission->getActive() == 0): ?>
+                        <a href="<?php echo $this->url('admin/mission/activate', array('missionId' => $mission->getId()));?>"><?php echo $this->translate('Activate mission');?></a> |
+                    <?php else : ?>
+                        <a href="<?php echo $this->url('admin/mission/desactivate', array('missionId' => $mission->getId()));?>"><?php echo $this->translate('Deactivate mission');?></a> |
+                    <?php endif; ?> 
+
+                    
+                    
+                    <a href="<?php echo $this->url('admin/mission/edit', array('missionId' => $mission->getId()));?>"><?php echo $this->translate('Edit');?></a>  |
+                    <a href="<?php echo $this->url('admin/mission/delete', array('missionId' => $mission->getId()));?>"><?php echo $this->translate('Delete');?></a>
+                </th>
+            </tr>
+        <?php endforeach; ?>
+    </thead>
+    <tbody>
+    </tbody>
+</table>

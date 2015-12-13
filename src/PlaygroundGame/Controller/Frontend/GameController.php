@@ -824,7 +824,7 @@ class GameController extends AbstractActionController
 
             if (!$found || !empty($found->getUser())) {
                 $form->setData($post);
-                $viewModel = $this->buildView($game);
+                $viewModel = $this->buildView($this->game);
                 $viewModel->setVariables(array(
                     'registerForm' => $form,
                     'enableRegistration' => $userOptions->getEnableRegistration(),

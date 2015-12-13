@@ -1,0 +1,21 @@
+<?php $this->plugin('translate')->setTranslatorTextDomain('mission');// Pour le texte ?>
+
+<div class="game-lottery row-fluid welcome">
+    <h1><?php echo $this->game->getTitle(); ?></h1>
+
+    <!-- BLOCK GAME START -->
+    <?php echo $this->partial('playground-game/partial/game-header', array('game'=>$this->game));?>
+    <!-- END BLOCK GAME START -->
+
+    <!-- contenu article -->
+    <div id="content-article" class="row-fluid rounded backgrey">
+        <div class="welcome-block"><?php echo $this->game->getWelcomeBlock(); ?></div>
+        <?php if($game->isStarted()):?>
+        <div class="center">
+            <div class="btn btn-warning"<?php if ($this->isCtaActive) { echo ' id="fb-play"'; } ?>>
+                <a href="<?php echo $this->url('frontend/mission/result', array('id' => $this->game->getIdentifier()))?>" class="arrow-right">Result</a>
+            </div>
+        </div>
+        <?php endif;?>
+    </div>
+  </div>

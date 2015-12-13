@@ -362,7 +362,8 @@ class Module
                 'playgroundgame_postvote_service'          => 'PlaygroundGame\Service\PostVote',
                 'playgroundgame_quiz_service'              => 'PlaygroundGame\Service\Quiz',
                 'playgroundgame_instantwin_service'        => 'PlaygroundGame\Service\InstantWin',
-                'playgroundgame_prize_service'                => 'PlaygroundGame\Service\Prize',
+                'playgroundgame_mission_service'           => 'PlaygroundGame\Service\Mission',
+                'playgroundgame_prize_service'             => 'PlaygroundGame\Service\Prize',
                 'playgroundgame_prizecategory_service'     => 'PlaygroundGame\Service\PrizeCategory',
                 'playgroundgame_prizecategoryuser_service' => 'PlaygroundGame\Service\PrizeCategoryUser',
             ),
@@ -555,6 +556,50 @@ class Module
                     );
 
                     return $mapper;
+                },
+
+                'playgroundgame_mission_mapper' => function ($sm) {
+                    $mapper = new Mapper\Mission(
+                            $sm->get('doctrine.entitymanager.orm_default'),
+                            $sm->get('playgroundgame_module_options')
+                    );
+
+                    return $mapper;
+                },
+                
+                'playgroundgame_mission_game_mapper' => function ($sm) {
+                    $mapper = new Mapper\MissionGame(
+                        $sm->get('doctrine.entitymanager.orm_default'),
+                        $sm->get('playgroundgame_module_options')
+                    );
+                
+                    return $mapper;
+                },
+                
+                'playgroundgame_mission_game_condition_mapper' => function ($sm) {
+                    $mapper = new Mapper\MissionGameCondition(
+                        $sm->get('doctrine.entitymanager.orm_default'),
+                        $sm->get('playgroundgame_module_options')
+                    );
+                
+                    return $mapper;
+                },
+
+                'playgroundgame_mission_form' => function($sm) {
+                    $translator = $sm->get('translator');
+                    $form = new Form\Admin\Mission(null, $sm, $translator);
+                    $mission = new Entity\Mission();
+                    $form->setInputFilter($mission->getInputFilter());
+
+                    return $form;
+                },
+                
+                'playgroundgame_mission_game_form' => function(\Zend\ServiceManager\ServiceManager $sm) {
+                    $translator = $sm->get('translator');
+                    $form = new Form\Admin\MissionGameFieldset(null, $sm, $translator);
+                    $missionGame = new Entity\MissionGame();
+                    $form->setInputFilter($missionGame->getInputFilter());
+                    return $form;
                 },
 
                 'playgroundgame_game_form' => function (\Zend\ServiceManager\ServiceManager $sm) {
