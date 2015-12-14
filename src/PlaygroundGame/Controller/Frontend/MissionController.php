@@ -33,10 +33,10 @@ class MissionController extends GameController
         
         $viewModel = $this->buildView($this->game);
         $viewModel->setVariables(array(
-            'user'             => $this->user,
-            'games'            => $games,
-            'isSubscribed'     => $isSubscribed,
-            'flashMessages'    => $this->flashMessenger()->getMessages(),
+            'user' => $this->user,
+            'games' => $games,
+            'entry' => $entry,
+            'flashMessages' => $this->flashMessenger()->getMessages(),
         ));
     
         return $viewModel;
@@ -203,7 +203,7 @@ class MissionController extends GameController
         $secretKey = strtoupper(substr(sha1(uniqid('pg_', true).'####'.time()), 0, 15));
         $socialLinkUrl = $this->frontendUrl()->fromRoute(
             'mission',
-            array('id' => $game->getIdentifier()),
+            array('id' => $this->game->getIdentifier()),
             array('force_canonical' => true)
         ).'?key='.$secretKey;
 
@@ -225,15 +225,12 @@ class MissionController extends GameController
             $redirect = urlencode(
                 $this->frontendUrl()->fromRoute(
                     'mission/result',
-                    array('id' => $game->getIdentifier())
+                    array('id' => $this->game->getIdentifier())
                 )
             );
 
             return $this->redirect()->toUrl(
-                $this->frontendUrl()->fromRoute(
-                    'zfcuser/register',
-                    array('channel' => $channel)
-                ) . '?redirect='.$redirect
+                $this->frontendUrl()->fromRoute('zfcuser/register') . '?redirect='.$redirect
             );
         }
 
@@ -245,10 +242,10 @@ class MissionController extends GameController
             $data = $this->getRequest()->getPost()->toArray();
             $form->setData($data);
             if ($form->isValid()) {
-                $result = $this->getGameService()->sendShareMail($data, $game, $user, $lastEntry);
+                $result = $this->getGameService()->sendShareMail($data, $tis->game, $this->user, $lastEntry);
                 if ($result) {
                     $statusMail = true;
-                    //$bonusEntry = $this->getGameService()->addAnotherChance($game, $user, 1);
+                    //$bonusEntry = $this->getGameService()->addAnotherChance($tis->game, $this->user, 1);
                 }
             }
         }
@@ -258,7 +255,7 @@ class MissionController extends GameController
         // TODO : Improve this.
         $viewModel = $this->buildView($this->game);
         
-        //$this->sendMail($game, $user, $lastEntry);
+        //$this->sendMail($tis->game, $this->user, $lastEntry);
 
         $beforeLayout = $this->layout()->getTemplate();
         $subViewModel = $this->forward()->dispatch(

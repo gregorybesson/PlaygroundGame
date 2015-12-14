@@ -52,14 +52,10 @@ class Mission extends Game implements InputFilterAwareInterface
     
     public function addMissionGames(ArrayCollection $missionGames)
     {
-        //echo 'addMissionGames<br/>';
         foreach ($missionGames as $missionGame) {
-            //echo 'uu ' . $missionGame->getId();
-
             $missionGame->setMission($this);
             $this->missionGames->add($missionGame);
         }
-        //die('----fin----');
     }
     
     public function removeMissionGames(ArrayCollection $missionGames)
@@ -80,6 +76,37 @@ class Mission extends Game implements InputFilterAwareInterface
     public function addMissionGame($missionGame)
     {
         $this->missionGames[] = $missionGame;
+    }
+
+    /**
+     * Get the playables game if any
+     *
+     * @return array
+     */
+    public function getPlayableGames($entry=null)
+    {
+        $sortedPlayableGames = array();
+        foreach($this->missionGames as $missionGame){
+            if($missionGame->getGame()->isStarted() && $missionGame->getGame()->isOnline()){
+                if(!$missionGame->getConditions() || $missionGame->fulfillConditions($entry)){
+                    $sortedPlayableGames[$missionGame->getPosition()] = $missionGame;
+                }
+            }
+        }
+
+        return $sortedPlayableGames;
+    }
+
+    /**
+     * Get the next playable game if any
+     *
+     * @return \PlaygroundGame\Entity\Game
+     */
+    public function getNextPlayableGame($entry=null)
+    {
+        $sortedPlayableGames = $this->getPlayableGames($entry);
+
+        return (count($sortedPlayableGames)>=1)?current($sortedPlayableGames)->getGame():null;
     }
 
     /**

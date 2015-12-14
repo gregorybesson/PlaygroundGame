@@ -37,6 +37,19 @@ class QuizAnswerFieldset extends Fieldset
         ));
 
         $this->add(array(
+            'type' => 'Zend\Form\Element\Textarea',
+            'name' => 'jsonData',
+            'options' => array(
+                'label' => $translator->translate('json Data', 'playgroundgame'),
+            ),
+            'attributes' => array(
+                'cols' => '10',
+                'rows' => '2',
+                'id' => 'jsonData',
+            ),
+        ));
+
+        $this->add(array(
                 'type' => 'Zend\Form\Element\Select',
                 'name' => 'correct',
                 'options' => array(
