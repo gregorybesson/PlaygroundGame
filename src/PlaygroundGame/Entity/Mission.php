@@ -83,12 +83,12 @@ class Mission extends Game implements InputFilterAwareInterface
      *
      * @return array
      */
-    public function getPlayableGames($entry=null)
+    public function getPlayableGames($entry = null)
     {
         $sortedPlayableGames = array();
-        foreach($this->missionGames as $missionGame){
-            if($missionGame->getGame()->isStarted() && $missionGame->getGame()->isOnline()){
-                if(!$missionGame->getConditions() || $missionGame->fulfillConditions($entry)){
+        foreach ($this->missionGames as $missionGame) {
+            if ($missionGame->getGame()->isStarted() && $missionGame->getGame()->isOnline()) {
+                if (!$missionGame->getConditions() || $missionGame->fulfillConditions($entry)) {
                     $sortedPlayableGames[$missionGame->getPosition()] = $missionGame;
                 }
             }
@@ -102,7 +102,7 @@ class Mission extends Game implements InputFilterAwareInterface
      *
      * @return \PlaygroundGame\Entity\Game
      */
-    public function getNextPlayableGame($entry=null)
+    public function getNextPlayableGame($entry = null)
     {
         $sortedPlayableGames = $this->getPlayableGames($entry);
 

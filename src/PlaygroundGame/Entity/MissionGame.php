@@ -252,7 +252,7 @@ class MissionGame implements InputFilterAwareInterface
      */
     public function fulfillConditions($entry = null)
     {
-        foreach($this->getConditions() as $condition){
+        foreach ($this->getConditions() as $condition) {
             if ($condition->getAttribute() == MissionGameCondition::NONE) {
                 continue;
             }

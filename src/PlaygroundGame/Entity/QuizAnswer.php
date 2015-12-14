@@ -342,7 +342,7 @@ class QuizAnswer implements InputFilterAwareInterface
 
         if (isset($data['jsonData']) && $data['jsonData'] !== null) {
             $this->jsonData = $data['jsonData'];
-        }        
+        }
 
         if (isset($data['type']) && $data['type'] !== null) {
             $this->type = $data['type'];
