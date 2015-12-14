@@ -2,9 +2,7 @@
 
 namespace PlaygroundGame\Controller\Frontend;
 
-use PlaygroundGame\Entity\Mission;
 use PlaygroundGame\Controller\Frontend\GameController;
-use Zend\View\Model\ViewModel;
 use Zend\Session\Container;
 use PlaygroundGame\Service\GameService;
 
