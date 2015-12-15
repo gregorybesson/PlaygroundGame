@@ -87,7 +87,8 @@ class Mission extends Game implements InputFilterAwareInterface
     {
         $sortedPlayableGames = array();
         foreach ($this->missionGames as $missionGame) {
-            if ($missionGame->getGame()->isStarted() && $missionGame->getGame()->isOnline()) {
+            $g = $missionGame->getGame();
+            if ($g->isStarted() && $g->isOnline()) {
                 if (!$missionGame->getConditions() || $missionGame->fulfillConditions($entry)) {
                     $sortedPlayableGames[$missionGame->getPosition()] = $missionGame;
                 }
@@ -107,6 +108,24 @@ class Mission extends Game implements InputFilterAwareInterface
         $sortedPlayableGames = $this->getPlayableGames($entry);
 
         return (count($sortedPlayableGames)>=1)?current($sortedPlayableGames)->getGame():null;
+    }
+
+    /**
+     * is this game playable ?
+     *
+     * @return boolean
+     */
+    public function isPlayable($subGame, $entry=null)
+    {
+        if (!$subGame) return false;
+        
+        $sortedPlayableGames = $this->getPlayableGames($entry);
+        foreach($sortedPlayableGames as $pgame){
+            if($subGame->getIdentifier() === $pgame->getGame()->getIdentifier())
+                return true;
+        }
+
+        return false;
     }
 
     /**

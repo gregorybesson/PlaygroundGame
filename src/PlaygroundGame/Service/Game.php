@@ -596,20 +596,25 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             return false;
         }
 
+        // for preview stuff as admin
         if ($this->isAllowed('game', 'edit')) {
-            $game->setActive(true);
-            $game->setStartDate(null);
-            $game->setEndDate(null);
-            $game->setPublicationDate(null);
-            $game->setBroadcastPlatform(true);
+            $r =$this->getServiceManager()->get('request');
+            if($r->getQuery()->get('preview')){ 
+                $game->setActive(true);
+                $game->setStartDate(null);
+                $game->setEndDate(null);
+                $game->setPublicationDate(null);
+                $game->setBroadcastPlatform(true);
 
-            // I don't want the game to be updated through any update during the preview mode.
-            // I mark it as readonly for Doctrine
-            $this->getServiceManager()
-                ->get('doctrine.entitymanager.orm_default')
-                ->getUnitOfWork()
-                ->markReadOnly($game);
-            return $game;
+                // I don't want the game to be updated through any update during the preview mode.
+                // I mark it as readonly for Doctrine
+                $this->getServiceManager()
+                    ->get('doctrine.entitymanager.orm_default')
+                    ->getUnitOfWork()
+                    ->markReadOnly($game);
+                    
+                return $game;
+            }
         }
 
         // The game is inactive

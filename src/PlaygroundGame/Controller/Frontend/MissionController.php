@@ -42,20 +42,37 @@ class MissionController extends GameController
 
     public function playAction()
     {
-        $subGameIdentifier = $this->getEvent()->getRouteMatch()->getParam('gameId');
-        $subGame = $this->getGameService()->checkGame($subGameIdentifier);
 
-        if (!$subGame) {
-            $games = $this->getGameService()->getMissionGames($this->game, $this->user);
-            foreach ($games as $k => $v) {
-                $g = $v['game'];
-                $entry = $v['entry'];
-                if ($g->getGame()->isStarted() && $g->getGame()->isOnline()) {
-                    $subGame = $g->getGame();
-                    $subGameIdentifier = $subGame->getIdentifier();
-                    break;
-                }
-            }
+        $subGameIdentifier = $this->getEvent()->getRouteMatch()->getParam('gameId');
+        $entry = $this->getGameService()->play($this->game, $this->user);
+        if (!$entry) {
+            // the user has already taken part of this game and the participation limit has been reached
+            $this->flashMessenger()->addMessage('You have already played');
+
+            return $this->redirect()->toUrl(
+                $this->frontendUrl()->fromRoute(
+                    'mission/result',
+                    array('id' => $this->game->getIdentifier())
+                )
+            );
+        }
+
+        if(!$subGameIdentifier){
+            $subGame = $this->game->getNextPlayableGame($entry);
+        } else{
+            $subGame = $this->getGameService()->checkGame($subGameIdentifier);
+        }
+
+        if (!$this->game->isPlayable($subGame, $entry)) {
+            // this subgame is not playable
+            $this->flashMessenger()->addMessage('No game found');
+
+            return $this->redirect()->toUrl(
+                $this->frontendUrl()->fromRoute(
+                    'mission',
+                    array('id' => $this->game->getIdentifier())
+                )
+            );
         }
         
         $socialLinkUrl = $this->frontendUrl()->fromRoute(
@@ -140,19 +157,6 @@ class MissionController extends GameController
                 }
             }
         }
-
-        $entry = $this->getGameService()->play($this->game, $this->user);
-        if (!$entry) {
-            // the user has already taken part of this game and the participation limit has been reached
-            $this->flashMessenger()->addMessage('You have already played');
-
-            return $this->redirect()->toUrl(
-                $this->frontendUrl()->fromRoute(
-                    'mission/result',
-                    array('id' => $this->game->getIdentifier())
-                )
-            );
-        }
         
         $beforeLayout = $this->layout()->getTemplate();
         $subViewModel = $this->forward()->dispatch(
@@ -160,17 +164,18 @@ class MissionController extends GameController
             array(
                 'controller' => 'playgroundgame_'.$subGame->getClassType(),
                 'action' => 'play',
-                'id' => $subGameIdentifier
+                'id' => $subGame->getIdentifier()
             )
         );
         
         if ($this->getResponse()->getStatusCode() == 302) {
+
             return $this->redirect()->toUrl(
                 $this->frontendUrl()->fromRoute(
                     'mission/result',
                     array(
                         'id' => $this->game->getIdentifier(),
-                        'gameId' => $subGameIdentifier
+                        'gameId' => $subGame->getIdentifier()
                     ),
                     array('force_canonical' => true)
                 )
