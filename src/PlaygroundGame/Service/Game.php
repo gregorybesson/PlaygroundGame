@@ -599,7 +599,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         // for preview stuff as admin
         if ($this->isAllowed('game', 'edit')) {
             $r =$this->getServiceManager()->get('request');
-            if($r->getQuery()->get('preview')){ 
+            if ($r->getQuery()->get('preview')) {
                 $game->setActive(true);
                 $game->setStartDate(null);
                 $game->setEndDate(null);

@@ -57,9 +57,9 @@ class MissionController extends GameController
             );
         }
 
-        if(!$subGameIdentifier){
+        if (!$subGameIdentifier) {
             $subGame = $this->game->getNextPlayableGame($entry);
-        } else{
+        } else {
             $subGame = $this->getGameService()->checkGame($subGameIdentifier);
         }
 

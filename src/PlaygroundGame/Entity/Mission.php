@@ -115,14 +115,17 @@ class Mission extends Game implements InputFilterAwareInterface
      *
      * @return boolean
      */
-    public function isPlayable($subGame, $entry=null)
+    public function isPlayable($subGame, $entry = null)
     {
-        if (!$subGame) return false;
+        if (!$subGame) {
+            return false;
+        }
         
         $sortedPlayableGames = $this->getPlayableGames($entry);
-        foreach($sortedPlayableGames as $pgame){
-            if($subGame->getIdentifier() === $pgame->getGame()->getIdentifier())
+        foreach ($sortedPlayableGames as $pgame) {
+            if ($subGame->getIdentifier() === $pgame->getGame()->getIdentifier()) {
                 return true;
+            }
         }
 
         return false;
