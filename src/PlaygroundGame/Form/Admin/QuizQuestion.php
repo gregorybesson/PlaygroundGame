@@ -6,6 +6,7 @@ use Zend\Form\Element;
 use ZfcBase\Form\ProvidesEventsForm;
 use Zend\Mvc\I18n\Translator;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
+use PlaygroundCore\Stdlib\Hydrator\Strategy\BooleanStrategy;
 use Zend\ServiceManager\ServiceManager;
 
 class QuizQuestion extends ProvidesEventsForm
@@ -20,7 +21,11 @@ class QuizQuestion extends ProvidesEventsForm
         // This is the secret for working with collections with Doctrine
         // (+ add'Collection'() and remove'Collection'() and "cascade" in corresponding Entity
         // https://github.com/doctrine/DoctrineModule/blob/master/docs/hydrator.md
-        $this->setHydrator(new DoctrineHydrator($entityManager, 'PlaygroundGame\Entity\QuizQuestion'));
+        $hydrator = new DoctrineHydrator($entityManager, 'PlaygroundGame\Entity\QuizQuestion');
+        $hydrator->addStrategy('autoplay', new BooleanStrategy());
+        $hydrator->addStrategy('timer', new BooleanStrategy());
+        $this->setHydrator($hydrator);
+        
 
         $this->setAttribute('method', 'post');
         $this->setAttribute('enctype', 'multipart/form-data');
@@ -73,6 +78,23 @@ class QuizQuestion extends ProvidesEventsForm
                 'cols' => '10',
                 'rows' => '2',
                 'id' => 'question',
+            ),
+        ));
+
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Textarea',
+            'name' => 'jsonData',
+            'options' => array(
+                'label' => $translator->translate('Json Data', 'playgroundgame'),
+                'label_attributes' => array(
+                    'class' => 'control-label',
+                ),
+            ),
+            'attributes' => array(
+                'required' => false,
+                'cols' => '10',
+                'rows' => '2',
+                'id' => 'jsonData',
             ),
         ));
 

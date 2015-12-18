@@ -75,12 +75,17 @@ class QuizQuestion implements InputFilterAwareInterface
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
-    protected $autoplay = false;
+    protected $autoplay = 0;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
     protected $hint;
+
+    /**
+     * @ORM\Column(name="json_data", type="text", nullable=true)
+     */
+    protected $jsonData;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
@@ -90,7 +95,7 @@ class QuizQuestion implements InputFilterAwareInterface
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
-    protected $timer = false;
+    protected $timer = 0;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
@@ -338,6 +343,24 @@ class QuizQuestion implements InputFilterAwareInterface
     }
 
     /**
+     * @return the string
+     */
+    public function getJsonData()
+    {
+        return $this->jsonData;
+    }
+
+    /**
+     * @param string $hint
+     */
+    public function setJsonData($jsonData)
+    {
+        $this->jsonData = $jsonData;
+
+        return $this;
+    }
+    
+    /**
      * @return boolean unknown_type
      */
     public function getTimer()
@@ -544,6 +567,10 @@ class QuizQuestion implements InputFilterAwareInterface
             $this->hint = $data['hint'];
         }
 
+        if (isset($data['jsonData']) && $data['jsonData'] !== null) {
+            $this->jsonData = $data['jsonData'];
+        }
+
         if (isset($data['type']) && $data['type'] !== null) {
             $this->type = $data['type'];
         }
@@ -662,6 +689,12 @@ class QuizQuestion implements InputFilterAwareInterface
                 // 'filters'    => array(
                 //     array('name' => 'Boolean'),
                 // ),
+            )));
+
+            $inputFilter->add($factory->createInput(array(
+                'name'     => 'jsonData',
+                'required' => false,
+                'allowEmpty' => true,
             )));
 
             $inputFilter->add($factory->createInput(array(

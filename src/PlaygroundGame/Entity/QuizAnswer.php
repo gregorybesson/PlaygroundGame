@@ -43,6 +43,11 @@ class QuizAnswer implements InputFilterAwareInterface
     protected $explanation;
 
     /**
+     * @ORM\Column(name="json_data", type="text", nullable=true)
+     */
+    protected $jsonData;
+
+    /**
      * @ORM\Column(type="string", nullable=true)
      */
     protected $video;
@@ -160,6 +165,24 @@ class QuizAnswer implements InputFilterAwareInterface
     public function setExplanation($explanation)
     {
         $this->explanation = $explanation;
+
+        return $this;
+    }
+
+    /**
+     * @return the string
+     */
+    public function getJsonData()
+    {
+        return $this->jsonData;
+    }
+
+    /**
+     * @param string $hint
+     */
+    public function setJsonData($jsonData)
+    {
+        $this->jsonData = $jsonData;
 
         return $this;
     }
@@ -317,6 +340,10 @@ class QuizAnswer implements InputFilterAwareInterface
             $this->explanation = $data['explanation'];
         }
 
+        if (isset($data['jsonData']) && $data['jsonData'] !== null) {
+            $this->jsonData = $data['jsonData'];
+        }
+
         if (isset($data['type']) && $data['type'] !== null) {
             $this->type = $data['type'];
         }
@@ -398,6 +425,12 @@ class QuizAnswer implements InputFilterAwareInterface
             $inputFilter->add($factory->createInput(array(
                 'name'     => 'image',
                 'required' => false,
+            )));
+
+            $inputFilter->add($factory->createInput(array(
+                'name'     => 'jsonData',
+                'required' => false,
+                'allowEmpty' => true,
             )));
 
             $this->inputFilter = $inputFilter;

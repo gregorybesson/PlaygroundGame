@@ -245,6 +245,50 @@ class MissionGame implements InputFilterAwareInterface
         return $this;
     }
 
+    /**
+     * Are the conditions linked to this game fulfilled ?
+     *
+     * @return boolean
+     */
+    public function fulfillConditions($entry = null)
+    {
+        foreach ($this->getConditions() as $condition) {
+            if ($condition->getAttribute() == MissionGameCondition::NONE) {
+                continue;
+            }
+    
+            // On passe au suivant si on a gagné
+            if ($condition->getAttribute() == MissionGameCondition::VICTORY) {
+                if (!$entry || !$entry->getWinner()) {
+                    return false;
+                }
+            }
+    
+            // On passe au suivant si on a perdu
+            if ($condition->getAttribute() == MissionGameCondition::DEFEAT) {
+                if (!$entry || $entry->getWinner()) {
+                    return false;
+                }
+            }
+    
+            // On passe au suivant si on a plus de n points
+            if ($condition->getAttribute() == MissionGameCondition::GREATER) {
+                if (!$entry || !($entry->getPoints() >= $condition->getValue())) {
+                    return false;
+                }
+            }
+    
+            // On passe au suivant si on a moins de n points
+            if ($condition->getAttribute() == MissionGameCondition::LESS) {
+                if (!$entry || !($entry->getPoints() < $condition->getValue())) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
     public function setInputFilter(InputFilterInterface $inputFilter)
     {
         throw new \Exception("Not used");
