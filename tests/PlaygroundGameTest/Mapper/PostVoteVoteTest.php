@@ -48,21 +48,21 @@ class PostVoteVoteTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->tm->findById($id));
     }
 
-    public function testFindAll()
-    {
-        $postvotevote = new PostVoteVoteEntity();
-        $postvotevote->setUserId(1);
-        $postvotevote = $this->tm->insert($postvotevote);
-        $postvotevote = new PostVoteVoteEntity();
-        $postvotevote->setUserId(2);
-        $postvotevote = $this->tm->insert($postvotevote);
-        $postvotevote = new PostVoteVoteEntity();
-        $postvotevote->setUserId(3);
-        $postvotevote = $this->tm->insert($postvotevote);
+    // public function testFindAll()
+    // {
+    //     $postvotevote = new PostVoteVoteEntity();
+    //     $postvotevote->setUserId(1);
+    //     $postvotevote = $this->tm->insert($postvotevote);
+    //     $postvotevote = new PostVoteVoteEntity();
+    //     $postvotevote->setUserId(2);
+    //     $postvotevote = $this->tm->insert($postvotevote);
+    //     $postvotevote = new PostVoteVoteEntity();
+    //     $postvotevote->setUserId(3);
+    //     $postvotevote = $this->tm->insert($postvotevote);
 
-        $postvotevotes = $this->tm->findAll();
-        $this->assertEquals(3, count($postvotevotes));
-    }
+    //     $postvotevotes = $this->tm->findAll();
+    //     $this->assertEquals(3, count($postvotevotes));
+    // }
 
     public function tearDown()
     {
