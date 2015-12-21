@@ -109,7 +109,6 @@ class GameController extends AbstractActionController
                 // ligne    $controller->getRequest()->getUri()->getHost() === $customUrl
                 // ligne ) {
                 return $controller->redirect()->toUrl($urlRegister);
-
             }
 
             return;

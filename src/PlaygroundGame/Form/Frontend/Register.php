@@ -20,7 +20,6 @@ class Register extends \PlaygroundUser\Form\Register
         Translator $translator,
         $serviceManager
     ) {
-    
         $this->setServiceManager($serviceManager);
         parent::__construct($name, $registerOptions, $translator, $serviceManager);
 

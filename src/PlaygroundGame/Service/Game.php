@@ -910,7 +910,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $topic = null,
         $userTimer = array()
     ) {
-    
         $mailService = $this->getServiceManager()->get('playgroundgame_message');
         $mailSent = false;
         $from = $this->getOptions()->getEmailFromAddress();

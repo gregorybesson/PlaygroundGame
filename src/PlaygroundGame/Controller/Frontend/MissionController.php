@@ -42,7 +42,6 @@ class MissionController extends GameController
 
     public function playAction()
     {
-
         $subGameIdentifier = $this->getEvent()->getRouteMatch()->getParam('gameId');
         $entry = $this->getGameService()->play($this->game, $this->user);
         if (!$entry) {
@@ -136,7 +135,6 @@ class MissionController extends GameController
                 }
 
                 // The game is not played from Facebook : redirect to login/register form
-
             } elseif (!$this->game->getAnonymousAllowed()) {
                 $redirect = urlencode(
                     $this->frontendUrl()->fromRoute(
@@ -169,7 +167,6 @@ class MissionController extends GameController
         );
         
         if ($this->getResponse()->getStatusCode() == 302) {
-
             return $this->redirect()->toUrl(
                 $this->frontendUrl()->fromRoute(
                     'mission/result',
@@ -298,9 +295,9 @@ class MissionController extends GameController
 
     public function fbshareAction()
     {
-         $sg = $this->getGameService();
-         $result = parent::fbshareAction();
-         $bonusEntry = false;
+        $sg = $this->getGameService();
+        $result = parent::fbshareAction();
+        $bonusEntry = false;
 
         if ($result) {
             $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
@@ -309,13 +306,13 @@ class MissionController extends GameController
             $bonusEntry = $sg->addAnotherChance($game, $user, 1);
         }
 
-         $response = $this->getResponse();
-         $response->setContent(\Zend\Json\Json::encode(array(
+        $response = $this->getResponse();
+        $response->setContent(\Zend\Json\Json::encode(array(
             'success' => $result,
             'playBonus' => $bonusEntry
          )));
 
-         return $response;
+        return $response;
     }
 
     public function fbrequestAction()

@@ -56,6 +56,5 @@ class MissionGameConditionFieldset extends Fieldset
                 'label' => $translator->translate('Value'),
             ),
         ));
-
     }
 }

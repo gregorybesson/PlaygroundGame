@@ -74,7 +74,6 @@ class GameController extends AbstractActionController
      */
     public function editGame($templatePath, $formId)
     {
-
         $viewModel = new ViewModel();
         $viewModel->setTemplate($templatePath);
 
@@ -135,7 +134,6 @@ class GameController extends AbstractActionController
                 'title' => 'Edit this game',
             )
         );
-    
     }
 
     public function listAction()
