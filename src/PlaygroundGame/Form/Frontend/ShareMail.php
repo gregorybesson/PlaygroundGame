@@ -17,7 +17,7 @@ class ShareMail extends ProvidesEventsForm
         $this->setServiceManager($sm);
 
         $this->add(array(
-            'name' => 'email1',
+            'name' => 'email[1]',
             'options' => array(
                 'label' => $translator->translate('Email address', 'playgroundgame').' 1',
             ),
@@ -30,7 +30,7 @@ class ShareMail extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'name' => 'email2',
+            'name' => 'email[2]',
             'options' => array(
                 'label' => $translator->translate('Email address', 'playgroundgame').' 2',
             ),
@@ -43,7 +43,7 @@ class ShareMail extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'name' => 'email3',
+            'name' => 'email[3]',
             'options' => array(
                 'label' => $translator->translate('Email address', 'playgroundgame').' 3',
             ),
@@ -56,7 +56,7 @@ class ShareMail extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'name' => 'email4',
+            'name' => 'email[4]',
             'options' => array(
                 'label' => $translator->translate('Email address', 'playgroundgame').' 4',
             ),
@@ -69,7 +69,7 @@ class ShareMail extends ProvidesEventsForm
         ));
         
         $this->add(array(
-            'name' => 'email5',
+            'name' => 'email[5]',
             'options' => array(
                 'label' => $translator->translate('Email address', 'playgroundgame').' 5',
             ),

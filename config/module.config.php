@@ -403,6 +403,16 @@ return array(
                                     )
                                 )
                             ),
+                            'share' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/partager',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_mission',
+                                        'action' => 'share'
+                                    )
+                                )
+                            ),
                             'bounce' => array(
                                 'type' => 'Literal',
                                 'options' => array(
