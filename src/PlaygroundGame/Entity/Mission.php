@@ -148,7 +148,6 @@ class Mission extends Game implements InputFilterAwareInterface
      */
     public function populate($data = array())
     {
-
     }
 
     public function getInputFilter()

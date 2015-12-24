@@ -83,7 +83,6 @@ class Entry extends AbstractMapper
     
     public function findLastEntriesByAnonymousIdentifier($game, $anonymousIdentifier, $dateLimit)
     {
-    
         $query = $this->em->createQuery(
             'SELECT COUNT(e.id) FROM PlaygroundGame\Entity\Entry e 
              WHERE e.anonymousIdentifier = :anonymousIdentifier AND e.game = :game 
@@ -100,7 +99,6 @@ class Entry extends AbstractMapper
 
     public function findLastEntriesByIp($game, $ip, $dateLimit)
     {
-    
         $query = $this->em->createQuery(
             'SELECT COUNT(e.id) FROM PlaygroundGame\Entity\Entry e 
              WHERE e.ip = :ip AND e.game = :game AND (e.bonus = 0 OR e.bonus IS NULL) AND e.created_at >= :date'

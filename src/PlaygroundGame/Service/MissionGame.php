@@ -35,7 +35,6 @@ class MissionGame extends EventProvider implements ServiceManagerAwareInterface
 
     public function checkGames($dataGames)
     {
-
         $nbGames = count($dataGames);
         for ($i=0; $i < $nbGames; $i++) {
             if (!empty($dataGames[$i+1])) {
@@ -144,7 +143,6 @@ class MissionGame extends EventProvider implements ServiceManagerAwareInterface
         }
 
         foreach ($missionGameConditions as $missionGameCondition) {
-
             if ($missionGameCondition->getAttribute() == MissionGameConditionEntity::NONE) {
                 continue;
             }

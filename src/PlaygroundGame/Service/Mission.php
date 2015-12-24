@@ -80,7 +80,6 @@ class Mission extends Game implements ServiceManagerAwareInterface
         }
     
         foreach ($missionGameConditions as $missionGameCondition) {
-    
             if ($missionGameCondition->getAttribute() == MissionGameConditionEntity::NONE) {
                 continue;
             }

@@ -910,19 +910,17 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $topic = null,
         $userTimer = array()
     ) {
-    
         $mailService = $this->getServiceManager()->get('playgroundgame_message');
         $mailSent = false;
         $from = $this->getOptions()->getEmailFromAddress();
         $subject = $this->getOptions()->getShareSubjectLine();
         $renderer = $this->getServiceManager()->get('Zend\View\Renderer\RendererInterface');
         if ($user) {
-            $email = $user->getEmail();
-        } elseif ($entry->getAnonymousIdentifier()) {
-            $email = $entry->getAnonymousIdentifier();
-        } else {
-            $email = $from;
+            $from = $user->getEmail();
+        } elseif ($entry && $entry->getAnonymousIdentifier()) {
+            $from = $entry->getAnonymousIdentifier();
         }
+
         $skinUrl = $renderer->url(
             'frontend',
             array(),
@@ -934,141 +932,48 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             $topic = $game->getTitle();
         }
 
-        $shares = json_decode($entry->getSocialShares(), true);
-        
-        if ($data['email1']) {
+        //
+
+        foreach ($data['email'] as $to) {
             $mailSent = true;
             $message = $mailService->createHtmlMessage(
                 $from,
-                $data['email1'],
+                $to,
                 $subject,
                 'playground-game/email/' . $template,
                 array(
                     'game' => $game,
-                    'email' => $email,
+                    'from' => $from,
+                    'to' => $to,
                     'secretKey' => $secretKey,
                     'skinUrl' => $skinUrl,
                     'userTimer' => $userTimer
                 )
             );
-            $mailService->send($message);
+            try {
+                $mailService->send($message);
+            } catch (\Zend\Mail\Protocol\Exception\RuntimeException $e) {
+                $mailSent = false;
+            }
             
-            if (!isset($shares['mail'])) {
-                $shares['mail'] = 1;
-            } else {
-                $shares['mail'] += 1;
+            if ($entry) {
+                $shares = json_decode($entry->getSocialShares(), true);
+                (!isset($shares['mail']))? $shares['mail'] = 1:$shares['mail'] += 1;
             }
         }
-        if ($data['email2'] && $data['email2'] != $data['email1']) {
-            $mailSent = true;
-            $message = $mailService->createHtmlMessage(
-                $from,
-                $data['email2'],
-                $subject,
-                'playground-game/email/' . $template,
-                array(
-                    'game' => $game,
-                    'email' => $email,
-                    'secretKey' => $secretKey,
-                    'skinUrl' => $skinUrl,
-                    'userTimer' => $userTimer
-                )
-            );
-            $mailService->send($message);
-            
-            if (!isset($shares['mail'])) {
-                $shares['mail'] = 1;
-            } else {
-                $shares['mail'] += 1;
-            }
-        }
-        if ($data['email3'] && $data['email3'] != $data['email2'] && $data['email3'] != $data['email1']) {
-            $mailSent = true;
-            $message = $mailService->createHtmlMessage(
-                $from,
-                $data['email3'],
-                $subject,
-                'playground-game/email/' . $template,
-                array(
-                    'game' => $game,
-                    'email' => $email,
-                    'secretKey' => $secretKey,
-                    'skinUrl' => $skinUrl,
-                    'userTimer' => $userTimer
-                )
-            );
-            $mailService->send($message);
-            
-            if (!isset($shares['mail'])) {
-                $shares['mail'] = 1;
-            } else {
-                $shares['mail'] += 1;
-            }
-        }
-        if ($data['email4'] &&
-            $data['email4'] != $data['email3'] &&
-            $data['email4'] != $data['email2'] &&
-            $data['email4'] != $data['email1']
-        ) {
-            $mailSent = true;
-            $message = $mailService->createHtmlMessage(
-                $from,
-                $data['email4'],
-                $subject,
-                'playground-game/email/' . $template,
-                array(
-                    'game' => $game,
-                    'email' => $email,
-                    'secretKey' => $secretKey,
-                    'skinUrl' => $skinUrl,
-                    'userTimer' => $userTimer
-                )
-            );
-            $mailService->send($message);
-        
-            if (!isset($shares['mail'])) {
-                $shares['mail'] = 1;
-            } else {
-                $shares['mail'] += 1;
-            }
-        }
-        if ($data['email5'] &&
-            $data['email5'] != $data['email4'] &&
-            $data['email5'] != $data['email3'] &&
-            $data['email5'] != $data['email2'] &&
-            $data['email5'] != $data['email1']
-        ) {
-            $mailSent = true;
-            $message = $mailService->createHtmlMessage(
-                $from,
-                $data['email5'],
-                $subject,
-                'playground-game/email/' . $template,
-                array(
-                    'game' => $game,
-                    'email' => $email,
-                    'secretKey' => $secretKey,
-                    'skinUrl' => $skinUrl,
-                    'userTimer' => $userTimer
-                )
-            );
-            $mailService->send($message);
-        
-            if (!isset($shares['mail'])) {
-                $shares['mail'] = 1;
-            } else {
-                $shares['mail'] += 1;
-            }
-        }
+
         if ($mailSent) {
-            $sharesJson = json_encode($shares);
-            $entry->setSocialShares($sharesJson);
-            $entry = $this->getEntryMapper()->update($entry);
+            if ($entry) {
+                $sharesJson = json_encode($shares);
+                $entry->setSocialShares($sharesJson);
+                $entry = $this->getEntryMapper()->update($entry);
+            }
             
             $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array(
                 'user' => $user,
                 'topic' => $topic,
                 'secretKey' => $secretKey,
+                'data' => $data,
                 'game' => $game,
                 'entry' => $entry
             ));

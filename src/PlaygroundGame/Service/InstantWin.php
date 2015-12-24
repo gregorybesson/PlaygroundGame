@@ -569,7 +569,6 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
     */
     public function getGameEntries($header, $entries, $game)
     {
-        
         $results = array();
 
         foreach ($entries as $k => $entry) {

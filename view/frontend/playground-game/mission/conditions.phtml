@@ -1,0 +1,5 @@
+<?php $this->plugin('translate')->setTranslatorTextDomain('playgroundgame');// Pour le texte ?>
+<div id="conditions" class="game-mission row-fluid">
+	<h1><?php echo $this->translate('Conditions'); ?></h1>
+		<?php echo $this->game->getConditionsBlock();?>
+</div>

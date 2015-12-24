@@ -51,7 +51,6 @@ class MissionController extends GameController
 
             $game = $service->createOrUpdate($data, $mission, 'playgroundgame_mission_form');
             if ($game) {
-
                 $this->flashMessenger()->setNamespace('mission')->addMessage('The game was created');
 
                 return $this->redirect()->toRoute('admin/playgroundgame/list');

@@ -73,7 +73,6 @@ class MissionGameFieldset extends Fieldset implements InputFilterProviderInterfa
                 'class' => 'addCondition',
             )
         ));
-
     }
     
     public function getInputFilterSpecification()

@@ -109,7 +109,6 @@ class GameController extends AbstractActionController
                 // ligne    $controller->getRequest()->getUri()->getHost() === $customUrl
                 // ligne ) {
                 return $controller->redirect()->toUrl($urlRegister);
-
             }
 
             return;
@@ -474,21 +473,57 @@ class GameController extends AbstractActionController
     public function shareAction()
     {
         $statusMail = null;
+        $lastEntry = null;
     
-        // Has the user finished the game ?
-        $lastEntry = $this->getGameService()->findLastInactiveEntry($this->game, $this->user);
+        // steps of the game
+        $steps = $this->game->getStepsArray();
+        // sub steps of the game
+        $viewSteps = $this->game->getStepsViewsArray();
+
+        // share position
+        $key = array_search($this->params('action'), $viewSteps);
+        if (!$key) {
+            // share is not a substep of the game so it's a step
+            $key = array_search($this->params('action'), $steps);
+            $keyStep = true;
+        } else {
+            // share was a substep, I search the index of its parent
+            $key = array_search($key, $steps);
+            $keyStep = false;
+        }
+
+        // play position
+        $keyplay = array_search('play', $viewSteps);
+
+        if (!$keyplay) {
+            // play is not a substep, so it's a step
+            $keyplay = array_search('play', $steps);
+            $keyplayStep = true;
+        } else {
+            // play is a substep so I search the index of its parent
+            $keyplay = array_search($keyplay, $steps);
+            $keyplayStep = false;
+        }
+
+        if ($key && $keyplay && $keyplay <= $key) {
+            // Has the user finished the game ?
+            $lastEntry = $this->getGameService()->findLastInactiveEntry($this->game, $this->user);
     
-        if ($lastEntry === null) {
-            return $this->redirect()->toUrl(
-                $this->frontendUrl()->fromRoute(
-                    $this->game->getClassType(),
-                    array('id' => $this->game->getIdentifier())
-                )
-            );
+            if ($lastEntry === null) {
+                return $this->redirect()->toUrl(
+                    $this->frontendUrl()->fromRoute(
+                        $this->game->getClassType(),
+                        array('id' => $this->game->getIdentifier())
+                    )
+                );
+            }
         }
     
         $form = $this->getServiceLocator()->get('playgroundgame_sharemail_form');
         $form->setAttribute('method', 'post');
+
+        // buildView must be before sendMail because it adds the game template path to the templateStack
+        $viewModel = $this->buildView($this->game);
     
         if ($this->getRequest()->isPost()) {
             $data = $this->getRequest()->getPost()->toArray();
@@ -500,12 +535,7 @@ class GameController extends AbstractActionController
                 }
             }
         }
-    
-        // buildView must be before sendMail because it adds the game template path to the templateStack
-        $viewModel = $this->buildView($this->game);
-    
-        $this->getGameService()->sendMail($this->game, $this->user, $lastEntry);
-    
+
         $viewModel->setVariables(array(
             'statusMail'       => $statusMail,
             'form'             => $form,
@@ -628,16 +658,17 @@ class GameController extends AbstractActionController
             $form->setData($request->getPost());
             
             if (!$form->isValid()) {
-                $this->flashMessenger()->setNamespace('zfcuser-login-form')->addMessage(
+                $this->flashMessenger()->addMessage(
                     'Authentication failed. Please try again.'
                 );
 
-                return $this->redirect()->toUrl(
-                    $this->frontendUrl()->fromRoute(
-                        $this->game->getClassType() . '/login',
-                        array('id' => $this->game->getIdentifier())
-                    )
-                );
+                $viewModel = $this->buildView($this->game);
+                $viewModel->setVariables(array(
+                    'form' => $form,
+                    'flashMessages' => $this->flashMessenger()->getMessages(),
+                ));
+                
+                return $viewModel;
             }
             
             // clear adapters

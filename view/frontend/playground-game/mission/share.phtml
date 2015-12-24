@@ -1,0 +1,92 @@
+<?php
+$twShareMsg = $this->translate('Come play games Playground');
+
+if(isset($this->game)) :
+    $this->plugin('translate')->setTranslatorTextDomain('playgroundgame');
+    $defaultMsg = (isset($this->userTimer['timer'])) ?
+        $this->translate('I had').' '.$this->userTimer['ratio'].'% '.$this->translate('of good answers in').' '.$this->userTimer['timer'].' '.$this->translate('seconds on game').' '.$this->game->getTitle().' '.$this->translate('Come do better !').' ' :
+        $this->translate('Come play game').' : ' . $this->game->getTitle() . ' '.$this->translate('of').' Playground ';
+    $twShareMsg = ($this->game->getTwShareMessage()) ?
+    $this->game->getTwShareMessage() :
+    $defaultMsg;
+    $fbShareMsg = ($this->game->getFbShareMessage()) ?
+    $this->game->getFbShareMessage() :
+    $defaultMsg;
+    $fbRequestMsg = ($this->game->getFbRequestMessage()) ?
+    $this->game->getFbRequestMessage() :
+    $defaultMsg;
+?>
+    <div
+        id="datas-result"
+        data-url="<?php echo $this->frontendUrl('' . $this->gameType, array("id" => $this->game->getIdentifier(), 'channel' => $this->channel), array('force_canonical' => true)); ?>"
+        data-secretkey="<?php echo $this->secretKey; ?>" data-fbmsg="<?php echo $fbShareMsg; ?>"
+        data-twmsg="<?php echo $twShareMsg; ?>" data-fbrequest="<?php echo $fbRequestMsg; ?>"
+        data-sociallink="<?php echo $this->socialLinkUrl; ?>">
+    </div>
+<?php endif; ?>
+<!-- invitations sociales -->
+<div class="invite-social row">
+	<p class="col-md-12 text-center">
+	    <?php echo $this->translate('On social networks'); ?>
+	</p>
+	<ul class="row col-md-12 text-center social-icon">
+		<li>
+		    <a id="fb-share" href="javascript:void(0)" class="link fb">
+		        <img src="<?php echo $this->frontendAssetPath('images/common/Facebook-24.png'); ?>" alt="" />
+		    </a>
+		</li>
+		<li>
+		    <a href="https://twitter.com/intent/tweet?text=<?php echo urlencode($twShareMsg); ?>&url=<?php echo urlencode($this->socialLinkUrl); ?>" data-txt="<?php echo $twShareMsg; ?>" target="_blank" class="link twitter">
+		        <img src="<?php echo $this->frontendAssetPath('images/common/Twitter Bird-24.png'); ?>" alt="" />
+		    </a>
+		</li>
+		<li>
+		    <a id='google-plus' href="https://plus.google.com/share?url=<?php echo urlencode($this->socialLinkUrl); ?>" class="link google-plus">
+		        <img src="<?php echo $this->frontendAssetPath('images/common/Google Plus-24.png'); ?>" alt="Share on Google+"/>
+		    </a>
+		</li>
+	</ul>
+</div>
+<!-- Par mail -->
+<div class="invit-mail row">
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<p class="text-mail">
+			    <?php echo $this->translate('By mail'); ?>
+			</p>
+		</div>
+        <div class="col-xs-1 col-md-3"></div>
+		<div class="col-xs-10 col-md-6 wrapper-share">
+			<?php if ($this->statusMail === true) : ?>
+				<div id="mail-sended">
+					<p class="a-left">
+					    <?php echo $this->translate('Thanks'); ?>, <?php echo $this->translate('Your invitations have been sent !'); ?>
+					</p>
+					<div class="btn btn-default more-invit">
+						<?php echo $this->translate('Invite more friends'); ?>
+					</div>
+				</div>
+			<?php endif; ?>
+			<div id="mail-send" class="<?php if($this->statusMail): echo 'none '; endif; ?>text-center">
+				<?php $form = $this->form;?>
+				<?php $form->prepare();?>
+                <?php echo $this->form()->openTag($form) ?>
+                <img src="<?php echo $this->frontendAssetPath('images/common/round-mail.png'); ?>" alt="" class="img-mail" />
+                
+            	<?php echo $this->formInput($form->get('email1')->setAttributes(array('class' => 'form-control'))); ?>
+                <?php echo $this->formElementErrors($form->get('email1')); ?>
+                
+                <?php echo $this->formInput($form->get('email2')->setAttributes(array('class' => 'form-control'))); ?>
+                <?php echo $this->formElementErrors($form->get('email2')); ?>
+                
+                <?php echo $this->formInput($form->get('email3')->setAttributes(array('class' => 'form-control'))); ?>
+                <?php echo $this->formElementErrors($form->get('email3')); ?>
+                
+                <?php echo $this->formButton($form->get('submit')->setAttributes(array('class' => 'btn btn-default btn-green'))) ?>
+                
+				<?php echo $this->form()->closeTag() ?>
+			</div>
+		</div>
+        <div class="col-xs-1col-md-3"></div>
+	</div>
+</div>
