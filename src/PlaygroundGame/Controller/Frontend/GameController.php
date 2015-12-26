@@ -854,6 +854,9 @@ class GameController extends AbstractActionController
             $found = $this->getGameService()->getInvitationMapper()->findOneBy(array('requestKey'=>$credential));
 
             if (!$found || !empty($found->getUser())) {
+                $this->flashMessenger()->addMessage(
+                    'Authentication failed. Please try again.'
+                );
                 $form->setData($post);
                 $viewModel = $this->buildView($this->game);
                 $viewModel->setVariables(array(

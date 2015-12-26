@@ -932,8 +932,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             $topic = $game->getTitle();
         }
 
-        //
-
         foreach ($data['email'] as $to) {
             $mailSent = true;
             $message = $mailService->createHtmlMessage(
@@ -953,7 +951,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             try {
                 $mailService->send($message);
             } catch (\Zend\Mail\Protocol\Exception\RuntimeException $e) {
-                $mailSent = false;
+                //$mailSent = false;
             }
             
             if ($entry) {
