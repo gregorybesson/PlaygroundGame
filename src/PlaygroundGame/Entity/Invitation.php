@@ -8,7 +8,9 @@ use Doctrine\ORM\Mapping\PreUpdate;
 
 /**
  * @ORM\Entity @HasLifecycleCallbacks
- * @ORM\Table(name="game_invitation")
+ * @ORM\Table(name="game_invitation", uniqueConstraints={
+ *      @ORM\UniqueConstraint(name="requestkey_game", columns={"request_key", "game_id"})
+ * })
  */
 class Invitation implements \JsonSerializable
 {
@@ -19,9 +21,15 @@ class Invitation implements \JsonSerializable
     protected $game;
 
     /**
-     * @var string
      * @ORM\Id
-     * @ORM\Column(name="request_key", type="string", length=32, nullable=false)
+     * @ORM\Column(type="integer");
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
+    /**
+     * @var string
+     * @ORM\Column(name="request_key", type="string", length=255, nullable=false)
      */
     protected $requestKey;
 
@@ -30,6 +38,13 @@ class Invitation implements \JsonSerializable
      * @ORM\JoinColumn(name="user_id", referencedColumnName="user_id")
      **/
     protected $user;
+
+    /**
+     * The user who invite (it can be the system who's the host. This attribute will be null then)
+     * @ORM\ManyToOne(targetEntity="PlaygroundUser\Entity\User", cascade={"persist","remove"})
+     * @ORM\JoinColumn(name="host_id", referencedColumnName="user_id", onDelete="CASCADE")
+     **/
+    protected $host;
 
     /**
      * @ORM\Column(name="created_at", type="datetime")
@@ -58,6 +73,18 @@ class Invitation implements \JsonSerializable
         $this->updatedAt = new \DateTime("now");
     }
 
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
     public function setRequestKey($key)
     {
         $this->requestKey = $key;
@@ -80,6 +107,18 @@ class Invitation implements \JsonSerializable
     public function getUser()
     {
         return $this->user;
+    }
+
+    public function setHost($host)
+    {
+        $this->host = $host;
+
+        return $this;
+    }
+
+    public function getHost()
+    {
+        return $this->host;
     }
 
     /**

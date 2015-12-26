@@ -10,6 +10,11 @@ class Invitation extends AbstractMapper
         return $this->getEntityRepository()->findBy(array('user'=>$user));
     }
 
+    public function findByHost($user)
+    {
+        return $this->getEntityRepository()->findBy(array('host'=>$user));
+    }
+
     public function findByRequestKey($key)
     {
         return $this->getEntityRepository()->findBy(array('requestKey'=>$key));
