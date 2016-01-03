@@ -915,12 +915,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $from = $this->getOptions()->getEmailFromAddress();
         $subject = $this->getOptions()->getShareSubjectLine();
         $renderer = $this->getServiceManager()->get('Zend\View\Renderer\RendererInterface');
-        if ($user) {
-            $from = $user->getEmail();
-        } elseif ($entry && $entry->getAnonymousIdentifier()) {
-            $from = $entry->getAnonymousIdentifier();
-        }
-
         $skinUrl = $renderer->url(
             'frontend',
             array(),
