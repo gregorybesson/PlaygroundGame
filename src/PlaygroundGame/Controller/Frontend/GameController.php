@@ -678,7 +678,7 @@ class GameController extends AbstractActionController
             $logged = $this->forward()->dispatch('playgrounduser_user', array('action' => 'ajaxauthenticate'));
 
             if (!$logged) {
-                $this->flashMessenger()->setNamespace('zfcuser-login-form')->addMessage(
+                $this->flashMessenger()->addMessage(
                     'Authentication failed. Please try again.'
                 );
                 
