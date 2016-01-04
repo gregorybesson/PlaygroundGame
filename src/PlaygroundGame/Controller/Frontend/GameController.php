@@ -82,6 +82,14 @@ class GameController extends AbstractActionController
                 return $controller->notFoundAction();
             }
 
+            if ($controller->game){
+                // this is possible to create a specific game design in /design/frontend/default/custom.
+                //It will precede all others templates.
+                $templatePathResolver = $controller->getServiceLocator()->get('Zend\View\Resolver\TemplatePathStack');
+                $l = $templatePathResolver->getPaths();
+                $templatePathResolver->addPath($l[0].'custom/'.$controller->game->getIdentifier());
+            }
+
             $controller->user = $controller->zfcUserAuthentication()->getIdentity();
             if ($controller->game &&
                 !$controller->user &&
@@ -1020,12 +1028,6 @@ class GameController extends AbstractActionController
                 $this->addGaEvent($game);
 
                 $this->customizeGameDesign($game);
-                
-                // this is possible to create a specific game design in /design/frontend/default/custom.
-                //It will precede all others templates.
-                $templatePathResolver = $this->getServiceLocator()->get('Zend\View\Resolver\TemplatePathStack');
-                $l = $templatePathResolver->getPaths();
-                $templatePathResolver->addPath($l[0].'custom/'.$game->getIdentifier());
                 
                 $view = $this->addAdditionalView($game);
                 if ($view && $view instanceof \Zend\View\Model\ViewModel) {
