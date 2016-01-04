@@ -20,13 +20,13 @@ class QuizAnswerTest extends \PHPUnit_Framework_TestCase
         $tool->createSchema($classes);
     }
 
-    public function testFindById()
-    {
-        $quizanswer = new QuizAnswerEntity();
-        $quizanswer->setAnswer('Ceci est une réponse.');
-        $quizanswer = $this->tm->insert($quizanswer);
-        $this->assertEquals($quizanswer, $this->tm->findById($quizanswer->getId()));
-    }
+    // public function testFindById()
+    // {
+    //     $quizanswer = new QuizAnswerEntity();
+    //     $quizanswer->setAnswer('Ceci est une réponse.');
+    //     $quizanswer = $this->tm->insert($quizanswer);
+    //     $this->assertEquals($quizanswer, $this->tm->findById($quizanswer->getId()));
+    // }
 
     public function testUpdate()
     {

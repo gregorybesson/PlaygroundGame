@@ -82,7 +82,7 @@ class GameController extends AbstractActionController
                 return $controller->notFoundAction();
             }
 
-            if ($controller->game){
+            if ($controller->game) {
                 // this is possible to create a specific game design in /design/frontend/default/custom.
                 //It will precede all others templates.
                 $templatePathResolver = $controller->getServiceLocator()->get('Zend\View\Resolver\TemplatePathStack');
@@ -948,6 +948,47 @@ class GameController extends AbstractActionController
         ) . ($socialnetwork ? '/' . $socialnetwork : ''). ($redirect ? '?redirect=' . $redirect : '');
 
         return $this->redirect()->toUrl($redirect);
+    }
+
+    public function cmsPageAction()
+    {
+        $viewModel = $this->forward()->dispatch(
+            'playgroundcms',
+            array(
+                'controller' => 'playgroundcms',
+                'action' => 'index',
+                'id' => $this->game->getIdentifier(),
+                'pid' => $this->getEvent()->getRouteMatch()->getParam('pid')
+            )
+        );
+
+        if ($viewModel && $viewModel instanceof \Zend\View\Model\ViewModel) {
+            $this->layout()->setVariables(array('game' => $this->game));
+            $viewModel->setVariables(array('game' => $this->game));
+        }
+
+        return $viewModel;
+    }
+
+    public function cmsListAction()
+    {
+
+        $viewModel = $this->forward()->dispatch(
+            'playgroundcms',
+            array(
+                'controller' => 'playgroundcms',
+                'action' => 'list',
+                'id' => $this->game->getIdentifier(),
+                'category' => $this->game->getIdentifier()
+            )
+        );
+
+        if ($viewModel && $viewModel instanceof \Zend\View\Model\ViewModel) {
+            $this->layout()->setVariables(array('game' => $this->game));
+            $viewModel->setVariables(array('game' => $this->game));
+        }
+
+        return $viewModel;
     }
 
     /**
