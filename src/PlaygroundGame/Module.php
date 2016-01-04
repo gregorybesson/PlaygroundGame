@@ -174,6 +174,13 @@ class Module
             array($this, 'addCronjob')
         );
 
+        // If PlaygroundCms is installed, I can add game categories
+        $e->getApplication()->getEventManager()->getSharedManager()->attach(
+            'Zend\Mvc\Application',
+            'getCmsCategories',
+            array($this, 'populateCmsCategories')
+        );
+
         // If cron is called, the $e->getRequest()->getPost() produces an error so I protect it with
         // this test
         if ((get_class($e->getRequest()) == 'Zend\Console\Request')) {
@@ -264,7 +271,7 @@ class Module
      * @param  MvcEvent $e
      * @return array
      */
-    public function updateDynareas(MvcEvent $e)
+    public function updateDynareas(\Zend\EventManager\Event $e)
     {
         $dynareas = $e->getParam('dynareas');
 
@@ -287,12 +294,33 @@ class Module
     }
 
     /**
+     * This method add the games to the cms categories of pages
+     * not that satisfied neither
+     *
+     * @param  EventManager $e
+     * @return array
+     */
+    public function populateCmsCategories ($e)
+    {
+        $catsArray = $e->getParam('categories');
+
+        $gameService = $e->getTarget()->getServiceManager()->get('playgroundgame_game_service');
+        $games = $gameService->getActiveGames(false);
+
+        foreach ($games as $game) {
+            $catsArray[$game->getIdentifier()] = 'Pg Game - ' . $game->getIdentifier();
+        }
+
+        return $catsArray;
+    }
+
+    /**
      * This method get the cron config for this module an add them to the listener
      *
      * @param  MvcEvent $e
      * @return array
      */
-    public function addCronjob(MvcEvent $e)
+    public function addCronjob(\Zend\EventManager\Event $e)
     {
         $cronjobs = $e->getParam('cronjobs');
 

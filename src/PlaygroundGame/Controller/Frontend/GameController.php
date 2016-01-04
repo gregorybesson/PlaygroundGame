@@ -950,6 +950,47 @@ class GameController extends AbstractActionController
         return $this->redirect()->toUrl($redirect);
     }
 
+    public function cmsPageAction()
+    {
+        $viewModel = $this->forward()->dispatch(
+            'playgroundcms',
+            array(
+                'controller' => 'playgroundcms',
+                'action' => 'index',
+                'id' => $this->game->getIdentifier(),
+                'pid' => $this->getEvent()->getRouteMatch()->getParam('pid')
+            )
+        );
+
+        if ($viewModel && $viewModel instanceof \Zend\View\Model\ViewModel) {
+            $this->layout()->setVariables(array('game' => $this->game));
+            $viewModel->setVariables(array('game' => $this->game));
+        }
+
+        return $viewModel;
+    }
+
+    public function cmsListAction()
+    {
+
+        $viewModel = $this->forward()->dispatch(
+            'playgroundcms',
+            array(
+                'controller' => 'playgroundcms',
+                'action' => 'list',
+                'id' => $this->game->getIdentifier(),
+                'category' => $this->game->getIdentifier()
+            )
+        );
+
+        if ($viewModel && $viewModel instanceof \Zend\View\Model\ViewModel) {
+            $this->layout()->setVariables(array('game' => $this->game));
+            $viewModel->setVariables(array('game' => $this->game));
+        }
+
+        return $viewModel;
+    }
+
     /**
      *
      * @param \PlaygroundGame\Entity\Game $game

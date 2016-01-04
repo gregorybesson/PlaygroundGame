@@ -489,7 +489,39 @@ return array(
                                     ),
                                 ),
                             ),
-                        )
+                            'cms' => array(
+                                'type' => 'segment',
+                                'options' => array(
+                                    'route'    => 'page',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_mission',
+                                        'action'     => 'cmsPage',
+                                    ),
+                                ),
+                                'child_routes' =>array(
+                                    'detail' => array(
+                                        'type' => 'segment',
+                                        'options' => array(
+                                            'route' => '/:pid',
+                                            'defaults' => array(
+                                                'controller' => 'playgroundgame_mission',
+                                                'action'     => 'cmsPage',
+                                            ),
+                                        ),
+                                    ),
+                                    'list' => array(
+                                        'type' => 'segment',
+                                        'options' => array(
+                                            'route' => '/liste[/:p]',
+                                            'defaults' => array(
+                                                'controller' => 'playgroundgame_mission',
+                                                'action'     => 'cmsList',
+                                            ),
+                                        ),
+                                    ),
+                                ),
+                            ),
+                        ),
                     ),
                     
                     'quiz' => array(
