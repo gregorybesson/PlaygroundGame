@@ -82,7 +82,7 @@ class GameController extends AbstractActionController
                 return $controller->notFoundAction();
             }
 
-            if ($controller->game){
+            if ($controller->game) {
                 // this is possible to create a specific game design in /design/frontend/default/custom.
                 //It will precede all others templates.
                 $templatePathResolver = $controller->getServiceLocator()->get('Zend\View\Resolver\TemplatePathStack');

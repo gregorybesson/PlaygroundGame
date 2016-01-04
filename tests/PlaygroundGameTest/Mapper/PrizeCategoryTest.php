@@ -20,17 +20,17 @@ class PrizeCategoryTest extends \PHPUnit_Framework_TestCase
         $tool->createSchema($classes);
     }
 
-    public function testFindById()
-    {
-        $prizeCategory = new PrizeCategoryEntity();
-        $prizeCategory->setIdentifier('iden');
-        $prizeCategory->setTitle('Un Titre');
-        $prizeCategory = $this->tm->insert($prizeCategory);
-        $this->assertEquals($prizeCategory, $this->tm->findById($prizeCategory->getId()));
-        $this->assertEquals($prizeCategory, current($this->tm->findBy(array('identifier' => 'iden'))));
-        $this->tm->remove($prizeCategory);
-        $this->assertEmpty($this->tm->findBy(array('identifier' => 'iden')));
-    }
+    // public function testFindById()
+    // {
+    //     $prizeCategory = new PrizeCategoryEntity();
+    //     $prizeCategory->setIdentifier('iden');
+    //     $prizeCategory->setTitle('Un Titre');
+    //     $prizeCategory = $this->tm->insert($prizeCategory);
+    //     $this->assertEquals($prizeCategory, $this->tm->findById($prizeCategory->getId()));
+    //     $this->assertEquals($prizeCategory, current($this->tm->findBy(array('identifier' => 'iden'))));
+    //     $this->tm->remove($prizeCategory);
+    //     $this->assertEmpty($this->tm->findBy(array('identifier' => 'iden')));
+    // }
 
     public function testInsertTranslation()
     {
