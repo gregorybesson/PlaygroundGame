@@ -176,7 +176,7 @@ class Game extends ProvidesEventsForm
             'name' => 'publicationDate',
             'options' => array(
                 'label' => $translator->translate('Publication date', 'playgroundgame'),
-                'format' => 'd/m/Y'
+                'format' => 'd/m/Y H:i:s'
             ),
             'attributes' => array(
                 'type' => 'text',
@@ -189,7 +189,7 @@ class Game extends ProvidesEventsForm
             'name' => 'startDate',
             'options' => array(
                 'label' => $translator->translate('Start Date', 'playgroundgame'),
-                'format' => 'd/m/Y'
+                'format' => 'd/m/Y H:i:s'
             ),
             'attributes' => array(
                 'type' => 'text',
@@ -202,7 +202,7 @@ class Game extends ProvidesEventsForm
             'name' => 'endDate',
             'options' => array(
                 'label' => $translator->translate('End Date', 'playgroundgame'),
-                'format' => 'd/m/Y'
+                'format' => 'd/m/Y H:i:s'
             ),
             'attributes' => array(
                 'type' => 'text',
@@ -215,7 +215,7 @@ class Game extends ProvidesEventsForm
             'name' => 'closeDate',
             'options' => array(
                 'label' => $translator->translate('Unpublished date', 'playgroundgame'),
-                'format' => 'd/m/Y'
+                'format' => 'd/m/Y H:i:s'
             ),
             'attributes' => array(
                 'type' => 'text',

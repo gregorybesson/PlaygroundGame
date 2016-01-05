@@ -64,16 +64,16 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
         $form = $this->getServiceManager()->get($formClass);
         $form->get('publicationDate')->setOptions(array(
-            'format' => 'Y-m-d'
+            'format' => 'Y-m-d H:i:s'
         ));
         $form->get('startDate')->setOptions(array(
-            'format' => 'Y-m-d'
+            'format' => 'Y-m-d H:i:s'
         ));
         $form->get('endDate')->setOptions(array(
-            'format' => 'Y-m-d'
+            'format' => 'Y-m-d H:i:s'
         ));
         $form->get('closeDate')->setOptions(array(
-            'format' => 'Y-m-d'
+            'format' => 'Y-m-d H:i:s'
         ));
 
         $form->bind($game);
@@ -97,20 +97,20 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         // I must switch from original format to the Y-m-d format because
         // this is the only one accepted by new DateTime($value)
         if (isset($data['publicationDate']) && $data['publicationDate']) {
-            $tmpDate = \DateTime::createFromFormat('d/m/Y', $data['publicationDate']);
-            $data['publicationDate'] = $tmpDate->format('Y-m-d');
+            $tmpDate = \DateTime::createFromFormat('d/m/Y H:i:s', $data['publicationDate']);
+            $data['publicationDate'] = $tmpDate->format('Y-m-d H:i:s');
         }
         if (isset($data['startDate']) && $data['startDate']) {
-            $tmpDate = \DateTime::createFromFormat('d/m/Y', $data['startDate']);
-            $data['startDate'] = $tmpDate->format('Y-m-d');
+            $tmpDate = \DateTime::createFromFormat('d/m/Y H:i:s', $data['startDate']);
+            $data['startDate'] = $tmpDate->format('Y-m-d H:i:s');
         }
         if (isset($data['endDate']) && $data['endDate']) {
-            $tmpDate = \DateTime::createFromFormat('d/m/Y', $data['endDate']);
-            $data['endDate'] = $tmpDate->format('Y-m-d');
+            $tmpDate = \DateTime::createFromFormat('d/m/Y H:i:s', $data['endDate']);
+            $data['endDate'] = $tmpDate->format('Y-m-d H:i:s');
         }
         if (isset($data['closeDate']) && $data['closeDate']) {
-            $tmpDate = \DateTime::createFromFormat('d/m/Y', $data['closeDate']);
-            $data['closeDate'] = $tmpDate->format('Y-m-d');
+            $tmpDate = \DateTime::createFromFormat('d/m/Y H:i:s', $data['closeDate']);
+            $data['closeDate'] = $tmpDate->format('Y-m-d H:i:s');
         }
 
         // If publicationDate is null, I update it with the startDate if not null neither
@@ -142,29 +142,29 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
         if (! $form->isValid()) {
             if (isset($data['publicationDate']) && $data['publicationDate']) {
-                $tmpDate = \DateTime::createFromFormat('Y-m-d', $data['publicationDate']);
-                $data['publicationDate'] = $tmpDate->format('d/m/Y');
+                $tmpDate = \DateTime::createFromFormat('Y-m-d H:i:s', $data['publicationDate']);
+                $data['publicationDate'] = $tmpDate->format('d/m/Y H:i:s');
                 $form->setData(array(
                     'publicationDate' => $data['publicationDate']
                 ));
             }
             if (isset($data['startDate']) && $data['startDate']) {
-                $tmpDate = \DateTime::createFromFormat('Y-m-d', $data['startDate']);
-                $data['startDate'] = $tmpDate->format('d/m/Y');
+                $tmpDate = \DateTime::createFromFormat('Y-m-d H:i:s', $data['startDate']);
+                $data['startDate'] = $tmpDate->format('d/m/Y H:i:s');
                 $form->setData(array(
                     'startDate' => $data['startDate']
                 ));
             }
             if (isset($data['endDate']) && $data['endDate']) {
-                $tmpDate = \DateTime::createFromFormat('Y-m-d', $data['endDate']);
-                $data['endDate'] = $tmpDate->format('d/m/Y');
+                $tmpDate = \DateTime::createFromFormat('Y-m-d H:i:s', $data['endDate']);
+                $data['endDate'] = $tmpDate->format('d/m/Y H:i:s');
                 $form->setData(array(
                     'endDate' => $data['endDate']
                 ));
             }
             if (isset($data['closeDate']) && $data['closeDate']) {
-                $tmpDate = \DateTime::createFromFormat('Y-m-d', $data['closeDate']);
-                $data['closeDate'] = $tmpDate->format('d/m/Y');
+                $tmpDate = \DateTime::createFromFormat('Y-m-d H:i:s', $data['closeDate']);
+                $data['closeDate'] = $tmpDate->format('d/m/Y H:i:s');
                 $form->setData(array(
                     'closeDate' => $data['closeDate']
                 ));
@@ -333,7 +333,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
     {
         $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
         $today = new \DateTime("now");
-        $today = $today->format('Y-m-d') . ' 23:59:59';
+        $today = $today->format('Y-m-d H:i:s');
         $orderBy = 'g.publicationDate';
         if ($order != '') {
             $orderBy = 'g.'.$order;
@@ -402,7 +402,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
     {
         $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
         $today = new \DateTime("now");
-        $today = $today->format('Y-m-d') . ' 23:59:59';
+        $today = $today->format('Y-m-d H:i:s');
 
         // Game active with a start_date before today (or without start_date)
         // and end_date after today (or without end-date)
@@ -514,7 +514,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                     $results[$k][$key] = (is_array($entryData[$key]))?implode(', ', $entryData[$key]):$entryData[$key];
                 } elseif (array_key_exists($key, $entry)) {
                     $results[$k][$key] = ($entry[$key] instanceof \DateTime)?
-                        $entry[$key]->format('Y-m-d'):
+                        $entry[$key]->format('Y-m-d H:i:s'):
                         $entry[$key];
                 } else {
                     $results[$k][$key] = '';
@@ -534,7 +534,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
     {
         $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
         $today = new \DateTime("now");
-        $today = $today->format('Y-m-d') . ' 23:59:59';
+        $today = $today->format('Y-m-d H:i:s');
 
         // Game active with a start_date before today (or without start_date)
         // and end_date after today (or without end-date)
@@ -857,30 +857,30 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             case 'always':
                 $interval = 'P100Y';
                 $now->sub(new \DateInterval($interval));
-                $dateLimit = $now->format('Y-m-d') . ' 0:0:0';
+                $dateLimit = $now->format('Y-m-d H:i:s');
                 break;
             case 'day':
-                $dateLimit = $now->format('Y-m-d') . ' 0:0:0';
+                $dateLimit = $now->format('Y-m-d H:i:s');
                 break;
             case 'week':
                 $interval = 'P7D';
                 $now->sub(new \DateInterval($interval));
-                $dateLimit = $now->format('Y-m-d') . ' 0:0:0';
+                $dateLimit = $now->format('Y-m-d H:i:s');
                 break;
             case 'month':
                 $interval = 'P1M';
                 $now->sub(new \DateInterval($interval));
-                $dateLimit = $now->format('Y-m-d') . ' 0:0:0';
+                $dateLimit = $now->format('Y-m-d H:i:s');
                 break;
             case 'year':
                 $interval = 'P1Y';
                 $now->sub(new \DateInterval($interval));
-                $dateLimit = $now->format('Y-m-d') . ' 0:0:0';
+                $dateLimit = $now->format('Y-m-d H:i:s');
                 break;
             default:
                 $interval = 'P100Y';
                 $now->sub(new \DateInterval($interval));
-                $dateLimit = $now->format('Y-m-d') . ' 0:0:0';
+                $dateLimit = $now->format('Y-m-d H:i:s');
         }
 
         return $dateLimit;
@@ -1322,7 +1322,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
     {
         $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
         $today = new \DateTime("now");
-        $today = $today->format('Y-m-d') . ' 23:59:59';
+        $today = $today->format('Y-m-d H:i:s');
 
         $onlineGames = '(
             (

@@ -815,9 +815,9 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
     public function isClosed()
     {
         $today = new DateTime('now');
-        if (($this->getCloseDate() && $this->getCloseDate()->setTime(23, 59, 59) < $today)
+        if (($this->getCloseDate() && $this->getCloseDate() < $today)
             ||
-            ($this->getPublicationDate() && $this->getPublicationDate()->setTime(0, 0, 0) > $today)
+            ($this->getPublicationDate() && $this->getPublicationDate() > $today)
         ) {
             return true;
         }
@@ -833,9 +833,9 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
     public function isStarted()
     {
         $today = new DateTime('now');
-        if (((!$this->getStartDate() || $this->getStartDate()->setTime(0, 0, 0) <= $today))
+        if (((!$this->getStartDate() || $this->getStartDate() <= $today))
                 &&
-                (!$this->getEndDate() || $this->getEndDate()->setTime(23, 59, 59) > $today)
+                (!$this->getEndDate() || $this->getEndDate() > $today)
         ) {
             return true;
         }
@@ -846,9 +846,9 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
     public function isFinished()
     {
         $today = new DateTime('now');
-        if ($this->getEndDate() && $this->getEndDate()->setTime(23, 59, 59) <= $today
+        if ($this->getEndDate() && $this->getEndDate() <= $today
             ||
-            ($this->getCloseDate() && $this->getCloseDate()->setTime(23, 59, 59) <= $today)
+            ($this->getCloseDate() && $this->getCloseDate() <= $today)
         ) {
             return true;
         }
@@ -1620,14 +1620,13 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
         $obj_vars = get_object_vars($this);
 
         if (isset($obj_vars['publicationDate']) && $obj_vars['publicationDate'] !== null) {
-            $obj_vars['publicationDate'] = $obj_vars['publicationDate']->format('d/m/Y');
+            $obj_vars['publicationDate'] = $obj_vars['publicationDate']->format('d/m/Y H:i:s');
         }
-
         if (isset($obj_vars['endDate']) && $obj_vars['endDate'] !== null) {
-            $obj_vars['endDate'] = $obj_vars['endDate']->format('d/m/Y');
+            $obj_vars['endDate'] = $obj_vars['endDate']->format('d/m/Y H:i:s');
         }
         if (isset($obj_vars['startDate']) && $obj_vars['startDate'] !== null) {
-            $obj_vars['startDate'] = $obj_vars['startDate']->format('d/m/Y');
+            $obj_vars['startDate'] = $obj_vars['startDate']->format('d/m/Y H:i:s');
         }
 
         return $obj_vars;
