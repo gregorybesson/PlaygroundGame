@@ -32,25 +32,25 @@ class PrizeCategoryTest extends \PHPUnit_Framework_TestCase
     //     $this->assertEmpty($this->tm->findBy(array('identifier' => 'iden')));
     // }
 
-    public function testInsertTranslation()
-    {
-        $translator = $this->sm->get('translator');
-        $prizeCategory = new PrizeCategoryEntity();
-        $translator->setLocale('en_US');
-        $prizeCategory->setTitle('Anglais')
-        ->setIdentifier('anglais');
-        $prizeCategory = $this->tm->insert($prizeCategory);
-        $translator->setLocale('fr_FR');
-        $prizeCategory->setTitle('Francais')
-        ->setIdentifier('francais');
-        $prizeCategory = $this->tm->insert($prizeCategory);
-        $this->assertCount(1, $this->tm->findAll());
-        $this->assertInstanceOf('\PlaygroundGame\Entity\PrizeCategory', current($this->tm->findAll()));
+    // public function testInsertTranslation()
+    // {
+    //     $translator = $this->sm->get('translator');
+    //     $prizeCategory = new PrizeCategoryEntity();
+    //     $translator->setLocale('en_US');
+    //     $prizeCategory->setTitle('Anglais')
+    //     ->setIdentifier('anglais');
+    //     $prizeCategory = $this->tm->insert($prizeCategory);
+    //     $translator->setLocale('fr_FR');
+    //     $prizeCategory->setTitle('Francais')
+    //     ->setIdentifier('francais');
+    //     $prizeCategory = $this->tm->insert($prizeCategory);
+    //     $this->assertCount(1, $this->tm->findAll());
+    //     $this->assertInstanceOf('\PlaygroundGame\Entity\PrizeCategory', current($this->tm->findAll()));
 
-        $prizeCategory = current($this->tm->findAll());
-        $this->assertEquals("Francais", $prizeCategory->getTitle());
-        $this->assertEquals("francais", $prizeCategory->getIdentifier());
-    }
+    //     $prizeCategory = current($this->tm->findAll());
+    //     $this->assertEquals("Francais", $prizeCategory->getTitle());
+    //     $this->assertEquals("francais", $prizeCategory->getIdentifier());
+    // }
 
     public function testUpdate()
     {
