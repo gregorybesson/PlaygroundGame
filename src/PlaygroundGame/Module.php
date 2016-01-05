@@ -300,7 +300,7 @@ class Module
      * @param  EventManager $e
      * @return array
      */
-    public function populateCmsCategories ($e)
+    public function populateCmsCategories($e)
     {
         $catsArray = $e->getParam('categories');
 
