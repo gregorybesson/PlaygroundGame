@@ -76,36 +76,36 @@ class PrizeCategoryTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->tm->findById($id));
     }
 
-    public function testFindAll()
-    {
-        $prizeCategory = new PrizeCategoryEntity();
-        $prizeCategory->setIdentifier('iden 1');
-        $prizeCategory->setTitle('Un Titre 1');
-        $prizeCategory = $this->tm->insert($prizeCategory);
+    // public function testFindAll()
+    // {
+    //     $prizeCategory = new PrizeCategoryEntity();
+    //     $prizeCategory->setIdentifier('iden 1');
+    //     $prizeCategory->setTitle('Un Titre 1');
+    //     $prizeCategory = $this->tm->insert($prizeCategory);
 
-        //var_dump($prizeCategory);
+    //     //var_dump($prizeCategory);
 
-        $prizeCategory2 = new PrizeCategoryEntity();
-        $prizeCategory2->setIdentifier('iden 2');
-        $prizeCategory2->setTitle('Un Titre 2');
-        $prizeCategory2 = $this->tm->insert($prizeCategory2);
+    //     $prizeCategory2 = new PrizeCategoryEntity();
+    //     $prizeCategory2->setIdentifier('iden 2');
+    //     $prizeCategory2->setTitle('Un Titre 2');
+    //     $prizeCategory2 = $this->tm->insert($prizeCategory2);
 
-        //var_dump($prizeCategory2);
+    //     //var_dump($prizeCategory2);
 
-        $prizeCategory3 = new PrizeCategoryEntity();
-        $prizeCategory3->setIdentifier('iden 3');
-        $prizeCategory3->setTitle('Un Titre 3');
-        $prizeCategory3 = $this->tm->insert($prizeCategory3);
+    //     $prizeCategory3 = new PrizeCategoryEntity();
+    //     $prizeCategory3->setIdentifier('iden 3');
+    //     $prizeCategory3->setTitle('Un Titre 3');
+    //     $prizeCategory3 = $this->tm->insert($prizeCategory3);
 
-        //var_dump($prizeCategory);
+    //     //var_dump($prizeCategory);
 
-        $prizeCategories = $this->tm->findAll();
-        $this->assertEquals(3, count($prizeCategories));
+    //     $prizeCategories = $this->tm->findAll();
+    //     $this->assertEquals(3, count($prizeCategories));
 
-        foreach ($this->tm->findAll() as $prizeCategory) {
-            $this->tm->remove($prizeCategory);
-        }
-    }
+    //     foreach ($this->tm->findAll() as $prizeCategory) {
+    //         $this->tm->remove($prizeCategory);
+    //     }
+    // }
     
     public function tearDown()
     {
