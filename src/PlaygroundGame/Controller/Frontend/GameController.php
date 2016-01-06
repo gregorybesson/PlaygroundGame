@@ -991,7 +991,6 @@ class GameController extends AbstractActionController
 
     public function cmsListAction()
     {
-
         $viewModel = $this->forward()->dispatch(
             'playgroundcms',
             array(
