@@ -29,6 +29,7 @@ class QuizQuestion implements InputFilterAwareInterface
 
     /**
      * @ORM\ManyToOne(targetEntity="Quiz", inversedBy="questions")
+     * @ORM\JoinColumn(name="quiz_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $quiz;
 

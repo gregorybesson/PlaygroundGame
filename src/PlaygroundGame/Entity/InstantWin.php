@@ -39,14 +39,14 @@ class InstantWin extends Game implements InputFilterAwareInterface
      *
      * @ORM\Column(name="occurrence_number", type="integer", nullable=true)
      */
-    protected $occurrenceNumber;
+    protected $occurrenceNumber = 0;
 
     /**
      * Determine how much winning occurrences to create among the occurrences
      *
      * @ORM\Column(name="winning_occurrence_number", type="integer", nullable=true)
      */
-    protected $winningOccurrenceNumber;
+    protected $winningOccurrenceNumber = 0;
     
     /**
      * this field is taken into account only if $occurrenceNumber<>0.
@@ -282,7 +282,7 @@ class InstantWin extends Game implements InputFilterAwareInterface
                 'name' => 'occurrenceNumber',
                 'required' => false,
                 'validators' => array(
-                    array('name' => 'Digits', ),
+                    array('name' => 'Digits'),
                 ),
             )));
 
@@ -290,7 +290,7 @@ class InstantWin extends Game implements InputFilterAwareInterface
                 'name' => 'winningOccurrenceNumber',
                 'required' => false,
                 'validators' => array(
-                    array('name' => 'Digits', ),
+                    array('name' => 'Digits'),
                 ),
             )));
             

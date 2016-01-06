@@ -35,6 +35,7 @@ class MissionGame implements InputFilterAwareInterface
 
     /**
      * @ORM\ManyToOne(targetEntity="Mission", inversedBy="missionGames")
+     * @ORM\JoinColumn(name="mission_id", referencedColumnName="id", onDelete="CASCADE")
      *
      **/
     protected $mission;
