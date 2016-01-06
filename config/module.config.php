@@ -363,6 +363,16 @@ return array(
                                     )
                                 )
                             ),
+                            'profile' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/profil',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_mission',
+                                        'action' => 'userProfile'
+                                    )
+                                )
+                            ),
                             'fbshare' => array(
                                 'type' => 'Literal',
                                 'options' => array(

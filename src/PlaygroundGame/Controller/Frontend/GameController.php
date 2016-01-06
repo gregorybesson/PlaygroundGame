@@ -950,6 +950,25 @@ class GameController extends AbstractActionController
         return $this->redirect()->toUrl($redirect);
     }
 
+    public function userProfileAction()
+    {
+        $viewModel = $this->forward()->dispatch(
+            'playgrounduser_user',
+            array(
+                'controller' => 'playgrounduser_user',
+                'action' => 'profile',
+                'id' => $this->game->getIdentifier()
+            )
+        );
+
+        if ($viewModel && $viewModel instanceof \Zend\View\Model\ViewModel) {
+            $this->layout()->setVariables(array('game' => $this->game));
+            $viewModel->setVariables(array('game' => $this->game));
+        }
+
+        return $viewModel;
+    }
+
     public function cmsPageAction()
     {
         $viewModel = $this->forward()->dispatch(
