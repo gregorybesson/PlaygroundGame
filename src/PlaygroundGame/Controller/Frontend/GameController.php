@@ -146,7 +146,6 @@ class GameController extends AbstractActionController
         $template = 'playground-game/'.$controllerPath . '/custom' .$this->getRequest()->getUri()->getPath();
 
         if (false === $templatePathResolver->resolve($template)) {
-
             $viewRender     = $this->getServiceLocator()->get('ViewRenderer');
 
             $this->getEvent()->getRouteMatch()->setParam('action', 'not-found');

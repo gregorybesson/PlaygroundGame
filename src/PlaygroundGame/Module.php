@@ -67,11 +67,12 @@ class Module
                     
                                 // and removing the trailing slash for each subsequent route
                                 foreach ($routeModel['child_routes'] as $id => $ar) {
-                                    if (isset($routeModel['child_routes'][$id]['options']['route']))
+                                    if (isset($routeModel['child_routes'][$id]['options']['route'])) {
                                         $routeModel['child_routes'][$id]['options']['route'] = ltrim(
                                             $ar['options']['route'],
                                             '/'
                                         );
+                                    }
                                 }
                     
                                 // then create the hostname route + appending the model updated
