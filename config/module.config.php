@@ -363,6 +363,16 @@ return array(
                                     )
                                 )
                             ),
+                            'profile' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/profil',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_mission',
+                                        'action' => 'userProfile'
+                                    )
+                                )
+                            ),
                             'fbshare' => array(
                                 'type' => 'Literal',
                                 'options' => array(
@@ -521,7 +531,19 @@ return array(
                                     ),
                                 ),
                             ),
-                        ),
+                            'other-routes' => array(
+                                'type' => '\Zend\Mvc\Router\Http\Regex',
+                                'priority' => -1000,
+                                'options' => array(
+                                    'regex' => '.*',
+                                    'spec' => '%url%',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_mission',
+                                        'action' => 'not-found'
+                                    )
+                                )
+                            )
+                        )
                     ),
                     
                     'quiz' => array(
@@ -731,6 +753,18 @@ return array(
                                     ),
                                 ),
                             ),
+                            'other-routes' => array(
+                                'type' => '\Zend\Mvc\Router\Http\Regex',
+                                'priority' => -1000,
+                                'options' => array(
+                                    'regex' => '.*',
+                                    'spec' => '%url%',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_quiz',
+                                        'action' => 'not-found'
+                                    )
+                                )
+                            )
                         )
                     ),
 
@@ -941,6 +975,18 @@ return array(
                                     ),
                                 ),
                             ),
+                            'other-routes' => array(
+                                'type' => '\Zend\Mvc\Router\Http\Regex',
+                                'priority' => -1000,
+                                'options' => array(
+                                    'regex' => '.*',
+                                    'spec' => '%url%',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_lottery',
+                                        'action' => 'not-found'
+                                    )
+                                )
+                            )
                         )
                     ),
 
@@ -1151,6 +1197,18 @@ return array(
                                     ),
                                 ),
                             ),
+                            'other-routes' => array(
+                                'type' => '\Zend\Mvc\Router\Http\Regex',
+                                'priority' => -1000,
+                                'options' => array(
+                                    'regex' => '.*',
+                                    'spec' => '%url%',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_instantwin',
+                                        'action' => 'not-found'
+                                    )
+                                )
+                            )
                         )
                     ),
 
@@ -1451,6 +1509,18 @@ return array(
                                     ),
                                 ),
                             ),
+                            'other-routes' => array(
+                                'type' => '\Zend\Mvc\Router\Http\Regex',
+                                'priority' => -1000,
+                                'options' => array(
+                                    'regex' => '.*',
+                                    'spec' => '%url%',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_postvote',
+                                        'action' => 'not-found'
+                                    )
+                                )
+                            )
                         )
                     ),
                     'prizecategories' => array(
