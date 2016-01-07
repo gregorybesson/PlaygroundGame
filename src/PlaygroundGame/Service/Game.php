@@ -928,29 +928,31 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
         foreach ($data['email'] as $to) {
             $mailSent = true;
-            $message = $mailService->createHtmlMessage(
-                $from,
-                $to,
-                $subject,
-                'playground-game/email/' . $template,
-                array(
-                    'game' => $game,
-                    'from' => $from,
-                    'to' => $to,
-                    'secretKey' => $secretKey,
-                    'skinUrl' => $skinUrl,
-                    'userTimer' => $userTimer
-                )
-            );
-            try {
-                $mailService->send($message);
-            } catch (\Zend\Mail\Protocol\Exception\RuntimeException $e) {
-                //$mailSent = false;
-            }
-            
-            if ($entry) {
-                $shares = json_decode($entry->getSocialShares(), true);
-                (!isset($shares['mail']))? $shares['mail'] = 1:$shares['mail'] += 1;
+            if(!empty($to)){
+                $message = $mailService->createHtmlMessage(
+                    $from,
+                    $to,
+                    $subject,
+                    'playground-game/email/' . $template,
+                    array(
+                        'game' => $game,
+                        'from' => $from,
+                        'to' => $to,
+                        'secretKey' => $secretKey,
+                        'skinUrl' => $skinUrl,
+                        'userTimer' => $userTimer
+                    )
+                );
+                try {
+                    $mailService->send($message);
+                } catch (\Zend\Mail\Protocol\Exception\RuntimeException $e) {
+                    //$mailSent = false;
+                }
+                
+                if ($entry) {
+                    $shares = json_decode($entry->getSocialShares(), true);
+                    (!isset($shares['mail']))? $shares['mail'] = 1:$shares['mail'] += 1;
+                }
             }
         }
 
