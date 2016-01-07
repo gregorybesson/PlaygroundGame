@@ -67,10 +67,11 @@ class Module
                     
                                 // and removing the trailing slash for each subsequent route
                                 foreach ($routeModel['child_routes'] as $id => $ar) {
-                                    $routeModel['child_routes'][$id]['options']['route'] = ltrim(
-                                        $ar['options']['route'],
-                                        '/'
-                                    );
+                                    if (isset($routeModel['child_routes'][$id]['options']['route']))
+                                        $routeModel['child_routes'][$id]['options']['route'] = ltrim(
+                                            $ar['options']['route'],
+                                            '/'
+                                        );
                                 }
                     
                                 // then create the hostname route + appending the model updated
@@ -85,20 +86,6 @@ class Module
                                     'may_terminate' => true
                                 );
                                 $config['router']['routes']['frontend.'.$url]['child_routes'][$v['classType']] = $routeModel;
-                                
-                                // adding not-found catchall : Any non existent URL will be catched by this controller
-                                $config['router']['routes']['frontend.'.$url]['child_routes'][$v['classType']]['child_routes']['catchall'] = array(
-                                    'type' => '\Zend\Mvc\Router\Http\Regex',
-                                    'priority' => -1000,
-                                    'options' => array(
-                                        'regex' => '.*',
-                                        'spec' => '%url%',
-                                        'defaults' => array(
-                                            'controller' => 'playgroundgame_'.$v['classType'],
-                                            'action' => 'not-found'
-                                        ),
-                                    ),
-                                );
                     
                                 $coreLayoutModel = isset($config['core_layout']['frontend'])?
                                     $config['core_layout']['frontend']:

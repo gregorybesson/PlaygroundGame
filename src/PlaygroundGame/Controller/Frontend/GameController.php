@@ -137,20 +137,37 @@ class GameController extends AbstractActionController
      */
     public function notFoundAction()
     {
-        $viewRender     = $this->getServiceLocator()->get('ViewRenderer');
+        $templatePathResolver = $this->getServiceLocator()->get('Zend\View\Resolver\TemplatePathStack');
 
-        $this->getEvent()->getRouteMatch()->setParam('action', 'not-found');
-        $this->response->setStatusCode(404);
+        // Figuring out the template path name based on the controller name
+        $controller = explode('\\', get_class($this));
+        $controllerPath = str_replace('Controller', '', end($controller));
+        $controllerPath = strtolower(preg_replace('/(?<=\\w)([A-Z])/', '-\\1', $controllerPath));
 
-        $res = 'error/404';
+        $template = 'playground-game/'.$controllerPath . $this->getRequest()->getUri()->getPath();
+
+        if (false === $templatePathResolver->resolve($template)) {
+
+            $viewRender     = $this->getServiceLocator()->get('ViewRenderer');
+
+            $this->getEvent()->getRouteMatch()->setParam('action', 'not-found');
+            $this->response->setStatusCode(404);
+
+            $res = 'error/404';
+
+            $viewModel = $this->buildView($this->game);
+            $viewModel->setTemplate($res);
+
+            $this->layout()->setVariable("content", $viewRender->render($viewModel));
+            $this->response->setContent($viewRender->render($this->layout()));
+
+            return $this->response;
+        }
 
         $viewModel = $this->buildView($this->game);
-        $viewModel->setTemplate($res);
+        $viewModel->setTemplate($template);
 
-        $this->layout()->setVariable("content", $viewRender->render($viewModel));
-        $this->response->setContent($viewRender->render($this->layout()));
-
-        return $this->response;
+        return $viewModel;
     }
 
     /**
@@ -1108,7 +1125,7 @@ class GameController extends AbstractActionController
         
         if ($game) {
             $viewModel->setVariables($this->getShareData($game));
-            $viewModel->setVariables(array('game' => $game));
+            $viewModel->setVariables(array('game' => $game, 'user' => $this->user));
         }
 
         return $viewModel;
