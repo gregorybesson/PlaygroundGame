@@ -902,6 +902,8 @@ class GameController extends AbstractActionController
                 'registerForm' => $form,
                 'enableRegistration' => $userOptions->getEnableRegistration(),
                 'redirect' => $redirect,
+                'flashMessages'    => $this->flashMessenger()->getMessages(),
+                'flashErrors'      => $this->flashMessenger()->getErrorMessages(),
             ));
             
             return $viewModel;
@@ -956,10 +958,7 @@ class GameController extends AbstractActionController
 
         $redirect = $this->frontendUrl()->fromRoute(
             $this->game->getClassType().'/login',
-            array(
-                'id' => $this->game->getIdentifier(),
-                
-            )
+            array('id' => $this->game->getIdentifier())
         ) . ($socialnetwork ? '/' . $socialnetwork : ''). ($redirect ? '?redirect=' . $redirect : '');
 
         return $this->redirect()->toUrl($redirect);
