@@ -928,7 +928,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
         foreach ($data['email'] as $to) {
             $mailSent = true;
-            if(!empty($to)){
+            if (!empty($to)) {
                 $message = $mailService->createHtmlMessage(
                     $from,
                     $to,
