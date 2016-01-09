@@ -34,6 +34,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
      * @var quizReplyAnswerMapper
      */
     protected $quizReplyAnswerMapper;
+
     /**
      *
      *
@@ -256,6 +257,25 @@ class Quiz extends Game implements ServiceManagerAwareInterface
     }
 
     /**
+     * This function update the sort order of the questions in a Quiz
+     *
+     * @param  string $data
+     * @return boolean
+     */
+    public function sortQuestion($data)
+    {
+        $arr = explode(",", $data);
+
+        foreach ($arr as $k => $v) {
+            $question = $this->getQuizQuestionMapper()->findById($v);
+            $question->setPosition($k);
+            $this->getQuizQuestionMapper()->update($question);
+        }
+
+        return true;
+    }
+
+    /**
      * @return string
      */
     public function calculateMaxAnswersQuestion($question)
@@ -345,7 +365,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
         $totalQuestions = 0;
 
         $quizReply = new QuizReply();
-
+        
         foreach ($data as $group) {
             foreach ($group as $q => $a) {
                 if (strlen($q) > 5 && strpos($q, '-data', strlen($q) - 5) !== false) {

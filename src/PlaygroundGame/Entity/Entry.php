@@ -28,7 +28,7 @@ class Entry implements \JsonSerializable
 
     /**
      * @ORM\ManyToOne(targetEntity="PlaygroundUser\Entity\User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="user_id")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="user_id", onDelete="CASCADE")
      **/
     protected $user;
 

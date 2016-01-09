@@ -61,14 +61,14 @@ class QuizController extends GameController
                 $values = array();
                 $valuesSortedByPosition = array();
                 foreach ($q->getAnswers() as $a) {
-                    $values[$a->getId()] = array(
+                    $values[$a->getPosition()] = array(
                         'id' => $a->getId(),
                         'position' => $a->getPosition(),
                         'answer' => $a->getAnswer(),
                         );
                     $explanations[$a->getAnswer()] = $a->getExplanation();
                 }
-                sort($values);
+                ksort($values);
                 foreach ($values as $key => $value) {
                     $valuesSortedByPosition[$value['id']] = $value['answer'];
                 }
@@ -146,10 +146,7 @@ class QuizController extends GameController
             return $this->redirect()->toUrl(
                 $this->frontendUrl()->fromRoute(
                     $this->game->getClassType() . '/'. $this->game->nextStep($this->params('action')),
-                    array(
-                        'id' => $this->game->getIdentifier(),
-                        
-                    )
+                    array('id' => $this->game->getIdentifier())
                 )
             );
         }
