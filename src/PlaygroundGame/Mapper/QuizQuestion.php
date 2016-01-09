@@ -9,7 +9,10 @@ class QuizQuestion extends AbstractMapper
 
     public function findByGameId($quiz)
     {
-        return $this->getEntityRepository()->findBy(array('quiz' => $quiz));
+        return $this->getEntityRepository()->findBy(
+            array('quiz' => $quiz),
+            array('position' => 'ASC', 'id' => 'ASC')
+        );
     }
 
     public function getEntityRepository()

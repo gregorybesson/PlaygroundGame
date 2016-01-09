@@ -1700,8 +1700,18 @@ return array(
                                 'options' => array(
                                     'route' => '/draw/:gameId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_lottery',
+                                        'controller' => 'playgroundgame_admin_quiz',
                                         'action' => 'draw'
+                                    )
+                                )
+                            ),
+                            'sortquestion' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/sortquestion/:gameId',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_admin_quiz',
+                                        'action' => 'sortQuestion'
                                     )
                                 )
                             )

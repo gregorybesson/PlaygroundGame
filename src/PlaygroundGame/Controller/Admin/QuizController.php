@@ -2,6 +2,7 @@
 
 namespace PlaygroundGame\Controller\Admin;
 
+use Zend\View\Model\JsonModel;
 use PlaygroundGame\Entity\Quiz;
 use PlaygroundGame\Entity\QuizQuestion;
 use PlaygroundGame\Controller\Admin\GameController;
@@ -149,6 +150,15 @@ class QuizController extends GameController
         $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The question was created');
 
         return $this->redirect()->toRoute('admin/playgroundgame/quiz-question-list', array('quizId'=>$quizId));
+    }
+
+    public function sortQuestionAction()
+    {
+        $result = $this->getAdminGameService()->sortQuestion($this->params()->fromQuery('order'));
+        $model = new JsonModel(array(
+            'success' => $result,
+        ));
+        return $model->setTerminal(true);
     }
 
     public function createQuizAction()
