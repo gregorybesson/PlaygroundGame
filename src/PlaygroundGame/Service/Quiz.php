@@ -91,7 +91,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
     }
 
     /**
-     * @param  array                  $data
+     * @param  array $data
      * @return \PlaygroundGame\Entity\Game
      */
     public function updateQuestion(array $data, $question)
@@ -195,9 +195,9 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                                     if ($answersarray[$quizReplyAnswer->getAnswerId()]) {
                                         $updatedAnswer = $answersarray[$quizReplyAnswer->getAnswerId()];
                                         $quizReplyAnswer->setPoints($updatedAnswer->getPoints());
-                                        $quizPoints += $updatedAnswer->getPoints();
+                                        //$quizPoints += $updatedAnswer->getPoints();
                                         $quizReplyAnswer->setCorrect($updatedAnswer->getCorrect());
-                                        $quizCorrectAnswers += $updatedAnswer->getCorrect();
+                                        //$quizCorrectAnswers += $updatedAnswer->getCorrect();
                                         $quizReplyAnswer = $this->getQuizReplyAnswerMapper()->update(
                                             $quizReplyAnswer
                                         );
@@ -211,9 +211,9 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                                         )
                                         ) {
                                             $quizReplyAnswer->setPoints($answer->getPoints());
-                                            $quizPoints += $answer->getPoints();
+                                            //$quizPoints += $answer->getPoints();
                                             $quizReplyAnswer->setCorrect($answer->getCorrect());
-                                            $quizCorrectAnswers += $answer->getCorrect();
+                                            //$quizCorrectAnswers += $answer->getCorrect();
                                             $quizReplyAnswer = $this->getQuizReplyAnswerMapper()->update(
                                                 $quizReplyAnswer
                                             );
@@ -223,12 +223,21 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                                 }
                             }
                         }
+
+                        // The reply has been update with correct answers and point for this question.
+                        // I count the whole set of points for this reply and update the entry
+                        foreach($reply->getAnswers() as $a){
+                            if($a->getCorrect()){
+                                $quizPoints += $a->getPoints();
+                                $quizCorrectAnswers += $a->getCorrect();
+                            }
+                        }
                     }
                 }
                 $winner = $this->isWinner($quiz, $quizCorrectAnswers);
                 $entry->setWinner($winner);
                 $entry->setPoints($quizPoints);
-                $entry->setActive(false);
+                //$entry->setActive(false);
                 $entry = $this->getEntryMapper()->update($entry);
             }
 
@@ -364,7 +373,14 @@ class Quiz extends Game implements ServiceManagerAwareInterface
         $maxCorrectAnswers = $game->getMaxCorrectAnswers();
         $totalQuestions = 0;
 
-        $quizReply = new QuizReply();
+        $quizReply = $this->getQuizReplyMapper()->getLastGameReply($entry);
+        if(!$quizReply){
+            $quizReply = new QuizReply();
+        } else {
+            foreach($quizReply->getAnswers() as $answer){
+                $this->getQuizReplyAnswerMapper()->remove($answer);
+            }
+        }
         
         foreach ($data as $group) {
             foreach ($group as $q => $a) {
@@ -463,7 +479,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
         $quizReplyMapper->insert($quizReply);
 
         $this->getEventManager()->trigger(
-            'complete_quiz.post',
+            __FUNCTION__.'.post',
             $this,
             array('user' => $user, 'entry' => $entry, 'reply' => $quizReply, 'game' => $game)
         );

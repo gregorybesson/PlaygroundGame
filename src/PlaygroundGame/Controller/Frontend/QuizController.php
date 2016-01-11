@@ -34,6 +34,15 @@ class QuizController extends GameController
             );
         }
 
+        $reply = $this->getGameService()->getQuizReplyMapper()->getLastGameReply($entry);
+        $userAnswers = array();
+        if($reply){
+            foreach ($reply->getAnswers() as $answer) {
+                $userAnswers[$answer->getQuestionId()][$answer->getAnswerId()] = true;
+                $userAnswers[$answer->getQuestionId()]['answer'] = $answer->getAnswer();
+            }
+        }
+
         $questions = $this->game->getQuestions();
         $totalQuestions = count($questions);
 
@@ -48,7 +57,8 @@ class QuizController extends GameController
         $explanations = array();
 
         foreach ($questions as $q) {
-            if (($this->game->getQuestionGrouping() > 0 && $i % $this->game->getQuestionGrouping() === 0) ||
+            if (
+                ($this->game->getQuestionGrouping() > 0 && $i % $this->game->getQuestionGrouping() === 0) ||
                 ($i === 0 && $this->game->getQuestionGrouping() === 0)
             ) {
                 $fieldsetName = 'questionGroup' . ++ $j;
@@ -74,7 +84,6 @@ class QuizController extends GameController
                 }
                 $element->setValueOptions($valuesSortedByPosition);
                 $element->setLabelOptions(array("disable_html_escape"=>true));
-
                 $elementData[$q->getId()] = new Element\Hidden($name.'-data');
             } elseif ($q->getType() === 1) {
                 $element = new Element\MultiCheckbox($name);
@@ -98,13 +107,18 @@ class QuizController extends GameController
                 $element->setLabelOptions(array("disable_html_escape"=>true));
             } elseif ($q->getType() == 2) {
                 $element = new Element\Textarea($name);
+                if(isset($userAnswers[$q->getId()])) $element->setValue($userAnswers[$q->getId()]['answer']);
                 $elementData[$q->getId()] = new Element\Hidden($name.'-data');
             }
 
             $element->setLabel($q->getQuestion());
             $fieldset->add($element);
-            foreach ($elementData as $id => $e) {
-                $fieldset->add($e);
+            if (is_array($elementData)) {
+                foreach ($elementData as $id => $e) {
+                    $fieldset->add($e);
+                }
+            } else {
+                $fieldset->add($elementData);
             }
 
             $fieldsetFilter->add($factory->createInput(array(
@@ -123,7 +137,8 @@ class QuizController extends GameController
             )));
 
             $i ++;
-            if (($this->game->getQuestionGrouping() > 0 && $i % $this->game->getQuestionGrouping() == 0 && $i > 0) ||
+            if (
+                ($this->game->getQuestionGrouping() > 0 && $i % $this->game->getQuestionGrouping() == 0 && $i > 0) ||
                 $i == $totalQuestions
             ) {
                 $form->add($fieldset);
@@ -156,6 +171,7 @@ class QuizController extends GameController
             'questions' => $questions,
             'form'      => $form,
             'explanations' => $explanations,
+            'flashMessages' => $this->flashMessenger()->getMessages(),
         ));
 
         return $viewModel;
@@ -172,10 +188,11 @@ class QuizController extends GameController
             array('id' => $this->game->getIdentifier()),
             array('force_canonical' => true)
         ).'?key='.$secretKey;
+
         // With core shortener helper
         $socialLinkUrl = $this->shortenUrl()->shortenUrl($socialLinkUrl);
 
-        $lastEntry = $this->getGameService()->findLastInactiveEntry($this->game, $this->user);
+        $lastEntry = $this->getGameService()->findLastEntry($this->game, $this->user);
         if (!$lastEntry) {
             return $this->redirect()->toUrl(
                 $this->frontendUrl()->fromRoute(
@@ -189,21 +206,18 @@ class QuizController extends GameController
         // je compte les bonnes réponses et le ratio
         $maxCorrectAnswers = $this->game->getMaxCorrectAnswers();
         $winner = $lastEntry->getWinner();
-        $replies    = $this->getGameService()->getQuizReplyMapper()->getLastGameReply($lastEntry);
+        $reply = $this->getGameService()->getQuizReplyMapper()->getLastGameReply($lastEntry);
         $userCorrectAnswers = 0;
         $correctAnswers = array();
         $userAnswers = array();
-
-
-        foreach ($replies as $reply) {
-            foreach ($reply->getAnswers() as $answer) {
-                if ($answer->getCorrect()) {
-                    $correctAnswers[$answer->getQuestionId()][$answer->getAnswerId()] = true;
-                    ++$userCorrectAnswers;
-                }
-                $userAnswers[$answer->getQuestionId()][$answer->getAnswerId()] = true;
-                $userAnswers[$answer->getQuestionId()]['answer'] = $answer->getAnswer();
+        
+        foreach ($reply->getAnswers() as $answer) {
+            if ($answer->getCorrect()) {
+                $correctAnswers[$answer->getQuestionId()][$answer->getAnswerId()] = true;
+                ++$userCorrectAnswers;
             }
+            $userAnswers[$answer->getQuestionId()][$answer->getAnswerId()] = true;
+            $userAnswers[$answer->getQuestionId()]['answer'] = $answer->getAnswer();
         }
 
         $ratioCorrectAnswers = 0;
@@ -276,7 +290,6 @@ class QuizController extends GameController
         $form = $this->getServiceLocator()->get('playgroundgame_sharemail_form');
         $form->setAttribute('method', 'post');
 
-        // buildView must be before sendMail because it adds the game template path to the templateStack
         $viewModel = $this->buildView($this->game);
         
         $this->getGameService()->sendMail($this->game, $this->user, $lastEntry);
@@ -295,6 +308,7 @@ class QuizController extends GameController
             'secretKey'           => $secretKey,
             'userTimer'           => $userTimer,
             'userAnswers'         => $userAnswers,
+            'flashMessages'       => $this->flashMessenger()->getMessages(),
         ));
 
         return $viewModel;

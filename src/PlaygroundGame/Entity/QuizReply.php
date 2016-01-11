@@ -201,7 +201,7 @@ class QuizReply implements InputFilterAwareInterface
         }
     }
 
-    public function removeAnswers(ArrayCollection $answers)
+    public function removeAnswers(\Doctrine\Common\Collections\Collection $answers)
     {
         foreach ($answers as $answer) {
             $answer->setReply(null);

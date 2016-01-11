@@ -92,8 +92,8 @@ class QuizQuestion extends ProvidesEventsForm
             ),
             'attributes' => array(
                 'required' => false,
-                'cols' => '10',
-                'rows' => '2',
+                'cols' => '40',
+                'rows' => '10',
                 'id' => 'jsonData',
             ),
         ));
