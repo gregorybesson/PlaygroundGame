@@ -35,10 +35,7 @@ class PostVoteController extends GameController
                 return $this->redirect()->toUrl(
                     $this->frontendUrl()->fromRoute(
                         'postvote',
-                        array(
-                            'id' => $this->game->getIdentifier(),
-                            
-                        )
+                        array('id' => $this->game->getIdentifier())
                     )
                 );
             }
@@ -47,7 +44,7 @@ class PostVoteController extends GameController
             $lastPost = $this->getGameService()->getPostVotePostMapper()->findOneBy(array('entry' => $lastEntryId));
             $postId = $lastPost->getId();
             if ($lastPost->getStatus() == 2) {
-                // the user has already taken part of this game and the participation limit has been reached
+                // the user has already taken part to this game and the participation limit has been reached
                 $this->flashMessenger()->addMessage(
                     $this->getServiceLocator()->get('translator')->translate('You have already a Post')
                 );
@@ -58,7 +55,6 @@ class PostVoteController extends GameController
                         array(
                             'id' => $this->game->getIdentifier(),
                             'post' => $postId,
-                            
                         )
                     )
                 );
@@ -84,10 +80,7 @@ class PostVoteController extends GameController
             return $this->redirect()->toUrl(
                 $this->frontendUrl()->fromRoute(
                     'postvote',
-                    array(
-                        'id' => $this->game->getIdentifier(),
-                        
-                    )
+                    array('id' => $this->game->getIdentifier())
                 )
             );
         }
@@ -132,10 +125,7 @@ class PostVoteController extends GameController
                     // determine the route where the user should go
                     $redirectUrl = $this->frontendUrl()->fromRoute(
                         'postvote/'.$this->game->nextStep('play'),
-                        array(
-                            'id' => $this->game->getIdentifier(),
-                            
-                        )
+                        array('id' => $this->game->getIdentifier())
                     );
 
                     return $this->redirect()->toUrl($redirectUrl);
@@ -151,10 +141,10 @@ class PostVoteController extends GameController
         }
 
         $viewModel->setVariables(array(
-                'playerData' => $entry->getPlayerData(),
-                'form' => $form,
-                'post' => $post,
-            ));
+            'playerData' => $entry->getPlayerData(),
+            'form' => $form,
+            'post' => $post,
+        ));
 
         return $viewModel;
     }
@@ -330,10 +320,15 @@ class PostVoteController extends GameController
      */
     public function resultAction()
     {
+        $lastEntry = $this->getGameService()->findLastInactiveEntry($this->game, $this->user);
+        if ($lastEntry == null) {
+            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('postvote', array('id' => $identifier)));
+        }
         // Je recherche le post associé à entry + status == 0. Si non trouvé, je redirige vers home du jeu.
         $post = $this->getGameService()->getPostVotePostMapper()->findOneBy(array('entry' => $lastEntry));
 
         if (! $post) {
+            die('bad');
             return $this->redirect()->toUrl(
                 $this->frontendUrl()->fromRoute(
                     'postvote',

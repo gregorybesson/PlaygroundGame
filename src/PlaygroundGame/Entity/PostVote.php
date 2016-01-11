@@ -19,12 +19,6 @@ class PostVote extends Game implements InputFilterAwareInterface
     const CLASSTYPE = 'postvote';
 
     /**
-     * templates
-     * @ORM\Column(name="template", type="string", nullable=false)
-     */
-    protected $template;
-
-    /**
      * Display mode of Posts :
      * 'date' : sort by post date desc
      * 'random' : ...
@@ -52,7 +46,7 @@ class PostVote extends Game implements InputFilterAwareInterface
      * Type of moderation : moderate posts before their publication, or after their publication (default)
      * @ORM\Column(name="moderation_type", type="boolean", nullable=false, options={"default" = 0})
      */
-    protected $moderationType;
+    protected $moderationType = 0;
 
     /**
      * @ORM\OneToOne(targetEntity="PostVoteForm", mappedBy="postvote", cascade={"persist","remove"})
@@ -109,24 +103,6 @@ class PostVote extends Game implements InputFilterAwareInterface
     public function setForm($form)
     {
         $this->form = $form;
-
-        return $this;
-    }
-
-    /**
-     * @return the unknown_type
-     */
-    public function getTemplate()
-    {
-        return $this->template;
-    }
-
-    /**
-     * @param unknown_type $template
-     */
-    public function setTemplate($template)
-    {
-        $this->template = $template;
 
         return $this;
     }
@@ -225,10 +201,6 @@ class PostVote extends Game implements InputFilterAwareInterface
     {
         parent::populate($data);
 
-        if (isset($data['template']) && $data['template'] !== null) {
-            $this->template = $data['template'];
-        }
-
         if (isset($data['postDisplayMode']) && $data['postDisplayMode'] !== null) {
             $this->postDisplayMode = $data['postDisplayMode'];
         }
@@ -250,11 +222,6 @@ class PostVote extends Game implements InputFilterAwareInterface
             $factory = new InputFactory();
 
             $inputFilter = parent::getInputFilter();
-
-            $inputFilter->add($factory->createInput(array(
-                'name' => 'template',
-                'required' => true,
-            )));
 
             $inputFilter->add(
                 $factory->createInput(

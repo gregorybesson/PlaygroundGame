@@ -136,7 +136,7 @@ $form->setAttribute('action', $this->url('postvote/play', array('id' => $this->g
     	    
 			<?php echo $this->form()->closeTag() ?>
 			<!-- FORM HANDLER LIVE UPLOAD PHOTO -->
-	        <form id="uploadform" method="post" enctype="multipart/form-data" action="<?php echo $this->url('photocontestcreate') ?>" target="upload_iframe" style="display:none;"></form>
+	        <form id="uploadform" method="post" enctype="multipart/form-data" action="<?php echo $this->url('postvote/play/ajaxupload', array('id' => $this->game->getIdentifier()))?>" target="upload_iframe" style="display:none;"></form>
 
 		</div>
 		<p class="champs-obligatoitres">*champs obligatoires</p>
