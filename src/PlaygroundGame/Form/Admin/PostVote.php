@@ -23,23 +23,6 @@ class PostVote extends Game
 
         $this->add(array(
             'type' => 'Zend\Form\Element\Select',
-            'name' => 'template',
-            'attributes' =>  array(
-                'id' => 'template',
-                'options' => array(
-                    'text' => $translator->translate('Text', 'playgroundgame'),
-                    'photo' => $translator->translate('Photo', 'playgroundgame'),
-                    'recipe' => $translator->translate('Recipe', 'playgroundgame'),
-                ),
-            ),
-            'options' => array(
-                'empty_option' => $translator->translate('What is the posts type ?', 'playgroundgame'),
-                'label' => $translator->translate('Post type', 'playgroundgame'),
-            ),
-        ));
-
-        $this->add(array(
-            'type' => 'Zend\Form\Element\Select',
             'name' => 'postDisplayMode',
             'attributes' =>  array(
                 'id' => 'postDisplayMode',

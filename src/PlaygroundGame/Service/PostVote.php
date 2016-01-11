@@ -359,6 +359,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
                 foreach ($post->getPostElements() as $element) {
                     $data[$element->getPosition()] = $element->getValue();
                 }
+                $arrayPosts[$i]['post']  = $post;
                 $arrayPosts[$i]['data']  = $data;
                 $arrayPosts[$i]['votes'] = count($post->getVotes());
                 $arrayPosts[$i]['id']    = $post->getId();
