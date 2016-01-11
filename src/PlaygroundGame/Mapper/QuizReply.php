@@ -22,7 +22,7 @@ class QuizReply extends AbstractMapper
      */
     public function getLastGameReply($entry)
     {
-        return $this->getEntityRepository()->findBy(array('entry' => $entry));
+        return $this->getEntityRepository()->findOneBy(array('entry' => $entry));
     }
 
     public function getEntityRepository()

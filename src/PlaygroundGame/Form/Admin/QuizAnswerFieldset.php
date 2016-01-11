@@ -62,6 +62,13 @@ class QuizAnswerFieldset extends Fieldset
         ));
 
         $this->add(array(
+            'name' => 'points',
+            'options' => array(
+                'label' => 'Points'
+            ),
+        ));
+
+        $this->add(array(
             'name' => 'position',
             'options' => array(
                 'label' => 'Position'
