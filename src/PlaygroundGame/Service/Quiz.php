@@ -226,8 +226,8 @@ class Quiz extends Game implements ServiceManagerAwareInterface
 
                         // The reply has been update with correct answers and point for this question.
                         // I count the whole set of points for this reply and update the entry
-                        foreach($reply->getAnswers() as $a){
-                            if($a->getCorrect()){
+                        foreach ($reply->getAnswers() as $a) {
+                            if ($a->getCorrect()) {
                                 $quizPoints += $a->getPoints();
                                 $quizCorrectAnswers += $a->getCorrect();
                             }
@@ -374,10 +374,10 @@ class Quiz extends Game implements ServiceManagerAwareInterface
         $totalQuestions = 0;
 
         $quizReply = $this->getQuizReplyMapper()->getLastGameReply($entry);
-        if(!$quizReply){
+        if (!$quizReply) {
             $quizReply = new QuizReply();
         } else {
-            foreach($quizReply->getAnswers() as $answer){
+            foreach ($quizReply->getAnswers() as $answer) {
                 $this->getQuizReplyAnswerMapper()->remove($answer);
             }
         }
