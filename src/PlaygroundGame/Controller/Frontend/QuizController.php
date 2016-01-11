@@ -36,7 +36,7 @@ class QuizController extends GameController
 
         $reply = $this->getGameService()->getQuizReplyMapper()->getLastGameReply($entry);
         $userAnswers = array();
-        if($reply){
+        if ($reply) {
             foreach ($reply->getAnswers() as $answer) {
                 $userAnswers[$answer->getQuestionId()][$answer->getAnswerId()] = true;
                 $userAnswers[$answer->getQuestionId()]['answer'] = $answer->getAnswer();
@@ -57,8 +57,7 @@ class QuizController extends GameController
         $explanations = array();
 
         foreach ($questions as $q) {
-            if (
-                ($this->game->getQuestionGrouping() > 0 && $i % $this->game->getQuestionGrouping() === 0) ||
+            if (($this->game->getQuestionGrouping() > 0 && $i % $this->game->getQuestionGrouping() === 0) ||
                 ($i === 0 && $this->game->getQuestionGrouping() === 0)
             ) {
                 $fieldsetName = 'questionGroup' . ++ $j;
@@ -107,7 +106,9 @@ class QuizController extends GameController
                 $element->setLabelOptions(array("disable_html_escape"=>true));
             } elseif ($q->getType() == 2) {
                 $element = new Element\Textarea($name);
-                if(isset($userAnswers[$q->getId()])) $element->setValue($userAnswers[$q->getId()]['answer']);
+                if (isset($userAnswers[$q->getId()])) {
+                    $element->setValue($userAnswers[$q->getId()]['answer']);
+                }
                 $elementData[$q->getId()] = new Element\Hidden($name.'-data');
             }
 
@@ -137,8 +138,7 @@ class QuizController extends GameController
             )));
 
             $i ++;
-            if (
-                ($this->game->getQuestionGrouping() > 0 && $i % $this->game->getQuestionGrouping() == 0 && $i > 0) ||
+            if (($this->game->getQuestionGrouping() > 0 && $i % $this->game->getQuestionGrouping() == 0 && $i > 0) ||
                 $i == $totalQuestions
             ) {
                 $form->add($fieldset);
