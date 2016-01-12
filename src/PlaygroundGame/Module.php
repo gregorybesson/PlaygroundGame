@@ -265,7 +265,7 @@ class Module
 
         $gameService = $e->getTarget()->getServiceManager()->get('playgroundgame_game_service');
 
-        $games = $gameService->getActiveGames();
+        $games = $gameService->getActiveGames(false);
 
         foreach ($games as $game) {
             $array = array(
