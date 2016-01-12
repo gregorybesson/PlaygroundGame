@@ -174,7 +174,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
                         ErrorHandler::stop(true);
                     }
                 }
-            } elseif (is_array($value)) {
+            } elseif (is_array($value) || $form->get($name) instanceof \Zend\Form\Element\Select) {
                 $arValues = $form->get($name)->getValueOptions();
                 $postElement->setValue($arValues[$value[0]]);
             } elseif (!empty($value)) {
