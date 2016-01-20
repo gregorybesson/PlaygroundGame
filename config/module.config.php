@@ -319,6 +319,30 @@ return array(
                                     )
                                 )
                             ),
+                            'ajaxforgotpassword' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/ajax-mot-passe-oublie[/:gameId]',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_mission',
+                                        'action'     => 'ajaxforgot',
+                                    ),
+                                ),
+                            ),
+                            'resetpassword' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/reset-password/:userId/:token',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_mission',
+                                        'action'     => 'userreset',
+                                    ),
+                                    'constraints' => array(
+                                        'userId'  => '[0-9]+',
+                                        'token' => '[A-F0-9]+',
+                                    ),
+                                ),
+                            ),
                             'login' => array(
                                 'type' => 'Segment',
                                 'options' => array(
