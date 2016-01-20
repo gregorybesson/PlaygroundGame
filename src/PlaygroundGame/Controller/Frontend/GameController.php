@@ -40,6 +40,7 @@ class GameController extends AbstractActionController
         'share',
         'optin',
         'login',
+        'ajaxforgot',
         'play',
         'result',
         'preview',
@@ -981,6 +982,46 @@ class GameController extends AbstractActionController
         }
 
         return $viewModel;
+    }
+
+    public function userresetAction()
+    {
+        $viewModel = $this->forward()->dispatch(
+            'playgrounduser_forgot',
+            array(
+                'controller' => 'playgrounduser_forgot',
+                'action' => 'reset',
+                'id' => $this->game->getIdentifier(),
+                'userId' => $this->params()->fromRoute('userId', null),
+                'token' => $this->params()->fromRoute('token', null),
+            )
+        );
+
+        if ($viewModel && $viewModel instanceof \Zend\View\Model\ViewModel) {
+            $this->layout()->setVariables(array('game' => $this->game));
+            $viewModel->setVariables(array('game' => $this->game));
+        }
+
+        return $viewModel;
+    }
+
+    public function ajaxforgotAction()
+    {
+        $view = $this->forward()->dispatch(
+            'playgrounduser_forgot',
+            array(
+                'controller' => 'playgrounduser_forgot',
+                'action' => 'ajaxforgot',
+                'id' => $this->game->getIdentifier()
+            )
+        );
+
+        if ($view && $view instanceof \Zend\View\Model\ViewModel) {
+            $this->layout()->setVariables(array('game' => $this->game));
+            $view->setVariables(array('game' => $this->game));
+        }
+
+        return $view;
     }
 
     public function cmsPageAction()
