@@ -40,6 +40,7 @@ class GameController extends AbstractActionController
         'share',
         'optin',
         'login',
+        'logout',
         'ajaxforgot',
         'play',
         'result',
@@ -58,7 +59,8 @@ class GameController extends AbstractActionController
     protected $withAnyUser = array(
         'share',
         'result',
-        'play'
+        'play',
+        'logout'
     );
 
     public function setEventManager(\Zend\EventManager\EventManagerInterface $events)
@@ -734,6 +736,25 @@ class GameController extends AbstractActionController
             'form' => $form,
             'flashMessages' => $this->flashMessenger()->getMessages(),
         ));
+        return $viewModel;
+    }
+
+    public function logoutAction()
+    {
+        $viewModel = $this->forward()->dispatch(
+            'playgrounduser_user',
+            array(
+                'controller' => 'playgrounduser_user',
+                'action' => 'logout',
+                'id' => $this->game->getIdentifier()
+            )
+        );
+
+        if ($viewModel && $viewModel instanceof \Zend\View\Model\ViewModel) {
+            $this->layout()->setVariables(array('game' => $this->game));
+            $viewModel->setVariables(array('game' => $this->game));
+        }
+
         return $viewModel;
     }
 
