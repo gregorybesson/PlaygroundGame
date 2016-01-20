@@ -353,6 +353,16 @@ return array(
                                     )
                                 )
                             ),
+                            'logout' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/logout',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_mission',
+                                        'action'     => 'logout',
+                                    ),
+                                ),
+                            ),
                             'user-register' => array(
                                 'type' => 'Segment',
                                 'options' => array(
