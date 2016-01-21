@@ -36,10 +36,10 @@ class PostVoteComment implements InputFilterAwareInterface
     protected $postvote;
 
     /**
-     * The link to the user is not explicit as it's possible to vote anonymously....
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $userId;
+     * @ORM\ManyToOne(targetEntity="PlaygroundUser\Entity\User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="user_id")
+     **/
+    protected $user;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -110,20 +110,20 @@ class PostVoteComment implements InputFilterAwareInterface
         return $this;
     }
 
-   /**
-    * @return the unknown_type
-    */
-    public function getUserId()
+    /**
+     * @return the unknown_type
+     */
+    public function getUser()
     {
-        return $this->userId;
+        return $this->user;
     }
 
     /**
-     * @param unknown_type $userId
+     * @param unknown_type $user
      */
-    public function setUserId($userId)
+    public function setUser($user)
     {
-        $this->userId = $userId;
+        $this->user = $user;
 
         return $this;
     }

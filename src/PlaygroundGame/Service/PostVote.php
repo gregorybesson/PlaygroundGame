@@ -417,7 +417,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
         $comment->setMessage($message);
         $comment->setPostvote($game);
         if ($user) {
-            $comment->setUserId($user->getId());
+            $comment->setUser($user);
         }
 
         $postvoteCommentMapper->insert($comment);
@@ -457,7 +457,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
     {
         $postvoteCommentMapper = $this->getPostVoteCommentMapper();
         $comment = $postvoteCommentMapper->findOneBy(array('id' => $messageId));
-        if($comment->getUserId() === $user->getId()){
+        if($comment->getUser()->getId() === $user->getId()){
             $postvoteCommentMapper->remove($comment);
             $this->getEventManager()->trigger(
                 'remove_comment_postvote.post',
