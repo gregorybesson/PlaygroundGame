@@ -631,8 +631,16 @@ class PostVoteController extends GameController
             $comments = $this->getGameService()->getCommentsForPostvote($this->game);
         }
 
+        if (is_array($comments)) {
+            $paginator = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\ArrayAdapter($comments));
+            $paginator->setItemCountPerPage(1);
+            $paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
+        } else {
+            $paginator = $comments;
+        }
+
         $viewModel = $this->buildView($this->game);
-        $viewModel->setVariables(array('comments' => $comments));
+        $viewModel->setVariables(array('comments' => $paginator));
 
         return $viewModel;
     }
