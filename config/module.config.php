@@ -1401,17 +1401,30 @@ return array(
                                         'controller' => 'playgroundgame_postvote',
                                         'action' => 'ajaxVote'
                                     )
-                                )
+                                ),
+                                'may_terminate' => true,
                             ),
                             'comments' => array(
                                 'type' => 'Segment',
                                 'options' => array(
-                                    'route' => '/comments[/:post]',
+                                    'route' => '/comments[/:p]',
                                     'defaults' => array(
                                         'controller' => 'playgroundgame_postvote',
                                         'action' => 'comments'
                                     )
-                                )
+                                ),
+                                'may_terminate' => true,
+                            ),
+                            'postcomments' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/comments/:post[/:p]',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_postvote',
+                                        'action' => 'comments'
+                                    )
+                                ),
+                                'may_terminate' => true,
                             ),
                             'comment' => array(
                                 'type' => 'Segment',
