@@ -3,6 +3,8 @@ namespace PlaygroundGame\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Translatable\Translatable;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
@@ -10,9 +12,17 @@ use Zend\InputFilter\InputFilterInterface;
 /**
  * @ORM\Entity @HasLifecycleCallbacks
  * @ORM\Table(name="game_postvote_form")
+ * @Gedmo\TranslationEntity(class="PlaygroundGame\Entity\PostVoteFormTranslation")
  */
-class PostVoteForm implements InputFilterAwareInterface
+class PostVoteForm implements InputFilterAwareInterface, Translatable
 {
+    /**
+     * @Gedmo\Locale
+     * Used locale to override Translation listener`s locale
+     * this is not a mapped field of entity metadata, just a simple property
+     */
+    protected $locale;
+
     protected $inputFilter;
 
     /**
@@ -29,21 +39,25 @@ class PostVoteForm implements InputFilterAwareInterface
     protected $postvote;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(type="string", nullable=true)
      */
     protected $title;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(type="text", nullable=true)
      */
     protected $description;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(type="text", nullable=true)
      */
     protected $form;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(name="form_template", type="text", nullable=true)
      */
     protected $formTemplate;
@@ -195,5 +209,10 @@ class PostVoteForm implements InputFilterAwareInterface
         }
 
         return $this->inputFilter;
+    }
+
+    public function setTranslatableLocale($locale)
+    {
+        $this->locale = $locale;
     }
 }

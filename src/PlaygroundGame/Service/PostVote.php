@@ -11,6 +11,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
     protected $postvoteformMapper;
     protected $postVotePostMapper;
     protected $postVoteVoteMapper;
+    protected $postVoteCommentMapper;
     protected $postVotePostElementMapper;
 
     public function getGameEntity()
@@ -405,6 +406,29 @@ class PostVote extends Game implements ServiceManagerAwareInterface
         }
     }
 
+    public function addComment($user, $ipAddress, $post, $message = '')
+    {
+        $postvoteCommentMapper = $this->getPostVoteCommentMapper();
+        $postId = $post->getId();
+        $comment = new \PlaygroundGame\Entity\PostVoteComment();
+        $comment->setPost($post);
+        $comment->setIp($ipAddress);
+        $comment->setMessage($message);
+        if ($user) {
+            $comment->setUserId($user->getId());
+        }
+
+        $postvoteCommentMapper->insert($comment);
+        $game = $post->getPostvote();
+        $this->getEventManager()->trigger(
+            'vote_postvote.post',
+            $this,
+            array('user' => $user, 'game' => $game, 'post' => $post, 'comment' => $comment)
+        );
+
+        return true;
+    }
+
     public function getEntriesHeader($game)
     {
         $header = parent::getEntriesHeader($game);
@@ -541,6 +565,22 @@ class PostVote extends Game implements ServiceManagerAwareInterface
     public function setPostVoteVoteMapper($postVoteVoteMapper)
     {
         $this->postVoteVoteMapper = $postVoteVoteMapper;
+
+        return $this;
+    }
+
+    public function getPostVoteCommentMapper()
+    {
+        if (null === $this->postVoteCommentMapper) {
+            $this->postVoteCommentMapper = $this->getServiceManager()->get('playgroundgame_postvotecomment_mapper');
+        }
+
+        return $this->postVoteCommentMapper;
+    }
+
+    public function setPostVoteCommentMapper($postVoteCommentMapper)
+    {
+        $this->postVoteCommentMapper = $postVoteCommentMapper;
 
         return $this;
     }

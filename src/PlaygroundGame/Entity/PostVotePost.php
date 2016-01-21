@@ -51,6 +51,11 @@ class PostVotePost implements InputFilterAwareInterface, \JsonSerializable
     private $votes;
 
     /**
+     * @ORM\OneToMany(targetEntity="PostVoteComment", mappedBy="post")
+     */
+    private $comments;    
+
+    /**
      * @ORM\OneToMany(targetEntity="PostVotePostElement", mappedBy="post", cascade={"persist","remove"})
      */
     private $postElements;
@@ -84,6 +89,8 @@ class PostVotePost implements InputFilterAwareInterface, \JsonSerializable
     public function __construct()
     {
         $this->postElements = new ArrayCollection();
+        $this->votes = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     /**
@@ -234,6 +241,53 @@ class PostVotePost implements InputFilterAwareInterface, \JsonSerializable
         $this->votes = $votes;
 
         return $this;
+    }
+
+    /**
+     * Add an entry to the comment.
+     *
+     * @param PostVoteComment $comment
+     *
+     * @return void
+     */
+    public function addComment(PostVoteComment $comment)
+    {
+        //$comment->setPost($this);
+        $this->comments[] = $comment;
+    }
+
+    /**
+     * @return the unknown_type
+     */
+    public function getComments()
+    {
+        return $this->comments;
+    }
+
+    /**
+     * @param unknown_type $comments
+     */
+    public function setComments($comments)
+    {
+        $this->comments = $comments;
+
+        return $this;
+    }
+
+    public function addComments(ArrayCollection $comments)
+    {
+        foreach ($comments as $comment) {
+            $comment->setPost($this);
+            $this->comments->add($comment);
+        }
+    }
+
+    public function removeComments(\Doctrine\Common\Collections\Collection $comments)
+    {
+        foreach ($comments as $comment) {
+            $comment->setPost(null);
+            $this->comments->removeElement($comment);
+        }
     }
 
     /**

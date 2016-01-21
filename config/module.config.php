@@ -1403,6 +1403,16 @@ return array(
                                     )
                                 )
                             ),
+                            'comment' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/comment[/:post]',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_postvote',
+                                        'action' => 'ajaxComment'
+                                    )
+                                )
+                            ),
                             'result' => array(
                                 'type' => 'Literal',
                                 'options' => array(

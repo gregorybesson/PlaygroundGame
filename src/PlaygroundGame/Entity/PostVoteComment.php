@@ -11,9 +11,9 @@ use Zend\InputFilter\InputFilterInterface;
 
 /**
  * @ORM\Entity @HasLifecycleCallbacks
- * @ORM\Table(name="game_postvote_vote")
+ * @ORM\Table(name="game_postvote_comment")
  */
-class PostVoteVote implements InputFilterAwareInterface
+class PostVoteComment implements InputFilterAwareInterface
 {
     protected $inputFilter;
 
@@ -25,8 +25,8 @@ class PostVoteVote implements InputFilterAwareInterface
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="PostVotePost", inversedBy="votes")
-     *
+     * @ORM\ManyToOne(targetEntity="PostVotePost", inversedBy="comments")
+     * @ORM\JoinColumn(name="post_id", referencedColumnName="id", onDelete="CASCADE")
      **/
     protected $post;
 
@@ -45,11 +45,6 @@ class PostVoteVote implements InputFilterAwareInterface
      * @ORM\Column(type="text", nullable=true)
      */
     protected $message;
-
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
-    protected $note;
 
     /**
      * @ORM\Column(name="created_at", type="datetime")
@@ -142,7 +137,7 @@ class PostVoteVote implements InputFilterAwareInterface
     public function setPost($post)
     {
         // Check that there is no drawback using the cascading update from PostVoteEntry
-        $post->addVote($this);
+        $post->addComment($this);
         $this->post = $post;
 
         return $this;
@@ -162,24 +157,6 @@ class PostVoteVote implements InputFilterAwareInterface
     public function setMessage($message)
     {
         $this->message = $message;
-
-        return $this;
-    }
-
-    /**
-    * @return the unknown_type
-    */
-    public function getNote()
-    {
-        return $this->note;
-    }
-
-    /**
-     * @param unknown_type $note
-     */
-    public function setNote($note)
-    {
-        $this->note = $note;
 
         return $this;
     }
