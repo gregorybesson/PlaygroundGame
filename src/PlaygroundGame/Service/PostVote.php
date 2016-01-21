@@ -410,23 +410,65 @@ class PostVote extends Game implements ServiceManagerAwareInterface
     {
         $postvoteCommentMapper = $this->getPostVoteCommentMapper();
         $postId = $post->getId();
+        $game = $post->getPostvote();
         $comment = new \PlaygroundGame\Entity\PostVoteComment();
         $comment->setPost($post);
         $comment->setIp($ipAddress);
         $comment->setMessage($message);
+        $comment->setPostvote($game);
         if ($user) {
-            $comment->setUserId($user->getId());
+            $comment->setUser($user);
         }
 
         $postvoteCommentMapper->insert($comment);
-        $game = $post->getPostvote();
+        
         $this->getEventManager()->trigger(
-            'vote_postvote.post',
+            'comment_postvote.post',
             $this,
             array('user' => $user, 'game' => $game, 'post' => $post, 'comment' => $comment)
         );
 
         return true;
+    }
+
+    /**
+     * Get all comments for this game
+     */
+    public function getCommentsForPostvote($postvote)
+    {
+        $postvoteCommentMapper = $this->getPostVoteCommentMapper();
+        $comments = $postvoteCommentMapper->findBy(array('postvote' => $postvote));
+
+        return $comments ;
+    }
+
+    /**
+     * Get all comments for this post
+     */
+    public function getCommentsForPost($post)
+    {
+        $postvoteCommentMapper = $this->getPostVoteCommentMapper();
+        $comments = $postvoteCommentMapper->findBy(array('post' => $post));
+
+        return $comments ;
+    }
+
+    public function removeComment($user, $ipAddress, $messageId)
+    {
+        $postvoteCommentMapper = $this->getPostVoteCommentMapper();
+        $comment = $postvoteCommentMapper->findOneBy(array('id' => $messageId));
+        if($comment->getUser()->getId() === $user->getId()){
+            $postvoteCommentMapper->remove($comment);
+            $this->getEventManager()->trigger(
+                'remove_comment_postvote.post',
+                $this,
+                array('user' => $user,'comment' => $comment)
+            );
+
+            return true;
+        }
+
+        return false;
     }
 
     public function getEntriesHeader($game)
