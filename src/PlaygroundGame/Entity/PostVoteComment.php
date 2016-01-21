@@ -31,6 +31,11 @@ class PostVoteComment implements InputFilterAwareInterface
     protected $post;
 
     /**
+     * @ORM\ManyToOne(targetEntity="PostVote")
+     **/
+    protected $postvote;
+
+    /**
      * The link to the user is not explicit as it's possible to vote anonymously....
      * @ORM\Column(type="integer", nullable=true)
      */
@@ -139,6 +144,25 @@ class PostVoteComment implements InputFilterAwareInterface
         // Check that there is no drawback using the cascading update from PostVoteEntry
         $post->addComment($this);
         $this->post = $post;
+
+        return $this;
+    }
+
+    /**
+     * @return the unknown_type
+     */
+    public function getPostvote()
+    {
+        return $this->postvote;
+    }
+
+    /**
+     * @param unknown_type $postvote
+     */
+    public function setPostvote($postvote)
+    {
+        
+        $this->postvote = $postvote;
 
         return $this;
     }

@@ -620,6 +620,23 @@ class PostVoteController extends GameController
         return $response;
     }
 
+    public function commentsAction()
+    {
+
+        $postId = $this->getEvent()->getRouteMatch()->getParam('post');
+        if($postId){
+            $post = $this->getGameService()->getPostvotePostMapper()->findById($postId);
+            $comments = $this->getGameService()->getCommentsForPostvote($postId);
+        } else {
+            $comments = $this->getGameService()->getCommentsForPostvote($this->game);
+        }
+
+        $viewModel = $this->buildView($this->game);
+        $viewModel->setVariables(array('comments' => $comments));
+
+        return $viewModel;
+    }
+
     public function ajaxCommentAction()
     {
         // Call this for the session lock to be released (other ajax calls can then be made)
@@ -648,6 +665,47 @@ class PostVoteController extends GameController
                     $this->getRequest()->getServer('REMOTE_ADDR'),
                     $post,
                     $this->params()->fromPost('comment')
+                )) {
+                    $response->setContent(\Zend\Json\Json::encode(array(
+                        'success' => 1
+                    )));
+                } else {
+                    $response->setContent(\Zend\Json\Json::encode(array(
+                        'success' => 0
+                    )));
+                }
+            }
+        }
+
+        return $response;
+    }
+
+    public function ajaxRemoveCommentAction()
+    {
+        // Call this for the session lock to be released (other ajax calls can then be made)
+        session_write_close();
+        $commentId = $this->getEvent()->getRouteMatch()->getParam('comment');
+        $request = $this->getRequest();
+        $response = $this->getResponse();
+
+        if (! $this->game) {
+            $response->setContent(\Zend\Json\Json::encode(array(
+                'success' => 0
+            )));
+
+            return $response;
+        }
+
+        if (!$this->zfcUserAuthentication()->hasIdentity()) {
+            $response->setContent(\Zend\Json\Json::encode(array(
+                'success' => 0
+            )));
+        } else {
+            if ($request->isPost()) {
+                if ($this->getGameService()->removeComment(
+                    $this->user,
+                    $this->getRequest()->getServer('REMOTE_ADDR'),
+                    $commentId
                 )) {
                     $response->setContent(\Zend\Json\Json::encode(array(
                         'success' => 1

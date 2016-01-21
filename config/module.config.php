@@ -1403,6 +1403,16 @@ return array(
                                     )
                                 )
                             ),
+                            'comments' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/comments[/:post]',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_postvote',
+                                        'action' => 'comments'
+                                    )
+                                )
+                            ),
                             'comment' => array(
                                 'type' => 'Segment',
                                 'options' => array(
@@ -1410,6 +1420,16 @@ return array(
                                     'defaults' => array(
                                         'controller' => 'playgroundgame_postvote',
                                         'action' => 'ajaxComment'
+                                    )
+                                )
+                            ),
+                            'removecomment' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/remove-comment[/:comment]',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_postvote',
+                                        'action' => 'ajaxRemoveComment'
                                     )
                                 )
                             ),
