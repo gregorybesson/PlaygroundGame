@@ -620,6 +620,49 @@ class PostVoteController extends GameController
         return $response;
     }
 
+    public function ajaxCommentAction()
+    {
+        // Call this for the session lock to be released (other ajax calls can then be made)
+        session_write_close();
+        $postId = $this->getEvent()->getRouteMatch()->getParam('post');
+        $request = $this->getRequest();
+        $response = $this->getResponse();
+
+        if (! $this->game) {
+            $response->setContent(\Zend\Json\Json::encode(array(
+                'success' => 0
+            )));
+
+            return $response;
+        }
+
+        if (!$this->zfcUserAuthentication()->hasIdentity()) {
+            $response->setContent(\Zend\Json\Json::encode(array(
+                'success' => 0
+            )));
+        } else {
+            if ($request->isPost()) {
+                $post = $this->getGameService()->getPostvotePostMapper()->findById($postId);
+                if ($this->getGameService()->addComment(
+                    $this->user,
+                    $this->getRequest()->getServer('REMOTE_ADDR'),
+                    $post,
+                    $this->params()->fromPost('comment')
+                )) {
+                    $response->setContent(\Zend\Json\Json::encode(array(
+                        'success' => 1
+                    )));
+                } else {
+                    $response->setContent(\Zend\Json\Json::encode(array(
+                        'success' => 0
+                    )));
+                }
+            }
+        }
+
+        return $response;
+    }
+
     public function captchaAction()
     {
         $response = $this->getResponse();
