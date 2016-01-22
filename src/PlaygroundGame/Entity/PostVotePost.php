@@ -7,6 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping\PrePersist;
 use Doctrine\ORM\Mapping\PreUpdate;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Translatable\Translatable;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\Factory as InputFactory;
 use Zend\InputFilter\InputFilterAwareInterface;
@@ -15,9 +17,17 @@ use Zend\InputFilter\InputFilterInterface;
 /**
  * @ORM\Entity @HasLifecycleCallbacks
  * @ORM\Table(name="game_postvote_post")
+ * @Gedmo\TranslationEntity(class="PlaygroundGame\Entity\PostVotePostTranslation")
  */
-class PostVotePost implements InputFilterAwareInterface, \JsonSerializable
+class PostVotePost implements InputFilterAwareInterface, Translatable, \JsonSerializable
 {
+    /**
+     * @Gedmo\Locale
+     * Used locale to override Translation listener`s locale
+     * this is not a mapped field of entity metadata, just a simple property
+     */
+    protected $locale;
+
     protected $inputFilter;
 
     /**
@@ -424,5 +434,10 @@ class PostVotePost implements InputFilterAwareInterface, \JsonSerializable
         }
 
         return $this->inputFilter;
+    }
+
+    public function setTranslatableLocale($locale)
+    {
+        $this->locale = $locale;
     }
 }
