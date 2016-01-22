@@ -47,11 +47,13 @@ class PostVotePost implements InputFilterAwareInterface, \JsonSerializable
 
     /**
      * @ORM\OneToMany(targetEntity="PostVoteVote", mappedBy="post")
+     * @ORM\OrderBy({"createdAt" = "DESC"})
      */
     private $votes;
 
     /**
      * @ORM\OneToMany(targetEntity="PostVoteComment", mappedBy="post")
+     * @ORM\OrderBy({"createdAt" = "DESC"})
      */
     private $comments;    
 

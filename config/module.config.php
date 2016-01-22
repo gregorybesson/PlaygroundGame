@@ -1432,7 +1432,7 @@ return array(
                                     'route' => '/comment[/:post]',
                                     'defaults' => array(
                                         'controller' => 'playgroundgame_postvote',
-                                        'action' => 'ajaxComment'
+                                        'action' => 'comment'
                                     )
                                 )
                             ),
