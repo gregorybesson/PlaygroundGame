@@ -353,6 +353,12 @@ class PostVote extends Game implements ServiceManagerAwareInterface
             case 'push':
                 $qb->orderBy('p.createdAt', 'DESC');
                 break;
+            case 'id':
+                $qb->orderBy('p.createdAt', 'ASC');
+                break;
+            default:
+                $qb->orderBy('p.createdAt', 'ASC');
+                break;
         }
         
         $query = $qb->getQuery();
@@ -407,7 +413,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
             $postvoteVoteMapper->insert($vote);
             $game = $post->getPostvote();
             $this->getEventManager()->trigger(
-                'vote_postvote.post',
+                __FUNCTION__ .'.post',
                 $this,
                 array('user' => $user, 'game' => $game, 'post' => $post, 'vote' => $vote)
             );
@@ -433,7 +439,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
         $postvoteCommentMapper->insert($comment);
         
         $this->getEventManager()->trigger(
-            'comment_postvote.post',
+            __FUNCTION__ .'.post',
             $this,
             array('user' => $user, 'game' => $game, 'post' => $post, 'comment' => $comment)
         );

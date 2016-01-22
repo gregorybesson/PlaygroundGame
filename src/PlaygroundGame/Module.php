@@ -358,6 +358,11 @@ class Module
 
                     return $viewHelper;
                 },
+                'postvoteShareEvents' => function ($sm) {
+                    $service = $sm->getServiceLocator()->get('playgroundgame_postvote_service');
+                    
+                    return new \PlaygroundGame\View\Helper\PostvoteShareEvents($service);
+                }
             ),
         );
     }
