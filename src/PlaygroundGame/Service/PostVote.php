@@ -292,7 +292,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
         return $form;
     }
 
-    public function findArrayOfValidatedPosts($game, $filter, $search = '')
+    public function findArrayOfValidatedPosts($game, $user, $filter, $search = '')
     {
         $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
         $qb = $em->createQueryBuilder();
@@ -324,15 +324,22 @@ class PostVote extends Game implements ServiceManagerAwareInterface
             );
         }
         
-        $qb->select('p, COUNT(v) AS votesCount')
+        $qb->select('p, COUNT(DISTINCT v) AS votesCount, COUNT(distinct av) AS voted')
             ->from('PlaygroundGame\Entity\PostVotePost', 'p')
             ->innerJoin('p.postvote', 'g')
             ->leftJoin('p.user', 'u')
             ->innerJoin('p.postElements', 'e')
             ->leftJoin('p.votes', 'v')
+            ->leftJoin('p.votes', 'av', 'WITH', 'av.userId = :userId')
             ->where($and)
             ->groupBy('p.id');
  
+        if($user){
+            $qb->setParameter('userId', $user->getId());
+        } else {
+            $qb->setParameter('userId', 0);
+        }
+
         switch ($filter) {
             case 'random':
                 $qb->orderBy('e.value', 'ASC');
@@ -363,6 +370,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
                 $arrayPosts[$i]['post']  = $post;
                 $arrayPosts[$i]['data']  = $data;
                 $arrayPosts[$i]['votes'] = count($post->getVotes());
+                $arrayPosts[$i]['voted'] = $postRaw['voted'];
                 $arrayPosts[$i]['id']    = $post->getId();
                 $arrayPosts[$i]['user']  = $post->getUser();
                 $arrayPosts[$i]['createdAt']  = $post->getCreatedAt();
@@ -385,11 +393,13 @@ class PostVote extends Game implements ServiceManagerAwareInterface
             $entryUser =count($postvoteVoteMapper->findBy(array('ip' => $ipAddress, 'post' =>$postId)));
         }
         if ($entryUser && $entryUser > 0) {
+
             return false;
         } else {
             $vote = new \PlaygroundGame\Entity\PostVoteVote();
             $vote->setPost($post);
             $vote->setIp($ipAddress);
+            $vote->setNote(1);
             if ($user) {
                 $vote->setUserId($user->getId());
             }

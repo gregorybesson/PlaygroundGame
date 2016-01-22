@@ -257,6 +257,7 @@ class PostVoteController extends GameController
 
         if ($this->user) {
             $form->remove('captcha');
+            if(count($this->getGameService()->getPostvoteVoteMapper()->findBy(array('userId' => $this->user->getId(), 'post' =>$post))) > 0) $voted = true;
         }
 
         $alreadyVoted = '';
@@ -484,7 +485,7 @@ class PostVoteController extends GameController
         $request = $this->getRequest();
 
         // Je recherche les posts validés associés à ce jeu
-        $posts = $this->getGameService()->findArrayOfValidatedPosts($this->game, $filter, $search);
+        $posts = $this->getGameService()->findArrayOfValidatedPosts($this->game, $this->user, $filter, $search);
 
         if (is_array($posts)) {
             $paginator = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\ArrayAdapter($posts));
@@ -633,7 +634,7 @@ class PostVoteController extends GameController
 
         if (is_array($comments)) {
             $paginator = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\ArrayAdapter($comments));
-            $paginator->setItemCountPerPage(1);
+            $paginator->setItemCountPerPage(500);
             $paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
         } else {
             $paginator = $comments;
@@ -645,21 +646,16 @@ class PostVoteController extends GameController
         return $viewModel;
     }
 
-    public function ajaxCommentAction()
+    public function commentAction()
     {
-        // Call this for the session lock to be released (other ajax calls can then be made)
-        session_write_close();
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            // Call this for the session lock to be released (other ajax calls can then be made)
+            session_write_close();
+        }
         $postId = $this->getEvent()->getRouteMatch()->getParam('post');
         $request = $this->getRequest();
         $response = $this->getResponse();
-
-        if (! $this->game) {
-            $response->setContent(\Zend\Json\Json::encode(array(
-                'success' => 0
-            )));
-
-            return $response;
-        }
+        $post = $this->getGameService()->getPostvotePostMapper()->findById($postId);
 
         if (!$this->zfcUserAuthentication()->hasIdentity()) {
             $response->setContent(\Zend\Json\Json::encode(array(
@@ -667,7 +663,6 @@ class PostVoteController extends GameController
             )));
         } else {
             if ($request->isPost()) {
-                $post = $this->getGameService()->getPostvotePostMapper()->findById($postId);
                 if ($this->getGameService()->addComment(
                     $this->user,
                     $this->getRequest()->getServer('REMOTE_ADDR'),
@@ -685,7 +680,18 @@ class PostVoteController extends GameController
             }
         }
 
-        return $response;
+        //ajax call ?
+        if ($this->getRequest()->isXmlHttpRequest()) {
+
+            return $response;
+        }
+
+        return $this->redirect()->toUrl(
+            $this->frontendUrl()->fromRoute(
+                'les-idees/idee',
+                array('post' => $post->getId())
+            )
+        );
     }
 
     public function ajaxRemoveCommentAction()
