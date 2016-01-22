@@ -1446,6 +1446,26 @@ return array(
                                     )
                                 )
                             ),
+                            'sharecomment' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/share-comment/:comment',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_postvote',
+                                        'action' => 'shareComment'
+                                    )
+                                )
+                            ),
+                            'sharepost' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/share-post/:post',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_postvote',
+                                        'action' => 'sharePost'
+                                    )
+                                )
+                            ),
                             'result' => array(
                                 'type' => 'Literal',
                                 'options' => array(

@@ -759,7 +759,84 @@ class PostVoteController extends GameController
 
         return $response;
     }
+
+    public function sharePostAction()
+    {
+        $statusMail = null;
     
+        $postId = $this->getEvent()->getRouteMatch()->getParam('post');
+        $post = $this->getGameService()->getPostVotePostMapper()->findById($postId);
+    
+        $secretKey = strtoupper(substr(sha1(uniqid('pg_', true).'####'.time()), 0, 15));
+        $socialLinkUrl = $this->frontendUrl()->fromRoute(
+            'postvote/post',
+            array(
+                'id' => $this->game->getIdentifier(),
+                'post' => $post->getId(),
+            ),
+            array('force_canonical' => true)
+        ).'?key='.$secretKey;
+        // With core shortener helper
+        $socialLinkUrl = $this->shortenUrl()->shortenUrl($socialLinkUrl);
+    
+        $form = $this->getServiceLocator()->get('playgroundgame_sharemail_form');
+        $form->setAttribute('method', 'post');
+    
+        if ($this->getRequest()->isPost()) {
+            $data = $this->getRequest()->getPost()->toArray();
+            $form->setData($data);
+            if ($form->isValid()) {
+                $result = $this->getGameService()->sendShareMail($data, $this->game, $this->user, null, 'share-post');
+                if ($result) {
+                    $statusMail = true;
+                }
+            }
+        }
+
+        $viewModel = $this->buildView($this->game);
+            
+        $viewModel->setVariables(array(
+            'statusMail'       => $statusMail,
+            'form'             => $form,
+            'socialLinkUrl'    => $socialLinkUrl,
+            'post'             => $post
+        ));
+    
+        return $viewModel;
+    }
+
+    public function shareCommentAction()
+    {
+        $statusMail = null;
+    
+        $commentId = $this->getEvent()->getRouteMatch()->getParam('comment');
+        $comment = $this->getGameService()->getPostVoteCommentMapper()->findById($commentId);
+    
+        $form = $this->getServiceLocator()->get('playgroundgame_sharemail_form');
+        $form->setAttribute('method', 'post');
+    
+        if ($this->getRequest()->isPost()) {
+            $data = $this->getRequest()->getPost()->toArray();
+            $form->setData($data);
+            if ($form->isValid()) {
+                $result = $this->getGameService()->sendShareMail($data, $this->game, $this->user, null, 'share-comment');
+                if ($result) {
+                    $statusMail = true;
+                }
+            }
+        }
+
+        $viewModel = $this->buildView($this->game);
+            
+        $viewModel->setVariables(array(
+            'statusMail' => $statusMail,
+            'form'       => $form,
+            'comment'    => $comment
+        ));
+    
+        return $viewModel;
+    }
+
     public function shareAction()
     {
         $statusMail = null;
