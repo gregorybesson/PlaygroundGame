@@ -913,7 +913,11 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $mailService = $this->getServiceManager()->get('playgroundgame_message');
         $mailSent = false;
         $from = $this->getOptions()->getEmailFromAddress();
-        $subject = $this->getOptions()->getShareSubjectLine();
+        $subject = $this->getServiceManager()->get('translator')->translate(
+            $this->getOptions()->getShareSubjectLine(),
+            'playgroundgame'
+        );
+
         $renderer = $this->getServiceManager()->get('Zend\View\Renderer\RendererInterface');
         $skinUrl = $renderer->url(
             'frontend',
@@ -926,6 +930,8 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             $topic = $game->getTitle();
         }
 
+        if(isset($data['email']) && !is_array($data['email'])) $data['email'] = array($data['email']);
+        
         foreach ($data['email'] as $to) {
             $mailSent = true;
             if (!empty($to)) {
@@ -936,6 +942,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                     'playground-game/email/' . $template,
                     array(
                         'game' => $game,
+                        'data' => $data,
                         'from' => $from,
                         'to' => $to,
                         'secretKey' => $secretKey,
@@ -1016,7 +1023,9 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $mailService = $this->getServiceManager()->get('playgroundgame_message');
         $from = $this->getOptions()->getEmailFromAddress();
         $to = $user->getEmail();
-        $subject = $this->getOptions()->getParticipationSubjectLine();
+        $subject = $this->getServiceManager()->get('translator')->translate(
+            $this->getOptions()->getParticipationSubjectLine(), 'playgroundgame'
+        );
         $renderer = $this->getServiceManager()->get('Zend\View\Renderer\RendererInterface');
         $skinUrl = $renderer->url(
             'frontend',
@@ -1715,7 +1724,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             $element->setAttribute('maxlength', $attr['lengthMax']);
             $options['messages'] = array(
                 \Zend\Validator\StringLength::TOO_LONG => sprintf(
-                    $this->getServiceLocator()->get('translator')->translate(
+                    $this->getServiceManager()->get('translator')->translate(
                         'This field contains more than %s characters',
                         'playgroundgame'
                     ),
