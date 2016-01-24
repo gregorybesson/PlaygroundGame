@@ -627,7 +627,7 @@ class PostVoteController extends GameController
         $postId = $this->getEvent()->getRouteMatch()->getParam('post');
         if($postId){
             $post = $this->getGameService()->getPostvotePostMapper()->findById($postId);
-            $comments = $this->getGameService()->getCommentsForPostvote($postId);
+            $comments = $post->getComments();
         } else {
             $comments = $this->getGameService()->getCommentsForPostvote($this->game);
         }
@@ -762,7 +762,8 @@ class PostVoteController extends GameController
 
     public function sharePostAction()
     {
-        $statusMail = null;
+        $statusMail = false;
+        $message = '';
     
         $postId = $this->getEvent()->getRouteMatch()->getParam('post');
         $post = $this->getGameService()->getPostVotePostMapper()->findById($postId);
@@ -790,6 +791,13 @@ class PostVoteController extends GameController
                 if ($result) {
                     $statusMail = true;
                 }
+            } else {
+                foreach($form->getMessages() as $el=> $errors){
+                    foreach($errors as $key => $message){
+                        $message = $this->getServiceLocator()->get('translator')->translate($message);
+                    }
+                    
+                }
             }
         }
 
@@ -797,6 +805,7 @@ class PostVoteController extends GameController
             
         $viewModel->setVariables(array(
             'statusMail'       => $statusMail,
+            'message'          => $message,
             'form'             => $form,
             'socialLinkUrl'    => $socialLinkUrl,
             'post'             => $post
@@ -807,7 +816,8 @@ class PostVoteController extends GameController
 
     public function shareCommentAction()
     {
-        $statusMail = null;
+        $statusMail = false;
+        $message = '';
     
         $commentId = $this->getEvent()->getRouteMatch()->getParam('comment');
         $comment = $this->getGameService()->getPostVoteCommentMapper()->findById($commentId);
@@ -823,6 +833,13 @@ class PostVoteController extends GameController
                 if ($result) {
                     $statusMail = true;
                 }
+            } else {
+                foreach($form->getMessages() as $el=> $errors){
+                    foreach($errors as $key => $message){
+                        $message = $this->getServiceLocator()->get('translator')->translate($message);
+                    }
+                    
+                }
             }
         }
 
@@ -830,6 +847,7 @@ class PostVoteController extends GameController
             
         $viewModel->setVariables(array(
             'statusMail' => $statusMail,
+            'message'    => $message,
             'form'       => $form,
             'comment'    => $comment
         ));

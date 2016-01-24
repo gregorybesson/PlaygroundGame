@@ -453,18 +453,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
     public function getCommentsForPostvote($postvote)
     {
         $postvoteCommentMapper = $this->getPostVoteCommentMapper();
-        $comments = $postvoteCommentMapper->findBy(array('postvote' => $postvote));
-
-        return $comments ;
-    }
-
-    /**
-     * Get all comments for this post
-     */
-    public function getCommentsForPost($post)
-    {
-        $postvoteCommentMapper = $this->getPostVoteCommentMapper();
-        $comments = $postvoteCommentMapper->findBy(array('post' => $post));
+        $comments = $postvoteCommentMapper->findBy(array('postvote' => $postvote), array('createdAt' => 'DESC'));
 
         return $comments ;
     }

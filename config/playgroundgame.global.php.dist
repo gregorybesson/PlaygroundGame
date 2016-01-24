@@ -12,9 +12,15 @@ $playgroundgame = array(
 		'media_url' => 'media/game',
 
         /**
-         * Sender email address
-         */
-        'emailFromAddress' => 'no-reply@to.me',
+		 * Email Address that will appear in the 'From' of outbound emails
+		 *
+		 * Default: empty
+		 */		
+		'email_from_address' => array(
+			'email' => 'no-reply@to.me',
+			'name' => 'Admin',
+		),
+		
         'participationSubjectLine' => 'Jeu concours',
         'shareSubjectLine' => 'Venez découvrir le jeu concours',
         'onInvitationField' => 'code'

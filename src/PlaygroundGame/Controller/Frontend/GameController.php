@@ -140,13 +140,14 @@ class GameController extends AbstractActionController
      */
     public function notFoundAction()
     {
+
         $templatePathResolver = $this->getServiceLocator()->get('Zend\View\Resolver\TemplatePathStack');
 
         // I create a template path in which I can find a custom template
         $controller = explode('\\', get_class($this));
         $controllerPath = str_replace('Controller', '', end($controller));
         $controllerPath = strtolower(preg_replace('/(?<=\\w)([A-Z])/', '-\\1', $controllerPath));
-        $template = 'playground-game/'.$controllerPath . '/custom' .$this->getRequest()->getUri()->getPath();
+        $template = 'playground-game/'.$controllerPath . '/custom' .str_replace($controllerPath.'/'.$this->game->getIdentifier().'/','',$this->getRequest()->getUri()->getPath());
 
         if (false === $templatePathResolver->resolve($template)) {
             $viewRender     = $this->getServiceLocator()->get('ViewRenderer');
