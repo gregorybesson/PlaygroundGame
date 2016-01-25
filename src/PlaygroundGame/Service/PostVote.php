@@ -430,6 +430,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
         $comment = new \PlaygroundGame\Entity\PostVoteComment();
         $comment->setPost($post);
         $comment->setIp($ipAddress);
+        $message = strip_tags($message);
         $comment->setMessage($message);
         $comment->setPostvote($game);
         if ($user) {
