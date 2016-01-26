@@ -73,6 +73,12 @@ class PostVotePost implements InputFilterAwareInterface, Translatable, \JsonSeri
     private $postElements;
 
     /**
+     * # of shares (FB, Twitter, mails...)
+     * @ORM\Column(type="integer", nullable=false)
+     */
+    protected $shares = 0;
+
+    /**
      * values :
      *          0 : draft
      *          1 : user confirmed
@@ -300,6 +306,24 @@ class PostVotePost implements InputFilterAwareInterface, Translatable, \JsonSeri
             $comment->setPost(null);
             $this->comments->removeElement($comment);
         }
+    }
+
+    /**
+     * @return integer unknown_type
+     */
+    public function getShares()
+    {
+        return $this->shares;
+    }
+
+    /**
+     * @param unknown_shares $shares
+     */
+    public function setShares($shares)
+    {
+        $this->shares = $shares;
+
+        return $this;
     }
 
     /**
