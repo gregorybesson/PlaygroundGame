@@ -257,7 +257,7 @@ class PostVoteController extends GameController
 
         if ($this->user) {
             $form->remove('captcha');
-            if(count($this->getGameService()->getPostvoteVoteMapper()->findBy(array('userId' => $this->user->getId(), 'post' =>$post))) > 0) $voted = true;
+            if(count($this->getGameService()->getPostvoteVoteMapper()->findBy(array('user' => $this->user, 'post' =>$post))) > 0) $voted = true;
         }
 
         $alreadyVoted = '';
@@ -790,6 +790,7 @@ class PostVoteController extends GameController
                 $result = $this->getGameService()->sendShareMail($data, $this->game, $this->user, null, 'share-post');
                 if ($result) {
                     $statusMail = true;
+                    $this->getGameService()->addShare($post);
                 }
             } else {
                 foreach($form->getMessages() as $el=> $errors){

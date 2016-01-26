@@ -27,15 +27,20 @@ class PostVoteVote implements InputFilterAwareInterface
     /**
      * @ORM\ManyToOne(targetEntity="PostVotePost", inversedBy="votes")
      * @ORM\JoinColumn(name="post_id", referencedColumnName="id", onDelete="CASCADE")
-     *
      **/
     protected $post;
 
     /**
-     * The link to the user is not explicit as it's possible to vote anonymously....
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="PostVote")
+     **/
+    protected $postvote;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="PlaygroundUser\Entity\User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="user_id", onDelete="CASCADE")
      */
-    protected $userId;
+    protected $user;
+    
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -114,17 +119,17 @@ class PostVoteVote implements InputFilterAwareInterface
    /**
     * @return the unknown_type
     */
-    public function getUserId()
+    public function getUser()
     {
-        return $this->userId;
+        return $this->user;
     }
 
     /**
-     * @param unknown_type $userId
+     * @param unknown_type $user
      */
-    public function setUserId($userId)
+    public function setUser($user)
     {
-        $this->userId = $userId;
+        $this->user = $user;
 
         return $this;
     }
@@ -145,6 +150,25 @@ class PostVoteVote implements InputFilterAwareInterface
         // Check that there is no drawback using the cascading update from PostVoteEntry
         $post->addVote($this);
         $this->post = $post;
+
+        return $this;
+    }
+
+    /**
+     * @return the unknown_type
+     */
+    public function getPostvote()
+    {
+        return $this->postvote;
+    }
+
+    /**
+     * @param unknown_type $postvote
+     */
+    public function setPostvote($postvote)
+    {
+        
+        $this->postvote = $postvote;
 
         return $this;
     }

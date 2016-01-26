@@ -330,14 +330,14 @@ class PostVote extends Game implements ServiceManagerAwareInterface
             ->leftJoin('p.user', 'u')
             ->innerJoin('p.postElements', 'e')
             ->leftJoin('p.votes', 'v')
-            ->leftJoin('p.votes', 'av', 'WITH', 'av.userId = :userId')
+            ->leftJoin('p.votes', 'av', 'WITH', 'av.user = :user')
             ->where($and)
             ->groupBy('p.id');
  
         if($user){
-            $qb->setParameter('userId', $user->getId());
+            $qb->setParameter('user', $user);
         } else {
-            $qb->setParameter('userId', 0);
+            $qb->setParameter('user', null);
         }
 
         switch ($filter) {
@@ -393,8 +393,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
         $postId = $post->getId();
 
         if ($user) {
-            $userId = $user->getId();
-            $entryUser = count($postvoteVoteMapper->findBy(array('userId' => $userId, 'post' =>$postId)));
+            $entryUser = count($postvoteVoteMapper->findBy(array('user' => $user, 'post' =>$postId)));
         } else {
             $entryUser =count($postvoteVoteMapper->findBy(array('ip' => $ipAddress, 'post' =>$postId)));
         }
@@ -406,8 +405,9 @@ class PostVote extends Game implements ServiceManagerAwareInterface
             $vote->setPost($post);
             $vote->setIp($ipAddress);
             $vote->setNote(1);
+            $vote->setPostvote($post->getPostvote());
             if ($user) {
-                $vote->setUserId($user->getId());
+                $vote->setUser($user);
             }
 
             $postvoteVoteMapper->insert($vote);
@@ -448,6 +448,19 @@ class PostVote extends Game implements ServiceManagerAwareInterface
         return true;
     }
 
+
+    public function addShare($post)
+    {
+        $postvotePostMapper = $this->getPostVotePostMapper();
+        $post->setShares($post->getShares()+1);
+        $postvotePostMapper->update($post);
+
+        $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array(
+            'post' => $post
+        ));
+
+        return true;
+    }
     /**
      * Get all comments for this game
      */
