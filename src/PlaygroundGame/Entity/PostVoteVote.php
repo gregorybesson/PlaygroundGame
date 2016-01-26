@@ -26,6 +26,7 @@ class PostVoteVote implements InputFilterAwareInterface
 
     /**
      * @ORM\ManyToOne(targetEntity="PostVotePost", inversedBy="votes")
+     * @ORM\JoinColumn(name="post_id", referencedColumnName="id", onDelete="CASCADE")
      *
      **/
     protected $post;

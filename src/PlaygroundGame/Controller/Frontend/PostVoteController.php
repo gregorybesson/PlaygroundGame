@@ -634,7 +634,7 @@ class PostVoteController extends GameController
 
         if (is_array($comments)) {
             $paginator = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\ArrayAdapter($comments));
-            $paginator->setItemCountPerPage(500);
+            $paginator->setItemCountPerPage(25);
             $paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
         } else {
             $paginator = $comments;
