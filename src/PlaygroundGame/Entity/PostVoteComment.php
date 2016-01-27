@@ -13,7 +13,7 @@ use Zend\InputFilter\InputFilterInterface;
  * @ORM\Entity @HasLifecycleCallbacks
  * @ORM\Table(name="game_postvote_comment")
  */
-class PostVoteComment implements InputFilterAwareInterface
+class PostVoteComment implements InputFilterAwareInterface, \JsonSerializable
 {
     protected $inputFilter;
 
@@ -231,6 +231,16 @@ class PostVoteComment implements InputFilterAwareInterface
         $obj_vars = get_object_vars($this);
 
         return $obj_vars;
+    }
+    
+    /**
+     * Convert the object to json.
+     *
+     * @return array
+     */
+    public function jsonSerialize()
+    {
+        return $this->getArrayCopy();
     }
 
     /**
