@@ -686,6 +686,10 @@ class PostVoteController extends GameController
             return $response;
         }
 
+        $this->flashMessenger()->addMessage(
+            $this->getServiceLocator()->get('translator')->translate('Your comment has been recorded')
+        );
+
         return $this->redirect()->toUrl(
             $this->frontendUrl()->fromRoute(
                 'les-idees/idee',

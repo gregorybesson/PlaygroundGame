@@ -40,7 +40,6 @@ class PostVoteVote implements InputFilterAwareInterface
      * @ORM\JoinColumn(name="user_id", referencedColumnName="user_id", onDelete="CASCADE")
      */
     protected $user;
-    
 
     /**
      * @ORM\Column(type="text", nullable=true)
