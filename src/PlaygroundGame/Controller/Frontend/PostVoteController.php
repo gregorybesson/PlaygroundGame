@@ -329,7 +329,7 @@ class PostVoteController extends GameController
         $post = $this->getGameService()->getPostVotePostMapper()->findOneBy(array('entry' => $lastEntry));
 
         if (! $post) {
-            die('bad');
+
             return $this->redirect()->toUrl(
                 $this->frontendUrl()->fromRoute(
                     'postvote',
