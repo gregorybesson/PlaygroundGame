@@ -791,6 +791,7 @@ class PostVoteController extends GameController
             $data = $this->getRequest()->getPost()->toArray();
             $form->setData($data);
             if ($form->isValid()) {
+                $data['post'] = $post;
                 $result = $this->getGameService()->sendShareMail($data, $this->game, $this->user, null, 'share-post');
                 if ($result) {
                     $statusMail = true;
@@ -834,6 +835,7 @@ class PostVoteController extends GameController
             $data = $this->getRequest()->getPost()->toArray();
             $form->setData($data);
             if ($form->isValid()) {
+                $data['comment'] = $comment;
                 $result = $this->getGameService()->sendShareMail($data, $this->game, $this->user, null, 'share-comment');
                 if ($result) {
                     $statusMail = true;
