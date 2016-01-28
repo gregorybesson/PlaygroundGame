@@ -48,6 +48,11 @@ class ModuleOptions extends AbstractOptions implements GameEditOptionsInterface
 
     /**
      * @var string
+     */
+    protected $shareCommentSubjectLine = '';
+
+    /**
+     * @var string
      * The field associated with the invitation request Id
      */
     protected $onInvitationField = 'code';
@@ -165,6 +170,18 @@ class ModuleOptions extends AbstractOptions implements GameEditOptionsInterface
     public function getShareSubjectLine()
     {
         return $this->shareSubjectLine;
+    }
+    
+    public function setShareCommentSubjectLine($shareCommentSubjectLine)
+    {
+        $this->shareCommentSubjectLine = $shareCommentSubjectLine;
+
+        return $this;
+    }
+    
+    public function getShareCommentSubjectLine()
+    {
+        return $this->shareCommentSubjectLine;
     }
 
     public function setOnInvitationField($onInvitationField)
