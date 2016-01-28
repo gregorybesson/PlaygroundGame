@@ -908,15 +908,24 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $entry,
         $template = 'share_game',
         $topic = null,
-        $userTimer = array()
+        $userTimer = array(),
+        $subject = ''
     ) {
         $mailService = $this->getServiceManager()->get('playgroundgame_message');
         $mailSent = false;
         $from = $this->getOptions()->getEmailFromAddress();
-        $subject = $this->getServiceManager()->get('translator')->translate(
-            $this->getOptions()->getShareSubjectLine(),
-            'playgroundgame'
-        );
+
+        if(empty($subject)){ 
+            $subject = $this->getServiceManager()->get('translator')->translate(
+                $this->getOptions()->getShareSubjectLine(),
+                'playgroundgame'
+            );
+        } else {
+            $subject = $this->getServiceManager()->get('translator')->translate(
+                $subject,
+                'playgroundgame'
+            );
+        }
 
         $renderer = $this->getServiceManager()->get('Zend\View\Renderer\RendererInterface');
         $skinUrl = $renderer->url(

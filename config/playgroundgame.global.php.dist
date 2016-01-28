@@ -23,6 +23,7 @@ $playgroundgame = array(
 		
         'participationSubjectLine' => 'Jeu concours',
         'shareSubjectLine' => 'Venez découvrir le jeu concours',
+        'shareCommentSubjectLine' => 'Venez découvrir le commentaire',
         'onInvitationField' => 'code'
 );
 
