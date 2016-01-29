@@ -463,6 +463,16 @@ return array(
                                     )
                                 )
                             ),
+                            'invite-to-team' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/rejoins-ma-team',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_mission',
+                                        'action' => 'inviteToTeam',
+                                    )
+                                )
+                            ),
                             'bounce' => array(
                                 'type' => 'Literal',
                                 'options' => array(

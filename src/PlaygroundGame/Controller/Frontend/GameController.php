@@ -34,6 +34,7 @@ class GameController extends AbstractActionController
         'leaderboard',
         'register',
         'bounce',
+        'inviteToTeam',
         'prizes',
         'prize',
         'fangate',
@@ -60,7 +61,8 @@ class GameController extends AbstractActionController
         'share',
         'result',
         'play',
-        'logout'
+        'logout',
+        'inviteToTeam'
     );
 
     public function setEventManager(\Zend\EventManager\EventManagerInterface $events)
@@ -573,6 +575,38 @@ class GameController extends AbstractActionController
         return $viewModel;
     }
     
+    public function inviteToTeamAction()
+    {
+        $statusMail = null;
+        $message = '';
+    
+        $form = $this->getServiceLocator()->get('playgroundgame_sharemail_form');
+        $form->setAttribute('method', 'post');
+
+        if ($this->getRequest()->isPost()) {
+            $data = $this->getRequest()->getPost()->toArray();
+            $form->setData($data);
+            if ($form->isValid()) {
+                $result = $this->getGameService()->inviteToTeam($data, $this->game, $this->user);
+                if ($result['result']) {
+                    $statusMail = true;
+                } else {
+                    $statusMail = false;
+                    $message = $result['message'];
+                }
+            }
+        }
+
+        $viewModel = $this->buildView($this->game);
+        $viewModel->setVariables(array(
+            'message' => $message,
+            'statusMail' => $statusMail,
+            'form' => $form,
+        ));
+    
+        return $viewModel;
+    }
+
     public function fbshareAction()
     {
         $viewModel = new JsonModel();

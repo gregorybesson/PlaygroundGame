@@ -46,6 +46,8 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
     protected $playerformMapper;
 
     protected $invitationMapper;
+
+    protected $userMapper;
     
     protected $anonymousIdentifier = null;
 
@@ -899,6 +901,67 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
     public function findLastEntry($game, $user)
     {
         return $this->checkExistingEntry($game, $user, null, false);
+    }
+
+    public function inviteToTeam($data, $game, $user){
+        $mailService = $this->getServiceManager()->get('playgroundgame_message');
+        $invitationMapper = $this->getServiceManager()->get('playgroundgame_invitation_mapper');
+
+        $sentInvitations = $invitationMapper->findBy(array('host' => $user, 'game' => $game));
+        $nbInvitations = count($sentInvitations);
+        $to = $data['email'];
+        if(empty($to)) return ['result'=>false, 'message'=>'no email'];
+
+        if($nbInvitations < 20){    
+            $alreadyInvited = $invitationMapper->findBy(array('requestKey' => $to, 'game' => $game));
+            if(!$alreadyInvited) $alreadyInvited = $this->getUserMapper()->findByEmail($to);
+
+            if(empty($alreadyInvited)){
+                $invitation = new \PlaygroundGame\Entity\Invitation();
+                $invitation->setRequestKey($to);
+                $invitation->setGame($game);
+                $invitation->setHost($user);
+                $invitationMapper->insert($invitation);
+
+                $from = $this->getOptions()->getEmailFromAddress();
+                $subject = $this->getServiceManager()->get('translator')->translate(
+                    $this->getOptions()->getInviteToTeamSubjectLine(),
+                    'playgroundgame'
+                );
+                $message = $mailService->createHtmlMessage(
+                    $from,
+                    $to,
+                    $subject,
+                    'playground-game/email/invite_team',
+                    array(
+                        'game' => $game,
+                        'user' => $user,
+                        'data' => $data,
+                        'from' => $from
+                    )
+                );
+                try {
+                    $mailService->send($message);
+                } catch (\Zend\Mail\Protocol\Exception\RuntimeException $e) {
+                    return ['result' => true, 'message' => $this->getServiceManager()->get('translator')->translate(
+                    'mail error'
+                    )];
+                }
+
+                return ['result' => true, 'message' => ''];
+
+            } else {
+                return ['result' => false, 'message' => 'already invited'];
+            }
+        } else {
+            return [
+                'result' => false, 
+                'message' => $this->getServiceManager()->get('translator')->translate(
+                    'Too many invitations for this user'
+                )
+            ];
+        }
+
     }
 
     public function sendShareMail(
@@ -2017,5 +2080,19 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $this->invitationMapper = $invitationMapper;
 
         return $this;
+    }
+
+    /**
+     * getUserMapper
+     *
+     * @return UserMapperInterface
+     */
+    public function getUserMapper()
+    {
+        if (null === $this->userMapper) {
+            $this->userMapper = $this->getServiceManager()->get('zfcuser_user_mapper');
+        }
+
+        return $this->userMapper;
     }
 }
