@@ -250,12 +250,15 @@ class GameController extends AbstractActionController
         
         // suite au forward, le template de layout a changé, je dois le rétablir...
         $this->layout()->setTemplate($beforeLayout);
-
-        // give the ability to the game to have its customized look and feel.
-        $templatePathResolver = $this->getServiceLocator()->get('Zend\View\Resolver\TemplatePathStack');
-        $l = $templatePathResolver->getPaths();
-
-        $templatePathResolver->addPath($l[0].'custom/'.$this->game->getIdentifier());
+        $this->layout()->setVariables(
+            array(
+                'action' => $this->params('action'),
+                'game' => $this->game,
+            )
+        );
+        
+        $subViewModel->setVariables($this->getShareData($this->game));
+        $subViewModel->setVariables(array('game' => $this->game, 'user' => $this->user));
 
         return $subViewModel;
     }
