@@ -464,6 +464,43 @@ class PostVoteController extends GameController
         return $response;
     }
 
+    public function ajaxrejectPostAction()
+    {
+        $response = $this->getResponse();
+        $postId = $this->getEvent()->getRouteMatch()->getParam('post');
+
+        if (! $postId) {
+            $response->setContent(\Zend\Json\Json::encode(array(
+                'success' => 0
+            )));
+
+            return $response;
+        }
+
+        $post = $this->getGameService()->getPostVotePostMapper()->findById($postId);
+
+        if (! $post || $post->getUser()->getId() !== $this->user->getId()) {
+            $response->setContent(\Zend\Json\Json::encode(array(
+                'success' => 0
+            )));
+
+            return $response;
+        }
+
+        if ($this->getRequest()->isPost()) {
+            $postvotePostMapper = $this->getGameService()->getPostVotePostMapper();
+            // Post is rejected by User
+            $post->setStatus(8);
+            $postvotePostMapper->update($post);
+        }
+
+        $response->setContent(\Zend\Json\Json::encode(array(
+            'success' => true,
+        )));
+
+        return $response;
+    }
+
     public function listAction()
     {
         $filter = $this->getEvent()->getRouteMatch()->getParam('filter');

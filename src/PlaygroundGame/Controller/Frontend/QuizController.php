@@ -16,6 +16,8 @@ class QuizController extends GameController
 
     public function playAction()
     {
+        // the quiz is done for the first time in this entry
+        $firstTime = true;
         $redirectFb = $this->checkFbRegistration($this->user, $this->game);
         if ($redirectFb) {
             return $redirectFb;
@@ -37,6 +39,7 @@ class QuizController extends GameController
         $reply = $this->getGameService()->getQuizReplyMapper()->getLastGameReply($entry);
         $userAnswers = array();
         if ($reply) {
+            $firstTime = false;
             foreach ($reply->getAnswers() as $answer) {
                 $userAnswers[$answer->getQuestionId()][$answer->getAnswerId()] = true;
                 $userAnswers[$answer->getQuestionId()]['answer'] = $answer->getAnswer();
@@ -70,16 +73,22 @@ class QuizController extends GameController
                 $values = array();
                 $valuesSortedByPosition = array();
                 foreach ($q->getAnswers() as $a) {
+                    $status = (
+                        isset($userAnswers[$q->getId()]) && 
+                        isset($userAnswers[$q->getId()][$a->getId()])
+                    )? true:false;
                     $values[$a->getPosition()] = array(
                         'id' => $a->getId(),
                         'position' => $a->getPosition(),
                         'answer' => $a->getAnswer(),
-                        );
+                        'checked' => $status
+                    );
                     $explanations[$a->getAnswer()] = $a->getExplanation();
                 }
                 ksort($values);
                 foreach ($values as $key => $value) {
                     $valuesSortedByPosition[$value['id']] = $value['answer'];
+                    if($value['checked']) $element->setValue($value['id']);
                 }
                 $element->setValueOptions($valuesSortedByPosition);
                 $element->setLabelOptions(array("disable_html_escape"=>true));
@@ -104,6 +113,7 @@ class QuizController extends GameController
 
                 $element->setValueOptions($valuesSortedByPosition);
                 $element->setLabelOptions(array("disable_html_escape"=>true));
+
             } elseif ($q->getType() == 2) {
                 $element = new Element\Textarea($name);
                 if (isset($userAnswers[$q->getId()])) {
@@ -168,6 +178,7 @@ class QuizController extends GameController
 
         $viewModel = $this->buildView($this->game);
         $viewModel->setVariables(array(
+            'firstTime' => $firstTime,
             'questions' => $questions,
             'form'      => $form,
             'explanations' => $explanations,
