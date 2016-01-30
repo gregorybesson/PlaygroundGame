@@ -1476,6 +1476,16 @@ return array(
                                     )
                                 )
                             ),
+                            'reject-post' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/reject/:post',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_postvote',
+                                        'action' => 'ajaxrejectPost'
+                                    )
+                                )
+                            ),
                             'result' => array(
                                 'type' => 'Literal',
                                 'options' => array(

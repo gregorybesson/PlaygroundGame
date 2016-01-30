@@ -83,6 +83,7 @@ class PostVotePost implements InputFilterAwareInterface, Translatable, \JsonSeri
      *          0 : draft
      *          1 : user confirmed
      *          2 : admin accepted
+     *          8 : user rejected
      *          9 : admin rejected
      *
      * @ORM\Column(type="integer", nullable=false)
