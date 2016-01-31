@@ -1,3 +1,3 @@
 <?php
-$array = include 'en.php';
+$array = include 'fr.php';
 return $array;
