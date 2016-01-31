@@ -372,7 +372,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $game->setIdentifier('gameid');
 
         $f = $this->getMockBuilder('PlaygroundGame\Service\Game')
-        ->setMethods(array('checkGame', 'checkIsFan', 'getEntryMapper', 'getServiceManager', 'findLastInactiveEntry'))
+        ->setMethods(array('checkGame', 'checkIsFan', 'getEntryMapper', 'getServiceManager', 'findLastEntry'))
         //->disableOriginalConstructor()
         ->getMock();
 
@@ -384,7 +384,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         ->will($this->returnValue($game));
         
         $f->expects($this->once())
-        ->method('findLastInactiveEntry')
+        ->method('findLastEntry')
         ->will($this->returnValue(false));
 
         $ZfcUserMock = $this->getMock('ZfcUser\Entity\User');
