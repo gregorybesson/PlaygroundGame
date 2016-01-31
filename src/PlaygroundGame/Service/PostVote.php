@@ -419,7 +419,6 @@ class PostVote extends Game implements ServiceManagerAwareInterface
     public function addComment($user, $ipAddress, $post, $message = '')
     {
         $postvoteCommentMapper = $this->getPostVoteCommentMapper();
-        $postId = $post->getId();
         $game = $post->getPostvote();
         $comment = new \PlaygroundGame\Entity\PostVoteComment();
         $comment->setPost($post);

@@ -233,7 +233,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                 $winner = $this->isWinner($quiz, $quizCorrectAnswers);
                 $entry->setWinner($winner);
                 $entry->setPoints($quizPoints);
-                //- $entry->setActive(false);
+                // The entry should be inactive : entry->setActive(false);
                 $entry = $this->getEntryMapper()->update($entry);
             }
 
