@@ -166,7 +166,6 @@ class PostVoteVote implements InputFilterAwareInterface, \JsonSerializable
      */
     public function setPostvote($postvote)
     {
-        
         $this->postvote = $postvote;
 
         return $this;

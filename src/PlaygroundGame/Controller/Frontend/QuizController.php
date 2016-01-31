@@ -74,7 +74,7 @@ class QuizController extends GameController
                 $valuesSortedByPosition = array();
                 foreach ($q->getAnswers() as $a) {
                     $status = (
-                        isset($userAnswers[$q->getId()]) && 
+                        isset($userAnswers[$q->getId()]) &&
                         isset($userAnswers[$q->getId()][$a->getId()])
                     )? true:false;
                     $values[$a->getPosition()] = array(
@@ -88,7 +88,9 @@ class QuizController extends GameController
                 ksort($values);
                 foreach ($values as $key => $value) {
                     $valuesSortedByPosition[$value['id']] = $value['answer'];
-                    if($value['checked']) $element->setValue($value['id']);
+                    if ($value['checked']) {
+                        $element->setValue($value['id']);
+                    }
                 }
                 $element->setValueOptions($valuesSortedByPosition);
                 $element->setLabelOptions(array("disable_html_escape"=>true));
@@ -113,7 +115,6 @@ class QuizController extends GameController
 
                 $element->setValueOptions($valuesSortedByPosition);
                 $element->setLabelOptions(array("disable_html_escape"=>true));
-
             } elseif ($q->getType() == 2) {
                 $element = new Element\Textarea($name);
                 if (isset($userAnswers[$q->getId()])) {

@@ -335,7 +335,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
             ->where($and)
             ->groupBy('p.id');
  
-        if($user){
+        if ($user) {
             $qb->setParameter('user', $user);
         } else {
             $qb->setParameter('user', null);
@@ -399,7 +399,6 @@ class PostVote extends Game implements ServiceManagerAwareInterface
             $entryUser =count($postvoteVoteMapper->findBy(array('ip' => $ipAddress, 'post' =>$postId)));
         }
         if ($entryUser && $entryUser > 0) {
-
             return false;
         } else {
             $vote = new \PlaygroundGame\Entity\PostVoteVote();
@@ -477,12 +476,12 @@ class PostVote extends Game implements ServiceManagerAwareInterface
     {
         $postvoteCommentMapper = $this->getPostVoteCommentMapper();
         $comment = $postvoteCommentMapper->findOneBy(array('id' => $messageId));
-        if($comment->getUser()->getId() === $user->getId()){
+        if ($comment->getUser()->getId() === $user->getId()) {
             $postvoteCommentMapper->remove($comment);
             $this->getEventManager()->trigger(
                 'remove_comment_postvote.post',
                 $this,
-                array('user' => $user,'comment' => $comment)
+                array('user' => $user, 'comment' => $comment)
             );
 
             return true;

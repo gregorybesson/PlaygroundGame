@@ -23,7 +23,7 @@ class PostVoteVoteTest extends \PHPUnit_Framework_TestCase
     public function testFindById()
     {
         $postvotevote = new PostVoteVoteEntity();
-        $postvotevote->setUserId(1);
+        $postvotevote->setUser(null);
         $this->tm->insert($postvotevote);
         $this->assertEquals($postvotevote, $this->tm->findById($postvotevote->getId()));
     }
@@ -31,17 +31,17 @@ class PostVoteVoteTest extends \PHPUnit_Framework_TestCase
     public function testUpdate()
     {
         $postvotevote = new PostVoteVoteEntity();
-        $postvotevote->setUserId(1);
+        $postvotevote->setUser(null);
         $postvotevote = $this->tm->insert($postvotevote);
-        $postvotevote->setUserId(2);
+        $postvotevote->setNote(1);
         $postvotevote = $this->tm->update($postvotevote);
-        $this->assertEquals(2, $postvotevote->getUserId());
+        $this->assertEquals(1, $postvotevote->getNote());
     }
 
     public function testRemove()
     {
         $postvotevote = new PostVoteVoteEntity();
-        $postvotevote->setUserId(1);
+        $postvotevote->setUser(null);
         $postvotevote = $this->tm->insert($postvotevote);
         $id = $postvotevote->getId();
         $this->tm->remove($postvotevote);

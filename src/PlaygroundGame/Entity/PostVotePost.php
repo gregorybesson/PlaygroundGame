@@ -65,7 +65,7 @@ class PostVotePost implements InputFilterAwareInterface, Translatable, \JsonSeri
      * @ORM\OneToMany(targetEntity="PostVoteComment", mappedBy="post")
      * @ORM\OrderBy({"createdAt" = "DESC"})
      */
-    private $comments;    
+    private $comments;
 
     /**
      * @ORM\OneToMany(targetEntity="PostVotePostElement", mappedBy="post", cascade={"persist","remove"})

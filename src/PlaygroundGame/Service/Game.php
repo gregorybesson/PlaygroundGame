@@ -903,20 +903,25 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         return $this->checkExistingEntry($game, $user, null, false);
     }
 
-    public function inviteToTeam($data, $game, $user){
+    public function inviteToTeam($data, $game, $user)
+    {
         $mailService = $this->getServiceManager()->get('playgroundgame_message');
         $invitationMapper = $this->getServiceManager()->get('playgroundgame_invitation_mapper');
 
         $sentInvitations = $invitationMapper->findBy(array('host' => $user, 'game' => $game));
         $nbInvitations = count($sentInvitations);
         $to = $data['email'];
-        if(empty($to)) return ['result'=>false, 'message'=>'no email'];
+        if (empty($to)) {
+            return ['result'=>false, 'message'=>'no email'];
+        }
 
-        if($nbInvitations < 20){    
+        if ($nbInvitations < 20) {
             $alreadyInvited = $invitationMapper->findBy(array('requestKey' => $to, 'game' => $game));
-            if(!$alreadyInvited) $alreadyInvited = $this->getUserMapper()->findByEmail($to);
+            if (!$alreadyInvited) {
+                $alreadyInvited = $this->getUserMapper()->findByEmail($to);
+            }
 
-            if(empty($alreadyInvited)){
+            if (empty($alreadyInvited)) {
                 $invitation = new \PlaygroundGame\Entity\Invitation();
                 $invitation->setRequestKey($to);
                 $invitation->setGame($game);
@@ -944,24 +949,22 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                     $mailService->send($message);
                 } catch (\Zend\Mail\Protocol\Exception\RuntimeException $e) {
                     return ['result' => true, 'message' => $this->getServiceManager()->get('translator')->translate(
-                    'mail error'
+                        'mail error'
                     )];
                 }
 
                 return ['result' => true, 'message' => ''];
-
             } else {
                 return ['result' => false, 'message' => 'already invited'];
             }
         } else {
             return [
-                'result' => false, 
+                'result' => false,
                 'message' => $this->getServiceManager()->get('translator')->translate(
                     'Too many invitations for this user'
                 )
             ];
         }
-
     }
 
     public function sendShareMail(
@@ -978,7 +981,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $mailSent = false;
         $from = $this->getOptions()->getEmailFromAddress();
 
-        if(empty($subject)){ 
+        if (empty($subject)) {
             $subject = $this->getServiceManager()->get('translator')->translate(
                 $this->getOptions()->getShareSubjectLine(),
                 'playgroundgame'
@@ -1002,7 +1005,9 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             $topic = $game->getTitle();
         }
 
-        if(isset($data['email']) && !is_array($data['email'])) $data['email'] = array($data['email']);
+        if (isset($data['email']) && !is_array($data['email'])) {
+            $data['email'] = array($data['email']);
+        }
         
         foreach ($data['email'] as $to) {
             $mailSent = true;
@@ -1096,7 +1101,8 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $from = $this->getOptions()->getEmailFromAddress();
         $to = $user->getEmail();
         $subject = $this->getServiceManager()->get('translator')->translate(
-            $this->getOptions()->getParticipationSubjectLine(), 'playgroundgame'
+            $this->getOptions()->getParticipationSubjectLine(),
+            'playgroundgame'
         );
         $renderer = $this->getServiceManager()->get('Zend\View\Renderer\RendererInterface');
         $skinUrl = $renderer->url(
