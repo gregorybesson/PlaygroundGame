@@ -149,7 +149,9 @@ class GameController extends AbstractActionController
         $controller = explode('\\', get_class($this));
         $controllerPath = str_replace('Controller', '', end($controller));
         $controllerPath = strtolower(preg_replace('/(?<=\\w)([A-Z])/', '-\\1', $controllerPath));
-        $uri = str_replace($controllerPath.'/'.$this->game->getIdentifier().'/','',$this->getRequest()->getUri()->getPath());
+        $uri = $this->getRequest()->getUri()->getPath();
+        if($this->game)
+            $uri = str_replace($controllerPath.'/'.$this->game->getIdentifier().'/','', $uri);
         $uri = str_replace("/" . $this->getEvent()->getRouteMatch()->getParam('locale') . "/","/",$uri);
         $template = 'playground-game/'.$controllerPath . '/custom' . $uri;
 
