@@ -257,7 +257,9 @@ class PostVoteController extends GameController
 
         if ($this->user) {
             $form->remove('captcha');
-            if(count($this->getGameService()->getPostvoteVoteMapper()->findBy(array('user' => $this->user, 'post' =>$post))) > 0) $voted = true;
+            if (count($this->getGameService()->getPostvoteVoteMapper()->findBy(array('user' => $this->user, 'post' =>$post))) > 0) {
+                $voted = true;
+            }
         }
 
         $alreadyVoted = '';
@@ -329,7 +331,6 @@ class PostVoteController extends GameController
         $post = $this->getGameService()->getPostVotePostMapper()->findOneBy(array('entry' => $lastEntry));
 
         if (! $post) {
-
             return $this->redirect()->toUrl(
                 $this->frontendUrl()->fromRoute(
                     'postvote',
@@ -660,9 +661,8 @@ class PostVoteController extends GameController
 
     public function commentsAction()
     {
-
         $postId = $this->getEvent()->getRouteMatch()->getParam('post');
-        if($postId){
+        if ($postId) {
             $post = $this->getGameService()->getPostvotePostMapper()->findById($postId);
             $comments = $post->getComments();
         } else {
@@ -719,7 +719,6 @@ class PostVoteController extends GameController
 
         //ajax call ?
         if ($this->getRequest()->isXmlHttpRequest()) {
-
             return $response;
         }
 
@@ -835,11 +834,10 @@ class PostVoteController extends GameController
                     $this->getGameService()->addShare($post);
                 }
             } else {
-                foreach($form->getMessages() as $el=> $errors){
-                    foreach($errors as $key => $message){
+                foreach ($form->getMessages() as $el => $errors) {
+                    foreach ($errors as $key => $message) {
                         $message = $this->getServiceLocator()->get('translator')->translate($message);
                     }
-                    
                 }
             }
         }
@@ -879,11 +877,10 @@ class PostVoteController extends GameController
                     $statusMail = true;
                 }
             } else {
-                foreach($form->getMessages() as $el=> $errors){
-                    foreach($errors as $key => $message){
+                foreach ($form->getMessages() as $el => $errors) {
+                    foreach ($errors as $key => $message) {
                         $message = $this->getServiceLocator()->get('translator')->translate($message);
                     }
-                    
                 }
             }
         }

@@ -142,7 +142,6 @@ class GameController extends AbstractActionController
      */
     public function notFoundAction()
     {
-
         $templatePathResolver = $this->getServiceLocator()->get('Zend\View\Resolver\TemplatePathStack');
 
         // I create a template path in which I can find a custom template
@@ -150,9 +149,10 @@ class GameController extends AbstractActionController
         $controllerPath = str_replace('Controller', '', end($controller));
         $controllerPath = strtolower(preg_replace('/(?<=\\w)([A-Z])/', '-\\1', $controllerPath));
         $uri = $this->getRequest()->getUri()->getPath();
-        if($this->game)
-            $uri = str_replace($controllerPath.'/'.$this->game->getIdentifier().'/','', $uri);
-        $uri = str_replace("/" . $this->getEvent()->getRouteMatch()->getParam('locale') . "/","/",$uri);
+        if ($this->game) {
+            $uri = str_replace($controllerPath.'/'.$this->game->getIdentifier().'/', '', $uri);
+        }
+        $uri = str_replace("/" . $this->getEvent()->getRouteMatch()->getParam('locale') . "/", "/", $uri);
         $template = 'playground-game/'.$controllerPath . '/custom' . $uri;
 
         if (false === $templatePathResolver->resolve($template)) {
