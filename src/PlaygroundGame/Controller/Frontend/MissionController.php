@@ -226,22 +226,6 @@ class MissionController extends GameController
         $form = $this->getServiceLocator()->get('playgroundgame_sharemail_form');
         $form->setAttribute('method', 'post');
 
-        /*
-        if ($this->getRequest()->isPost()) {
-            $data = $this->getRequest()->getPost()->toArray();
-            $form->setData($data);
-            if ($form->isValid()) {
-                $result = $this->getGameService()->sendShareMail($data, $tis->game, $this->user, $lastEntry);
-                if ($result) {
-                    $statusMail = true;
-                    //$bonusEntry = $this->getGameService()->addAnotherChance($tis->game, $this->user, 1);
-                }
-            }
-        }
-        */
-
-        // buildView must be before sendMail because it adds the game template path to the templateStack
-        // TODO : Improve this.
         $viewModel = $this->buildView($this->game);
         
         //$this->sendMail($tis->game, $this->user, $lastEntry);

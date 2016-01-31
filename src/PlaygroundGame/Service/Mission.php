@@ -5,6 +5,7 @@ namespace PlaygroundGame\Service;
 use Zend\ServiceManager\ServiceManagerAwareInterface;
 use Zend\ServiceManager\ServiceManager;
 use PlaygroundGame\Service\Game;
+use PlaygroundGame\Entity\MissionGameCondition as MissionGameConditionEntity;
 
 class Mission extends Game implements ServiceManagerAwareInterface
 {

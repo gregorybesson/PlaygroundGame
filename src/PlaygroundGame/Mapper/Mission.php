@@ -2,8 +2,6 @@
 
 namespace PlaygroundGame\Mapper;
 
-use Doctrine\ORM\EntityManager;
-use PlaygroundGame\Options\ModuleOptions;
 use PlaygroundGame\Mapper\Game;
 
 class Mission extends Game
