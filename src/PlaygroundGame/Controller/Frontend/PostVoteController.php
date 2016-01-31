@@ -324,7 +324,7 @@ class PostVoteController extends GameController
     public function resultAction()
     {
         $lastEntry = $this->getGameService()->findLastInactiveEntry($this->game, $this->user);
-        if ($lastEntry == null) {
+        if ($lastEntry === null) {
             return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('postvote', array('id' => $identifier)));
         }
         // Je recherche le post associé à entry + status == 0. Si non trouvé, je redirige vers home du jeu.

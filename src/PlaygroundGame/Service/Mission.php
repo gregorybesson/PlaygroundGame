@@ -4,10 +4,7 @@ namespace PlaygroundGame\Service;
 
 use Zend\ServiceManager\ServiceManagerAwareInterface;
 use Zend\ServiceManager\ServiceManager;
-use DoctrineModule\Validator\NoObjectExists as NoObjectExistsValidator;
 use PlaygroundGame\Service\Game;
-use Zend\Db\Sql\Sql;
-use Zend\Db\Adapter\Adapter;
 
 class Mission extends Game implements ServiceManagerAwareInterface
 {
