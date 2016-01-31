@@ -18,12 +18,6 @@ class Mission extends Game
         $hydrator = new DoctrineHydrator($entityManager, 'PlaygroundGame\Entity\Mission');
         $hydrator->addStrategy('partner', new \PlaygroundCore\Stdlib\Hydrator\Strategy\ObjectStrategy());
         $this->setHydrator($hydrator);
-        
-        /*$this->setValidationGroup(array(
-            'MissionGame' => array(
-                'game'
-            )
-        ));*/
 
         parent::__construct($name, $sm, $translator);
 

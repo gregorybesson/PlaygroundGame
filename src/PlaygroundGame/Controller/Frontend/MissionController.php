@@ -210,17 +210,6 @@ class MissionController extends GameController
         // With core shortener helper
         $socialLinkUrl = $this->shortenUrl()->shortenUrl($socialLinkUrl);
 
-        //TODO check existence of an active entry
-        /*$lastEntry = $this->getGameService()->findLastInactiveEntry(
-        $game, $user, $this->params()->fromQuery('anonymous_identifier')
-        );
-        if (!$lastEntry) {
-            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute(
-                'mission', array('id' => $game->getIdentifier()),
-                array('force_canonical' => true)
-            ));
-        }*/
-
         if (!$this->user && !$this->game->getAnonymousAllowed()) {
             $redirect = urlencode(
                 $this->frontendUrl()->fromRoute(

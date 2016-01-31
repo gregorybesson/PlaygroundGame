@@ -246,12 +246,6 @@ class PostVote extends Game implements ServiceManagerAwareInterface
             'post' => $post
         ));
 
-        // sending a mail after Post creation should be optional
-        // if ($user) {
-        //     // send mail for participation
-        //     $this->sendGameMail($game, $user, $post, 'postvote');
-        // }
-
         return $post;
     }
 

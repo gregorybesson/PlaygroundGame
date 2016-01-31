@@ -195,9 +195,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                                     if ($answersarray[$quizReplyAnswer->getAnswerId()]) {
                                         $updatedAnswer = $answersarray[$quizReplyAnswer->getAnswerId()];
                                         $quizReplyAnswer->setPoints($updatedAnswer->getPoints());
-                                        //$quizPoints += $updatedAnswer->getPoints();
                                         $quizReplyAnswer->setCorrect($updatedAnswer->getCorrect());
-                                        //$quizCorrectAnswers += $updatedAnswer->getCorrect();
                                         $quizReplyAnswer = $this->getQuizReplyAnswerMapper()->update(
                                             $quizReplyAnswer
                                         );
@@ -211,9 +209,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                                         )
                                         ) {
                                             $quizReplyAnswer->setPoints($answer->getPoints());
-                                            //$quizPoints += $answer->getPoints();
                                             $quizReplyAnswer->setCorrect($answer->getCorrect());
-                                            //$quizCorrectAnswers += $answer->getCorrect();
                                             $quizReplyAnswer = $this->getQuizReplyAnswerMapper()->update(
                                                 $quizReplyAnswer
                                             );
@@ -237,7 +233,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                 $winner = $this->isWinner($quiz, $quizCorrectAnswers);
                 $entry->setWinner($winner);
                 $entry->setPoints($quizPoints);
-                //$entry->setActive(false);
+                //- $entry->setActive(false);
                 $entry = $this->getEntryMapper()->update($entry);
             }
 

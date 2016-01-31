@@ -271,7 +271,6 @@ class PostVotePost implements InputFilterAwareInterface, Translatable, \JsonSeri
      */
     public function addComment(PostVoteComment $comment)
     {
-        //$comment->setPost($this);
         $this->comments[] = $comment;
     }
 
