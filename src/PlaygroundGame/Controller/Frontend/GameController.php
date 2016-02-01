@@ -521,11 +521,9 @@ class GameController extends AbstractActionController
         if (!$key) {
             // share is not a substep of the game so it's a step
             $key = array_search($this->params('action'), $steps);
-            $keyStep = true;
         } else {
             // share was a substep, I search the index of its parent
             $key = array_search($key, $steps);
-            $keyStep = false;
         }
 
         // play position
@@ -534,11 +532,9 @@ class GameController extends AbstractActionController
         if (!$keyplay) {
             // play is not a substep, so it's a step
             $keyplay = array_search('play', $steps);
-            $keyplayStep = true;
         } else {
             // play is a substep so I search the index of its parent
             $keyplay = array_search($keyplay, $steps);
-            $keyplayStep = false;
         }
 
         if ($key && $keyplay && $keyplay <= $key) {
@@ -711,7 +707,7 @@ class GameController extends AbstractActionController
 
         return $this->redirect()->toUrl(
             $this->frontendUrl()->fromRoute(
-                'frontend/' . $this->game->getClassType() . '/index',
+                $this->game->getClassType(),
                 array('id' => $this->game->getIdentifier())
             )
         );

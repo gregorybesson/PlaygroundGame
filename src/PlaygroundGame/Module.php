@@ -288,7 +288,7 @@ class Module
      * @param  EventManager $e
      * @return array
      */
-    public function populateCmsCategories($e)
+    public function populateCmsCategories(\Zend\EventManager\Event $e)
     {
         $catsArray = $e->getParam('categories');
 
@@ -358,7 +358,7 @@ class Module
 
                     return $viewHelper;
                 },
-                'postvoteShareEvents' => function ($sm) {
+                'postvoteShareEvents' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $service = $sm->getServiceLocator()->get('playgroundgame_postvote_service');
                     
                     return new \PlaygroundGame\View\Helper\PostvoteShareEvents($service);
@@ -588,7 +588,7 @@ class Module
                     return $mapper;
                 },
 
-                'playgroundgame_mission_mapper' => function ($sm) {
+                'playgroundgame_mission_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $mapper = new Mapper\Mission(
                         $sm->get('doctrine.entitymanager.orm_default'),
                         $sm->get('playgroundgame_module_options')
@@ -597,7 +597,7 @@ class Module
                     return $mapper;
                 },
                 
-                'playgroundgame_mission_game_mapper' => function ($sm) {
+                'playgroundgame_mission_game_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $mapper = new Mapper\MissionGame(
                         $sm->get('doctrine.entitymanager.orm_default'),
                         $sm->get('playgroundgame_module_options')
@@ -606,7 +606,7 @@ class Module
                     return $mapper;
                 },
                 
-                'playgroundgame_mission_game_condition_mapper' => function ($sm) {
+                'playgroundgame_mission_game_condition_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $mapper = new Mapper\MissionGameCondition(
                         $sm->get('doctrine.entitymanager.orm_default'),
                         $sm->get('playgroundgame_module_options')
@@ -615,7 +615,7 @@ class Module
                     return $mapper;
                 },
 
-                'playgroundgame_mission_form' => function ($sm) {
+                'playgroundgame_mission_form' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $translator = $sm->get('translator');
                     $form = new Form\Admin\Mission(null, $sm, $translator);
                     $mission = new Entity\Mission();

@@ -118,26 +118,6 @@ class MissionController extends GameController
 
             if ($result) {
 
-                /**
-                 *   The following work has to be done there because doctrine hydration with nested objects is a mess
-                 *   I've been obliged to proceed this way... haven't found the bugfix.
-                 */
-                /*$cmg = count($result->getMissionGames());
-                if( $cmg < count($data['missionGames']) ){
-                    $i=0;
-                    foreach($data['missionGames'] as $m){
-                        if( $i >= $cmg ){
-                            $g = $service->getGameMapper()->findById($m['game']);
-                            $mg = new \PlaygroundGame\Entity\MissionGame();
-                            $mg->setGame($g);
-                            $mg->setPosition($m['position']);
-                            $mg->setMission($result);
-                            $result->addMissionGame($mg);
-                        }
-                        $i++;
-                    }
-                    $service->getGameMapper()->update($result);
-                }*/
                 return $this->redirect()->toRoute('admin/playgroundgame/list');
             }
         }

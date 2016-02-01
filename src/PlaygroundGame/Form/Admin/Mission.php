@@ -2,9 +2,7 @@
 
 namespace PlaygroundGame\Form\Admin;
 
-use Zend\Form\Form;
 use PlaygroundCore\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
-use Zend\Form\Element;
 use Zend\Mvc\I18n\Translator;
 use Zend\ServiceManager\ServiceManager;
 use PlaygroundGame\Form\Admin\Game;
@@ -20,12 +18,6 @@ class Mission extends Game
         $hydrator = new DoctrineHydrator($entityManager, 'PlaygroundGame\Entity\Mission');
         $hydrator->addStrategy('partner', new \PlaygroundCore\Stdlib\Hydrator\Strategy\ObjectStrategy());
         $this->setHydrator($hydrator);
-        
-        /*$this->setValidationGroup(array(
-            'MissionGame' => array(
-                'game'
-            )
-        ));*/
 
         parent::__construct($name, $sm, $translator);
 

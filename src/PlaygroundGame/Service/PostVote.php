@@ -246,12 +246,6 @@ class PostVote extends Game implements ServiceManagerAwareInterface
             'post' => $post
         ));
 
-        // sending a mail after Post creation should be optional
-        // if ($user) {
-        //     // send mail for participation
-        //     $this->sendGameMail($game, $user, $post, 'postvote');
-        // }
-
         return $post;
     }
 
@@ -425,7 +419,6 @@ class PostVote extends Game implements ServiceManagerAwareInterface
     public function addComment($user, $ipAddress, $post, $message = '')
     {
         $postvoteCommentMapper = $this->getPostVoteCommentMapper();
-        $postId = $post->getId();
         $game = $post->getPostvote();
         $comment = new \PlaygroundGame\Entity\PostVoteComment();
         $comment->setPost($post);

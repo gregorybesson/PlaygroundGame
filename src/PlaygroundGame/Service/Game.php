@@ -1030,7 +1030,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                 try {
                     $mailService->send($message);
                 } catch (\Zend\Mail\Protocol\Exception\RuntimeException $e) {
-                    //$mailSent = false;
+
                 }
                 
                 if ($entry) {

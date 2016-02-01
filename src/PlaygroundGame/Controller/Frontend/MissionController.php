@@ -20,13 +20,7 @@ class MissionController extends GameController
      */
     public function indexAction()
     {
-        $isSubscribed = false;
-    
         $entry = $this->getGameService()->checkExistingEntry($this->game, $this->user);
-        if ($entry) {
-            $isSubscribed = true;
-        }
-    
         $games = $this->getGameService()->getMissionGames($this->game, $this->user);
         
         $viewModel = $this->buildView($this->game);
@@ -73,12 +67,6 @@ class MissionController extends GameController
                 )
             );
         }
-        
-        $socialLinkUrl = $this->frontendUrl()->fromRoute(
-            'mission',
-            array('id' => $this->game->getIdentifier()),
-            array('force_canonical' => true)
-        );
 
         $session = new Container('facebook');
         // Redirect to fan gate if the game require to 'like' the page before playing
@@ -99,7 +87,6 @@ class MissionController extends GameController
             if ($session->offsetExists('signed_request')) {
 
                 // Get Playground user from Facebook info
-                $viewModel = $this->buildView($this->game);
                 $beforeLayout = $this->layout()->getTemplate();
 
                 $view = $this->forward()->dispatch(
@@ -195,7 +182,6 @@ class MissionController extends GameController
 
     public function resultAction()
     {
-        $statusMail = null;
         
         $subGameIdentifier = $this->getEvent()->getRouteMatch()->getParam('gameId');
         $subGame = $this->getGameService()->checkGame($subGameIdentifier);
@@ -209,17 +195,6 @@ class MissionController extends GameController
 
         // With core shortener helper
         $socialLinkUrl = $this->shortenUrl()->shortenUrl($socialLinkUrl);
-
-        //TODO check existence of an active entry
-        /*$lastEntry = $this->getGameService()->findLastInactiveEntry(
-        $game, $user, $this->params()->fromQuery('anonymous_identifier')
-        );
-        if (!$lastEntry) {
-            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute(
-                'mission', array('id' => $game->getIdentifier()),
-                array('force_canonical' => true)
-            ));
-        }*/
 
         if (!$this->user && !$this->game->getAnonymousAllowed()) {
             $redirect = urlencode(
@@ -237,26 +212,6 @@ class MissionController extends GameController
         $form = $this->getServiceLocator()->get('playgroundgame_sharemail_form');
         $form->setAttribute('method', 'post');
 
-        /*
-        if ($this->getRequest()->isPost()) {
-            $data = $this->getRequest()->getPost()->toArray();
-            $form->setData($data);
-            if ($form->isValid()) {
-                $result = $this->getGameService()->sendShareMail($data, $tis->game, $this->user, $lastEntry);
-                if ($result) {
-                    $statusMail = true;
-                    //$bonusEntry = $this->getGameService()->addAnotherChance($tis->game, $this->user, 1);
-                }
-            }
-        }
-        */
-
-        // buildView must be before sendMail because it adds the game template path to the templateStack
-        // TODO : Improve this.
-        $viewModel = $this->buildView($this->game);
-        
-        //$this->sendMail($tis->game, $this->user, $lastEntry);
-
         $beforeLayout = $this->layout()->getTemplate();
         $subViewModel = $this->forward()->dispatch(
             'playgroundgame_'.$subGame->getClassType(),
@@ -269,7 +224,6 @@ class MissionController extends GameController
         
         if ($this->getResponse()->getStatusCode() == 302) {
             $this->getResponse()->setStatusCode('200');
-            $urlRedirect = $this->getResponse()->getHeaders()->get('Location');
             
             $subViewModel = $this->forward()->dispatch(
                 'playgroundgame_'.$subGame->getClassType(),
