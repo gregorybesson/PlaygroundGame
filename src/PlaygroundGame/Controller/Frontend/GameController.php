@@ -707,7 +707,7 @@ class GameController extends AbstractActionController
 
         return $this->redirect()->toUrl(
             $this->frontendUrl()->fromRoute(
-                'frontend/' . $this->game->getClassType() . '/index',
+                $this->game->getClassType(),
                 array('id' => $this->game->getIdentifier())
             )
         );
