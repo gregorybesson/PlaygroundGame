@@ -96,15 +96,18 @@ class TradingCard extends Game implements ServiceManagerAwareInterface
 
         $eventModels = $this->getEventManager()->trigger(
             __FUNCTION__.'.pre',
-            $this, array(
-                'game' => $game,
-                'user' => $user,
-                'entry' => $entry,
-                'models' => $models
+            $this,
+            array(
+            'game' => $game,
+            'user' => $user,
+            'entry' => $entry,
+            'models' => $models
             )
         )->last();
 
-        if($eventModels) $models = $eventModels;
+        if ($eventModels) {
+            $models = $eventModels;
+        }
 
         for ($i=1; $i<=$nb; $i++) {
             $model = $models[$i];
@@ -120,15 +123,18 @@ class TradingCard extends Game implements ServiceManagerAwareInterface
 
         $eventBooster = $this->getEventManager()->trigger(
             __FUNCTION__.'.post',
-            $this, array(
-                'game' => $game,
-                'user' => $user,
-                'entry' => $entry,
-                'booster' => $booster
+            $this,
+            array(
+            'game' => $game,
+            'user' => $user,
+            'entry' => $entry,
+            'booster' => $booster
             )
         )->last();
 
-        if($eventBooster) $booster = $eventBooster;
+        if ($eventBooster) {
+            $booster = $eventBooster;
+        }
 
         // sending a booster represents an entry. We close the entry after that
         $entry->setActive(0);
@@ -143,14 +149,17 @@ class TradingCard extends Game implements ServiceManagerAwareInterface
         $album = $this->getTradingCardCardMapper()->findBy(array('game' => $game, 'user' => $user));
         $eventAlbum = $this->getEventManager()->trigger(
             __FUNCTION__.'.post',
-            $this, array(
-                'game' => $game,
-                'user' => $user,
-                'album' => $album
+            $this,
+            array(
+            'game' => $game,
+            'user' => $user,
+            'album' => $album
             )
         )->last();
 
-        if($eventAlbum) $album = $eventAlbum;
+        if ($eventAlbum) {
+            $album = $eventAlbum;
+        }
         
         return $album;
     }
