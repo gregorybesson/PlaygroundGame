@@ -117,7 +117,6 @@ class MissionController extends GameController
             $result = $service->createOrUpdate($data, $game, 'playgroundgame_mission_form');
 
             if ($result) {
-
                 return $this->redirect()->toRoute('admin/playgroundgame/list');
             }
         }

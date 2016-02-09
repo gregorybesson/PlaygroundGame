@@ -440,6 +440,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             u.address2,
             u.postalCode,
             u.city,
+            u.country,
             u.telephone,
             u.mobile,
             u.created_at,
@@ -484,6 +485,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                 'address2' => 1,
                 'postalCode' => 1,
                 'city' => 1,
+                'country' => 1,
                 'telephone' => 1,
                 'mobile' => 1,
                 'created_at' => 1,
@@ -862,6 +864,8 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                 $dateLimit = $now->format('Y-m-d H:i:s');
                 break;
             case 'day':
+                $interval = 'P1D';
+                $now->sub(new \DateInterval($interval));
                 $dateLimit = $now->format('Y-m-d H:i:s');
                 break;
             case 'week':
@@ -1030,7 +1034,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                 try {
                     $mailService->send($message);
                 } catch (\Zend\Mail\Protocol\Exception\RuntimeException $e) {
-
                 }
                 
                 if ($entry) {

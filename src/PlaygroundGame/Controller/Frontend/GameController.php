@@ -1217,12 +1217,10 @@ class GameController extends AbstractActionController
                         
                     )
                 );
+
+                $viewModel->setVariables($this->getShareData($game));
+                $viewModel->setVariables(array('game' => $game, 'user' => $this->user));
             }
-        }
-        
-        if ($game) {
-            $viewModel->setVariables($this->getShareData($game));
-            $viewModel->setVariables(array('game' => $game, 'user' => $this->user));
         }
 
         return $viewModel;
