@@ -41,12 +41,12 @@ class TradingCard extends Game implements ServiceManagerAwareInterface
      */
     public function updateModel(array $data, $model)
     {
-        $path = $this->getPath($model);
-        $media_url = $this->getMediaUrl($model);
         $form  = $this->getServiceManager()->get('playgroundgame_tradingcardmodel_form');
         $tradingcard = $this->getGameMapper()->findById($data['trading_card_id']);
-
         $model->setGame($tradingcard);
+        $path = $this->getPath($model);
+        $media_url = $this->getMediaUrl($model);
+
         $form->bind($model);
         $form->setData($data);
 
