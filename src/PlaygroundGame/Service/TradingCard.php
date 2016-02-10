@@ -109,7 +109,7 @@ class TradingCard extends Game implements ServiceManagerAwareInterface
             $models = $eventModels;
         }
 
-        for ($i=1; $i<=$nb; $i++) {
+        for ($i=0; $i<$nb; $i++) {
             $model = $models[$i];
             $card = new \PlaygroundGame\Entity\TradingCardCard();
             $card->setUser($user);
