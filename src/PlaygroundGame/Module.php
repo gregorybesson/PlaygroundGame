@@ -384,6 +384,7 @@ class Module
                 'playgroundgame_quiz_service'              => 'PlaygroundGame\Service\Quiz',
                 'playgroundgame_instantwin_service'        => 'PlaygroundGame\Service\InstantWin',
                 'playgroundgame_mission_service'           => 'PlaygroundGame\Service\Mission',
+                'playgroundgame_tradingcard_service'       => 'PlaygroundGame\Service\TradingCard',
                 'playgroundgame_prize_service'             => 'PlaygroundGame\Service\Prize',
                 'playgroundgame_prizecategory_service'     => 'PlaygroundGame\Service\PrizeCategory',
                 'playgroundgame_prizecategoryuser_service' => 'PlaygroundGame\Service\PrizeCategoryUser',
@@ -615,6 +616,51 @@ class Module
                     return $mapper;
                 },
 
+                'playgroundgame_tradingcard_mapper' => function ($sm) {
+                    $mapper = new Mapper\TradingCard(
+                        $sm->get('doctrine.entitymanager.orm_default'),
+                        $sm->get('playgroundgame_module_options')
+                    );
+
+                    return $mapper;
+                },
+
+                'playgroundgame_tradingcard_model_mapper' => function ($sm) {
+                    $mapper = new Mapper\TradingCardModel(
+                        $sm->get('doctrine.entitymanager.orm_default'),
+                        $sm->get('playgroundgame_module_options')
+                    );
+
+                    return $mapper;
+                },
+
+                'playgroundgame_tradingcard_card_mapper' => function ($sm) {
+                    $mapper = new Mapper\TradingCardCard(
+                        $sm->get('doctrine.entitymanager.orm_default'),
+                        $sm->get('playgroundgame_module_options')
+                    );
+
+                    return $mapper;
+                },
+                
+                'playgroundgame_tradingcardmodel_form' => function (\Zend\ServiceManager\ServiceManager $sm) {
+                    $translator = $sm->get('translator');
+                    $form = new Form\Admin\TradingCardModel(null, $sm, $translator);
+                    $tradingcardmodel = new Entity\TradingCardModel();
+                    $form->setInputFilter($tradingcardmodel->getInputFilter());
+
+                    return $form;
+                },
+
+                'playgroundgame_tradingcard_form' => function (\Zend\ServiceManager\ServiceManager $sm) {
+                    $translator = $sm->get('translator');
+                    $form = new Form\Admin\TradingCard(null, $sm, $translator);
+                    $tradingcard = new Entity\TradingCard();
+                    $form->setInputFilter($tradingcard->getInputFilter());
+
+                    return $form;
+                },
+                
                 'playgroundgame_mission_form' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $translator = $sm->get('translator');
                     $form = new Form\Admin\Mission(null, $sm, $translator);

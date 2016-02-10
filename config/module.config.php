@@ -41,6 +41,7 @@ return array(
                 array('controller' => 'playgroundgame_instantwin',          'roles' => array('guest', 'user')),
                 array('controller' => 'playgroundgame_prizecategory',       'roles' => array('guest', 'user')),
                 array('controller' => 'playgroundgame_mission',             'roles' => array('guest', 'user')),
+                array('controller' => 'playgroundgame_tradingcard',         'roles' => array('guest', 'user')),
     
                 // Admin area
                 array('controller' => 'playgroundgame_admin_game',          'roles' => array('admin')),
@@ -49,6 +50,7 @@ return array(
                 array('controller' => 'playgroundgame_admin_quiz',          'roles' => array('admin')),
                 array('controller' => 'playgroundgame_admin_postvote',      'roles' => array('admin')),
                 array('controller' => 'playgroundgame_admin_mission',       'roles' => array('admin')),
+                array('controller' => 'playgroundgame_admin_tradingcard',   'roles' => array('admin')),
                 array('controller' => 'playgroundgame_admin_prizecategory', 'roles' => array('admin')),
             ),
         ),
@@ -230,6 +232,7 @@ return array(
             'playgroundgame_instantwin' => 'PlaygroundGame\Controller\Frontend\InstantWinController',
             'playgroundgame_postvote' => 'PlaygroundGame\Controller\Frontend\PostVoteController',
             'playgroundgame_mission' => 'PlaygroundGame\Controller\Frontend\MissionController',
+            'playgroundgame_tradingcard' => 'PlaygroundGame\Controller\Frontend\TradingCardController',
             'playgroundgame_prizecategory' => 'PlaygroundGame\Controller\Frontend\PrizeCategoryController',
             'playgroundgame_admin_game' => 'PlaygroundGame\Controller\Admin\GameController',
             'playgroundgame_admin_lottery' => 'PlaygroundGame\Controller\Admin\LotteryController',
@@ -237,6 +240,7 @@ return array(
             'playgroundgame_admin_postvote' => 'PlaygroundGame\Controller\Admin\PostVoteController',
             'playgroundgame_admin_quiz' => 'PlaygroundGame\Controller\Admin\QuizController',
             'playgroundgame_admin_mission' => 'PlaygroundGame\Controller\Admin\MissionController',
+            'playgroundgame_admin_tradingcard' => 'PlaygroundGame\Controller\Admin\TradingCardController',
             'playgroundgame_admin_prizecategory' => 'PlaygroundGame\Controller\Admin\PrizeCategoryController',
         )
     ),
@@ -283,6 +287,324 @@ return array(
                                     ),
                                     'constraints' => array(
                                         'p' => '[0-9]*'
+                                    )
+                                )
+                            )
+                        )
+                    ),
+                    'tradingcard' => array(
+                        'type' => 'Segment',
+                        'options' => array(
+                            'route' => 'trading-card[/:id]',
+                            'defaults' => array(
+                                'controller' => 'playgroundgame_tradingcard',
+                                'action' => 'home'
+                            )
+                        ),
+                        'may_terminate' => true,
+                        'child_routes' => array(
+                            'index' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/index',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_tradingcard',
+                                        'action' => 'index'
+                                    )
+                                )
+                            ),
+                            'play' => array(
+                                'type' => 'Segment', 
+                                'options' => array(
+                                    'route' => '/jouer',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_tradingcard',
+                                        'action' => 'play'
+                                    )
+                                ),
+                                'may_terminate' => true,
+                            ),
+                            'ajaxforgotpassword' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/ajax-mot-passe-oublie',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_tradingcard',
+                                        'action'     => 'ajaxforgot',
+                                    ),
+                                ),
+                            ),
+                            'resetpassword' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/reset-password/:userId/:token',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_tradingcard',
+                                        'action'     => 'userreset',
+                                    ),
+                                    'constraints' => array(
+                                        'userId'  => '[0-9]+',
+                                        'token' => '[A-F0-9]+',
+                                    ),
+                                ),
+                            ),
+                            'login' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/connexion',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_tradingcard',
+                                        'action' => 'login'
+                                    )
+                                )
+                            ),
+                            'logout' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/logout',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_tradingcard',
+                                        'action'     => 'logout',
+                                    ),
+                                ),
+                            ),
+                            'user-register' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/inscription',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_tradingcard',
+                                        'action' => 'userregister'
+                                    )
+                                )
+                            ),
+                            'login' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/connexion',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_tradingcard',
+                                        'action' => 'login'
+                                    )
+                                )
+                            ),
+                            'optin' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/optin',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_tradingcard',
+                                        'action' => 'optin'
+                                    )
+                                )
+                            ),
+                            'result' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/resultat',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_tradingcard',
+                                        'action' => 'result'
+                                    )
+                                )
+                            ),
+                            'register' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/register',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_tradingcard',
+                                        'action' => 'register'
+                                    )
+                                )
+                            ),
+                            'profile' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/profil',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_tradingcard',
+                                        'action' => 'userProfile'
+                                    )
+                                )
+                            ),
+                            'fbshare' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/fbshare',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_tradingcard',
+                                        'action' => 'fbshare'
+                                    )
+                                )
+                            ),
+                            'fbrequest' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/fbrequest',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_tradingcard',
+                                        'action' => 'fbrequest'
+                                    )
+                                )
+                            ),
+                            'tweet' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/tweet',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_tradingcard',
+                                        'action' => 'tweet'
+                                    )
+                                )
+                            ),
+                            'google' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/google',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_tradingcard',
+                                        'action' => 'google'
+                                    )
+                                )
+                            ),
+                            'share' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/partager',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_tradingcard',
+                                        'action' => 'share'
+                                    )
+                                )
+                            ),
+                            'invite-to-team' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/rejoins-ma-team',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_tradingcard',
+                                        'action' => 'inviteToTeam',
+                                    )
+                                )
+                            ),
+                            'bounce' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/essayez-aussi',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_tradingcard',
+                                        'action' => 'bounce'
+                                    )
+                                )
+                            ),
+                            'terms' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/reglement',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_tradingcard',
+                                        'action' => 'terms'
+                                    )
+                                )
+                            ),
+                            'conditions' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/mentions-legales',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_tradingcard',
+                                        'action' => 'conditions'
+                                    )
+                                )
+                            ),
+                            'fangate' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/fangate',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_tradingcard',
+                                        'action' => 'fangate'
+                                    )
+                                )
+                            ),
+                            'prizes' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/lots',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_tradingcard',
+                                        'action' => 'prizes'
+                                    )
+                                ),
+                                'may_terminate' => true,
+                                'child_routes' => array(
+                                    'prize' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/:prize',
+                                            'defaults' => array(
+                                                'controller' => 'playgroundgame_tradingcard',
+                                                'action' => 'prize'
+                                            )
+                                        )
+                                    )
+                                )
+                            ),
+                            'leaderboard' => array(
+                                'type' => 'segment',
+                                'options' => array(
+                                    'route' => '/leaderboard[/:filter][/:p]',
+                                    'constraints' => array(
+                                        'filter' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                    ),
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_tradingcard',
+                                        'action'     => 'leaderboard'
+                                    ),
+                                ),
+                            ),
+                            'cms' => array(
+                                'type' => 'segment',
+                                'options' => array(
+                                    'route'    => 'page',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_tradingcard',
+                                        'action'     => 'cmsPage',
+                                    ),
+                                ),
+                                'child_routes' =>array(
+                                    'detail' => array(
+                                        'type' => 'segment',
+                                        'options' => array(
+                                            'route' => '/:pid',
+                                            'defaults' => array(
+                                                'controller' => 'playgroundgame_tradingcard',
+                                                'action'     => 'cmsPage',
+                                            ),
+                                        ),
+                                    ),
+                                    'list' => array(
+                                        'type' => 'segment',
+                                        'options' => array(
+                                            'route' => '/liste[/:p]',
+                                            'defaults' => array(
+                                                'controller' => 'playgroundgame_tradingcard',
+                                                'action'     => 'cmsList',
+                                            ),
+                                        ),
+                                    ),
+                                ),
+                            ),
+                            'other-routes' => array(
+                                'type' => '\Zend\Mvc\Router\Http\Regex',
+                                'priority' => -1000,
+                                'options' => array(
+                                    'regex' => '.*',
+                                    'spec' => '%url%',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_tradingcard',
+                                        'action' => 'not-found'
                                     )
                                 )
                             )
@@ -1952,6 +2274,41 @@ return array(
                             )
                         )
                     ),
+                
+                    'tradingcard' => array(
+                        'type' => 'Literal',
+                        'priority' => 1000,
+                        'options' => array(
+                            'route' => '/tradingcard',
+                            'defaults' => array(
+                                'controller' => 'playgroundgame_admin_tradingcard',
+                                'action' => 'index'
+                            )
+                        ),
+                        'child_routes' => array(
+                            'entry' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/entry/:gameId[/:p]',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_admin_tradingcard',
+                                        'action' => 'entry',
+                                        'gameId' => 0
+                                    )
+                                )
+                            ),
+                            'download' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/download/:gameId',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_admin_tradingcard',
+                                        'action' => 'download'
+                                    )
+                                )
+                            )
+                        )
+                    ),
 
                     'playgroundgame' => array(
                         'type' => 'Literal',
@@ -2015,6 +2372,98 @@ return array(
                                     'defaults' => array(
                                         'controller' => 'playgroundgame_admin_game',
                                         'action' => 'import'
+                                    )
+                                )
+                            ),
+                            'create-tradingcard' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/create-tradingcard',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_admin_tradingcard',
+                                        'action' => 'createTradingcard'
+                                    )
+                                )
+                            ),
+                            'edit-tradingcard' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/edit-tradingcard/:gameId',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_admin_tradingcard',
+                                        'action' => 'editTradingcard',
+                                        'gameId' => 0
+                                    )
+                                )
+                            ),
+                            'tradingcard-model-list' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/tradingcard-model-list/:gameId[/:filter][/:p]',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_admin_tradingcard',
+                                        'action' => 'listModel',
+                                        'gameId' => 0,
+                                        'filter' => 'DESC'
+                                    ),
+                                    'constraints' => array(
+                                        'filter' => '[a-zA-Z][a-zA-Z0-9_-]*'
+                                    )
+                                )
+                            ),
+                            'tradingcard-models-import' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/tradingcard-models-import/:gameId',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_admin_tradingcard',
+                                        'action' => 'importModels',
+                                        'gameId' => 0
+                                    )
+                                )
+                            ),
+                            'tradingcard-models-export' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/tradingcard-models-export/:gameId',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_admin_tradingcard',
+                                        'action' => 'exportModels',
+                                        'gameId' => 0
+                                    )
+                                )
+                            ),
+                            'tradingcard-model-add' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/tradingcard-model-add/:gameId',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_admin_tradingcard',
+                                        'action' => 'addModel',
+                                        'gameId' => 0
+                                    )
+                                )
+                            ),
+                            'tradingcard-model-edit' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/tradingcard-model-edit/:gameId/:modelId',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_admin_tradingcard',
+                                        'action' => 'editModel',
+                                        'gameId' => 0,
+                                        'modelId' => 0
+                                    )
+                                )
+                            ),
+                            'tradingcard-model-remove' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/tradingcard-model-remove/:modelId',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_admin_tradingcard',
+                                        'action' => 'removeModel',
+                                        'modelId' => 0
                                     )
                                 )
                             ),
@@ -2648,6 +3097,12 @@ return array(
                     'create-mission' => array(
                         'label' => 'Add new mission',
                         'route' => 'admin/playgroundgame/create-mission',
+                        'resource' => 'game',
+                        'privilege' => 'add'
+                    ),
+                    'create-tradingcard' => array(
+                        'label' => 'Add new trading card',
+                        'route' => 'admin/playgroundgame/create-tradingcard',
                         'resource' => 'game',
                         'privilege' => 'add'
                     ),

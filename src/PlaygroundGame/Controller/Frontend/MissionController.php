@@ -182,7 +182,6 @@ class MissionController extends GameController
 
     public function resultAction()
     {
-        
         $subGameIdentifier = $this->getEvent()->getRouteMatch()->getParam('gameId');
         $subGame = $this->getGameService()->checkGame($subGameIdentifier);
 
