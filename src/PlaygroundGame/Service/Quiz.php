@@ -160,88 +160,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
 
         // If the question was a pronostic, I update entries with the results !
         if ($question->getPrediction()) {
-            // je recherche toutes les participations au jeu
-            $entries = $this->getEntryMapper()->findByGameId($question->getQuiz());
-
-            $answers = $question->getAnswers();
-
-            $answersarray = array();
-            foreach ($answers as $answer) {
-                $answersarray[$answer->getId()] = $answer;
-            }
-
-            // I update all answers with points and correctness
-            // Refactorer findByEntryAndQuestion pour qu'elle fonctionne avec QuizReplyAnswer
-            /**
-             * 1. Je recherche $this->getQuizReplyMapper()->findByEntry($entry)
-             * 2. Pour chaque entrée trouvée, je recherche
-             * $this->getQuizReplyAnswerMapper()->findByReplyAndQuestion($reply, $question->getId())
-             * 3. Je mets à jour reply avec le nb de bonnes réponses
-             * 4. Je trigger une story ?
-             */
-            foreach ($entries as $entry) {
-                $quizReplies = $this->getQuizReplyMapper()->findByEntry($entry);
-                if ($quizReplies) {
-                    foreach ($quizReplies as $reply) {
-                        $quizReplyAnswers = $this->getQuizReplyAnswerMapper()->findByReplyAndQuestion(
-                            $reply,
-                            $question->getId()
-                        );
-                        $quizPoints = 0;
-                        $quizCorrectAnswers = 0;
-                        if ($quizReplyAnswers) {
-                            foreach ($quizReplyAnswers as $quizReplyAnswer) {
-                                if (2 != $question->getType()) {
-                                    if ($answersarray[$quizReplyAnswer->getAnswerId()]) {
-                                        $updatedAnswer = $answersarray[$quizReplyAnswer->getAnswerId()];
-                                        $quizReplyAnswer->setPoints($updatedAnswer->getPoints());
-                                        $quizReplyAnswer->setCorrect($updatedAnswer->getCorrect());
-                                        $quizReplyAnswer = $this->getQuizReplyAnswerMapper()->update(
-                                            $quizReplyAnswer
-                                        );
-                                    }
-                                } else {
-                                    // question is a textarea
-                                    // search for a matching answer
-                                    foreach ($answers as $answer) {
-                                        if (trim(strip_tags($answer->getAnswer())) == trim(
-                                            strip_tags($quizReplyAnswer->getAnswer())
-                                        )
-                                        ) {
-                                            $quizReplyAnswer->setPoints($answer->getPoints());
-                                            $quizReplyAnswer->setCorrect($answer->getCorrect());
-                                            $quizReplyAnswer = $this->getQuizReplyAnswerMapper()->update(
-                                                $quizReplyAnswer
-                                            );
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        // The reply has been update with correct answers and point for this question.
-                        // I count the whole set of points for this reply and update the entry
-                        foreach ($reply->getAnswers() as $a) {
-                            if ($a->getCorrect()) {
-                                $quizPoints += $a->getPoints();
-                                $quizCorrectAnswers += $a->getCorrect();
-                            }
-                        }
-                    }
-                }
-                $winner = $this->isWinner($quiz, $quizCorrectAnswers);
-                $entry->setWinner($winner);
-                $entry->setPoints($quizPoints);
-                // The entry should be inactive : entry->setActive(false);
-                $entry = $this->getEntryMapper()->update($entry);
-            }
-
-            $this->getEventManager()->trigger(
-                __FUNCTION__.'.prediction',
-                $this,
-                array('question' => $question, 'data' => $data)
-            );
+            $this->updatePrediction($question);
         }
 
         $this->getEventManager()->trigger(
@@ -259,6 +178,104 @@ class Quiz extends Game implements ServiceManagerAwareInterface
         $this->getQuizMapper()->update($quiz);
 
         return $question;
+    }
+
+    /**
+     * This function update the sort order of the questions in a Quiz
+     *
+     * @param  string $data
+     * @return boolean
+     */
+    public function updatePrediction($question)
+    {
+        // je recherche toutes les participations au jeu
+        $entries = $this->getEntryMapper()->findByGameId($question->getQuiz());
+
+        $answers = $question->getAnswers();
+
+        $answersarray = array();
+        foreach ($answers as $answer) {
+            $answersarray[$answer->getId()] = $answer;
+        }
+
+        // I update all answers with points and correctness
+        // Refactorer findByEntryAndQuestion pour qu'elle fonctionne avec QuizReplyAnswer
+        /**
+         * 1. Je recherche $this->getQuizReplyMapper()->findByEntry($entry)
+         * 2. Pour chaque entrée trouvée, je recherche
+         * $this->getQuizReplyAnswerMapper()->findByReplyAndQuestion($reply, $question->getId())
+         * 3. Je mets à jour reply avec le nb de bonnes réponses
+         * 4. Je trigger une story ?
+         */
+        foreach ($entries as $entry) {
+            $quizReplies = $this->getQuizReplyMapper()->findByEntry($entry);
+            if ($quizReplies) {
+                foreach ($quizReplies as $reply) {
+                    $quizReplyAnswers = $this->getQuizReplyAnswerMapper()->findByReplyAndQuestion(
+                        $reply,
+                        $question->getId()
+                    );
+                    $quizPoints = 0;
+                    $quizCorrectAnswers = 0;
+                    if ($quizReplyAnswers) {
+                        foreach ($quizReplyAnswers as $quizReplyAnswer) {
+                            if (2 != $question->getType()) {
+                                if ($answersarray[$quizReplyAnswer->getAnswerId()]) {
+                                    $updatedAnswer = $answersarray[$quizReplyAnswer->getAnswerId()];
+                                    $quizReplyAnswer->setPoints($updatedAnswer->getPoints());
+                                    $quizReplyAnswer->setCorrect($updatedAnswer->getCorrect());
+                                    $quizReplyAnswer = $this->getQuizReplyAnswerMapper()->update(
+                                        $quizReplyAnswer
+                                    );
+                                }
+                            } else {
+                                // question is a textarea
+                                // search for a matching answer
+                                foreach ($answers as $answer) {
+                                    if (trim(strip_tags($answer->getAnswer())) == trim(
+                                        strip_tags($quizReplyAnswer->getAnswer())
+                                    )
+                                    ) {
+                                        $quizReplyAnswer->setPoints($answer->getPoints());
+                                        $quizReplyAnswer->setCorrect($answer->getCorrect());
+                                        $quizReplyAnswer = $this->getQuizReplyAnswerMapper()->update(
+                                            $quizReplyAnswer
+                                        );
+                                        break;
+                                    } else {
+                                        $quizReplyAnswer->setPoints(0);
+                                        $quizReplyAnswer->setCorrect(false);
+                                        $quizReplyAnswer = $this->getQuizReplyAnswerMapper()->update(
+                                            $quizReplyAnswer
+                                        );
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // The reply has been updated with correct answers and points for this question.
+                    // I count the whole set of points for this reply and update the entry
+                    foreach ($reply->getAnswers() as $a) {
+                        if ($a->getCorrect()) {
+                            $quizPoints += $a->getPoints();
+                            $quizCorrectAnswers += $a->getCorrect();
+                        }
+                    }
+                }
+            }
+            $winner = $this->isWinner($question->getQuiz(), $quizCorrectAnswers);
+            $entry->setWinner($winner);
+            $entry->setPoints($quizPoints);
+            // The entry should be inactive : entry->setActive(false);
+            $entry = $this->getEntryMapper()->update($entry);
+        }
+
+        $this->getEventManager()->trigger(
+            __FUNCTION__.'.post',
+            $this,
+            array('question' => $question)
+        );
     }
 
     /**
