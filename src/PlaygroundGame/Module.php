@@ -312,18 +312,18 @@ class Module
     {
         $cronjobs = $e->getParam('cronjobs');
 
-        $cronjobs['adfagame_email'] = array(
-            'frequency' => '*/15 * * * *',
-            'callback'  => '\PlaygroundGame\Service\Cron::cronMail',
-            'args'      => array('bar', 'baz'),
-        );
+        // $cronjobs['adfagame_email'] = array(
+        //     'frequency' => '*/15 * * * *',
+        //     'callback'  => '\PlaygroundGame\Service\Cron::cronMail',
+        //     'args'      => array('bar', 'baz'),
+        // );
 
-        // tous les jours à 5:00 AM
-        $cronjobs['adfagame_instantwin_email'] = array(
-                'frequency' => '* 5 * * *',
-                'callback'  => '\PlaygroundGame\Service\Cron::instantWinEmail',
-                'args'      => array(),
-        );
+        // // tous les jours à 5:00 AM
+        // $cronjobs['adfagame_instantwin_email'] = array(
+        //         'frequency' => '* 5 * * *',
+        //         'callback'  => '\PlaygroundGame\Service\Cron::instantWinEmail',
+        //         'args'      => array(),
+        // );
 
         return $cronjobs;
     }
