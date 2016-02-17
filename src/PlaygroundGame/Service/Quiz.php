@@ -200,7 +200,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
      * This function update the sort order of the questions in a Quiz
      * BEWARE : This function is time consuming (1s for 11 updates)
      * If you have many replies, switch to a  batch
-     * 
+     *
      * To improve performance, usage of DQL update
      * http://doctrine-orm.readthedocs.org/projects/doctrine-orm/en/latest/reference/dql-doctrine-query-language.html
      *
@@ -232,13 +232,13 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                         $quizReplyAnswer->setPoints($updatedAnswer->getPoints());
                         $quizReplyAnswer->setCorrect($updatedAnswer->getCorrect());
                         $q = $em->createQuery(
-                            'update PlaygroundGame\Entity\QuizReplyAnswer a SET a.points = ' . 
-                            $updatedAnswer->getPoints() . ',a.correct=' . $updatedAnswer->getCorrect() . 
+                            'update PlaygroundGame\Entity\QuizReplyAnswer a SET a.points = ' .
+                            $updatedAnswer->getPoints() . ',a.correct=' . $updatedAnswer->getCorrect() .
                             ' WHERE a.id=' .$quizReplyAnswer->getId()
                         );
                         $q->execute();
                     }
-                } else if($quizReplyAnswer->getQuestionId() === $question->getId()){
+                } elseif ($quizReplyAnswer->getQuestionId() === $question->getId()) {
                     // question is a textarea
                     // search for a matching answer
                     foreach ($answers as $answer) {
@@ -249,8 +249,8 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                             $quizReplyAnswer->setPoints($answer->getPoints());
                             $quizReplyAnswer->setCorrect($answer->getCorrect());
                             $q = $em->createQuery(
-                                'update PlaygroundGame\Entity\QuizReplyAnswer a SET a.points = ' . 
-                                $answer->getPoints() . ', a.correct='.$answer->getCorrect() 
+                                'update PlaygroundGame\Entity\QuizReplyAnswer a SET a.points = ' .
+                                $answer->getPoints() . ', a.correct='.$answer->getCorrect()
                                 . ' WHERE a.id=' .$quizReplyAnswer->getId()
                             );
                             $q->execute();
