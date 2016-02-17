@@ -180,95 +180,105 @@ class Quiz extends Game implements ServiceManagerAwareInterface
         return $question;
     }
 
+    public function findRepliesByGame($game)
+    {
+        $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
+        $qb = $em->createQueryBuilder();
+        $qb->select('r')
+            ->from('PlaygroundGame\Entity\QuizReply', 'r')
+            ->innerJoin('r.entry', 'e')
+            ->where('e.game = :game')
+            ->setParameter('game', $game);
+        $query = $qb->getQuery();
+        
+        $replies = $query->getResult();
+
+        return $replies;
+    }
+
     /**
      * This function update the sort order of the questions in a Quiz
+     * BEWARE : This function is time consuming (1s for 11 updates)
+     * If you have many replies, switch to a  batch
+     * 
+     * To improve performance, usage of DQL update
+     * http://doctrine-orm.readthedocs.org/projects/doctrine-orm/en/latest/reference/dql-doctrine-query-language.html
      *
      * @param  string $data
      * @return boolean
      */
     public function updatePrediction($question)
     {
-        // je recherche toutes les participations au jeu
-        $entries = $this->getEntryMapper()->findByGameId($question->getQuiz());
+        set_time_limit(0);
+        $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
 
-        $answers = $question->getAnswers();
+        $replies = $this->findRepliesByGame($question->getQuiz());
+
+        $answers = $question->getAnswers($question->getQuiz());
 
         $answersarray = array();
         foreach ($answers as $answer) {
             $answersarray[$answer->getId()] = $answer;
         }
 
-        // I update all answers with points and correctness
-        // Refactorer findByEntryAndQuestion pour qu'elle fonctionne avec QuizReplyAnswer
-        /**
-         * 1. Je recherche $this->getQuizReplyMapper()->findByEntry($entry)
-         * 2. Pour chaque entrée trouvée, je recherche
-         * $this->getQuizReplyAnswerMapper()->findByReplyAndQuestion($reply, $question->getId())
-         * 3. Je mets à jour reply avec le nb de bonnes réponses
-         * 4. Je trigger une story ?
-         */
-        foreach ($entries as $entry) {
-            $quizReplies = $this->getQuizReplyMapper()->findByEntry($entry);
-            if ($quizReplies) {
-                foreach ($quizReplies as $reply) {
-                    $quizReplyAnswers = $this->getQuizReplyAnswerMapper()->findByReplyAndQuestion(
-                        $reply,
-                        $question->getId()
-                    );
-                    $quizPoints = 0;
-                    $quizCorrectAnswers = 0;
-                    if ($quizReplyAnswers) {
-                        foreach ($quizReplyAnswers as $quizReplyAnswer) {
-                            if (2 != $question->getType()) {
-                                if ($answersarray[$quizReplyAnswer->getAnswerId()]) {
-                                    $updatedAnswer = $answersarray[$quizReplyAnswer->getAnswerId()];
-                                    $quizReplyAnswer->setPoints($updatedAnswer->getPoints());
-                                    $quizReplyAnswer->setCorrect($updatedAnswer->getCorrect());
-                                    $quizReplyAnswer = $this->getQuizReplyAnswerMapper()->update(
-                                        $quizReplyAnswer
-                                    );
-                                }
-                            } else {
-                                // question is a textarea
-                                // search for a matching answer
-                                foreach ($answers as $answer) {
-                                    if (trim(strip_tags($answer->getAnswer())) == trim(
-                                        strip_tags($quizReplyAnswer->getAnswer())
-                                    )
-                                    ) {
-                                        $quizReplyAnswer->setPoints($answer->getPoints());
-                                        $quizReplyAnswer->setCorrect($answer->getCorrect());
-                                        $quizReplyAnswer = $this->getQuizReplyAnswerMapper()->update(
-                                            $quizReplyAnswer
-                                        );
-                                        break;
-                                    } else {
-                                        $quizReplyAnswer->setPoints(0);
-                                        $quizReplyAnswer->setCorrect(false);
-                                        $quizReplyAnswer = $this->getQuizReplyAnswerMapper()->update(
-                                            $quizReplyAnswer
-                                        );
-                                    }
-                                }
-                            }
-                        }
-                    }
+        foreach ($replies as $reply) {
+            $quizPoints = 0;
+            $quizCorrectAnswers = 0;
 
-                    // The reply has been updated with correct answers and points for this question.
-                    // I count the whole set of points for this reply and update the entry
-                    foreach ($reply->getAnswers() as $a) {
-                        if ($a->getCorrect()) {
-                            $quizPoints += $a->getPoints();
-                            $quizCorrectAnswers += $a->getCorrect();
+            foreach ($reply->getAnswers() as $quizReplyAnswer) {
+                if (2 != $question->getType() && $quizReplyAnswer->getQuestionId() === $question->getId()) {
+                    if ($answersarray[$quizReplyAnswer->getAnswerId()]) {
+                        $updatedAnswer = $answersarray[$quizReplyAnswer->getAnswerId()];
+                        $quizReplyAnswer->setPoints($updatedAnswer->getPoints());
+                        $quizReplyAnswer->setCorrect($updatedAnswer->getCorrect());
+                        $q = $em->createQuery(
+                            'update PlaygroundGame\Entity\QuizReplyAnswer a SET a.points = ' . 
+                            $updatedAnswer->getPoints() . ',a.correct=' . $updatedAnswer->getCorrect() . 
+                            ' WHERE a.id=' .$quizReplyAnswer->getId()
+                        );
+                        $q->execute();
+                    }
+                } else if($quizReplyAnswer->getQuestionId() === $question->getId()){
+                    // question is a textarea
+                    // search for a matching answer
+                    foreach ($answers as $answer) {
+                        if (trim(strip_tags($answer->getAnswer())) == trim(
+                            strip_tags($quizReplyAnswer->getAnswer())
+                        )
+                        ) {
+                            $quizReplyAnswer->setPoints($answer->getPoints());
+                            $quizReplyAnswer->setCorrect($answer->getCorrect());
+                            $q = $em->createQuery(
+                                'update PlaygroundGame\Entity\QuizReplyAnswer a SET a.points = ' . 
+                                $answer->getPoints() . ', a.correct='.$answer->getCorrect() 
+                                . ' WHERE a.id=' .$quizReplyAnswer->getId()
+                            );
+                            $q->execute();
+                        } else {
+                            $quizReplyAnswer->setPoints(0);
+                            $quizReplyAnswer->setCorrect(false);
+                            $q = $em->createQuery(
+                                'update PlaygroundGame\Entity\QuizReplyAnswer a SET a.points = 0, a.correct = false WHERE a.id=' .
+                                $quizReplyAnswer->getId()
+                            );
+                            $q->execute();
                         }
                     }
                 }
+
+                // The reply has been updated with correct answers and points for this question.
+                // I count the whole set of points for this reply and update the entry
+                if ($quizReplyAnswer->getCorrect()) {
+                    $quizPoints += $quizReplyAnswer->getPoints();
+                    $quizCorrectAnswers += $quizReplyAnswer->getCorrect();
+                }
             }
+            
             $winner = $this->isWinner($question->getQuiz(), $quizCorrectAnswers);
-            $entry->setWinner($winner);
-            $entry->setPoints($quizPoints);
+            $reply->getEntry()->setWinner($winner);
+            $reply->getEntry()->setPoints($quizPoints);
             // The entry should be inactive : entry->setActive(false);
-            $entry = $this->getEntryMapper()->update($entry);
+            $this->getEntryMapper()->update($reply->getEntry());
         }
 
         $this->getEventManager()->trigger(
