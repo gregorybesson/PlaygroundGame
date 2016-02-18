@@ -196,6 +196,70 @@ class Quiz extends Game implements ServiceManagerAwareInterface
         return $replies;
     }
 
+    public function updatePrediction($question)
+    {
+        set_time_limit(0);
+        $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
+        
+        /* @var $dbal \Doctrine\DBAL\Connection */
+        $dbal = $em->getConnection();
+
+        $answers = $question->getAnswers($question->getQuiz());
+
+        // I update all the answers with points and correctness
+        // Very fast (native query inside)
+        if ($question->getType() == 2){
+            foreach ($answers as $answer) {
+                $value = trim(strip_tags($answer->getAnswer()));
+                $points = ($answer->getCorrect())? $answer->getPoints():0;
+                $sql = "
+                    UPDATE game_quiz_reply_answer AS ra 
+                    SET ra.points=IF(ra.answer='". $value ."', ". $points .", ra.points), 
+                        ra.correct = IF(ra.answer='". $value ."', ". $answer->getCorrect() .", ra.correct)
+                    WHERE ra.question_id = " . $question->getId() ."
+                ";
+
+                $dbal->exec( $sql );
+            }
+
+        } else {
+            foreach ($answers as $answer) {
+                $points = ($answer->getCorrect())? $answer->getPoints():0;
+                $sql = "
+                    UPDATE game_quiz_reply_answer AS ra 
+                    SET ra.points=" . $points .", 
+                        ra.correct = " . $answer->getCorrect() ."
+                    WHERE ra.question_id = ". $question->getId() ." 
+                        AND ra.answer_id = ". $answer->getId() ."
+                ";
+
+                $dbal->exec( $sql );
+            }
+        }
+
+        // Entry update with points. WINNER as to be calculated also !
+        $sql = "
+            UPDATE game_entry as e
+            INNER JOIN
+            (
+               SELECT e.id, SUM(ra.points) as points, SUM(ra.correct) as correct
+               FROM game_entry as e
+               INNER JOIN game_quiz_reply AS r ON r.entry_id = e.id
+               INNER JOIN game_quiz_reply_answer AS ra ON ra.reply_id = r.id
+               GROUP BY e.id
+            ) i ON e.id = i.id
+            SET e.points = i.points 
+            WHERE e.game_id = ". $question->getQuiz()->getId() . "
+        ";
+
+        $dbal->exec( $sql );
+
+        $this->getEventManager()->trigger(
+            __FUNCTION__.'.post',
+            $this,
+            array('question' => $question)
+        );
+    }
     /**
      * This function update the sort order of the questions in a Quiz
      * BEWARE : This function is time consuming (1s for 11 updates)
@@ -207,7 +271,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
      * @param  string $data
      * @return boolean
      */
-    public function updatePrediction($question)
+    public function updatePredictionOld($question)
     {
         set_time_limit(0);
         $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
@@ -400,8 +464,10 @@ class Quiz extends Game implements ServiceManagerAwareInterface
         if (!$quizReply) {
             $quizReply = new QuizReply();
         } else {
+            $quizReplyAnswered = [];
             foreach ($quizReply->getAnswers() as $answer) {
-                $this->getQuizReplyAnswerMapper()->remove($answer);
+                $quizReplyAnswered[$answer->getQuestionId()] = $answer;
+                //$this->getQuizReplyAnswerMapper()->remove($answer);
             }
         }
         
@@ -416,6 +482,10 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                     foreach ($a as $k => $answer_id) {
                         $answer = $this->getQuizAnswerMapper()->findById($answer_id);
                         if ($answer) {
+                            if(isset($quizReplyAnswered[$question->getId()])){
+                                $this->getQuizReplyAnswerMapper()->remove($quizReplyAnswered[$question->getId()]);
+                            }
+
                             $quizReplyAnswer = new QuizReplyAnswer();
                             $quizReplyAnswer->setAnswer($answer->getAnswer());
                             $quizReplyAnswer->setAnswerId($answer_id);
@@ -425,6 +495,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                             $quizReplyAnswer->setCorrect($answer->getCorrect());
 
                             $quizReply->addAnswer($quizReplyAnswer);
+                            
                             $quizPoints += $answer->getPoints();
                             $quizCorrectAnswers += $answer->getCorrect();
 
@@ -437,6 +508,9 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                     ++$totalQuestions;
                     $answer = $this->getQuizAnswerMapper()->findById($a);
                     if ($answer) {
+                        if(isset($quizReplyAnswered[$question->getId()])){
+                            $this->getQuizReplyAnswerMapper()->remove($quizReplyAnswered[$question->getId()]);
+                        }
                         $quizReplyAnswer = new QuizReplyAnswer();
                         $quizReplyAnswer->setAnswer($answer->getAnswer());
                         $quizReplyAnswer->setAnswerId($a);
@@ -446,6 +520,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                         $quizReplyAnswer->setCorrect($answer->getCorrect());
 
                         $quizReply->addAnswer($quizReplyAnswer);
+
                         $quizPoints += $answer->getPoints();
                         $quizCorrectAnswers += $answer->getCorrect();
                         if (isset($group[$q.'-'.$a.'-data'])) {
@@ -454,8 +529,10 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                     }
                 } elseif ($question->getType() == 2) {
                     ++$totalQuestions;
+                    if(isset($quizReplyAnswered[$question->getId()])){
+                        $this->getQuizReplyAnswerMapper()->remove($quizReplyAnswered[$question->getId()]);
+                    }
                     $quizReplyAnswer = new QuizReplyAnswer();
-                    
                     $quizReplyAnswer->setAnswer($a);
                     $quizReplyAnswer->setAnswerId(0);
                     $quizReplyAnswer->setQuestion($question->getQuestion());
@@ -464,6 +541,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                     $quizReplyAnswer->setCorrect(0);
 
                     $quizReply->addAnswer($quizReplyAnswer);
+
                     $quizPoints += 0;
                     $quizCorrectAnswers += 0;
                     $qAnswers = $question->getAnswers();
@@ -527,7 +605,6 @@ class Quiz extends Game implements ServiceManagerAwareInterface
             $ratioCorrectAnswers = 100;
         }
 
-        $winner = false;
         if ($game->getVictoryConditions() >= 0) {
             if ($ratioCorrectAnswers >= $game->getVictoryConditions()) {
                 $winner = true;
