@@ -8,6 +8,68 @@ class TradingCardController extends GameController
      */
     protected $gameService;
 
+    /**
+     * Example of AJAX File Upload with Session Progress and partial validation.
+     * It's now possible to send a base64 image in this case the call is the form :
+     * this._ajax(
+     * {
+     *   url: url.dataset.url,
+     *    method: 'post',
+     *    body: 'photo=' + image
+     * },
+     *
+     * @return \Zend\Stdlib\ResponseInterface
+     */
+    public function ajaxuploadAction()
+    {
+        // Call this for the session lock to be released (other ajax calls can then be made)
+        session_write_close();
+
+        if (! $this->game) {
+            $this->getResponse()->setContent(\Zend\Json\Json::encode(array(
+                'success' => 0
+            )));
+
+            return $this->getResponse();
+        }
+
+        $entry = $this->getGameService()->play($this->game, $this->user);
+        if (!$entry) {
+            // the user has already taken part of this game and the participation limit has been reached
+            $this->getResponse()->setContent(\Zend\Json\Json::encode(array(
+                'success' => 0
+            )));
+
+            return $this->getResponse();
+        }
+
+        if ($this->getRequest()->isPost()) {
+
+            $data = $this->getRequest()->getFiles()->toArray();
+
+            if (empty($data)) {
+                $data = $this->getRequest()->getPost()->toArray();
+                $key = key($data);
+                $uploadImage = array('name' => $key.'.png', 'error' => 0, 'base64' => $data[$key]);
+                $data = array($key => $uploadImage);
+            }
+            $path = $this->getGameService()->getGameUserPath($this->game, $this->user);
+            $media_url = '/'.$this->getGameService()->getGameUserMediaUrl($this->game, $this->user);
+            $uploadFile = $this->getGameService()->uploadFile(
+                $path,
+                $data[$key]
+            );
+            $result = $media_url.$uploadFile;
+        }
+
+        $this->getResponse()->setContent(\Zend\Json\Json::encode(array(
+            'success' => true,
+            'fileUrl' => $result
+        )));
+
+        return $this->getResponse();
+    }
+
     public function playAction()
     {
         $entry = $this->getGameService()->play($this->game, $this->user);
