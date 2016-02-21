@@ -12,7 +12,7 @@ class TradingCard extends Game implements ServiceManagerAwareInterface
     protected $tradingcardmodelMapper;
     protected $tradingcardcardMapper;
 
-    public function getPath($model)
+    public function getModelPath($model)
     {
         $path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR;
         $path .= 'game' . $model->getGame()->getId() . DIRECTORY_SEPARATOR;
@@ -27,7 +27,7 @@ class TradingCard extends Game implements ServiceManagerAwareInterface
         return $path;
     }
 
-    public function getMediaUrl($model)
+    public function getModelMediaUrl($model)
     {
         $media_url = $this->getOptions()->getMediaUrl() . '/';
         $media_url .= 'game' . $model->getGame()->getId() . '/' . 'model'. $model->getId() . '/';
@@ -44,8 +44,8 @@ class TradingCard extends Game implements ServiceManagerAwareInterface
         $form  = $this->getServiceManager()->get('playgroundgame_tradingcardmodel_form');
         $tradingcard = $this->getGameMapper()->findById($data['trading_card_id']);
         $model->setGame($tradingcard);
-        $path = $this->getPath($model);
-        $media_url = $this->getMediaUrl($model);
+        $path = $this->getModelPath($model);
+        $media_url = $this->getModelMediaUrl($model);
 
         $form->bind($model);
         $form->setData($data);

@@ -323,6 +323,28 @@ return array(
                                     )
                                 ),
                                 'may_terminate' => true,
+                                'child_routes' => array(
+                                    'ajaxupload' => array(
+                                        'type' => 'Literal',
+                                        'options' => array(
+                                            'route' => '/ajaxupload',
+                                            'defaults' => array(
+                                                'controller' => 'playgroundgame_tradingcard',
+                                                'action' => 'ajaxupload'
+                                            )
+                                        )
+                                    ),
+                                    'ajaxdelete' => array(
+                                        'type' => 'Literal',
+                                        'options' => array(
+                                            'route' => '/ajaxdelete',
+                                            'defaults' => array(
+                                                'controller' => 'playgroundgame_postvote',
+                                                'action' => 'ajaxdelete'
+                                            )
+                                        )
+                                    )
+                                )
                             ),
                             'ajaxforgotpassword' => array(
                                 'type' => 'Segment',

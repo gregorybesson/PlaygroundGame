@@ -51,6 +51,29 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
     
     protected $anonymousIdentifier = null;
 
+    public function getGameUserPath($game, $user)
+    {
+        $path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR;
+        $path .= 'game' . $game->getId() . DIRECTORY_SEPARATOR;
+        if (!is_dir($path)) {
+            mkdir($path, 0777, true);
+        }
+        $path .= 'user'. $user->getId() . DIRECTORY_SEPARATOR;
+        if (!is_dir($path)) {
+            mkdir($path, 0777, true);
+        }
+
+        return $path;
+    }
+
+    public function getGameUserMediaUrl($game, $user)
+    {
+        $media_url = $this->getOptions()->getMediaUrl() . '/';
+        $media_url .= 'game' . $game->getId() . '/' . 'user'. $user->getId() . '/';
+
+        return $media_url;
+    }
+
     /**
      *
      *
