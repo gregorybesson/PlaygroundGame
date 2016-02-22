@@ -44,7 +44,6 @@ class TradingCardController extends GameController
         }
 
         if ($this->getRequest()->isPost()) {
-
             $data = $this->getRequest()->getFiles()->toArray();
 
             if (empty($data)) {
