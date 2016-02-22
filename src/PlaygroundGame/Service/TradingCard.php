@@ -30,7 +30,7 @@ class TradingCard extends Game implements ServiceManagerAwareInterface
     public function getModelMediaUrl($model)
     {
         $media_url = $this->getOptions()->getMediaUrl() . '/';
-        $media_url .= 'game' . $model->getGame()->getId() . '/' . 'model'. $model->getId() . '/';
+        $media_url .= 'game' . $model->getGame()->getId() . '/models/';
 
         return $media_url;
     }
