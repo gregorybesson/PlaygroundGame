@@ -208,7 +208,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
 
         // I update all the answers with points and correctness
         // Very fast (native query inside)
-        if ($question->getType() == 2){
+        if ($question->getType() == 2) {
             foreach ($answers as $answer) {
                 $value = trim(strip_tags($answer->getAnswer()));
                 $points = ($answer->getCorrect())? $answer->getPoints():0;
@@ -219,9 +219,8 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                     WHERE ra.question_id = " . $question->getId() ."
                 ";
 
-                $dbal->exec( $sql );
+                $dbal->exec($sql);
             }
-
         } else {
             foreach ($answers as $answer) {
                 $points = ($answer->getCorrect())? $answer->getPoints():0;
@@ -233,7 +232,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                         AND ra.answer_id = ". $answer->getId() ."
                 ";
 
-                $dbal->exec( $sql );
+                $dbal->exec($sql);
             }
         }
 
@@ -252,7 +251,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
             WHERE e.game_id = ". $question->getQuiz()->getId() . "
         ";
 
-        $dbal->exec( $sql );
+        $dbal->exec($sql);
 
         $this->getEventManager()->trigger(
             __FUNCTION__.'.post',
@@ -482,7 +481,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                     foreach ($a as $k => $answer_id) {
                         $answer = $this->getQuizAnswerMapper()->findById($answer_id);
                         if ($answer) {
-                            if(isset($quizReplyAnswered[$question->getId()])){
+                            if (isset($quizReplyAnswered[$question->getId()])) {
                                 $this->getQuizReplyAnswerMapper()->remove($quizReplyAnswered[$question->getId()]);
                             }
 
@@ -508,7 +507,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                     ++$totalQuestions;
                     $answer = $this->getQuizAnswerMapper()->findById($a);
                     if ($answer) {
-                        if(isset($quizReplyAnswered[$question->getId()])){
+                        if (isset($quizReplyAnswered[$question->getId()])) {
                             $this->getQuizReplyAnswerMapper()->remove($quizReplyAnswered[$question->getId()]);
                         }
                         $quizReplyAnswer = new QuizReplyAnswer();
@@ -529,7 +528,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
                     }
                 } elseif ($question->getType() == 2) {
                     ++$totalQuestions;
-                    if(isset($quizReplyAnswered[$question->getId()])){
+                    if (isset($quizReplyAnswered[$question->getId()])) {
                         $this->getQuizReplyAnswerMapper()->remove($quizReplyAnswered[$question->getId()]);
                     }
                     $quizReplyAnswer = new QuizReplyAnswer();

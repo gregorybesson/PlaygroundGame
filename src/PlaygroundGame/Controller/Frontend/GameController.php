@@ -46,7 +46,8 @@ class GameController extends AbstractActionController
         'play',
         'result',
         'preview',
-        'list'
+        'list',
+        'comments'
     );
 
     protected $withOnlineGame = array(
