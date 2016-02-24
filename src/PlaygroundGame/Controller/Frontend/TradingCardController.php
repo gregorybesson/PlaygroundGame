@@ -49,14 +49,19 @@ class TradingCardController extends GameController
             if (empty($data)) {
                 $data = $this->getRequest()->getPost()->toArray();
                 $key = key($data);
-                $uploadImage = array('name' => $key.'.png', 'error' => 0, 'base64' => $data[$key]);
+                $uploadImage = array(
+                    'name' => $key.'.png',
+                    'error' => 0,
+                    'base64' => $data[$key]
+                );
                 $data = array($key => $uploadImage);
             }
             $path = $this->getGameService()->getGameUserPath($this->game, $this->user);
             $media_url = '/'.$this->getGameService()->getGameUserMediaUrl($this->game, $this->user);
             $uploadFile = $this->getGameService()->uploadFile(
                 $path,
-                $data[$key]
+                $data[$key],
+                false
             );
             $result = $media_url.$uploadFile;
         }

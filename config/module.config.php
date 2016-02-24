@@ -113,7 +113,19 @@ return array(
                             'output' => 'zfcadmin/js/deezer.js'
                         )
                     ),
+                    'head_admin_fabric_js' => array(
+                        'assets' => array(
+                            __DIR__ . '/../view/lib/js/fabricjs/fabric.js',
+                            __DIR__ . '/../view/lib/js/fabricjs/fabric_gestures.js',
+                            __DIR__ . '/../view/lib/js/fabricjs/FabricHelper.js',
 
+                        ),
+                        'filters' => array(),
+                        'options' => array(
+                            'move_raw' => true,
+                            'output' => 'lib/js/fabricjs'
+                        )
+                    ),
                     'head_frontend_deezer_js' => array(
                         'assets' => array(
                             __DIR__ . '/../view/lib/js/deezer/dz.min.js'
@@ -2364,7 +2376,18 @@ return array(
                                         'action' => 'download'
                                     )
                                 )
-                            )
+                            ),
+                            'coo' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/coo/:gameId',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_admin_tradingcard',
+                                        'action' => 'coo',
+                                        'gameId' => 0
+                                    )
+                                )
+                            ),
                         )
                     ),
 

@@ -195,6 +195,62 @@ class TradingCardController extends GameController
         );
     }
 
+    /**
+     * This function helps the admin to position UGC image on a card model
+     */
+    public function cooAction()
+    {
+        // get models
+        $sg = $this->getAdminGameService();
+        $this->checkGame();
+
+        $modelId = $this->params()->fromQuery('model');
+        // if (! $modelId) {
+        //     return $this->notFoundAction();
+        // }
+        $models = $sg->getTradingCardModelMapper()->findBy(array('game' => $this->game));
+
+        if ($this->getRequest()->isXmlHttpRequest() && $this->getRequest()->isPost()) {
+            $position = json_decode($this->getRequest()->getPost()->get('position'));
+            $i = 0;
+            foreach ($models as $model) {
+                $jsonData = json_decode($model->getJsonData());
+                if (isset($jsonData->coo)) {
+                    $jsonData->coo = $position[$i];
+                } else {
+                    $jsonData = array('coo' => $position[$i]);
+                }
+
+                $model->setJsonData(json_encode($jsonData));
+                $models = $sg->getTradingCardModelMapper()->update($model);
+                ++$i;
+            }
+
+            // update coo of Model
+            $jsonModel = new \Zend\View\Model\JsonModel();
+            $jsonModel->setVariables(array(
+                'success'   => true,
+            ));
+
+            return $jsonModel;
+        }
+
+        // ajout des images au tableau
+        $bgs = [];
+        $coo = [];
+        foreach ($models as $model) {
+            $json = json_decode($model->getJsonData());
+            $modelCoo = (isset($json->coo))?$json->coo:'';
+            $bgs[] = '/'.$model->getImage();
+            $coo[] = $modelCoo;
+        }
+
+        return array(
+            'backgrounds' => $bgs,
+            'face' => 'img-test/photo.png',
+            'coo'  => $coo,
+        );
+    }
 
     public function removeOccurrenceAction()
     {

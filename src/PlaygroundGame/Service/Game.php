@@ -1329,8 +1329,9 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
     /**
      * @param string $path
+     * @param boolean $noReplace : If the image name already exist, don't replace it but change the name
      */
-    public function uploadFile($path, $file)
+    public function uploadFile($path, $file, $noReplace = true)
     {
         $err = $file["error"];
         $message = '';
@@ -1357,7 +1358,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
             return $err;
         } else {
-            $fileNewname = $this->fileNewname($path, $file['name'], true);
+            $fileNewname = $this->fileNewname($path, $file['name'], $noReplace);
 
             if (isset($file["base64"])) {
                 list(, $img) = explode(',', $file["base64"]);
