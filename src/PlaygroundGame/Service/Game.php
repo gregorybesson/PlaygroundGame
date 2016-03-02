@@ -808,6 +808,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
         if (! $entry) {
             if ($this->hasReachedPlayLimit($game, $user)) {
+
                 return false;
             }
 
@@ -884,32 +885,30 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             case 'always':
                 $interval = 'P100Y';
                 $now->sub(new \DateInterval($interval));
-                $dateLimit = $now->format('Y-m-d H:i:s');
+                $dateLimit = $now->format('Y-m-d') . ' 0:0:0';
                 break;
             case 'day':
-                $interval = 'P1D';
-                $now->sub(new \DateInterval($interval));
-                $dateLimit = $now->format('Y-m-d H:i:s');
+                $dateLimit = $now->format('Y-m-d') . ' 0:0:0';
                 break;
             case 'week':
                 $interval = 'P7D';
                 $now->sub(new \DateInterval($interval));
-                $dateLimit = $now->format('Y-m-d H:i:s');
+                $dateLimit = $now->format('Y-m-d') . ' 0:0:0';
                 break;
             case 'month':
                 $interval = 'P1M';
                 $now->sub(new \DateInterval($interval));
-                $dateLimit = $now->format('Y-m-d H:i:s');
+                $dateLimit = $now->format('Y-m-d') . ' 0:0:0';
                 break;
             case 'year':
                 $interval = 'P1Y';
                 $now->sub(new \DateInterval($interval));
-                $dateLimit = $now->format('Y-m-d H:i:s');
+                $dateLimit = $now->format('Y-m-d') . ' 0:0:0';
                 break;
             default:
                 $interval = 'P100Y';
                 $now->sub(new \DateInterval($interval));
-                $dateLimit = $now->format('Y-m-d H:i:s');
+                $dateLimit = $now->format('Y-m-d') . ' 0:0:0';
         }
 
         return $dateLimit;
