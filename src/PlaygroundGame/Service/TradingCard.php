@@ -89,9 +89,30 @@ class TradingCard extends Game implements ServiceManagerAwareInterface
     public function getBooster($game, $user, $entry)
     {
         // get booster config from $game
+        $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
         $nb = $game->getBoosterCardNumber();
         $booster = [];
-        $models = $this->getTradingCardModelMapper()->findBy(array('game' => $game));
+        
+        $today = new \DateTime("now");
+        $today = $today->format('Y-m-d H:i:s');
+
+        $qb = $em->createQueryBuilder();
+        $and = $qb->expr()->andx();
+        $and->add(
+            $qb->expr()->orX(
+                $qb->expr()->lte('g.availability', ':date'),
+                $qb->expr()->isNull('g.availability')
+            )
+        );
+
+        $qb->setParameter('date', $today);
+        $qb->select('g')
+        ->from('PlaygroundGame\Entity\TradingCardModel', 'g')
+        ->where($and);
+        
+        $query = $qb->getQuery();
+        $models = $query->getResult();
+
         shuffle($models);
 
         $eventModels = $this->getEventManager()->trigger(
