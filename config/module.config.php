@@ -256,6 +256,27 @@ return array(
             'playgroundgame_admin_prizecategory' => 'PlaygroundGame\Controller\Admin\PrizeCategoryController',
         )
     ),
+
+    'service_manager' => array(
+        'aliases' => array(
+            'playgroundgame_partner_service' => 'playgroundpartnership_partner_service',
+            'playgroundgame_message'         => 'playgroundcore_message',
+        ),
+        'factories' => array(
+            'playgroundgame_game_service'              => 'PlaygroundGame\Service\GameFactory',
+            'playgroundgame_lottery_service'           => 'PlaygroundGame\Service\LotteryFactory',
+            'playgroundgame_postvote_service'          => 'PlaygroundGame\Service\PostVoteFactory',
+            'playgroundgame_quiz_service'              => 'PlaygroundGame\Service\QuizFactory',
+            'playgroundgame_instantwin_service'        => 'PlaygroundGame\Service\InstantWinFactory',
+            'playgroundgame_mission_service'           => 'PlaygroundGame\Service\MissionFactory',
+            'playgroundgame_mission_game_service'      => 'PlaygroundGame\Service\MissionGameFactory',
+            'playgroundgame_tradingcard_service'       => 'PlaygroundGame\Service\TradingCardFactory',
+            'playgroundgame_prize_service'             => 'PlaygroundGame\Service\PrizeFactory',
+            'playgroundgame_prizecategory_service'     => 'PlaygroundGame\Service\PrizeCategoryFactory',
+            'playgroundgame_prizecategoryuser_service' => 'PlaygroundGame\Service\PrizeCategoryUserFactory',
+        ),
+    ),
+
     'router' => array(
         'routes' => array(
             'frontend' => array(
