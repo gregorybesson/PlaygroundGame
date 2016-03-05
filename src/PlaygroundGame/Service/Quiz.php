@@ -4,11 +4,10 @@ namespace PlaygroundGame\Service;
 
 use PlaygroundGame\Entity\QuizReply;
 use PlaygroundGame\Entity\QuizReplyAnswer;
-use Zend\ServiceManager\ServiceManagerAwareInterface;
 use PlaygroundGame\Mapper\GameInterface as GameMapperInterface;
 use Zend\Stdlib\ErrorHandler;
 
-class Quiz extends Game implements ServiceManagerAwareInterface
+class Quiz extends Game
 {
     /**
      * @var QuizMapperInterface
@@ -47,7 +46,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
         $media_url = $this->getOptions()->getMediaUrl() . '/';
 
         $question  = new \PlaygroundGame\Entity\QuizQuestion();
-        $form  = $this->getServiceManager()->get('playgroundgame_quizquestion_form');
+        $form  = $this->serviceLocator->get('playgroundgame_quizquestion_form');
         $form->bind($question);
         $form->setData($data);
 
@@ -99,7 +98,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
         $path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR;
         $media_url = $this->getOptions()->getMediaUrl() . '/';
 
-        $form  = $this->getServiceManager()->get('playgroundgame_quizquestion_form');
+        $form  = $this->serviceLocator->get('playgroundgame_quizquestion_form');
         $form->bind($question);
         $form->setData($data);
 
@@ -182,7 +181,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
 
     public function findRepliesByGame($game)
     {
-        $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
+        $em = $this->serviceLocator->get('doctrine.entitymanager.orm_default');
         $qb = $em->createQueryBuilder();
         $qb->select('r')
             ->from('PlaygroundGame\Entity\QuizReply', 'r')
@@ -199,7 +198,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
     public function updatePrediction($question)
     {
         set_time_limit(0);
-        $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
+        $em = $this->serviceLocator->get('doctrine.entitymanager.orm_default');
         
         /* @var $dbal \Doctrine\DBAL\Connection */
         $dbal = $em->getConnection();
@@ -273,7 +272,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
     public function updatePredictionOld($question)
     {
         set_time_limit(0);
-        $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
+        $em = $this->serviceLocator->get('doctrine.entitymanager.orm_default');
 
         $replies = $this->findRepliesByGame($question->getQuiz());
 
@@ -429,7 +428,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
 
     public function getNumberCorrectAnswersQuiz($user, $count = 'count')
     {
-        $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
+        $em = $this->serviceLocator->get('doctrine.entitymanager.orm_default');
 
         $query = $em->createQuery(
             "SELECT COUNT(e.id) FROM PlaygroundGame\Entity\Entry e, PlaygroundGame\Entity\Game g
@@ -622,7 +621,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
 
     public function getEntriesQuery($game)
     {
-        $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
+        $em = $this->serviceLocator->get('doctrine.entitymanager.orm_default');
 
         $qb = $em->createQueryBuilder();
         $qb->select('
@@ -671,7 +670,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
     public function getQuizMapper()
     {
         if (null === $this->quizMapper) {
-            $this->quizMapper = $this->getServiceManager()->get('playgroundgame_quiz_mapper');
+            $this->quizMapper = $this->serviceLocator->get('playgroundgame_quiz_mapper');
         }
 
         return $this->quizMapper;
@@ -698,7 +697,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
     public function getQuizQuestionMapper()
     {
         if (null === $this->quizQuestionMapper) {
-            $this->quizQuestionMapper = $this->getServiceManager()->get('playgroundgame_quizquestion_mapper');
+            $this->quizQuestionMapper = $this->serviceLocator->get('playgroundgame_quizquestion_mapper');
         }
 
         return $this->quizQuestionMapper;
@@ -738,7 +737,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
     public function getQuizAnswerMapper()
     {
         if (null === $this->quizAnswerMapper) {
-            $this->quizAnswerMapper = $this->getServiceManager()->get('playgroundgame_quizanswer_mapper');
+            $this->quizAnswerMapper = $this->serviceLocator->get('playgroundgame_quizanswer_mapper');
         }
 
         return $this->quizAnswerMapper;
@@ -752,7 +751,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
     public function getQuizReplyMapper()
     {
         if (null === $this->quizReplyMapper) {
-            $this->quizReplyMapper = $this->getServiceManager()->get('playgroundgame_quizreply_mapper');
+            $this->quizReplyMapper = $this->serviceLocator->get('playgroundgame_quizreply_mapper');
         }
 
         return $this->quizReplyMapper;
@@ -779,7 +778,7 @@ class Quiz extends Game implements ServiceManagerAwareInterface
     public function getQuizReplyAnswerMapper()
     {
         if (null === $this->quizReplyAnswerMapper) {
-            $this->quizReplyAnswerMapper = $this->getServiceManager()->get('playgroundgame_quizreplyanswer_mapper');
+            $this->quizReplyAnswerMapper = $this->serviceLocator->get('playgroundgame_quizreplyanswer_mapper');
         }
 
         return $this->quizReplyAnswerMapper;

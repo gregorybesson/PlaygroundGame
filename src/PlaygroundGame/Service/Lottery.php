@@ -2,10 +2,9 @@
 
 namespace PlaygroundGame\Service;
 
-use Zend\ServiceManager\ServiceManagerAwareInterface;
 use PlaygroundGame\Mapper\GameInterface as GameMapperInterface;
 
-class Lottery extends Game implements ServiceManagerAwareInterface
+class Lottery extends Game
 {
     /**
      * @var LotteryMapperInterface
@@ -25,7 +24,7 @@ class Lottery extends Game implements ServiceManagerAwareInterface
     public function getLotteryMapper()
     {
         if (null === $this->lotteryMapper) {
-            $this->lotteryMapper = $this->getServiceManager()->get('playgroundgame_lottery_mapper');
+            $this->lotteryMapper = $this->serviceLocator->get('playgroundgame_lottery_mapper');
         }
 
         return $this->lotteryMapper;

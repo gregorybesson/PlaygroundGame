@@ -2,14 +2,14 @@
 
 namespace PlaygroundGame\Service;
 
-use Zend\ServiceManager\ServiceManagerAwareInterface;
 use Zend\ServiceManager\ServiceManager;
 use ZfcBase\EventManager\EventProvider;
 use PlaygroundGame\Options\ModuleOptions;
 use PlaygroundGame\Mapper\PrizeCategory as PrizeCategoryMapper;
 use Zend\Stdlib\ErrorHandler;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
-class PrizeCategory extends EventProvider implements ServiceManagerAwareInterface
+class PrizeCategory extends EventProvider
 {
     /**
      * @var prizeCategoryMapper
@@ -28,6 +28,17 @@ class PrizeCategory extends EventProvider implements ServiceManagerAwareInterfac
 
     /**
      *
+     * @var ServiceManager
+     */
+    protected $serviceLocator;
+
+    public function __construct(ServiceLocatorInterface $locator)
+    {
+        $this->serviceLocator = $locator;
+    }
+
+    /**
+     *
      * This service is ready for all types of games
      *
      * @param  array                  $data
@@ -36,7 +47,7 @@ class PrizeCategory extends EventProvider implements ServiceManagerAwareInterfac
      */
     public function create(array $data, $prizeCategory, $formClass)
     {
-        $form  = $this->getServiceManager()->get($formClass);
+        $form  = $this->serviceLocator->get($formClass);
         $form->bind($prizeCategory);
 
         $path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR;
@@ -73,7 +84,7 @@ class PrizeCategory extends EventProvider implements ServiceManagerAwareInterfac
      */
     public function edit(array $data, $prizeCategory, $formClass)
     {
-        $form  = $this->getServiceManager()->get($formClass);
+        $form  = $this->serviceLocator->get($formClass);
         $form->bind($prizeCategory);
 
         $path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR;
@@ -102,7 +113,7 @@ class PrizeCategory extends EventProvider implements ServiceManagerAwareInterfac
 
     public function getActivePrizeCategories()
     {
-        $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
+        $em = $this->serviceLocator->get('doctrine.entitymanager.orm_default');
 
         $query = $em->createQuery('SELECT p FROM PlaygroundGame\Entity\PrizeCategory p WHERE p.active = true');
         $categories = $query->getResult();
@@ -118,7 +129,7 @@ class PrizeCategory extends EventProvider implements ServiceManagerAwareInterfac
     public function getPrizeCategoryMapper()
     {
         if (null === $this->prizeCategoryMapper) {
-            $this->prizeCategoryMapper = $this->getServiceManager()->get('playgroundgame_prizecategory_mapper');
+            $this->prizeCategoryMapper = $this->serviceLocator->get('playgroundgame_prizecategory_mapper');
         }
 
         return $this->prizeCategoryMapper;
@@ -147,7 +158,7 @@ class PrizeCategory extends EventProvider implements ServiceManagerAwareInterfac
     public function getOptions()
     {
         if (!$this->options instanceof ModuleOptions) {
-            $this->setOptions($this->getServiceManager()->get('playgroundgame_module_options'));
+            $this->setOptions($this->serviceLocator->get('playgroundgame_module_options'));
         }
 
         return $this->options;

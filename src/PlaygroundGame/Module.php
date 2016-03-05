@@ -377,20 +377,18 @@ class Module
 
             ),
 
-            'invokables' => array(
-                'playgroundgame_game_service'              => 'PlaygroundGame\Service\Game',
-                'playgroundgame_lottery_service'           => 'PlaygroundGame\Service\Lottery',
-                'playgroundgame_postvote_service'          => 'PlaygroundGame\Service\PostVote',
-                'playgroundgame_quiz_service'              => 'PlaygroundGame\Service\Quiz',
-                'playgroundgame_instantwin_service'        => 'PlaygroundGame\Service\InstantWin',
-                'playgroundgame_mission_service'           => 'PlaygroundGame\Service\Mission',
-                'playgroundgame_tradingcard_service'       => 'PlaygroundGame\Service\TradingCard',
-                'playgroundgame_prize_service'             => 'PlaygroundGame\Service\Prize',
-                'playgroundgame_prizecategory_service'     => 'PlaygroundGame\Service\PrizeCategory',
-                'playgroundgame_prizecategoryuser_service' => 'PlaygroundGame\Service\PrizeCategoryUser',
-            ),
-
             'factories' => array(
+                'playgroundgame_game_service'              => 'PlaygroundGame\Service\GameFactory',
+                'playgroundgame_lottery_service'           => 'PlaygroundGame\Service\LotteryFactory',
+                'playgroundgame_postvote_service'          => 'PlaygroundGame\Service\PostVoteFactory',
+                'playgroundgame_quiz_service'              => 'PlaygroundGame\Service\QuizFactory',
+                'playgroundgame_instantwin_service'        => 'PlaygroundGame\Service\InstantWinFactory',
+                'playgroundgame_mission_service'           => 'PlaygroundGame\Service\MissionFactory',
+                'playgroundgame_mission_game_service'      => 'PlaygroundGame\Service\MissionGameFactory',
+                'playgroundgame_tradingcard_service'       => 'PlaygroundGame\Service\TradingCardFactory',
+                'playgroundgame_prize_service'             => 'PlaygroundGame\Service\PrizeFactory',
+                'playgroundgame_prizecategory_service'     => 'PlaygroundGame\Service\PrizeCategoryFactory',
+                'playgroundgame_prizecategoryuser_service' => 'PlaygroundGame\Service\PrizeCategoryUserFactory',
                 'playgroundgame_module_options' => function (\Zend\ServiceManager\ServiceManager $sm) {
                         $config = $sm->get('Configuration');
 

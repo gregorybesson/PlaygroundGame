@@ -2,11 +2,10 @@
 
 namespace PlaygroundGame\Service;
 
-use Zend\ServiceManager\ServiceManagerAwareInterface;
 use PlaygroundGame\Mapper\GameInterface as GameMapperInterface;
 use Zend\Stdlib\ErrorHandler;
 
-class TradingCard extends Game implements ServiceManagerAwareInterface
+class TradingCard extends Game
 {
     protected $tradingcardMapper;
     protected $tradingcardmodelMapper;
@@ -41,7 +40,7 @@ class TradingCard extends Game implements ServiceManagerAwareInterface
      */
     public function updateModel(array $data, $model)
     {
-        $form  = $this->getServiceManager()->get('playgroundgame_tradingcardmodel_form');
+        $form  = $this->serviceLocator->get('playgroundgame_tradingcardmodel_form');
         $tradingcard = $this->getGameMapper()->findById($data['trading_card_id']);
         $model->setGame($tradingcard);
         $path = $this->getModelPath($model);
@@ -89,7 +88,7 @@ class TradingCard extends Game implements ServiceManagerAwareInterface
     public function getBooster($game, $user, $entry)
     {
         // get booster config from $game
-        $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
+        $em = $this->serviceLocator->get('doctrine.entitymanager.orm_default');
         $nb = $game->getBoosterCardNumber();
         $booster = [];
         
@@ -193,7 +192,7 @@ class TradingCard extends Game implements ServiceManagerAwareInterface
     public function getTradingCardMapper()
     {
         if (null === $this->tradingcardMapper) {
-            $this->tradingcardMapper = $this->getServiceManager()->get('playgroundgame_tradingcard_mapper');
+            $this->tradingcardMapper = $this->serviceLocator->get('playgroundgame_tradingcard_mapper');
         }
 
         return $this->tradingcardMapper;
@@ -202,7 +201,7 @@ class TradingCard extends Game implements ServiceManagerAwareInterface
     public function getTradingCardCardMapper()
     {
         if (null === $this->tradingcardcardMapper) {
-            $this->tradingcardcardMapper = $this->getServiceManager()->get('playgroundgame_tradingcardcard_mapper');
+            $this->tradingcardcardMapper = $this->serviceLocator->get('playgroundgame_tradingcardcard_mapper');
         }
 
         return $this->tradingcardcardMapper;
@@ -211,7 +210,7 @@ class TradingCard extends Game implements ServiceManagerAwareInterface
     public function getTradingCardModelMapper()
     {
         if (null === $this->tradingcardmodelMapper) {
-            $this->tradingcardmodelMapper = $this->getServiceManager()->get('playgroundgame_tradingcardmodel_mapper');
+            $this->tradingcardmodelMapper = $this->serviceLocator->get('playgroundgame_tradingcardmodel_mapper');
         }
 
         return $this->tradingcardmodelMapper;

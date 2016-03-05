@@ -36,7 +36,7 @@ class PrizeCategoryUser extends PrizeCategoryService
     public function getPrizeCategoryUserMapper()
     {
         if (null === $this->prizeCategoryUserMapper) {
-            $this->prizeCategoryUserMapper = $this->getServiceManager()->get('playgroundgame_prizecategoryuser_mapper');
+            $this->prizeCategoryUserMapper = $this->serviceLocator->get('playgroundgame_prizecategoryuser_mapper');
         }
 
         return $this->prizeCategoryUserMapper;

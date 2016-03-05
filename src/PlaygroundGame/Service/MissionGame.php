@@ -2,13 +2,13 @@
 
 namespace PlaygroundGame\Service;
 
-use Zend\ServiceManager\ServiceManagerAwareInterface;
 use Zend\ServiceManager\ServiceManager;
 use ZfcBase\EventManager\EventProvider;
 use PlaygroundGame\Entity\MissionGame as MissionGameEntity;
 use PlaygroundGame\Entity\MissionGameCondition as MissionGameConditionEntity;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
-class MissionGame extends EventProvider implements ServiceManagerAwareInterface
+class MissionGame extends EventProvider
 {
 
     /**
@@ -32,6 +32,16 @@ class MissionGame extends EventProvider implements ServiceManagerAwareInterface
     */
     protected $options;
 
+    /**
+     *
+     * @var ServiceManager
+     */
+    protected $serviceLocator;
+
+    public function __construct(ServiceLocatorInterface $locator)
+    {
+        $this->serviceLocator = $locator;
+    }
 
     public function checkGames($dataGames)
     {
@@ -64,7 +74,7 @@ class MissionGame extends EventProvider implements ServiceManagerAwareInterface
             $gamesId[] = $dataGames[$i]['games'];
         }
 
-        $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
+        $em = $this->serviceLocator->get('doctrine.entitymanager.orm_default');
 
         $query = $em->createQuery('SELECT mg 
                                    FROM PlaygroundGame\Entity\MissionGame mg
@@ -247,7 +257,7 @@ class MissionGame extends EventProvider implements ServiceManagerAwareInterface
     public function getMissionGameConditionMapper()
     {
         if (null === $this->missionGameConditionMapper) {
-            $this->missionGameConditionMapper = $this->getServiceManager()->get(
+            $this->missionGameConditionMapper = $this->serviceLocator->get(
                 'playgroundgame_mission_game_condition_mapper'
             );
         }
@@ -263,7 +273,7 @@ class MissionGame extends EventProvider implements ServiceManagerAwareInterface
     public function getMissionGameMapper()
     {
         if (null === $this->missionGameMapper) {
-            $this->missionGameMapper = $this->getServiceManager()->get('playgroundgame_mission_game_mapper');
+            $this->missionGameMapper = $this->serviceLocator->get('playgroundgame_mission_game_mapper');
         }
 
         return $this->missionGameMapper;
@@ -277,7 +287,7 @@ class MissionGame extends EventProvider implements ServiceManagerAwareInterface
     public function getGameMapper()
     {
         if (null === $this->gameMapper) {
-            $this->gameMapper = $this->getServiceManager()->get('playgroundgame_game_mapper');
+            $this->gameMapper = $this->serviceLocator->get('playgroundgame_game_mapper');
         }
 
         return $this->gameMapper;

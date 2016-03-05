@@ -3,7 +3,6 @@ namespace PlaygroundGame\Service;
 
 use PlaygroundGame\Entity\Entry;
 use Zend\Session\Container;
-use Zend\ServiceManager\ServiceManagerAwareInterface;
 use Zend\ServiceManager\ServiceManager;
 use ZfcBase\EventManager\EventProvider;
 use PlaygroundGame\Options\ModuleOptions;
@@ -16,8 +15,9 @@ use PlaygroundCore\Filter\Sanitize;
 use Zend\Form\Element;
 use Zend\Form\Form;
 use Zend\InputFilter\Factory as InputFactory;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
-class Game extends EventProvider implements ServiceManagerAwareInterface
+class Game extends EventProvider
 {
     /**
      *
@@ -33,12 +33,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
     /**
      *
-     * @var ServiceManager
-     */
-    protected $serviceManager;
-
-    /**
-     *
      * @var UserServiceOptionsInterface
      */
     protected $options;
@@ -50,6 +44,17 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
     protected $userMapper;
     
     protected $anonymousIdentifier = null;
+
+    /**
+     *
+     * @var ServiceManager
+     */
+    protected $serviceLocator;
+
+    public function __construct(ServiceLocatorInterface $locator)
+    {
+        $this->serviceLocator = $locator;
+    }
 
     public function getGameUserPath($game, $user)
     {
@@ -85,9 +90,9 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      */
     public function createOrUpdate(array $data, $game, $formClass)
     {
-        $entityManager = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
+        $entityManager = $this->serviceLocator->get('doctrine.entitymanager.orm_default');
 
-        $form = $this->getServiceManager()->get($formClass);
+        $form = $this->serviceLocator->get($formClass);
         $form->get('publicationDate')->setOptions(array(
             'format' => 'Y-m-d H:i:s'
         ));
@@ -308,7 +313,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
         $game = $this->getGameMapper()->update($game);
 
-        $prize_mapper = $this->getServiceManager()->get('playgroundgame_prize_mapper');
+        $prize_mapper = $this->serviceLocator->get('playgroundgame_prize_mapper');
         if (isset($data['prizes'])) {
             foreach ($data['prizes'] as $prize_data) {
                 if (! empty($prize_data['picture_file']['tmp_name']) && ! $prize_data['picture_file']['error']) {
@@ -356,7 +361,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      */
     public function getActiveGames($displayHome = true, $classType = '', $order = '')
     {
-        $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
+        $em = $this->serviceLocator->get('doctrine.entitymanager.orm_default');
         $today = new \DateTime("now");
         $today = $today->format('Y-m-d H:i:s');
         $orderBy = 'g.publicationDate';
@@ -425,7 +430,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      */
     public function getAvailableGames($user, $maxResults = 2)
     {
-        $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
+        $em = $this->serviceLocator->get('doctrine.entitymanager.orm_default');
         $today = new \DateTime("now");
         $today = $today->format('Y-m-d H:i:s');
 
@@ -447,7 +452,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
     public function getEntriesQuery($game)
     {
-        $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
+        $em = $this->serviceLocator->get('doctrine.entitymanager.orm_default');
 
         $qb = $em->createQueryBuilder();
         $qb->select('
@@ -559,7 +564,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      */
     public function getActiveSliderGames()
     {
-        $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
+        $em = $this->serviceLocator->get('doctrine.entitymanager.orm_default');
         $today = new \DateTime("now");
         $today = $today->format('Y-m-d H:i:s');
 
@@ -597,7 +602,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      */
     public function getPrizeCategoryGames($categoryid)
     {
-        $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
+        $em = $this->serviceLocator->get('doctrine.entitymanager.orm_default');
 
         $query = $em->createQuery('SELECT g FROM PlaygroundGame\Entity\Game g
             WHERE (g.prizeCategory = :categoryid AND g.broadcastPlatform = 1)
@@ -625,7 +630,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
         // for preview stuff as admin
         if ($this->isAllowed('game', 'edit')) {
-            $r =$this->getServiceManager()->get('request');
+            $r =$this->serviceLocator->get('request');
             if ($r->getQuery()->get('preview')) {
                 $game->setActive(true);
                 $game->setStartDate(null);
@@ -635,7 +640,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
                 // I don't want the game to be updated through any update during the preview mode.
                 // I mark it as readonly for Doctrine
-                $this->getServiceManager()
+                $this->serviceLocator
                     ->get('doctrine.entitymanager.orm_default')
                     ->getUnitOfWork()
                     ->markReadOnly($game);
@@ -808,7 +813,6 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
         if (! $entry) {
             if ($this->hasReachedPlayLimit($game, $user)) {
-
                 return false;
             }
 
@@ -931,8 +935,8 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
     public function inviteToTeam($data, $game, $user)
     {
-        $mailService = $this->getServiceManager()->get('playgroundgame_message');
-        $invitationMapper = $this->getServiceManager()->get('playgroundgame_invitation_mapper');
+        $mailService = $this->serviceLocator->get('playgroundgame_message');
+        $invitationMapper = $this->serviceLocator->get('playgroundgame_invitation_mapper');
 
         $sentInvitations = $invitationMapper->findBy(array('host' => $user, 'game' => $game));
         $nbInvitations = count($sentInvitations);
@@ -955,7 +959,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                 $invitationMapper->insert($invitation);
 
                 $from = $this->getOptions()->getEmailFromAddress();
-                $subject = $this->getServiceManager()->get('translator')->translate(
+                $subject = $this->serviceLocator->get('translator')->translate(
                     $this->getOptions()->getInviteToTeamSubjectLine(),
                     'playgroundgame'
                 );
@@ -974,7 +978,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
                 try {
                     $mailService->send($message);
                 } catch (\Zend\Mail\Protocol\Exception\RuntimeException $e) {
-                    return ['result' => true, 'message' => $this->getServiceManager()->get('translator')->translate(
+                    return ['result' => true, 'message' => $this->serviceLocator->get('translator')->translate(
                         'mail error'
                     )];
                 }
@@ -986,7 +990,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         } else {
             return [
                 'result' => false,
-                'message' => $this->getServiceManager()->get('translator')->translate(
+                'message' => $this->serviceLocator->get('translator')->translate(
                     'Too many invitations for this user'
                 )
             ];
@@ -1003,23 +1007,23 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $userTimer = array(),
         $subject = ''
     ) {
-        $mailService = $this->getServiceManager()->get('playgroundgame_message');
+        $mailService = $this->serviceLocator->get('playgroundgame_message');
         $mailSent = false;
         $from = $this->getOptions()->getEmailFromAddress();
 
         if (empty($subject)) {
-            $subject = $this->getServiceManager()->get('translator')->translate(
+            $subject = $this->serviceLocator->get('translator')->translate(
                 $this->getOptions()->getShareSubjectLine(),
                 'playgroundgame'
             );
         } else {
-            $subject = $this->getServiceManager()->get('translator')->translate(
+            $subject = $this->serviceLocator->get('translator')->translate(
                 $subject,
                 'playgroundgame'
             );
         }
 
-        $renderer = $this->getServiceManager()->get('Zend\View\Renderer\RendererInterface');
+        $renderer = $this->serviceLocator->get('Zend\View\Renderer\RendererInterface');
         $skinUrl = $renderer->url(
             'frontend',
             array(),
@@ -1095,7 +1099,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      */
     public function sendResultMail($game, $user, $entry, $template = 'entry', $prize = null)
     {
-        $mailService = $this->getServiceManager()->get('playgroundgame_message');
+        $mailService = $this->serviceLocator->get('playgroundgame_message');
         $from = $this->getOptions()->getEmailFromAddress();
         if ($user) {
             $to = $user->getEmail();
@@ -1105,7 +1109,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             return false;
         }
         $subject = $game->getTitle();
-        $renderer = $this->getServiceManager()->get('Zend\View\Renderer\RendererInterface');
+        $renderer = $this->serviceLocator->get('Zend\View\Renderer\RendererInterface');
         $skinUrl = $renderer->url(
             'frontend',
             array(),
@@ -1122,14 +1126,14 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
 
     public function sendGameMail($game, $user, $post, $template = 'postvote')
     {
-        $mailService = $this->getServiceManager()->get('playgroundgame_message');
+        $mailService = $this->serviceLocator->get('playgroundgame_message');
         $from = $this->getOptions()->getEmailFromAddress();
         $to = $user->getEmail();
-        $subject = $this->getServiceManager()->get('translator')->translate(
+        $subject = $this->serviceLocator->get('translator')->translate(
             $this->getOptions()->getParticipationSubjectLine(),
             'playgroundgame'
         );
-        $renderer = $this->getServiceManager()->get('Zend\View\Renderer\RendererInterface');
+        $renderer = $this->serviceLocator->get('Zend\View\Renderer\RendererInterface');
         $skinUrl = $renderer->url(
             'frontend',
             array(),
@@ -1435,7 +1439,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      */
     public function getQueryGamesOrderBy($type = 'createdAt', $order = 'DESC')
     {
-        $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
+        $em = $this->serviceLocator->get('doctrine.entitymanager.orm_default');
         $today = new \DateTime("now");
         $today = $today->format('Y-m-d H:i:s');
 
@@ -1487,7 +1491,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
         $total = $game->getWinners();
 
         // I Have to know what is the User Class used
-        $zfcUserOptions = $this->getServiceManager()->get('zfcuser_module_options');
+        $zfcUserOptions = $this->serviceLocator->get('zfcuser_module_options');
         $userClass = $zfcUserOptions->getUserEntityClass();
 
         $result = $this->getEntryMapper()->draw($game, $userClass, $total);
@@ -1513,7 +1517,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
     public function getGameMapper()
     {
         if (null === $this->gameMapper) {
-            $this->gameMapper = $this->getServiceManager()->get('playgroundgame_game_mapper');
+            $this->gameMapper = $this->serviceLocator->get('playgroundgame_game_mapper');
         }
 
         return $this->gameMapper;
@@ -1540,7 +1544,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
     public function getEntryMapper()
     {
         if (null === $this->entryMapper) {
-            $this->entryMapper = $this->getServiceManager()->get('playgroundgame_entry_mapper');
+            $this->entryMapper = $this->serviceLocator->get('playgroundgame_entry_mapper');
         }
 
         return $this->entryMapper;
@@ -1569,34 +1573,11 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
     public function getOptions()
     {
         if (! $this->options instanceof ModuleOptions) {
-            $this->setOptions($this->getServiceManager()
+            $this->setOptions($this->serviceLocator
                 ->get('playgroundgame_module_options'));
         }
 
         return $this->options;
-    }
-
-    /**
-     * Retrieve service manager instance
-     *
-     * @return ServiceManager
-     */
-    public function getServiceManager()
-    {
-        return $this->serviceManager;
-    }
-
-    /**
-     * Set service manager instance
-     *
-     * @param ServiceManager $serviceManager
-     * @return Game
-     */
-    public function setServiceManager(ServiceManager $serviceManager)
-    {
-        $this->serviceManager = $serviceManager;
-
-        return $this;
     }
 
     /**
@@ -1687,7 +1668,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
      */
     public function isAllowed($resource, $privilege = null)
     {
-        $auth = $this->getServiceManager()->get('BjyAuthorize\Service\Authorize');
+        $auth = $this->serviceLocator->get('BjyAuthorize\Service\Authorize');
 
         return $auth->isAllowed($resource, $privilege);
     }
@@ -1828,7 +1809,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
             $element->setAttribute('maxlength', $attr['lengthMax']);
             $options['messages'] = array(
                 \Zend\Validator\StringLength::TOO_LONG => sprintf(
-                    $this->getServiceManager()->get('translator')->translate(
+                    $this->serviceLocator->get('translator')->translate(
                         'This field contains more than %s characters',
                         'playgroundgame'
                     ),
@@ -2085,7 +2066,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
     public function getPlayerFormMapper()
     {
         if (null === $this->playerformMapper) {
-            $this->playerformMapper = $this->getServiceManager()->get('playgroundgame_playerform_mapper');
+            $this->playerformMapper = $this->serviceLocator->get('playgroundgame_playerform_mapper');
         }
 
         return $this->playerformMapper;
@@ -2101,7 +2082,7 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
     public function getInvitationMapper()
     {
         if (null === $this->invitationMapper) {
-            $this->invitationMapper = $this->getServiceManager()->get('playgroundgame_invitation_mapper');
+            $this->invitationMapper = $this->serviceLocator->get('playgroundgame_invitation_mapper');
         }
 
         return $this->invitationMapper;
@@ -2122,9 +2103,19 @@ class Game extends EventProvider implements ServiceManagerAwareInterface
     public function getUserMapper()
     {
         if (null === $this->userMapper) {
-            $this->userMapper = $this->getServiceManager()->get('zfcuser_user_mapper');
+            $this->userMapper = $this->serviceLocator->get('zfcuser_user_mapper');
         }
 
         return $this->userMapper;
+    }
+
+    /**
+     * getUserMapper
+     *
+     * @return ServiceManager
+     */
+    public function getServiceManager()
+    {
+        return $this->serviceLocator;
     }
 }

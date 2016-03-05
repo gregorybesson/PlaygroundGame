@@ -2,10 +2,9 @@
 
 namespace PlaygroundGame\Service;
 
-use Zend\ServiceManager\ServiceManagerAwareInterface;
 use Zend\Stdlib\ErrorHandler;
 
-class InstantWin extends Game implements ServiceManagerAwareInterface
+class InstantWin extends Game
 {
     /**
      * @var InstantWinOccurrenceMapperInterface
@@ -459,7 +458,7 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
         } else {
             $occurrence = $this->getInstantWinOccurrenceMapper()->findById($occurrence_id);
         }
-        $form  = $this->getServiceManager()->get('playgroundgame_instantwinoccurrence_form');
+        $form  = $this->serviceLocator->get('playgroundgame_instantwinoccurrence_form');
         $form->bind($occurrence);
 
         $form->setData($data);
@@ -613,7 +612,7 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
     public function getInstantWinOccurrenceMapper()
     {
         if (null === $this->instantWinOccurrenceMapper) {
-            $this->instantWinOccurrenceMapper = $this->getServiceManager()->get(
+            $this->instantWinOccurrenceMapper = $this->serviceLocator->get(
                 'playgroundgame_instantwinoccurrence_mapper'
             );
         }
@@ -641,7 +640,7 @@ class InstantWin extends Game implements ServiceManagerAwareInterface
     public function getPrizeMapper()
     {
         if (null === $this->prizeMapper) {
-            $this->prizeMapper = $this->getServiceManager()->get('playgroundgame_prize_mapper');
+            $this->prizeMapper = $this->serviceLocator->get('playgroundgame_prize_mapper');
         }
 
         return $this->prizeMapper;
