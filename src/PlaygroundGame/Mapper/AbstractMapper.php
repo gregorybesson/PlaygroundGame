@@ -4,11 +4,10 @@ namespace PlaygroundGame\Mapper;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\DBAL\DBALException;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use PlaygroundGame\Options\ModuleOptions;
 
-abstract class AbstractMapper implements ServiceLocatorAwareInterface
+abstract class AbstractMapper
 {
 
     abstract protected function getEntityRepository();
@@ -33,10 +32,11 @@ abstract class AbstractMapper implements ServiceLocatorAwareInterface
      */
     protected $options;
 
-    public function __construct(EntityManager $em, ModuleOptions $options)
+    public function __construct(EntityManager $em, ModuleOptions $options, ServiceLocatorInterface $locator)
     {
         $this->em      = $em;
         $this->options = $options;
+        $this->serviceLocator = $locator;
     }
 
     public function findById($id)
@@ -97,26 +97,5 @@ abstract class AbstractMapper implements ServiceLocatorAwareInterface
     {
         $this->em->remove($entity);
         $this->em->flush();
-    }
-
-    /**
-     * Set serviceManager instance
-     *
-     * @param  ServiceLocatorInterface $serviceLocator
-     * @return void
-     */
-    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
-    {
-        $this->serviceLocator = $serviceLocator;
-    }
-
-    /**
-     * Retrieve serviceManager instance
-     *
-     * @return ServiceLocatorInterface
-     */
-    public function getServiceLocator()
-    {
-        return $this->serviceLocator;
     }
 }

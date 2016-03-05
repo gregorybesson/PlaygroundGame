@@ -382,7 +382,8 @@ class Module
                 'playgroundgame_game_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $mapper = new \PlaygroundGame\Mapper\Game(
                         $sm->get('doctrine.entitymanager.orm_default'),
-                        $sm->get('playgroundgame_module_options')
+                        $sm->get('playgroundgame_module_options'),
+                        $sm
                     );
 
                     return $mapper;
@@ -391,7 +392,8 @@ class Module
                 'playgroundgame_playerform_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $mapper = new \PlaygroundGame\Mapper\PlayerForm(
                         $sm->get('doctrine.entitymanager.orm_default'),
-                        $sm->get('playgroundgame_module_options')
+                        $sm->get('playgroundgame_module_options'),
+                        $sm
                     );
                 
                     return $mapper;
@@ -400,7 +402,8 @@ class Module
                 'playgroundgame_lottery_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $mapper = new \PlaygroundGame\Mapper\Lottery(
                         $sm->get('doctrine.entitymanager.orm_default'),
-                        $sm->get('playgroundgame_module_options')
+                        $sm->get('playgroundgame_module_options'),
+                        $sm
                     );
 
                     return $mapper;
@@ -409,7 +412,8 @@ class Module
                 'playgroundgame_instantwin_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $mapper = new \PlaygroundGame\Mapper\InstantWin(
                         $sm->get('doctrine.entitymanager.orm_default'),
-                        $sm->get('playgroundgame_module_options')
+                        $sm->get('playgroundgame_module_options'),
+                        $sm
                     );
 
                     return $mapper;
@@ -418,7 +422,8 @@ class Module
                 'playgroundgame_instantwinoccurrence_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $mapper = new \PlaygroundGame\Mapper\InstantWinOccurrence(
                         $sm->get('doctrine.entitymanager.orm_default'),
-                        $sm->get('playgroundgame_module_options')
+                        $sm->get('playgroundgame_module_options'),
+                        $sm
                     );
 
                     return $mapper;
@@ -427,7 +432,8 @@ class Module
                 'playgroundgame_quiz_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $mapper = new \PlaygroundGame\Mapper\Quiz(
                         $sm->get('doctrine.entitymanager.orm_default'),
-                        $sm->get('playgroundgame_module_options')
+                        $sm->get('playgroundgame_module_options'),
+                        $sm
                     );
 
                     return $mapper;
@@ -436,7 +442,8 @@ class Module
                 'playgroundgame_quizquestion_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $mapper = new \PlaygroundGame\Mapper\QuizQuestion(
                         $sm->get('doctrine.entitymanager.orm_default'),
-                        $sm->get('playgroundgame_module_options')
+                        $sm->get('playgroundgame_module_options'),
+                        $sm
                     );
 
                     return $mapper;
@@ -445,7 +452,8 @@ class Module
                 'playgroundgame_quizanswer_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $mapper = new \PlaygroundGame\Mapper\QuizAnswer(
                         $sm->get('doctrine.entitymanager.orm_default'),
-                        $sm->get('playgroundgame_module_options')
+                        $sm->get('playgroundgame_module_options'),
+                        $sm
                     );
 
                     return $mapper;
@@ -454,7 +462,8 @@ class Module
                 'playgroundgame_quizreply_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $mapper = new \PlaygroundGame\Mapper\QuizReply(
                         $sm->get('doctrine.entitymanager.orm_default'),
-                        $sm->get('playgroundgame_module_options')
+                        $sm->get('playgroundgame_module_options'),
+                        $sm
                     );
 
                     return $mapper;
@@ -463,7 +472,8 @@ class Module
                 'playgroundgame_quizreplyanswer_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $mapper = new \PlaygroundGame\Mapper\QuizReplyAnswer(
                         $sm->get('doctrine.entitymanager.orm_default'),
-                        $sm->get('playgroundgame_module_options')
+                        $sm->get('playgroundgame_module_options'),
+                        $sm
                     );
 
                     return $mapper;
@@ -473,7 +483,8 @@ class Module
                 'playgroundgame_entry_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $mapper = new \PlaygroundGame\Mapper\Entry(
                         $sm->get('doctrine.entitymanager.orm_default'),
-                        $sm->get('playgroundgame_module_options')
+                        $sm->get('playgroundgame_module_options'),
+                        $sm
                     );
 
                     return $mapper;
@@ -482,7 +493,8 @@ class Module
                 'playgroundgame_postvote_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $mapper = new \PlaygroundGame\Mapper\PostVote(
                         $sm->get('doctrine.entitymanager.orm_default'),
-                        $sm->get('playgroundgame_module_options')
+                        $sm->get('playgroundgame_module_options'),
+                        $sm
                     );
 
                     return $mapper;
@@ -491,7 +503,8 @@ class Module
                 'playgroundgame_postvoteform_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $mapper = new \PlaygroundGame\Mapper\PostVoteForm(
                         $sm->get('doctrine.entitymanager.orm_default'),
-                        $sm->get('playgroundgame_module_options')
+                        $sm->get('playgroundgame_module_options'),
+                        $sm
                     );
 
                     return $mapper;
@@ -500,7 +513,8 @@ class Module
                 'playgroundgame_postvotepost_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $mapper = new \PlaygroundGame\Mapper\PostVotePost(
                         $sm->get('doctrine.entitymanager.orm_default'),
-                        $sm->get('playgroundgame_module_options')
+                        $sm->get('playgroundgame_module_options'),
+                        $sm
                     );
 
                     return $mapper;
@@ -509,7 +523,8 @@ class Module
                 'playgroundgame_postvotepostelement_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $mapper = new \PlaygroundGame\Mapper\PostVotePostElement(
                         $sm->get('doctrine.entitymanager.orm_default'),
-                        $sm->get('playgroundgame_module_options')
+                        $sm->get('playgroundgame_module_options'),
+                        $sm
                     );
 
                     return $mapper;
@@ -518,7 +533,8 @@ class Module
                 'playgroundgame_postvotevote_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $mapper = new \PlaygroundGame\Mapper\PostVoteVote(
                         $sm->get('doctrine.entitymanager.orm_default'),
-                        $sm->get('playgroundgame_module_options')
+                        $sm->get('playgroundgame_module_options'),
+                        $sm
                     );
 
                     return $mapper;
@@ -527,7 +543,8 @@ class Module
                 'playgroundgame_postvotecomment_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $mapper = new \PlaygroundGame\Mapper\PostVoteComment(
                         $sm->get('doctrine.entitymanager.orm_default'),
-                        $sm->get('playgroundgame_module_options')
+                        $sm->get('playgroundgame_module_options'),
+                        $sm
                     );
 
                     return $mapper;
@@ -536,7 +553,8 @@ class Module
                 'playgroundgame_prize_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $mapper = new \PlaygroundGame\Mapper\Prize(
                         $sm->get('doctrine.entitymanager.orm_default'),
-                        $sm->get('playgroundgame_module_options')
+                        $sm->get('playgroundgame_module_options'),
+                        $sm
                     );
 
                     return $mapper;
@@ -545,7 +563,8 @@ class Module
                 'playgroundgame_prizecategory_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $mapper = new \PlaygroundGame\Mapper\PrizeCategory(
                         $sm->get('doctrine.entitymanager.orm_default'),
-                        $sm->get('playgroundgame_module_options')
+                        $sm->get('playgroundgame_module_options'),
+                        $sm
                     );
 
                     return $mapper;
@@ -554,7 +573,8 @@ class Module
                 'playgroundgame_prizecategoryuser_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $mapper = new \PlaygroundGame\Mapper\PrizeCategoryUser(
                         $sm->get('doctrine.entitymanager.orm_default'),
-                        $sm->get('playgroundgame_module_options')
+                        $sm->get('playgroundgame_module_options'),
+                        $sm
                     );
 
                     return $mapper;
@@ -563,7 +583,8 @@ class Module
                 'playgroundgame_invitation_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $mapper = new \PlaygroundGame\Mapper\Invitation(
                         $sm->get('doctrine.entitymanager.orm_default'),
-                        $sm->get('playgroundgame_module_options')
+                        $sm->get('playgroundgame_module_options'),
+                        $sm
                     );
 
                     return $mapper;
@@ -572,7 +593,8 @@ class Module
                 'playgroundgame_mission_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $mapper = new Mapper\Mission(
                         $sm->get('doctrine.entitymanager.orm_default'),
-                        $sm->get('playgroundgame_module_options')
+                        $sm->get('playgroundgame_module_options'),
+                        $sm
                     );
 
                     return $mapper;
@@ -581,7 +603,8 @@ class Module
                 'playgroundgame_mission_game_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $mapper = new Mapper\MissionGame(
                         $sm->get('doctrine.entitymanager.orm_default'),
-                        $sm->get('playgroundgame_module_options')
+                        $sm->get('playgroundgame_module_options'),
+                        $sm
                     );
                 
                     return $mapper;
@@ -590,7 +613,8 @@ class Module
                 'playgroundgame_mission_game_condition_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $mapper = new Mapper\MissionGameCondition(
                         $sm->get('doctrine.entitymanager.orm_default'),
-                        $sm->get('playgroundgame_module_options')
+                        $sm->get('playgroundgame_module_options'),
+                        $sm
                     );
                 
                     return $mapper;
@@ -599,7 +623,8 @@ class Module
                 'playgroundgame_tradingcard_mapper' => function ($sm) {
                     $mapper = new Mapper\TradingCard(
                         $sm->get('doctrine.entitymanager.orm_default'),
-                        $sm->get('playgroundgame_module_options')
+                        $sm->get('playgroundgame_module_options'),
+                        $sm
                     );
 
                     return $mapper;
@@ -608,7 +633,8 @@ class Module
                 'playgroundgame_tradingcard_model_mapper' => function ($sm) {
                     $mapper = new Mapper\TradingCardModel(
                         $sm->get('doctrine.entitymanager.orm_default'),
-                        $sm->get('playgroundgame_module_options')
+                        $sm->get('playgroundgame_module_options'),
+                        $sm
                     );
 
                     return $mapper;
@@ -617,7 +643,8 @@ class Module
                 'playgroundgame_tradingcard_card_mapper' => function ($sm) {
                     $mapper = new Mapper\TradingCardCard(
                         $sm->get('doctrine.entitymanager.orm_default'),
-                        $sm->get('playgroundgame_module_options')
+                        $sm->get('playgroundgame_module_options'),
+                        $sm
                     );
 
                     return $mapper;
