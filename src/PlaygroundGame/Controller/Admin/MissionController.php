@@ -20,7 +20,7 @@ class MissionController extends GameController
     {
         $service = $this->getAdminGameService();
         $viewModel = new ViewModel();
-        $viewModel->setTemplate('playground-game/game/mission');
+        $viewModel->setTemplate('playground-game/mission/mission');
 
         $gameForm = new ViewModel();
         $gameForm->setTemplate('playground-game/game/game-form');
