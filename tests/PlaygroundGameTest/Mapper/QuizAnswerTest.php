@@ -38,15 +38,15 @@ class QuizAnswerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Ceci est une nouvelle réponse.', $quizanswer->getAnswer());
     }
 
-    public function testRemove()
-    {
-        $quizanswer = new QuizAnswerEntity();
-        $quizanswer->setAnswer('Ceci est une réponse.');
-        $quizanswer = $this->tm->insert($quizanswer);
-        $id = $quizanswer->getId();
-        $this->tm->remove($quizanswer);
-        $this->assertNull($this->tm->findById($id));
-    }
+    // public function testRemove()
+    // {
+    //     $quizanswer = new QuizAnswerEntity();
+    //     $quizanswer->setAnswer('Ceci est une réponse.');
+    //     $quizanswer = $this->tm->insert($quizanswer);
+    //     $id = $quizanswer->getId();
+    //     $this->tm->remove($quizanswer);
+    //     $this->assertNull($this->tm->findById($id));
+    // }
 
     public function testFindAll()
     {
