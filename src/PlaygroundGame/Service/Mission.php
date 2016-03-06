@@ -2,12 +2,11 @@
 
 namespace PlaygroundGame\Service;
 
-use Zend\ServiceManager\ServiceManagerAwareInterface;
 use Zend\ServiceManager\ServiceManager;
 use PlaygroundGame\Service\Game;
 use PlaygroundGame\Entity\MissionGameCondition as MissionGameConditionEntity;
 
-class Mission extends Game implements ServiceManagerAwareInterface
+class Mission extends Game
 {
 
     /**
@@ -133,7 +132,7 @@ class Mission extends Game implements ServiceManagerAwareInterface
     public function getMissionMapper()
     {
         if (null === $this->missionMapper) {
-            $this->missionMapper = $this->getServiceManager()->get('playgroundgame_mission_mapper');
+            $this->missionMapper = $this->serviceLocator->get('playgroundgame_mission_mapper');
         }
 
         return $this->missionMapper;
@@ -160,7 +159,7 @@ class Mission extends Game implements ServiceManagerAwareInterface
     public function getMissionGameMapper()
     {
         if (null === $this->missionGameMapper) {
-            $this->missionGameMapper = $this->getServiceManager()->get('playgroundgame_mission_game_mapper');
+            $this->missionGameMapper = $this->serviceLocator->get('playgroundgame_mission_game_mapper');
         }
     
         return $this->missionGameMapper;

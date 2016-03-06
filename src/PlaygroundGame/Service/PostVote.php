@@ -2,10 +2,9 @@
 
 namespace PlaygroundGame\Service;
 
-use Zend\ServiceManager\ServiceManagerAwareInterface;
 use Zend\Stdlib\ErrorHandler;
 
-class PostVote extends Game implements ServiceManagerAwareInterface
+class PostVote extends Game
 {
     protected $postvoteMapper;
     protected $postvoteformMapper;
@@ -155,7 +154,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
                     ErrorHandler::start();
                     $value['name'] = $this->fileNewname($path, $value['name'], true);
                     move_uploaded_file($value['tmp_name'], $path . $value['name']);
-                    $image = $this->getServiceManager()->get('playgroundcore_image_service');
+                    $image = $this->serviceLocator->get('playgroundcore_image_service');
                     $image->setImage($path . $value['name']);
 
                     if ($image->canCorrectOrientation()) {
@@ -289,7 +288,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
 
     public function findArrayOfValidatedPosts($game, $user, $filter, $search = '')
     {
-        $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
+        $em = $this->serviceLocator->get('doctrine.entitymanager.orm_default');
         $qb = $em->createQueryBuilder();
         $and = $qb->expr()->andx();
         
@@ -502,7 +501,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
 
     public function getEntriesQuery($game)
     {
-        $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
+        $em = $this->serviceLocator->get('doctrine.entitymanager.orm_default');
 
         $qb = $em->createQueryBuilder();
         $qb->select('
@@ -576,7 +575,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
     public function getPostVoteFormMapper()
     {
         if (null === $this->postvoteformMapper) {
-            $this->postvoteformMapper = $this->getServiceManager()->get('playgroundgame_postvoteform_mapper');
+            $this->postvoteformMapper = $this->serviceLocator->get('playgroundgame_postvoteform_mapper');
         }
 
         return $this->postvoteformMapper;
@@ -592,7 +591,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
     public function getPostVotePostElementMapper()
     {
         if (null === $this->postVotePostElementMapper) {
-            $this->postVotePostElementMapper = $this->getServiceManager()->get(
+            $this->postVotePostElementMapper = $this->serviceLocator->get(
                 'playgroundgame_postvotepostelement_mapper'
             );
         }
@@ -610,7 +609,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
     public function getPostVoteVoteMapper()
     {
         if (null === $this->postVoteVoteMapper) {
-            $this->postVoteVoteMapper = $this->getServiceManager()->get('playgroundgame_postvotevote_mapper');
+            $this->postVoteVoteMapper = $this->serviceLocator->get('playgroundgame_postvotevote_mapper');
         }
 
         return $this->postVoteVoteMapper;
@@ -626,7 +625,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
     public function getPostVoteCommentMapper()
     {
         if (null === $this->postVoteCommentMapper) {
-            $this->postVoteCommentMapper = $this->getServiceManager()->get('playgroundgame_postvotecomment_mapper');
+            $this->postVoteCommentMapper = $this->serviceLocator->get('playgroundgame_postvotecomment_mapper');
         }
 
         return $this->postVoteCommentMapper;
@@ -642,7 +641,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
     public function getPostVotePostMapper()
     {
         if (null === $this->postVotePostMapper) {
-            $this->postVotePostMapper = $this->getServiceManager()->get('playgroundgame_postvotepost_mapper');
+            $this->postVotePostMapper = $this->serviceLocator->get('playgroundgame_postvotepost_mapper');
         }
 
         return $this->postVotePostMapper;
@@ -658,7 +657,7 @@ class PostVote extends Game implements ServiceManagerAwareInterface
     public function getPostVoteMapper()
     {
         if (null === $this->postvoteMapper) {
-            $this->postvoteMapper = $this->getServiceManager()->get('playgroundgame_postvote_mapper');
+            $this->postvoteMapper = $this->serviceLocator->get('playgroundgame_postvote_mapper');
         }
 
         return $this->postvoteMapper;

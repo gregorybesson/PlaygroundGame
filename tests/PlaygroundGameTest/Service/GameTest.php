@@ -2,6 +2,7 @@
 
 namespace PlaygroundGameTest\Service;
 
+use PlaygroundGameTest\Bootstrap;
 use \PlaygroundGame\Entity\Lottery as GameEntity;
 
 class GameTest extends \PHPUnit_Framework_TestCase
@@ -16,7 +17,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
     public function testAllowBonusNull()
     {
         $game = new GameEntity();
-        $gs = new \PlaygroundGame\Service\Game();
+        $gs = new \PlaygroundGame\Service\Game(Bootstrap::getServiceManager());
 
         $this->assertFalse($gs->allowBonus($game, null));
     }
@@ -26,7 +27,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
         $game = new GameEntity();
         $game->setPlayBonus('non_existent_value');
 
-        $gs = new \PlaygroundGame\Service\Game();
+        $gs = new \PlaygroundGame\Service\Game(Bootstrap::getServiceManager());
 
         $this->assertFalse($gs->allowBonus($game, null));
     }
@@ -40,7 +41,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
         $game = new GameEntity();
         $game->setPlayBonus('one');
 
-        $gs = new \PlaygroundGame\Service\Game();
+        $gs = new \PlaygroundGame\Service\Game(Bootstrap::getServiceManager());
         $gs->setEntryMapper($mapper);
 
         $gs->getEntryMapper()
@@ -61,7 +62,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
         $game = new GameEntity();
         $game->setPlayBonus('one');
 
-        $gs = new \PlaygroundGame\Service\Game();
+        $gs = new \PlaygroundGame\Service\Game(Bootstrap::getServiceManager());
         $gs->setEntryMapper($mapper);
 
         $gs->getEntryMapper()
@@ -81,7 +82,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
         $game = new GameEntity();
         $game->setPlayBonus('per_entry');
 
-        $gs = new \PlaygroundGame\Service\Game();
+        $gs = new \PlaygroundGame\Service\Game(Bootstrap::getServiceManager());
         $gs->setEntryMapper($mapper);
 
         $gs->getEntryMapper()
@@ -101,7 +102,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
         $game = new GameEntity();
         $game->setPlayBonus('per_entry');
 
-        $gs = new \PlaygroundGame\Service\Game();
+        $gs = new \PlaygroundGame\Service\Game(Bootstrap::getServiceManager());
         $gs->setEntryMapper($mapper);
 
         $gs->getEntryMapper()
@@ -121,7 +122,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
         $game = new GameEntity();
         $game->setPlayBonus('one');
 
-        $gs = new \PlaygroundGame\Service\Game();
+        $gs = new \PlaygroundGame\Service\Game(Bootstrap::getServiceManager());
         $gs->setEntryMapper($mapper);
 
         // return false : The user has not played yet the bonus game
@@ -148,7 +149,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
         $game = new GameEntity();
         $game->setPlayBonus('one');
 
-        $gs = new \PlaygroundGame\Service\Game();
+        $gs = new \PlaygroundGame\Service\Game(Bootstrap::getServiceManager());
         $gs->setEntryMapper($mapper);
 
         // return false : The user has already played the bonus game
@@ -169,7 +170,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
         $game = new GameEntity();
         $game->setPlayBonus('one');
 
-        $gs = new \PlaygroundGame\Service\Game();
+        $gs = new \PlaygroundGame\Service\Game(Bootstrap::getServiceManager());
         $gs->setEntryMapper($mapper);
 
         // return false : The user has not played yet the bonus game
@@ -196,7 +197,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
         $game = new GameEntity();
         $game->setPlayBonus('one');
 
-        $gs = new \PlaygroundGame\Service\Game();
+        $gs = new \PlaygroundGame\Service\Game(Bootstrap::getServiceManager());
         $gs->setEntryMapper($mapper);
 
         // return false : The user has already played the bonus game
@@ -217,7 +218,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
         $game = new GameEntity();
         $game->setAnonymousAllowed(false);
 
-        $gs = new \PlaygroundGame\Service\Game();
+        $gs = new \PlaygroundGame\Service\Game(Bootstrap::getServiceManager());
         $gs->setEntryMapper($mapper);
 
         // return false : The user has already played the bonus game
@@ -237,7 +238,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
 
         $game = new GameEntity();
 
-        $gs = new \PlaygroundGame\Service\Game();
+        $gs = new \PlaygroundGame\Service\Game(Bootstrap::getServiceManager());
         $gs->setEntryMapper($mapper);
 
         // I check that the array in findOneBy doesn't contain the parameter
@@ -268,7 +269,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
         $game = new GameEntity();
         $game->setActive(true);
 
-        $gs = new \PlaygroundGame\Service\Game();
+        $gs = new \PlaygroundGame\Service\Game(Bootstrap::getServiceManager());
         $gs->setEntryMapper($mapper);
 
         // I check that the array in findOneBy contains the parameter 'active' = 1
@@ -293,7 +294,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
     public function testCheckIsFanNotOnFacebook()
     {
         $game = new GameEntity();
-        $gs = new \PlaygroundGame\Service\Game();
+        $gs = new \PlaygroundGame\Service\Game(Bootstrap::getServiceManager());
 
         $this->assertTrue($gs->checkIsFan($game));
     }
@@ -301,7 +302,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
     public function testCheckIsFanOnFacebookNotFan()
     {
         $game = new GameEntity();
-        $gs = new \PlaygroundGame\Service\Game();
+        $gs = new \PlaygroundGame\Service\Game(Bootstrap::getServiceManager());
 
         $session = new \Zend\Session\Container('facebook');
 
@@ -314,7 +315,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
     public function testCheckIsFanOnFacebookFan()
     {
         $game = new GameEntity();
-        $gs = new \PlaygroundGame\Service\Game();
+        $gs = new \PlaygroundGame\Service\Game(Bootstrap::getServiceManager());
 
         $session = new \Zend\Session\Container('facebook');
 
@@ -332,7 +333,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
 
         $game = new GameEntity();
 
-        $gs = new \PlaygroundGame\Service\Game();
+        $gs = new \PlaygroundGame\Service\Game(Bootstrap::getServiceManager());
         $gs->setEntryMapper($mapper);
 
         $gs->getEntryMapper()

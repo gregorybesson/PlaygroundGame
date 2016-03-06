@@ -38,31 +38,31 @@ class QuizAnswerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Ceci est une nouvelle réponse.', $quizanswer->getAnswer());
     }
 
-    public function testRemove()
-    {
-        $quizanswer = new QuizAnswerEntity();
-        $quizanswer->setAnswer('Ceci est une réponse.');
-        $quizanswer = $this->tm->insert($quizanswer);
-        $id = $quizanswer->getId();
-        $this->tm->remove($quizanswer);
-        $this->assertNull($this->tm->findById($id));
-    }
+    // public function testRemove()
+    // {
+    //     $quizanswer = new QuizAnswerEntity();
+    //     $quizanswer->setAnswer('Ceci est une réponse.');
+    //     $quizanswer = $this->tm->insert($quizanswer);
+    //     $id = $quizanswer->getId();
+    //     $this->tm->remove($quizanswer);
+    //     $this->assertNull($this->tm->findById($id));
+    // }
 
-    public function testFindAll()
-    {
-        $quizanswer = new QuizAnswerEntity();
-        $quizanswer->setAnswer('Ceci est une réponse. 1');
-        $quizanswer = $this->tm->insert($quizanswer);
-        $quizanswer = new QuizAnswerEntity();
-        $quizanswer->setAnswer('Ceci est une réponse. 2');
-        $quizanswer = $this->tm->insert($quizanswer);
-        $quizanswer = new QuizAnswerEntity();
-        $quizanswer->setAnswer('Ceci est une réponse. 3');
-        $quizanswer = $this->tm->insert($quizanswer);
+    // public function testFindAll()
+    // {
+    //     $quizanswer = new QuizAnswerEntity();
+    //     $quizanswer->setAnswer('Ceci est une réponse. 1');
+    //     $quizanswer = $this->tm->insert($quizanswer);
+    //     $quizanswer = new QuizAnswerEntity();
+    //     $quizanswer->setAnswer('Ceci est une réponse. 2');
+    //     $quizanswer = $this->tm->insert($quizanswer);
+    //     $quizanswer = new QuizAnswerEntity();
+    //     $quizanswer->setAnswer('Ceci est une réponse. 3');
+    //     $quizanswer = $this->tm->insert($quizanswer);
 
-        $quizanswers = $this->tm->findAll();
-        $this->assertEquals(3, count($quizanswers));
-    }
+    //     $quizanswers = $this->tm->findAll();
+    //     $this->assertEquals(3, count($quizanswers));
+    // }
 
     public function tearDown()
     {

@@ -2,11 +2,10 @@
 
 namespace PlaygroundGame\Service;
 
-use Zend\ServiceManager\ServiceManagerAwareInterface;
 use Zend\ServiceManager\ServiceManager;
 use PlaygroundGame\Mapper\GameInterface as GameMapperInterface;
 
-class Cron extends Game implements ServiceManagerAwareInterface
+class Cron
 {
     /**
      * @var GameMapperInterface

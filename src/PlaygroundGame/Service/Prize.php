@@ -3,13 +3,13 @@
 namespace PlaygroundGame\Service;
 
 use DoctrineModule\Validator\NoObjectExists as NoObjectExistsValidator;
-use Zend\ServiceManager\ServiceManagerAwareInterface;
 use Zend\ServiceManager\ServiceManager;
 use ZfcBase\EventManager\EventProvider;
 use PlaygroundGame\Options\ModuleOptions;
 use PlaygroundGame\Mapper\Prize as PrizeMapper;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
-class Prize extends EventProvider implements ServiceManagerAwareInterface
+class Prize extends EventProvider
 {
     /**
      * @var prizeMapper
@@ -28,6 +28,17 @@ class Prize extends EventProvider implements ServiceManagerAwareInterface
 
     /**
      *
+     * @var ServiceManager
+     */
+    protected $serviceLocator;
+
+    public function __construct(ServiceLocatorInterface $locator)
+    {
+        $this->serviceLocator = $locator;
+    }
+
+    /**
+     *
      * This service is ready for all types of games
      *
      * @param  array                  $data
@@ -36,7 +47,7 @@ class Prize extends EventProvider implements ServiceManagerAwareInterface
      */
     public function create(array $data, $prize, $formClass)
     {
-        $form  = $this->getServiceManager()->get($formClass);
+        $form  = $this->serviceLocator->get($formClass);
         $form->bind($prize);
 
         // If the identifier has not been set, I use the title to create one.
@@ -63,8 +74,8 @@ class Prize extends EventProvider implements ServiceManagerAwareInterface
      */
     public function edit(array $data, $prize, $formClass)
     {
-        $entityManager = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
-        $form  = $this->getServiceManager()->get($formClass);
+        $entityManager = $this->serviceLocator->get('doctrine.entitymanager.orm_default');
+        $form  = $this->serviceLocator->get($formClass);
         $form->bind($prize);
         
         $identifierInput = $form->getInputFilter()->get('identifier');
@@ -98,7 +109,7 @@ class Prize extends EventProvider implements ServiceManagerAwareInterface
     public function getPrizeMapper()
     {
         if (null === $this->prizeMapper) {
-            $this->prizeMapper = $this->getServiceManager()->get('playgroundgame_prize_mapper');
+            $this->prizeMapper = $this->serviceLocator->get('playgroundgame_prize_mapper');
         }
 
         return $this->prizeMapper;
@@ -127,7 +138,7 @@ class Prize extends EventProvider implements ServiceManagerAwareInterface
     public function getOptions()
     {
         if (!$this->options instanceof ModuleOptions) {
-            $this->setOptions($this->getServiceManager()->get('playgroundgame_module_options'));
+            $this->setOptions($this->serviceLocator->get('playgroundgame_module_options'));
         }
 
         return $this->options;
