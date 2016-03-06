@@ -7,6 +7,7 @@ use PlaygroundGame\Service\PrizeCategory as PrizeCategoryService;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use PlaygroundGame\Options\ModuleOptions;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 class PrizeCategoryController extends AbstractActionController
 {
@@ -17,6 +18,23 @@ class PrizeCategoryController extends AbstractActionController
      */
     protected $prizeCategoryService;
 
+    /**
+     *
+     * @var ServiceManager
+     */
+    protected $serviceLocator;
+
+    public function __construct(ServiceLocatorInterface $locator)
+    {
+        $this->serviceLocator = $locator;
+    }
+
+    public function getServiceLocator()
+    {
+        
+        return $this->serviceLocator;
+    }
+    
     public function listAction()
     {
         $service = $this->getPrizeCategoryService();

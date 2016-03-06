@@ -1,19 +1,19 @@
 <?php
-namespace PlaygroundGame\Service;
+namespace PlaygroundGame\Service\Factory;
 
-use PlaygroundGame\Service\PostVote;
+use PlaygroundGame\Service\InstantWin;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class PostVoteFactory implements FactoryInterface
+class InstantWinFactory implements FactoryInterface
 {
     /**
     * @param ServiceLocatorInterface $locator
-    * @return \PlaygroundGame\Service\PostVote
+    * @return \PlaygroundGame\Service\InstantWin
     */
     public function createService(ServiceLocatorInterface $locator)
     {
-        $service = new PostVote($locator);
+        $service = new InstantWin($locator);
 
         return $service;
     }

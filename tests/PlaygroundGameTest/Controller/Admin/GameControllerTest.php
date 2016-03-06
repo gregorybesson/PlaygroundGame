@@ -29,13 +29,10 @@ class GameControllerTest extends AbstractHttpControllerTestCase
         $tool->dropSchema($classes);
         $tool->createSchema($classes);
 
-        $serviceManager = Bootstrap::getServiceManager();
-        $this->controller = new GameController();
+        $this->controller = new GameController(Bootstrap::getServiceManager());
         $this->request    = new Request();
         $this->routeMatch = new RouteMatch(array('controller' => 'playgroundgame_admin_game'));
         $this->event      = new MvcEvent();
-
-        $this->controller->setServiceLocator($serviceManager);
 
         parent::setUp();
     }

@@ -3,6 +3,7 @@
 namespace PlaygroundGame\Controller\Frontend;
 
 use Zend\View\Model\ViewModel;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 class PrizeCategoryController extends GameController
 {
@@ -10,6 +11,23 @@ class PrizeCategoryController extends GameController
 
     protected $prizeCategoryService;
 
+    /**
+     *
+     * @var ServiceManager
+     */
+    protected $serviceLocator;
+
+    public function __construct(ServiceLocatorInterface $locator)
+    {
+        $this->serviceLocator = $locator;
+    }
+
+    public function getServiceLocator()
+    {
+        
+        return $this->serviceLocator;
+    }
+    
     public function indexAction()
     {
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');

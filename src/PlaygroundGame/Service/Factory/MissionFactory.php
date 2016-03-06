@@ -1,19 +1,19 @@
 <?php
-namespace PlaygroundGame\Service;
+namespace PlaygroundGame\Service\Factory;
 
-use PlaygroundGame\Service\Quiz;
+use PlaygroundGame\Service\Mission;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class QuizFactory implements FactoryInterface
+class MissionFactory implements FactoryInterface
 {
     /**
     * @param ServiceLocatorInterface $locator
-    * @return \PlaygroundGame\Service\Quiz
+    * @return \PlaygroundGame\Service\Mission
     */
     public function createService(ServiceLocatorInterface $locator)
     {
-        $service = new Quiz($locator);
+        $service = new Mission($locator);
 
         return $service;
     }

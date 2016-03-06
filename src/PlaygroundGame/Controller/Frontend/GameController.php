@@ -10,6 +10,7 @@ use PlaygroundGame\Service\Prize as PrizeService;
 use Zend\View\Model\JsonModel;
 use Zend\Http\PhpEnvironment\Response;
 use Zend\Stdlib\Parameters;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 class GameController extends AbstractActionController
 {
@@ -65,6 +66,23 @@ class GameController extends AbstractActionController
         'logout',
         'inviteToTeam'
     );
+
+    /**
+     *
+     * @var ServiceManager
+     */
+    protected $serviceLocator;
+
+    public function __construct(ServiceLocatorInterface $locator)
+    {
+        $this->serviceLocator = $locator;
+    }
+
+    public function getServiceLocator()
+    {
+        
+        return $this->serviceLocator;
+    }
 
     public function setEventManager(\Zend\EventManager\EventManagerInterface $events)
     {

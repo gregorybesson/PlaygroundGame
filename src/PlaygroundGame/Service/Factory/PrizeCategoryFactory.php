@@ -1,19 +1,19 @@
 <?php
-namespace PlaygroundGame\Service;
+namespace PlaygroundGame\Service\Factory;
 
-use PlaygroundGame\Service\Game;
+use PlaygroundGame\Service\PrizeCategory;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class GameFactory implements FactoryInterface
+class PrizeCategoryFactory implements FactoryInterface
 {
     /**
     * @param ServiceLocatorInterface $locator
-    * @return \PlaygroundGame\Service\Game
+    * @return \PlaygroundGame\Service\PrizeCategory
     */
     public function createService(ServiceLocatorInterface $locator)
     {
-        $service = new Game($locator);
+        $service = new PrizeCategory($locator);
 
         return $service;
     }

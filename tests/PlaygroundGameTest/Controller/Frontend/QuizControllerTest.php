@@ -36,7 +36,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         //mocking the method checkExistingEntry
         $f = $this->getMockBuilder('PlaygroundGame\Service\Game')
         ->setMethods(array('checkGame', 'checkIsFan', 'checkExistingEntry', 'getServiceManager'))
-        //->disableOriginalConstructor()
+        ->disableOriginalConstructor()
         ->getMock();
     
         $serviceManager->setService('playgroundgame_quiz_service', $f);
@@ -200,7 +200,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         //mocking the method checkExistingEntry
         $f = $this->getMockBuilder('PlaygroundGame\Service\Game')
         ->setMethods(array('checkGame', 'checkExistingEntry', 'getServiceManager'))
-        //->disableOriginalConstructor()
+        ->disableOriginalConstructor()
         ->getMock();
 
         $serviceManager->setService('playgroundgame_quiz_service', $f);
@@ -266,7 +266,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         //mocking the method checkExistingEntry
         $f = $this->getMockBuilder('PlaygroundGame\Service\Game')
         ->setMethods(array('checkGame', 'checkExistingEntry', 'getServiceManager'))
-        //->disableOriginalConstructor()
+        ->disableOriginalConstructor()
         ->getMock();
 
         $serviceManager->setService('playgroundgame_quiz_service', $f);
@@ -321,7 +321,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
 
         $f = $this->getMockBuilder('PlaygroundGame\Service\Game')
         ->setMethods(array('checkGame', 'checkIsFan', 'checkExistingEntry', 'getServiceManager'))
-        //->disableOriginalConstructor()
+        ->disableOriginalConstructor()
         ->getMock();
 
         $serviceManager->setService('playgroundgame_quiz_service', $f);
@@ -373,7 +373,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
 
         $f = $this->getMockBuilder('PlaygroundGame\Service\Game')
         ->setMethods(array('checkGame', 'checkIsFan', 'getEntryMapper', 'getServiceManager', 'findLastEntry'))
-        //->disableOriginalConstructor()
+        ->disableOriginalConstructor()
         ->getMock();
 
         $serviceManager->setService('playgroundgame_quiz_service', $f);
@@ -393,7 +393,10 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $bitlyMock = $this->getMock('PlaygroundCore\Controller\Plugin\ShortenUrl');
+        $bitlyMock = $this->getMockBuilder('PlaygroundCore\Controller\Plugin\ShortenUrl')
+        ->setMethods(array('ShortenUrl'))
+        ->disableOriginalConstructor()
+        ->getMock();
 
         $bitlyMock->expects($this->any())
         ->method('shortenUrl')

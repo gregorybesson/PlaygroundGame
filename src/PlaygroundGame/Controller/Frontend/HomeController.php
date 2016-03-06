@@ -4,6 +4,7 @@ namespace PlaygroundGame\Controller\Frontend;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 class HomeController extends AbstractActionController
 {
@@ -16,6 +17,23 @@ class HomeController extends AbstractActionController
      * @var \PlaygroundCms\Service\Page
      */
     protected $pageService;
+    
+    /**
+     *
+     * @var ServiceManager
+     */
+    protected $serviceLocator;
+
+    public function __construct(ServiceLocatorInterface $locator)
+    {
+        $this->serviceLocator = $locator;
+    }
+
+    public function getServiceLocator()
+    {
+        
+        return $this->serviceLocator;
+    }
     
     public function indexAction()
     {

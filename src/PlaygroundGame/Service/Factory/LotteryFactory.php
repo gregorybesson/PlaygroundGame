@@ -1,5 +1,5 @@
 <?php
-namespace PlaygroundGame\Service;
+namespace PlaygroundGame\Service\Factory;
 
 use PlaygroundGame\Service\Lottery;
 use Zend\ServiceManager\FactoryInterface;

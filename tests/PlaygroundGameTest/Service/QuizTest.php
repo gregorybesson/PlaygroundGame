@@ -122,8 +122,7 @@ class QuizTest extends AbstractHttpControllerTestCase
         $this->getServiceManager()->setService('playgroundgame_game_mapper', $gameMapper);
         $this->getServiceManager()->setService('playgroundgame_quiz_mapper', $quizMapper);
         $this->getServiceManager()->setService('playgroundgame_quizquestion_mapper', $quizquestionMapper);
-        $qs = new \PlaygroundGame\Service\Quiz();
-        $qs->setServiceManager($this->getServiceManager());
+        $qs = new \PlaygroundGame\Service\Quiz($this->getServiceManager());
 
         $this->assertInstanceOf('\PlaygroundGame\Entity\QuizQuestion', $qs->createQuestion($this->dataTrue));
     }
@@ -143,8 +142,7 @@ class QuizTest extends AbstractHttpControllerTestCase
         ->will($this->returnValue($quiz));
 
         $this->getServiceManager()->setService('playgroundgame_game_mapper', $gameMapper);
-        $qs = new \PlaygroundGame\Service\Quiz();
-        $qs->setServiceManager($this->getServiceManager());
+        $qs = new \PlaygroundGame\Service\Quiz($this->getServiceManager());
 
         $this->assertFalse($qs->createQuestion($this->dataFalse));
     }
