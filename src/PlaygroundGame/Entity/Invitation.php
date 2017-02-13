@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping\PreUpdate;
 class Invitation implements \JsonSerializable
 {
     /**
-     * @ORM\ManyToOne(targetEntity="Game", cascade={"persist","remove"})
+     * @ORM\ManyToOne(targetEntity="Game", inversedBy="invitations")
      * @ORM\JoinColumn(name="game_id", referencedColumnName="id", onDelete="CASCADE")
      **/
     protected $game;
