@@ -70,7 +70,10 @@ if (isset($fm[0]))
                 <?php $activeString = $this->translate('Activate the game'); ?>
             <?php endif; ?>
             <td>
-                <a href='<?php echo $entryLink ?>'><?php echo $this->translate('Entries'); ?></a> 
+                <a href='<?php echo $entryLink ?>'><?php echo $this->translate('Entries'); ?></a>
+                <?php if($game->getOnInvitation()):?> 
+                | <a href='<?php echo $this->url('admin/'. $game->getClassType() .'/invitation', array('gameId' => $game->getId())); ?>'><?php echo $this->translate('Invitations'); ?></a
+                <?php endif;?> 
                 | <a href='<?php echo $editLink ?>'><?php echo $this->translate('Edit'); ?></a> 
                 | <a href='<?php echo $deleteLink ?>'><?php echo $this->translate('Delete'); ?></a><?php if($optionLink != ''):?> 
                 | <a href='<?php echo $optionLink ?>'><?php echo $optionLinkName ?></a><?php endif;?> 

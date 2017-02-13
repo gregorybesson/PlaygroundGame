@@ -1,0 +1,30 @@
+<?php $this->plugin('translate')->setTranslatorTextDomain('playgroundgame');// Pour le texte ?>
+
+<h1><a href="<?php echo $this->url('admin/playgroundgame/edit-mission', array('gameId' => $this->gameId)) ?>"><?php echo $this->game->getTitle(); ?></a></h1>
+
+<h3><?php echo $this->translate('Liste des Invitations'); ?></h3>
+
+<table class="table">
+    <tr>
+        <td>Hôte</td>
+        <td>Invité</td>
+        <td>Inscrit</td>
+        <td>Actions</td>
+    </tr>
+    <?php foreach ($this->invitations as $invitation): ?>
+        <tr>
+            <td><?php if($invitation->getHost() != NULL): ?>
+                <?php echo $invitation->getHost()->getFirstname() . ' ' . $invitation->getHost()->getLastname() . ' (' . $invitation->getHost()->getEmail() . ')'; ?>
+                <?php else: ?>
+                    Invité par l'organisateur du jeu
+                <?php endif; ?>
+            </td>
+            <td><?php echo $invitation->getRequestKey(); ?></td>
+            <td><?php if($invitation->getUser() != NULL): echo $invitation->getUser()->getFirstname() . ' ' . $invitation->getUser()->getLastname(); endif;?></td>
+            <td><?php if($invitation->getUser() == NULL): ?><a href="<?php echo $this->url('admin/'. $game->getClassType() .'/removeInvitation', array('gameId' => $game->getId(), 'invitationId' => $invitation->getId())); ?>">Remove invitation</a><?php endif;?></td>
+        </tr>
+    <?php endforeach; ?>
+</table>
+<br/>
+<br/>
+<?php echo (count($this->invitations)>1)?$this->paginationControl($this->invitations, 'Sliding', 'playground-game/game/pagination_invitationlist', array('classType' => $this->game->getClassType()  ,'gameId' => $this->gameId)):''; ?>

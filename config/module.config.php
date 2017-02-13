@@ -2091,6 +2091,29 @@ return array(
                                     )
                                 )
                             ),
+                            'invitation' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/:gameId/invitation[/:p]',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_admin_mission',
+                                        'action' => 'invitation',
+                                        'gameId' => 0
+                                    )
+                                )
+                            ),
+                            'removeInvitation' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/:gameId/removeInvitation/:invitationId',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_admin_mission',
+                                        'action' => 'removeInvitation',
+                                        'gameId' => 0,
+                                        'invitationId' => 0
+                                    )
+                                )
+                            ),
                             'download' => array(
                                 'type' => 'Segment',
                                 'options' => array(
