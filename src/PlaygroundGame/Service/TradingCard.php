@@ -166,7 +166,7 @@ class TradingCard extends Game
     public function getAlbum($game, $user)
     {
         // get collection of cards from the user for this game
-        $album = $this->getTradingCardCardMapper()->findBy(array('game' => $game, 'user' => $user));
+        $album = $this->getTradingCardCardMapper()->findBy(array('game' => $game, 'user' => $user), array('createdAt' => 'ASC'));
         $eventAlbum = $this->getEventManager()->trigger(
             __FUNCTION__.'.post',
             $this,
@@ -180,7 +180,6 @@ class TradingCard extends Game
         if ($eventAlbum) {
             $album = $eventAlbum;
         }
-        
         return $album;
     }
 

@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping\PreUpdate;
 class Invitation implements \JsonSerializable
 {
     /**
-     * @ORM\ManyToOne(targetEntity="Game", cascade={"persist","remove"})
+     * @ORM\ManyToOne(targetEntity="Game", inversedBy="invitations")
      * @ORM\JoinColumn(name="game_id", referencedColumnName="id", onDelete="CASCADE")
      **/
     protected $game;
@@ -34,14 +34,14 @@ class Invitation implements \JsonSerializable
     protected $requestKey;
 
     /**
-     * @ORM\ManyToOne(targetEntity="PlaygroundUser\Entity\User", cascade={"persist","remove"})
+     * @ORM\ManyToOne(targetEntity="PlaygroundUser\Entity\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="user_id", onDelete="CASCADE")
      **/
     protected $user;
 
     /**
      * The user who invite (it can be the system who's the host. This attribute will be null then)
-     * @ORM\ManyToOne(targetEntity="PlaygroundUser\Entity\User", cascade={"persist","remove"})
+     * @ORM\ManyToOne(targetEntity="PlaygroundUser\Entity\User")
      * @ORM\JoinColumn(name="host_id", referencedColumnName="user_id", onDelete="CASCADE")
      **/
     protected $host;

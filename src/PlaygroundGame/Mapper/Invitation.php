@@ -32,4 +32,15 @@ class Invitation extends AbstractMapper
     {
         return $this->em->getRepository('PlaygroundGame\Entity\Invitation');
     }
+
+    public function queryByGame($game)
+    {
+        $query = $this->em->createQuery(
+            'SELECT i FROM PlaygroundGame\Entity\Invitation i
+                WHERE i.game = :game
+                ORDER BY i.requestKey ASC'
+        );
+        $query->setParameter('game', $game);
+        return $query;
+    }
 }

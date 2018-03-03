@@ -201,6 +201,45 @@ class GameController extends AbstractActionController
         );
     }
 
+    public function invitationAction()
+    {
+        $this->checkGame();
+
+        $adapter = new DoctrineAdapter(
+            new LargeTablePaginator(
+                $this->getAdminGameService()->getInvitationMapper()->queryByGame($this->game)
+            )
+        );
+        $paginator = new Paginator($adapter);
+        $paginator->setItemCountPerPage(25);
+        $paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
+
+        return new ViewModel(
+            array(
+                'invitations' => $paginator,
+                'gameId'      => $this->game->getId(),
+                'game'        => $this->game,
+            )
+        );
+    }
+
+    public function removeInvitationAction()
+    {
+        $this->checkGame();
+
+        $service = $this->getAdminGameService();
+        $invitationId = $this->getEvent()->getRouteMatch()->getParam('invitationId');
+        if ($invitationId) {
+            $invitation   = $service->getInvitationMapper()->findById($invitationId);
+            $service->getInvitationMapper()->remove($invitation);
+        }
+
+        return $this->redirect()->toRoute(
+            'admin/'. $this->game->getClassType() .'/invitation',
+            array('gameId'=>$this->game->getId())
+        );
+    }
+    
     public function downloadAction()
     {
         $this->checkGame();

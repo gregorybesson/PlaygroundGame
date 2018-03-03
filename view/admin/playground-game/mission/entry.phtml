@@ -1,0 +1,24 @@
+<?php $this->plugin('translate')->setTranslatorTextDomain('playgroundgame');// Pour le texte ?>
+
+<?php $downloadLink = $this->url('admin/'. $this->game->getClassType() .'/download', array('gameId' => $this->game->getId()));?>
+
+<h1><a href="<?php echo $this->url('admin/playgroundgame/edit-mission', array('gameId' => $this->gameId)) ?>"><?php echo $this->game->getTitle(); ?></a></h1>
+
+<h3><?php echo $this->translate('Liste des Participants'); ?></h3>
+
+<a href='<?php echo $downloadLink ?>'>Export CSV</a>
+<table class="table">
+    <tr>
+        <?php foreach ($this->header as $k => $v): ?>
+            <th><?php echo $k; ?></th>
+        <?php endforeach; ?>
+    </tr>
+    <?php foreach ($this->entries as $entry): ?>
+        <tr>
+        <?php foreach ($entry as $key => $value):?>
+            <td><?php echo $value; ?></td>
+        <?php endforeach; ?>
+        </tr>
+    <?php endforeach; ?>
+</table>
+<?php echo (count($this->paginator)>1)?$this->paginationControl($this->paginator, 'Sliding', 'playground-game/game/pagination_entrylist', array('classType' => $this->game->getClassType()  ,'gameId' => $this->gameId)):''; ?>
