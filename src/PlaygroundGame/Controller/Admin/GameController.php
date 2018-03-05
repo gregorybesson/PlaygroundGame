@@ -57,7 +57,7 @@ class GameController extends AbstractActionController
 
     public function createForm($form)
     {
-        // I use the wonderful Form Generator to create the Post & Vote form
+        // I use the wonderful Form Generator to create the Player form
         $this->forward()->dispatch(
             'PlaygroundCore\Controller\Formgen',
             array(

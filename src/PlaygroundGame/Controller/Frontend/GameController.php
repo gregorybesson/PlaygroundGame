@@ -292,106 +292,109 @@ class GameController extends AbstractActionController
      */
     public function registerAction()
     {
-        $form = $this->getGameService()->createFormFromJson($this->game->getPlayerForm()->getForm(), 'playerForm');
+      $formDef = $this->game->getPlayerForm();
+      if ($formDef != null) {
+        $form = $this->getGameService()->createFormFromJson($formDef->getForm(), 'playerForm');
+      } else {
+        return $this->notFoundAction();
+      }
 
-        if ($this->getRequest()->isPost()) {
-            // POST Request: Process form
-            $data = array_merge_recursive(
-                $this->getRequest()->getPost()->toArray(),
-                $this->getRequest()->getFiles()->toArray()
-            );
-            
-            $form->setData($data);
+      if ($this->getRequest()->isPost()) {
+        // POST Request: Process form
+        $data = array_merge_recursive(
+            $this->getRequest()->getPost()->toArray(),
+            $this->getRequest()->getFiles()->toArray()
+        );
 
-            if ($form->isValid()) {
-                // steps of the game
-                $steps = $this->game->getStepsArray();
-                // sub steps of the game
-                $viewSteps = $this->game->getStepsViewsArray();
+        $form->setData($data);
 
-                // register position
-                $key = array_search($this->params('action'), $viewSteps);
-                if (!$key) {
-                    // register is not a substep of the game so it's a step
-                    $key = array_search($this->params('action'), $steps);
-                    $keyStep = true;
-                } else {
-                    // register was a substep, i search the index of its parent
-                    $key = array_search($key, $steps);
-                    $keyStep = false;
-                }
+        if ($form->isValid()) {
+          // steps of the game
+          $steps = $this->game->getStepsArray();
+          // sub steps of the game
+          $viewSteps = $this->game->getStepsViewsArray();
 
-                // play position
-                $keyplay = array_search('play', $viewSteps);
+          // register position
+          $key = array_search($this->params('action'), $viewSteps);
+          if (!$key) {
+            // register is not a substep of the game so it's a step
+            $key = array_search($this->params('action'), $steps);
+            $keyStep = true;
+          } else {
+            // register was a substep, i search the index of its parent
+            $key = array_search($key, $steps);
+            $keyStep = false;
+          }
 
-                if (!$keyplay) {
-                    // play is not a substep, so it's a step
-                    $keyplay = array_search('play', $steps);
-                    $keyplayStep = true;
-                } else {
-                    // play is a substep so I search the index of its parent
-                    $keyplay = array_search($keyplay, $steps);
-                    $keyplayStep = false;
-                }
+          // play position
+          $keyplay = array_search('play', $viewSteps);
 
-                // If register step before play, I don't have no entry yet. I have to create one
-                // If register after play step, I search for the last entry created by play step.
+          if (!$keyplay) {
+            // play is not a substep, so it's a step
+            $keyplay = array_search('play', $steps);
+            $keyplayStep = true;
+          } else {
+            // play is a substep so I search the index of its parent
+            $keyplay = array_search($keyplay, $steps);
+            $keyplayStep = false;
+          }
 
-                if ($key < $keyplay || ($keyStep && !$keyplayStep && $key <= $keyplay)) {
-                    $entry = $this->getGameService()->play($this->game, $this->user);
-                    if (!$entry) {
-                        // the user has already taken part of this game and the participation limit has been reached
-                        $this->flashMessenger()->addMessage('Vous avez déjà participé');
-                    
-                        return $this->redirect()->toUrl(
-                            $this->frontendUrl()->fromRoute(
-                                $this->game->getClassType().'/result',
-                                array(
-                                    'id' => $this->game->getIdentifier(),
-                                    
-                                )
-                            )
-                        );
-                    }
-                } else {
-                    // I'm looking for an entry without anonymousIdentifier (the active entry in fact).
-                    $entry = $this->getGameService()->findLastEntry($this->game, $this->user);
-                    if ($this->getGameService()->hasReachedPlayLimit($this->game, $this->user)) {
-                        // the user has already taken part of this game and the participation limit has been reached
-                        $this->flashMessenger()->addMessage('Vous avez déjà participé');
-                    
-                        return $this->redirect()->toUrl(
-                            $this->frontendUrl()->fromRoute(
-                                $this->game->getClassType().'/result',
-                                array(
-                                    'id' => $this->game->getIdentifier(),
-                                    
-                                )
-                            )
-                        );
-                    }
-                }
+          // If register step before play, I don't have no entry yet. I have to create one
+          // If register after play step, I search for the last entry created by play step.
 
-                $this->getGameService()->updateEntryPlayerForm($form->getData(), $this->game, $this->user, $entry);
-
-                if (!empty($this->game->nextStep($this->params('action')))) {
-                    return $this->redirect()->toUrl(
-                        $this->frontendUrl()->fromRoute(
-                            $this->game->getClassType() .'/' . $this->game->nextStep($this->params('action')),
-                            array('id' => $this->game->getIdentifier()),
-                            array('force_canonical' => true)
-                        )
-                    );
-                }
+          if ($key < $keyplay || ($keyStep && !$keyplayStep && $key <= $keyplay)) {
+            $entry = $this->getGameService()->play($this->game, $this->user);
+            if (!$entry) {
+              // the user has already taken part of this game and the participation limit has been reached
+              $this->flashMessenger()->addMessage('Vous avez déjà participé');
+          
+              return $this->redirect()->toUrl(
+                $this->frontendUrl()->fromRoute(
+                  $this->game->getClassType().'/result',
+                  array(
+                    'id' => $this->game->getIdentifier(),
+                  )
+                )
+              );
             }
+          } else {
+            // I'm looking for an entry without anonymousIdentifier (the active entry in fact).
+            $entry = $this->getGameService()->findLastEntry($this->game, $this->user);
+            if ($this->getGameService()->hasReachedPlayLimit($this->game, $this->user)) {
+              // the user has already taken part of this game and the participation limit has been reached
+              $this->flashMessenger()->addMessage('Vous avez déjà participé');
+          
+              return $this->redirect()->toUrl(
+                $this->frontendUrl()->fromRoute(
+                  $this->game->getClassType().'/result',
+                  array(
+                    'id' => $this->game->getIdentifier(),
+                  )
+                )
+              );
+            }
+          }
+
+          $this->getGameService()->updateEntryPlayerForm($form->getData(), $this->game, $this->user, $entry);
+
+          if (!empty($this->game->nextStep($this->params('action')))) {
+            return $this->redirect()->toUrl(
+              $this->frontendUrl()->fromRoute(
+                $this->game->getClassType() .'/' . $this->game->nextStep($this->params('action')),
+                array('id' => $this->game->getIdentifier()),
+                array('force_canonical' => true)
+              )
+            );
+          }
         }
+      }
 
-        $viewModel = $this->buildView($this->game);
-        $viewModel->setVariables(array(
-            'form' => $form
-        ));
+      $viewModel = $this->buildView($this->game);
+      $viewModel->setVariables(array(
+          'form' => $form
+      ));
 
-        return $viewModel;
+      return $viewModel;
     }
 
     /**
