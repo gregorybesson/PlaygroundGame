@@ -300,9 +300,9 @@ class GameController extends AbstractActionController
         if ($this->getRequest()->isPost()) {
             // POST Request: Process form
             $data = array_merge_recursive(
-            $this->getRequest()->getPost()->toArray(),
-            $this->getRequest()->getFiles()->toArray()
-        );
+                $this->getRequest()->getPost()->toArray(),
+                $this->getRequest()->getFiles()->toArray()
+            );
 
             $form->setData($data);
 
@@ -347,13 +347,13 @@ class GameController extends AbstractActionController
                         $this->flashMessenger()->addMessage('Vous avez déjà participé');
           
                         return $this->redirect()->toUrl(
-                $this->frontendUrl()->fromRoute(
-                  $this->game->getClassType().'/result',
-                  array(
-                    'id' => $this->game->getIdentifier(),
-                  )
-                )
-              );
+                            $this->frontendUrl()->fromRoute(
+                                $this->game->getClassType().'/result',
+                                array(
+                                'id' => $this->game->getIdentifier(),
+                                )
+                            )
+                        );
                     }
                 } else {
                     // I'm looking for an entry without anonymousIdentifier (the active entry in fact).
@@ -363,13 +363,13 @@ class GameController extends AbstractActionController
                         $this->flashMessenger()->addMessage('Vous avez déjà participé');
           
                         return $this->redirect()->toUrl(
-                $this->frontendUrl()->fromRoute(
-                  $this->game->getClassType().'/result',
-                  array(
-                    'id' => $this->game->getIdentifier(),
-                  )
-                )
-              );
+                            $this->frontendUrl()->fromRoute(
+                                $this->game->getClassType().'/result',
+                                array(
+                                'id' => $this->game->getIdentifier(),
+                                )
+                            )
+                        );
                     }
                 }
 
@@ -377,12 +377,12 @@ class GameController extends AbstractActionController
 
                 if (!empty($this->game->nextStep($this->params('action')))) {
                     return $this->redirect()->toUrl(
-              $this->frontendUrl()->fromRoute(
-                $this->game->getClassType() .'/' . $this->game->nextStep($this->params('action')),
-                array('id' => $this->game->getIdentifier()),
-                array('force_canonical' => true)
-              )
-            );
+                        $this->frontendUrl()->fromRoute(
+                            $this->game->getClassType() .'/' . $this->game->nextStep($this->params('action')),
+                            array('id' => $this->game->getIdentifier()),
+                            array('force_canonical' => true)
+                        )
+                    );
                 }
             }
         }
@@ -390,7 +390,7 @@ class GameController extends AbstractActionController
         $viewModel = $this->buildView($this->game);
         $viewModel->setVariables(array(
           'form' => $form
-      ));
+        ));
 
         return $viewModel;
     }

@@ -375,8 +375,8 @@ class Module
                     $config = $sm->get('Configuration');
 
                     return new Options\ModuleOptions(
-                            isset($config['playgroundgame']) ? $config['playgroundgame'] : array()
-                        );
+                        isset($config['playgroundgame']) ? $config['playgroundgame'] : array()
+                    );
                 },
 
                 'playgroundgame_game_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
