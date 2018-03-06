@@ -90,9 +90,9 @@ class PostVotePost implements InputFilterAwareInterface, Translatable, \JsonSeri
      */
     protected $status = 0;
     
-   /**
-    * @ORM\Column(type="boolean", nullable=true)
-    */
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
     protected $pushed = 0;
 
     /**
@@ -344,18 +344,18 @@ class PostVotePost implements InputFilterAwareInterface, Translatable, \JsonSeri
         return $this;
     }
     
-   /**
-    * @return integer
-    */
+    /**
+     * @return integer
+     */
     public function isPushed()
     {
         return $this->pushed;
     }
         
-   /**
-    * @param bool $pushed
-    * @return PostVotePost
-    */
+    /**
+     * @param bool $pushed
+     * @return PostVotePost
+     */
     public function setPushed($pushed)
     {
         $this->pushed = (boolean)$pushed;

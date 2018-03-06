@@ -389,7 +389,7 @@ class Quiz extends Game
             if ($question_max_correct_answers == 0) {
                 return false;
             }
-        // Closed question : Many answers allowed
+            // Closed question : Many answers allowed
         } elseif ($question->getType() == 1) {
             foreach ($question->getAnswers() as $answer) {
                 $question_max_points += $answer->getPoints();
@@ -401,7 +401,7 @@ class Quiz extends Game
             if ($question_max_correct_answers == 0) {
                 return false;
             }
-        // Not a question : A textarea to fill in
+            // Not a question : A textarea to fill in
         } elseif ($question->getType() == 2) {
             $question_max_correct_answers = 0;
         }
@@ -784,12 +784,12 @@ class Quiz extends Game
         return $this->quizReplyAnswerMapper;
     }
 
-     /**
-     * setQuizReplyAnswerMapper
-     *
-     * @param  QuizReplyAnswerMapper $quizReplyAnswerMapper
-     * @return Quiz
-     */
+    /**
+    * setQuizReplyAnswerMapper
+    *
+    * @param  QuizReplyAnswerMapper $quizReplyAnswerMapper
+    * @return Quiz
+    */
     public function setQuizReplyAnswerMapper($quizReplyAnswerMapper)
     {
         $this->quizReplyAnswerMapper = $quizReplyAnswerMapper;

@@ -24,7 +24,6 @@ class PrizeCategoryController extends GameController
 
     public function getServiceLocator()
     {
-        
         return $this->serviceLocator;
     }
     

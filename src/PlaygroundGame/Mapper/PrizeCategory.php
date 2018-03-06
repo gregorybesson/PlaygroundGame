@@ -6,7 +6,6 @@ use PlaygroundGame\Mapper\AbstractMapper;
 
 class PrizeCategory extends AbstractMapper
 {
-
     public function findByIdentifier($identifier)
     {
         return $this->getEntityRepository()->findOneBy(array('identifier' => $identifier));

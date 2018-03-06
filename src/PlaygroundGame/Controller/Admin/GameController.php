@@ -37,7 +37,6 @@ class GameController extends AbstractActionController
 
     public function getServiceLocator()
     {
-        
         return $this->serviceLocator;
     }
 

@@ -366,7 +366,7 @@ class TradingCardModel implements InputFilterAwareInterface, \JsonSerializable
         return $this;
     }
 
-        /**
+    /**
      * Gets the value of jsonData.
      *
      * @return mixed
@@ -523,7 +523,7 @@ class TradingCardModel implements InputFilterAwareInterface, \JsonSerializable
         return $jsonArray;
     }
 
-        /**
+    /**
      * Populate from an array.
      *
      * @param array $data

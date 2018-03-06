@@ -6,7 +6,6 @@ use PlaygroundGame\Mapper\AbstractMapper;
 
 class QuizQuestion extends AbstractMapper
 {
-
     public function findByGameId($quiz)
     {
         return $this->getEntityRepository()->findBy(

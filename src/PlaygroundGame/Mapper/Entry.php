@@ -6,7 +6,6 @@ use PlaygroundGame\Mapper\AbstractMapper;
 
 class Entry extends AbstractMapper
 {
-    
     public function countByGame(\PlaygroundGame\Entity\Game $game)
     {
         $query = $this->em->createQuery('SELECT COUNT(e.id) FROM PlaygroundGame\Entity\Entry e WHERE e.game = :game');

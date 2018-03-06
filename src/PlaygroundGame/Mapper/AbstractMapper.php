@@ -9,7 +9,6 @@ use PlaygroundGame\Options\ModuleOptions;
 
 abstract class AbstractMapper
 {
-
     abstract protected function getEntityRepository();
 
     /**

@@ -6,7 +6,6 @@ use PlaygroundGame\Mapper\AbstractMapper;
 
 class PlayerForm extends AbstractMapper
 {
-
     public function getEntityRepository()
     {
         if (null === $this->er) {

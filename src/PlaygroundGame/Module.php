@@ -372,9 +372,9 @@ class Module
         return array(
             'factories' => array(
                 'playgroundgame_module_options' => function (\Zend\ServiceManager\ServiceManager $sm) {
-                        $config = $sm->get('Configuration');
+                    $config = $sm->get('Configuration');
 
-                        return new Options\ModuleOptions(
+                    return new Options\ModuleOptions(
                             isset($config['playgroundgame']) ? $config['playgroundgame'] : array()
                         );
                 },
