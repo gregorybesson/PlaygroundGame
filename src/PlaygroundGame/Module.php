@@ -16,15 +16,15 @@ class Module
     public function init(ModuleManager $manager)
     {
         $eventManager = $manager->getEventManager();
-    
+
         /*
-         * This event change the config before it's cached
-        * The change will apply to 'template_path_stack' and 'assetic_configuration'
-        * These 2 config take part in the Playground Theme Management
-        */
+		 * This event change the config before it's cached
+		 * The change will apply to 'template_path_stack' and 'assetic_configuration'
+		 * These 2 config take part in the Playground Theme Management
+		 */
         $eventManager->attach(\Zend\ModuleManager\ModuleEvent::EVENT_MERGE_CONFIG, array($this, 'onMergeConfig'), 50);
     }
-    
+
     /**
      * This method is called only when the config is not cached.
      * @param \Zend\ModuleManager\ModuleEvent $e
@@ -32,24 +32,24 @@ class Module
     public function onMergeConfig(\Zend\ModuleManager\ModuleEvent $e)
     {
         $config = $e->getConfigListener()->getMergedConfig(false);
-        
+
         if (isset($config['design']) && isset($config['design']['frontend'])) {
             $parentTheme = array($config['design']['frontend']['package'], $config['design']['frontend']['theme']);
         } else {
-            $parentTheme = array('playground','base');
+            $parentTheme = array('playground', 'base');
         }
-    
+
         // If custom games need a specific route. I create these routes
         if (PHP_SAPI !== 'cli') {
             if (isset($config['custom_games'])) {
                 foreach ($config['custom_games'] as $k => $v) {
                     // add custom language directory
                     $config['translator']['translation_file_patterns'][] = array(
-                        'type' => 'phpArray',
-                        'base_dir' => __DIR__ . '/../../../../../design/frontend/'. $parentTheme[0] .
-                            '/'. $parentTheme[1] . '/custom/' . $k . '/language',
-                        'pattern' => '%s.php',
-                        'text_domain' => $k
+                        'type'     => 'phpArray',
+                        'base_dir' => __DIR__ .'/../../../../../design/frontend/'.$parentTheme[0].
+                        '/'.$parentTheme[1].'/custom/'.$k.'/language',
+                        'pattern'     => '%s.php',
+                        'text_domain' => $k,
                     );
 
                     // create routes
@@ -61,10 +61,10 @@ class Module
                             // I take the url model of the game type
                             if (isset($config['router']['routes']['frontend']['child_routes'][$v['classType']])) {
                                 $routeModel = $config['router']['routes']['frontend']['child_routes'][$v['classType']];
-                    
+
                                 // Changing the root of the route
                                 $routeModel['options']['route'] = '/';
-                    
+
                                 // and removing the trailing slash for each subsequent route
                                 foreach ($routeModel['child_routes'] as $id => $ar) {
                                     if (isset($routeModel['child_routes'][$id]['options']['route'])) {
@@ -74,23 +74,23 @@ class Module
                                         );
                                     }
                                 }
-                    
+
                                 // then create the hostname route + appending the model updated
                                 $config['router']['routes']['frontend.'.$url] = array(
-                                    'type' => 'Zend\Mvc\Router\Http\Hostname',
-                                    'options' => array(
-                                        'route' => $url,
+                                    'type'      => 'Zend\Mvc\Router\Http\Hostname',
+                                    'options'   => array(
+                                        'route'    => $url,
                                         'defaults' => array(
-                                            'id' => $k
+                                            'id'      => $k,
                                         )
                                     ),
                                     'may_terminate' => true
                                 );
                                 $config['router']['routes']['frontend.'.$url]['child_routes'][$v['classType']] = $routeModel;
-                    
+
                                 $coreLayoutModel = isset($config['core_layout']['frontend'])?
-                                    $config['core_layout']['frontend']:
-                                    [];
+                                $config['core_layout']['frontend']:
+                                [];
                                 $config['core_layout']['frontend.'.$url] = $coreLayoutModel;
                             }
                         }
@@ -98,10 +98,10 @@ class Module
                     if (isset($v['assetic_configuration'])) {
                         foreach ($v['assetic_configuration']['modules'] as $m => $d) {
                             $v['assetic_configuration']['modules'][$m]['root_path'][] = __DIR__ .
-                                '/../../../../../design/frontend/'. $parentTheme[0] .'/'. $parentTheme[1] .
-                                '/custom/' . $k . '/assets';
+                            '/../../../../../design/frontend/'.$parentTheme[0].'/'.$parentTheme[1].
+                            '/custom/'.$k.'/assets';
                         }
-                        
+
                         // I specialize the route config to the game !
                         if (isset($v['assetic_configuration']['routes'])) {
                             $customRoutes = array();
@@ -110,10 +110,10 @@ class Module
                                 unset($v['assetic_configuration']['routes']['params']);
                             }
                             $customRoutes['custom'][$k]['params']['id'] = $k;
-                            $customRoutes['custom'][$k]['routes'] = $v['assetic_configuration']['routes'];
-                            $v['assetic_configuration']['routes'] = $customRoutes;
+                            $customRoutes['custom'][$k]['routes']       = $v['assetic_configuration']['routes'];
+                            $v['assetic_configuration']['routes']       = $customRoutes;
                         }
-                        
+
                         $config['assetic_configuration'] = array_replace_recursive(
                             $config['assetic_configuration'],
                             $v['assetic_configuration']
@@ -125,13 +125,13 @@ class Module
 
         $e->getConfigListener()->setMergedConfig($config);
     }
-            
+
     public function onBootstrap(MvcEvent $e)
     {
         $serviceManager = $e->getApplication()->getServiceManager();
 
-        $options = $serviceManager->get('playgroundcore_module_options');
-        $locale = $options->getLocale();
+        $options    = $serviceManager->get('playgroundcore_module_options');
+        $locale     = $options->getLocale();
         $translator = $serviceManager->get('translator');
         if (!empty($locale)) {
             //translator
@@ -174,7 +174,7 @@ class Module
         if ((get_class($e->getRequest()) == 'Zend\Console\Request')) {
             return;
         }
-            
+
         /**
          * This listener gives the possibility to select the layout on module / controller / action level
          * This is triggered after the PlaygroundDesign one so that it's the last triggered for games.
@@ -183,26 +183,26 @@ class Module
             'Zend\Mvc\Controller\AbstractActionController',
             'dispatch',
             function (MvcEvent $e) {
-                $config     = $e->getApplication()->getServiceManager()->get('config');
+                $config = $e->getApplication()->getServiceManager()->get('config');
                 if (isset($config['core_layout'])) {
-                    $controller      = $e->getTarget();
+                    $controller = $e->getTarget();
                     $controllerClass = get_class($controller);
-                    $moduleName      = strtolower(substr($controllerClass, 0, strpos($controllerClass, '\\')));
-                    $match           = $e->getRouteMatch();
-                    $routeName       = $match->getMatchedRouteName();
-                    $areaName        = (strpos($routeName, '/'))?
-                        substr($routeName, 0, strpos($routeName, '/')):
-                        $routeName;
-                    $areaName        = (strpos($areaName, '.'))?substr($areaName, 0, strpos($areaName, '.')):$areaName;
-                    $areaName        = ($areaName == 'frontend' || $areaName == 'admin')? $areaName : 'frontend';
-                    $controllerName  = $match->getParam('controller', 'not-found');
-                    $actionName      = $match->getParam('action', 'not-found');
-                    $slug            = $match->getParam('id', '');
-                    $viewModel       = $e->getViewModel();
+                    $moduleName = strtolower(substr($controllerClass, 0, strpos($controllerClass, '\\')));
+                    $match = $e->getRouteMatch();
+                    $routeName = $match->getMatchedRouteName();
+                    $areaName = (strpos($routeName, '/'))?
+                    substr($routeName, 0, strpos($routeName, '/')):
+                    $routeName;
+                    $areaName = (strpos($areaName, '.'))?substr($areaName, 0, strpos($areaName, '.')):$areaName;
+                    $areaName = ($areaName == 'frontend' || $areaName == 'admin')?$areaName:'frontend';
+                    $controllerName = $match->getParam('controller', 'not-found');
+                    $actionName = $match->getParam('action', 'not-found');
+                    $slug = $match->getParam('id', '');
+                    $viewModel = $e->getViewModel();
 
                     /**
                      * Assign the correct layout
-                    */
+                     */
                     if (!empty($slug)) {
                         if (isset($config['custom_games'][$slug]['core_layout'][$areaName]['modules'][$moduleName]['controllers'][$controllerName]['actions'][$actionName]['layout'])) {
                             $controller->layout($config['custom_games'][$slug]['core_layout'][$areaName]['modules'][$moduleName]['controllers'][$controllerName]['actions'][$actionName]['layout']);
@@ -213,15 +213,14 @@ class Module
                         } elseif (isset($config['custom_games'][$slug]['core_layout'][$areaName]['layout'])) {
                             $controller->layout($config['custom_games'][$slug]['core_layout'][$areaName]['layout']);
                         }
-                
 
                         // the area needs to be updated if I'm in a custom game for frontendUrl to work
                         if (isset($config['custom_games'][$slug])) {
                             $url = (is_array($config['custom_games'][$slug]['url']))?
-                                $config['custom_games'][$slug]['url']:
-                                array($config['custom_games'][$slug]['url']);
+                            $config['custom_games'][$slug]['url']:
+                            array($config['custom_games'][$slug]['url']);
                             $from = strtolower($e->getRequest()->getUri()->getHost());
-                            $areaName = ($areaName === 'frontend' && in_array($from, $url))? $areaName.'.'.$from:$areaName;
+                            $areaName = ($areaName === 'frontend' && in_array($from, $url))?$areaName.'.'.$from:$areaName;
                         }
                         // I add this area param so that it can be used by Controller plugin frontendUrl
                         // and View helper frontendUrl
@@ -232,17 +231,17 @@ class Module
                          */
                         if (isset($config['custom_games'][$slug]['core_layout'][$areaName]['modules'][$moduleName]['children_views'])) {
                             foreach ($config['custom_games'][$slug]['core_layout'][$areaName]['modules'][$moduleName]['children_views'] as $k => $v) {
-                                $viewModel->$k  = $v;
+                                $viewModel->$k = $v;
                             }
                         }
                         if (isset($config['custom_games'][$slug]['core_layout'][$areaName]['modules'][$moduleName]['controllers'][$controllerName]['children_views'])) {
                             foreach ($config['custom_games'][$slug]['core_layout'][$areaName]['modules'][$moduleName]['controllers'][$controllerName]['children_views'] as $k => $v) {
-                                $viewModel->$k  = $v;
+                                $viewModel->$k = $v;
                             }
                         }
                         if (isset($config['custom_games'][$slug]['core_layout'][$areaName]['modules'][$moduleName]['controllers'][$controllerName]['actions'][$actionName]['children_views'])) {
                             foreach ($config['custom_games'][$slug]['core_layout'][$areaName]['modules'][$moduleName]['controllers'][$controllerName]['actions'][$actionName]['children_views'] as $k => $v) {
-                                $viewModel->$k  = $v;
+                                $viewModel->$k = $v;
                             }
                         }
                     }
@@ -269,10 +268,10 @@ class Module
 
         foreach ($games as $game) {
             $array = array(
-                'game'.$game->getId() => array(
-                    'title' => $game->getTitle(),
-                    'description' => $game->getClassType(),
-                    'location'=>'pages du jeu'
+                'game'.$game->getId()=> array(
+                    'title'             => $game->getTitle(),
+                    'description'       => $game->getClassType(),
+                    'location'          => 'pages du jeu'
                 )
             );
             $dynareas = array_merge($dynareas, $array);
@@ -293,10 +292,10 @@ class Module
         $catsArray = $e->getParam('categories');
 
         $gameService = $e->getTarget()->getServiceManager()->get('playgroundgame_game_service');
-        $games = $gameService->getActiveGames(false);
+        $games       = $gameService->getActiveGames(false);
 
         foreach ($games as $game) {
-            $catsArray[$game->getIdentifier()] = 'Pg Game - ' . $game->getIdentifier();
+            $catsArray[$game->getIdentifier()] = 'Pg Game - '.$game->getIdentifier();
         }
 
         return $catsArray;
@@ -330,15 +329,15 @@ class Module
 
     public function getConfig()
     {
-        return include __DIR__ . '/../../config/module.config.php';
+        return include __DIR__ .'/../../config/module.config.php';
     }
 
     public function getAutoloaderConfig()
     {
         return array(
             'Zend\Loader\StandardAutoloader' => array(
-                'namespaces' => array(
-                    __NAMESPACE__ => __DIR__ . '/../../src/' . __NAMESPACE__,
+                'namespaces'                    => array(
+                    __NAMESPACE__                  => __DIR__ .'/../../src/'.__NAMESPACE__,
                 ),
             ),
         );
@@ -350,7 +349,7 @@ class Module
     public function getViewHelperConfig()
     {
         return array(
-            'factories' => array(
+            'factories'                => array(
                 'playgroundPrizeCategory' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $locator = $sm->getServiceLocator();
                     $viewHelper = new View\Helper\PrizeCategory;
@@ -360,7 +359,7 @@ class Module
                 },
                 'postvoteShareEvents' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $service = $sm->getServiceLocator()->get('playgroundgame_postvote_service');
-                    
+
                     return new \PlaygroundGame\View\Helper\PostvoteShareEvents($service);
                 }
             ),
@@ -370,12 +369,12 @@ class Module
     public function getServiceConfig()
     {
         return array(
-            'factories' => array(
+            'factories'                      => array(
                 'playgroundgame_module_options' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $config = $sm->get('Configuration');
 
                     return new Options\ModuleOptions(
-                        isset($config['playgroundgame']) ? $config['playgroundgame'] : array()
+                        isset($config['playgroundgame'])?$config['playgroundgame']:array()
                     );
                 },
 
@@ -388,14 +387,14 @@ class Module
 
                     return $mapper;
                 },
-                
+
                 'playgroundgame_playerform_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $mapper = new \PlaygroundGame\Mapper\PlayerForm(
                         $sm->get('doctrine.entitymanager.orm_default'),
                         $sm->get('playgroundgame_module_options'),
                         $sm
                     );
-                
+
                     return $mapper;
                 },
 
@@ -478,7 +477,6 @@ class Module
 
                     return $mapper;
                 },
-
 
                 'playgroundgame_entry_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $mapper = new \PlaygroundGame\Mapper\Entry(
@@ -599,28 +597,28 @@ class Module
 
                     return $mapper;
                 },
-                
+
                 'playgroundgame_mission_game_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $mapper = new Mapper\MissionGame(
                         $sm->get('doctrine.entitymanager.orm_default'),
                         $sm->get('playgroundgame_module_options'),
                         $sm
                     );
-                
+
                     return $mapper;
                 },
-                
+
                 'playgroundgame_mission_game_condition_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $mapper = new Mapper\MissionGameCondition(
                         $sm->get('doctrine.entitymanager.orm_default'),
                         $sm->get('playgroundgame_module_options'),
                         $sm
                     );
-                
+
                     return $mapper;
                 },
 
-                'playgroundgame_tradingcard_mapper' => function ($sm) {
+                'playgroundgame_tradingcard_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $mapper = new Mapper\TradingCard(
                         $sm->get('doctrine.entitymanager.orm_default'),
                         $sm->get('playgroundgame_module_options'),
@@ -630,7 +628,7 @@ class Module
                     return $mapper;
                 },
 
-                'playgroundgame_tradingcard_model_mapper' => function ($sm) {
+                'playgroundgame_tradingcard_model_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $mapper = new Mapper\TradingCardModel(
                         $sm->get('doctrine.entitymanager.orm_default'),
                         $sm->get('playgroundgame_module_options'),
@@ -640,7 +638,7 @@ class Module
                     return $mapper;
                 },
 
-                'playgroundgame_tradingcard_card_mapper' => function ($sm) {
+                'playgroundgame_tradingcard_card_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $mapper = new Mapper\TradingCardCard(
                         $sm->get('doctrine.entitymanager.orm_default'),
                         $sm->get('playgroundgame_module_options'),
@@ -649,7 +647,7 @@ class Module
 
                     return $mapper;
                 },
-                
+
                 'playgroundgame_tradingcardmodel_form' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $translator = $sm->get('translator');
                     $form = new Form\Admin\TradingCardModel(null, $sm, $translator);
@@ -667,7 +665,7 @@ class Module
 
                     return $form;
                 },
-                
+
                 'playgroundgame_mission_form' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $translator = $sm->get('translator');
                     $form = new Form\Admin\Mission(null, $sm, $translator);
@@ -676,7 +674,7 @@ class Module
 
                     return $form;
                 },
-                
+
                 'playgroundgame_mission_game_form' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $translator = $sm->get('translator');
                     $form = new Form\Admin\MissionGameFieldset(null, $sm, $translator);
@@ -700,13 +698,13 @@ class Module
                     $form = new Form\Frontend\Register(null, $zfcUserOptions, $translator, $sm);
                     $form->setInputFilter(new \ZfcUser\Form\RegisterFilter(
                         new \ZfcUser\Validator\NoRecordExists(array(
-                            'mapper' => $sm->get('zfcuser_user_mapper'),
-                            'key'    => 'email'
-                        )),
+                                    'mapper' => $sm->get('zfcuser_user_mapper'),
+                                    'key'    => 'email',
+                                )),
                         new \ZfcUser\Validator\NoRecordExists(array(
-                            'mapper' => $sm->get('zfcuser_user_mapper'),
-                            'key'    => 'username'
-                        )),
+                                    'mapper' => $sm->get('zfcuser_user_mapper'),
+                                    'key'    => 'username',
+                                )),
                         $zfcUserOptions
                     ));
 
@@ -716,7 +714,7 @@ class Module
                 'playgroundgame_import_form' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $translator = $sm->get('translator');
                     $form = new Form\Admin\Import(null, $sm, $translator);
-                
+
                     return $form;
                 },
 
