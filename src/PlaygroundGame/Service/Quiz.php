@@ -311,9 +311,11 @@ class Quiz extends Game
                         $updatedAnswer = $answersarray[$quizReplyAnswer->getAnswerId()];
                         $quizReplyAnswer->setPoints($updatedAnswer->getPoints());
                         $quizReplyAnswer->setCorrect($updatedAnswer->getCorrect());
-                        $q = $em->createQuery(
-                            'update PlaygroundGame\Entity\QuizReplyAnswer a SET a.points = :points, a.correct=:isCorrect WHERE a.id=:answerId'
-                        );
+                        $q = $em->createQuery('
+							UPDATE PlaygroundGame\Entity\QuizReplyAnswer a
+              SET a.points = :points, a.correct=:isCorrect
+              WHERE a.id=:answerId
+						');
                         $q->setParameter('points', $updatedAnswer->getPoints());
                         $q->setParameter('isCorrect', $updatedAnswer->getCorrect());
                         $q->setParameter('answerId', $quizReplyAnswer->getId());
@@ -329,9 +331,11 @@ class Quiz extends Game
                         ) {
                             $quizReplyAnswer->setPoints($answer->getPoints());
                             $quizReplyAnswer->setCorrect($answer->getCorrect());
-                            $q = $em->createQuery(
-                                'update PlaygroundGame\Entity\QuizReplyAnswer a SET a.points = :points, a.correct=:isCorrect WHERE a.id=:answerId'
-                            );
+                            $q = $em->createQuery('
+                              UPDATE PlaygroundGame\Entity\QuizReplyAnswer a
+                              SET a.points = :points, a.correct=:isCorrect
+                              WHERE a.id=:answerId
+                            ');
                             $q->setParameter('points', $updatedAnswer->getPoints());
                             $q->setParameter('isCorrect', $updatedAnswer->getCorrect());
                             $q->setParameter('answerId', $quizReplyAnswer->getId());
@@ -339,9 +343,11 @@ class Quiz extends Game
                         } else {
                             $quizReplyAnswer->setPoints(0);
                             $quizReplyAnswer->setCorrect(false);
-                            $q = $em->createQuery(
-                                'update PlaygroundGame\Entity\QuizReplyAnswer a SET a.points = 0, a.correct = false WHERE a.id=:answerId'
-                            );
+                            $q = $em->createQuery('
+                              UPDATE PlaygroundGame\Entity\QuizReplyAnswer a
+                              SET a.points = 0, a.correct = false
+                              WHERE a.id=:answerId
+                            ');
                             $q->setParameter('answerId', $quizReplyAnswer->getId());
                             $q->execute();
                         }
@@ -485,7 +491,6 @@ class Quiz extends Game
             $quizReplyAnswered = [];
             foreach ($quizReply->getAnswers() as $answer) {
                 $quizReplyAnswered[$answer->getQuestionId()] = $answer;
-                //$this->getQuizReplyAnswerMapper()->remove($answer);
             }
         }
 

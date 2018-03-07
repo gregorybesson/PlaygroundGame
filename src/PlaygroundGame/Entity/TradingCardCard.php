@@ -2,23 +2,16 @@
 
 namespace PlaygroundGame\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
-use Doctrine\ORM\Mapping\PrePersist;
-use Doctrine\ORM\Mapping\PreUpdate;
 use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\Factory as InputFactory;
 use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
-use Gedmo\Mapping\Annotation as Gedmo;
-use Gedmo\Translatable\Translatable;
 
 /**
  * @ORM\Entity @HasLifecycleCallbacks
  * @ORM\Table(name="game_tradingcard_card")
  * @Gedmo\TranslationEntity(class="PlaygroundGame\Entity\GameTranslation")
  */
+
 class TradingCardCard implements InputFilterAwareInterface, \JsonSerializable
 {
     protected $inputFilter;
@@ -341,7 +334,6 @@ class TradingCardCard implements InputFilterAwareInterface, \JsonSerializable
     {
         if (!$this->inputFilter) {
             $inputFilter = new InputFilter();
-            $factory = new InputFactory();
 
             $this->inputFilter = $inputFilter;
         }

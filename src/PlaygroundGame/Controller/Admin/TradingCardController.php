@@ -2,14 +2,14 @@
 
 namespace PlaygroundGame\Controller\Admin;
 
-use PlaygroundGame\Service\Game as AdminGameService;
+use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
+use PlaygroundCore\ORM\Pagination\LargeTablePaginator;
+use PlaygroundGame\Controller\Admin\GameController;
 use PlaygroundGame\Entity\TradingCard;
 use PlaygroundGame\Entity\TradingCardModel;
-use PlaygroundGame\Controller\Admin\GameController;
-use Zend\View\Model\ViewModel;
+use PlaygroundGame\Service\Game as AdminGameService;
 use Zend\Paginator\Paginator;
-use PlaygroundCore\ORM\Pagination\LargeTablePaginator;
-use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
+use Zend\View\Model\ViewModel;
 
 class TradingCardController extends GameController
 {
@@ -20,7 +20,7 @@ class TradingCardController extends GameController
 
     public function createTradingcardAction()
     {
-        $service = $this->getAdminGameService();
+        $service   = $this->getAdminGameService();
         $viewModel = new ViewModel();
         $viewModel->setTemplate('playground-game/trading-card/tradingcard');
 
@@ -89,12 +89,11 @@ class TradingCardController extends GameController
         return new ViewModel(
             array(
                 'models' => $paginator,
-                'gameId'      => $this->game->getId(),
-                'game'        => $this->game,
+                'gameId' => $this->game->getId(),
+                'game'   => $this->game,
             )
         );
     }
-
 
     public function addModelAction()
     {
@@ -127,23 +126,23 @@ class TradingCardController extends GameController
                 $this->getRequest()->getPost()->toArray(),
                 $this->getRequest()->getFiles()->toArray()
             );
-            
+
             $model = $this->getAdminGameService()->updateModel($data, $model);
             if ($model) {
                 // Redirect to list of games
                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The model has been created');
                 return $this->redirect()->toRoute(
                     'admin/playgroundgame/tradingcard-model-list',
-                    array('gameId'=>$this->game->getId())
+                    array('gameId' => $this->game->getId())
                 );
             }
         }
         return $viewModel->setVariables(
             array(
-                'form' => $form,
-                'game' => $this->game,
+                'form'     => $form,
+                'game'     => $this->game,
                 'model_id' => 0,
-                'title' => 'Add model',
+                'title'    => 'Add model',
             )
         );
     }
@@ -157,7 +156,7 @@ class TradingCardController extends GameController
         $service = $this->getAdminGameService();
 
         $modelId = $this->getEvent()->getRouteMatch()->getParam('modelId');
-        $model = $service->getTradingCardModelMapper()->findById($modelId);
+        $model   = $service->getTradingCardModelMapper()->findById($modelId);
 
         $form = $this->getServiceLocator()->get('playgroundgame_tradingcardmodel_form');
         $form->remove('models_file');
@@ -181,16 +180,16 @@ class TradingCardController extends GameController
                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The model has been edited');
                 return $this->redirect()->toRoute(
                     'admin/playgroundgame/tradingcard-model-list',
-                    array('gameId'=>$this->game->getId())
+                    array('gameId' => $this->game->getId())
                 );
             }
         }
         return $viewModel->setVariables(
             array(
-                'form' => $form,
-                'game' => $this->game,
+                'form'     => $form,
+                'game'     => $this->game,
                 'model_id' => $modelId,
-                'title' => 'Edit model',
+                'title'    => 'Edit model',
             )
         );
     }
@@ -204,15 +203,11 @@ class TradingCardController extends GameController
         $sg = $this->getAdminGameService();
         $this->checkGame();
 
-        $modelId = $this->params()->fromQuery('model');
-        // if (! $modelId) {
-        //     return $this->notFoundAction();
-        // }
         $models = $sg->getTradingCardModelMapper()->findBy(array('game' => $this->game));
 
         if ($this->getRequest()->isXmlHttpRequest() && $this->getRequest()->isPost()) {
             $position = json_decode($this->getRequest()->getPost()->get('position'));
-            $i = 0;
+            $i        = 0;
             foreach ($models as $model) {
                 $jsonData = json_decode($model->getJsonData());
                 if (isset($jsonData->coo)) {
@@ -229,8 +224,8 @@ class TradingCardController extends GameController
             // update coo of Model
             $jsonModel = new \Zend\View\Model\JsonModel();
             $jsonModel->setVariables(array(
-                'success'   => true,
-            ));
+                    'success' => true,
+                ));
 
             return $jsonModel;
         }
@@ -239,16 +234,16 @@ class TradingCardController extends GameController
         $bgs = [];
         $coo = [];
         foreach ($models as $model) {
-            $json = json_decode($model->getJsonData());
+            $json     = json_decode($model->getJsonData());
             $modelCoo = (isset($json->coo))?$json->coo:'';
-            $bgs[] = '/'.$model->getImage();
-            $coo[] = $modelCoo;
+            $bgs[]    = '/'.$model->getImage();
+            $coo[]    = $modelCoo;
         }
 
         return array(
             'backgrounds' => $bgs,
-            'face' => 'img-test/photo.png',
-            'coo'  => $coo,
+            'face'        => 'img-test/photo.png',
+            'coo'         => $coo,
         );
     }
 
@@ -259,7 +254,7 @@ class TradingCardController extends GameController
         if (!$modelId) {
             return $this->redirect()->toRoute('admin/playgroundgame/list');
         }
-        $model   = $service->getTradingCardModelMapper()->findById($modelId);
+        $model         = $service->getTradingCardModelMapper()->findById($modelId);
         $tradingcardId = $model->getTradingCard()->getId();
 
         if ($model->getActive()) {
@@ -273,7 +268,7 @@ class TradingCardController extends GameController
 
         return $this->redirect()->toRoute(
             'admin/playgroundgame/tradingcard-model-list',
-            array('gameId'=>$tradingcardId)
+            array('gameId' => $tradingcardId)
         );
     }
 

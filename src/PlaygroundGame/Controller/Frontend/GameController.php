@@ -291,7 +291,7 @@ class GameController extends AbstractActionController
     public function registerAction()
     {
         $formDef = $this->game->getPlayerForm();
-        if ($formDef != null) {
+        if ($formDef !== null) {
             $form = $this->getGameService()->createFormFromJson($formDef->getForm(), 'playerForm');
         } else {
             return $this->notFoundAction();
