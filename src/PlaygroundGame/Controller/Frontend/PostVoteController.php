@@ -179,7 +179,7 @@ class PostVoteController extends GameController
             $post = $this->getGameService()->confirmPost($this->game, $this->user);
 
             if ($post) {
-                if (!($step = $this->game->nextStep('play'))) {
+                if (!($step = $this->game->nextStep('preview'))) {
                     $step = 'result';
                 }
                 $redirectUrl = $this->frontendUrl()->fromRoute(
