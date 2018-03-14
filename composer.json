@@ -28,7 +28,7 @@
 		"zendframework/zendframework" : "2.*",
 		"playground/core" : "2.*",
 		"playground/design" : "2.*",
-		"playground/user" : "2.*",
+		"playground/user" : "3.*",
 		"playground/hybridauth" : "2.*",
 		"playground/partnership" : "2.*"
 	},
