@@ -6,7 +6,6 @@ use PlaygroundGame\Mapper\AbstractMapper;
 
 class PostVotePost extends AbstractMapper
 {
-
     public function findByGameId($post_vote)
     {
         return $this->getEntityRepository()->findBy(array('post_vote' => $post_vote));

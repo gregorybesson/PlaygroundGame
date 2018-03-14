@@ -29,9 +29,9 @@ class Mission extends Game implements InputFilterAwareInterface
         $this->missionGames = new ArrayCollection();
     }
 
-     /**
-     * @return the $missionGames
-     */
+    /**
+    * @return the $missionGames
+    */
     public function getMissionGames()
     {
         return $this->missionGames;

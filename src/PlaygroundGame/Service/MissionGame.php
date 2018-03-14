@@ -15,19 +15,19 @@ class MissionGame extends EventProvider
     * @var missionMapper
     */
     protected $missionMapper;
-     /**
+    /**
     * @var missionGameMapper
     */
     protected $missionGameMapper;
-     /**
+    /**
     * @var missionGameConditionMapper
     */
     protected $missionGameConditionMapper;
-     /**
+    /**
     * @var gameMapper
     */
     protected $gameMapper;
-     /**
+    /**
     * @var options
     */
     protected $options;
@@ -249,7 +249,7 @@ class MissionGame extends EventProvider
         return $this;
     }
 
-     /**
+    /**
     * getMissionGameConditionMapper : retrieve missionGameCondition mapper instance
     *
     * @return Mapper/missionGameCondition $missionGameConditionMapper

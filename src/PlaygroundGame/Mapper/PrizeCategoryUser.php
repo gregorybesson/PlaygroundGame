@@ -6,7 +6,6 @@ use PlaygroundGame\Mapper\AbstractMapper;
 
 class PrizeCategoryUser extends AbstractMapper
 {
-
     public function removeAll($user)
     {
         $categories = $this->findBy(array('user' => $user));

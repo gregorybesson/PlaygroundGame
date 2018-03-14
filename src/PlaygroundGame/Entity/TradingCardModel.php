@@ -7,18 +7,21 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping\PrePersist;
 use Doctrine\ORM\Mapping\PreUpdate;
-use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\Factory as InputFactory;
-use Zend\InputFilter\InputFilterAwareInterface;
-use Zend\InputFilter\InputFilterInterface;
+
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Translatable\Translatable;
+
+use Zend\InputFilter\Factory as InputFactory;
+use Zend\InputFilter\InputFilter;
+use Zend\InputFilter\InputFilterAwareInterface;
+use Zend\InputFilter\InputFilterInterface;
 
 /**
  * @ORM\Entity @HasLifecycleCallbacks
  * @ORM\Table(name="game_tradingcard_model")
  * @Gedmo\TranslationEntity(class="PlaygroundGame\Entity\GameTranslation")
  */
+
 class TradingCardModel implements InputFilterAwareInterface, \JsonSerializable
 {
     protected $inputFilter;
@@ -366,7 +369,7 @@ class TradingCardModel implements InputFilterAwareInterface, \JsonSerializable
         return $this;
     }
 
-        /**
+    /**
      * Gets the value of jsonData.
      *
      * @return mixed
@@ -398,20 +401,6 @@ class TradingCardModel implements InputFilterAwareInterface, \JsonSerializable
     public function getCards()
     {
         return $this->cards;
-    }
-
-    /**
-     * Sets the value of cards.
-     *
-     * @param mixed $cards the cards
-     *
-     * @return self
-     */
-    private function setCards($cards)
-    {
-        $this->cards = $cards;
-
-        return $this;
     }
 
     public function addCards(ArrayCollection $cards)
@@ -519,11 +508,11 @@ class TradingCardModel implements InputFilterAwareInterface, \JsonSerializable
         unset($jsonArray['distribution']);
         unset($jsonArray['createdAt']);
         unset($jsonArray['updatedAt']);
-        
+
         return $jsonArray;
     }
 
-        /**
+    /**
      * Populate from an array.
      *
      * @param array $data
@@ -554,17 +543,17 @@ class TradingCardModel implements InputFilterAwareInterface, \JsonSerializable
             $this->family = $data['family'];
         }
 
-        $this->points = (!empty($data['points'])) ?
-            $this->points = $data['points']:
-            0;
+        $this->points = (!empty($data['points']))?
+        $this->points = $data['points']:
+        0;
 
         if (!empty($data['image'])) {
             $this->image = $data['image'];
         }
 
-        $this->availability  = (!empty($data['availability'])) ?
-            \DateTime::createFromFormat('d/m/Y H:i:s', $data['availability']) :
-            null;
+        $this->availability = (!empty($data['availability']))?
+        \DateTime::createFromFormat('d/m/Y H:i:s', $data['availability']):
+        null;
     }
 
     public function setInputFilter(InputFilterInterface $inputFilter)
@@ -576,12 +565,12 @@ class TradingCardModel implements InputFilterAwareInterface, \JsonSerializable
     {
         if (!$this->inputFilter) {
             $inputFilter = new InputFilter();
-            $factory = new InputFactory();
+            $factory     = new InputFactory();
 
             $inputFilter->add($factory->createInput(array(
-                'name' => 'availability',
-                'required' => false,
-            )));
+                        'name'     => 'availability',
+                        'required' => false,
+                    )));
 
             $this->inputFilter = $inputFilter;
         }

@@ -17,7 +17,6 @@ use Zend\InputFilter\Factory as InputFactory;
  */
 class MissionGame implements InputFilterAwareInterface
 {
-
     protected $inputFilter;
     
     /**
@@ -27,10 +26,10 @@ class MissionGame implements InputFilterAwareInterface
      */
     protected $id;
 
-     /**
-     * @ORM\ManyToOne(targetEntity="PlaygroundGame\Entity\Game")
-     * @ORM\JoinColumn(name="game_id", referencedColumnName="id", onDelete="CASCADE")
-     **/
+    /**
+    * @ORM\ManyToOne(targetEntity="PlaygroundGame\Entity\Game")
+    * @ORM\JoinColumn(name="game_id", referencedColumnName="id", onDelete="CASCADE")
+    **/
     protected $game;
 
     /**
@@ -106,10 +105,10 @@ class MissionGame implements InputFilterAwareInterface
         return $this->id;
     }
 
-     /**
-     * @param $id
-     * @return MissionGame
-     */
+    /**
+    * @param $id
+    * @return MissionGame
+    */
     public function setPosition($position)
     {
         $this->position = (int) $position;

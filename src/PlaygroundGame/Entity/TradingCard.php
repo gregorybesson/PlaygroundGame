@@ -1,12 +1,15 @@
 <?php
 namespace PlaygroundGame\Entity;
 
-use PlaygroundGame\Entity\Game;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
+use Doctrine\ORM\Mapping\PrePersist;
+use Doctrine\ORM\Mapping\PreUpdate;
+
+use PlaygroundGame\Entity\Game;
+
 use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\Factory as InputFactory;
 use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
 
@@ -14,6 +17,7 @@ use Zend\InputFilter\InputFilterInterface;
  * @ORM\Entity @HasLifecycleCallbacks
  * @ORM\Table(name="game_tradingcard")
  */
+
 class TradingCard extends Game implements InputFilterAwareInterface
 {
     const CLASSTYPE = 'tradingcard';
@@ -35,7 +39,7 @@ class TradingCard extends Game implements InputFilterAwareInterface
      * @ORM\Column(name="booster_draw_quantity", type="integer", nullable=true)
      */
     protected $boosterDrawQuantity;
-    
+
     public function __construct()
     {
         parent::__construct();
@@ -148,7 +152,6 @@ class TradingCard extends Game implements InputFilterAwareInterface
     {
         if (!$this->inputFilter) {
             $inputFilter = new InputFilter();
-            $factory = new InputFactory();
 
             $inputFilter = parent::getInputFilter();
 

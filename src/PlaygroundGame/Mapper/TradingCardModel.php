@@ -5,7 +5,6 @@ use PlaygroundGame\Mapper\AbstractMapper;
 
 class TradingCardModel extends AbstractMapper
 {
-
     public function queryByGame($tradingcard)
     {
         $query = $this->em->createQuery(

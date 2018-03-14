@@ -6,7 +6,6 @@ use PlaygroundGame\Mapper\AbstractMapper;
 
 class PostVoteVote extends AbstractMapper
 {
-
     public function getEntityRepository()
     {
         if (null === $this->er) {

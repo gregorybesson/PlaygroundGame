@@ -42,11 +42,11 @@ class Quiz extends Game
      */
     public function createQuestion(array $data)
     {
-        $path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR;
-        $media_url = $this->getOptions()->getMediaUrl() . '/';
+        $path      = $this->getOptions()->getMediaPath().DIRECTORY_SEPARATOR;
+        $media_url = $this->getOptions()->getMediaUrl().'/';
 
-        $question  = new \PlaygroundGame\Entity\QuizQuestion();
-        $form  = $this->serviceLocator->get('playgroundgame_quizquestion_form');
+        $question = new \PlaygroundGame\Entity\QuizQuestion();
+        $form     = $this->serviceLocator->get('playgroundgame_quizquestion_form');
         $form->bind($question);
         $form->setData($data);
 
@@ -70,16 +70,16 @@ class Quiz extends Game
 
         $this->getEventManager()->trigger(__FUNCTION__, $this, array('game' => $question, 'data' => $data));
         $this->getQuizQuestionMapper()->insert($question);
-        $this->getEventManager()->trigger(__FUNCTION__.'.post', $this, array('game' => $question, 'data' => $data));
+        $this->getEventManager()->trigger(__FUNCTION__ .'.post', $this, array('game' => $question, 'data' => $data));
 
         if (!empty($data['upload_image']['tmp_name'])) {
             ErrorHandler::start();
             $data['upload_image']['name'] = $this->fileNewname(
                 $path,
-                $question->getId() . "-" . $data['upload_image']['name']
+                $question->getId()."-".$data['upload_image']['name']
             );
-            move_uploaded_file($data['upload_image']['tmp_name'], $path . $data['upload_image']['name']);
-            $question->setImage($media_url . $data['upload_image']['name']);
+            move_uploaded_file($data['upload_image']['tmp_name'], $path.$data['upload_image']['name']);
+            $question->setImage($media_url.$data['upload_image']['name']);
             ErrorHandler::stop(true);
         }
 
@@ -95,10 +95,10 @@ class Quiz extends Game
      */
     public function updateQuestion(array $data, $question)
     {
-        $path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR;
-        $media_url = $this->getOptions()->getMediaUrl() . '/';
+        $path      = $this->getOptions()->getMediaPath().DIRECTORY_SEPARATOR;
+        $media_url = $this->getOptions()->getMediaUrl().'/';
 
-        $form  = $this->serviceLocator->get('playgroundgame_quizquestion_form');
+        $form = $this->serviceLocator->get('playgroundgame_quizquestion_form');
         $form->bind($question);
         $form->setData($data);
 
@@ -118,10 +118,10 @@ class Quiz extends Game
             ErrorHandler::start();
             $data['upload_image']['name'] = $this->fileNewname(
                 $path,
-                $question->getId() . "-" . $data['upload_image']['name']
+                $question->getId()."-".$data['upload_image']['name']
             );
-            move_uploaded_file($data['upload_image']['tmp_name'], $path . $data['upload_image']['name']);
-            $question->setImage($media_url . $data['upload_image']['name']);
+            move_uploaded_file($data['upload_image']['tmp_name'], $path.$data['upload_image']['name']);
+            $question->setImage($media_url.$data['upload_image']['name']);
             ErrorHandler::stop(true);
         }
 
@@ -129,26 +129,26 @@ class Quiz extends Game
             ErrorHandler::start();
             $image = $question->getImage();
             $image = str_replace($media_url, '', $image);
-            if (file_exists($path .$image)) {
-                unlink($path .$image);
+            if (file_exists($path.$image)) {
+                unlink($path.$image);
             }
             $question->setImage(null);
             ErrorHandler::stop(true);
         }
-        
+
         $i = 0;
         foreach ($question->getAnswers() as $answer) {
             if (!empty($data['answers'][$i]['upload_image']['tmp_name'])) {
                 ErrorHandler::start();
                 $data['answers'][$i]['upload_image']['name'] = $this->fileNewname(
                     $path,
-                    $question->getId() . "-" . $data['answers'][$i]['upload_image']['name']
+                    $question->getId()."-".$data['answers'][$i]['upload_image']['name']
                 );
                 move_uploaded_file(
                     $data['answers'][$i]['upload_image']['tmp_name'],
-                    $path . $data['answers'][$i]['upload_image']['name']
+                    $path.$data['answers'][$i]['upload_image']['name']
                 );
-                $answer->setImage($media_url . $data['answers'][$i]['upload_image']['name']);
+                $answer->setImage($media_url.$data['answers'][$i]['upload_image']['name']);
                 ErrorHandler::stop(true);
             }
             $i++;
@@ -169,7 +169,7 @@ class Quiz extends Game
         );
         $this->getQuizQuestionMapper()->update($question);
         $this->getEventManager()->trigger(
-            __FUNCTION__.'.post',
+            __FUNCTION__ .'.post',
             $this,
             array('question' => $question, 'data' => $data)
         );
@@ -184,12 +184,12 @@ class Quiz extends Game
         $em = $this->serviceLocator->get('doctrine.entitymanager.orm_default');
         $qb = $em->createQueryBuilder();
         $qb->select('r')
-            ->from('PlaygroundGame\Entity\QuizReply', 'r')
-            ->innerJoin('r.entry', 'e')
-            ->where('e.game = :game')
-            ->setParameter('game', $game);
+           ->from('PlaygroundGame\Entity\QuizReply', 'r')
+           ->innerJoin('r.entry', 'e')
+           ->where('e.game = :game')
+           ->setParameter('game', $game);
         $query = $qb->getQuery();
-        
+
         $replies = $query->getResult();
 
         return $replies;
@@ -199,7 +199,7 @@ class Quiz extends Game
     {
         set_time_limit(0);
         $em = $this->serviceLocator->get('doctrine.entitymanager.orm_default');
-        
+
         /* @var $dbal \Doctrine\DBAL\Connection */
         $dbal = $em->getConnection();
 
@@ -209,51 +209,69 @@ class Quiz extends Game
         // Very fast (native query inside)
         if ($question->getType() == 2) {
             foreach ($answers as $answer) {
-                $value = trim(strip_tags($answer->getAnswer()));
-                $points = ($answer->getCorrect())? $answer->getPoints():0;
-                $sql = "
-                    UPDATE game_quiz_reply_answer AS ra 
-                    SET ra.points=IF(ra.answer='". $value ."', ". $points .", ra.points), 
-                        ra.correct = IF(ra.answer='". $value ."', ". $answer->getCorrect() .", ra.correct)
-                    WHERE ra.question_id = " . $question->getId() ."
-                ";
-
-                $dbal->exec($sql);
+                $value  = trim(strip_tags($answer->getAnswer()));
+                $points = ($answer->getCorrect())?$answer->getPoints():0;
+                $sql    = "
+          UPDATE game_quiz_reply_answer AS ra
+          SET ra.points=IF(ra.answer=:answer, :points, ra.points),
+              ra.correct = IF(ra.answer=:answer, :isCorrect, ra.correct)
+          WHERE ra.question_id = :questionId
+        ";
+                $stmt = $dbal->prepare($sql);
+                $stmt->execute(
+                    array(
+                        'answer'     => $value,
+                        'points'     => $points,
+                        'isCorrect'  => $answer->getCorrect(),
+                        'questionId' => $question->getId()
+                    )
+                );
             }
         } else {
             foreach ($answers as $answer) {
-                $points = ($answer->getCorrect())? $answer->getPoints():0;
-                $sql = "
-                    UPDATE game_quiz_reply_answer AS ra 
-                    SET ra.points=" . $points .", 
-                        ra.correct = " . $answer->getCorrect() ."
-                    WHERE ra.question_id = ". $question->getId() ." 
-                        AND ra.answer_id = ". $answer->getId() ."
-                ";
+                $points = ($answer->getCorrect())?$answer->getPoints():0;
+                $sql    = "
+          UPDATE game_quiz_reply_answer AS ra
+          SET ra.points=:points,
+              ra.correct = :isCorrect
+          WHERE ra.question_id = :questionId
+              AND ra.answer_id = :answerId
+        ";
 
-                $dbal->exec($sql);
+                $stmt = $dbal->prepare($sql);
+                $stmt->execute(
+                    array(
+                        'points'     => $points,
+                        'isCorrect'  => $answer->getCorrect(),
+                        'questionId' => $question->getId(),
+                        'answerId'   => $answer->getId()
+                    )
+                );
             }
         }
 
         // Entry update with points. WINNER as to be calculated also !
         $sql = "
-            UPDATE game_entry as e
-            INNER JOIN
-            (
-               SELECT e.id, SUM(ra.points) as points, SUM(ra.correct) as correct
-               FROM game_entry as e
-               INNER JOIN game_quiz_reply AS r ON r.entry_id = e.id
-               INNER JOIN game_quiz_reply_answer AS ra ON ra.reply_id = r.id
-               GROUP BY e.id
-            ) i ON e.id = i.id
-            SET e.points = i.points 
-            WHERE e.game_id = ". $question->getQuiz()->getId() . "
-        ";
+      UPDATE game_entry as e
+      INNER JOIN
+      (
+         SELECT e.id, SUM(ra.points) as points, SUM(ra.correct) as correct
+         FROM game_entry as e
+         INNER JOIN game_quiz_reply AS r ON r.entry_id = e.id
+         INNER JOIN game_quiz_reply_answer AS ra ON ra.reply_id = r.id
+         GROUP BY e.id
+      ) i ON e.id = i.id
+      SET e.points = i.points
+      WHERE e.game_id = :gameId
+    ";
 
-        $dbal->exec($sql);
+        $stmt = $dbal->prepare($sql);
+        $stmt->execute(
+            array('gameId' => $question->getQuiz()->getId())
+        );
 
         $this->getEventManager()->trigger(
-            __FUNCTION__.'.post',
+            __FUNCTION__ .'.post',
             $this,
             array('question' => $question)
         );
@@ -284,7 +302,7 @@ class Quiz extends Game
         }
 
         foreach ($replies as $reply) {
-            $quizPoints = 0;
+            $quizPoints         = 0;
             $quizCorrectAnswers = 0;
 
             foreach ($reply->getAnswers() as $quizReplyAnswer) {
@@ -293,11 +311,14 @@ class Quiz extends Game
                         $updatedAnswer = $answersarray[$quizReplyAnswer->getAnswerId()];
                         $quizReplyAnswer->setPoints($updatedAnswer->getPoints());
                         $quizReplyAnswer->setCorrect($updatedAnswer->getCorrect());
-                        $q = $em->createQuery(
-                            'update PlaygroundGame\Entity\QuizReplyAnswer a SET a.points = ' .
-                            $updatedAnswer->getPoints() . ',a.correct=' . $updatedAnswer->getCorrect() .
-                            ' WHERE a.id=' .$quizReplyAnswer->getId()
-                        );
+                        $q = $em->createQuery('
+							UPDATE PlaygroundGame\Entity\QuizReplyAnswer a
+              SET a.points = :points, a.correct=:isCorrect
+              WHERE a.id=:answerId
+						');
+                        $q->setParameter('points', $updatedAnswer->getPoints());
+                        $q->setParameter('isCorrect', $updatedAnswer->getCorrect());
+                        $q->setParameter('answerId', $quizReplyAnswer->getId());
                         $q->execute();
                     }
                 } elseif ($quizReplyAnswer->getQuestionId() === $question->getId()) {
@@ -310,19 +331,24 @@ class Quiz extends Game
                         ) {
                             $quizReplyAnswer->setPoints($answer->getPoints());
                             $quizReplyAnswer->setCorrect($answer->getCorrect());
-                            $q = $em->createQuery(
-                                'update PlaygroundGame\Entity\QuizReplyAnswer a SET a.points = ' .
-                                $answer->getPoints() . ', a.correct='.$answer->getCorrect()
-                                . ' WHERE a.id=' .$quizReplyAnswer->getId()
-                            );
+                            $q = $em->createQuery('
+                              UPDATE PlaygroundGame\Entity\QuizReplyAnswer a
+                              SET a.points = :points, a.correct=:isCorrect
+                              WHERE a.id=:answerId
+                            ');
+                            $q->setParameter('points', $updatedAnswer->getPoints());
+                            $q->setParameter('isCorrect', $updatedAnswer->getCorrect());
+                            $q->setParameter('answerId', $quizReplyAnswer->getId());
                             $q->execute();
                         } else {
                             $quizReplyAnswer->setPoints(0);
                             $quizReplyAnswer->setCorrect(false);
-                            $q = $em->createQuery(
-                                'update PlaygroundGame\Entity\QuizReplyAnswer a SET a.points = 0, a.correct = false WHERE a.id=' .
-                                $quizReplyAnswer->getId()
-                            );
+                            $q = $em->createQuery('
+                              UPDATE PlaygroundGame\Entity\QuizReplyAnswer a
+                              SET a.points = 0, a.correct = false
+                              WHERE a.id=:answerId
+                            ');
+                            $q->setParameter('answerId', $quizReplyAnswer->getId());
                             $q->execute();
                         }
                     }
@@ -335,7 +361,7 @@ class Quiz extends Game
                     $quizCorrectAnswers += $quizReplyAnswer->getCorrect();
                 }
             }
-            
+
             $winner = $this->isWinner($question->getQuiz(), $quizCorrectAnswers);
             $reply->getEntry()->setWinner($winner);
             $reply->getEntry()->setPoints($quizPoints);
@@ -344,7 +370,7 @@ class Quiz extends Game
         }
 
         $this->getEventManager()->trigger(
-            __FUNCTION__.'.post',
+            __FUNCTION__ .'.post',
             $this,
             array('question' => $question)
         );
@@ -374,7 +400,7 @@ class Quiz extends Game
      */
     public function calculateMaxAnswersQuestion($question)
     {
-        $question_max_points = 0;
+        $question_max_points          = 0;
         $question_max_correct_answers = 0;
         // Closed question : Only one answer allowed
         if ($question->getType() == 0) {
@@ -382,14 +408,14 @@ class Quiz extends Game
                 if ($answer->getPoints() > $question_max_points) {
                     $question_max_points = $answer->getPoints();
                 }
-                if ($answer->getCorrect() && $question_max_correct_answers==0) {
-                    $question_max_correct_answers=1;
+                if ($answer->getCorrect() && $question_max_correct_answers == 0) {
+                    $question_max_correct_answers = 1;
                 }
             }
             if ($question_max_correct_answers == 0) {
                 return false;
             }
-        // Closed question : Many answers allowed
+            // Closed question : Many answers allowed
         } elseif ($question->getType() == 1) {
             foreach ($question->getAnswers() as $answer) {
                 $question_max_points += $answer->getPoints();
@@ -401,7 +427,7 @@ class Quiz extends Game
             if ($question_max_correct_answers == 0) {
                 return false;
             }
-        // Not a question : A textarea to fill in
+            // Not a question : A textarea to fill in
         } elseif ($question->getType() == 2) {
             $question_max_correct_answers = 0;
         }
@@ -414,7 +440,7 @@ class Quiz extends Game
 
     public function calculateMaxAnswersQuiz($quiz)
     {
-        $question_max_points = 0;
+        $question_max_points          = 0;
         $question_max_correct_answers = 0;
         foreach ($quiz->getQuestions() as $question) {
             $question_max_points += $question->getMaxPoints();
@@ -446,17 +472,17 @@ class Quiz extends Game
     {
         // Si mon nb de participation est < au nb autorisé, j'ajoute une entry + reponses au quiz et points
         $quizReplyMapper = $this->getQuizReplyMapper();
-        $entryMapper = $this->getEntryMapper();
-        $entry = $this->findLastActiveEntry($game, $user);
+        $entryMapper     = $this->getEntryMapper();
+        $entry           = $this->findLastActiveEntry($game, $user);
 
         if (!$entry) {
             return false;
         }
 
-        $quizPoints          = 0;
-        $quizCorrectAnswers  = 0;
-        $maxCorrectAnswers = $game->getMaxCorrectAnswers();
-        $totalQuestions = 0;
+        $quizPoints         = 0;
+        $quizCorrectAnswers = 0;
+        $maxCorrectAnswers  = $game->getMaxCorrectAnswers();
+        $totalQuestions     = 0;
 
         $quizReply = $this->getQuizReplyMapper()->getLastGameReply($entry);
         if (!$quizReply) {
@@ -465,14 +491,13 @@ class Quiz extends Game
             $quizReplyAnswered = [];
             foreach ($quizReply->getAnswers() as $answer) {
                 $quizReplyAnswered[$answer->getQuestionId()] = $answer;
-                //$this->getQuizReplyAnswerMapper()->remove($answer);
             }
         }
-        
+
         foreach ($data as $group) {
             foreach ($group as $q => $a) {
-                if (strlen($q) > 5 && strpos($q, '-data', strlen($q) - 5) !== false) {
-                    continue; // answer data is processed below
+                if (strlen($q) > 5 && strpos($q, '-data', strlen($q)-5) !== false) {
+                    continue;// answer data is processed below
                 }
                 $question = $this->getQuizQuestionMapper()->findById((int) str_replace('q', '', $q));
                 ++$totalQuestions;
@@ -493,7 +518,7 @@ class Quiz extends Game
                             $quizReplyAnswer->setCorrect($answer->getCorrect());
 
                             $quizReply->addAnswer($quizReplyAnswer);
-                            
+
                             $quizPoints += $answer->getPoints();
                             $quizCorrectAnswers += $answer->getCorrect();
 
@@ -578,7 +603,7 @@ class Quiz extends Game
         $quizReplyMapper->insert($quizReply);
 
         $this->getEventManager()->trigger(
-            __FUNCTION__.'.post',
+            __FUNCTION__ .'.post',
             $this,
             array('user' => $user, 'entry' => $entry, 'reply' => $quizReply, 'game' => $game)
         );
@@ -591,10 +616,10 @@ class Quiz extends Game
         // Pour déterminer le gagnant, je regarde le nombre max de reponses correctes possibles
         // dans le jeu, puis je calcule le ratio de bonnes réponses et le compare aux conditions
         // de victoire
-        $winner = false;
+        $winner            = false;
         $maxCorrectAnswers = $game->getMaxCorrectAnswers();
         if ($maxCorrectAnswers > 0) {
-            $ratioCorrectAnswers = ($quizCorrectAnswers / $maxCorrectAnswers) * 100;
+            $ratioCorrectAnswers = ($quizCorrectAnswers/$maxCorrectAnswers)*100;
         } elseif ($game->getVictoryConditions() > 0) {
             // In the case I have a pronostic game for example
             $ratioCorrectAnswers = 0;
@@ -613,7 +638,7 @@ class Quiz extends Game
 
     public function getEntriesHeader($game)
     {
-        $header = parent::getEntriesHeader($game);
+        $header                        = parent::getEntriesHeader($game);
         $header['totalCorrectAnswers'] = 1;
 
         return $header;
@@ -647,11 +672,11 @@ class Quiz extends Game
             e.updated_at,
             r.totalCorrectAnswers
             ')
-            ->from('PlaygroundGame\Entity\QuizReply', 'r')
-            ->innerJoin('r.entry', 'e')
-            ->leftJoin('e.user', 'u')
-            ->where($qb->expr()->eq('e.game', ':game'));
-        
+        ->from('PlaygroundGame\Entity\QuizReply', 'r')
+        ->innerJoin('r.entry', 'e')
+        ->leftJoin('e.user', 'u')
+        ->where($qb->expr()->eq('e.game', ':game'));
+
         $qb->setParameter('game', $game);
 
         return $qb->getQuery();
@@ -784,7 +809,7 @@ class Quiz extends Game
         return $this->quizReplyAnswerMapper;
     }
 
-     /**
+    /**
      * setQuizReplyAnswerMapper
      *
      * @param  QuizReplyAnswerMapper $quizReplyAnswerMapper

@@ -31,7 +31,6 @@ class PrizeCategoryController extends AbstractActionController
 
     public function getServiceLocator()
     {
-        
         return $this->serviceLocator;
     }
     

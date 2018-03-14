@@ -15,7 +15,6 @@ use Zend\InputFilter\InputFilterInterface;
  */
 class MissionGameCondition implements InputFilterAwareInterface
 {
-
     const NONE    = 0;
     const VICTORY = 1;
     const DEFEAT  = 2;
@@ -46,9 +45,9 @@ class MissionGameCondition implements InputFilterAwareInterface
      **/
     protected $missionGame;
     
-     /**
-     * @ORM\Column(name="attribute", type="string", nullable=true)
-     */
+    /**
+    * @ORM\Column(name="attribute", type="string", nullable=true)
+    */
     protected $attribute;
 
     /**
@@ -78,9 +77,9 @@ class MissionGameCondition implements InputFilterAwareInterface
     {
     }
 
-     /**
-     * @return the $id
-     */
+    /**
+    * @return the $id
+    */
     public function getId()
     {
         return $this->id;
@@ -115,10 +114,10 @@ class MissionGameCondition implements InputFilterAwareInterface
         return $this->missionGame;
     }
 
-     /**
-     * @param $id
-     * @return MissionGameCondition
-     */
+    /**
+    * @param $id
+    * @return MissionGameCondition
+    */
     public function setAttribute($attribute)
     {
         $this->attribute = $attribute;
@@ -134,10 +133,10 @@ class MissionGameCondition implements InputFilterAwareInterface
         return $this->attribute;
     }
 
-     /**
-     * @param $id
-     * @return MissionGameCondition
-     */
+    /**
+    * @param $id
+    * @return MissionGameCondition
+    */
     public function setComparison($comparison)
     {
         $this->comparison = $comparison;
@@ -153,10 +152,10 @@ class MissionGameCondition implements InputFilterAwareInterface
         return $this->comparison;
     }
 
-     /**
-     * @param $id
-     * @return MissionGameCondition
-     */
+    /**
+    * @param $id
+    * @return MissionGameCondition
+    */
     public function setValue($value)
     {
         $this->value = $value;

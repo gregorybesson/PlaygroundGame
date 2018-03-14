@@ -115,9 +115,9 @@ class PostVoteVote implements InputFilterAwareInterface, \JsonSerializable
         return $this;
     }
 
-   /**
-    * @return the unknown_type
-    */
+    /**
+     * @return the unknown_type
+     */
     public function getUser()
     {
         return $this->user;

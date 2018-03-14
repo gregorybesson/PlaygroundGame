@@ -6,7 +6,6 @@ use PlaygroundGame\Mapper\AbstractMapper;
 
 class InstantWinOccurrence extends AbstractMapper
 {
-
     public function findByEntry($entry)
     {
         return $this->getEntityRepository()->findOneBy(array('entry' => $entry));

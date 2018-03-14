@@ -4,7 +4,6 @@ namespace PlaygroundGame\Mapper;
 
 class Quiz extends Game
 {
-
     public function getEntityRepository()
     {
         if (null === $this->er) {

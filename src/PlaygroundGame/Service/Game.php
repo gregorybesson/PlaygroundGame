@@ -709,7 +709,7 @@ class Game extends EventProvider
     }
 
     /*
-    * This function updates the entry with the player data after checking 
+    * This function updates the entry with the player data after checking
     * that the data are compliant with the formUser Game attribute
     *
     * The $data has to be a json object

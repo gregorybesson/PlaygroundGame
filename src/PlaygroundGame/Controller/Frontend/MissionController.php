@@ -3,8 +3,8 @@
 namespace PlaygroundGame\Controller\Frontend;
 
 use PlaygroundGame\Controller\Frontend\GameController;
-use Zend\Session\Container;
 use PlaygroundGame\Service\GameService;
+use Zend\Session\Container;
 
 class MissionController extends GameController
 {
@@ -14,7 +14,7 @@ class MissionController extends GameController
      */
     protected $gameService;
     protected $mission;
-    
+
     /**
      * Homepage of the game
      */
@@ -22,22 +22,22 @@ class MissionController extends GameController
     {
         $entry = $this->getGameService()->checkExistingEntry($this->game, $this->user);
         $games = $this->getGameService()->getMissionGames($this->game, $this->user);
-        
+
         $viewModel = $this->buildView($this->game);
         $viewModel->setVariables(array(
-            'user' => $this->user,
-            'games' => $games,
-            'entry' => $entry,
-            'flashMessages' => $this->flashMessenger()->getMessages(),
-        ));
-    
+                'user'          => $this->user,
+                'games'         => $games,
+                'entry'         => $entry,
+                'flashMessages' => $this->flashMessenger()->getMessages(),
+            ));
+
         return $viewModel;
     }
 
     public function playAction()
     {
         $subGameIdentifier = $this->getEvent()->getRouteMatch()->getParam('gameId');
-        $entry = $this->getGameService()->play($this->game, $this->user);
+        $entry             = $this->getGameService()->play($this->game, $this->user);
         if (!$entry) {
             // the user has already taken part of this game and the participation limit has been reached
             $this->flashMessenger()->addMessage('You have already played');
@@ -82,10 +82,8 @@ class MissionController extends GameController
         }
 
         if (!$this->user) {
-
             // The game is deployed on Facebook, and played from Facebook : retrieve/register user
             if ($session->offsetExists('signed_request')) {
-
                 // Get Playground user from Facebook info
                 $beforeLayout = $this->layout()->getTemplate();
 
@@ -93,8 +91,8 @@ class MissionController extends GameController
                     'playgrounduser_user',
                     array(
                         'controller' => 'playgrounduser_user',
-                        'action' => 'registerFacebookUser',
-                        'provider' => 'facebook'
+                        'action'     => 'registerFacebookUser',
+                        'provider'   => 'facebook',
                     )
                 );
 
@@ -106,17 +104,17 @@ class MissionController extends GameController
                     $redirect = urlencode(
                         $this->frontendUrl()->fromRoute(
                             'mission/play',
-                            array('id' => $this->game->getIdentifier()),
+                            array('id'              => $this->game->getIdentifier()),
                             array('force_canonical' => true)
                         )
                     );
                     if (array_search('login', $this->game->getStepsArray())) {
                         return $this->redirect()->toUrl(
-                            $this->frontendUrl()->fromRoute('mission/login') . '?redirect='.$redirect
+                            $this->frontendUrl()->fromRoute('mission/login').'?redirect='.$redirect
                         );
                     } else {
                         return $this->redirect()->toUrl(
-                            $this->frontendUrl()->fromRoute('zfcuser/register') . '?redirect='.$redirect
+                            $this->frontendUrl()->fromRoute('zfcuser/register').'?redirect='.$redirect
                         );
                     }
                 }
@@ -126,69 +124,69 @@ class MissionController extends GameController
                 $redirect = urlencode(
                     $this->frontendUrl()->fromRoute(
                         'mission/play',
-                        array('id' => $this->game->getIdentifier()),
+                        array('id'              => $this->game->getIdentifier()),
                         array('force_canonical' => true)
                     )
                 );
 
                 if (array_search('login', $this->game->getStepsArray())) {
                     return $this->redirect()->toUrl(
-                        $this->frontendUrl()->fromRoute('mission/login') . '?redirect='.$redirect
+                        $this->frontendUrl()->fromRoute('mission/login').'?redirect='.$redirect
                     );
                 } else {
                     return $this->redirect()->toUrl(
-                        $this->frontendUrl()->fromRoute('zfcuser/register') . '?redirect='.$redirect
+                        $this->frontendUrl()->fromRoute('zfcuser/register').'?redirect='.$redirect
                     );
                 }
             }
         }
-        
+
         $beforeLayout = $this->layout()->getTemplate();
         $subViewModel = $this->forward()->dispatch(
             'playgroundgame_'.$subGame->getClassType(),
             array(
                 'controller' => 'playgroundgame_'.$subGame->getClassType(),
-                'action' => 'play',
-                'id' => $subGame->getIdentifier()
+                'action'     => 'play',
+                'id'         => $subGame->getIdentifier()
             )
         );
-        
+
         if ($this->getResponse()->getStatusCode() == 302) {
             return $this->redirect()->toUrl(
                 $this->frontendUrl()->fromRoute(
                     'mission/result',
                     array(
-                        'id' => $this->game->getIdentifier(),
+                        'id'     => $this->game->getIdentifier(),
                         'gameId' => $subGame->getIdentifier()
                     ),
                     array('force_canonical' => true)
                 )
             );
         }
-        
+
         // suite au forward, le template de layout a changé, je dois le rétablir...
         $this->layout()->setTemplate($beforeLayout);
-        
+
         // give the ability to the mission to have its customized look and feel.
         $templatePathResolver = $this->getServiceLocator()->get('Zend\View\Resolver\TemplatePathStack');
-        $l = $templatePathResolver->getPaths();
+        $l                    = $templatePathResolver->getPaths();
         // I've already added the path for the game so the base path is $l[1]
         $templatePathResolver->addPath($l[1].'custom/'.$this->game->getIdentifier());
-        
+
         $subViewModel->mission = $this->game;
-        
+
         return $subViewModel;
     }
 
     public function resultAction()
     {
         $subGameIdentifier = $this->getEvent()->getRouteMatch()->getParam('gameId');
-        $subGame = $this->getGameService()->checkGame($subGameIdentifier);
+        $subGame           = $this->getGameService()->checkGame($subGameIdentifier);
 
-        $secretKey = strtoupper(substr(sha1(uniqid('pg_', true).'####'.time()), 0, 15));
+        $secretKey     = strtoupper(substr(sha1(uniqid('pg_', true).'####'.time()), 0, 15));
         $socialLinkUrl = $this->frontendUrl()->fromRoute(
             'mission',
-            array('id' => $this->game->getIdentifier()),
+            array('id'              => $this->game->getIdentifier()),
             array('force_canonical' => true)
         ).'?key='.$secretKey;
 
@@ -204,7 +202,7 @@ class MissionController extends GameController
             );
 
             return $this->redirect()->toUrl(
-                $this->frontendUrl()->fromRoute('zfcuser/register') . '?redirect='.$redirect
+                $this->frontendUrl()->fromRoute('zfcuser/register').'?redirect='.$redirect
             );
         }
 
@@ -216,20 +214,20 @@ class MissionController extends GameController
             'playgroundgame_'.$subGame->getClassType(),
             array(
                 'controller' => 'playgroundgame_'.$subGame->getClassType(),
-                'action' => 'result',
-                'id' => $subGameIdentifier
+                'action'     => 'result',
+                'id'         => $subGameIdentifier
             )
         );
-        
+
         if ($this->getResponse()->getStatusCode() == 302) {
             $this->getResponse()->setStatusCode('200');
-            
+
             $subViewModel = $this->forward()->dispatch(
                 'playgroundgame_'.$subGame->getClassType(),
                 array(
                     'controller' => 'playgroundgame_'.$subGame->getClassType(),
-                    'action' => 'result',
-                    'id' => $subGameIdentifier
+                    'action'     => 'result',
+                    'id'         => $subGameIdentifier
                 )
             );
         }
@@ -238,98 +236,98 @@ class MissionController extends GameController
 
         // give the ability to the mission to have its customized look and feel.
         $templatePathResolver = $this->getServiceLocator()->get('Zend\View\Resolver\TemplatePathStack');
-        $l = $templatePathResolver->getPaths();
+        $l                    = $templatePathResolver->getPaths();
         // I've already added the path for the game so the base path is $l[1]
         $templatePathResolver->addPath($l[1].'custom/'.$this->game->getIdentifier());
-        
+
         $subViewModel->mission = $this->game;
         return $subViewModel;
     }
 
     public function fbshareAction()
     {
-        $sg = $this->getGameService();
-        $result = parent::fbshareAction();
+        $sg         = $this->getGameService();
+        $result     = parent::fbshareAction();
         $bonusEntry = false;
 
         if ($result) {
             $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-            $user = $this->zfcUserAuthentication()->getIdentity();
-            $game = $sg->checkGame($identifier);
+            $user       = $this->zfcUserAuthentication()->getIdentity();
+            $game       = $sg->checkGame($identifier);
             $bonusEntry = $sg->addAnotherChance($game, $user, 1);
         }
 
         $response = $this->getResponse();
         $response->setContent(\Zend\Json\Json::encode(array(
-            'success' => $result,
-            'playBonus' => $bonusEntry
-         )));
+                    'success'   => $result,
+                    'playBonus' => $bonusEntry,
+                )));
 
         return $response;
     }
 
     public function fbrequestAction()
     {
-        $sg = $this->getGameService();
-        $result = parent::fbrequestAction();
+        $sg         = $this->getGameService();
+        $result     = parent::fbrequestAction();
         $bonusEntry = false;
 
         if ($result) {
             $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-            $user = $this->zfcUserAuthentication()->getIdentity();
-            $game = $sg->checkGame($identifier);
+            $user       = $this->zfcUserAuthentication()->getIdentity();
+            $game       = $sg->checkGame($identifier);
             $bonusEntry = $sg->addAnotherChance($game, $user, 1);
         }
 
         $response = $this->getResponse();
         $response->setContent(\Zend\Json\Json::encode(array(
-            'success' => $result,
-            'playBonus' => $bonusEntry
-        )));
+                    'success'   => $result,
+                    'playBonus' => $bonusEntry,
+                )));
 
         return $response;
     }
 
     public function tweetAction()
     {
-        $sg = $this->getGameService();
-        $result = parent::tweetAction();
+        $sg         = $this->getGameService();
+        $result     = parent::tweetAction();
         $bonusEntry = false;
 
         if ($result) {
             $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-            $user = $this->zfcUserAuthentication()->getIdentity();
-            $game = $sg->checkGame($identifier);
+            $user       = $this->zfcUserAuthentication()->getIdentity();
+            $game       = $sg->checkGame($identifier);
             $bonusEntry = $sg->addAnotherChance($game, $user, 1);
         }
 
         $response = $this->getResponse();
         $response->setContent(\Zend\Json\Json::encode(array(
-            'success' => $result,
-            'playBonus' => $bonusEntry
-        )));
+                    'success'   => $result,
+                    'playBonus' => $bonusEntry,
+                )));
 
         return $response;
     }
 
     public function googleAction()
     {
-        $sg = $this->getGameService();
-        $result = parent::googleAction();
+        $sg         = $this->getGameService();
+        $result     = parent::googleAction();
         $bonusEntry = false;
 
         if ($result) {
             $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-            $user = $this->zfcUserAuthentication()->getIdentity();
-            $game = $sg->checkGame($identifier);
+            $user       = $this->zfcUserAuthentication()->getIdentity();
+            $game       = $sg->checkGame($identifier);
             $bonusEntry = $sg->addAnotherChance($game, $user, 1);
         }
 
         $response = $this->getResponse();
         $response->setContent(\Zend\Json\Json::encode(array(
-            'success' => $result,
-            'playBonus' => $bonusEntry
-        )));
+                    'success'   => $result,
+                    'playBonus' => $bonusEntry,
+                )));
 
         return $response;
     }

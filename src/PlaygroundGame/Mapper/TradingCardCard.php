@@ -5,7 +5,6 @@ use PlaygroundGame\Mapper\AbstractMapper;
 
 class TradingCardCard extends AbstractMapper
 {
-
     public function getEntityRepository()
     {
         if (null === $this->er) {

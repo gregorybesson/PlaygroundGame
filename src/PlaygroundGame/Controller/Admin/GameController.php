@@ -37,7 +37,6 @@ class GameController extends AbstractActionController
 
     public function getServiceLocator()
     {
-        
         return $this->serviceLocator;
     }
 
@@ -57,7 +56,7 @@ class GameController extends AbstractActionController
 
     public function createForm($form)
     {
-        // I use the wonderful Form Generator to create the Post & Vote form
+        // I use the wonderful Form Generator to create the Player form
         $this->forward()->dispatch(
             'PlaygroundCore\Controller\Formgen',
             array(
