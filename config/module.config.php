@@ -1041,7 +1041,7 @@ return array(
                                 )
                             ),
                             'user-register' => array(
-                                'type' => 'Literal',
+                                'type' => 'Segment',
                                 'options' => array(
                                     'route' => '/inscription[/:socialnetwork]',
                                     'defaults' => array(
@@ -1263,7 +1263,7 @@ return array(
                                 )
                             ),
                             'user-register' => array(
-                                'type' => 'Literal',
+                                'type' => 'Segment',
                                 'options' => array(
                                     'route' => '/inscription[/:socialnetwork]',
                                     'defaults' => array(
@@ -1485,7 +1485,7 @@ return array(
                                 )
                             ),
                             'user-register' => array(
-                                'type' => 'Literal',
+                                'type' => 'Segment',
                                 'options' => array(
                                     'route' => '/inscription[/:socialnetwork]',
                                     'defaults' => array(
@@ -1731,7 +1731,7 @@ return array(
                                 )
                             ),
                             'user-register' => array(
-                                'type' => 'Literal',
+                                'type' => 'Segment',
                                 'options' => array(
                                     'route' => '/inscription[/:socialnetwork]',
                                     'defaults' => array(
