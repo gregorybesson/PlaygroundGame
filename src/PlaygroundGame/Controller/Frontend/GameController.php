@@ -90,23 +90,24 @@ class GameController extends AbstractActionController
         parent::setEventManager($events);
 
         $controller = $this;
+
         $events->attach('dispatch', function (\Zend\Mvc\MvcEvent $e) use ($controller) {
-                $identifier = $e->getRouteMatch()->getParam('id');
-                $controller->game = $controller->getGameService()->checkGame($identifier, false);
+            $identifier = $e->getRouteMatch()->getParam('id');
+            $controller->game = $controller->getGameService()->checkGame($identifier, false);
+
+            $config = $this->getServiceLocator()->get('config');
+            $customUrl = str_replace('frontend.', '', $e->getRouteMatch()->getMatchedRouteName());
+            $customUrl = explode("/", $customUrl)[0];
+
+            if (isset($config['custom_games']) && $config['custom_games'][$controller->game->getIdentifier()] &&
+                    $controller->getRequest()->getUri()->getHost() === $customUrl
+                ) {
+                $this->isSoloGame = true;
+            }
             if (!$controller->game &&
                     in_array($controller->params('action'), $controller->withGame)
                 ) {
                 return $controller->notFoundAction();
-            }
-
-                $config = $controller->getGameService()->getServiceManager()->get('config');
-                $customUrl = str_replace('frontend.', '', $e->getRouteMatch()->getMatchedRouteName());
-                $customUrl = explode("/", $customUrl)[0];
-
-            if ($config['custom_games'][$controller->game->getIdentifier()] &&
-                    $controller->getRequest()->getUri()->getHost() === $customUrl
-                ) {
-                $this->isSoloGame = true;
             }
 
             if ($controller->game &&
@@ -138,13 +139,12 @@ class GameController extends AbstractActionController
                     )
                 );
 
-                // code permettant d'identifier un custom game
                 if ($this->isSoloGame) {
-                    $urlRegister = $controller->url()->fromRoute(
-                        'frontend.'.$customUrl.'/'.$controller->game->getClassType().'/user-register',
-                        array(),
-                        array('force_canonical' => true)
-                    ).'?redirect='.$redirect;
+                     $urlRegister = $controller->url()->fromRoute(
+                         'frontend.'.$customUrl.'/'.$controller->game->getClassType().'/user-register',
+                         array(),
+                         array('force_canonical' => true)
+                     ).'?redirect='.$redirect;
                 } else {
                     $urlRegister = $controller->url()->fromRoute(
                         'frontend/zfcuser/register',
@@ -152,6 +152,13 @@ class GameController extends AbstractActionController
                         array('force_canonical' => true)
                     ).'?redirect='.$redirect;
                 }
+
+                // code permettant d'identifier un custom game
+                // ligne $config = $controller->getGameService()->getServiceManager()->get('config');
+                // ligne $customUrl = str_replace('frontend.', '', $e->getRouteMatch()->getParam('area', ''));
+                // ligne if ($config['custom_games'][$controller->game->getIdentifier()] &&
+                // ligne    $controller->getRequest()->getUri()->getHost() === $customUrl
+                // ligne ) {
                 return $controller->redirect()->toUrl($urlRegister);
             }
 
@@ -826,14 +833,6 @@ class GameController extends AbstractActionController
             $viewModel->setVariables(array('game'      => $this->game));
         }
 
-        if ($this->isSoloGame) {
-            return $this->redirect()->toUrl(
-                $this->frontendUrl()->fromRoute(
-                    $this->game->getClassType(),
-                    array('id' => $this->game->getIdentifier())
-                )
-            );
-        }
         return $viewModel;
     }
 
