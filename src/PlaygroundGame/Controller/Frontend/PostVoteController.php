@@ -638,22 +638,22 @@ class PostVoteController extends GameController
                 'success' => 0
             )));
         } else {
-          if ($request->isPost()) {
-            $post = $this->getGameService()->getPostvotePostMapper()->findById($postId);
-            if ($this->getGameService()->addVote(
-              $this->user,
-              $this->getRequest()->getServer('REMOTE_ADDR'),
-              $post
-            )) {
-              $response->setContent(\Zend\Json\Json::encode(array(
-                'success' => 1
-              )));
-            } else {
-              $response->setContent(\Zend\Json\Json::encode(array(
-                'success' => 0
-              )));
+            if ($request->isPost()) {
+                $post = $this->getGameService()->getPostvotePostMapper()->findById($postId);
+                if ($this->getGameService()->addVote(
+                    $this->user,
+                    $this->getRequest()->getServer('REMOTE_ADDR'),
+                    $post
+                )) {
+                    $response->setContent(\Zend\Json\Json::encode(array(
+                    'success' => 1
+                    )));
+                } else {
+                    $response->setContent(\Zend\Json\Json::encode(array(
+                    'success' => 0
+                    )));
+                }
             }
-          }
         }
 
         return $response;
