@@ -952,10 +952,10 @@ class GameController extends AbstractActionController
             $form->setData($params);
             $viewModel = $this->buildView($this->game);
             $viewModel->setVariables(array(
-                    'registerForm'       => $form,
-                    'enableRegistration' => $userOptions->getEnableRegistration(),
-                    'redirect'           => $redirect,
-                ));
+                'registerForm'       => $form,
+                'enableRegistration' => $userOptions->getEnableRegistration(),
+                'redirect'           => $redirect,
+            ));
             return $viewModel;
         }
 
