@@ -58,9 +58,9 @@ class GameController extends AbstractActionController
     {
         // I use the wonderful Form Generator to create the Player form
         $this->forward()->dispatch(
-            'PlaygroundCore\Controller\Formgen',
+            'playgroundcore_admin_formgen',
             array(
-                'controller' => 'PlaygroundCore\Controller\Formgen',
+                'controller' => 'playgroundcore_admin_formgen',
                 'action' => 'create'
             )
         );
