@@ -339,35 +339,38 @@ class PostVoteController extends GameController
             );
         }
 
-        $view = $this->forward()->dispatch(
-            'playgroundgame_'.$this->game->getClassType(),
-            array(
-                'controller' => 'playgroundgame_'.$this->game->getClassType(),
-                'action' => 'share',
-                'id' => $this->game->getIdentifier()
-            )
-        );
+        // DEPRECATED: we should be able to add a specific view to each action
+        // based on config in the admin (tab design)
+        // $view = $this->forward()->dispatch(
+        //     'playgroundgame_'.$this->game->getClassType(),
+        //     array(
+        //         'controller' => 'playgroundgame_'.$this->game->getClassType(),
+        //         'action' => 'share',
+        //         'id' => $this->game->getIdentifier()
+        //     )
+        // );
 
-        if ($view && $view instanceof \Zend\View\Model\ViewModel) {
-            $view->setVariables(array('post' => $post));
+        // if ($view && $view instanceof \Zend\View\Model\ViewModel) {
+        //     $view->setVariables(array('post' => $post));
 
-            return $view;
-        } elseif ($view && $view instanceof \Zend\Http\PhpEnvironment\Response) {
-            return $view;
-        } else {
-            $form = $this->getServiceLocator()->get('playgroundgame_sharemail_form');
-            $form->setAttribute('method', 'post');
+        //     return $view;
+        // } elseif ($view && $view instanceof \Zend\Http\PhpEnvironment\Response) {
+        //     return $view;
+        // } else {
+        $form = $this->getServiceLocator()
+            ->get('playgroundgame_sharemail_form')
+            ->setAttribute('method', 'post');
 
-            $viewModel = $this->buildView($this->game);
+        $viewModel = $this->buildView($this->game);
 
-            $viewModel->setVariables(array(
-                    'statusMail' => null,
-                    'post' => $post,
-                    'form' => $form,
-                ));
+        $viewModel->setVariables(array(
+                'statusMail' => null,
+                'post' => $post,
+                'form' => $form,
+            ));
 
-            return $viewModel;
-        }
+        return $viewModel;
+        //}
     }
 
     /**
