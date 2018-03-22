@@ -18,52 +18,12 @@ class InstantWin extends Game
      * saving an instantwin image if any
      *
      * @param  array                  $data
-     * @param  string                 $entity
      * @param  string                 $formClass
      * @return \PlaygroundGame\Entity\Game
      */
-    public function create(array $data, $entity, $formClass)
+    public function createOrUpdate(array $data, $game, $formClass)
     {
-        $game = parent::create($data, $entity, $formClass);
-        if ($game) {
-            if (!empty($data['uploadScratchcardImage']['tmp_name'])) {
-                $path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR;
-                $media_url = $this->getOptions()->getMediaUrl() . '/';
-
-                ErrorHandler::start();
-                $data['uploadScratchcardImage']['name'] = $this->fileNewname(
-                    $path,
-                    $game->getId() . "-" . $data['uploadScratchcardImage']['name']
-                );
-                move_uploaded_file(
-                    $data['uploadScratchcardImage']['tmp_name'],
-                    $path . $data['uploadScratchcardImage']['name']
-                );
-                $game->setScratchcardImage($media_url . $data['uploadScratchcardImage']['name']);
-                ErrorHandler::stop(true);
-
-                $game = $this->getGameMapper()->update($game);
-            }
-
-            if ($game->getOccurrenceNumber() && $game->getScheduleOccurrenceAuto()) {
-                $this->scheduleOccurrences($game, $data);
-            }
-        }
-
-        return $game;
-    }
-
-    /**
-     *
-     * saving an instantwin image if any
-     *
-     * @param  array                  $data
-     * @param  string                 $formClass
-     * @return \PlaygroundGame\Entity\Game
-     */
-    public function edit(array $data, $game, $formClass)
-    {
-        $game = parent::edit($data, $game, $formClass);
+        $game = parent::createOrUpdate($data, $game, $formClass);
 
         if ($game) {
             $path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR;
