@@ -81,7 +81,6 @@ class Game extends EventProvider
 
     /**
      *
-     *
      * This service is ready for all types of games
      *
      * @param array $data
