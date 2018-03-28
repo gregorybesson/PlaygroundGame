@@ -11,6 +11,7 @@ class InstantWinController extends GameController
 
     public function playAction()
     {
+
         $redirectFb = $this->checkFbRegistration($this->user, $this->game);
         if ($redirectFb) {
             return $redirectFb;

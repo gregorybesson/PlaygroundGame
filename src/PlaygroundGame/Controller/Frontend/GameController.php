@@ -99,7 +99,7 @@ class GameController extends AbstractActionController
             $customUrl = str_replace('frontend.', '', $e->getRouteMatch()->getMatchedRouteName());
             $customUrl = explode("/", $customUrl)[0];
 
-            if (isset($config['custom_games']) && $config['custom_games'][$controller->game->getIdentifier()] &&
+            if (isset($config['custom_games']) && isset($config['custom_games'][$controller->game->getIdentifier()]) &&
                     $controller->getRequest()->getUri()->getHost() === $customUrl
                 ) {
                 $this->isSoloGame = true;
@@ -266,8 +266,8 @@ class GameController extends AbstractActionController
 
         $viewModel = $this->buildView($this->game);
         $viewModel->setVariables(array(
-                'isSubscribed' => $isSubscribed,
-            ));
+            'isSubscribed' => $isSubscribed,
+        ));
 
         return $viewModel;
     }
