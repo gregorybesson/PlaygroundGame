@@ -372,7 +372,7 @@ return array(
                                         'options' => array(
                                             'route' => '/ajaxdelete',
                                             'defaults' => array(
-                                                'controller' => 'playgroundgame_postvote',
+                                                'controller' => 'playgroundgame_tradingcard',
                                                 'action' => 'ajaxdelete'
                                             )
                                         )
