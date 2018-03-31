@@ -95,15 +95,6 @@ class GameController extends AbstractActionController
             $identifier = $e->getRouteMatch()->getParam('id');
             $controller->game = $controller->getGameService()->checkGame($identifier, false);
 
-            $config = $this->getServiceLocator()->get('config');
-            $customUrl = str_replace('frontend.', '', $e->getRouteMatch()->getMatchedRouteName());
-            $customUrl = explode("/", $customUrl)[0];
-
-            if (isset($config['custom_games']) && isset($config['custom_games'][$controller->game->getIdentifier()]) &&
-                    $controller->getRequest()->getUri()->getHost() === $customUrl
-                ) {
-                $this->isSoloGame = true;
-            }
             if (!$controller->game &&
                     in_array($controller->params('action'), $controller->withGame)
                 ) {
@@ -115,6 +106,16 @@ class GameController extends AbstractActionController
                     in_array($controller->params('action'), $controller->withOnlineGame)
                 ) {
                 return $controller->notFoundAction();
+            }
+
+            $config = $this->getServiceLocator()->get('config');
+            $customUrl = str_replace('frontend.', '', $e->getRouteMatch()->getMatchedRouteName());
+            $customUrl = explode("/", $customUrl)[0];
+
+            if (isset($config['custom_games']) && isset($config['custom_games'][$controller->game->getIdentifier()]) &&
+                    $controller->getRequest()->getUri()->getHost() === $customUrl
+                ) {
+                $this->isSoloGame = true;
             }
 
             if ($controller->game) {

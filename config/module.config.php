@@ -433,16 +433,6 @@ return array(
                                     )
                                 )
                             ),
-                            'login' => array(
-                                'type' => 'Segment',
-                                'options' => array(
-                                    'route' => '/connexion',
-                                    'defaults' => array(
-                                        'controller' => 'playgroundgame_tradingcard',
-                                        'action' => 'login'
-                                    )
-                                )
-                            ),
                             'optin' => array(
                                 'type' => 'Segment',
                                 'options' => array(
@@ -1030,6 +1020,30 @@ return array(
                                     )
                                 )
                             ),
+                            'ajaxforgotpassword' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/ajax-mot-passe-oublie[/:gameId]',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_quiz',
+                                        'action'     => 'ajaxforgot',
+                                    ),
+                                ),
+                            ),
+                            'resetpassword' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/reset-password/:userId/:token',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_quiz',
+                                        'action'     => 'userreset',
+                                    ),
+                                    'constraints' => array(
+                                        'userId'  => '[0-9]+',
+                                        'token' => '[A-F0-9]+',
+                                    ),
+                                ),
+                            ),
                             'login' => array(
                                 'type' => 'Literal',
                                 'options' => array(
@@ -1252,6 +1266,30 @@ return array(
                                     )
                                 )
                             ),
+                            'ajaxforgotpassword' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/ajax-mot-passe-oublie[/:gameId]',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_lottery',
+                                        'action'     => 'ajaxforgot',
+                                    ),
+                                ),
+                            ),
+                            'resetpassword' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/reset-password/:userId/:token',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_lottery',
+                                        'action'     => 'userreset',
+                                    ),
+                                    'constraints' => array(
+                                        'userId'  => '[0-9]+',
+                                        'token' => '[A-F0-9]+',
+                                    ),
+                                ),
+                            ),
                             'login' => array(
                                 'type' => 'Literal',
                                 'options' => array(
@@ -1473,6 +1511,30 @@ return array(
                                         'action' => 'index'
                                     )
                                 )
+                            ),
+                            'ajaxforgotpassword' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/ajax-mot-passe-oublie[/:gameId]',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_instantwin',
+                                        'action'     => 'ajaxforgot',
+                                    ),
+                                ),
+                            ),
+                            'resetpassword' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/reset-password/:userId/:token',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_instantwin',
+                                        'action'     => 'userreset',
+                                    ),
+                                    'constraints' => array(
+                                        'userId'  => '[0-9]+',
+                                        'token' => '[A-F0-9]+',
+                                    ),
+                                ),
                             ),
                             'login' => array(
                                 'type' => 'Literal',
@@ -1719,6 +1781,30 @@ return array(
                                         )
                                     )
                                 )
+                            ),
+                            'ajaxforgotpassword' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/ajax-mot-passe-oublie[/:gameId]',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_postvote',
+                                        'action'     => 'ajaxforgot',
+                                    ),
+                                ),
+                            ),
+                            'resetpassword' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/reset-password/:userId/:token',
+                                    'defaults' => array(
+                                        'controller' => 'playgroundgame_postvote',
+                                        'action'     => 'userreset',
+                                    ),
+                                    'constraints' => array(
+                                        'userId'  => '[0-9]+',
+                                        'token' => '[A-F0-9]+',
+                                    ),
+                                ),
                             ),
                             'login' => array(
                                 'type' => 'Literal',
