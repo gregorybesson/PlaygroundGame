@@ -95,15 +95,6 @@ class GameController extends AbstractActionController
             $identifier = $e->getRouteMatch()->getParam('id');
             $controller->game = $controller->getGameService()->checkGame($identifier, false);
 
-            $config = $this->getServiceLocator()->get('config');
-            $customUrl = str_replace('frontend.', '', $e->getRouteMatch()->getMatchedRouteName());
-            $customUrl = explode("/", $customUrl)[0];
-
-            if (isset($config['custom_games']) && $config['custom_games'][$controller->game->getIdentifier()] &&
-                    $controller->getRequest()->getUri()->getHost() === $customUrl
-                ) {
-                $this->isSoloGame = true;
-            }
             if (!$controller->game &&
                     in_array($controller->params('action'), $controller->withGame)
                 ) {
@@ -115,6 +106,16 @@ class GameController extends AbstractActionController
                     in_array($controller->params('action'), $controller->withOnlineGame)
                 ) {
                 return $controller->notFoundAction();
+            }
+
+            $config = $this->getServiceLocator()->get('config');
+            $customUrl = str_replace('frontend.', '', $e->getRouteMatch()->getMatchedRouteName());
+            $customUrl = explode("/", $customUrl)[0];
+
+            if (isset($config['custom_games']) && isset($config['custom_games'][$controller->game->getIdentifier()]) &&
+                    $controller->getRequest()->getUri()->getHost() === $customUrl
+                ) {
+                $this->isSoloGame = true;
             }
 
             if ($controller->game) {
@@ -266,8 +267,8 @@ class GameController extends AbstractActionController
 
         $viewModel = $this->buildView($this->game);
         $viewModel->setVariables(array(
-                'isSubscribed' => $isSubscribed,
-            ));
+            'isSubscribed' => $isSubscribed,
+        ));
 
         return $viewModel;
     }
@@ -838,6 +839,7 @@ class GameController extends AbstractActionController
 
     public function userregisterAction()
     {
+        $pguserOptions = $this->getServiceLocator()->get('playgrounduser_module_options');
         $userOptions = $this->getServiceLocator()->get('zfcuser_module_options');
 
         if ($this->zfcUserAuthentication()->hasIdentity()) {
@@ -960,10 +962,32 @@ class GameController extends AbstractActionController
         }
 
         $post = $prg;
+        if(isset($post['optin'])) $post['optin'] = 1;
+        if(isset($post['optinPartner'])) $post['optinPartner'] = 1;
         $post = array_merge(
             $post,
             $socialCredentials
         );
+
+        if($pguserOptions->getUseRecaptcha()) {
+            if(!isset($post['g-recaptcha-response']) || $post['g-recaptcha-response'] == '' || !$this->recaptcha()->recaptcha($post['g-recaptcha-response'])) {
+                $this->flashMessenger()->addErrorMessage(
+                    'Invalid Captcha. Please try again.'
+                );
+                $form->setData($post);
+                $viewModel = $this->buildView($this->game);
+                $viewModel->setVariables(array(
+                        'registerForm'       => $form,
+                        'enableRegistration' => $userOptions->getEnableRegistration(),
+                        'redirect'           => $redirect,
+                        'bah'                => 'coco',
+                        'flashMessages'      => $this->flashMessenger()->getMessages(),
+                        'flashErrors'        => $this->flashMessenger()->getErrorMessages(),
+                    ));
+
+                return $viewModel;
+            }
+        }
 
         if ($this->game->getOnInvitation()) {
             $credential = trim(
