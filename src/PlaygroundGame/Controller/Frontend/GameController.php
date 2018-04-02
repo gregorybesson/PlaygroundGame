@@ -839,6 +839,7 @@ class GameController extends AbstractActionController
 
     public function userregisterAction()
     {
+        $pguserOptions = $this->getServiceLocator()->get('playgrounduser_module_options');
         $userOptions = $this->getServiceLocator()->get('zfcuser_module_options');
 
         if ($this->zfcUserAuthentication()->hasIdentity()) {
@@ -961,10 +962,32 @@ class GameController extends AbstractActionController
         }
 
         $post = $prg;
+        if(isset($post['optin'])) $post['optin'] = 1;
+        if(isset($post['optinPartner'])) $post['optinPartner'] = 1;
         $post = array_merge(
             $post,
             $socialCredentials
         );
+
+        if($pguserOptions->getUseRecaptcha()) {
+            if(!isset($post['g-recaptcha-response']) || $post['g-recaptcha-response'] == '' || !$this->recaptcha()->recaptcha($post['g-recaptcha-response'])) {
+                $this->flashMessenger()->addErrorMessage(
+                    'Invalid Captcha. Please try again.'
+                );
+                $form->setData($post);
+                $viewModel = $this->buildView($this->game);
+                $viewModel->setVariables(array(
+                        'registerForm'       => $form,
+                        'enableRegistration' => $userOptions->getEnableRegistration(),
+                        'redirect'           => $redirect,
+                        'bah'                => 'coco',
+                        'flashMessages'      => $this->flashMessenger()->getMessages(),
+                        'flashErrors'        => $this->flashMessenger()->getErrorMessages(),
+                    ));
+
+                return $viewModel;
+            }
+        }
 
         if ($this->game->getOnInvitation()) {
             $credential = trim(

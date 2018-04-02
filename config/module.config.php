@@ -1023,7 +1023,7 @@ return array(
                             'ajaxforgotpassword' => array(
                                 'type' => 'Segment',
                                 'options' => array(
-                                    'route' => '/ajax-mot-passe-oublie[/:gameId]',
+                                    'route' => '/ajax-mot-passe-oublie',
                                     'defaults' => array(
                                         'controller' => 'playgroundgame_quiz',
                                         'action'     => 'ajaxforgot',
@@ -1269,7 +1269,7 @@ return array(
                             'ajaxforgotpassword' => array(
                                 'type' => 'Segment',
                                 'options' => array(
-                                    'route' => '/ajax-mot-passe-oublie[/:gameId]',
+                                    'route' => '/ajax-mot-passe-oublie',
                                     'defaults' => array(
                                         'controller' => 'playgroundgame_lottery',
                                         'action'     => 'ajaxforgot',
@@ -1515,7 +1515,7 @@ return array(
                             'ajaxforgotpassword' => array(
                                 'type' => 'Segment',
                                 'options' => array(
-                                    'route' => '/ajax-mot-passe-oublie[/:gameId]',
+                                    'route' => '/ajax-mot-passe-oublie',
                                     'defaults' => array(
                                         'controller' => 'playgroundgame_instantwin',
                                         'action'     => 'ajaxforgot',
@@ -1785,7 +1785,7 @@ return array(
                             'ajaxforgotpassword' => array(
                                 'type' => 'Segment',
                                 'options' => array(
-                                    'route' => '/ajax-mot-passe-oublie[/:gameId]',
+                                    'route' => '/ajax-mot-passe-oublie',
                                     'defaults' => array(
                                         'controller' => 'playgroundgame_postvote',
                                         'action'     => 'ajaxforgot',
