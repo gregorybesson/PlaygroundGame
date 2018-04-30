@@ -971,9 +971,7 @@ class GameController extends AbstractActionController
 
         if($pguserOptions->getUseRecaptcha()) {
             if(!isset($post['g-recaptcha-response']) || $post['g-recaptcha-response'] == '' || !$this->recaptcha()->recaptcha($post['g-recaptcha-response'])) {
-                $this->flashMessenger()->addErrorMessage(
-                    'Invalid Captcha. Please try again.'
-                );
+                $this->flashMessenger()->addErrorMessage('Invalid Captcha. Please try again.');
                 $form->setData($post);
                 $viewModel = $this->buildView($this->game);
                 $viewModel->setVariables(array(

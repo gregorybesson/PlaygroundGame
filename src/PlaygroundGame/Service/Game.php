@@ -1779,6 +1779,22 @@ class Game extends EventProvider
             array();
         $a['filesizeMin']   = isset($attributes->data->filesize)? $attributes->data->filesize->min : 0;
         $a['filesizeMax']   = isset($attributes->data->filesize)? $attributes->data->filesize->max : 10*1024*1024;
+        $a['fileextension']   = isset($attributes->data->fileextension)? 
+            str_replace(', ', ',', $attributes->data->fileextension) : 
+            'png,jpg,jpeg,gif';
+
+        // hiddenRequired('fileexcludeextension', '').appendTo(li);
+        // hiddenRequired('filemimetype', '').appendTo(li);
+        // hiddenRequired('fileexcludemimetype', '').appendTo(li);
+        // hiddenRequired('fileexists', '').appendTo(li);
+        // hiddenRequired('fileimagesize_minheight', '').appendTo(li);
+        // hiddenRequired('fileimagesize_maxheight', '').appendTo(li);
+        // hiddenRequired('fileimagesize_minwidth', '').appendTo(li);
+        // hiddenRequired('fileimagesize_maxwidth', '').appendTo(li);
+        // hiddenRequired('fileiscompressed', '').appendTo(li);
+        // hiddenRequired('fileisimage', '').appendTo(li);
+        // hiddenRequired('filewordcount_min', '').appendTo(li);
+        // hiddenRequired('filewordcount_max', '').appendTo(li);
 
         return $a;
     }
@@ -2010,7 +2026,7 @@ class Game extends EventProvider
                     )
                 );
                 $form->add($element);
-        
+
                 $inputFilter->add($factory->createInput(array(
                     'name'     => $attr['name'],
                     'required' => $attr['required'],
@@ -2022,9 +2038,9 @@ class Game extends EventProvider
                         array(
                             'name' => '\Zend\Validator\File\Extension',
                             'options'  => array(
-                                'png,PNG,jpg,JPG,jpeg,JPEG,gif,GIF',
+                                $attr['fileextension'],
                                 'messages' => array(
-                                    \Zend\Validator\File\Extension::FALSE_EXTENSION =>'Veuillez télécharger une image'
+                                    \Zend\Validator\File\Extension::FALSE_EXTENSION =>'Veuillez télécharger un fichier avec la bonne extension'
                                 )
                             )
                         ),
