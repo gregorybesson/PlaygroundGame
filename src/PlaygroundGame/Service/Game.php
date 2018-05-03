@@ -1779,8 +1779,8 @@ class Game extends EventProvider
             array();
         $a['filesizeMin']   = isset($attributes->data->filesize)? $attributes->data->filesize->min : 0;
         $a['filesizeMax']   = isset($attributes->data->filesize)? $attributes->data->filesize->max : 10*1024*1024;
-        $a['fileextension']   = isset($attributes->data->fileextension)? 
-            str_replace(', ', ',', $attributes->data->fileextension) : 
+        $a['fileextension']   = isset($attributes->data->fileextension)?
+            str_replace(', ', ',', $attributes->data->fileextension) :
             'png,jpg,jpeg,gif';
 
         // hiddenRequired('fileexcludeextension', '').appendTo(li);

@@ -154,24 +154,27 @@ class PostVote extends Game
                     ErrorHandler::start();
                     $value['name'] = $this->fileNewname($path, $value['name'], true);
                     move_uploaded_file($value['tmp_name'], $path . $value['name']);
-                    $image = $this->serviceLocator->get('playgroundcore_image_service');
-                    $image->setImage($path . $value['name']);
 
-                    if ($image->canCorrectOrientation()) {
-                        $image->correctOrientation()->save();
-                    }
-                    $postElement->setValue($media_url . $value['name']);
-                    
-                    if (class_exists("Imagick")) {
-                        $ext = pathinfo($value['name'], PATHINFO_EXTENSION);
-                        $img = new \Imagick($path . $value['name']);
-                        $img->cropThumbnailImage(100, 100);
-                        $img->setImageCompression(\Imagick::COMPRESSION_JPEG);
-                        $img->setImageCompressionQuality(75);
-                        // Strip out unneeded meta data
-                        $img->stripImage();
-                        $img->writeImage($path . str_replace('.'.$ext, '-thumbnail.'.$ext, $value['name']));
-                        ErrorHandler::stop(true);
+                    if (getimagesize($path . $value['name'])) {
+                        $image = $this->serviceLocator->get('playgroundcore_image_service');
+                        $image->setImage($path . $value['name']);
+
+                        if ($image->canCorrectOrientation()) {
+                            $image->correctOrientation()->save();
+                        }
+                        $postElement->setValue($media_url . $value['name']);
+                        
+                        if (class_exists("Imagick")) {
+                            $ext = pathinfo($value['name'], PATHINFO_EXTENSION);
+                            $img = new \Imagick($path . $value['name']);
+                            $img->cropThumbnailImage(100, 100);
+                            $img->setImageCompression(\Imagick::COMPRESSION_JPEG);
+                            $img->setImageCompressionQuality(75);
+                            // Strip out unneeded meta data
+                            $img->stripImage();
+                            $img->writeImage($path . str_replace('.'.$ext, '-thumbnail.'.$ext, $value['name']));
+                            ErrorHandler::stop(true);
+                        }
                     }
                 }
             } elseif (is_array($value) || $form->get($name) instanceof \Zend\Form\Element\Select) {
