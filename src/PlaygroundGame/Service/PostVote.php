@@ -175,6 +175,8 @@ class PostVote extends Game
                             $img->writeImage($path . str_replace('.'.$ext, '-thumbnail.'.$ext, $value['name']));
                             ErrorHandler::stop(true);
                         }
+                    } else {
+                        $postElement->setValue($media_url . $value['name']);
                     }
                 }
             } elseif (is_array($value) || $form->get($name) instanceof \Zend\Form\Element\Select) {
