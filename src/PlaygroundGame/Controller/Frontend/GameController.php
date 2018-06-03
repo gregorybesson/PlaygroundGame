@@ -1086,6 +1086,26 @@ class GameController extends AbstractActionController
         return $this->redirect()->toUrl($redirect);
     }
 
+    public function checkTokenAction()
+    {
+        $viewModel = $this->forward()->dispatch(
+            'playgrounduser_user',
+            array(
+                'controller' => 'playgrounduser_user',
+                'action' => 'check-token',
+                'id' => $this->game->getIdentifier(),
+                'token' => $this->params()->fromRoute('token', null)
+            )
+        );
+
+        if ($viewModel && $viewModel instanceof \Zend\View\Model\ViewModel) {
+            $this->layout()->setVariables(array('game' => $this->game));
+            $viewModel->setVariables(array('game' => $this->game));
+        }
+
+        return $viewModel;
+    }
+
     public function userProfileAction()
     {
         $viewModel = $this->forward()->dispatch(

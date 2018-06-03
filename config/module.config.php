@@ -433,6 +433,16 @@ return array(
                                     )
                                 )
                             ),
+                            'verification' => array(
+		                        'type' => 'Literal',
+		                        'options' => array(
+		                            'route' => '/verification',
+		                            'defaults' => array(
+		                                'controller' => 'playgroundgame_tradingcard',
+		                                'action'     => 'check-token',
+		                            ),
+		                        ),
+		                    ),
                             'optin' => array(
                                 'type' => 'Segment',
                                 'options' => array(
@@ -758,6 +768,16 @@ return array(
                                     )
                                 )
                             ),
+                            'verification' => array(
+		                        'type' => 'Literal',
+		                        'options' => array(
+		                            'route' => '/verification',
+		                            'defaults' => array(
+		                                'controller' => 'playgroundgame_mission',
+		                                'action'     => 'check-token',
+		                            ),
+		                        ),
+		                    ),
                             'optin' => array(
                                 'type' => 'Segment',
                                 'options' => array(
@@ -1064,6 +1084,16 @@ return array(
                                     )
                                 )
                             ),
+                            'verification' => array(
+		                        'type' => 'Literal',
+		                        'options' => array(
+		                            'route' => '/verification',
+		                            'defaults' => array(
+		                                'controller' => 'playgroundgame_quiz',
+		                                'action'     => 'check-token',
+		                            ),
+		                        ),
+		                    ),
                             'optin' => array(
                                 'type' => 'Segment',
                                 'options' => array(
@@ -1310,6 +1340,16 @@ return array(
                                     )
                                 )
                             ),
+                            'verification' => array(
+		                        'type' => 'Literal',
+		                        'options' => array(
+		                            'route' => '/verification',
+		                            'defaults' => array(
+		                                'controller' => 'playgroundgame_lottery',
+		                                'action'     => 'check-token',
+		                            ),
+		                        ),
+		                    ),
                             'optin' => array(
                                 'type' => 'Segment',
                                 'options' => array(
@@ -1556,6 +1596,16 @@ return array(
                                     )
                                 )
                             ),
+                            'verification' => array(
+		                        'type' => 'Literal',
+		                        'options' => array(
+		                            'route' => '/verification',
+		                            'defaults' => array(
+		                                'controller' => 'playgroundgame_instantwin',
+		                                'action'     => 'check-token',
+		                            ),
+		                        ),
+		                    ),
                             'optin' => array(
                                 'type' => 'Segment',
                                 'options' => array(
@@ -1826,6 +1876,16 @@ return array(
                                     )
                                 )
                             ),
+                            'verification' => array(
+		                        'type' => 'Literal',
+		                        'options' => array(
+		                            'route' => '/verification',
+		                            'defaults' => array(
+		                                'controller' => 'playgroundgame_postvote',
+		                                'action'     => 'check-token',
+		                            ),
+		                        ),
+		                    ),
                             'optin' => array(
                                 'type' => 'Segment',
                                 'options' => array(
