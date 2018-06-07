@@ -5,6 +5,7 @@ use Zend\Form\Element;
 use Zend\Form\Fieldset;
 use Zend\Form\Form;
 use Zend\InputFilter\Factory as InputFactory;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 class QuizController extends GameController
 {
@@ -13,6 +14,11 @@ class QuizController extends GameController
      * @var gameService
      */
     protected $gameService;
+
+    public function __construct(ServiceLocatorInterface $locator)
+    {
+        parent::__construct($locator);
+    }
 
     public function playAction()
     {

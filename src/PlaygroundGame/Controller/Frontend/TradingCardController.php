@@ -1,12 +1,19 @@
 <?php
 namespace PlaygroundGame\Controller\Frontend;
 
+use Zend\ServiceManager\ServiceLocatorInterface;
+
 class TradingCardController extends GameController
 {
     /**
      * @var gameService
      */
     protected $gameService;
+
+    public function __construct(ServiceLocatorInterface $locator)
+    {
+        parent::__construct($locator);
+    }
 
     /**
      * Example of AJAX File Upload with Session Progress and partial validation.

@@ -33,24 +33,24 @@ return array(
     
         'guards' => array(
             'BjyAuthorize\Guard\Controller' => array(
-                array('controller' => 'playgroundgame',                     'roles' => array('guest', 'user')),
-                array('controller' => 'playgroundgame_game',                'roles' => array('guest', 'user')),
-                array('controller' => 'playgroundgame_lottery',             'roles' => array('guest', 'user')),
-                array('controller' => 'playgroundgame_quiz',                'roles' => array('guest', 'user')),
-                array('controller' => 'playgroundgame_postvote',            'roles' => array('guest', 'user')),
-                array('controller' => 'playgroundgame_instantwin',          'roles' => array('guest', 'user')),
-                array('controller' => 'playgroundgame_prizecategory',       'roles' => array('guest', 'user')),
-                array('controller' => 'playgroundgame_mission',             'roles' => array('guest', 'user')),
-                array('controller' => 'playgroundgame_tradingcard',         'roles' => array('guest', 'user')),
+                array('controller' => Playgroundgame\Controller\Frontend\Home::class,                     'roles' => array('guest', 'user')),
+                array('controller' => PlaygroundGame\Controller\Frontend\Game::class,                'roles' => array('guest', 'user')),
+                array('controller' => PlaygroundGame\Controller\Frontend\Lottery::class,             'roles' => array('guest', 'user')),
+                array('controller' => PlaygroundGame\Controller\Frontend\Quiz::class,                'roles' => array('guest', 'user')),
+                array('controller' => PlaygroundGame\Controller\Frontend\PostVote::class,            'roles' => array('guest', 'user')),
+                array('controller' => PlaygroundGame\Controller\Frontend\InstantWin::class,          'roles' => array('guest', 'user')),
+                array('controller' => PlaygroundGame\Controller\Frontend\PrizeCategory::class,       'roles' => array('guest', 'user')),
+                array('controller' => PlaygroundGame\Controller\Frontend\Mission::class,             'roles' => array('guest', 'user')),
+                array('controller' => PlaygroundGame\Controller\Frontend\TradingCard::class,         'roles' => array('guest', 'user')),
     
                 // Admin area
-                array('controller' => 'playgroundgame_admin_game',          'roles' => array('admin')),
-                array('controller' => 'playgroundgame_admin_lottery',       'roles' => array('admin')),
-                array('controller' => 'playgroundgame_admin_instantwin',    'roles' => array('admin')),
-                array('controller' => 'playgroundgame_admin_quiz',          'roles' => array('admin')),
-                array('controller' => 'playgroundgame_admin_postvote',      'roles' => array('admin')),
-                array('controller' => 'playgroundgame_admin_mission',       'roles' => array('admin')),
-                array('controller' => 'playgroundgame_admin_tradingcard',   'roles' => array('admin')),
+                array('controller' => Playgroundgame\Controller\Admin\Game::class,          'roles' => array('admin')),
+                array('controller' => Playgroundgame\Controller\Admin\Lottery::class,       'roles' => array('admin')),
+                array('controller' => Playgroundgame\Controller\Admin\InstantWin::class,    'roles' => array('admin')),
+                array('controller' => Playgroundgame\Controller\Admin\Quiz::class,          'roles' => array('admin')),
+                array('controller' => Playgroundgame\Controller\Admin\PostVote::class,      'roles' => array('admin')),
+                array('controller' => Playgroundgame\Controller\Admin\Mission::class,       'roles' => array('admin')),
+                array('controller' => Playgroundgame\Controller\Admin\TradingCard::class,   'roles' => array('admin')),
                 array('controller' => 'playgroundgame_admin_prizecategory', 'roles' => array('admin')),
             ),
         ),
@@ -162,15 +162,15 @@ return array(
     'core_layout' => array(
         'frontend' => array(
             'modules' => array(
-                'playgroundgame' => array(
+                Playgroundgame\Controller\Frontend\Home::class => array(
                     'layout' => 'layout/game-2columns-right.phtml',
                     'controllers' => array(
-                        'playgroundgame_lottery' => array(
+                        PlaygroundGame\Controller\Frontend\Lottery::class => array(
                             'children_views' => array(
                                 'col_right' => 'playground-game/lottery/col-lottery.phtml'
                             )
                         ),
-                        'playgroundgame_quiz' => array(
+                        PlaygroundGame\Controller\Frontend\Quiz::class => array(
                             // 'layout'
                             // =>
                             // 'layout/game-2columns-right.phtml',
@@ -178,17 +178,17 @@ return array(
                                 'col_right' => 'playground-game/quiz/col-quiz.phtml'
                             )
                         ),
-                        'playgroundgame_instantwin' => array(
+                        PlaygroundGame\Controller\Frontend\InstantWin::class => array(
                             'children_views' => array(
                                 'col_right' => 'playground-game/instant-win/col-instantwin.phtml'
                             )
                         ),
-                        'playgroundgame_postvote' => array(
+                        PlaygroundGame\Controller\Frontend\PostVote::class => array(
                             'children_views' => array(
                                 'col_right' => 'playground-game/post-vote/col-postvote.phtml'
                             )
                         ),
-                        'playgroundgame_prizecategory' => array(
+                        PlaygroundGame\Controller\Frontend\PrizeCategory::class => array(
                             'actions' => array(
                                 'index' => array(
                                     'children_views' => array(
@@ -197,7 +197,7 @@ return array(
                                 )
                             )
                         ),
-                        'playgroundgame' => array(
+                        Playgroundgame\Controller\Frontend\Home::class => array(
                             'layout' => 'layout/2columns-right',
                         )
                     )
@@ -237,23 +237,24 @@ return array(
 
     'controllers' => array(
         'factories' => array(
-            'playgroundgame' => 'PlaygroundGame\Service\Factory\FrontendHomeControllerFactory',
-            'playgroundgame_game' => 'PlaygroundGame\Service\Factory\FrontendGameControllerFactory',
-            'playgroundgame_lottery' => 'PlaygroundGame\Service\Factory\FrontendLotteryControllerFactory',
-            'playgroundgame_quiz' => 'PlaygroundGame\Service\Factory\FrontendQuizControllerFactory',
-            'playgroundgame_instantwin' => 'PlaygroundGame\Service\Factory\FrontendInstantWinControllerFactory',
-            'playgroundgame_postvote' => 'PlaygroundGame\Service\Factory\FrontendPostVoteControllerFactory',
-            'playgroundgame_mission' => 'PlaygroundGame\Service\Factory\FrontendMissionControllerFactory',
-            'playgroundgame_tradingcard' => 'PlaygroundGame\Service\Factory\FrontendTradingCardControllerFactory',
-            'playgroundgame_prizecategory' => 'PlaygroundGame\Service\Factory\FrontendPrizeCategoryControllerFactory',
-            'playgroundgame_admin_game' => 'PlaygroundGame\Service\Factory\AdminGameControllerFactory',
-            'playgroundgame_admin_lottery' => 'PlaygroundGame\Service\Factory\AdminLotteryControllerFactory',
-            'playgroundgame_admin_instantwin' => 'PlaygroundGame\Service\Factory\AdminInstantWinControllerFactory',
-            'playgroundgame_admin_postvote' => 'PlaygroundGame\Service\Factory\AdminPostVoteControllerFactory',
-            'playgroundgame_admin_quiz' => 'PlaygroundGame\Service\Factory\AdminQuizControllerFactory',
-            'playgroundgame_admin_mission' => 'PlaygroundGame\Service\Factory\AdminMissionControllerFactory',
-            'playgroundgame_admin_tradingcard' => 'PlaygroundGame\Service\Factory\AdminTradingCardControllerFactory',
-            'playgroundgame_admin_prizecategory' => 'PlaygroundGame\Service\Factory\AdminPrizeCategoryControllerFactory',
+            Playgroundgame\Controller\Frontend\Home::class => PlaygroundGame\Service\Factory\FrontendHomeControllerFactory::class,
+            PlaygroundGame\Controller\Frontend\Game::class => PlaygroundGame\Service\Factory\FrontendGameControllerFactory::class,
+            Playgroundgame\Controller\Frontend\Lottery::class => PlaygroundGame\Service\Factory\FrontendLotteryControllerFactory::class,
+            PlaygroundGame\Controller\Frontend\Quiz::class => PlaygroundGame\Service\Factory\FrontendQuizControllerFactory::class,
+            PlaygroundGame\Controller\Frontend\InstantWin::class => PlaygroundGame\Service\Factory\FrontendInstantWinControllerFactory::class,
+            PlaygroundGame\Controller\Frontend\PostVote::class => PlaygroundGame\Service\Factory\FrontendPostVoteControllerFactory::class,
+            PlaygroundGame\Controller\Frontend\Mission::class => PlaygroundGame\Service\Factory\FrontendMissionControllerFactory::class,
+            PlaygroundGame\Controller\Frontend\TradingCard::class => PlaygroundGame\Service\Factory\FrontendTradingCardControllerFactory::class,
+            PlaygroundGame\Controller\Frontend\PrizeCategory::class => PlaygroundGame\Service\Factory\FrontendPrizeCategoryControllerFactory::class,
+
+            PlaygroundGame\Controller\Admin\Game::class => PlaygroundGame\Service\Factory\AdminGameControllerFactory::class,
+            PlaygroundGame\Controller\Admin\Lottery::class => PlaygroundGame\Service\Factory\AdminLotteryControllerFactory::class,
+            PlaygroundGame\Controller\Admin\InstantWin::class => PlaygroundGame\Service\Factory\AdminInstantWinControllerFactory::class,
+            PlaygroundGame\Controller\Admin\PostVote::class => PlaygroundGame\Service\Factory\AdminPostVoteControllerFactory::class,
+            PlaygroundGame\Controller\Admin\Quiz::class => PlaygroundGame\Service\Factory\AdminQuizControllerFactory::class,
+            PlaygroundGame\Controller\Admin\Mission::class => PlaygroundGame\Service\Factory\AdminMissionControllerFactory::class,
+            PlaygroundGame\Controller\Admin\TradingCard::class => PlaygroundGame\Service\Factory\AdminTradingCardControllerFactory::class,
+            PlaygroundGame\Controller\Admin\PrizeCategory::class => PlaygroundGame\Service\Factory\AdminPrizeCategoryControllerFactory::class,
         ),
     ),
 
@@ -282,7 +283,7 @@ return array(
             'frontend' => array(
                 'options' => array(
                     'defaults' => array(
-                        'controller' => 'playgroundgame',
+                        'controller' => Playgroundgame\Controller\Frontend\Home::class,
                         'action'     => 'index',
                     ),
                 ),
@@ -293,7 +294,7 @@ return array(
                         'options' => array(
                             'route'    => '[:p]',
                             'defaults' => array(
-                                'controller' => 'playgroundgame',
+                                'controller' => Playgroundgame\Controller\Frontend\Home::class,
                                 'action'     => 'index',
                             ),
                             'constraints' => array('p' => '[0-9]*'),
@@ -304,7 +305,7 @@ return array(
                         'options' => array(
                             'route' => 'gameslist',
                             'defaults' => array(
-                                'controller' => 'playgroundgame_game',
+                                'controller' => PlaygroundGame\Controller\Frontend\Game::class,
                                 'action' => 'gameslist'
                             )
                         ),
@@ -315,7 +316,7 @@ return array(
                                 'options' => array(
                                     'route' => '[/:p]',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_game',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Game::class,
                                         'action' => 'gameslist'
                                     ),
                                     'constraints' => array(
@@ -330,7 +331,7 @@ return array(
                         'options' => array(
                             'route' => 'trading-card[/:id]',
                             'defaults' => array(
-                                'controller' => 'playgroundgame_tradingcard',
+                                'controller' => PlaygroundGame\Controller\Frontend\TradingCard::class,
                                 'action' => 'home'
                             )
                         ),
@@ -341,7 +342,7 @@ return array(
                                 'options' => array(
                                     'route' => '/index',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_tradingcard',
+                                        'controller' => PlaygroundGame\Controller\Frontend\TradingCard::class,
                                         'action' => 'index'
                                     )
                                 )
@@ -351,7 +352,7 @@ return array(
                                 'options' => array(
                                     'route' => '/jouer',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_tradingcard',
+                                        'controller' => PlaygroundGame\Controller\Frontend\TradingCard::class,
                                         'action' => 'play'
                                     )
                                 ),
@@ -362,7 +363,7 @@ return array(
                                         'options' => array(
                                             'route' => '/ajaxupload',
                                             'defaults' => array(
-                                                'controller' => 'playgroundgame_tradingcard',
+                                                'controller' => PlaygroundGame\Controller\Frontend\TradingCard::class,
                                                 'action' => 'ajaxupload'
                                             )
                                         )
@@ -372,7 +373,7 @@ return array(
                                         'options' => array(
                                             'route' => '/ajaxdelete',
                                             'defaults' => array(
-                                                'controller' => 'playgroundgame_tradingcard',
+                                                'controller' => PlaygroundGame\Controller\Frontend\TradingCard::class,
                                                 'action' => 'ajaxdelete'
                                             )
                                         )
@@ -384,7 +385,7 @@ return array(
                                 'options' => array(
                                     'route' => '/ajax-mot-passe-oublie',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_tradingcard',
+                                        'controller' => PlaygroundGame\Controller\Frontend\TradingCard::class,
                                         'action'     => 'ajaxforgot',
                                     ),
                                 ),
@@ -394,7 +395,7 @@ return array(
                                 'options' => array(
                                     'route' => '/reset-password/:userId/:token',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_tradingcard',
+                                        'controller' => PlaygroundGame\Controller\Frontend\TradingCard::class,
                                         'action'     => 'userreset',
                                     ),
                                     'constraints' => array(
@@ -408,7 +409,7 @@ return array(
                                 'options' => array(
                                     'route' => '/connexion',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_tradingcard',
+                                        'controller' => PlaygroundGame\Controller\Frontend\TradingCard::class,
                                         'action' => 'login'
                                     )
                                 )
@@ -418,7 +419,7 @@ return array(
                                 'options' => array(
                                     'route' => '/logout',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_tradingcard',
+                                        'controller' => PlaygroundGame\Controller\Frontend\TradingCard::class,
                                         'action'     => 'logout',
                                     ),
                                 ),
@@ -428,7 +429,7 @@ return array(
                                 'options' => array(
                                     'route' => '/inscription',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_tradingcard',
+                                        'controller' => PlaygroundGame\Controller\Frontend\TradingCard::class,
                                         'action' => 'userregister'
                                     )
                                 )
@@ -438,7 +439,7 @@ return array(
 		                        'options' => array(
 		                            'route' => '/verification',
 		                            'defaults' => array(
-		                                'controller' => 'playgroundgame_tradingcard',
+		                                'controller' => PlaygroundGame\Controller\Frontend\TradingCard::class,
 		                                'action'     => 'check-token',
 		                            ),
 		                        ),
@@ -448,7 +449,7 @@ return array(
                                 'options' => array(
                                     'route' => '/optin',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_tradingcard',
+                                        'controller' => PlaygroundGame\Controller\Frontend\TradingCard::class,
                                         'action' => 'optin'
                                     )
                                 )
@@ -458,7 +459,7 @@ return array(
                                 'options' => array(
                                     'route' => '/resultat',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_tradingcard',
+                                        'controller' => PlaygroundGame\Controller\Frontend\TradingCard::class,
                                         'action' => 'result'
                                     )
                                 )
@@ -468,7 +469,7 @@ return array(
                                 'options' => array(
                                     'route' => '/register',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_tradingcard',
+                                        'controller' => PlaygroundGame\Controller\Frontend\TradingCard::class,
                                         'action' => 'register'
                                     )
                                 )
@@ -478,7 +479,7 @@ return array(
                                 'options' => array(
                                     'route' => '/profil',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_tradingcard',
+                                        'controller' => PlaygroundGame\Controller\Frontend\TradingCard::class,
                                         'action' => 'userProfile'
                                     )
                                 )
@@ -506,7 +507,7 @@ return array(
                                 'options' => array(
                                     'route' => '/fbshare',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_tradingcard',
+                                        'controller' => PlaygroundGame\Controller\Frontend\TradingCard::class,
                                         'action' => 'fbshare'
                                     )
                                 )
@@ -516,7 +517,7 @@ return array(
                                 'options' => array(
                                     'route' => '/fbrequest',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_tradingcard',
+                                        'controller' => PlaygroundGame\Controller\Frontend\TradingCard::class,
                                         'action' => 'fbrequest'
                                     )
                                 )
@@ -526,7 +527,7 @@ return array(
                                 'options' => array(
                                     'route' => '/tweet',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_tradingcard',
+                                        'controller' => PlaygroundGame\Controller\Frontend\TradingCard::class,
                                         'action' => 'tweet'
                                     )
                                 )
@@ -536,7 +537,7 @@ return array(
                                 'options' => array(
                                     'route' => '/google',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_tradingcard',
+                                        'controller' => PlaygroundGame\Controller\Frontend\TradingCard::class,
                                         'action' => 'google'
                                     )
                                 )
@@ -546,7 +547,7 @@ return array(
                                 'options' => array(
                                     'route' => '/partager',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_tradingcard',
+                                        'controller' => PlaygroundGame\Controller\Frontend\TradingCard::class,
                                         'action' => 'share'
                                     )
                                 )
@@ -556,7 +557,7 @@ return array(
                                 'options' => array(
                                     'route' => '/rejoins-ma-team',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_tradingcard',
+                                        'controller' => PlaygroundGame\Controller\Frontend\TradingCard::class,
                                         'action' => 'inviteToTeam',
                                     )
                                 )
@@ -566,7 +567,7 @@ return array(
                                 'options' => array(
                                     'route' => '/essayez-aussi',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_tradingcard',
+                                        'controller' => PlaygroundGame\Controller\Frontend\TradingCard::class,
                                         'action' => 'bounce'
                                     )
                                 )
@@ -576,7 +577,7 @@ return array(
                                 'options' => array(
                                     'route' => '/reglement',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_tradingcard',
+                                        'controller' => PlaygroundGame\Controller\Frontend\TradingCard::class,
                                         'action' => 'terms'
                                     )
                                 )
@@ -586,7 +587,7 @@ return array(
                                 'options' => array(
                                     'route' => '/mentions-legales',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_tradingcard',
+                                        'controller' => PlaygroundGame\Controller\Frontend\TradingCard::class,
                                         'action' => 'conditions'
                                     )
                                 )
@@ -596,7 +597,7 @@ return array(
                                 'options' => array(
                                     'route' => '/fangate',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_tradingcard',
+                                        'controller' => PlaygroundGame\Controller\Frontend\TradingCard::class,
                                         'action' => 'fangate'
                                     )
                                 )
@@ -606,7 +607,7 @@ return array(
                                 'options' => array(
                                     'route' => '/lots',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_tradingcard',
+                                        'controller' => PlaygroundGame\Controller\Frontend\TradingCard::class,
                                         'action' => 'prizes'
                                     )
                                 ),
@@ -617,7 +618,7 @@ return array(
                                         'options' => array(
                                             'route' => '/:prize',
                                             'defaults' => array(
-                                                'controller' => 'playgroundgame_tradingcard',
+                                                'controller' => PlaygroundGame\Controller\Frontend\TradingCard::class,
                                                 'action' => 'prize'
                                             )
                                         )
@@ -632,7 +633,7 @@ return array(
                                         'filter' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                     ),
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_tradingcard',
+                                        'controller' => PlaygroundGame\Controller\Frontend\TradingCard::class,
                                         'action'     => 'leaderboard'
                                     ),
                                 ),
@@ -642,7 +643,7 @@ return array(
                                 'options' => array(
                                     'route'    => 'page',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_tradingcard',
+                                        'controller' => PlaygroundGame\Controller\Frontend\TradingCard::class,
                                         'action'     => 'cmsPage',
                                     ),
                                 ),
@@ -652,7 +653,7 @@ return array(
                                         'options' => array(
                                             'route' => '/:pid',
                                             'defaults' => array(
-                                                'controller' => 'playgroundgame_tradingcard',
+                                                'controller' => PlaygroundGame\Controller\Frontend\TradingCard::class,
                                                 'action'     => 'cmsPage',
                                             ),
                                         ),
@@ -662,7 +663,7 @@ return array(
                                         'options' => array(
                                             'route' => '/liste[/:p]',
                                             'defaults' => array(
-                                                'controller' => 'playgroundgame_tradingcard',
+                                                'controller' => PlaygroundGame\Controller\Frontend\TradingCard::class,
                                                 'action'     => 'cmsList',
                                             ),
                                         ),
@@ -676,7 +677,7 @@ return array(
                                     'regex' => '.*',
                                     'spec' => '%url%',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_tradingcard',
+                                        'controller' => PlaygroundGame\Controller\Frontend\TradingCard::class,
                                         'action' => 'not-found'
                                     )
                                 )
@@ -688,7 +689,7 @@ return array(
                         'options' => array(
                             'route' => 'mission[/:id]',
                             'defaults' => array(
-                                'controller' => 'playgroundgame_mission',
+                                'controller' => PlaygroundGame\Controller\Frontend\Mission::class,
                                 'action' => 'home'
                             )
                         ),
@@ -699,7 +700,7 @@ return array(
                                 'options' => array(
                                     'route' => '/index',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_mission',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Mission::class,
                                         'action' => 'index'
                                     )
                                 )
@@ -709,7 +710,7 @@ return array(
                                 'options' => array(
                                     'route' => '/jouer[/:gameId]',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_mission',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Mission::class,
                                         'action' => 'play'
                                     )
                                 )
@@ -719,7 +720,7 @@ return array(
                                 'options' => array(
                                     'route' => '/ajax-mot-passe-oublie[/:gameId]',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_mission',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Mission::class,
                                         'action'     => 'ajaxforgot',
                                     ),
                                 ),
@@ -729,7 +730,7 @@ return array(
                                 'options' => array(
                                     'route' => '/reset-password/:userId/:token',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_mission',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Mission::class,
                                         'action'     => 'userreset',
                                     ),
                                     'constraints' => array(
@@ -743,7 +744,7 @@ return array(
                                 'options' => array(
                                     'route' => '/connexion[/:gameId]',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_mission',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Mission::class,
                                         'action' => 'login'
                                     )
                                 )
@@ -753,7 +754,7 @@ return array(
                                 'options' => array(
                                     'route' => '/logout',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_mission',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Mission::class,
                                         'action'     => 'logout',
                                     ),
                                 ),
@@ -763,7 +764,7 @@ return array(
                                 'options' => array(
                                     'route' => '/inscription[/:gameId]',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_mission',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Mission::class,
                                         'action' => 'userregister'
                                     )
                                 )
@@ -773,7 +774,7 @@ return array(
 		                        'options' => array(
 		                            'route' => '/verification',
 		                            'defaults' => array(
-		                                'controller' => 'playgroundgame_mission',
+		                                'controller' => PlaygroundGame\Controller\Frontend\Mission::class,
 		                                'action'     => 'check-token',
 		                            ),
 		                        ),
@@ -783,7 +784,7 @@ return array(
                                 'options' => array(
                                     'route' => '/optin[/:gameId]',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_mission',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Mission::class,
                                         'action' => 'optin'
                                     )
                                 )
@@ -793,7 +794,7 @@ return array(
                                 'options' => array(
                                     'route' => '/resultat[/:gameId]',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_mission',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Mission::class,
                                         'action' => 'result'
                                     )
                                 )
@@ -803,7 +804,7 @@ return array(
                                 'options' => array(
                                     'route' => '/register',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_mission',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Mission::class,
                                         'action' => 'register'
                                     )
                                 )
@@ -813,7 +814,7 @@ return array(
                                 'options' => array(
                                     'route' => '/profil',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_mission',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Mission::class,
                                         'action' => 'userProfile'
                                     )
                                 )
@@ -841,7 +842,7 @@ return array(
                                 'options' => array(
                                     'route' => '/fbshare',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_mission',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Mission::class,
                                         'action' => 'fbshare'
                                     )
                                 )
@@ -851,7 +852,7 @@ return array(
                                 'options' => array(
                                     'route' => '/fbrequest',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_mission',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Mission::class,
                                         'action' => 'fbrequest'
                                     )
                                 )
@@ -861,7 +862,7 @@ return array(
                                 'options' => array(
                                     'route' => '/tweet',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_mission',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Mission::class,
                                         'action' => 'tweet'
                                     )
                                 )
@@ -871,7 +872,7 @@ return array(
                                 'options' => array(
                                     'route' => '/google',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_mission',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Mission::class,
                                         'action' => 'google'
                                     )
                                 )
@@ -881,7 +882,7 @@ return array(
                                 'options' => array(
                                     'route' => '/partager',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_mission',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Mission::class,
                                         'action' => 'share'
                                     )
                                 )
@@ -891,7 +892,7 @@ return array(
                                 'options' => array(
                                     'route' => '/rejoins-ma-team',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_mission',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Mission::class,
                                         'action' => 'inviteToTeam',
                                     )
                                 )
@@ -901,7 +902,7 @@ return array(
                                 'options' => array(
                                     'route' => '/essayez-aussi',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_mission',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Mission::class,
                                         'action' => 'bounce'
                                     )
                                 )
@@ -911,7 +912,7 @@ return array(
                                 'options' => array(
                                     'route' => '/reglement',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_mission',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Mission::class,
                                         'action' => 'terms'
                                     )
                                 )
@@ -921,7 +922,7 @@ return array(
                                 'options' => array(
                                     'route' => '/mentions-legales',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_mission',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Mission::class,
                                         'action' => 'conditions'
                                     )
                                 )
@@ -931,7 +932,7 @@ return array(
                                 'options' => array(
                                     'route' => '/fangate',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_mission',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Mission::class,
                                         'action' => 'fangate'
                                     )
                                 )
@@ -941,7 +942,7 @@ return array(
                                 'options' => array(
                                     'route' => '/lots',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_mission',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Mission::class,
                                         'action' => 'prizes'
                                     )
                                 ),
@@ -952,7 +953,7 @@ return array(
                                         'options' => array(
                                             'route' => '/:prize',
                                             'defaults' => array(
-                                                'controller' => 'playgroundgame_mission',
+                                                'controller' => PlaygroundGame\Controller\Frontend\Mission::class,
                                                 'action' => 'prize'
                                             )
                                         )
@@ -967,7 +968,7 @@ return array(
                                         'filter' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                     ),
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_mission',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Mission::class,
                                         'action'     => 'leaderboard'
                                     ),
                                 ),
@@ -977,7 +978,7 @@ return array(
                                 'options' => array(
                                     'route'    => 'page',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_mission',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Mission::class,
                                         'action'     => 'cmsPage',
                                     ),
                                 ),
@@ -987,7 +988,7 @@ return array(
                                         'options' => array(
                                             'route' => '/:pid',
                                             'defaults' => array(
-                                                'controller' => 'playgroundgame_mission',
+                                                'controller' => PlaygroundGame\Controller\Frontend\Mission::class,
                                                 'action'     => 'cmsPage',
                                             ),
                                         ),
@@ -997,7 +998,7 @@ return array(
                                         'options' => array(
                                             'route' => '/liste[/:p]',
                                             'defaults' => array(
-                                                'controller' => 'playgroundgame_mission',
+                                                'controller' => PlaygroundGame\Controller\Frontend\Mission::class,
                                                 'action'     => 'cmsList',
                                             ),
                                         ),
@@ -1011,7 +1012,7 @@ return array(
                                     'regex' => '.*',
                                     'spec' => '%url%',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_mission',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Mission::class,
                                         'action' => 'not-found'
                                     )
                                 )
@@ -1024,7 +1025,7 @@ return array(
                         'options' => array(
                             'route' => 'quiz[/:id]',
                             'defaults' => array(
-                                'controller' => 'playgroundgame_quiz',
+                                'controller' => PlaygroundGame\Controller\Frontend\Quiz::class,
                                 'action' => 'home'
                             )
                         ),
@@ -1035,7 +1036,7 @@ return array(
                                 'options' => array(
                                     'route' => '/index',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_quiz',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Quiz::class,
                                         'action' => 'index'
                                     )
                                 )
@@ -1045,7 +1046,7 @@ return array(
                                 'options' => array(
                                     'route' => '/ajax-mot-passe-oublie',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_quiz',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Quiz::class,
                                         'action'     => 'ajaxforgot',
                                     ),
                                 ),
@@ -1055,7 +1056,7 @@ return array(
                                 'options' => array(
                                     'route' => '/reset-password/:userId/:token',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_quiz',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Quiz::class,
                                         'action'     => 'userreset',
                                     ),
                                     'constraints' => array(
@@ -1069,7 +1070,7 @@ return array(
                                 'options' => array(
                                     'route' => '/connexion',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_quiz',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Quiz::class,
                                         'action' => 'login'
                                     )
                                 )
@@ -1079,7 +1080,7 @@ return array(
                                 'options' => array(
                                     'route' => '/inscription[/:socialnetwork]',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_quiz',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Quiz::class,
                                         'action' => 'userregister'
                                     )
                                 )
@@ -1089,7 +1090,7 @@ return array(
 		                        'options' => array(
 		                            'route' => '/verification',
 		                            'defaults' => array(
-		                                'controller' => 'playgroundgame_quiz',
+		                                'controller' => PlaygroundGame\Controller\Frontend\Quiz::class,
 		                                'action'     => 'check-token',
 		                            ),
 		                        ),
@@ -1099,7 +1100,7 @@ return array(
                                 'options' => array(
                                     'route' => '/optin[/:gameId]',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_quiz',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Quiz::class,
                                         'action' => 'optin'
                                     )
                                 )
@@ -1109,7 +1110,7 @@ return array(
                                 'options' => array(
                                     'route' => '/jouer',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_quiz',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Quiz::class,
                                         'action' => 'play'
                                     )
                                 )
@@ -1119,7 +1120,7 @@ return array(
                                 'options' => array(
                                     'route' => '/resultat',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_quiz',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Quiz::class,
                                         'action' => 'result'
                                     )
                                 )
@@ -1129,7 +1130,7 @@ return array(
                                 'options' => array(
                                     'route' => '/register',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_quiz',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Quiz::class,
                                         'action' => 'register'
                                     )
                                 )
@@ -1139,7 +1140,7 @@ return array(
                                 'options' => array(
                                     'route' => '/fbshare',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_quiz',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Quiz::class,
                                         'action' => 'fbshare'
                                     )
                                 )
@@ -1149,7 +1150,7 @@ return array(
                                 'options' => array(
                                     'route' => '/fbrequest',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_quiz',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Quiz::class,
                                         'action' => 'fbrequest'
                                     )
                                 )
@@ -1159,7 +1160,7 @@ return array(
                                 'options' => array(
                                     'route' => '/tweet',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_quiz',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Quiz::class,
                                         'action' => 'tweet'
                                     )
                                 )
@@ -1169,7 +1170,7 @@ return array(
                                 'options' => array(
                                     'route' => '/google',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_quiz',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Quiz::class,
                                         'action' => 'google'
                                     )
                                 )
@@ -1179,7 +1180,7 @@ return array(
                                 'options' => array(
                                     'route' => '/essayez-aussi',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_quiz',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Quiz::class,
                                         'action' => 'bounce'
                                     )
                                 )
@@ -1189,7 +1190,7 @@ return array(
                                 'options' => array(
                                     'route' => '/reglement',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_quiz',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Quiz::class,
                                         'action' => 'terms'
                                     )
                                 )
@@ -1199,7 +1200,7 @@ return array(
                                 'options' => array(
                                     'route' => '/mentions-legales',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_quiz',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Quiz::class,
                                         'action' => 'conditions'
                                     )
                                 )
@@ -1209,7 +1210,7 @@ return array(
                                 'options' => array(
                                     'route' => '/fangate',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_quiz',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Quiz::class,
                                         'action' => 'fangate'
                                     )
                                 )
@@ -1219,7 +1220,7 @@ return array(
                                 'options' => array(
                                     'route' => '/lots',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_quiz',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Quiz::class,
                                         'action' => 'prizes'
                                     )
                                 ),
@@ -1230,7 +1231,7 @@ return array(
                                         'options' => array(
                                             'route' => '/:prize',
                                             'defaults' => array(
-                                                'controller' => 'playgroundgame_quiz',
+                                                'controller' => PlaygroundGame\Controller\Frontend\Quiz::class,
                                                 'action' => 'prize'
                                             )
                                         )
@@ -1242,7 +1243,7 @@ return array(
                                 'options' => array(
                                     'route' => '/partager',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_quiz',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Quiz::class,
                                         'action' => 'share'
                                     )
                                 )
@@ -1255,7 +1256,7 @@ return array(
                                         'filter' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                     ),
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_quiz',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Quiz::class,
                                         'action'     => 'leaderboard'
                                     ),
                                 ),
@@ -1267,7 +1268,7 @@ return array(
                                     'regex' => '.*',
                                     'spec' => '%url%',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_quiz',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Quiz::class,
                                         'action' => 'not-found'
                                     )
                                 )
@@ -1280,7 +1281,7 @@ return array(
                         'options' => array(
                             'route' => 'loterie[/:id]',
                             'defaults' => array(
-                                'controller' => 'playgroundgame_lottery',
+                                'controller' => PlaygroundGame\Controller\Frontend\Lottery::class,
                                 'action' => 'home'
                             )
                         ),
@@ -1291,7 +1292,7 @@ return array(
                                 'options' => array(
                                     'route' => '/index',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_lottery',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Lottery::class,
                                         'action' => 'index'
                                     )
                                 )
@@ -1301,7 +1302,7 @@ return array(
                                 'options' => array(
                                     'route' => '/ajax-mot-passe-oublie',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_lottery',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Lottery::class,
                                         'action'     => 'ajaxforgot',
                                     ),
                                 ),
@@ -1311,7 +1312,7 @@ return array(
                                 'options' => array(
                                     'route' => '/reset-password/:userId/:token',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_lottery',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Lottery::class,
                                         'action'     => 'userreset',
                                     ),
                                     'constraints' => array(
@@ -1325,7 +1326,7 @@ return array(
                                 'options' => array(
                                     'route' => '/connexion',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_lottery',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Lottery::class,
                                         'action' => 'login'
                                     )
                                 )
@@ -1335,7 +1336,7 @@ return array(
                                 'options' => array(
                                     'route' => '/inscription[/:socialnetwork]',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_lottery',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Lottery::class,
                                         'action' => 'userregister'
                                     )
                                 )
@@ -1345,7 +1346,7 @@ return array(
 		                        'options' => array(
 		                            'route' => '/verification',
 		                            'defaults' => array(
-		                                'controller' => 'playgroundgame_lottery',
+		                                'controller' => PlaygroundGame\Controller\Frontend\Lottery::class,
 		                                'action'     => 'check-token',
 		                            ),
 		                        ),
@@ -1355,7 +1356,7 @@ return array(
                                 'options' => array(
                                     'route' => '/optin[/:gameId]',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_lottery',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Lottery::class,
                                         'action' => 'optin'
                                     )
                                 )
@@ -1365,7 +1366,7 @@ return array(
                                 'options' => array(
                                     'route' => '/jouer',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_lottery',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Lottery::class,
                                         'action' => 'play'
                                     )
                                 )
@@ -1375,7 +1376,7 @@ return array(
                                 'options' => array(
                                     'route' => '/resultat',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_lottery',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Lottery::class,
                                         'action' => 'result'
                                     )
                                 )
@@ -1385,7 +1386,7 @@ return array(
                                 'options' => array(
                                     'route' => '/register',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_lottery',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Lottery::class,
                                         'action' => 'register'
                                     )
                                 )
@@ -1395,7 +1396,7 @@ return array(
                                 'options' => array(
                                     'route' => '/fbshare',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_lottery',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Lottery::class,
                                         'action' => 'fbshare'
                                     )
                                 )
@@ -1405,7 +1406,7 @@ return array(
                                 'options' => array(
                                     'route' => '/fbrequest',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_lottery',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Lottery::class,
                                         'action' => 'fbrequest'
                                     )
                                 )
@@ -1415,7 +1416,7 @@ return array(
                                 'options' => array(
                                     'route' => '/tweet',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_lottery',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Lottery::class,
                                         'action' => 'tweet'
                                     )
                                 )
@@ -1425,7 +1426,7 @@ return array(
                                 'options' => array(
                                     'route' => '/google',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_lottery',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Lottery::class,
                                         'action' => 'google'
                                     )
                                 )
@@ -1435,7 +1436,7 @@ return array(
                                 'options' => array(
                                     'route' => '/essayez-aussi',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_lottery',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Lottery::class,
                                         'action' => 'bounce'
                                     )
                                 )
@@ -1445,7 +1446,7 @@ return array(
                                 'options' => array(
                                     'route' => '/reglement',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_lottery',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Lottery::class,
                                         'action' => 'terms'
                                     )
                                 )
@@ -1455,7 +1456,7 @@ return array(
                                 'options' => array(
                                     'route' => '/mentions-legales',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_lottery',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Lottery::class,
                                         'action' => 'conditions'
                                     )
                                 )
@@ -1465,7 +1466,7 @@ return array(
                                 'options' => array(
                                     'route' => '/fangate',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_lottery',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Lottery::class,
                                         'action' => 'fangate'
                                     )
                                 )
@@ -1475,7 +1476,7 @@ return array(
                                 'options' => array(
                                     'route' => '/lots',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_lottery',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Lottery::class,
                                         'action' => 'prizes'
                                     )
                                 ),
@@ -1486,7 +1487,7 @@ return array(
                                         'options' => array(
                                             'route' => '/:prize',
                                             'defaults' => array(
-                                                'controller' => 'playgroundgame_lottery',
+                                                'controller' => PlaygroundGame\Controller\Frontend\Lottery::class,
                                                 'action' => 'prize'
                                             )
                                         )
@@ -1498,7 +1499,7 @@ return array(
                                 'options' => array(
                                     'route' => '/partager',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_lottery',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Lottery::class,
                                         'action' => 'share'
                                     )
                                 )
@@ -1511,7 +1512,7 @@ return array(
                                         'filter' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                     ),
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_lottery',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Lottery::class,
                                         'action'     => 'leaderboard'
                                     ),
                                 ),
@@ -1523,7 +1524,7 @@ return array(
                                     'regex' => '.*',
                                     'spec' => '%url%',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_lottery',
+                                        'controller' => PlaygroundGame\Controller\Frontend\Lottery::class,
                                         'action' => 'not-found'
                                     )
                                 )
@@ -1536,7 +1537,7 @@ return array(
                         'options' => array(
                             'route' => 'instant-gagnant[/:id]',
                             'defaults' => array(
-                                'controller' => 'playgroundgame_instantwin',
+                                'controller' => PlaygroundGame\Controller\Frontend\InstantWin::class,
                                 'action' => 'home'
                             )
                         ),
@@ -1547,7 +1548,7 @@ return array(
                                 'options' => array(
                                     'route' => '/index',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_instantwin',
+                                        'controller' => PlaygroundGame\Controller\Frontend\InstantWin::class,
                                         'action' => 'index'
                                     )
                                 )
@@ -1557,7 +1558,7 @@ return array(
                                 'options' => array(
                                     'route' => '/ajax-mot-passe-oublie',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_instantwin',
+                                        'controller' => PlaygroundGame\Controller\Frontend\InstantWin::class,
                                         'action'     => 'ajaxforgot',
                                     ),
                                 ),
@@ -1567,7 +1568,7 @@ return array(
                                 'options' => array(
                                     'route' => '/reset-password/:userId/:token',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_instantwin',
+                                        'controller' => PlaygroundGame\Controller\Frontend\InstantWin::class,
                                         'action'     => 'userreset',
                                     ),
                                     'constraints' => array(
@@ -1581,7 +1582,7 @@ return array(
                                 'options' => array(
                                     'route' => '/connexion',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_instantwin',
+                                        'controller' => PlaygroundGame\Controller\Frontend\InstantWin::class,
                                         'action' => 'login'
                                     )
                                 )
@@ -1591,7 +1592,7 @@ return array(
                                 'options' => array(
                                     'route' => '/inscription[/:socialnetwork]',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_instantwin',
+                                        'controller' => PlaygroundGame\Controller\Frontend\InstantWin::class,
                                         'action' => 'userregister'
                                     )
                                 )
@@ -1601,7 +1602,7 @@ return array(
 		                        'options' => array(
 		                            'route' => '/verification',
 		                            'defaults' => array(
-		                                'controller' => 'playgroundgame_instantwin',
+		                                'controller' => PlaygroundGame\Controller\Frontend\InstantWin::class,
 		                                'action'     => 'check-token',
 		                            ),
 		                        ),
@@ -1611,7 +1612,7 @@ return array(
                                 'options' => array(
                                     'route' => '/optin[/:gameId]',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_instantwin',
+                                        'controller' => PlaygroundGame\Controller\Frontend\InstantWin::class,
                                         'action' => 'optin'
                                     )
                                 )
@@ -1621,7 +1622,7 @@ return array(
                                 'options' => array(
                                     'route' => '/jouer',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_instantwin',
+                                        'controller' => PlaygroundGame\Controller\Frontend\InstantWin::class,
                                         'action' => 'play'
                                     )
                                 )
@@ -1631,7 +1632,7 @@ return array(
                                 'options' => array(
                                     'route' => '/resultat',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_instantwin',
+                                        'controller' => PlaygroundGame\Controller\Frontend\InstantWin::class,
                                         'action' => 'result'
                                     )
                                 )
@@ -1641,7 +1642,7 @@ return array(
                                 'options' => array(
                                     'route' => '/register',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_instantwin',
+                                        'controller' => PlaygroundGame\Controller\Frontend\InstantWin::class,
                                         'action' => 'register'
                                     )
                                 )
@@ -1651,7 +1652,7 @@ return array(
                                 'options' => array(
                                     'route' => '/fbshare',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_instantwin',
+                                        'controller' => PlaygroundGame\Controller\Frontend\InstantWin::class,
                                         'action' => 'fbshare'
                                     )
                                 )
@@ -1661,7 +1662,7 @@ return array(
                                 'options' => array(
                                     'route' => '/fbrequest',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_instantwin',
+                                        'controller' => PlaygroundGame\Controller\Frontend\InstantWin::class,
                                         'action' => 'fbrequest'
                                     )
                                 )
@@ -1671,7 +1672,7 @@ return array(
                                 'options' => array(
                                     'route' => '/tweet',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_instantwin',
+                                        'controller' => PlaygroundGame\Controller\Frontend\InstantWin::class,
                                         'action' => 'tweet'
                                     )
                                 )
@@ -1681,7 +1682,7 @@ return array(
                                 'options' => array(
                                     'route' => '/google',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_instantwin',
+                                        'controller' => PlaygroundGame\Controller\Frontend\InstantWin::class,
                                         'action' => 'google'
                                     )
                                 )
@@ -1691,7 +1692,7 @@ return array(
                                 'options' => array(
                                     'route' => '/essayez-aussi',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_instantwin',
+                                        'controller' => PlaygroundGame\Controller\Frontend\InstantWin::class,
                                         'action' => 'bounce'
                                     )
                                 )
@@ -1701,7 +1702,7 @@ return array(
                                 'options' => array(
                                     'route' => '/reglement',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_instantwin',
+                                        'controller' => PlaygroundGame\Controller\Frontend\InstantWin::class,
                                         'action' => 'terms'
                                     )
                                 )
@@ -1711,7 +1712,7 @@ return array(
                                 'options' => array(
                                     'route' => '/mentions-legales',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_instantwin',
+                                        'controller' => PlaygroundGame\Controller\Frontend\InstantWin::class,
                                         'action' => 'conditions'
                                     )
                                 )
@@ -1721,7 +1722,7 @@ return array(
                                 'options' => array(
                                     'route' => '/fangate',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_instantwin',
+                                        'controller' => PlaygroundGame\Controller\Frontend\InstantWin::class,
                                         'action' => 'fangate'
                                     )
                                 )
@@ -1731,7 +1732,7 @@ return array(
                                 'options' => array(
                                     'route' => '/lots',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_instantwin',
+                                        'controller' => PlaygroundGame\Controller\Frontend\InstantWin::class,
                                         'action' => 'prizes'
                                     )
                                 ),
@@ -1742,7 +1743,7 @@ return array(
                                         'options' => array(
                                             'route' => '/:prize',
                                             'defaults' => array(
-                                                'controller' => 'playgroundgame_instantwin',
+                                                'controller' => PlaygroundGame\Controller\Frontend\InstantWin::class,
                                                 'action' => 'prize'
                                             )
                                         )
@@ -1754,7 +1755,7 @@ return array(
                                 'options' => array(
                                     'route' => '/partager',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_instantwin',
+                                        'controller' => PlaygroundGame\Controller\Frontend\InstantWin::class,
                                         'action' => 'share'
                                     )
                                 )
@@ -1767,7 +1768,7 @@ return array(
                                         'filter' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                     ),
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_instantwin',
+                                        'controller' => PlaygroundGame\Controller\Frontend\InstantWin::class,
                                         'action'     => 'leaderboard'
                                     ),
                                 ),
@@ -1779,7 +1780,7 @@ return array(
                                     'regex' => '.*',
                                     'spec' => '%url%',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_instantwin',
+                                        'controller' => PlaygroundGame\Controller\Frontend\InstantWin::class,
                                         'action' => 'not-found'
                                     )
                                 )
@@ -1792,7 +1793,7 @@ return array(
                         'options' => array(
                             'route' => 'post-vote[/:id]',
                             'defaults' => array(
-                                'controller' => 'playgroundgame_postvote',
+                                'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
                                 'action' => 'home'
                             )
                         ),
@@ -1803,7 +1804,7 @@ return array(
                                 'options' => array(
                                     'route' => '/index',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_postvote',
+                                        'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
                                         'action' => 'index'
                                     )
                                 )
@@ -1813,7 +1814,7 @@ return array(
                                 'options' => array(
                                     'route' => '/liste/:filter',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_postvote',
+                                        'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
                                         'action' => 'list',
                                         'filter' => 0
                                     )
@@ -1825,7 +1826,7 @@ return array(
                                         'options' => array(
                                             'route' => '[/:p]',
                                             'defaults' => array(
-                                                'controller' => 'playgroundgame_postvote',
+                                                'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
                                                 'action' => 'list'
                                             )
                                         )
@@ -1837,7 +1838,7 @@ return array(
                                 'options' => array(
                                     'route' => '/ajax-mot-passe-oublie',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_postvote',
+                                        'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
                                         'action'     => 'ajaxforgot',
                                     ),
                                 ),
@@ -1847,7 +1848,7 @@ return array(
                                 'options' => array(
                                     'route' => '/reset-password/:userId/:token',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_postvote',
+                                        'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
                                         'action'     => 'userreset',
                                     ),
                                     'constraints' => array(
@@ -1861,7 +1862,7 @@ return array(
                                 'options' => array(
                                     'route' => '/connexion',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_postvote',
+                                        'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
                                         'action' => 'login'
                                     )
                                 )
@@ -1871,7 +1872,7 @@ return array(
                                 'options' => array(
                                     'route' => '/inscription[/:socialnetwork]',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_postvote',
+                                        'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
                                         'action' => 'userregister'
                                     )
                                 )
@@ -1881,7 +1882,7 @@ return array(
 		                        'options' => array(
 		                            'route' => '/verification',
 		                            'defaults' => array(
-		                                'controller' => 'playgroundgame_postvote',
+		                                'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
 		                                'action'     => 'check-token',
 		                            ),
 		                        ),
@@ -1891,7 +1892,7 @@ return array(
                                 'options' => array(
                                     'route' => '/optin[/:gameId]',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_postvote',
+                                        'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
                                         'action' => 'optin'
                                     )
                                 )
@@ -1901,7 +1902,7 @@ return array(
                                 'options' => array(
                                     'route' => '/jouer',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_postvote',
+                                        'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
                                         'action' => 'play'
                                     )
                                 ),
@@ -1912,7 +1913,7 @@ return array(
                                         'options' => array(
                                             'route' => '/ajaxupload',
                                             'defaults' => array(
-                                                'controller' => 'playgroundgame_postvote',
+                                                'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
                                                 'action' => 'ajaxupload'
                                             )
                                         )
@@ -1922,7 +1923,7 @@ return array(
                                         'options' => array(
                                             'route' => '/ajaxdelete',
                                             'defaults' => array(
-                                                'controller' => 'playgroundgame_postvote',
+                                                'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
                                                 'action' => 'ajaxdelete'
                                             )
                                         )
@@ -1934,7 +1935,7 @@ return array(
                                 'options' => array(
                                     'route' => '/previsualiser',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_postvote',
+                                        'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
                                         'action' => 'preview'
                                     )
                                 )
@@ -1944,7 +1945,7 @@ return array(
                                 'options' => array(
                                     'route' => '/post/:post',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_postvote',
+                                        'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
                                         'action' => 'post'
                                     )
                                 ),
@@ -1955,7 +1956,7 @@ return array(
                                         'options' => array(
                                             'route' => '/captcha/[:id]',
                                             'defaults' => array(
-                                                'controller' => 'playgroundgame_postvote',
+                                                'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
                                                 'action' => 'captcha'
                                             )
                                         )
@@ -1967,7 +1968,7 @@ return array(
                                 'options' => array(
                                     'route' => '/vote[/:post]',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_postvote',
+                                        'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
                                         'action' => 'ajaxVote'
                                     )
                                 ),
@@ -1978,7 +1979,7 @@ return array(
                                 'options' => array(
                                     'route' => '/comments[/:p]',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_postvote',
+                                        'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
                                         'action' => 'comments'
                                     )
                                 ),
@@ -1989,7 +1990,7 @@ return array(
                                 'options' => array(
                                     'route' => '/comments/:post[/:p]',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_postvote',
+                                        'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
                                         'action' => 'comments'
                                     )
                                 ),
@@ -2000,7 +2001,7 @@ return array(
                                 'options' => array(
                                     'route' => '/comment[/:post]',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_postvote',
+                                        'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
                                         'action' => 'comment'
                                     )
                                 )
@@ -2010,7 +2011,7 @@ return array(
                                 'options' => array(
                                     'route' => '/remove-comment[/:comment]',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_postvote',
+                                        'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
                                         'action' => 'ajaxRemoveComment'
                                     )
                                 )
@@ -2020,7 +2021,7 @@ return array(
                                 'options' => array(
                                     'route' => '/share-comment/:comment',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_postvote',
+                                        'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
                                         'action' => 'shareComment'
                                     )
                                 )
@@ -2030,7 +2031,7 @@ return array(
                                 'options' => array(
                                     'route' => '/share-post/:post',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_postvote',
+                                        'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
                                         'action' => 'sharePost'
                                     )
                                 )
@@ -2040,7 +2041,7 @@ return array(
                                 'options' => array(
                                     'route' => '/reject/:post',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_postvote',
+                                        'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
                                         'action' => 'ajaxrejectPost'
                                     )
                                 )
@@ -2050,7 +2051,7 @@ return array(
                                 'options' => array(
                                     'route' => '/resultat',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_postvote',
+                                        'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
                                         'action' => 'result'
                                     )
                                 )
@@ -2060,7 +2061,7 @@ return array(
                                 'options' => array(
                                     'route' => '/register',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_postvote',
+                                        'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
                                         'action' => 'register'
                                     )
                                 )
@@ -2070,7 +2071,7 @@ return array(
                                 'options' => array(
                                     'route' => '/fbshare',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_postvote',
+                                        'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
                                         'action' => 'fbshare'
                                     )
                                 )
@@ -2080,7 +2081,7 @@ return array(
                                 'options' => array(
                                     'route' => '/fbrequest',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_postvote',
+                                        'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
                                         'action' => 'fbrequest'
                                     )
                                 )
@@ -2090,7 +2091,7 @@ return array(
                                 'options' => array(
                                     'route' => '/tweet',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_postvote',
+                                        'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
                                         'action' => 'tweet'
                                     )
                                 )
@@ -2100,7 +2101,7 @@ return array(
                                 'options' => array(
                                     'route' => '/google',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_postvote',
+                                        'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
                                         'action' => 'google'
                                     )
                                 )
@@ -2110,7 +2111,7 @@ return array(
                                 'options' => array(
                                     'route' => '/essayez-aussi',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_postvote',
+                                        'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
                                         'action' => 'bounce'
                                     )
                                 )
@@ -2120,7 +2121,7 @@ return array(
                                 'options' => array(
                                     'route' => '/reglement',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_postvote',
+                                        'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
                                         'action' => 'terms'
                                     )
                                 )
@@ -2130,7 +2131,7 @@ return array(
                                 'options' => array(
                                     'route' => '/mentions-legales',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_postvote',
+                                        'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
                                         'action' => 'conditions'
                                     )
                                 )
@@ -2140,7 +2141,7 @@ return array(
                                 'options' => array(
                                     'route' => '/fangate',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_postvote',
+                                        'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
                                         'action' => 'fangate'
                                     )
                                 )
@@ -2150,7 +2151,7 @@ return array(
                                 'options' => array(
                                     'route' => '/lots',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_postvote',
+                                        'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
                                         'action' => 'prizes'
                                     )
                                 ),
@@ -2161,7 +2162,7 @@ return array(
                                         'options' => array(
                                             'route' => '/:prize',
                                             'defaults' => array(
-                                                'controller' => 'playgroundgame_postvote',
+                                                'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
                                                 'action' => 'prize'
                                             )
                                         )
@@ -2173,7 +2174,7 @@ return array(
                                 'options' => array(
                                     'route' => '/partager',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_postvote',
+                                        'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
                                         'action' => 'share'
                                     )
                                 )
@@ -2186,7 +2187,7 @@ return array(
                                         'filter' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                     ),
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_postvote',
+                                        'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
                                         'action'     => 'leaderboard'
                                     ),
                                 ),
@@ -2198,7 +2199,7 @@ return array(
                                     'regex' => '.*',
                                     'spec' => '%url%',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_postvote',
+                                        'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
                                         'action' => 'not-found'
                                     )
                                 )
@@ -2213,7 +2214,7 @@ return array(
                                 'id' => '[a-zA-Z][a-zA-Z0-9_-]*'
                             ),
                             'defaults' => array(
-                                'controller' => 'playgroundgame_prizecategory',
+                                'controller' => PlaygroundGame\Controller\Frontend\PrizeCategory::class,
                                 'action' => 'index',
                                 'id' => ''
                             )
@@ -2225,7 +2226,7 @@ return array(
                                 'options' => array(
                                     'route' => '[/:p]',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_prizecategory',
+                                        'controller' => PlaygroundGame\Controller\Frontend\PrizeCategory::class,
                                         'action' => 'index'
                                     )
                                 )
@@ -2242,7 +2243,7 @@ return array(
                         'options' => array(
                             'route' => '/mission',
                             'defaults' => array(
-                                'controller' => 'playgroundgame_admin_mission',
+                                'controller' => Playgroundgame\Controller\Admin\Mission::class,
                                 'action' => 'list'
                             )
                         ),
@@ -2252,7 +2253,7 @@ return array(
                                 'options' => array(
                                     'route' => '/:gameId/entries[/:p]',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_mission',
+                                        'controller' => Playgroundgame\Controller\Admin\Mission::class,
                                         'action' => 'entry',
                                         'gameId' => 0
                                     )
@@ -2263,7 +2264,7 @@ return array(
                                 'options' => array(
                                     'route' => '/:gameId/invitation[/:p]',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_mission',
+                                        'controller' => Playgroundgame\Controller\Admin\Mission::class,
                                         'action' => 'invitation',
                                         'gameId' => 0
                                     )
@@ -2274,7 +2275,7 @@ return array(
                                 'options' => array(
                                     'route' => '/:gameId/removeInvitation/:invitationId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_mission',
+                                        'controller' => Playgroundgame\Controller\Admin\Mission::class,
                                         'action' => 'removeInvitation',
                                         'gameId' => 0,
                                         'invitationId' => 0
@@ -2286,7 +2287,7 @@ return array(
                                 'options' => array(
                                     'route' => '/download/:gameId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_mission',
+                                        'controller' => Playgroundgame\Controller\Admin\Mission::class,
                                         'action' => 'download'
                                     )
                                 )
@@ -2296,7 +2297,7 @@ return array(
                                 'options' => array(
                                     'route' => '/list[/:p]',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_mission',
+                                        'controller' => Playgroundgame\Controller\Admin\Mission::class,
                                         'action' => 'list'
                                     )
                                 )
@@ -2306,7 +2307,7 @@ return array(
                                 'options' => array(
                                     'route' => '/create',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_mission',
+                                        'controller' => Playgroundgame\Controller\Admin\Mission::class,
                                         'action' => 'create'
                                     )
                                 )
@@ -2316,7 +2317,7 @@ return array(
                                 'options' => array(
                                     'route' => '/edit/:missionId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_mission',
+                                        'controller' => Playgroundgame\Controller\Admin\Mission::class,
                                         'action' => 'edit',
                                         'missionId' => 0
                                     )
@@ -2327,7 +2328,7 @@ return array(
                                 'options' => array(
                                     'route' => '/delete/:missionId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_mission',
+                                        'controller' => Playgroundgame\Controller\Admin\Mission::class,
                                         'action' => 'delete',
                                         'missionId' => 0
                                     )
@@ -2338,7 +2339,7 @@ return array(
                                 'options' => array(
                                     'route' => '/associate/:missionId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_mission',
+                                        'controller' => Playgroundgame\Controller\Admin\Mission::class,
                                         'action' => 'associate',
                                         'missionId' => 0
                                     )
@@ -2349,7 +2350,7 @@ return array(
                                 'options' => array(
                                     'route' => '/activate/:missionId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_mission',
+                                        'controller' => Playgroundgame\Controller\Admin\Mission::class,
                                         'action' => 'activate',
                                         'missionId' => 0
                                     )
@@ -2360,7 +2361,7 @@ return array(
                                 'options' => array(
                                     'route' => '/desactivate/:missionId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_mission',
+                                        'controller' => Playgroundgame\Controller\Admin\Mission::class,
                                         'action' => 'desactivate',
                                         'missionId' => 0
                                     )
@@ -2374,7 +2375,7 @@ return array(
                         'options' => array(
                             'route' => '/quiz',
                             'defaults' => array(
-                                'controller' => 'playgroundgame_admin_quiz',
+                                'controller' => Playgroundgame\Controller\Admin\Quiz::class,
                                 'action' => 'index'
                             )
                         ),
@@ -2384,7 +2385,7 @@ return array(
                                 'options' => array(
                                     'route' => '/:gameId/entries[/:p]',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_quiz',
+                                        'controller' => Playgroundgame\Controller\Admin\Quiz::class,
                                         'action' => 'entry',
                                         'gameId' => 0
                                     )
@@ -2395,7 +2396,7 @@ return array(
                                 'options' => array(
                                     'route' => '/download/:gameId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_quiz',
+                                        'controller' => Playgroundgame\Controller\Admin\Quiz::class,
                                         'action' => 'download'
                                     )
                                 )
@@ -2405,7 +2406,7 @@ return array(
                                 'options' => array(
                                     'route' => '/draw/:gameId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_quiz',
+                                        'controller' => Playgroundgame\Controller\Admin\Quiz::class,
                                         'action' => 'draw'
                                     )
                                 )
@@ -2415,7 +2416,7 @@ return array(
                                 'options' => array(
                                     'route' => '/sortquestion/:gameId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_quiz',
+                                        'controller' => Playgroundgame\Controller\Admin\Quiz::class,
                                         'action' => 'sortQuestion'
                                     )
                                 )
@@ -2428,7 +2429,7 @@ return array(
                         'options' => array(
                             'route' => '/lottery',
                             'defaults' => array(
-                                'controller' => 'playgroundgame_admin_lottery',
+                                'controller' => Playgroundgame\Controller\Admin\Lottery::class,
                                 'action' => 'index'
                             )
                         ),
@@ -2438,7 +2439,7 @@ return array(
                                 'options' => array(
                                     'route' => '/entry/:gameId[/:p]',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_lottery',
+                                        'controller' => Playgroundgame\Controller\Admin\Lottery::class,
                                         'action' => 'entry',
                                         'gameId' => 0
                                     )
@@ -2449,7 +2450,7 @@ return array(
                                 'options' => array(
                                     'route' => '/download/:gameId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_lottery',
+                                        'controller' => Playgroundgame\Controller\Admin\Lottery::class,
                                         'action' => 'download'
                                     )
                                 )
@@ -2459,7 +2460,7 @@ return array(
                                 'options' => array(
                                     'route' => '/draw/:gameId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_lottery',
+                                        'controller' => Playgroundgame\Controller\Admin\Lottery::class,
                                         'action' => 'draw'
                                     )
                                 )
@@ -2472,7 +2473,7 @@ return array(
                         'options' => array(
                             'route' => '/instantwin',
                             'defaults' => array(
-                                'controller' => 'playgroundgame_admin_instantwin',
+                                'controller' => Playgroundgame\Controller\Admin\InstantWin::class,
                                 'action' => 'index'
                             )
                         ),
@@ -2482,7 +2483,7 @@ return array(
                                 'options' => array(
                                     'route' => '/entry/:gameId[/:p]',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_instantwin',
+                                        'controller' => Playgroundgame\Controller\Admin\InstantWin::class,
                                         'action' => 'entry',
                                         'gameId' => 0
                                     )
@@ -2493,7 +2494,7 @@ return array(
                                 'options' => array(
                                     'route' => '/download/:gameId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_instantwin',
+                                        'controller' => Playgroundgame\Controller\Admin\InstantWin::class,
                                         'action' => 'download'
                                     )
                                 )
@@ -2506,7 +2507,7 @@ return array(
                         'options' => array(
                             'route' => '/postvote',
                             'defaults' => array(
-                                'controller' => 'playgroundgame_admin_postvote',
+                                'controller' => Playgroundgame\Controller\Admin\PostVote::class,
                                 'action' => 'index'
                             )
                         ),
@@ -2516,7 +2517,7 @@ return array(
                                 'options' => array(
                                     'route' => '/entry/:gameId[/:p]',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_postvote',
+                                        'controller' => Playgroundgame\Controller\Admin\PostVote::class,
                                         'action' => 'entry',
                                         'gameId' => 0
                                     )
@@ -2527,21 +2528,20 @@ return array(
                                 'options' => array(
                                     'route' => '/download/:gameId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_postvote',
+                                        'controller' => Playgroundgame\Controller\Admin\PostVote::class,
                                         'action' => 'download'
                                     )
                                 )
                             )
                         )
                     ),
-                
                     'tradingcard' => array(
                         'type' => 'Literal',
                         'priority' => 1000,
                         'options' => array(
                             'route' => '/tradingcard',
                             'defaults' => array(
-                                'controller' => 'playgroundgame_admin_tradingcard',
+                                'controller' => Playgroundgame\Controller\Admin\TradingCard::class,
                                 'action' => 'index'
                             )
                         ),
@@ -2551,7 +2551,7 @@ return array(
                                 'options' => array(
                                     'route' => '/entry/:gameId[/:p]',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_tradingcard',
+                                        'controller' => Playgroundgame\Controller\Admin\TradingCard::class,
                                         'action' => 'entry',
                                         'gameId' => 0
                                     )
@@ -2562,7 +2562,7 @@ return array(
                                 'options' => array(
                                     'route' => '/download/:gameId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_tradingcard',
+                                        'controller' => Playgroundgame\Controller\Admin\TradingCard::class,
                                         'action' => 'download'
                                     )
                                 )
@@ -2572,7 +2572,7 @@ return array(
                                 'options' => array(
                                     'route' => '/coo/:gameId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_tradingcard',
+                                        'controller' => Playgroundgame\Controller\Admin\TradingCard::class,
                                         'action' => 'coo',
                                         'gameId' => 0
                                     )
@@ -2580,14 +2580,13 @@ return array(
                             ),
                         )
                     ),
-
                     'playgroundgame' => array(
                         'type' => 'Literal',
                         'priority' => 1000,
                         'options' => array(
                             'route' => '/game',
                             'defaults' => array(
-                                'controller' => 'playgroundgame_admin_game',
+                                'controller' => Playgroundgame\Controller\Admin\Game::class,
                                 'action' => 'index'
                             )
                         ),
@@ -2597,7 +2596,7 @@ return array(
                                 'options' => array(
                                     'route' => '/list/:type/:filter[/:p]',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_game',
+                                        'controller' => Playgroundgame\Controller\Admin\Game::class,
                                         'action' => 'list',
                                         'type' => 'createdAt',
                                         'filter' => 'DESC'
@@ -2609,7 +2608,7 @@ return array(
                                 'options' => array(
                                     'route' => '/create',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_game',
+                                        'controller' => Playgroundgame\Controller\Admin\Game::class,
                                         'action' => 'create'
                                     )
                                 )
@@ -2619,7 +2618,7 @@ return array(
                                 'options' => array(
                                     'route' => '/player-form/:gameId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_game',
+                                        'controller' => Playgroundgame\Controller\Admin\Game::class,
                                         'action' => 'form',
                                         'gameId' => 0
                                     )
@@ -2630,7 +2629,7 @@ return array(
                                 'options' => array(
                                     'route' => '/export/:gameId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_game',
+                                        'controller' => Playgroundgame\Controller\Admin\Game::class,
                                         'action' => 'export',
                                         'gameId' => 0
                                     )
@@ -2641,7 +2640,7 @@ return array(
                                 'options' => array(
                                     'route' => '/import',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_game',
+                                        'controller' => Playgroundgame\Controller\Admin\Game::class,
                                         'action' => 'import'
                                     )
                                 )
@@ -2651,7 +2650,7 @@ return array(
                                 'options' => array(
                                     'route' => '/create-tradingcard',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_tradingcard',
+                                        'controller' => Playgroundgame\Controller\Admin\TradingCard::class,
                                         'action' => 'createTradingcard'
                                     )
                                 )
@@ -2661,7 +2660,7 @@ return array(
                                 'options' => array(
                                     'route' => '/edit-tradingcard/:gameId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_tradingcard',
+                                        'controller' => Playgroundgame\Controller\Admin\TradingCard::class,
                                         'action' => 'editTradingcard',
                                         'gameId' => 0
                                     )
@@ -2672,7 +2671,7 @@ return array(
                                 'options' => array(
                                     'route' => '/tradingcard-model-list/:gameId[/:filter][/:p]',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_tradingcard',
+                                        'controller' => Playgroundgame\Controller\Admin\TradingCard::class,
                                         'action' => 'listModel',
                                         'gameId' => 0,
                                         'filter' => 'DESC'
@@ -2687,7 +2686,7 @@ return array(
                                 'options' => array(
                                     'route' => '/tradingcard-models-import/:gameId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_tradingcard',
+                                        'controller' => Playgroundgame\Controller\Admin\TradingCard::class,
                                         'action' => 'importModels',
                                         'gameId' => 0
                                     )
@@ -2698,7 +2697,7 @@ return array(
                                 'options' => array(
                                     'route' => '/tradingcard-models-export/:gameId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_tradingcard',
+                                        'controller' => Playgroundgame\Controller\Admin\TradingCard::class,
                                         'action' => 'exportModels',
                                         'gameId' => 0
                                     )
@@ -2709,7 +2708,7 @@ return array(
                                 'options' => array(
                                     'route' => '/tradingcard-model-add/:gameId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_tradingcard',
+                                        'controller' => Playgroundgame\Controller\Admin\TradingCard::class,
                                         'action' => 'addModel',
                                         'gameId' => 0
                                     )
@@ -2720,7 +2719,7 @@ return array(
                                 'options' => array(
                                     'route' => '/tradingcard-model-edit/:gameId/:modelId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_tradingcard',
+                                        'controller' => Playgroundgame\Controller\Admin\TradingCard::class,
                                         'action' => 'editModel',
                                         'gameId' => 0,
                                         'modelId' => 0
@@ -2732,7 +2731,7 @@ return array(
                                 'options' => array(
                                     'route' => '/tradingcard-model-remove/:modelId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_tradingcard',
+                                        'controller' => Playgroundgame\Controller\Admin\TradingCard::class,
                                         'action' => 'removeModel',
                                         'modelId' => 0
                                     )
@@ -2743,7 +2742,7 @@ return array(
                                 'options' => array(
                                     'route' => '/create-lottery',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_lottery',
+                                        'controller' => Playgroundgame\Controller\Admin\Lottery::class,
                                         'action' => 'createLottery'
                                     )
                                 )
@@ -2753,7 +2752,7 @@ return array(
                                 'options' => array(
                                     'route' => '/edit-lottery/:gameId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_lottery',
+                                        'controller' => Playgroundgame\Controller\Admin\Lottery::class,
                                         'action' => 'editLottery',
                                         'gameId' => 0
                                     )
@@ -2764,7 +2763,7 @@ return array(
                                 'options' => array(
                                     'route' => '/create-instantwin',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_instantwin',
+                                        'controller' => Playgroundgame\Controller\Admin\InstantWin::class,
                                         'action' => 'createInstantWin'
                                     )
                                 )
@@ -2774,7 +2773,7 @@ return array(
                                 'options' => array(
                                     'route' => '/edit-instantwin/:gameId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_instantwin',
+                                        'controller' => Playgroundgame\Controller\Admin\InstantWin::class,
                                         'action' => 'editInstantWin',
                                         'gameId' => 0
                                     )
@@ -2785,7 +2784,7 @@ return array(
                                 'options' => array(
                                     'route' => '/instantwin-occurrence-list/:gameId[/:filter][/:p]',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_instantwin',
+                                        'controller' => Playgroundgame\Controller\Admin\InstantWin::class,
                                         'action' => 'listOccurrence',
                                         'gameId' => 0,
                                         'filter' => 'DESC'
@@ -2800,7 +2799,7 @@ return array(
                                 'options' => array(
                                     'route' => '/instantwin-occurrences-import/:gameId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_instantwin',
+                                        'controller' => Playgroundgame\Controller\Admin\InstantWin::class,
                                         'action' => 'importOccurrences',
                                         'gameId' => 0
                                     )
@@ -2811,7 +2810,7 @@ return array(
                                 'options' => array(
                                     'route' => '/instantwin-occurrences-export/:gameId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_instantwin',
+                                        'controller' => Playgroundgame\Controller\Admin\InstantWin::class,
                                         'action' => 'exportOccurrences',
                                         'gameId' => 0
                                     )
@@ -2822,7 +2821,7 @@ return array(
                                 'options' => array(
                                     'route' => '/instantwin-occurrence-add/:gameId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_instantwin',
+                                        'controller' => Playgroundgame\Controller\Admin\InstantWin::class,
                                         'action' => 'addOccurrence',
                                         'gameId' => 0
                                     )
@@ -2833,7 +2832,7 @@ return array(
                                 'options' => array(
                                     'route' => '/instantwin-occurrence-edit/:gameId/:occurrenceId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_instantwin',
+                                        'controller' => Playgroundgame\Controller\Admin\InstantWin::class,
                                         'action' => 'editOccurrence',
                                         'gameId' => 0,
                                         'occurrenceId' => 0
@@ -2845,7 +2844,7 @@ return array(
                                 'options' => array(
                                     'route' => '/instantwin-occurrence-remove/:occurrenceId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_instantwin',
+                                        'controller' => Playgroundgame\Controller\Admin\InstantWin::class,
                                         'action' => 'removeOccurrence',
                                         'occurrenceId' => 0
                                     )
@@ -2856,7 +2855,7 @@ return array(
                                 'options' => array(
                                     'route' => '/create-quiz',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_quiz',
+                                        'controller' => Playgroundgame\Controller\Admin\Quiz::class,
                                         'action' => 'createQuiz'
                                     )
                                 )
@@ -2866,7 +2865,7 @@ return array(
                                 'options' => array(
                                     'route' => '/edit-quiz/:gameId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_quiz',
+                                        'controller' => Playgroundgame\Controller\Admin\Quiz::class,
                                         'action' => 'editQuiz',
                                         'gameId' => 0
                                     )
@@ -2877,7 +2876,7 @@ return array(
                                 'options' => array(
                                     'route' => '/create-postvote',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_postvote',
+                                        'controller' => Playgroundgame\Controller\Admin\PostVote::class,
                                         'action' => 'createPostVote'
                                     )
                                 )
@@ -2887,7 +2886,7 @@ return array(
                                 'options' => array(
                                     'route' => '/edit-postvote/:gameId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_postvote',
+                                        'controller' => Playgroundgame\Controller\Admin\PostVote::class,
                                         'action' => 'editPostVote',
                                         'gameId' => 0
                                     )
@@ -2898,7 +2897,7 @@ return array(
                                 'options' => array(
                                     'route' => '/postvote-form/:gameId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_postvote',
+                                        'controller' => Playgroundgame\Controller\Admin\PostVote::class,
                                         'action' => 'form',
                                         'gameId' => 0
                                     )
@@ -2909,7 +2908,7 @@ return array(
                                 'options' => array(
                                     'route' => '/postvote-mod-list',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_postvote',
+                                        'controller' => Playgroundgame\Controller\Admin\PostVote::class,
                                         'action' => 'modList'
                                     )
                                 )
@@ -2919,7 +2918,7 @@ return array(
                                 'options' => array(
                                     'route' => '/postvote-moderation-edit/:postId[/:status]',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_postvote',
+                                        'controller' => Playgroundgame\Controller\Admin\PostVote::class,
                                         'action' => 'moderationEdit'
                                     )
                                 )
@@ -2929,7 +2928,7 @@ return array(
                                 'options' => array(
                                     'route' => '/postvote-push/:postId[/:pushed]',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_postvote',
+                                        'controller' => Playgroundgame\Controller\Admin\PostVote::class,
                                         'action' => 'push'
                                     )
                                 )
@@ -2940,7 +2939,7 @@ return array(
                                 'options' => array(
                                     'route' => '/entry/:gameId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_game',
+                                        'controller' => Playgroundgame\Controller\Admin\Game::class,
                                         'action' => 'entry',
                                         'gameId' => 0
                                     )
@@ -2952,7 +2951,7 @@ return array(
                                         'options' => array(
                                             'route' => '[:p]',
                                             'defaults' => array(
-                                                'controller' => 'playgroundgame_admin_game',
+                                                'controller' => Playgroundgame\Controller\Admin\Game::class,
                                                 'action' => 'entry'
                                             )
                                         )
@@ -2964,7 +2963,7 @@ return array(
                                 'options' => array(
                                     'route' => '/quiz-question-list/:quizId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_quiz',
+                                        'controller' => Playgroundgame\Controller\Admin\Quiz::class,
                                         'action' => 'listQuestion',
                                         'quizId' => 0
                                     )
@@ -2975,7 +2974,7 @@ return array(
                                 'options' => array(
                                     'route' => '/quiz-question-add/:quizId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_quiz',
+                                        'controller' => Playgroundgame\Controller\Admin\Quiz::class,
                                         'action' => 'addQuestion',
                                         'quizId' => 0
                                     )
@@ -2986,7 +2985,7 @@ return array(
                                 'options' => array(
                                     'route' => '/quiz-question-edit/:questionId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_quiz',
+                                        'controller' => Playgroundgame\Controller\Admin\Quiz::class,
                                         'action' => 'editQuestion',
                                         'questionId' => 0
                                     )
@@ -2997,7 +2996,7 @@ return array(
                                 'options' => array(
                                     'route' => '/quiz-question-remove/:questionId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_quiz',
+                                        'controller' => Playgroundgame\Controller\Admin\Quiz::class,
                                         'action' => 'removeQuestion',
                                         'questionId' => 0
                                     )
@@ -3008,7 +3007,7 @@ return array(
                                 'options' => array(
                                     'route' => '/download/:gameId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_game',
+                                        'controller' => Playgroundgame\Controller\Admin\Game::class,
                                         'action' => 'download',
                                         'gameId' => 0
                                     )
@@ -3019,7 +3018,7 @@ return array(
                                 'options' => array(
                                     'route' => '/edit/:gameId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_game',
+                                        'controller' => Playgroundgame\Controller\Admin\Game::class,
                                         'action' => 'edit',
                                         'gameId' => 0
                                     )
@@ -3030,7 +3029,7 @@ return array(
                                 'options' => array(
                                     'route' => '/remove/:gameId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_game',
+                                        'controller' => Playgroundgame\Controller\Admin\Game::class,
                                         'action' => 'remove',
                                         'gameId' => 0
                                     )
@@ -3044,7 +3043,7 @@ return array(
                                         'gameId' => '[0-9]+'
                                     ),
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_game',
+                                        'controller' => Playgroundgame\Controller\Admin\Game::class,
                                         'action' => 'setActive',
                                         'gameId' => 0
                                     )
@@ -3090,7 +3089,7 @@ return array(
                                 'options' => array(
                                     'route' => '/create-mission/:gameId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_mission',
+                                        'controller' => Playgroundgame\Controller\Admin\Mission::class,
                                         'action' => 'createMission',
                                         'gameId' => 0
                                     )
@@ -3101,7 +3100,7 @@ return array(
                                 'options' => array(
                                     'route' => '/edit-mission/:gameId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_mission',
+                                        'controller' => Playgroundgame\Controller\Admin\Mission::class,
                                         'action' => 'editMission',
                                         'gameId' => 0
                                     )

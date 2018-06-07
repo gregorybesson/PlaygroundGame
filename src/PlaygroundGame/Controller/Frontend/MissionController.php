@@ -5,6 +5,7 @@ namespace PlaygroundGame\Controller\Frontend;
 use PlaygroundGame\Controller\Frontend\GameController;
 use PlaygroundGame\Service\GameService;
 use Zend\Session\Container;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 class MissionController extends GameController
 {
@@ -14,6 +15,11 @@ class MissionController extends GameController
      */
     protected $gameService;
     protected $mission;
+
+    public function __construct(ServiceLocatorInterface $locator)
+    {
+        parent::__construct($locator);
+    }
 
     /**
      * Homepage of the game
@@ -144,10 +150,12 @@ class MissionController extends GameController
         }
 
         $beforeLayout = $this->layout()->getTemplate();
+        $classGame = __NAMESPACE__ . '\\' . ucfirst($subGame->getClassType());
+
         $subViewModel = $this->forward()->dispatch(
-            'playgroundgame_'.$subGame->getClassType(),
+            $classGame,
             array(
-            'controller' => 'playgroundgame_'.$subGame->getClassType(),
+            'controller' => $classGame,
             'action'     => 'play',
             'id'         => $subGame->getIdentifier()
             )
@@ -212,10 +220,11 @@ class MissionController extends GameController
         $form->setAttribute('method', 'post');
 
         $beforeLayout = $this->layout()->getTemplate();
+        $classGame = __NAMESPACE__ . '\\' . ucfirst($subGame->getClassType());
         $subViewModel = $this->forward()->dispatch(
-            'playgroundgame_'.$subGame->getClassType(),
+            $classGame,
             array(
-                'controller' => 'playgroundgame_'.$subGame->getClassType(),
+                'controller' => $classGame,
                 'action'     => 'result',
                 'id'         => $subGameIdentifier
             )
@@ -224,10 +233,11 @@ class MissionController extends GameController
         if ($this->getResponse()->getStatusCode() == 302) {
             $this->getResponse()->setStatusCode('200');
 
+            $classGame = __NAMESPACE__ . '\\' . ucfirst($subGame->getClassType());
             $subViewModel = $this->forward()->dispatch(
-                'playgroundgame_'.$subGame->getClassType(),
+                $classGame,
                 array(
-                    'controller' => 'playgroundgame_'.$subGame->getClassType(),
+                    'controller' => $classGame,
                     'action'     => 'result',
                     'id'         => $subGameIdentifier
                 )

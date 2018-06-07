@@ -1,6 +1,7 @@
 <?php
-
 namespace PlaygroundGame\Controller\Frontend;
+
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 class InstantWinController extends GameController
 {
@@ -8,6 +9,11 @@ class InstantWinController extends GameController
      * @var gameService
      */
     protected $gameService;
+
+    public function __construct(ServiceLocatorInterface $locator)
+    {
+        parent::__construct($locator);
+    }
 
     public function playAction()
     {

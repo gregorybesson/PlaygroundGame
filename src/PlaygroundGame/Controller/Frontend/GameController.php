@@ -243,10 +243,11 @@ class GameController extends AbstractActionController
             $session->offsetUnset('anonymous_identifier');
         }
 
+        $classGame = __NAMESPACE__ . '\\' . ucfirst($this->game->getClassType());
         return $this->forward()->dispatch(
-            'playgroundgame_'.$this->game->getClassType(),
+            $classGame,
             array(
-                'controller' => 'playgroundgame_'.$this->game->getClassType(),
+                'controller' => $classGame,
                 'action'     => $this->game->firstStep(),
                 'id'         => $this->game->getIdentifier()
             )
@@ -1322,7 +1323,7 @@ class GameController extends AbstractActionController
             $actionData   = $stepsViews[$actionName];
             if (is_string($actionData)) {
                 $action     = $actionData;
-                $controller = $this->getEvent()->getRouteMatch()->getParam('controller', 'playgroundgame_game');
+                $controller = $this->getEvent()->getRouteMatch()->getParam('controller', PlaygroundGame\Controller\Frontend\Game::class);
                 $view       = $this->forward()->dispatch(
                     $controller,
                     array(
