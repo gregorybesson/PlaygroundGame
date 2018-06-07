@@ -31,7 +31,7 @@ class GameControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller = new GameController(Bootstrap::getServiceManager());
         $this->request    = new Request();
-        $this->routeMatch = new RouteMatch(array('controller' => 'playgroundgame_admin_game'));
+        $this->routeMatch = new RouteMatch(array('controller' => Playgroundgame\Controller\Admin\Game::class));
         $this->event      = new MvcEvent();
 
         parent::setUp();
@@ -127,7 +127,7 @@ class GameControllerTest extends AbstractHttpControllerTestCase
 
         $this->dispatch('/admin/game/download/1');
         $this->assertModuleName('playgroundgame');
-        $this->assertControllerName('playgroundgame_admin_game');
+        $this->assertControllerName('playgroundgame\controller\admin\game');
         $this->assertControllerClass('GameController');
         $this->assertActionName('download');
     }
@@ -321,7 +321,7 @@ class GameControllerTest extends AbstractHttpControllerTestCase
 
         $this->dispatch('/admin/game/remove/1');
         $this->assertModuleName('playgroundgame');
-        $this->assertControllerName('playgroundgame_admin_game');
+        $this->assertControllerName('playgroundgame\controller\admin\game');
         $this->assertControllerClass('GameController');
         $this->assertActionName('remove');
 

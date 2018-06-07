@@ -71,7 +71,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
 
         $this->dispatch('/admin/game/quiz-question-add/1');
         $this->assertModuleName('playgroundgame');
-        $this->assertControllerName('playgroundgame_admin_quiz');
+        $this->assertControllerName('playgroundgame\controller\admin\quiz');
         $this->assertControllerClass('QuizController');
         $this->assertActionName('addQuestion');
         //$this->assertMatchedRouteName('frontend/lottery');*/
@@ -117,7 +117,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
 
         $this->dispatch('/admin/game/quiz-question-remove/1');
         $this->assertModuleName('playgroundgame');
-        $this->assertControllerName('playgroundgame_admin_quiz');
+        $this->assertControllerName('playgroundgame\controller\admin\quiz');
         $this->assertControllerClass('QuizController');
         $this->assertActionName('removeQuestion');
     }
