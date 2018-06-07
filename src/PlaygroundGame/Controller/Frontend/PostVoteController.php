@@ -3,6 +3,7 @@
 namespace PlaygroundGame\Controller\Frontend;
 
 use Zend\Form\Form;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 class PostVoteController extends GameController
 {
@@ -10,6 +11,11 @@ class PostVoteController extends GameController
      * @var gameService
      */
     protected $gameService;
+
+    public function __construct(ServiceLocatorInterface $locator)
+    {
+        parent::__construct($locator);
+    }
 
     /**
      * --DONE-- 1. try to change the Game Id (on le redirige vers la home du jeu)
