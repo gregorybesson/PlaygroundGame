@@ -67,7 +67,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $this->dispatch('/quiz/gameid?redir_fb_page_id=httpredir');
     
         $this->assertModuleName('playgroundgame');
-        $this->assertControllerName(PlaygroundGame\Controller\Frontend\Quiz::class);
+        $this->assertControllerName('playgroundgame\controller\frontend\quiz');
         $this->assertControllerClass('QuizController');
         $this->assertActionName('home');
         $this->assertMatchedRouteName('frontend/quiz');
@@ -175,7 +175,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
 
 
     //     $this->assertModuleName('playgroundgame');
-    //     $this->assertControllerName(PlaygroundGame\Controller\Frontend\Quiz::class);
+    //     $this->assertControllerName('playgroundgame\controller\frontend\quiz');
     //     $this->assertControllerClass('QuizController');
     //     $this->assertActionName('home');
     //     $this->assertMatchedRouteName('frontend/quiz');
@@ -239,7 +239,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $this->dispatch('/quiz/gameid');
 
         $this->assertModuleName('playgroundgame');
-        $this->assertControllerName(PlaygroundGame\Controller\Frontend\Quiz::class);
+        $this->assertControllerName('playgroundgame\controller\frontend\quiz');
         $this->assertControllerClass('QuizController');
         $this->assertActionName('home');
         $this->assertMatchedRouteName('frontend/quiz');
@@ -304,7 +304,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $this->dispatch('/quiz/gameid');
 
         $this->assertModuleName('playgroundgame');
-        $this->assertControllerName(PlaygroundGame\Controller\Frontend\Quiz::class);
+        $this->assertControllerName('playgroundgame\controller\frontend\quiz');
         $this->assertControllerClass('QuizController');
         $this->assertActionName('home');
         $this->assertMatchedRouteName('frontend/quiz');
@@ -352,7 +352,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $this->dispatch('/quiz/gameid/resultat');
 
         $this->assertModuleName('playgroundgame');
-        $this->assertControllerName(PlaygroundGame\Controller\Frontend\Quiz::class);
+        $this->assertControllerName('playgroundgame\controller\frontend\quiz');
         $this->assertControllerClass('QuizController');
         $this->assertActionName('not-found');
         $this->assertMatchedRouteName('frontend/quiz/result');
@@ -415,7 +415,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
 
         $this->assertModuleName('playgroundgame');
         $this->assertActionName('result');
-        $this->assertControllerName(PlaygroundGame\Controller\Frontend\Quiz::class);
+        $this->assertControllerName('playgroundgame\controller\frontend\quiz');
         $this->assertControllerClass('QuizController');
         $this->assertMatchedRouteName('frontend/quiz/result');
 
@@ -464,7 +464,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $this->dispatch('/quiz/gameid/jouer');
 
         $this->assertModuleName('playgroundgame');
-        $this->assertControllerName(PlaygroundGame\Controller\Frontend\Quiz::class);
+        $this->assertControllerName('playgroundgame\controller\frontend\quiz');
         $this->assertControllerClass('QuizController');
         $this->assertActionName('not-found');
         $this->assertMatchedRouteName('frontend/quiz/play');
@@ -511,7 +511,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $this->dispatch('/quiz/gameid/jouer');
 
         $this->assertModuleName('playgroundgame');
-        $this->assertControllerName(PlaygroundGame\Controller\Frontend\Quiz::class);
+        $this->assertControllerName('playgroundgame\controller\frontend\quiz');
         $this->assertControllerClass('QuizController');
         $this->assertActionName('not-found');
         $this->assertMatchedRouteName('frontend/quiz/play');
@@ -563,7 +563,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $this->dispatch('/quiz/gameid/jouer');
 
         $this->assertModuleName('playgroundgame');
-        $this->assertControllerName(PlaygroundGame\Controller\Frontend\Quiz::class);
+        $this->assertControllerName('playgroundgame\controller\frontend\quiz');
         $this->assertControllerClass('QuizController');
         $this->assertActionName('play');
         $this->assertMatchedRouteName('frontend/quiz/play');
@@ -622,7 +622,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $this->dispatch('/quiz/gameid/jouer');
 
         $this->assertModuleName('playgroundgame');
-        $this->assertControllerName(PlaygroundGame\Controller\Frontend\Quiz::class);
+        $this->assertControllerName('playgroundgame\controller\frontend\quiz');
         $this->assertControllerClass('QuizController');
         $this->assertActionName('play');
         $this->assertMatchedRouteName('frontend/quiz/play');
@@ -706,7 +706,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
 //     	$this->assertEquals(true, $entry->getWinner());
 //     	$this->assertEquals(false, $entry->getActive());
 //     	$this->assertModuleName('playgroundgame');
-//     	$this->assertControllerName(PlaygroundGame\Controller\Frontend\Quiz::class);
+//     	$this->assertControllerName('playgroundgame\controller\frontend\quiz');
 //     	$this->assertControllerClass('QuizController');
 //     	$this->assertActionName('play');
 //     	$this->assertMatchedRouteName('frontend/quiz/play');
@@ -775,7 +775,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $this->dispatch('/quiz/gameid/fbshare');
 
         $this->assertModuleName('playgroundgame');
-        $this->assertControllerName(PlaygroundGame\Controller\Frontend\Quiz::class);
+        $this->assertControllerName('playgroundgame\controller\frontend\quiz');
         $this->assertControllerClass('QuizController');
         $this->assertActionName('fbshare');
         $this->assertMatchedRouteName('frontend/quiz/fbshare');
@@ -848,7 +848,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $this->dispatch('/quiz/gameid/fbshare');
 
         $this->assertModuleName('playgroundgame');
-        $this->assertControllerName(PlaygroundGame\Controller\Frontend\Quiz::class);
+        $this->assertControllerName('playgroundgame\controller\frontend\quiz');
         $this->assertControllerClass('QuizController');
         $this->assertActionName('fbshare');
         $this->assertMatchedRouteName('frontend/quiz/fbshare');
@@ -921,7 +921,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $this->dispatch('/quiz/gameid/fbshare');
 
         $this->assertModuleName('playgroundgame');
-        $this->assertControllerName(PlaygroundGame\Controller\Frontend\Quiz::class);
+        $this->assertControllerName('playgroundgame\controller\frontend\quiz');
         $this->assertControllerClass('QuizController');
         $this->assertActionName('fbshare');
         $this->assertMatchedRouteName('frontend/quiz/fbshare');
@@ -1001,7 +1001,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $this->dispatch('/quiz/gameid/fbshare', 'GET', $getData);
 
         $this->assertModuleName('playgroundgame');
-        $this->assertControllerName(PlaygroundGame\Controller\Frontend\Quiz::class);
+        $this->assertControllerName('playgroundgame\controller\frontend\quiz');
         $this->assertControllerClass('QuizController');
         $this->assertActionName('fbshare');
         $this->assertMatchedRouteName('frontend/quiz/fbshare');
@@ -1086,7 +1086,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $this->dispatch('/quiz/gameid/fbshare', 'GET', $getData);
 
         $this->assertModuleName('playgroundgame');
-        $this->assertControllerName(PlaygroundGame\Controller\Frontend\Quiz::class);
+        $this->assertControllerName('playgroundgame\controller\frontend\quiz');
         $this->assertControllerClass('QuizController');
         $this->assertActionName('fbshare');
         $this->assertMatchedRouteName('frontend/quiz/fbshare');
@@ -1155,7 +1155,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $this->dispatch('/quiz/gameid/tweet');
 
         $this->assertModuleName('playgroundgame');
-        $this->assertControllerName(PlaygroundGame\Controller\Frontend\Quiz::class);
+        $this->assertControllerName('playgroundgame\controller\frontend\quiz');
         $this->assertControllerClass('QuizController');
         $this->assertActionName('tweet');
         $this->assertMatchedRouteName('frontend/quiz/tweet');
@@ -1228,7 +1228,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $this->dispatch('/quiz/gameid/tweet');
 
         $this->assertModuleName('playgroundgame');
-        $this->assertControllerName(PlaygroundGame\Controller\Frontend\Quiz::class);
+        $this->assertControllerName('playgroundgame\controller\frontend\quiz');
         $this->assertControllerClass('QuizController');
         $this->assertActionName('tweet');
         $this->assertMatchedRouteName('frontend/quiz/tweet');
@@ -1301,7 +1301,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $this->dispatch('/quiz/gameid/tweet');
 
         $this->assertModuleName('playgroundgame');
-        $this->assertControllerName(PlaygroundGame\Controller\Frontend\Quiz::class);
+        $this->assertControllerName('playgroundgame\controller\frontend\quiz');
         $this->assertControllerClass('QuizController');
         $this->assertActionName('tweet');
         $this->assertMatchedRouteName('frontend/quiz/tweet');
@@ -1381,7 +1381,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $this->dispatch('/quiz/gameid/tweet', 'GET', $getData);
 
         $this->assertModuleName('playgroundgame');
-        $this->assertControllerName(PlaygroundGame\Controller\Frontend\Quiz::class);
+        $this->assertControllerName('playgroundgame\controller\frontend\quiz');
         $this->assertControllerClass('QuizController');
         $this->assertActionName('tweet');
         $this->assertMatchedRouteName('frontend/quiz/tweet');
@@ -1466,7 +1466,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $this->dispatch('/quiz/gameid/tweet', 'GET', $getData);
 
         $this->assertModuleName('playgroundgame');
-        $this->assertControllerName(PlaygroundGame\Controller\Frontend\Quiz::class);
+        $this->assertControllerName('playgroundgame\controller\frontend\quiz');
         $this->assertControllerClass('QuizController');
         $this->assertActionName('tweet');
         $this->assertMatchedRouteName('frontend/quiz/tweet');
@@ -1535,7 +1535,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $this->dispatch('/quiz/gameid/google');
 
         $this->assertModuleName('playgroundgame');
-        $this->assertControllerName(PlaygroundGame\Controller\Frontend\Quiz::class);
+        $this->assertControllerName('playgroundgame\controller\frontend\quiz');
         $this->assertControllerClass('QuizController');
         $this->assertActionName('google');
         $this->assertMatchedRouteName('frontend/quiz/google');
@@ -1608,7 +1608,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $this->dispatch('/quiz/gameid/google');
 
         $this->assertModuleName('playgroundgame');
-        $this->assertControllerName(PlaygroundGame\Controller\Frontend\Quiz::class);
+        $this->assertControllerName('playgroundgame\controller\frontend\quiz');
         $this->assertControllerClass('QuizController');
         $this->assertActionName('google');
         $this->assertMatchedRouteName('frontend/quiz/google');
@@ -1681,7 +1681,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $this->dispatch('/quiz/gameid/google');
 
         $this->assertModuleName('playgroundgame');
-        $this->assertControllerName(PlaygroundGame\Controller\Frontend\Quiz::class);
+        $this->assertControllerName('playgroundgame\controller\frontend\quiz');
         $this->assertControllerClass('QuizController');
         $this->assertActionName('google');
         $this->assertMatchedRouteName('frontend/quiz/google');
@@ -1761,7 +1761,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $this->dispatch('/quiz/gameid/google', 'GET', $getData);
 
         $this->assertModuleName('playgroundgame');
-        $this->assertControllerName(PlaygroundGame\Controller\Frontend\Quiz::class);
+        $this->assertControllerName('playgroundgame\controller\frontend\quiz');
         $this->assertControllerClass('QuizController');
         $this->assertActionName('google');
         $this->assertMatchedRouteName('frontend/quiz/google');
@@ -1846,7 +1846,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $this->dispatch('/quiz/gameid/google', 'GET', $getData);
 
         $this->assertModuleName('playgroundgame');
-        $this->assertControllerName(PlaygroundGame\Controller\Frontend\Quiz::class);
+        $this->assertControllerName('playgroundgame\controller\frontend\quiz');
         $this->assertControllerClass('QuizController');
         $this->assertActionName('google');
         $this->assertMatchedRouteName('frontend/quiz/google');
@@ -1896,7 +1896,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $this->dispatch('/quiz/gameid/essayez-aussi');
 
         $this->assertModuleName('playgroundgame');
-        $this->assertControllerName(PlaygroundGame\Controller\Frontend\Quiz::class);
+        $this->assertControllerName('playgroundgame\controller\frontend\quiz');
         $this->assertControllerClass('QuizController');
         $this->assertActionName('not-found');
         $this->assertMatchedRouteName('frontend/quiz/bounce');
@@ -1943,7 +1943,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $this->dispatch('/quiz/gameid/essayez-aussi');
 
         $this->assertModuleName('playgroundgame');
-        $this->assertControllerName(PlaygroundGame\Controller\Frontend\Quiz::class);
+        $this->assertControllerName('playgroundgame\controller\frontend\quiz');
         $this->assertControllerClass('QuizController');
         $this->assertActionName('not-found');
         $this->assertMatchedRouteName('frontend/quiz/bounce');
@@ -2016,7 +2016,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $this->dispatch('/quiz/gameid/essayez-aussi');
 
         $this->assertModuleName('playgroundgame');
-        $this->assertControllerName(PlaygroundGame\Controller\Frontend\Quiz::class);
+        $this->assertControllerName('playgroundgame\controller\frontend\quiz');
         $this->assertControllerClass('QuizController');
         $this->assertActionName('bounce');
         $this->assertMatchedRouteName('frontend/quiz/bounce');
@@ -2064,7 +2064,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $this->dispatch('/quiz/gameid/reglement');
 
         $this->assertModuleName('playgroundgame');
-        $this->assertControllerName(PlaygroundGame\Controller\Frontend\Quiz::class);
+        $this->assertControllerName('playgroundgame\controller\frontend\quiz');
         $this->assertControllerClass('QuizController');
         $this->assertActionName('not-found');
         $this->assertMatchedRouteName('frontend/quiz/terms');
@@ -2125,7 +2125,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $this->dispatch('/quiz/gameid/reglement');
 
         $this->assertModuleName('playgroundgame');
-        $this->assertControllerName(PlaygroundGame\Controller\Frontend\Quiz::class);
+        $this->assertControllerName('playgroundgame\controller\frontend\quiz');
         $this->assertControllerClass('QuizController');
         $this->assertActionName('terms');
         $this->assertMatchedRouteName('frontend/quiz/terms');
@@ -2173,7 +2173,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $this->dispatch('/quiz/gameid/mentions-legales');
 
         $this->assertModuleName('playgroundgame');
-        $this->assertControllerName(PlaygroundGame\Controller\Frontend\Quiz::class);
+        $this->assertControllerName('playgroundgame\controller\frontend\quiz');
         $this->assertControllerClass('QuizController');
         $this->assertActionName('not-found');
         $this->assertMatchedRouteName('frontend/quiz/conditions');
@@ -2233,7 +2233,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $this->dispatch('/quiz/gameid/mentions-legales');
 
         $this->assertModuleName('playgroundgame');
-        $this->assertControllerName(PlaygroundGame\Controller\Frontend\Quiz::class);
+        $this->assertControllerName('playgroundgame\controller\frontend\quiz');
         $this->assertControllerClass('QuizController');
         $this->assertActionName('conditions');
         $this->assertMatchedRouteName('frontend/quiz/conditions');
@@ -2278,7 +2278,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $this->dispatch('/quiz/gameid/fangate');
 
         $this->assertModuleName('playgroundgame');
-        $this->assertControllerName(PlaygroundGame\Controller\Frontend\Quiz::class);
+        $this->assertControllerName('playgroundgame\controller\frontend\quiz');
         $this->assertControllerClass('QuizController');
         $this->assertActionName('fangate');
         $this->assertMatchedRouteName('frontend/quiz/fangate');
@@ -2326,7 +2326,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $this->dispatch('/quiz/gameid/lots');
 
         $this->assertModuleName('playgroundgame');
-        $this->assertControllerName(PlaygroundGame\Controller\Frontend\Quiz::class);
+        $this->assertControllerName('playgroundgame\controller\frontend\quiz');
         $this->assertControllerClass('QuizController');
         $this->assertActionName('not-found');
         $this->assertMatchedRouteName('frontend/quiz/prizes');
@@ -2382,7 +2382,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $this->dispatch('/quiz/gameid/lots');
 
         $this->assertModuleName('playgroundgame');
-        $this->assertControllerName(PlaygroundGame\Controller\Frontend\Quiz::class);
+        $this->assertControllerName('playgroundgame\controller\frontend\quiz');
         $this->assertControllerClass('QuizController');
         $this->assertActionName('not-found');
         $this->assertMatchedRouteName('frontend/quiz/prizes');
@@ -2455,7 +2455,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $this->dispatch('/quiz/gameid/lots');
 
         $this->assertModuleName('playgroundgame');
-        $this->assertControllerName(PlaygroundGame\Controller\Frontend\Quiz::class);
+        $this->assertControllerName('playgroundgame\controller\frontend\quiz');
         $this->assertControllerClass('QuizController');
         $this->assertActionName('prizes');
         $this->assertMatchedRouteName('frontend/quiz/prizes');
@@ -2503,7 +2503,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $this->dispatch('/quiz/gameid/lots/prizeid');
 
         $this->assertModuleName('playgroundgame');
-        $this->assertControllerName(PlaygroundGame\Controller\Frontend\Quiz::class);
+        $this->assertControllerName('playgroundgame\controller\frontend\quiz');
         $this->assertControllerClass('QuizController');
         $this->assertActionName('not-found');
         $this->assertMatchedRouteName('frontend/quiz/prizes/prize');
@@ -2577,7 +2577,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $this->dispatch('/quiz/gameid/lots/prize');
 
         $this->assertModuleName('playgroundgame');
-        $this->assertControllerName(PlaygroundGame\Controller\Frontend\Quiz::class);
+        $this->assertControllerName('playgroundgame\controller\frontend\quiz');
         $this->assertControllerClass('QuizController');
         $this->assertActionName('not-found');
         $this->assertMatchedRouteName('frontend/quiz/prizes/prize');
@@ -2653,7 +2653,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $this->dispatch('/quiz/gameid/lots/prize');
 
         $this->assertModuleName('playgroundgame');
-        $this->assertControllerName(PlaygroundGame\Controller\Frontend\Quiz::class);
+        $this->assertControllerName('playgroundgame\controller\frontend\quiz');
         $this->assertControllerClass('QuizController');
         $this->assertActionName('prize');
         $this->assertMatchedRouteName('frontend/quiz/prizes/prize');

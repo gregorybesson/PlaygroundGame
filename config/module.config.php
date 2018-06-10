@@ -2961,13 +2961,13 @@ return array(
                             'quiz-question-list' => array(
                                 'type' => 'Segment',
                                 'options' => array(
-                                    'route' => '/quiz-question-list/:quizId',
+                                    'route' => '/quiz-question-list/:quizId[/:p]',
                                     'defaults' => array(
                                         'controller' => Playgroundgame\Controller\Admin\Quiz::class,
                                         'action' => 'listQuestion',
                                         'quizId' => 0
                                     )
-                                )
+                                ),
                             ),
                             'quiz-question-add' => array(
                                 'type' => 'Segment',
