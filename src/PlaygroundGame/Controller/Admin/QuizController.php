@@ -35,7 +35,7 @@ class QuizController extends GameController
             $paginator = $questions;
         }
 
-        $paginator->setItemCountPerPage(50);
+        $paginator->setItemCountPerPage(500);
         $paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
 
         return array(
