@@ -552,6 +552,16 @@ return array(
                                     )
                                 )
                             ),
+                            'create-team' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/creation-team',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\TradingCard::class,
+                                        'action' => 'createTeam',
+                                    )
+                                )
+                            ),
                             'invite-to-team' => array(
                                 'type' => 'Segment',
                                 'options' => array(
@@ -884,6 +894,16 @@ return array(
                                     'defaults' => array(
                                         'controller' => PlaygroundGame\Controller\Frontend\Mission::class,
                                         'action' => 'share'
+                                    )
+                                )
+                            ),
+                            'create-team' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/creation-team',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Mission::class,
+                                        'action' => 'createTeam',
                                     )
                                 )
                             ),
@@ -1248,6 +1268,26 @@ return array(
                                     )
                                 )
                             ),
+                            'create-team' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/creation-team',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Quiz::class,
+                                        'action' => 'createTeam',
+                                    )
+                                )
+                            ),
+                            'invite-to-team' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/rejoins-ma-team',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Quiz::class,
+                                        'action' => 'inviteToTeam',
+                                    )
+                                )
+                            ),
                             'leaderboard' => array(
                                 'type' => 'segment',
                                 'options' => array(
@@ -1504,6 +1544,26 @@ return array(
                                     )
                                 )
                             ),
+                            'create-team' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/creation-team',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Lottery::class,
+                                        'action' => 'createTeam',
+                                    )
+                                )
+                            ),
+                            'invite-to-team' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/rejoins-ma-team',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Lottery::class,
+                                        'action' => 'inviteToTeam',
+                                    )
+                                )
+                            ),
                             'leaderboard' => array(
                                 'type' => 'segment',
                                 'options' => array(
@@ -1757,6 +1817,26 @@ return array(
                                     'defaults' => array(
                                         'controller' => PlaygroundGame\Controller\Frontend\InstantWin::class,
                                         'action' => 'share'
+                                    )
+                                )
+                            ),
+                            'create-team' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/creation-team',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\InstantWin::class,
+                                        'action' => 'createTeam',
+                                    )
+                                )
+                            ),
+                            'invite-to-team' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/rejoins-ma-team',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\InstantWin::class,
+                                        'action' => 'inviteToTeam',
                                     )
                                 )
                             ),
@@ -2176,6 +2256,26 @@ return array(
                                     'defaults' => array(
                                         'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
                                         'action' => 'share'
+                                    )
+                                )
+                            ),
+                            'create-team' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/creation-team',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
+                                        'action' => 'createTeam',
+                                    )
+                                )
+                            ),
+                            'invite-to-team' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/rejoins-ma-team',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
+                                        'action' => 'inviteToTeam',
                                     )
                                 )
                             ),

@@ -810,6 +810,13 @@ class Module
 
                     return $form;
                 },
+
+                'playgroundgame_createteam_form' => function (\Zend\ServiceManager\ServiceManager $sm) {
+                    $translator = $sm->get('translator');
+                    $form = new Form\Frontend\CreateTeam(null, $sm, $translator);
+
+                    return $form;
+                },
             ),
         );
     }
