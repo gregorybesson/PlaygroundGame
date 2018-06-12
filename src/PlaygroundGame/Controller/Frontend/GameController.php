@@ -826,6 +826,10 @@ class GameController extends AbstractActionController
     public function loginAction()
     {
         $request = $this->getRequest();
+        $redirect = "";
+        if ($request->getQuery()->get('redirect') != '') {
+            $redirect = $request->getQuery()->get('redirect');
+        }
         $form    = $this->getServiceLocator()->get('zfcuser_login_form');
 
         if ($request->isPost()) {
@@ -863,12 +867,16 @@ class GameController extends AbstractActionController
                     )
                 );
             } else {
-                return $this->redirect()->toUrl(
-                    $this->frontendUrl()->fromRoute(
-                        $this->game->getClassType().'/'.$this->game->nextStep('index'),
-                        array('id' => $this->game->getIdentifier())
-                    )
-                );
+                if ($redirect != "") {
+                    return $this->redirect()->toUrl($redirect);
+                } else {
+                    return $this->redirect()->toUrl(
+                        $this->frontendUrl()->fromRoute(
+                            $this->game->getClassType().'/'.$this->game->nextStep('index'),
+                            array('id' => $this->game->getIdentifier())
+                        )
+                    );
+                }
             }
         }
 
