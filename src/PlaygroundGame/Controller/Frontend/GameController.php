@@ -35,6 +35,7 @@ class GameController extends AbstractActionController
         'leaderboard',
         'register',
         'bounce',
+        'createTeam',
         'inviteToTeam',
         'prizes',
         'prize',
@@ -64,6 +65,7 @@ class GameController extends AbstractActionController
         'result',
         'play',
         'logout',
+        'createTeam',
         'inviteToTeam',
     );
 
@@ -620,8 +622,22 @@ class GameController extends AbstractActionController
 
     public function inviteToTeamAction()
     {
+
+        if (count($this->user->getTeams()) == 0) {
+            return $this->redirect()->toUrl(
+                $this->frontendUrl()->fromRoute(
+                    $this->game->getClassType().'/create-team',
+                    array('id' => $this->game->getIdentifier())
+                )
+            );
+        }
+
+        $team = $this->user->getTeams()->first(); 
+        $invitationMapper = $this->getServiceLocator()->get('playgroundgame_invitation_mapper');
+        $invitations = $invitationMapper->findBy(array('host' => $this->user, 'game' => $this->game));
         $statusMail = null;
-        $message    = '';
+        $message = '';
+        $isHost = ($this->user->getId() === $team->getHost()->getId()) ? true : false;
 
         $form = $this->getServiceLocator()->get('playgroundgame_sharemail_form');
         $form->setAttribute('method', 'post');
@@ -642,10 +658,62 @@ class GameController extends AbstractActionController
 
         $viewModel = $this->buildView($this->game);
         $viewModel->setVariables(array(
-                'message'    => $message,
-                'statusMail' => $statusMail,
-                'form'       => $form,
-            ));
+            'team'       => $team,
+            'invitations'=> $invitations,
+            'message'    => $message,
+            'statusMail' => $statusMail,
+            'form'       => $form,
+            'isHost'     => $isHost,
+        ));
+
+        return $viewModel;
+    }
+
+    public function createTeamAction()
+    {
+        if (count($this->user->getTeams()) > 0) {
+            return $this->redirect()->toUrl(
+                $this->frontendUrl()->fromRoute(
+                    $this->game->getClassType().'/invite-to-team',
+                    array('id' => $this->game->getIdentifier())
+                )
+            );
+        }
+
+        $form = $this->getServiceLocator()->get('playgroundgame_createteam_form');
+        $form->setAttribute('method', 'post');
+
+        if ($this->getRequest()->isPost()) {
+            $data = $this->getRequest()->getPost()->toArray();
+            $form->setData($data);
+            if ($form->isValid()) {
+                $teamMapper = $this->getServiceLocator()->get('playgrounduser_team_mapper');
+                $users = new \Doctrine\Common\Collections\ArrayCollection();
+                $users->add($this->user);
+                $teamName = $data['name'];
+                $slugify = new \PlaygroundCore\Filter\Slugify;
+
+                $team = new \PlaygroundUser\Entity\Team();
+                $team->setName($teamName);
+                $team->setIdentifier($slugify($teamName));
+                $team->setHost($this->user);
+                $team->addUsers($users);
+
+                $teamMapper->insert($team);
+
+                return $this->redirect()->toUrl(
+                    $this->frontendUrl()->fromRoute(
+                        $this->game->getClassType().'/invite-to-team',
+                        array('id' => $this->game->getIdentifier())
+                    )
+                );
+            }
+        }
+
+        $viewModel = $this->buildView($this->game);
+        $viewModel->setVariables(array(
+            'form'       => $form,
+        ));
 
         return $viewModel;
     }
