@@ -195,7 +195,7 @@ class Quiz extends Game
         return $replies;
     }
 
-    public function updatePredictionNEW($question)
+    public function updatePrediction($question)
     {
         set_time_limit(0);
         $em = $this->serviceLocator->get('doctrine.entitymanager.orm_default');
@@ -212,11 +212,11 @@ class Quiz extends Game
                 $value  = trim(strip_tags($answer->getAnswer()));
                 $points = ($answer->getCorrect())?$answer->getPoints():0;
                 $sql    = "
-          UPDATE game_quiz_reply_answer AS ra
-          SET ra.points=IF(ra.answer=:answer, :points, ra.points),
-              ra.correct = IF(ra.answer=:answer, :isCorrect, ra.correct)
-          WHERE ra.question_id = :questionId
-        ";
+                UPDATE game_quiz_reply_answer AS ra
+                SET ra.points=IF(ra.answer=:answer, :points, 0),
+                    ra.correct = IF(ra.answer=:answer, :isCorrect, 0)
+                WHERE ra.question_id = :questionId
+                ";
                 $stmt = $dbal->prepare($sql);
                 $stmt->execute(
                     array(
@@ -231,12 +231,12 @@ class Quiz extends Game
             foreach ($answers as $answer) {
                 $points = ($answer->getCorrect())?$answer->getPoints():0;
                 $sql    = "
-          UPDATE game_quiz_reply_answer AS ra
-          SET ra.points=:points,
-              ra.correct = :isCorrect
-          WHERE ra.question_id = :questionId
-              AND ra.answer_id = :answerId
-        ";
+                UPDATE game_quiz_reply_answer AS ra
+                SET ra.points=:points,
+                    ra.correct = :isCorrect
+                WHERE ra.question_id = :questionId
+                    AND ra.answer_id = :answerId
+                ";
 
                 $stmt = $dbal->prepare($sql);
                 $stmt->execute(
@@ -252,18 +252,18 @@ class Quiz extends Game
 
         // Entry update with points. WINNER as to be calculated also !
         $sql = "
-      UPDATE game_entry as e
-      INNER JOIN
-      (
-         SELECT e.id, SUM(ra.points) as points, SUM(ra.correct) as correct
-         FROM game_entry as e
-         INNER JOIN game_quiz_reply AS r ON r.entry_id = e.id
-         INNER JOIN game_quiz_reply_answer AS ra ON ra.reply_id = r.id
-         GROUP BY e.id
-      ) i ON e.id = i.id
-      SET e.points = i.points
-      WHERE e.game_id = :gameId
-    ";
+        UPDATE game_entry as e
+        INNER JOIN
+        (
+            SELECT e.id, SUM(ra.points) as points, SUM(ra.correct) as correct
+            FROM game_entry as e
+            INNER JOIN game_quiz_reply AS r ON r.entry_id = e.id
+            INNER JOIN game_quiz_reply_answer AS ra ON ra.reply_id = r.id AND ra.correct = 1
+            GROUP BY e.id
+        ) i ON e.id = i.id
+        SET e.points = i.points
+        WHERE e.game_id = :gameId
+        ";
 
         $stmt = $dbal->prepare($sql);
         $stmt->execute(
@@ -287,7 +287,7 @@ class Quiz extends Game
      * @param  string $data
      * @return boolean
      */
-    public function updatePrediction($question)
+    public function updatePredictionOLD($question)
     {
         set_time_limit(0);
         $em = $this->serviceLocator->get('doctrine.entitymanager.orm_default');
