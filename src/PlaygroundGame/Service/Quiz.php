@@ -195,7 +195,7 @@ class Quiz extends Game
         return $replies;
     }
 
-    public function updatePrediction($question)
+    public function updatePredictionNEW($question)
     {
         set_time_limit(0);
         $em = $this->serviceLocator->get('doctrine.entitymanager.orm_default');
@@ -287,7 +287,7 @@ class Quiz extends Game
      * @param  string $data
      * @return boolean
      */
-    public function updatePredictionOld($question)
+    public function updatePrediction($question)
     {
         set_time_limit(0);
         $em = $this->serviceLocator->get('doctrine.entitymanager.orm_default');
