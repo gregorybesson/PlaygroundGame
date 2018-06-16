@@ -4,18 +4,18 @@
 	"type" : "library",
 	"authors" : [{
 			"name" : "Greg Besson",
-			"email" : "gregory.besson@playground.gg",
-			"homepage" : "http://www.playground.gg"
+			"email" : "gregory.besson@abecms.com",
+			"homepage" : "http://www.livingcolor.fr"
 		}
 	],
 	"keywords" : [
-		"zf2",
+		"zf3",
 		"playground",
 		"game"
 	],
 	"homepage" : "https://github.com/gregorybesson/PlaygroundGame",
 	"license" : [
-		"BSD-3-Clause"
+		"MIT"
 	],
 	"repositories" : [{
 			"type" : "git",
@@ -23,14 +23,14 @@
 		}
 	],
 	"require" : {
-		"php" : ">=5.3.3",
+		"php" : ">=5.5",
 		"zendframework/zend-developer-tools" : "1.*@RC",
 		"zendframework/zendframework" : "2.*",
 		"playground/core" : "2.*",
 		"playground/design" : ">=3.0.0",
 		"playground/user" : ">=3.0.0",
 		"playground/hybridauth" : "2.*",
-		"playground/partnership" : "2.*"
+		"playground/partnership" : ">4.0.0"
 	},
 	"require-dev" : {
 		"phpunit/phpunit" : "4.*",
