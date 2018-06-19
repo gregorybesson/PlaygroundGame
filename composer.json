@@ -24,18 +24,18 @@
 	],
 	"require" : {
 		"php" : ">=5.5",
-		"zendframework/zend-developer-tools" : "1.*@RC",
-		"zendframework/zendframework" : "^2.5",
-		"playground/core" : "2.*",
+		"zendframework/zend-developer-tools" : ">=1.0.0",
+		"zendframework/zendframework" : ">=2.5.0",
+		"playground/core" : ">=2.0.0",
 		"playground/design" : ">=3.0.0",
 		"playground/user" : ">=3.0.0",
-		"playground/hybridauth" : "2.*",
+		"playground/hybridauth" : ">=2.0.0",
 		"playground/partnership" : ">4.0.0"
 	},
 	"require-dev" : {
-		"phpunit/phpunit" : "4.*",
-		"squizlabs/php_codesniffer": "2.*",
-		"satooshi/php-coveralls": "0.*"
+		"phpunit/phpunit" : ">=4.0.0",
+		"squizlabs/php_codesniffer": ">=2.0.0",
+		"php-coveralls/php-coveralls": ">=0.0.0"
 	},
 	"autoload" : {
 		"psr-4" : {
@@ -44,7 +44,7 @@
 	},
 	"extra": {
         "branch-alias": {
-            "dev-master": "2.x-dev"
+            "dev-master": "4.x-dev"
         }
     }
 }
