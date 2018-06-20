@@ -4,13 +4,15 @@ namespace PlaygroundGame\Service;
 
 use DoctrineModule\Validator\NoObjectExists as NoObjectExistsValidator;
 use Zend\ServiceManager\ServiceManager;
-use ZfcBase\EventManager\EventProvider;
+use Zend\EventManager\EventManagerAwareTrait;
 use PlaygroundGame\Options\ModuleOptions;
 use PlaygroundGame\Mapper\Prize as PrizeMapper;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class Prize extends EventProvider
+class Prize
 {
+    use EventManagerAwareTrait;
+
     /**
      * @var prizeMapper
      */

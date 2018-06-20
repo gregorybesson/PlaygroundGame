@@ -4,7 +4,7 @@ namespace PlaygroundGame\Service;
 use PlaygroundGame\Entity\Entry;
 use Zend\Session\Container;
 use Zend\ServiceManager\ServiceManager;
-use ZfcBase\EventManager\EventProvider;
+use Zend\EventManager\EventManagerAwareTrait;
 use PlaygroundGame\Options\ModuleOptions;
 use PlaygroundGame\Mapper\GameInterface as GameMapperInterface;
 use DoctrineModule\Validator\NoObjectExists as NoObjectExistsValidator;
@@ -17,8 +17,10 @@ use Zend\Form\Form;
 use Zend\InputFilter\Factory as InputFactory;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class Game extends EventProvider
+class Game
 {
+    use EventManagerAwareTrait;
+
     /**
      *
      * @var GameMapperInterface

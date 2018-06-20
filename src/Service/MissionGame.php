@@ -3,13 +3,14 @@
 namespace PlaygroundGame\Service;
 
 use Zend\ServiceManager\ServiceManager;
-use ZfcBase\EventManager\EventProvider;
+use Zend\EventManager\EventManagerAwareTrait;
 use PlaygroundGame\Entity\MissionGame as MissionGameEntity;
 use PlaygroundGame\Entity\MissionGameCondition as MissionGameConditionEntity;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class MissionGame extends EventProvider
+class MissionGame
 {
+    use EventManagerAwareTrait;
 
     /**
     * @var missionMapper

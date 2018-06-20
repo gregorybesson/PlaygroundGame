@@ -3,14 +3,16 @@
 namespace PlaygroundGame\Service;
 
 use Zend\ServiceManager\ServiceManager;
-use ZfcBase\EventManager\EventProvider;
+use Zend\EventManager\EventManagerAwareTrait;
 use PlaygroundGame\Options\ModuleOptions;
 use PlaygroundGame\Mapper\PrizeCategory as PrizeCategoryMapper;
 use Zend\Stdlib\ErrorHandler;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class PrizeCategory extends EventProvider
+class PrizeCategory
 {
+    use EventManagerAwareTrait;
+
     /**
      * @var prizeCategoryMapper
      */
