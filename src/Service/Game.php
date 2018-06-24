@@ -5,6 +5,7 @@ use PlaygroundGame\Entity\Entry;
 use Zend\Session\Container;
 use Zend\ServiceManager\ServiceManager;
 use Zend\EventManager\EventManagerAwareTrait;
+use Zend\EventManager\EventManager;
 use PlaygroundGame\Options\ModuleOptions;
 use PlaygroundGame\Mapper\GameInterface as GameMapperInterface;
 use DoctrineModule\Validator\NoObjectExists as NoObjectExistsValidator;
@@ -53,9 +54,19 @@ class Game
      */
     protected $serviceLocator;
 
+    protected $event;
+
     public function __construct(ServiceLocatorInterface $locator)
     {
         $this->serviceLocator = $locator;
+    }
+
+    public function getEventManager() {
+        if (null === $this->event) {
+            $this->event = new EventManager($this->serviceLocator->get('SharedEventManager'), [get_class($this)]);
+        }
+
+        return $this->event;
     }
 
     public function getGameUserPath($game, $user)
@@ -960,7 +971,7 @@ class Game
                 $invitationMapper->insert($invitation);
 
                 $from = $this->getOptions()->getEmailFromAddress();
-                $subject = $this->serviceLocator->get('translator')->translate(
+                $subject = $this->serviceLocator->get('MvcTranslator')->translate(
                     $this->getOptions()->getInviteToTeamSubjectLine(),
                     'playgroundgame'
                 );
@@ -979,7 +990,7 @@ class Game
                 try {
                     $mailService->send($message);
                 } catch (\Zend\Mail\Protocol\Exception\RuntimeException $e) {
-                    return ['result' => true, 'message' => $this->serviceLocator->get('translator')->translate(
+                    return ['result' => true, 'message' => $this->serviceLocator->get('MvcTranslator')->translate(
                         'mail error'
                     )];
                 }
@@ -991,7 +1002,7 @@ class Game
         } else {
             return [
                 'result' => false,
-                'message' => $this->serviceLocator->get('translator')->translate(
+                'message' => $this->serviceLocator->get('MvcTranslator')->translate(
                     'Too many invitations for this user'
                 )
             ];
@@ -1013,12 +1024,12 @@ class Game
         $from = $this->getOptions()->getEmailFromAddress();
 
         if (empty($subject)) {
-            $subject = $this->serviceLocator->get('translator')->translate(
+            $subject = $this->serviceLocator->get('MvcTranslator')->translate(
                 $this->getOptions()->getShareSubjectLine(),
                 'playgroundgame'
             );
         } else {
-            $subject = $this->serviceLocator->get('translator')->translate(
+            $subject = $this->serviceLocator->get('MvcTranslator')->translate(
                 $subject,
                 'playgroundgame'
             );
@@ -1130,7 +1141,7 @@ class Game
         $mailService = $this->serviceLocator->get('playgroundgame_message');
         $from = $this->getOptions()->getEmailFromAddress();
         $to = $user->getEmail();
-        $subject = $this->serviceLocator->get('translator')->translate(
+        $subject = $this->serviceLocator->get('MvcTranslator')->translate(
             $this->getOptions()->getParticipationSubjectLine(),
             'playgroundgame'
         );
@@ -1826,7 +1837,7 @@ class Game
             $element->setAttribute('maxlength', $attr['lengthMax']);
             $options['messages'] = array(
                 \Zend\Validator\StringLength::TOO_LONG => sprintf(
-                    $this->serviceLocator->get('translator')->translate(
+                    $this->serviceLocator->get('MvcTranslator')->translate(
                         'This field contains more than %s characters',
                         'playgroundgame'
                     ),

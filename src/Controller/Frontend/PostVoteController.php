@@ -52,7 +52,7 @@ class PostVoteController extends GameController
             if ($lastPost->getStatus() == 2) {
                 // the user has already taken part to this game and the participation limit has been reached
                 $this->flashMessenger()->addMessage(
-                    $this->getServiceLocator()->get('translator')->translate('You have already a Post')
+                    $this->getServiceLocator()->get('MvcTranslator')->translate('You have already a Post')
                 );
 
                 return $this->redirect()->toUrl(
@@ -66,7 +66,7 @@ class PostVoteController extends GameController
                 );
             } else {
                 $this->flashMessenger()->addMessage(
-                    $this->getServiceLocator()->get('translator')->translate('Your Post is waiting for validation')
+                    $this->getServiceLocator()->get('MvcTranslator')->translate('Your Post is waiting for validation')
                 );
 
                 return $this->redirect()->toUrl(
@@ -732,7 +732,7 @@ class PostVoteController extends GameController
         }
 
         $this->flashMessenger()->addMessage(
-            $this->getServiceLocator()->get('translator')->translate('Your comment has been recorded')
+            $this->getServiceLocator()->get('MvcTranslator')->translate('Your comment has been recorded')
         );
 
         return $this->redirect()->toUrl(
@@ -845,7 +845,7 @@ class PostVoteController extends GameController
             } else {
                 foreach ($form->getMessages() as $el => $errors) {
                     foreach ($errors as $key => $message) {
-                        $message = $this->getServiceLocator()->get('translator')->translate($message);
+                        $message = $this->getServiceLocator()->get('MvcTranslator')->translate($message);
                     }
                 }
             }
@@ -888,7 +888,7 @@ class PostVoteController extends GameController
             } else {
                 foreach ($form->getMessages() as $el => $errors) {
                     foreach ($errors as $key => $message) {
-                        $message = $this->getServiceLocator()->get('translator')->translate($message);
+                        $message = $this->getServiceLocator()->get('MvcTranslator')->translate($message);
                     }
                 }
             }

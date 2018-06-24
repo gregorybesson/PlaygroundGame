@@ -1457,7 +1457,8 @@ class GameController extends AbstractActionController
      */
     public function addMetaTitle($game)
     {
-        $title = $this->translate($game->getTitle());
+        //$title = $this->translate($game->getTitle());
+        $title = $game->getTitle();
         $this->getGameService()->getServiceManager()->get('ViewHelperManager')->get('HeadTitle')->set($title);
         // Meta set in the layout
         $this->layout()->setVariables(
@@ -1620,7 +1621,7 @@ class GameController extends AbstractActionController
      */
     protected function getViewHelper($helperName)
     {
-        return $this->getServiceLocator()->get('viewhelpermanager')->get($helperName);
+        return $this->getServiceLocator()->get('ViewHelperManager')->get($helperName);
     }
 
     public function getGameService()

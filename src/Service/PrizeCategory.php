@@ -8,6 +8,7 @@ use PlaygroundGame\Options\ModuleOptions;
 use PlaygroundGame\Mapper\PrizeCategory as PrizeCategoryMapper;
 use Zend\Stdlib\ErrorHandler;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\EventManager\EventManager;
 
 class PrizeCategory
 {
@@ -34,9 +35,19 @@ class PrizeCategory
      */
     protected $serviceLocator;
 
+    protected $event;
+
     public function __construct(ServiceLocatorInterface $locator)
     {
         $this->serviceLocator = $locator;
+    }
+
+    public function getEventManager() {
+        if (null === $this->event) {
+            $this->event = new EventManager($this->serviceLocator->get('SharedEventManager'), [get_class($this)]);
+        }
+
+        return $this->event;
     }
 
     /**

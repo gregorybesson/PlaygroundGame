@@ -2,18 +2,14 @@
 namespace PlaygroundGame\Service\Factory;
 
 use PlaygroundGame\Controller\Frontend\QuizController;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
+use Interop\Container\ContainerInterface;
 
 class FrontendQuizControllerFactory implements FactoryInterface
 {
-    /**
-    * @param ServiceLocatorInterface $locator
-    * @return \PlaygroundGame\Controller\Frontend\QuizController
-    */
-    public function createService(ServiceLocatorInterface $locator)
+    public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
-        $controller = new QuizController($locator);
+        $controller = new QuizController($container);
 
         return $controller;
     }

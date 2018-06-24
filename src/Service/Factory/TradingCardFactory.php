@@ -2,18 +2,14 @@
 namespace PlaygroundGame\Service\Factory;
 
 use PlaygroundGame\Service\TradingCard;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
+use Interop\Container\ContainerInterface;
 
 class TradingCardFactory implements FactoryInterface
 {
-    /**
-    * @param ServiceLocatorInterface $locator
-    * @return \PlaygroundGame\Service\TradingCard
-    */
-    public function createService(ServiceLocatorInterface $locator)
+    public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
-        $service = new TradingCard($locator);
+        $service = new TradingCard($container);
 
         return $service;
     }

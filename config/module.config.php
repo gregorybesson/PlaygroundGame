@@ -33,25 +33,25 @@ return array(
     
         'guards' => array(
             'BjyAuthorize\Guard\Controller' => array(
-                array('controller' => Playgroundgame\Controller\Frontend\Home::class,                     'roles' => array('guest', 'user')),
-                array('controller' => PlaygroundGame\Controller\Frontend\Game::class,                'roles' => array('guest', 'user')),
-                array('controller' => PlaygroundGame\Controller\Frontend\Lottery::class,             'roles' => array('guest', 'user')),
-                array('controller' => PlaygroundGame\Controller\Frontend\Quiz::class,                'roles' => array('guest', 'user')),
-                array('controller' => PlaygroundGame\Controller\Frontend\PostVote::class,            'roles' => array('guest', 'user')),
-                array('controller' => PlaygroundGame\Controller\Frontend\InstantWin::class,          'roles' => array('guest', 'user')),
-                array('controller' => PlaygroundGame\Controller\Frontend\PrizeCategory::class,       'roles' => array('guest', 'user')),
-                array('controller' => PlaygroundGame\Controller\Frontend\Mission::class,             'roles' => array('guest', 'user')),
-                array('controller' => PlaygroundGame\Controller\Frontend\TradingCard::class,         'roles' => array('guest', 'user')),
+                array('controller' => PlaygroundGame\Controller\Frontend\Home::class,           'roles' => array('guest', 'user')),
+                array('controller' => PlaygroundGame\Controller\Frontend\Game::class,           'roles' => array('guest', 'user')),
+                array('controller' => PlaygroundGame\Controller\Frontend\Lottery::class,        'roles' => array('guest', 'user')),
+                array('controller' => PlaygroundGame\Controller\Frontend\Quiz::class,           'roles' => array('guest', 'user')),
+                array('controller' => PlaygroundGame\Controller\Frontend\PostVote::class,       'roles' => array('guest', 'user')),
+                array('controller' => PlaygroundGame\Controller\Frontend\InstantWin::class,     'roles' => array('guest', 'user')),
+                array('controller' => PlaygroundGame\Controller\Frontend\PrizeCategory::class,  'roles' => array('guest', 'user')),
+                array('controller' => PlaygroundGame\Controller\Frontend\Mission::class,        'roles' => array('guest', 'user')),
+                array('controller' => PlaygroundGame\Controller\Frontend\TradingCard::class,    'roles' => array('guest', 'user')),
     
                 // Admin area
-                array('controller' => Playgroundgame\Controller\Admin\Game::class,          'roles' => array('admin')),
-                array('controller' => Playgroundgame\Controller\Admin\Lottery::class,       'roles' => array('admin')),
-                array('controller' => Playgroundgame\Controller\Admin\InstantWin::class,    'roles' => array('admin')),
-                array('controller' => Playgroundgame\Controller\Admin\Quiz::class,          'roles' => array('admin')),
-                array('controller' => Playgroundgame\Controller\Admin\PostVote::class,      'roles' => array('admin')),
-                array('controller' => Playgroundgame\Controller\Admin\Mission::class,       'roles' => array('admin')),
-                array('controller' => Playgroundgame\Controller\Admin\TradingCard::class,   'roles' => array('admin')),
-                array('controller' => 'playgroundgame_admin_prizecategory', 'roles' => array('admin')),
+                array('controller' => PlaygroundGame\Controller\Admin\Game::class,          'roles' => array('admin')),
+                array('controller' => PlaygroundGame\Controller\Admin\Lottery::class,       'roles' => array('admin')),
+                array('controller' => PlaygroundGame\Controller\Admin\InstantWin::class,    'roles' => array('admin')),
+                array('controller' => PlaygroundGame\Controller\Admin\Quiz::class,          'roles' => array('admin')),
+                array('controller' => PlaygroundGame\Controller\Admin\PostVote::class,      'roles' => array('admin')),
+                array('controller' => PlaygroundGame\Controller\Admin\Mission::class,       'roles' => array('admin')),
+                array('controller' => PlaygroundGame\Controller\Admin\TradingCard::class,   'roles' => array('admin')),
+                array('controller' => PlaygroundGame\Controller\Admin\PrizeCategory::class, 'roles' => array('admin')),
             ),
         ),
     ),
@@ -162,7 +162,7 @@ return array(
     'core_layout' => array(
         'frontend' => array(
             'modules' => array(
-                Playgroundgame\Controller\Frontend\Home::class => array(
+                PlaygroundGame\Controller\Frontend\Home::class => array(
                     'layout' => 'layout/game-2columns-right.phtml',
                     'controllers' => array(
                         PlaygroundGame\Controller\Frontend\Lottery::class => array(
@@ -197,7 +197,7 @@ return array(
                                 )
                             )
                         ),
-                        Playgroundgame\Controller\Frontend\Home::class => array(
+                        PlaygroundGame\Controller\Frontend\Home::class => array(
                             'layout' => 'layout/2columns-right',
                         )
                     )
@@ -237,9 +237,9 @@ return array(
 
     'controllers' => array(
         'factories' => array(
-            Playgroundgame\Controller\Frontend\Home::class => PlaygroundGame\Service\Factory\FrontendHomeControllerFactory::class,
+            PlaygroundGame\Controller\Frontend\Home::class => PlaygroundGame\Service\Factory\FrontendHomeControllerFactory::class,
             PlaygroundGame\Controller\Frontend\Game::class => PlaygroundGame\Service\Factory\FrontendGameControllerFactory::class,
-            Playgroundgame\Controller\Frontend\Lottery::class => PlaygroundGame\Service\Factory\FrontendLotteryControllerFactory::class,
+            PlaygroundGame\Controller\Frontend\Lottery::class => PlaygroundGame\Service\Factory\FrontendLotteryControllerFactory::class,
             PlaygroundGame\Controller\Frontend\Quiz::class => PlaygroundGame\Service\Factory\FrontendQuizControllerFactory::class,
             PlaygroundGame\Controller\Frontend\InstantWin::class => PlaygroundGame\Service\Factory\FrontendInstantWinControllerFactory::class,
             PlaygroundGame\Controller\Frontend\PostVote::class => PlaygroundGame\Service\Factory\FrontendPostVoteControllerFactory::class,
@@ -283,7 +283,7 @@ return array(
             'frontend' => array(
                 'options' => array(
                     'defaults' => array(
-                        'controller' => Playgroundgame\Controller\Frontend\Home::class,
+                        'controller' => PlaygroundGame\Controller\Frontend\Home::class,
                         'action'     => 'index',
                     ),
                 ),
@@ -294,14 +294,14 @@ return array(
                         'options' => array(
                             'route'    => '[:p]',
                             'defaults' => array(
-                                'controller' => Playgroundgame\Controller\Frontend\Home::class,
+                                'controller' => PlaygroundGame\Controller\Frontend\Home::class,
                                 'action'     => 'index',
                             ),
                             'constraints' => array('p' => '[0-9]*'),
                         ),
                     ),
                     'gameslist' => array(
-                        'type' => 'Zend\Mvc\Router\Http\Literal',
+                        'type' => 'Zend\Router\Http\Literal',
                         'options' => array(
                             'route' => 'gameslist',
                             'defaults' => array(
@@ -338,7 +338,7 @@ return array(
                         'may_terminate' => true,
                         'child_routes' => array(
                             'index' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/index',
                                     'defaults' => array(
@@ -359,7 +359,7 @@ return array(
                                 'may_terminate' => true,
                                 'child_routes' => array(
                                     'ajaxupload' => array(
-                                        'type' => 'Literal',
+                                        'type' => 'Zend\Router\Http\Literal',
                                         'options' => array(
                                             'route' => '/ajaxupload',
                                             'defaults' => array(
@@ -369,7 +369,7 @@ return array(
                                         )
                                     ),
                                     'ajaxdelete' => array(
-                                        'type' => 'Literal',
+                                        'type' => 'Zend\Router\Http\Literal',
                                         'options' => array(
                                             'route' => '/ajaxdelete',
                                             'defaults' => array(
@@ -415,7 +415,7 @@ return array(
                                 )
                             ),
                             'logout' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/logout',
                                     'defaults' => array(
@@ -435,7 +435,7 @@ return array(
                                 )
                             ),
                             'verification' => array(
-		                        'type' => 'Literal',
+		                        'type' => 'Zend\Router\Http\Literal',
 		                        'options' => array(
 		                            'route' => '/verification',
 		                            'defaults' => array(
@@ -465,7 +465,7 @@ return array(
                                 )
                             ),
                             'register' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/register',
                                     'defaults' => array(
@@ -475,7 +475,7 @@ return array(
                                 )
                             ),
                             'profile' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/profil',
                                     'defaults' => array(
@@ -495,7 +495,7 @@ return array(
                                         'options' => array(
                                             'route' => '/user/:field/:value',
                                             'defaults' => array(
-                                                'controller' => 'playgrounduser_user',
+                                                'controller' => \PlaygroundUser\Controller\Frontend\UserController::class,
                                                 'action'     => 'autoCompleteUser',
                                             ),
                                         ),
@@ -503,7 +503,7 @@ return array(
                                 ),
                             ),
                             'fbshare' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/fbshare',
                                     'defaults' => array(
@@ -513,7 +513,7 @@ return array(
                                 )
                             ),
                             'fbrequest' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/fbrequest',
                                     'defaults' => array(
@@ -523,7 +523,7 @@ return array(
                                 )
                             ),
                             'tweet' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/tweet',
                                     'defaults' => array(
@@ -533,7 +533,7 @@ return array(
                                 )
                             ),
                             'google' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/google',
                                     'defaults' => array(
@@ -543,7 +543,7 @@ return array(
                                 )
                             ),
                             'share' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/partager',
                                     'defaults' => array(
@@ -573,7 +573,7 @@ return array(
                                 )
                             ),
                             'bounce' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/essayez-aussi',
                                     'defaults' => array(
@@ -583,7 +583,7 @@ return array(
                                 )
                             ),
                             'terms' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/reglement',
                                     'defaults' => array(
@@ -593,7 +593,7 @@ return array(
                                 )
                             ),
                             'conditions' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/mentions-legales',
                                     'defaults' => array(
@@ -603,7 +603,7 @@ return array(
                                 )
                             ),
                             'fangate' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/fangate',
                                     'defaults' => array(
@@ -613,7 +613,7 @@ return array(
                                 )
                             ),
                             'prizes' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/lots',
                                     'defaults' => array(
@@ -681,7 +681,7 @@ return array(
                                 ),
                             ),
                             'other-routes' => array(
-                                'type' => '\Zend\Mvc\Router\Http\Regex',
+                                'type' => 'Zend\Router\Http\Regex',
                                 'priority' => -1000,
                                 'options' => array(
                                     'regex' => '.*',
@@ -706,7 +706,7 @@ return array(
                         'may_terminate' => true,
                         'child_routes' => array(
                             'index' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/index',
                                     'defaults' => array(
@@ -760,7 +760,7 @@ return array(
                                 )
                             ),
                             'logout' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/logout',
                                     'defaults' => array(
@@ -780,7 +780,7 @@ return array(
                                 )
                             ),
                             'verification' => array(
-		                        'type' => 'Literal',
+		                        'type' => 'Zend\Router\Http\Literal',
 		                        'options' => array(
 		                            'route' => '/verification',
 		                            'defaults' => array(
@@ -810,7 +810,7 @@ return array(
                                 )
                             ),
                             'register' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/register',
                                     'defaults' => array(
@@ -820,7 +820,7 @@ return array(
                                 )
                             ),
                             'profile' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/profil',
                                     'defaults' => array(
@@ -840,7 +840,7 @@ return array(
                                         'options' => array(
                                             'route' => '/user/:field/:value',
                                             'defaults' => array(
-                                                'controller' => 'playgrounduser_user',
+                                                'controller' => \PlaygroundUser\Controller\Frontend\UserController::class,
                                                 'action'     => 'autoCompleteUser',
                                             ),
                                         ),
@@ -848,7 +848,7 @@ return array(
                                 ),
                             ),
                             'fbshare' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/fbshare',
                                     'defaults' => array(
@@ -858,7 +858,7 @@ return array(
                                 )
                             ),
                             'fbrequest' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/fbrequest',
                                     'defaults' => array(
@@ -868,7 +868,7 @@ return array(
                                 )
                             ),
                             'tweet' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/tweet',
                                     'defaults' => array(
@@ -878,7 +878,7 @@ return array(
                                 )
                             ),
                             'google' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/google',
                                     'defaults' => array(
@@ -888,7 +888,7 @@ return array(
                                 )
                             ),
                             'share' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/partager',
                                     'defaults' => array(
@@ -918,7 +918,7 @@ return array(
                                 )
                             ),
                             'bounce' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/essayez-aussi',
                                     'defaults' => array(
@@ -928,7 +928,7 @@ return array(
                                 )
                             ),
                             'terms' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/reglement',
                                     'defaults' => array(
@@ -938,7 +938,7 @@ return array(
                                 )
                             ),
                             'conditions' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/mentions-legales',
                                     'defaults' => array(
@@ -948,7 +948,7 @@ return array(
                                 )
                             ),
                             'fangate' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/fangate',
                                     'defaults' => array(
@@ -958,7 +958,7 @@ return array(
                                 )
                             ),
                             'prizes' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/lots',
                                     'defaults' => array(
@@ -1026,7 +1026,7 @@ return array(
                                 ),
                             ),
                             'other-routes' => array(
-                                'type' => '\Zend\Mvc\Router\Http\Regex',
+                                'type' => 'Zend\Router\Http\Regex',
                                 'priority' => -1000,
                                 'options' => array(
                                     'regex' => '.*',
@@ -1052,7 +1052,7 @@ return array(
                         'may_terminate' => true,
                         'child_routes' => array(
                             'index' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/index',
                                     'defaults' => array(
@@ -1086,7 +1086,7 @@ return array(
                                 ),
                             ),
                             'login' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/connexion',
                                     'defaults' => array(
@@ -1106,7 +1106,7 @@ return array(
                                 )
                             ),
                             'verification' => array(
-		                        'type' => 'Literal',
+		                        'type' => 'Zend\Router\Http\Literal',
 		                        'options' => array(
 		                            'route' => '/verification',
 		                            'defaults' => array(
@@ -1126,7 +1126,7 @@ return array(
                                 )
                             ),
                             'play' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/jouer',
                                     'defaults' => array(
@@ -1136,7 +1136,7 @@ return array(
                                 )
                             ),
                             'result' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/resultat',
                                     'defaults' => array(
@@ -1146,7 +1146,7 @@ return array(
                                 )
                             ),
                             'register' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/register',
                                     'defaults' => array(
@@ -1156,7 +1156,7 @@ return array(
                                 )
                             ),
                             'fbshare' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/fbshare',
                                     'defaults' => array(
@@ -1166,7 +1166,7 @@ return array(
                                 )
                             ),
                             'fbrequest' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/fbrequest',
                                     'defaults' => array(
@@ -1176,7 +1176,7 @@ return array(
                                 )
                             ),
                             'tweet' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/tweet',
                                     'defaults' => array(
@@ -1186,7 +1186,7 @@ return array(
                                 )
                             ),
                             'google' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/google',
                                     'defaults' => array(
@@ -1196,7 +1196,7 @@ return array(
                                 )
                             ),
                             'bounce' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/essayez-aussi',
                                     'defaults' => array(
@@ -1206,7 +1206,7 @@ return array(
                                 )
                             ),
                             'terms' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/reglement',
                                     'defaults' => array(
@@ -1216,7 +1216,7 @@ return array(
                                 )
                             ),
                             'conditions' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/mentions-legales',
                                     'defaults' => array(
@@ -1226,7 +1226,7 @@ return array(
                                 )
                             ),
                             'fangate' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/fangate',
                                     'defaults' => array(
@@ -1236,7 +1236,7 @@ return array(
                                 )
                             ),
                             'prizes' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/lots',
                                     'defaults' => array(
@@ -1259,7 +1259,7 @@ return array(
                                 )
                             ),
                             'share' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/partager',
                                     'defaults' => array(
@@ -1302,7 +1302,7 @@ return array(
                                 ),
                             ),
                             'other-routes' => array(
-                                'type' => '\Zend\Mvc\Router\Http\Regex',
+                                'type' => 'Zend\Router\Http\Regex',
                                 'priority' => -1000,
                                 'options' => array(
                                     'regex' => '.*',
@@ -1328,7 +1328,7 @@ return array(
                         'may_terminate' => true,
                         'child_routes' => array(
                             'index' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/index',
                                     'defaults' => array(
@@ -1362,7 +1362,7 @@ return array(
                                 ),
                             ),
                             'login' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/connexion',
                                     'defaults' => array(
@@ -1382,7 +1382,7 @@ return array(
                                 )
                             ),
                             'verification' => array(
-		                        'type' => 'Literal',
+		                        'type' => 'Zend\Router\Http\Literal',
 		                        'options' => array(
 		                            'route' => '/verification',
 		                            'defaults' => array(
@@ -1402,7 +1402,7 @@ return array(
                                 )
                             ),
                             'play' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/jouer',
                                     'defaults' => array(
@@ -1412,7 +1412,7 @@ return array(
                                 )
                             ),
                             'result' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/resultat',
                                     'defaults' => array(
@@ -1422,7 +1422,7 @@ return array(
                                 )
                             ),
                             'register' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/register',
                                     'defaults' => array(
@@ -1432,7 +1432,7 @@ return array(
                                 )
                             ),
                             'fbshare' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/fbshare',
                                     'defaults' => array(
@@ -1442,7 +1442,7 @@ return array(
                                 )
                             ),
                             'fbrequest' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/fbrequest',
                                     'defaults' => array(
@@ -1452,7 +1452,7 @@ return array(
                                 )
                             ),
                             'tweet' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/tweet',
                                     'defaults' => array(
@@ -1462,7 +1462,7 @@ return array(
                                 )
                             ),
                             'google' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/google',
                                     'defaults' => array(
@@ -1472,7 +1472,7 @@ return array(
                                 )
                             ),
                             'bounce' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/essayez-aussi',
                                     'defaults' => array(
@@ -1482,7 +1482,7 @@ return array(
                                 )
                             ),
                             'terms' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/reglement',
                                     'defaults' => array(
@@ -1492,7 +1492,7 @@ return array(
                                 )
                             ),
                             'conditions' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/mentions-legales',
                                     'defaults' => array(
@@ -1502,7 +1502,7 @@ return array(
                                 )
                             ),
                             'fangate' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/fangate',
                                     'defaults' => array(
@@ -1512,7 +1512,7 @@ return array(
                                 )
                             ),
                             'prizes' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/lots',
                                     'defaults' => array(
@@ -1535,7 +1535,7 @@ return array(
                                 )
                             ),
                             'share' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/partager',
                                     'defaults' => array(
@@ -1578,7 +1578,7 @@ return array(
                                 ),
                             ),
                             'other-routes' => array(
-                                'type' => '\Zend\Mvc\Router\Http\Regex',
+                                'type' => 'Zend\Router\Http\Regex',
                                 'priority' => -1000,
                                 'options' => array(
                                     'regex' => '.*',
@@ -1604,7 +1604,7 @@ return array(
                         'may_terminate' => true,
                         'child_routes' => array(
                             'index' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/index',
                                     'defaults' => array(
@@ -1638,7 +1638,7 @@ return array(
                                 ),
                             ),
                             'login' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/connexion',
                                     'defaults' => array(
@@ -1658,7 +1658,7 @@ return array(
                                 )
                             ),
                             'verification' => array(
-		                        'type' => 'Literal',
+		                        'type' => 'Zend\Router\Http\Literal',
 		                        'options' => array(
 		                            'route' => '/verification',
 		                            'defaults' => array(
@@ -1678,7 +1678,7 @@ return array(
                                 )
                             ),
                             'play' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/jouer',
                                     'defaults' => array(
@@ -1688,7 +1688,7 @@ return array(
                                 )
                             ),
                             'result' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/resultat',
                                     'defaults' => array(
@@ -1698,7 +1698,7 @@ return array(
                                 )
                             ),
                             'register' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/register',
                                     'defaults' => array(
@@ -1708,7 +1708,7 @@ return array(
                                 )
                             ),
                             'fbshare' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/fbshare',
                                     'defaults' => array(
@@ -1718,7 +1718,7 @@ return array(
                                 )
                             ),
                             'fbrequest' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/fbrequest',
                                     'defaults' => array(
@@ -1728,7 +1728,7 @@ return array(
                                 )
                             ),
                             'tweet' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/tweet',
                                     'defaults' => array(
@@ -1738,7 +1738,7 @@ return array(
                                 )
                             ),
                             'google' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/google',
                                     'defaults' => array(
@@ -1748,7 +1748,7 @@ return array(
                                 )
                             ),
                             'bounce' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/essayez-aussi',
                                     'defaults' => array(
@@ -1758,7 +1758,7 @@ return array(
                                 )
                             ),
                             'terms' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/reglement',
                                     'defaults' => array(
@@ -1768,7 +1768,7 @@ return array(
                                 )
                             ),
                             'conditions' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/mentions-legales',
                                     'defaults' => array(
@@ -1778,7 +1778,7 @@ return array(
                                 )
                             ),
                             'fangate' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/fangate',
                                     'defaults' => array(
@@ -1788,7 +1788,7 @@ return array(
                                 )
                             ),
                             'prizes' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/lots',
                                     'defaults' => array(
@@ -1811,7 +1811,7 @@ return array(
                                 )
                             ),
                             'share' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/partager',
                                     'defaults' => array(
@@ -1854,7 +1854,7 @@ return array(
                                 ),
                             ),
                             'other-routes' => array(
-                                'type' => '\Zend\Mvc\Router\Http\Regex',
+                                'type' => 'Zend\Router\Http\Regex',
                                 'priority' => -1000,
                                 'options' => array(
                                     'regex' => '.*',
@@ -1880,7 +1880,7 @@ return array(
                         'may_terminate' => true,
                         'child_routes' => array(
                             'index' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/index',
                                     'defaults' => array(
@@ -1938,7 +1938,7 @@ return array(
                                 ),
                             ),
                             'login' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/connexion',
                                     'defaults' => array(
@@ -1958,7 +1958,7 @@ return array(
                                 )
                             ),
                             'verification' => array(
-		                        'type' => 'Literal',
+		                        'type' => 'Zend\Router\Http\Literal',
 		                        'options' => array(
 		                            'route' => '/verification',
 		                            'defaults' => array(
@@ -1978,7 +1978,7 @@ return array(
                                 )
                             ),
                             'play' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/jouer',
                                     'defaults' => array(
@@ -1989,7 +1989,7 @@ return array(
                                 'may_terminate' => true,
                                 'child_routes' => array(
                                     'ajaxupload' => array(
-                                        'type' => 'Literal',
+                                        'type' => 'Zend\Router\Http\Literal',
                                         'options' => array(
                                             'route' => '/ajaxupload',
                                             'defaults' => array(
@@ -1999,7 +1999,7 @@ return array(
                                         )
                                     ),
                                     'ajaxdelete' => array(
-                                        'type' => 'Literal',
+                                        'type' => 'Zend\Router\Http\Literal',
                                         'options' => array(
                                             'route' => '/ajaxdelete',
                                             'defaults' => array(
@@ -2011,7 +2011,7 @@ return array(
                                 )
                             ),
                             'preview' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/previsualiser',
                                     'defaults' => array(
@@ -2127,7 +2127,7 @@ return array(
                                 )
                             ),
                             'result' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/resultat',
                                     'defaults' => array(
@@ -2137,7 +2137,7 @@ return array(
                                 )
                             ),
                             'register' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/register',
                                     'defaults' => array(
@@ -2147,7 +2147,7 @@ return array(
                                 )
                             ),
                             'fbshare' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/fbshare',
                                     'defaults' => array(
@@ -2157,7 +2157,7 @@ return array(
                                 )
                             ),
                             'fbrequest' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/fbrequest',
                                     'defaults' => array(
@@ -2167,7 +2167,7 @@ return array(
                                 )
                             ),
                             'tweet' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/tweet',
                                     'defaults' => array(
@@ -2177,7 +2177,7 @@ return array(
                                 )
                             ),
                             'google' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/google',
                                     'defaults' => array(
@@ -2187,7 +2187,7 @@ return array(
                                 )
                             ),
                             'bounce' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/essayez-aussi',
                                     'defaults' => array(
@@ -2197,7 +2197,7 @@ return array(
                                 )
                             ),
                             'terms' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/reglement',
                                     'defaults' => array(
@@ -2207,7 +2207,7 @@ return array(
                                 )
                             ),
                             'conditions' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/mentions-legales',
                                     'defaults' => array(
@@ -2217,7 +2217,7 @@ return array(
                                 )
                             ),
                             'fangate' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/fangate',
                                     'defaults' => array(
@@ -2227,7 +2227,7 @@ return array(
                                 )
                             ),
                             'prizes' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/lots',
                                     'defaults' => array(
@@ -2250,7 +2250,7 @@ return array(
                                 )
                             ),
                             'share' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/partager',
                                     'defaults' => array(
@@ -2293,7 +2293,7 @@ return array(
                                 ),
                             ),
                             'other-routes' => array(
-                                'type' => '\Zend\Mvc\Router\Http\Regex',
+                                'type' => 'Zend\Router\Http\Regex',
                                 'priority' => -1000,
                                 'options' => array(
                                     'regex' => '.*',
@@ -2339,11 +2339,11 @@ return array(
             'admin' => array(
                 'child_routes' => array(
                     'mission' => array(
-                        'type' => 'Literal',
+                        'type' => 'Zend\Router\Http\Literal',
                         'options' => array(
                             'route' => '/mission',
                             'defaults' => array(
-                                'controller' => Playgroundgame\Controller\Admin\Mission::class,
+                                'controller' => PlaygroundGame\Controller\Admin\Mission::class,
                                 'action' => 'list'
                             )
                         ),
@@ -2353,7 +2353,7 @@ return array(
                                 'options' => array(
                                     'route' => '/:gameId/entries[/:p]',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\Mission::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\Mission::class,
                                         'action' => 'entry',
                                         'gameId' => 0
                                     )
@@ -2364,7 +2364,7 @@ return array(
                                 'options' => array(
                                     'route' => '/:gameId/invitation[/:p]',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\Mission::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\Mission::class,
                                         'action' => 'invitation',
                                         'gameId' => 0
                                     )
@@ -2375,7 +2375,7 @@ return array(
                                 'options' => array(
                                     'route' => '/:gameId/removeInvitation/:invitationId',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\Mission::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\Mission::class,
                                         'action' => 'removeInvitation',
                                         'gameId' => 0,
                                         'invitationId' => 0
@@ -2387,7 +2387,7 @@ return array(
                                 'options' => array(
                                     'route' => '/download/:gameId',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\Mission::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\Mission::class,
                                         'action' => 'download'
                                     )
                                 )
@@ -2397,17 +2397,17 @@ return array(
                                 'options' => array(
                                     'route' => '/list[/:p]',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\Mission::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\Mission::class,
                                         'action' => 'list'
                                     )
                                 )
                             ),
                             'create' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/create',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\Mission::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\Mission::class,
                                         'action' => 'create'
                                     )
                                 )
@@ -2417,7 +2417,7 @@ return array(
                                 'options' => array(
                                     'route' => '/edit/:missionId',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\Mission::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\Mission::class,
                                         'action' => 'edit',
                                         'missionId' => 0
                                     )
@@ -2428,7 +2428,7 @@ return array(
                                 'options' => array(
                                     'route' => '/delete/:missionId',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\Mission::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\Mission::class,
                                         'action' => 'delete',
                                         'missionId' => 0
                                     )
@@ -2439,7 +2439,7 @@ return array(
                                 'options' => array(
                                     'route' => '/associate/:missionId',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\Mission::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\Mission::class,
                                         'action' => 'associate',
                                         'missionId' => 0
                                     )
@@ -2450,7 +2450,7 @@ return array(
                                 'options' => array(
                                     'route' => '/activate/:missionId',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\Mission::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\Mission::class,
                                         'action' => 'activate',
                                         'missionId' => 0
                                     )
@@ -2461,7 +2461,7 @@ return array(
                                 'options' => array(
                                     'route' => '/desactivate/:missionId',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\Mission::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\Mission::class,
                                         'action' => 'desactivate',
                                         'missionId' => 0
                                     )
@@ -2470,12 +2470,12 @@ return array(
                         )
                     ),
                     'quiz' => array(
-                        'type' => 'Literal',
+                        'type' => 'Zend\Router\Http\Literal',
                         'priority' => 1000,
                         'options' => array(
                             'route' => '/quiz',
                             'defaults' => array(
-                                'controller' => Playgroundgame\Controller\Admin\Quiz::class,
+                                'controller' => PlaygroundGame\Controller\Admin\Quiz::class,
                                 'action' => 'index'
                             )
                         ),
@@ -2485,7 +2485,7 @@ return array(
                                 'options' => array(
                                     'route' => '/:gameId/entries[/:p]',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\Quiz::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\Quiz::class,
                                         'action' => 'entry',
                                         'gameId' => 0
                                     )
@@ -2496,7 +2496,7 @@ return array(
                                 'options' => array(
                                     'route' => '/download/:gameId',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\Quiz::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\Quiz::class,
                                         'action' => 'download'
                                     )
                                 )
@@ -2506,7 +2506,7 @@ return array(
                                 'options' => array(
                                     'route' => '/draw/:gameId',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\Quiz::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\Quiz::class,
                                         'action' => 'draw'
                                     )
                                 )
@@ -2516,7 +2516,7 @@ return array(
                                 'options' => array(
                                     'route' => '/sortquestion/:gameId',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\Quiz::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\Quiz::class,
                                         'action' => 'sortQuestion'
                                     )
                                 )
@@ -2524,12 +2524,12 @@ return array(
                         )
                     ),
                     'lottery' => array(
-                        'type' => 'Literal',
+                        'type' => 'Zend\Router\Http\Literal',
                         'priority' => 1000,
                         'options' => array(
                             'route' => '/lottery',
                             'defaults' => array(
-                                'controller' => Playgroundgame\Controller\Admin\Lottery::class,
+                                'controller' => PlaygroundGame\Controller\Admin\Lottery::class,
                                 'action' => 'index'
                             )
                         ),
@@ -2539,7 +2539,7 @@ return array(
                                 'options' => array(
                                     'route' => '/entry/:gameId[/:p]',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\Lottery::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\Lottery::class,
                                         'action' => 'entry',
                                         'gameId' => 0
                                     )
@@ -2550,7 +2550,7 @@ return array(
                                 'options' => array(
                                     'route' => '/download/:gameId',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\Lottery::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\Lottery::class,
                                         'action' => 'download'
                                     )
                                 )
@@ -2560,7 +2560,7 @@ return array(
                                 'options' => array(
                                     'route' => '/draw/:gameId',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\Lottery::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\Lottery::class,
                                         'action' => 'draw'
                                     )
                                 )
@@ -2568,12 +2568,12 @@ return array(
                         )
                     ),
                     'instantwin' => array(
-                        'type' => 'Literal',
+                        'type' => 'Zend\Router\Http\Literal',
                         'priority' => 1000,
                         'options' => array(
                             'route' => '/instantwin',
                             'defaults' => array(
-                                'controller' => Playgroundgame\Controller\Admin\InstantWin::class,
+                                'controller' => PlaygroundGame\Controller\Admin\InstantWin::class,
                                 'action' => 'index'
                             )
                         ),
@@ -2583,7 +2583,7 @@ return array(
                                 'options' => array(
                                     'route' => '/entry/:gameId[/:p]',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\InstantWin::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\InstantWin::class,
                                         'action' => 'entry',
                                         'gameId' => 0
                                     )
@@ -2594,7 +2594,7 @@ return array(
                                 'options' => array(
                                     'route' => '/download/:gameId',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\InstantWin::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\InstantWin::class,
                                         'action' => 'download'
                                     )
                                 )
@@ -2602,12 +2602,12 @@ return array(
                         )
                     ),
                     'postvote' => array(
-                        'type' => 'Literal',
+                        'type' => 'Zend\Router\Http\Literal',
                         'priority' => 1000,
                         'options' => array(
                             'route' => '/postvote',
                             'defaults' => array(
-                                'controller' => Playgroundgame\Controller\Admin\PostVote::class,
+                                'controller' => PlaygroundGame\Controller\Admin\PostVote::class,
                                 'action' => 'index'
                             )
                         ),
@@ -2617,7 +2617,7 @@ return array(
                                 'options' => array(
                                     'route' => '/entry/:gameId[/:p]',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\PostVote::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\PostVote::class,
                                         'action' => 'entry',
                                         'gameId' => 0
                                     )
@@ -2628,7 +2628,7 @@ return array(
                                 'options' => array(
                                     'route' => '/download/:gameId',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\PostVote::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\PostVote::class,
                                         'action' => 'download'
                                     )
                                 )
@@ -2636,12 +2636,12 @@ return array(
                         )
                     ),
                     'tradingcard' => array(
-                        'type' => 'Literal',
+                        'type' => 'Zend\Router\Http\Literal',
                         'priority' => 1000,
                         'options' => array(
                             'route' => '/tradingcard',
                             'defaults' => array(
-                                'controller' => Playgroundgame\Controller\Admin\TradingCard::class,
+                                'controller' => PlaygroundGame\Controller\Admin\TradingCard::class,
                                 'action' => 'index'
                             )
                         ),
@@ -2651,7 +2651,7 @@ return array(
                                 'options' => array(
                                     'route' => '/entry/:gameId[/:p]',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\TradingCard::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\TradingCard::class,
                                         'action' => 'entry',
                                         'gameId' => 0
                                     )
@@ -2662,7 +2662,7 @@ return array(
                                 'options' => array(
                                     'route' => '/download/:gameId',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\TradingCard::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\TradingCard::class,
                                         'action' => 'download'
                                     )
                                 )
@@ -2672,7 +2672,7 @@ return array(
                                 'options' => array(
                                     'route' => '/coo/:gameId',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\TradingCard::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\TradingCard::class,
                                         'action' => 'coo',
                                         'gameId' => 0
                                     )
@@ -2681,12 +2681,12 @@ return array(
                         )
                     ),
                     'playgroundgame' => array(
-                        'type' => 'Literal',
+                        'type' => 'Zend\Router\Http\Literal',
                         'priority' => 1000,
                         'options' => array(
                             'route' => '/game',
                             'defaults' => array(
-                                'controller' => Playgroundgame\Controller\Admin\Game::class,
+                                'controller' => PlaygroundGame\Controller\Admin\Game::class,
                                 'action' => 'index'
                             )
                         ),
@@ -2696,7 +2696,7 @@ return array(
                                 'options' => array(
                                     'route' => '/list/:type/:filter[/:p]',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\Game::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\Game::class,
                                         'action' => 'list',
                                         'type' => 'createdAt',
                                         'filter' => 'DESC'
@@ -2704,11 +2704,11 @@ return array(
                                 )
                             ),
                             'create' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/create',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\Game::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\Game::class,
                                         'action' => 'create'
                                     )
                                 )
@@ -2718,7 +2718,7 @@ return array(
                                 'options' => array(
                                     'route' => '/player-form/:gameId',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\Game::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\Game::class,
                                         'action' => 'form',
                                         'gameId' => 0
                                     )
@@ -2729,7 +2729,7 @@ return array(
                                 'options' => array(
                                     'route' => '/export/:gameId',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\Game::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\Game::class,
                                         'action' => 'export',
                                         'gameId' => 0
                                     )
@@ -2740,17 +2740,17 @@ return array(
                                 'options' => array(
                                     'route' => '/import',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\Game::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\Game::class,
                                         'action' => 'import'
                                     )
                                 )
                             ),
                             'create-tradingcard' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/create-tradingcard',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\TradingCard::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\TradingCard::class,
                                         'action' => 'createTradingcard'
                                     )
                                 )
@@ -2760,7 +2760,7 @@ return array(
                                 'options' => array(
                                     'route' => '/edit-tradingcard/:gameId',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\TradingCard::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\TradingCard::class,
                                         'action' => 'editTradingcard',
                                         'gameId' => 0
                                     )
@@ -2771,7 +2771,7 @@ return array(
                                 'options' => array(
                                     'route' => '/tradingcard-model-list/:gameId[/:filter][/:p]',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\TradingCard::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\TradingCard::class,
                                         'action' => 'listModel',
                                         'gameId' => 0,
                                         'filter' => 'DESC'
@@ -2786,7 +2786,7 @@ return array(
                                 'options' => array(
                                     'route' => '/tradingcard-models-import/:gameId',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\TradingCard::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\TradingCard::class,
                                         'action' => 'importModels',
                                         'gameId' => 0
                                     )
@@ -2797,7 +2797,7 @@ return array(
                                 'options' => array(
                                     'route' => '/tradingcard-models-export/:gameId',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\TradingCard::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\TradingCard::class,
                                         'action' => 'exportModels',
                                         'gameId' => 0
                                     )
@@ -2808,7 +2808,7 @@ return array(
                                 'options' => array(
                                     'route' => '/tradingcard-model-add/:gameId',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\TradingCard::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\TradingCard::class,
                                         'action' => 'addModel',
                                         'gameId' => 0
                                     )
@@ -2819,7 +2819,7 @@ return array(
                                 'options' => array(
                                     'route' => '/tradingcard-model-edit/:gameId/:modelId',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\TradingCard::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\TradingCard::class,
                                         'action' => 'editModel',
                                         'gameId' => 0,
                                         'modelId' => 0
@@ -2831,18 +2831,18 @@ return array(
                                 'options' => array(
                                     'route' => '/tradingcard-model-remove/:modelId',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\TradingCard::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\TradingCard::class,
                                         'action' => 'removeModel',
                                         'modelId' => 0
                                     )
                                 )
                             ),
                             'create-lottery' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/create-lottery',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\Lottery::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\Lottery::class,
                                         'action' => 'createLottery'
                                     )
                                 )
@@ -2852,18 +2852,18 @@ return array(
                                 'options' => array(
                                     'route' => '/edit-lottery/:gameId',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\Lottery::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\Lottery::class,
                                         'action' => 'editLottery',
                                         'gameId' => 0
                                     )
                                 )
                             ),
                             'create-instantwin' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/create-instantwin',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\InstantWin::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\InstantWin::class,
                                         'action' => 'createInstantWin'
                                     )
                                 )
@@ -2873,7 +2873,7 @@ return array(
                                 'options' => array(
                                     'route' => '/edit-instantwin/:gameId',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\InstantWin::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\InstantWin::class,
                                         'action' => 'editInstantWin',
                                         'gameId' => 0
                                     )
@@ -2884,7 +2884,7 @@ return array(
                                 'options' => array(
                                     'route' => '/instantwin-occurrence-list/:gameId[/:filter][/:p]',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\InstantWin::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\InstantWin::class,
                                         'action' => 'listOccurrence',
                                         'gameId' => 0,
                                         'filter' => 'DESC'
@@ -2899,7 +2899,7 @@ return array(
                                 'options' => array(
                                     'route' => '/instantwin-occurrences-import/:gameId',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\InstantWin::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\InstantWin::class,
                                         'action' => 'importOccurrences',
                                         'gameId' => 0
                                     )
@@ -2910,7 +2910,7 @@ return array(
                                 'options' => array(
                                     'route' => '/instantwin-occurrences-export/:gameId',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\InstantWin::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\InstantWin::class,
                                         'action' => 'exportOccurrences',
                                         'gameId' => 0
                                     )
@@ -2921,7 +2921,7 @@ return array(
                                 'options' => array(
                                     'route' => '/instantwin-occurrence-add/:gameId',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\InstantWin::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\InstantWin::class,
                                         'action' => 'addOccurrence',
                                         'gameId' => 0
                                     )
@@ -2932,7 +2932,7 @@ return array(
                                 'options' => array(
                                     'route' => '/instantwin-occurrence-edit/:gameId/:occurrenceId',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\InstantWin::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\InstantWin::class,
                                         'action' => 'editOccurrence',
                                         'gameId' => 0,
                                         'occurrenceId' => 0
@@ -2944,18 +2944,18 @@ return array(
                                 'options' => array(
                                     'route' => '/instantwin-occurrence-remove/:occurrenceId',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\InstantWin::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\InstantWin::class,
                                         'action' => 'removeOccurrence',
                                         'occurrenceId' => 0
                                     )
                                 )
                             ),
                             'create-quiz' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/create-quiz',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\Quiz::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\Quiz::class,
                                         'action' => 'createQuiz'
                                     )
                                 )
@@ -2965,18 +2965,18 @@ return array(
                                 'options' => array(
                                     'route' => '/edit-quiz/:gameId',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\Quiz::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\Quiz::class,
                                         'action' => 'editQuiz',
                                         'gameId' => 0
                                     )
                                 )
                             ),
                             'create-postvote' => array(
-                                'type' => 'Literal',
+                                'type' => 'Zend\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/create-postvote',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\PostVote::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\PostVote::class,
                                         'action' => 'createPostVote'
                                     )
                                 )
@@ -2986,7 +2986,7 @@ return array(
                                 'options' => array(
                                     'route' => '/edit-postvote/:gameId',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\PostVote::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\PostVote::class,
                                         'action' => 'editPostVote',
                                         'gameId' => 0
                                     )
@@ -2997,7 +2997,7 @@ return array(
                                 'options' => array(
                                     'route' => '/postvote-form/:gameId',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\PostVote::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\PostVote::class,
                                         'action' => 'form',
                                         'gameId' => 0
                                     )
@@ -3008,7 +3008,7 @@ return array(
                                 'options' => array(
                                     'route' => '/postvote-mod-list',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\PostVote::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\PostVote::class,
                                         'action' => 'modList'
                                     )
                                 )
@@ -3018,7 +3018,7 @@ return array(
                                 'options' => array(
                                     'route' => '/postvote-moderation-edit/:postId[/:status]',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\PostVote::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\PostVote::class,
                                         'action' => 'moderationEdit'
                                     )
                                 )
@@ -3028,7 +3028,7 @@ return array(
                                 'options' => array(
                                     'route' => '/postvote-push/:postId[/:pushed]',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\PostVote::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\PostVote::class,
                                         'action' => 'push'
                                     )
                                 )
@@ -3039,7 +3039,7 @@ return array(
                                 'options' => array(
                                     'route' => '/entry/:gameId',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\Game::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\Game::class,
                                         'action' => 'entry',
                                         'gameId' => 0
                                     )
@@ -3051,7 +3051,7 @@ return array(
                                         'options' => array(
                                             'route' => '[:p]',
                                             'defaults' => array(
-                                                'controller' => Playgroundgame\Controller\Admin\Game::class,
+                                                'controller' => PlaygroundGame\Controller\Admin\Game::class,
                                                 'action' => 'entry'
                                             )
                                         )
@@ -3063,7 +3063,7 @@ return array(
                                 'options' => array(
                                     'route' => '/quiz-question-list/:quizId[/:p]',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\Quiz::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\Quiz::class,
                                         'action' => 'listQuestion',
                                         'quizId' => 0
                                     )
@@ -3074,7 +3074,7 @@ return array(
                                 'options' => array(
                                     'route' => '/quiz-question-add/:quizId',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\Quiz::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\Quiz::class,
                                         'action' => 'addQuestion',
                                         'quizId' => 0
                                     )
@@ -3085,7 +3085,7 @@ return array(
                                 'options' => array(
                                     'route' => '/quiz-question-edit/:questionId',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\Quiz::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\Quiz::class,
                                         'action' => 'editQuestion',
                                         'questionId' => 0
                                     )
@@ -3096,7 +3096,7 @@ return array(
                                 'options' => array(
                                     'route' => '/quiz-question-remove/:questionId',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\Quiz::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\Quiz::class,
                                         'action' => 'removeQuestion',
                                         'questionId' => 0
                                     )
@@ -3107,7 +3107,7 @@ return array(
                                 'options' => array(
                                     'route' => '/download/:gameId',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\Game::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\Game::class,
                                         'action' => 'download',
                                         'gameId' => 0
                                     )
@@ -3118,7 +3118,7 @@ return array(
                                 'options' => array(
                                     'route' => '/edit/:gameId',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\Game::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\Game::class,
                                         'action' => 'edit',
                                         'gameId' => 0
                                     )
@@ -3129,7 +3129,7 @@ return array(
                                 'options' => array(
                                     'route' => '/remove/:gameId',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\Game::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\Game::class,
                                         'action' => 'remove',
                                         'gameId' => 0
                                     )
@@ -3143,7 +3143,7 @@ return array(
                                         'gameId' => '[0-9]+'
                                     ),
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\Game::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\Game::class,
                                         'action' => 'setActive',
                                         'gameId' => 0
                                     )
@@ -3155,7 +3155,7 @@ return array(
                                 'options' => array(
                                     'route' => '/prize-category-list[/:p]',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_prizecategory',
+                                        'controller' => PlaygroundGame\Controller\Admin\PrizeCategory::class,
                                         'action' => 'list'
                                     )
                                 )
@@ -3166,7 +3166,7 @@ return array(
                                 'options' => array(
                                     'route' => '/prize-category-add/:prizeCategoryId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_prizecategory',
+                                        'controller' => PlaygroundGame\Controller\Admin\PrizeCategory::class,
                                         'action' => 'add',
                                         'prizeCategoryId' => 0
                                     )
@@ -3178,7 +3178,7 @@ return array(
                                 'options' => array(
                                     'route' => '/prize-category-edit/:prizeCategoryId',
                                     'defaults' => array(
-                                        'controller' => 'playgroundgame_admin_prizecategory',
+                                        'controller' => PlaygroundGame\Controller\Admin\PrizeCategory::class,
                                         'action' => 'edit',
                                         'prizeCategoryId' => 0
                                     )
@@ -3189,7 +3189,7 @@ return array(
                                 'options' => array(
                                     'route' => '/create-mission/:gameId',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\Mission::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\Mission::class,
                                         'action' => 'createMission',
                                         'gameId' => 0
                                     )
@@ -3200,7 +3200,7 @@ return array(
                                 'options' => array(
                                     'route' => '/edit-mission/:gameId',
                                     'defaults' => array(
-                                        'controller' => Playgroundgame\Controller\Admin\Mission::class,
+                                        'controller' => PlaygroundGame\Controller\Admin\Mission::class,
                                         'action' => 'editMission',
                                         'gameId' => 0
                                     )
