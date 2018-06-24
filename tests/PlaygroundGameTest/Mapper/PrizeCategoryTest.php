@@ -34,7 +34,7 @@ class PrizeCategoryTest extends \PHPUnit_Framework_TestCase
 
     // public function testInsertTranslation()
     // {
-    //     $translator = $this->sm->get('translator');
+    //     $translator = $this->sm->get('MvcTranslator');
     //     $prizeCategory = new PrizeCategoryEntity();
     //     $translator->setLocale('en_US');
     //     $prizeCategory->setTitle('Anglais')

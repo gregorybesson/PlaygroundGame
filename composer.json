@@ -9,7 +9,7 @@
 		}
 	],
 	"keywords" : [
-		"zf3",
+		"ZF3",
 		"playground",
 		"game"
 	],
@@ -25,10 +25,10 @@
 	"require" : {
 		"php" : ">=5.5",
 		"zendframework/zend-developer-tools" : ">=1.0.0",
-		"zendframework/zendframework" : ">=2.5.0",
-		"playground/core" : ">=2.0.0",
-		"playground/design" : ">=3.0.0",
-		"playground/user" : ">=3.0.0",
+		"zendframework/zendframework" : ">=3.0.0",
+		"playground/core" : ">=4.0.0",
+		"playground/design" : ">=4.0.0",
+		"playground/user" : ">=4.0.0",
 		"playground/hybridauth" : ">=2.0.0",
 		"playground/partnership" : ">4.0.0"
 	},

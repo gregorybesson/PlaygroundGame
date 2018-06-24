@@ -46,7 +46,7 @@ class Module
                     // add custom language directory
                     $config['translator']['translation_file_patterns'][] = array(
                         'type'     => 'phpArray',
-                        'base_dir' => __DIR__ .'/../../../../../design/frontend/'.$parentTheme[0].
+                        'base_dir' => __DIR__ .'/../../../../design/frontend/'.$parentTheme[0].
                         '/'.$parentTheme[1].'/custom/'.$k.'/language',
                         'pattern'     => '%s.php',
                         'text_domain' => $k,
@@ -77,7 +77,7 @@ class Module
 
                                 // then create the hostname route + appending the model updated
                                 $config['router']['routes']['frontend.'.$url] = array(
-                                    'type'      => 'Zend\Mvc\Router\Http\Hostname',
+                                    'type'      => 'Zend\Router\Http\Hostname',
                                     'options'   => array(
                                         'route'    => $url,
                                         'defaults' => array(
@@ -99,7 +99,7 @@ class Module
                     if (isset($v['assetic_configuration'])) {
                         foreach ($v['assetic_configuration']['modules'] as $m => $d) {
                             $v['assetic_configuration']['modules'][$m]['root_path'][] = __DIR__ .
-                            '/../../../../../design/frontend/'.$parentTheme[0].'/'.$parentTheme[1].
+                            '/../../../../design/frontend/'.$parentTheme[0].'/'.$parentTheme[1].
                             '/custom/'.$k.'/assets';
                         }
 
@@ -133,13 +133,13 @@ class Module
 
         $options    = $serviceManager->get('playgroundcore_module_options');
         $locale     = $options->getLocale();
-        $translator = $serviceManager->get('translator');
+        $translator = $serviceManager->get('MvcTranslator');
         if (!empty($locale)) {
             //translator
             $translator->setLocale($locale);
 
             // plugins
-            $translate = $serviceManager->get('viewhelpermanager')->get('translate');
+            $translate = $serviceManager->get('ViewHelperManager')->get('translate');
             $translate->getTranslator()->setLocale($locale);
         }
 
@@ -341,14 +341,13 @@ class Module
         return array(
             'factories'                => array(
                 'playgroundPrizeCategory' => function (\Zend\ServiceManager\ServiceManager $sm) {
-                    $locator = $sm->getServiceLocator();
                     $viewHelper = new View\Helper\PrizeCategory;
-                    $viewHelper->setPrizeCategoryService($locator->get('playgroundgame_prizecategory_service'));
+                    $viewHelper->setPrizeCategoryService($sm->get('playgroundgame_prizecategory_service'));
 
                     return $viewHelper;
                 },
                 'postvoteShareEvents' => function (\Zend\ServiceManager\ServiceManager $sm) {
-                    $service = $sm->getServiceLocator()->get('playgroundgame_postvote_service');
+                    $service = $sm->get('playgroundgame_postvote_service');
 
                     return new \PlaygroundGame\View\Helper\PostvoteShareEvents($service);
                 }
@@ -639,7 +638,7 @@ class Module
                 },
 
                 'playgroundgame_tradingcardmodel_form' => function (\Zend\ServiceManager\ServiceManager $sm) {
-                    $translator = $sm->get('translator');
+                    $translator = $sm->get('MvcTranslator');
                     $form = new Form\Admin\TradingCardModel(null, $sm, $translator);
                     $tradingcardmodel = new Entity\TradingCardModel();
                     $form->setInputFilter($tradingcardmodel->getInputFilter());
@@ -648,7 +647,7 @@ class Module
                 },
 
                 'playgroundgame_tradingcard_form' => function (\Zend\ServiceManager\ServiceManager $sm) {
-                    $translator = $sm->get('translator');
+                    $translator = $sm->get('MvcTranslator');
                     $form = new Form\Admin\TradingCard(null, $sm, $translator);
                     $tradingcard = new Entity\TradingCard();
                     $form->setInputFilter($tradingcard->getInputFilter());
@@ -657,7 +656,7 @@ class Module
                 },
 
                 'playgroundgame_mission_form' => function (\Zend\ServiceManager\ServiceManager $sm) {
-                    $translator = $sm->get('translator');
+                    $translator = $sm->get('MvcTranslator');
                     $form = new Form\Admin\Mission(null, $sm, $translator);
                     $mission = new Entity\Mission();
                     $form->setInputFilter($mission->getInputFilter());
@@ -666,7 +665,7 @@ class Module
                 },
 
                 'playgroundgame_mission_game_form' => function (\Zend\ServiceManager\ServiceManager $sm) {
-                    $translator = $sm->get('translator');
+                    $translator = $sm->get('MvcTranslator');
                     $form = new Form\Admin\MissionGameFieldset(null, $sm, $translator);
                     $missionGame = new Entity\MissionGame();
                     $form->setInputFilter($missionGame->getInputFilter());
@@ -674,7 +673,7 @@ class Module
                 },
 
                 'playgroundgame_game_form' => function (\Zend\ServiceManager\ServiceManager $sm) {
-                    $translator = $sm->get('translator');
+                    $translator = $sm->get('MvcTranslator');
                     $form = new Form\Admin\Game(null, $sm, $translator);
                     $game = new Entity\Game();
                     $form->setInputFilter($game->getInputFilter());
@@ -683,7 +682,7 @@ class Module
                 },
 
                 'playgroundgame_register_form' => function (\Zend\ServiceManager\ServiceManager $sm) {
-                    $translator = $sm->get('translator');
+                    $translator = $sm->get('MvcTranslator');
                     $zfcUserOptions = $sm->get('zfcuser_module_options');
                     $form = new Form\Frontend\Register(null, $zfcUserOptions, $translator, $sm);
                     $form->setInputFilter(new \ZfcUser\Form\RegisterFilter(
@@ -702,14 +701,14 @@ class Module
                 },
 
                 'playgroundgame_import_form' => function (\Zend\ServiceManager\ServiceManager $sm) {
-                    $translator = $sm->get('translator');
+                    $translator = $sm->get('MvcTranslator');
                     $form = new Form\Admin\Import(null, $sm, $translator);
 
                     return $form;
                 },
 
                 'playgroundgame_lottery_form' => function (\Zend\ServiceManager\ServiceManager $sm) {
-                    $translator = $sm->get('translator');
+                    $translator = $sm->get('MvcTranslator');
                     $form = new Form\Admin\Lottery(null, $sm, $translator);
                     $lottery = new Entity\Lottery();
                     $form->setInputFilter($lottery->getInputFilter());
@@ -718,7 +717,7 @@ class Module
                 },
 
                 'playgroundgame_quiz_form' => function (\Zend\ServiceManager\ServiceManager $sm) {
-                    $translator = $sm->get('translator');
+                    $translator = $sm->get('MvcTranslator');
                     $form = new Form\Admin\Quiz(null, $sm, $translator);
                     $quiz = new Entity\Quiz();
                     $form->setInputFilter($quiz->getInputFilter());
@@ -727,7 +726,7 @@ class Module
                 },
 
                 'playgroundgame_instantwin_form' => function (\Zend\ServiceManager\ServiceManager $sm) {
-                    $translator = $sm->get('translator');
+                    $translator = $sm->get('MvcTranslator');
                     $form = new Form\Admin\InstantWin(null, $sm, $translator);
                     $instantwin = new Entity\InstantWin();
                     $form->setInputFilter($instantwin->getInputFilter());
@@ -736,7 +735,7 @@ class Module
                 },
 
                 'playgroundgame_quizquestion_form' => function (\Zend\ServiceManager\ServiceManager $sm) {
-                    $translator = $sm->get('translator');
+                    $translator = $sm->get('MvcTranslator');
                     $form = new Form\Admin\QuizQuestion(null, $sm, $translator);
                     $quizQuestion = new Entity\QuizQuestion();
                     $form->setInputFilter($quizQuestion->getInputFilter());
@@ -745,7 +744,7 @@ class Module
                 },
 
                 'playgroundgame_instantwinoccurrence_form' => function (\Zend\ServiceManager\ServiceManager $sm) {
-                    $translator = $sm->get('translator');
+                    $translator = $sm->get('MvcTranslator');
                     $form = new Form\Admin\InstantWinOccurrence(null, $sm, $translator);
                     $instantwinOccurrence = new Entity\InstantWinOccurrence();
                     $form->setInputFilter($instantwinOccurrence->getInputFilter());
@@ -754,13 +753,13 @@ class Module
                 },
 
                 'playgroundgame_instantwinoccurrenceimport_form' => function (\Zend\ServiceManager\ServiceManager $sm) {
-                    $translator = $sm->get('translator');
+                    $translator = $sm->get('MvcTranslator');
                     $form = new Form\Admin\InstantWinOccurrenceImport(null, $sm, $translator);
                     return $form;
                 },
 
                 'playgroundgame_instantwinoccurrencecode_form' => function (\Zend\ServiceManager\ServiceManager $sm) {
-                    $translator = $sm->get('translator');
+                    $translator = $sm->get('MvcTranslator');
                     $form = new Form\Frontend\InstantWinOccurrenceCode(null, $sm, $translator);
                     $filter = new Form\Frontend\InstantWinOccurrenceCodeFilter();
                     $form->setInputFilter($filter);
@@ -768,7 +767,7 @@ class Module
                 },
 
                 'playgroundgame_postvote_form' => function (\Zend\ServiceManager\ServiceManager $sm) {
-                    $translator = $sm->get('translator');
+                    $translator = $sm->get('MvcTranslator');
                     $form = new Form\Admin\PostVote(null, $sm, $translator);
                     $postVote = new Entity\PostVote();
                     $form->setInputFilter($postVote->getInputFilter());
@@ -777,7 +776,7 @@ class Module
                 },
 
                 'playgroundgame_prizecategory_form' => function (\Zend\ServiceManager\ServiceManager $sm) {
-                    $translator = $sm->get('translator');
+                    $translator = $sm->get('MvcTranslator');
                     $form = new Form\Admin\PrizeCategory(null, $sm, $translator);
                     $prizeCategory = new Entity\PrizeCategory();
                     $form->setInputFilter($prizeCategory->getInputFilter());
@@ -786,14 +785,14 @@ class Module
                 },
 
                 'playgroundgame_prizecategoryuser_form' => function (\Zend\ServiceManager\ServiceManager $sm) {
-                    $translator = $sm->get('translator');
+                    $translator = $sm->get('MvcTranslator');
                     $form = new Form\Frontend\PrizeCategoryUser(null, $sm, $translator);
 
                     return $form;
                 },
 
                 'playgroundgame_sharemail_form' => function (\Zend\ServiceManager\ServiceManager $sm) {
-                    $translator = $sm->get('translator');
+                    $translator = $sm->get('MvcTranslator');
                     $form = new Form\Frontend\ShareMail(null, $sm, $translator);
                     $form->setInputFilter(new Form\Frontend\ShareMailFilter());
 
@@ -801,7 +800,7 @@ class Module
                 },
 
                 'playgroundgame_createteam_form' => function (\Zend\ServiceManager\ServiceManager $sm) {
-                    $translator = $sm->get('translator');
+                    $translator = $sm->get('MvcTranslator');
                     $form = new Form\Frontend\CreateTeam(null, $sm, $translator);
 
                     return $form;

@@ -31,7 +31,7 @@ class GameControllerTest extends AbstractHttpControllerTestCase
 
         $this->controller = new GameController(Bootstrap::getServiceManager());
         $this->request    = new Request();
-        $this->routeMatch = new RouteMatch(array('controller' => Playgroundgame\Controller\Admin\Game::class));
+        $this->routeMatch = new RouteMatch(array('controller' => PlaygroundGame\Controller\Admin\Game::class));
         $this->event      = new MvcEvent();
 
         parent::setUp();

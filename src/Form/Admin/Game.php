@@ -6,6 +6,7 @@ use Zend\Form\Element;
 use ZfcUser\Form\ProvidesEventsForm;
 use Zend\Mvc\I18n\Translator;
 use Zend\ServiceManager\ServiceManager;
+use Zend\EventManager\EventManager;
 
 class Game extends ProvidesEventsForm
 {
@@ -16,6 +17,8 @@ class Game extends ProvidesEventsForm
     protected $module_options;
 
     protected $serviceManager;
+
+    protected $event;
 
     public function __construct($name, ServiceManager $sm, Translator $translator)
     {
@@ -710,9 +713,7 @@ class Game extends ProvidesEventsForm
         $partners = array(
             '0' => 'Ce jeu n\'est pas sponsorisé'
         );
-        $results = $this->getServiceManager()
-            ->get('application')
-            ->getEventManager()
+        $results = $this->getEventManager()
             ->trigger(__FUNCTION__, $this, array(
             'partners' => $partners
             ))
@@ -736,9 +737,7 @@ class Game extends ProvidesEventsForm
     {
         $apps = array('' => 'Don\'t deploy on Facebook');
 
-        $results = $this->getServiceManager()
-            ->get('application')
-            ->getEventManager()
+        $results = $this->getEventManager()
             ->trigger(__FUNCTION__, $this, array(
             'apps' => $apps
             ))
@@ -766,6 +765,16 @@ class Game extends ProvidesEventsForm
         }
 
         return $categories;
+    }
+
+    public function getEventManager()
+    {
+        if ($this->event === NULL) {
+            $this->event = new EventManager(
+                $this->getServiceManager()->get('SharedEventManager'), [get_class($this)]
+            );
+        }
+        return $this->event;
     }
 
     /**
