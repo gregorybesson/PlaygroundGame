@@ -114,7 +114,10 @@ class GameController extends AbstractActionController
             $customUrl = str_replace('frontend.', '', $e->getRouteMatch()->getMatchedRouteName());
             $customUrl = explode("/", $customUrl)[0];
 
-            if (isset($config['custom_games']) && isset($config['custom_games'][$controller->game->getIdentifier()]) &&
+            if (
+                    isset($config['custom_games']) &&
+                    $controller->game !== false &&
+                    isset($config['custom_games'][$controller->game->getIdentifier()]) &&
                     $controller->getRequest()->getUri()->getHost() === $customUrl
                 ) {
                 $this->isSoloGame = true;
