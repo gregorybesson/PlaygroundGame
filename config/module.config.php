@@ -236,6 +236,15 @@ return array(
     ),
 
     'controllers' => array(
+	 'aliases' => array(
+            PlaygroundGame\Controller\Frontend\Instantwin::class => PlaygroundGame\Controller\Frontend\InstantWin::class,
+            PlaygroundGame\Controller\Frontend\Postvote::class => PlaygroundGame\Controller\Frontend\PostVote::class,
+            PlaygroundGame\Controller\Frontend\Tradingcard::class => PlaygroundGame\Controller\Frontend\TradingCard::class,
+
+            PlaygroundGame\Controller\Admin\Instantwin::class => PlaygroundGame\Controller\Admin\InstantWin::class,
+            PlaygroundGame\Controller\Admin\Postvote::class => PlaygroundGame\Controller\Admin\PostVote::class,
+            PlaygroundGame\Controller\Admin\Tradingcard::class => PlaygroundGame\Controller\Admin\TradingCard::class,
+        ),
         'factories' => array(
             PlaygroundGame\Controller\Frontend\Home::class => PlaygroundGame\Service\Factory\FrontendHomeControllerFactory::class,
             PlaygroundGame\Controller\Frontend\Game::class => PlaygroundGame\Service\Factory\FrontendGameControllerFactory::class,
