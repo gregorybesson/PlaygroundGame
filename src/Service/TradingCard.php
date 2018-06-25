@@ -188,7 +188,7 @@ class TradingCard extends Game
     public function getTradingCardCardMapper()
     {
         if (null === $this->tradingcardcardMapper) {
-            $this->tradingcardcardMapper = $this->serviceLocator->get('playgroundgame_tradingcardcard_mapper');
+            $this->tradingcardcardMapper = $this->serviceLocator->get('playgroundgame_tradingcard_card_mapper');
         }
 
         return $this->tradingcardcardMapper;
@@ -197,7 +197,7 @@ class TradingCard extends Game
     public function getTradingCardModelMapper()
     {
         if (null === $this->tradingcardmodelMapper) {
-            $this->tradingcardmodelMapper = $this->serviceLocator->get('playgroundgame_tradingcardmodel_mapper');
+            $this->tradingcardmodelMapper = $this->serviceLocator->get('playgroundgame_tradingcard_model_mapper');
         }
 
         return $this->tradingcardmodelMapper;
