@@ -626,6 +626,10 @@ class PostVoteController extends GameController
         return $viewModel;
     }
 
+    /**
+     * If the user has already voted, we cancel her vote, else we create the vote.
+     * TODO : we should distinguish between vote and like (so we should add the like field in post)
+     */
     public function ajaxVoteAction()
     {
         // Call this for the session lock to be released (other ajax calls can then be made)
@@ -649,7 +653,7 @@ class PostVoteController extends GameController
         } else {
             if ($request->isPost()) {
                 $post = $this->getGameService()->getPostvotePostMapper()->findById($postId);
-                if ($this->getGameService()->addVote(
+                if ($this->getGameService()->toggleVote(
                     $this->user,
                     $this->getRequest()->getServer('REMOTE_ADDR'),
                     $post

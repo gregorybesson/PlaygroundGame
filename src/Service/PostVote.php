@@ -386,6 +386,71 @@ class PostVote extends Game
         return $arrayPosts;
     }
 
+    public function toggleVote($user, $ipAddress, $post)
+    {
+        $postvoteVoteMapper = $this->getPostVoteVoteMapper();
+        $postId = $post->getId();
+        $vote = null;
+        $game = $post->getPostvote();
+
+        if ($user) {
+            $entryUser = count($postvoteVoteMapper->findBy(array('user' => $user, 'post' =>$postId)));
+            $vote = $postvoteVoteMapper->findOneBy(array('user' => $user, 'post' =>$postId));
+        } else {
+            $entryUser = count($postvoteVoteMapper->findBy(array('ip' => $ipAddress, 'post' =>$postId)));
+            $vote = $postvoteVoteMapper->findOneBy(array('ip' => $ipAddress, 'post' =>$postId));
+        }
+        if ($entryUser && $entryUser > 0) {
+            $postvoteVoteMapper->remove($vote);
+        } else {
+            $vote = new \PlaygroundGame\Entity\PostVoteVote();
+            $vote->setPost($post);
+            $vote->setIp($ipAddress);
+            $vote->setNote(1);
+            $vote->setPostvote($post->getPostvote());
+            if ($user) {
+                $vote->setUser($user);
+            }
+
+            $postvoteVoteMapper->insert($vote);
+        }
+
+        $this->getEventManager()->trigger(
+            __FUNCTION__ .'.post',
+            $this,
+            array('user' => $user, 'game' => $game, 'post' => $post, 'vote' => $vote)
+        );
+
+        return true;
+    }
+
+    public function removeVote($user, $ipAddress, $post)
+    {
+        $postvoteVoteMapper = $this->getPostVoteVoteMapper();
+        $postId = $post->getId();
+        $vote = null;
+        $game = $post->getPostvote();
+
+        if ($user) {
+            $entryUser = count($postvoteVoteMapper->findBy(array('user' => $user, 'post' =>$postId)));
+            $vote = $postvoteVoteMapper->findOneBy(array('user' => $user, 'post' =>$postId));
+        } else {
+            $entryUser = count($postvoteVoteMapper->findBy(array('ip' => $ipAddress, 'post' =>$postId)));
+            $vote = $postvoteVoteMapper->findOneBy(array('ip' => $ipAddress, 'post' =>$postId));
+        }
+        if ($entryUser && $entryUser > 0) {
+            $postvoteVoteMapper->remove($vote);
+        }
+
+        $this->getEventManager()->trigger(
+            __FUNCTION__ .'.post',
+            $this,
+            array('user' => $user, 'game' => $game, 'post' => $post, 'vote' => $vote)
+        );
+
+        return true;
+    }
+
     public function addVote($user, $ipAddress, $post)
     {
         $postvoteVoteMapper = $this->getPostVoteVoteMapper();
@@ -394,7 +459,7 @@ class PostVote extends Game
         if ($user) {
             $entryUser = count($postvoteVoteMapper->findBy(array('user' => $user, 'post' =>$postId)));
         } else {
-            $entryUser =count($postvoteVoteMapper->findBy(array('ip' => $ipAddress, 'post' =>$postId)));
+            $entryUser = count($postvoteVoteMapper->findBy(array('ip' => $ipAddress, 'post' =>$postId)));
         }
         if ($entryUser && $entryUser > 0) {
             return false;
