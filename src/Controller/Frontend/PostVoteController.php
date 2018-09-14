@@ -635,6 +635,7 @@ class PostVoteController extends GameController
         // Call this for the session lock to be released (other ajax calls can then be made)
         session_write_close();
         $postId = $this->getEvent()->getRouteMatch()->getParam('post');
+        $commentId = $this->getEvent()->getRouteMatch()->getParam('comment');
         $request = $this->getRequest();
         $response = $this->getResponse();
 
@@ -653,10 +654,12 @@ class PostVoteController extends GameController
         } else {
             if ($request->isPost()) {
                 $post = $this->getGameService()->getPostvotePostMapper()->findById($postId);
+                $comment = $this->getGameService()->getPostVoteCommentMapper()->findById($commentId);
                 if ($this->getGameService()->toggleVote(
                     $this->user,
                     $this->getRequest()->getServer('REMOTE_ADDR'),
-                    $post
+                    $post,
+                    $comment
                 )) {
                     $response->setContent(\Zend\Json\Json::encode(array(
                     'success' => 1

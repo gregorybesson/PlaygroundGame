@@ -36,6 +36,12 @@ class PostVoteVote implements InputFilterAwareInterface, \JsonSerializable
     protected $postvote;
 
     /**
+     * @ORM\ManyToOne(targetEntity="PostVoteComment", inversedBy="votes")
+     * @ORM\JoinColumn(name="comment_id", referencedColumnName="id", onDelete="CASCADE")
+     **/
+    protected $postComment;
+
+    /**
      * @ORM\ManyToOne(targetEntity="PlaygroundUser\Entity\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="user_id", onDelete="CASCADE")
      */
@@ -149,6 +155,26 @@ class PostVoteVote implements InputFilterAwareInterface, \JsonSerializable
         // Check that there is no drawback using the cascading update from PostVoteEntry
         $post->addVote($this);
         $this->post = $post;
+
+        return $this;
+    }
+
+    /**
+     * @return the unknown_type
+     */
+    public function getPostComment()
+    {
+        return $this->postComment;
+    }
+
+    /**
+     * @param unknown_type $postComment
+     */
+    public function setPostComment($postComment)
+    {
+        // Check that there is no drawback using the cascading update from PostVoteEntry
+        $postComment->addVote($this);
+        $this->postComment = $postComment;
 
         return $this;
     }

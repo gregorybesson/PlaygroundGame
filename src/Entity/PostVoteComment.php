@@ -36,6 +36,12 @@ class PostVoteComment implements InputFilterAwareInterface, \JsonSerializable
     protected $postvote;
 
     /**
+     * @ORM\OneToMany(targetEntity="PostVoteVote", mappedBy="postComment")
+     * @ORM\OrderBy({"createdAt" = "DESC"})
+     */
+    private $votes;
+
+    /**
      * @ORM\ManyToOne(targetEntity="PlaygroundUser\Entity\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="user_id", onDelete="CASCADE")
      **/
@@ -65,6 +71,11 @@ class PostVoteComment implements InputFilterAwareInterface, \JsonSerializable
      * @ORM\Column(name="updated_at", type="datetime")
      */
     protected $updatedAt;
+
+    public function __construct()
+    {
+        $this->votes = new ArrayCollection();
+    }
 
     /** @PrePersist */
     public function createChrono()
@@ -167,6 +178,36 @@ class PostVoteComment implements InputFilterAwareInterface, \JsonSerializable
     public function setPostvote($postvote)
     {
         $this->postvote = $postvote;
+
+        return $this;
+    }
+
+    /**
+     * Add an entry to the vote.
+     *
+     * @param PostVoteVote $vote
+     *
+     * @return void
+     */
+    public function addVote($vote)
+    {
+        $this->votes[] = $vote;
+    }
+
+    /**
+     * @return the unknown_type
+     */
+    public function getVotes()
+    {
+        return $this->votes;
+    }
+
+    /**
+     * @param unknown_type $votes
+     */
+    public function setVotes($votes)
+    {
+        $this->votes = $votes;
 
         return $this;
     }
