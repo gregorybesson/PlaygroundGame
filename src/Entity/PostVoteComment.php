@@ -52,6 +52,11 @@ class PostVoteComment implements InputFilterAwareInterface, \JsonSerializable
     protected $message;
 
     /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $category;
+
+    /**
      * @ORM\Column(name="created_at", type="datetime")
      */
     protected $createdAt;
@@ -184,6 +189,23 @@ class PostVoteComment implements InputFilterAwareInterface, \JsonSerializable
         return $this;
     }
 
+    /**
+    * @return the unknown_type
+    */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    /**
+     * @param unknown_type $category
+     */
+    public function setCategory($category)
+    {
+        $this->category = $category;
+
+        return $this;
+    }
     /**
      * @return the unknown_type
      */

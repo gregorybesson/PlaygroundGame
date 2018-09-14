@@ -713,7 +713,8 @@ class PostVoteController extends GameController
                     $this->user,
                     $this->getRequest()->getServer('REMOTE_ADDR'),
                     $post,
-                    $this->params()->fromPost('comment')
+                    $this->params()->fromPost('comment'),
+                    $this->params()->fromPost('category')
                 )) {
                     $response->setContent(\Zend\Json\Json::encode(array(
                         'success' => 1
