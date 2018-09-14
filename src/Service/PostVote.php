@@ -420,7 +420,7 @@ class PostVote extends Game
         }
     }
 
-    public function addComment($user, $ipAddress, $post, $message = '')
+    public function addComment($user, $ipAddress, $post, $message = '', $category = null)
     {
         $postvoteCommentMapper = $this->getPostVoteCommentMapper();
         $game = $post->getPostvote();
@@ -429,6 +429,9 @@ class PostVote extends Game
         $comment->setIp($ipAddress);
         $message = strip_tags($message);
         $comment->setMessage($message);
+        if ($category !== null) {
+            $comment->setCategory($category);
+        }
         $comment->setPostvote($game);
         if ($user) {
             $comment->setUser($user);
