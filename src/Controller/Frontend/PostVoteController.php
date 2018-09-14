@@ -735,12 +735,7 @@ class PostVoteController extends GameController
             $this->getServiceLocator()->get('MvcTranslator')->translate('Your comment has been recorded')
         );
 
-        return $this->redirect()->toUrl(
-            $this->frontendUrl()->fromRoute(
-                'les-idees/idee',
-                array('post' => $post->getId())
-            )
-        );
+        return $this->redirect()->toUrl($this->getRequest()->getServer('HTTP_REFERER'));
     }
 
     public function ajaxRemoveCommentAction()
