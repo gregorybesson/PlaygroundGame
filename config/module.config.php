@@ -2055,7 +2055,7 @@ return array(
                             'vote' => array(
                                 'type' => 'Segment',
                                 'options' => array(
-                                    'route' => '/vote[/:post]',
+                                    'route' => '/vote[/:post][/:comment]',
                                     'defaults' => array(
                                         'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
                                         'action' => 'ajaxVote'

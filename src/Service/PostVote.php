@@ -386,19 +386,20 @@ class PostVote extends Game
         return $arrayPosts;
     }
 
-    public function toggleVote($user, $ipAddress, $post)
+    public function toggleVote($user, $ipAddress, $post, $comment = null)
     {
         $postvoteVoteMapper = $this->getPostVoteVoteMapper();
         $postId = $post->getId();
+        $commentId = ($comment !== null) ? $comment->getId() : null;
         $vote = null;
         $game = $post->getPostvote();
 
         if ($user) {
-            $entryUser = count($postvoteVoteMapper->findBy(array('user' => $user, 'post' =>$postId)));
-            $vote = $postvoteVoteMapper->findOneBy(array('user' => $user, 'post' =>$postId));
+            $entryUser = count($postvoteVoteMapper->findBy(array('user' => $user, 'post' => $postId, 'postComment' => $commentId)));
+            $vote = $postvoteVoteMapper->findOneBy(array('user' => $user, 'post' => $postId, 'postComment' => $commentId));
         } else {
-            $entryUser = count($postvoteVoteMapper->findBy(array('ip' => $ipAddress, 'post' =>$postId)));
-            $vote = $postvoteVoteMapper->findOneBy(array('ip' => $ipAddress, 'post' =>$postId));
+            $entryUser = count($postvoteVoteMapper->findBy(array('ip' => $ipAddress, 'post' => $postId, 'postComment' => $commentId)));
+            $vote = $postvoteVoteMapper->findOneBy(array('ip' => $ipAddress, 'post' => $postId, 'postComment' => $commentId));
         }
         if ($entryUser && $entryUser > 0) {
             $postvoteVoteMapper->remove($vote);
@@ -408,6 +409,7 @@ class PostVote extends Game
             $vote->setIp($ipAddress);
             $vote->setNote(1);
             $vote->setPostvote($post->getPostvote());
+            $vote->setPostComment($comment);
             if ($user) {
                 $vote->setUser($user);
             }
@@ -428,15 +430,16 @@ class PostVote extends Game
     {
         $postvoteVoteMapper = $this->getPostVoteVoteMapper();
         $postId = $post->getId();
+        $commentId = ($comment !== null) ? $comment->getId() : null;
         $vote = null;
         $game = $post->getPostvote();
 
         if ($user) {
-            $entryUser = count($postvoteVoteMapper->findBy(array('user' => $user, 'post' =>$postId)));
-            $vote = $postvoteVoteMapper->findOneBy(array('user' => $user, 'post' =>$postId));
+            $entryUser = count($postvoteVoteMapper->findBy(array('user' => $user, 'post' => $postId, 'postComment' => $commentId)));
+            $vote = $postvoteVoteMapper->findOneBy(array('user' => $user, 'post' => $postId, 'postComment' => $commentId));
         } else {
-            $entryUser = count($postvoteVoteMapper->findBy(array('ip' => $ipAddress, 'post' =>$postId)));
-            $vote = $postvoteVoteMapper->findOneBy(array('ip' => $ipAddress, 'post' =>$postId));
+            $entryUser = count($postvoteVoteMapper->findBy(array('ip' => $ipAddress, 'post' => $postId, 'postComment' => $commentId)));
+            $vote = $postvoteVoteMapper->findOneBy(array('ip' => $ipAddress, 'post' => $postId, 'postComment' => $commentId));
         }
         if ($entryUser && $entryUser > 0) {
             $postvoteVoteMapper->remove($vote);
@@ -455,11 +458,16 @@ class PostVote extends Game
     {
         $postvoteVoteMapper = $this->getPostVoteVoteMapper();
         $postId = $post->getId();
+        $commentId = ($comment !== null) ? $comment->getId() : null;
+        $vote = null;
+        $game = $post->getPostvote();
 
         if ($user) {
-            $entryUser = count($postvoteVoteMapper->findBy(array('user' => $user, 'post' =>$postId)));
+            $entryUser = count($postvoteVoteMapper->findBy(array('user' => $user, 'post' => $postId, 'postComment' => $commentId)));
+            $vote = $postvoteVoteMapper->findOneBy(array('user' => $user, 'post' => $postId, 'postComment' => $commentId));
         } else {
-            $entryUser = count($postvoteVoteMapper->findBy(array('ip' => $ipAddress, 'post' =>$postId)));
+            $entryUser = count($postvoteVoteMapper->findBy(array('ip' => $ipAddress, 'post' => $postId, 'postComment' => $commentId)));
+            $vote = $postvoteVoteMapper->findOneBy(array('ip' => $ipAddress, 'post' => $postId, 'postComment' => $commentId));
         }
         if ($entryUser && $entryUser > 0) {
             return false;
@@ -469,6 +477,7 @@ class PostVote extends Game
             $vote->setIp($ipAddress);
             $vote->setNote(1);
             $vote->setPostvote($post->getPostvote());
+            $vote->setPostComment($comment);
             if ($user) {
                 $vote->setUser($user);
             }
