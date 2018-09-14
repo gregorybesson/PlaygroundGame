@@ -654,7 +654,7 @@ class PostVoteController extends GameController
         } else {
             if ($request->isPost()) {
                 $post = $this->getGameService()->getPostvotePostMapper()->findById($postId);
-                $comment = $this->getGameService()->getPostVoteCommentMapper()->findById($commentId);
+                $comment = ($commentId !== null) ? $this->getGameService()->getPostVoteCommentMapper()->findById($commentId) : null;
                 if ($this->getGameService()->toggleVote(
                     $this->user,
                     $this->getRequest()->getServer('REMOTE_ADDR'),
