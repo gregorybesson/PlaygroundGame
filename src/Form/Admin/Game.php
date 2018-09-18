@@ -133,6 +133,14 @@ class Game extends ProvidesEventsForm
         ));
 
         $this->add(array(
+            'name' => 'domain',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => array(
+                'label' => $translator->translate('Give a domain name to this game', 'playgroundgame'),
+            ),
+        ));
+
+        $this->add(array(
             'type' => 'Zend\Form\Element\Checkbox',
             'name' => 'anonymousAllowed',
             'options' => array(
@@ -275,15 +283,14 @@ class Game extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Select',
+            'type' => 'Zend\Form\Element\Checkbox',
             'name' => 'active',
+            'attributes' => array(
+                'class' => 'switch-input'
+            ),
             'options' => array(
-                'value_options' => array(
-                    '0' => $translator->translate('No', 'playgroundgame'),
-                    '1' => $translator->translate('Yes', 'playgroundgame')
-                ),
-                'label' => $translator->translate('Active', 'playgroundgame')
-            )
+                'label' => $translator->translate('Make this game available to the users', 'playgroundgame'),
+            ),
         ));
 
         $this->add(array(
@@ -520,45 +527,6 @@ class Game extends ProvidesEventsForm
                         'cols' => '10',
                         'rows' => '10',
                         'id' => 'termsBlock'
-                )
-        ));
-
-        $this->add(array(
-                'type' => 'Zend\Form\Element\Textarea',
-                'name' => 'columnBlock1',
-                'options' => array(
-                        'label' => $translator->translate('Right column', 'playgroundgame').' 1'
-                ),
-                'attributes' => array(
-                        'cols' => '10',
-                        'rows' => '10',
-                        'id' => 'columnBlock1'
-                )
-        ));
-
-        $this->add(array(
-                'type' => 'Zend\Form\Element\Textarea',
-                'name' => 'columnBlock2',
-                'options' => array(
-                        'label' => $translator->translate('Right column', 'playgroundgame').' 2'
-                ),
-                'attributes' => array(
-                        'cols' => '10',
-                        'rows' => '10',
-                        'id' => 'columnBlock2'
-                )
-        ));
-
-        $this->add(array(
-                'type' => 'Zend\Form\Element\Textarea',
-                'name' => 'columnBlock3',
-                'options' => array(
-                        'label' => $translator->translate('Right column', 'playgroundgame').' 3'
-                ),
-                'attributes' => array(
-                        'cols' => '10',
-                        'rows' => '10',
-                        'id' => 'columnBlock3'
                 )
         ));
 

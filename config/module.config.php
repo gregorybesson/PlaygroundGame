@@ -3339,6 +3339,7 @@ return array(
                 'route' => 'admin/playgroundgame/list',
                 'resource' => 'game',
                 'privilege' => 'list',
+                'target' => 'nav-icon icon-game-controller',
                 'pages' => array(
                     'list' => array(
                         'label' => 'Games list',

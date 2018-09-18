@@ -3,27 +3,6 @@
 <div class="span4 mobile sidebar game-sidebar">
 	<div class="row-fluid">
 		
-		<!-- COLUMNBLOCK1 (if not null) -->
-		<?php if($this->game->getColumnBlock1() != ''):?>
-			<div class="sd-block block-custom">
-				<?php echo $this->game->getColumnBlock1();?>
-			</div>
-		<?php endif; ?>
-		<!-- END COLUMNBLOCK1 -->
-	
-		<!-- ADSERVING SIDEBAR -->
-
-		<?php //echo $this->partial('application/index/partial/col-adserving.phtml', array('cat2' => 'game', 'cat3' => '&EASTgameid='.$this->game->getId())); ?>
-		<!-- END ADSERVING SIDEBAR -->
-	
-		<!-- COLUMNBLOCK2 (if not null) -->
-		<?php if($this->game->getColumnBlock2() != ''):?>
-		<div class="sd-block block-custom">
-			<?php echo $this->game->getColumnBlock2();?>
-		</div>
-		<?php endif;?>
-		<!-- END COLUMNBLOCK2 -->
-		
 		<?php //if(($this->dynablockWidget('game'.$this->game->getId())) != ''):?>
 	    	<?php //foreach($this->dynablockWidget('game'.$this->game->getId()) as $block): ?>
 	    		<!-- div class="sd-block ad"><?php //echo $block ?></div-->
@@ -92,14 +71,5 @@
 				<?php endif; ?>
 			</div>
 		</div>
-		
-		<!-- COLUMNBLOCK3 (if not null) -->
-		<?php if($this->game->getColumnBlock3() != ''):?>
-			<div class="sd-block block-custom">
-				<?php echo $this->game->getColumnBlock3();?>
-			</div>
-		<?php endif;?>
-		<!-- END COLUMNBLOCK3 -->
-		
 	</div>
 </div>

@@ -101,6 +101,11 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
     protected $broadcastPlatform = 0;
 
     /**
+     * @ORM\Column(type="string", length=255, unique=true, nullable=true)
+     */
+    protected $domain;
+
+    /**
      * @ORM\Column(name="broadcast_embed",type="boolean", nullable=true)
      */
     protected $broadcastEmbed = 0;
@@ -251,25 +256,6 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      * @ORM\Column(type="text", nullable=true)
      */
     protected $conditionsBlock;
-
-    // Adherence CMS de ces blocs à revoir
-    /**
-     * @Gedmo\Translatable
-     * @ORM\Column(type="text", nullable=true)
-     */
-    protected $columnBlock1;
-
-    /**
-     * @Gedmo\Translatable
-     * @ORM\Column(type="text", nullable=true)
-     */
-    protected $columnBlock2;
-
-    /**
-     * @Gedmo\Translatable
-     * @ORM\Column(type="text", nullable=true)
-     */
-    protected $columnBlock3;
 
     /**
      * @ORM\OneToMany(targetEntity="Prize", mappedBy="game", cascade={"persist","remove"}, orphanRemoval=true)
@@ -586,6 +572,26 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
     public function setBroadcastFacebook($broadcastFacebook)
     {
         $this->broadcastFacebook = $broadcastFacebook;
+
+        return $this;
+    }
+
+    /**
+     *
+     * @return integer $domain
+     */
+    public function getDomain()
+    {
+        return $this->domain;
+    }
+
+    /**
+     *
+     * @param field_type $domain
+     */
+    public function setDomain($domain)
+    {
+        $this->domain = $domain;
 
         return $this;
     }
@@ -1176,66 +1182,6 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
     }
 
     /**
-     *
-     * @return the $columnBlock1
-     */
-    public function getColumnBlock1()
-    {
-        return $this->columnBlock1;
-    }
-
-    /**
-     *
-     * @param text $columnBlock1
-     */
-    public function setColumnBlock1($columnBlock1)
-    {
-        $this->columnBlock1 = $columnBlock1;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $columnBlock2
-     */
-    public function getColumnBlock2()
-    {
-        return $this->columnBlock2;
-    }
-
-    /**
-     *
-     * @param text $columnBlock2
-     */
-    public function setColumnBlock2($columnBlock2)
-    {
-        $this->columnBlock2 = $columnBlock2;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the $columnBlock3
-     */
-    public function getColumnBlock3()
-    {
-        return $this->columnBlock3;
-    }
-
-    /**
-     *
-     * @param text $columnBlock3
-     */
-    public function setColumnBlock3($columnBlock3)
-    {
-        $this->columnBlock3 = $columnBlock3;
-
-        return $this;
-    }
-
-    /**
      * @return ArrayCollection unknown_type
      */
     public function getPrizes()
@@ -1691,9 +1637,6 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
         $this->welcomeBlock    = (isset($data['welcomeBlock'])) ? $data['welcomeBlock'] : null;
         $this->termsBlock       = (isset($data['termsBlock'])) ? $data['termsBlock'] : null;
         $this->conditionsBlock  = (isset($data['conditionsBlock'])) ? $data['conditionsBlock'] : null;
-        $this->columnBlock1     = (isset($data['columnBlock1'])) ? $data['columnBlock1'] : null;
-        $this->columnBlock2     = (isset($data['columnBlock2'])) ? $data['columnBlock2'] : null;
-        $this->columnBlock3     = (isset($data['columnBlock3'])) ? $data['columnBlock3'] : null;
 
         $this->fbShareMessage   = (isset($data['fbShareMessage'])) ? $data['fbShareMessage'] : null;
         $this->fbShareImage     = (isset($data['fbShareImage'])) ? $data['fbShareImage'] : null;
@@ -1883,6 +1826,21 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
 
             $inputFilter->add($factory->createInput(array(
                 'name' => 'pushHome',
+                'required' => false
+            )));
+
+            $inputFilter->add($factory->createInput(array(
+                'name' => 'anonymousAllowed',
+                'required' => false
+            )));
+
+            $inputFilter->add($factory->createInput(array(
+                'name' => 'mailWinner',
+                'required' => false
+            )));
+
+            $inputFilter->add($factory->createInput(array(
+                'name' => 'mailLooser',
                 'required' => false
             )));
 
