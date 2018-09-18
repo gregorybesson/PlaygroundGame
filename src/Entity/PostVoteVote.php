@@ -150,10 +150,16 @@ class PostVoteVote implements InputFilterAwareInterface, \JsonSerializable
     /**
      * @param unknown_type $post
      */
-    public function setPost($post)
+    public function setPost($post, $isAVoteForPost=false)
     {
+        // echo get_class($post);
+        // echo $post->getId();
+        // die('---');
         // Check that there is no drawback using the cascading update from PostVoteEntry
-        $post->addVote($this);
+        if ($isAVoteForPost) {
+            $post->addVote($this);
+        }
+
         $this->post = $post;
 
         return $this;
