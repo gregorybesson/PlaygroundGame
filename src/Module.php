@@ -21,8 +21,8 @@ class Module
 
         /*
 		 * This event change the config before it's cached
-		 * The change will apply to 'template_path_stack' and 'assetic_configuration'
-		 * These 2 config take part in the Playground Theme Management
+		 * The change will apply to 'template_path_stack'
+		 * This config take part in the Playground Theme Management
 		 */
         $eventManager->attach(\Zend\ModuleManager\ModuleEvent::EVENT_MERGE_CONFIG, array($this, 'onMergeConfig'), 50);
     }
@@ -130,30 +130,6 @@ class Module
                                 $config['core_layout']['frontend.'.$url] = $coreLayoutModel;
                             }
                         }
-                    }
-                    if (isset($v['assetic_configuration'])) {
-                        foreach ($v['assetic_configuration']['modules'] as $m => $d) {
-                            $v['assetic_configuration']['modules'][$m]['root_path'][] = __DIR__ .
-                            '/../../../../design/frontend/'.$parentTheme[0].'/'.$parentTheme[1].
-                            '/custom/'.$k.'/assets';
-                        }
-
-                        // I specialize the route config to the game !
-                        if (isset($v['assetic_configuration']['routes'])) {
-                            $customRoutes = array();
-                            if (isset($v['assetic_configuration']['routes']['params'])) {
-                                $customRoutes['custom'][$k]['params'] = $v['assetic_configuration']['routes']['params'];
-                                unset($v['assetic_configuration']['routes']['params']);
-                            }
-                            $customRoutes['custom'][$k]['params']['id'] = $k;
-                            $customRoutes['custom'][$k]['routes']       = $v['assetic_configuration']['routes'];
-                            $v['assetic_configuration']['routes']       = $customRoutes;
-                        }
-
-                        $config['assetic_configuration'] = array_replace_recursive(
-                            $config['assetic_configuration'],
-                            $v['assetic_configuration']
-                        );
                     }
                 }
             }
