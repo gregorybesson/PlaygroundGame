@@ -395,12 +395,24 @@ class PostVote extends Game
         $game = $post->getPostvote();
 
         if ($user) {
-            $entryUser = count($postvoteVoteMapper->findBy(array('user' => $user, 'post' => $postId, 'postComment' => $commentId)));
-            $vote = $postvoteVoteMapper->findOneBy(array('user' => $user, 'post' => $postId, 'postComment' => $commentId));
+            if ($comment == null) {
+                $entryUser = count($postvoteVoteMapper->findBy(array('user' => $user, 'post' => $postId)));
+                $vote = $postvoteVoteMapper->findOneBy(array('user' => $user, 'post' => $postId));
+            } else {
+                $entryUser = count($postvoteVoteMapper->findBy(array('user' => $user, 'post' => $postId, 'postComment' => $commentId)));
+                $vote = $postvoteVoteMapper->findOneBy(array('user' => $user, 'post' => $postId, 'postComment' => $commentId));
+            }
+            
         } else {
-            $entryUser = count($postvoteVoteMapper->findBy(array('ip' => $ipAddress, 'post' => $postId, 'postComment' => $commentId)));
-            $vote = $postvoteVoteMapper->findOneBy(array('ip' => $ipAddress, 'post' => $postId, 'postComment' => $commentId));
+            if ($comment == null) {
+                $entryUser = count($postvoteVoteMapper->findBy(array('ip' => $ipAddress, 'post' => $postId)));
+                $vote = $postvoteVoteMapper->findOneBy(array('ip' => $ipAddress, 'post' => $postId));
+            } else {
+                $entryUser = count($postvoteVoteMapper->findBy(array('ip' => $ipAddress, 'post' => $postId, 'postComment' => $commentId)));
+                $vote = $postvoteVoteMapper->findOneBy(array('ip' => $ipAddress, 'post' => $postId, 'postComment' => $commentId));
+            }
         }
+
         if ($entryUser && $entryUser > 0) {
             $postvoteVoteMapper->remove($vote);
         } else {
@@ -408,8 +420,15 @@ class PostVote extends Game
             $vote->setPost($post);
             $vote->setIp($ipAddress);
             $vote->setNote(1);
-            $vote->setPostvote($post->getPostvote());
-            $vote->setPostComment($comment);
+            // If the vote is for a comment
+            if ($comment != null) {
+                $vote->setPostComment($comment);
+                $vote->setPostvote($post->getPostvote());
+            // else if the vote is for the post itself
+            } else {
+                $vote->setPostvote($post->getPostvote(), true);
+            }
+
             if ($user) {
                 $vote->setUser($user);
             }
@@ -435,14 +454,22 @@ class PostVote extends Game
         $game = $post->getPostvote();
 
         if ($user) {
-            $entryUser = count($postvoteVoteMapper->findBy(array('user' => $user, 'post' => $postId, 'postComment' => $commentId)));
-            $vote = $postvoteVoteMapper->findOneBy(array('user' => $user, 'post' => $postId, 'postComment' => $commentId));
+            if ($comment == null) {
+                $entryUser = count($postvoteVoteMapper->findBy(array('user' => $user, 'post' => $postId)));
+                $vote = $postvoteVoteMapper->findOneBy(array('user' => $user, 'post' => $postId));
+            } else {
+                $entryUser = count($postvoteVoteMapper->findBy(array('user' => $user, 'post' => $postId, 'postComment' => $commentId)));
+                $vote = $postvoteVoteMapper->findOneBy(array('user' => $user, 'post' => $postId, 'postComment' => $commentId));
+            }
+            
         } else {
-            $entryUser = count($postvoteVoteMapper->findBy(array('ip' => $ipAddress, 'post' => $postId, 'postComment' => $commentId)));
-            $vote = $postvoteVoteMapper->findOneBy(array('ip' => $ipAddress, 'post' => $postId, 'postComment' => $commentId));
-        }
-        if ($entryUser && $entryUser > 0) {
-            $postvoteVoteMapper->remove($vote);
+            if ($comment == null) {
+                $entryUser = count($postvoteVoteMapper->findBy(array('ip' => $ipAddress, 'post' => $postId)));
+                $vote = $postvoteVoteMapper->findOneBy(array('ip' => $ipAddress, 'post' => $postId));
+            } else {
+                $entryUser = count($postvoteVoteMapper->findBy(array('ip' => $ipAddress, 'post' => $postId, 'postComment' => $commentId)));
+                $vote = $postvoteVoteMapper->findOneBy(array('ip' => $ipAddress, 'post' => $postId, 'postComment' => $commentId));
+            }
         }
 
         $this->getEventManager()->trigger(
@@ -463,12 +490,24 @@ class PostVote extends Game
         $game = $post->getPostvote();
 
         if ($user) {
-            $entryUser = count($postvoteVoteMapper->findBy(array('user' => $user, 'post' => $postId, 'postComment' => $commentId)));
-            $vote = $postvoteVoteMapper->findOneBy(array('user' => $user, 'post' => $postId, 'postComment' => $commentId));
+            if ($comment == null) {
+                $entryUser = count($postvoteVoteMapper->findBy(array('user' => $user, 'post' => $postId)));
+                $vote = $postvoteVoteMapper->findOneBy(array('user' => $user, 'post' => $postId));
+            } else {
+                $entryUser = count($postvoteVoteMapper->findBy(array('user' => $user, 'post' => $postId, 'postComment' => $commentId)));
+                $vote = $postvoteVoteMapper->findOneBy(array('user' => $user, 'post' => $postId, 'postComment' => $commentId));
+            }
+            
         } else {
-            $entryUser = count($postvoteVoteMapper->findBy(array('ip' => $ipAddress, 'post' => $postId, 'postComment' => $commentId)));
-            $vote = $postvoteVoteMapper->findOneBy(array('ip' => $ipAddress, 'post' => $postId, 'postComment' => $commentId));
+            if ($comment == null) {
+                $entryUser = count($postvoteVoteMapper->findBy(array('ip' => $ipAddress, 'post' => $postId)));
+                $vote = $postvoteVoteMapper->findOneBy(array('ip' => $ipAddress, 'post' => $postId));
+            } else {
+                $entryUser = count($postvoteVoteMapper->findBy(array('ip' => $ipAddress, 'post' => $postId, 'postComment' => $commentId)));
+                $vote = $postvoteVoteMapper->findOneBy(array('ip' => $ipAddress, 'post' => $postId, 'postComment' => $commentId));
+            }
         }
+
         if ($entryUser && $entryUser > 0) {
             return false;
         } else {
@@ -476,8 +515,14 @@ class PostVote extends Game
             $vote->setPost($post);
             $vote->setIp($ipAddress);
             $vote->setNote(1);
-            $vote->setPostvote($post->getPostvote());
-            $vote->setPostComment($comment);
+            // If the vote is for a comment
+            if ($comment != null) {
+                $vote->setPostComment($comment);
+                $vote->setPostvote($post->getPostvote());
+            // else if the vote is for the post itself
+            } else {
+                $vote->setPostvote($post->getPostvote(), true);
+            }
             if ($user) {
                 $vote->setUser($user);
             }
