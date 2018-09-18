@@ -3,6 +3,7 @@
 namespace PlaygroundGame\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping\PrePersist;
@@ -275,10 +276,16 @@ class PostVotePost implements InputFilterAwareInterface, Translatable, \JsonSeri
     }
 
     /**
-     * @return the unknown_type
+     * @return the collection of comments. You can filter on it based on one or more categories
      */
-    public function getComments()
+    public function getComments($category = null)
     {
+        if ($category != null) {
+            if (!is_array($category)) $category = [$category];
+            $criteria = Criteria::create()->where(Criteria::expr()->in("category", $category));
+
+            return $this->getComments()->matching($criteria);
+        }
         return $this->comments;
     }
 
