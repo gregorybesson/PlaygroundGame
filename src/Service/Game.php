@@ -121,6 +121,9 @@ class Game
         $form->bind($game);
 
         $path = $this->getOptions()->getMediaPath() . '/';
+        if (!is_dir($path)) {
+            mkdir($path, 0777, true);
+        }
         $media_url = $this->getOptions()->getMediaUrl() . '/';
 
         $identifierInput = $form->getInputFilter()->get('identifier');
@@ -623,6 +626,18 @@ class Game
         $games = $query->getResult();
 
         return $games;
+    }
+
+    public function getGameIdentifierFromFacebook($fbPageId)
+    {
+        $identifier = null;
+        $game = $this->getGameMapper()->findOneBy(array('fbPageId' => $fbPageId));
+
+        if($game && $game->getIdentifier() !== null) {
+            $identifier = $game->getIdentifier();
+        }
+
+        return $identifier;
     }
 
     public function checkGame($identifier, $checkIfStarted = true)

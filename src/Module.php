@@ -10,6 +10,8 @@ use Zend\ModuleManager\ModuleManager;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\Validator\AbstractValidator;
+use Zend\Db\Sql\Sql;
+use Zend\Db\Adapter\Adapter;
 
 class Module
 {
@@ -19,8 +21,8 @@ class Module
 
         /*
 		 * This event change the config before it's cached
-		 * The change will apply to 'template_path_stack' and 'assetic_configuration'
-		 * These 2 config take part in the Playground Theme Management
+		 * The change will apply to 'template_path_stack'
+		 * This config take part in the Playground Theme Management
 		 */
         $eventManager->attach(\Zend\ModuleManager\ModuleEvent::EVENT_MERGE_CONFIG, array($this, 'onMergeConfig'), 50);
     }
@@ -41,6 +43,39 @@ class Module
 
         // If custom games need a specific route. I create these routes
         if (PHP_SAPI !== 'cli') {
+
+            $configDatabaseDoctrine = $config['doctrine']['connection']['orm_default']['params'];
+            $configDatabase = array('driver' => 'Mysqli',
+                'database' => $configDatabaseDoctrine['dbname'],
+                'username' => $configDatabaseDoctrine['user'],
+                'password' => $configDatabaseDoctrine['password'],
+                'hostname' => $configDatabaseDoctrine['host']);
+
+            if (!empty($configDatabaseDoctrine['port'])) {
+                $configDatabase['port'] = $configDatabaseDoctrine['port'];
+            }
+            if (!empty($configDatabaseDoctrine['charset'])) {
+                $configDatabase['charset'] = $configDatabaseDoctrine['charset'];
+            }
+
+            $adapter = new Adapter($configDatabase);
+            $sql = new Sql($adapter);
+    
+            // ******************************************
+            // Check if games with specific domains have been configured
+            // ******************************************
+            $select = $sql->select();
+            $select->from('game');
+            $select->where(array('active' => 1, 'domain IS NOT NULL'));
+            $statement = $sql->prepareStatementForSqlObject($select);
+            $results = $statement->execute();
+            foreach ($results as $result) {
+                $config['custom_games'][$result['identifier']] = [
+                    'url' => $result['domain'],
+                    'classType' => $result['class_type']
+                ];
+            }
+
             if (isset($config['custom_games'])) {
                 foreach ($config['custom_games'] as $k => $v) {
                     // add custom language directory
@@ -95,30 +130,6 @@ class Module
                                 $config['core_layout']['frontend.'.$url] = $coreLayoutModel;
                             }
                         }
-                    }
-                    if (isset($v['assetic_configuration'])) {
-                        foreach ($v['assetic_configuration']['modules'] as $m => $d) {
-                            $v['assetic_configuration']['modules'][$m]['root_path'][] = __DIR__ .
-                            '/../../../../design/frontend/'.$parentTheme[0].'/'.$parentTheme[1].
-                            '/custom/'.$k.'/assets';
-                        }
-
-                        // I specialize the route config to the game !
-                        if (isset($v['assetic_configuration']['routes'])) {
-                            $customRoutes = array();
-                            if (isset($v['assetic_configuration']['routes']['params'])) {
-                                $customRoutes['custom'][$k]['params'] = $v['assetic_configuration']['routes']['params'];
-                                unset($v['assetic_configuration']['routes']['params']);
-                            }
-                            $customRoutes['custom'][$k]['params']['id'] = $k;
-                            $customRoutes['custom'][$k]['routes']       = $v['assetic_configuration']['routes'];
-                            $v['assetic_configuration']['routes']       = $customRoutes;
-                        }
-
-                        $config['assetic_configuration'] = array_replace_recursive(
-                            $config['assetic_configuration'],
-                            $v['assetic_configuration']
-                        );
                     }
                 }
             }
