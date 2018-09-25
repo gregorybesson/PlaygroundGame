@@ -353,6 +353,11 @@ class Quiz extends Game implements InputFilterAwareInterface
             )));
 
             $inputFilter->add($factory->createInput(array(
+                'name' => 'timer',
+                'required' => false
+            )));
+
+            $inputFilter->add($factory->createInput(array(
                 'name'     => 'identifier',
                 'required' => true,
                 'filters'  => array(

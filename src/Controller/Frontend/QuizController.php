@@ -74,22 +74,26 @@ class QuizController extends GameController
             }
             $name = 'q' . $q->getId();
             $fieldsetFilter = new \Zend\InputFilter\InputFilter();
+            
             if ($q->getType() === 0) {
                 $element = new Element\Radio($name);
                 $values = array();
                 $valuesSortedByPosition = array();
+                $position = 0;
                 foreach ($q->getAnswers() as $a) {
                     $status = (
                         isset($userAnswers[$q->getId()]) &&
                         isset($userAnswers[$q->getId()][$a->getId()])
                     )? true:false;
-                    $values[$a->getPosition()] = array(
+                    $pos = ($a->getPosition() == 0 && isset($values[$a->getPosition()])) ? $position : $a->getPosition();
+                    $values[$pos] = array(
                         'id' => $a->getId(),
-                        'position' => $a->getPosition(),
+                        'position' => $pos,
                         'answer' => $a->getAnswer(),
                         'checked' => $status
                     );
                     $explanations[$a->getAnswer()] = $a->getExplanation();
+                    ++$position;
                 }
                 ksort($values);
                 foreach ($values as $key => $value) {

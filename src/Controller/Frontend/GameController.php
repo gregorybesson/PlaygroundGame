@@ -39,7 +39,6 @@ class GameController extends AbstractActionController
         'inviteToTeam',
         'prizes',
         'prize',
-        'fangate',
         'share',
         'optin',
         'login',
@@ -94,7 +93,18 @@ class GameController extends AbstractActionController
         $controller = $this;
 
         $events->attach('dispatch', function (\Zend\Mvc\MvcEvent $e) use ($controller) {
+
+            $session = new Container('facebook');
             $identifier = $e->getRouteMatch()->getParam('id');
+
+            // I set the right identifier if I come from FB
+            // From FB, the games have all the same identifier. I use the FB Page Id to find the right game
+            // So for 1 FB page, you can have only 1 game ;/
+            if ($identifier === 'facebook' && $session->offsetExists('signed_request')) {
+                $sr = $session->offsetGet('signed_request');
+                $identifier = $controller->getGameService()->getGameIdentifierFromFacebook($sr['page']['id']);
+            }
+     
             $controller->game = $controller->getGameService()->checkGame($identifier, false);
 
             if (!$controller->game &&
@@ -544,13 +554,6 @@ class GameController extends AbstractActionController
                 'games' => $paginator,
             )
         );
-    }
-
-    public function fangateAction()
-    {
-        $viewModel = $this->buildView($this->game);
-
-        return $viewModel;
     }
 
     public function shareAction()
@@ -1327,15 +1330,6 @@ class GameController extends AbstractActionController
                         $this->frontendUrl()->fromRoute(
                             'zfcuser/register'
                         ).'?redirect='.$redirectUrl
-                    );
-                }
-            }
-
-            if ($game->getFbFan()) {
-                if ($this->getGameService()->checkIsFan($game) === false) {
-                    $redirect = $this->redirect()->toRoute(
-                        $game->getClassType().'/fangate',
-                        array('id' => $game->getIdentifier())
                     );
                 }
             }

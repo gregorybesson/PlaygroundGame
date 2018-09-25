@@ -133,6 +133,14 @@ class Game extends ProvidesEventsForm
         ));
 
         $this->add(array(
+            'name' => 'domain',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => array(
+                'label' => $translator->translate('Give a domain name to this game', 'playgroundgame'),
+            ),
+        ));
+
+        $this->add(array(
             'type' => 'Zend\Form\Element\Checkbox',
             'name' => 'anonymousAllowed',
             'options' => array(
@@ -275,15 +283,14 @@ class Game extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Select',
+            'type' => 'Zend\Form\Element\Checkbox',
             'name' => 'active',
+            'attributes' => array(
+                'class' => 'switch-input'
+            ),
             'options' => array(
-                'value_options' => array(
-                    '0' => $translator->translate('No', 'playgroundgame'),
-                    '1' => $translator->translate('Yes', 'playgroundgame')
-                ),
-                'label' => $translator->translate('Active', 'playgroundgame')
-            )
+                'label' => $translator->translate('Make this game available to the users', 'playgroundgame'),
+            ),
         ));
 
         $this->add(array(
@@ -421,17 +428,37 @@ class Game extends ProvidesEventsForm
             ));
         }
 
-        $fbAppIds = $this->getFbAppIds();
-        $fbAppIds_label = array();
-        foreach ($fbAppIds as $key => $title) {
-            $fbAppIds_label[$key] = $translator->translate($title, 'playgroundgame');
-        }
+        // $fbAppIds = $this->getFbAppIds();
+        // $fbAppIds_label = array();
+        // foreach ($fbAppIds as $key => $title) {
+        //     $fbAppIds_label[$key] = $translator->translate($title, 'playgroundgame');
+        // }
+        // $this->add(array(
+        //     'type' => 'Zend\Form\Element\Select',
+        //     'name' => 'fbAppId',
+        //     'options' => array(
+        //         'value_options' => $fbAppIds_label,
+        //         'label' => $translator->translate('Facebook Apps', 'playgroundgame')
+        //     )
+        // ));
+
         $this->add(array(
-            'type' => 'Zend\Form\Element\Select',
             'name' => 'fbAppId',
             'options' => array(
-                'value_options' => $fbAppIds_label,
-                'label' => $translator->translate('Facebook Apps', 'playgroundgame')
+                'label' => $translator->translate('Facebook app Id', 'playgroundgame')
+            ),
+            'attributes' => array(
+                'type' => 'text',
+                'placeholder' => $translator->translate('Facebook app Id', 'playgroundgame')
+            )
+        ));
+
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Select',
+            'name' => 'fbPageId',
+            'options' => array(
+                'value_options' => [],
+                'label' => $translator->translate('Facebook Pages', 'playgroundgame')
             )
         ));
 
@@ -443,6 +470,17 @@ class Game extends ProvidesEventsForm
             'attributes' => array(
                 'type' => 'text',
                 'placeholder' => $translator->translate('Game tab title', 'playgroundgame')
+            )
+        ));
+
+        $this->add(array(
+            'name' => 'fbPageTabPosition',
+            'options' => array(
+                'label' => $translator->translate('Game tab position', 'playgroundgame')
+            ),
+            'attributes' => array(
+                'type' => 'text',
+                'placeholder' => $translator->translate('Game tab position', 'playgroundgame')
             )
         ));
 
@@ -520,71 +558,6 @@ class Game extends ProvidesEventsForm
                         'cols' => '10',
                         'rows' => '10',
                         'id' => 'termsBlock'
-                )
-        ));
-
-        $this->add(array(
-                'type' => 'Zend\Form\Element\Textarea',
-                'name' => 'columnBlock1',
-                'options' => array(
-                        'label' => $translator->translate('Right column', 'playgroundgame').' 1'
-                ),
-                'attributes' => array(
-                        'cols' => '10',
-                        'rows' => '10',
-                        'id' => 'columnBlock1'
-                )
-        ));
-
-        $this->add(array(
-                'type' => 'Zend\Form\Element\Textarea',
-                'name' => 'columnBlock2',
-                'options' => array(
-                        'label' => $translator->translate('Right column', 'playgroundgame').' 2'
-                ),
-                'attributes' => array(
-                        'cols' => '10',
-                        'rows' => '10',
-                        'id' => 'columnBlock2'
-                )
-        ));
-
-        $this->add(array(
-                'type' => 'Zend\Form\Element\Textarea',
-                'name' => 'columnBlock3',
-                'options' => array(
-                        'label' => $translator->translate('Right column', 'playgroundgame').' 3'
-                ),
-                'attributes' => array(
-                        'cols' => '10',
-                        'rows' => '10',
-                        'id' => 'columnBlock3'
-                )
-        ));
-
-        $this->add(array(
-            'type' => 'Zend\Form\Element\Select',
-            'name' => 'fbFan',
-               'options' => array(
-                   //'empty_option' => $translator->translate('Is the answer correct ?', 'playgroundgame'),
-                   'value_options' => array(
-                    '0' => $translator->translate('No', 'playgroundgame'),
-                       '1' => $translator->translate('Yes', 'playgroundgame'),
-                   ),
-                   'label' => $translator->translate('You must be fan to participate', 'playgroundgame'),
-               ),
-        ));
-
-        $this->add(array(
-                'type' => 'Zend\Form\Element\Textarea',
-                'name' => 'fbFanGate',
-                'options' => array(
-                        'label' => $translator->translate('Fan gate content', 'playgroundgame')
-                ),
-                'attributes' => array(
-                        'cols' => '10',
-                        'rows' => '10',
-                        'id' => 'fbFanGate'
                 )
         ));
 

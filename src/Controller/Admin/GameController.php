@@ -12,6 +12,7 @@ use PlaygroundCore\ORM\Pagination\LargeTablePaginator;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use Zend\Stdlib\ErrorHandler;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\Session\Container;
 
 class GameController extends AbstractActionController
 {
@@ -91,6 +92,95 @@ class GameController extends AbstractActionController
      */
     public function editGame($templatePath, $formId)
     {
+        // We try to get FB pages from the logged in user
+        $session = new Container('facebook');
+        $config = $this->getServiceLocator()->get('config');
+        $appsArray = [];
+        $platformFbAppId = '';
+        
+        if (isset($config['facebook'])) {
+            $platformFbAppId     = $config['facebook']['fb_appid'];
+            $platformFbAppSecret = $config['facebook']['fb_secret'];
+            $fbPage              = $config['facebook']['fb_page'];
+        }
+        $fb = new \Facebook\Facebook([
+            'app_id' => $platformFbAppId,
+            'app_secret' => $platformFbAppSecret,
+            'default_graph_version' => 'v3.1',
+            //'cookie' => false,
+            //'default_access_token' => '{access-token}', // optional
+        ]);
+
+        $helper = $fb->getRedirectLoginHelper();
+        $fb_args_param = array('req_perms' => 'manage_pages,publish_pages');
+        $fb_login_url = $helper->getLoginUrl($this->url()->fromRoute(
+            'admin/playgroundgame/list',
+            array(),
+            array('force_canonical' => true)), $fb_args_param);
+        $accessToken = $helper->getAccessToken();
+
+        if (isset($accessToken) || $session->offsetExists('fb_token')) {
+            if (isset($accessToken)) {
+                $session->offsetSet('fb_token', $accessToken);
+            }
+
+            // checking if user access token is not valid then ask user to login again
+            $debugToken = $fb->get('/debug_token?input_token='. $session->offsetGet('fb_token'), $platformFbAppId . '|' . $platformFbAppSecret)
+            ->getGraphNode()
+            ->asArray();
+            if (isset($debugToken['error']['code'])) {
+                $session->offsetUnset('fb_token');
+            } else {
+                // setting default user access token for future requests
+                $fb->setDefaultAccessToken($session->offsetGet('fb_token'));
+                $pages = $fb->get('/me/accounts')
+                    ->getGraphEdge()
+                    ->asArray();
+
+                foreach ($pages as $key) {
+                    $app_label = '';
+                    if (isset($key['name'])) {
+                        $app_label .= $key['name'];
+                    }
+                    if (isset($key['id'])) {
+                        $app_label .= ' ('.$key['id'].')';
+                    }
+                    $appsArray[$key['id']] = $app_label;
+                }
+                $fb_login_url = '';
+
+                if ($this->getRequest()->isPost()) {
+                    $data = array_replace_recursive(
+                        $this->getRequest()->getPost()->toArray(),
+                        $this->getRequest()->getFiles()->toArray()
+                    );
+                    // Removing a previously page tab set on this game
+                    if( 
+                        $this->game && 
+                        !empty($this->game->getFbPageId()) &&
+                        !empty($this->game->getFbAppId()) &&
+                        (   
+                            $this->game->getFbPageId() !== $data['fbPageId'] ||
+                            $this->game->getFbAppId() !== $data['fbAppId']
+                        )
+                    ) {
+                        $oldPage = $fb->get('/' . $this->game->getFbPageId() . '?fields=access_token,name,id')
+                            ->getGraphNode()
+                            ->asArray();
+                        $removeTab = $fb->delete(
+                                '/' . $this->game->getFbPageId() . '/tabs',
+                                [
+                                    'tab' => 'app_'.$this->game->getFbAppId(),
+                                ],
+                                $oldPage['access_token']
+                            )
+                            ->getGraphNode()
+                            ->asArray();
+                    }
+                }
+            }
+        }
+
         $viewModel = new ViewModel();
         $viewModel->setTemplate($templatePath);
 
@@ -107,11 +197,21 @@ class GameController extends AbstractActionController
         );
         $form->setAttribute('method', 'post');
 
-        if ($this->game->getFbAppId()) {
-            $appIds = $form->get('fbAppId')->getOption('value_options');
-            $appIds[$this->game->getFbAppId()] = $this->game->getFbAppId();
-            $form->get('fbAppId')->setAttribute('options', $appIds);
+        $pageIds = $form->get('fbPageId')->getOption('value_options');
+        foreach($appsArray as $k => $v) {
+            $pageIds[$k] = $v;
         }
+        $form->get('fbPageId')->setAttribute('options', $pageIds);
+
+        //if($form->get('fbAppId')->getValue() == '') {
+            $form->get('fbAppId')->setValue($platformFbAppId);
+        //}
+
+        // if ($this->game->getFbAppId()) {
+        //     $data['fbAppId'] = $form->get('fbAppId')->getOption('value_options');
+        //     $appIds[$this->game->getFbAppId()] = $this->game->getFbAppId();
+        //     $form->get('fbAppId')->setAttribute('options', $appIds);
+        // }
 
         $gameOptions = $this->getAdminGameService()->getOptions();
         $gameStylesheet = $gameOptions->getMediaPath() . '/' . 'stylesheet_'. $this->game->getId(). '.css';
@@ -135,14 +235,68 @@ class GameController extends AbstractActionController
             if (isset($data['drawDate']) && $data['drawDate']) {
                 $data['drawDate'] = \DateTime::createFromFormat('d/m/Y', $data['drawDate']);
             }
-            $result = $this->getAdminGameService()->createOrUpdate($data, $this->game, $formId);
+            $game = $this->getAdminGameService()->createOrUpdate($data, $this->game, $formId);
 
-            if ($result) {
+            if ($game) {
+                // Let's record the FB page tab if it is configured
+                if ($session->offsetExists('fb_token')) {        
+                    // adding page tab to selected page using page access token
+                    if (!empty($data['fbPageId']) && !empty($data['fbAppId'])) {
+                        $page = $fb->get('/' . $data['fbPageId'] . '?fields=access_token,name,id')
+                        ->getGraphNode()
+                        ->asArray();
+
+                        try {
+                            $addTab = $fb->post(
+                                '/' . $page['id'] . '/tabs',
+                                [
+                                    'app_id' => $data['fbAppId'],
+                                    'custom_name' => (!empty($data['fbPageTabTitle'])) ? $data['fbPageTabTitle'] : $data['title'],
+                                    'custom_image_url' => ($game->getFbPageTabImage() !== '') ? 
+                                        $this->getAdminGameService()->getServiceManager()->get('ViewRenderer')->url(
+                                            'frontend',
+                                            array(),
+                                            array('force_canonical' => true)
+                                        ).$game->getFbPageTabImage() :
+                                        null,
+                                    'position' => (!empty($data['fbPageTabPosition'])) ? $data['fbPageTabPosition'] : 99
+                                ],
+                                $page['access_token'])
+                                ->getGraphNode()
+                                ->asArray();
+                        } catch (\Exception $e) {
+                            // (#324) Missing or invalid image file
+                            if($e->getCode() == '324') {
+                                try {
+                                    $addTab = $fb->post(
+                                        '/' . $page['id'] . '/tabs',
+                                        [
+                                            'app_id' => $data['fbAppId'],
+                                            'custom_name' => (!empty($data['fbPageTabTitle'])) ? $data['fbPageTabTitle'] : $data['title'],
+                                            'position' => (!empty($data['fbPageTabPosition'])) ? $data['fbPageTabPosition'] : 99
+                                        ],
+                                        $page['access_token'])
+                                        ->getGraphNode()
+                                        ->asArray();
+                                } catch (\Exception $e) {
+                                    throw $e;
+                                }
+                            }
+                        }
+                    }
+                }
                 return $this->redirect()->toRoute('admin/playgroundgame/list');
             }
         }
 
-        $gameForm->setVariables(array('form' => $form, 'game' => $this->game));
+        $gameForm->setVariables(
+            array(
+                'platform_fb_app_id' => $platformFbAppId,
+                'fb_login_url' => $fb_login_url,
+                'form' => $form,
+                'game' => $this->game
+            )
+        );
         $viewModel->addChild($gameForm, 'game_form');
 
         return $viewModel->setVariables(
@@ -155,6 +309,40 @@ class GameController extends AbstractActionController
 
     public function listAction()
     {
+        // We try to get FB pages from the logged in user
+        $session = new Container('facebook');
+        $config = $this->getServiceLocator()->get('config');
+        
+        if (isset($config['facebook'])) {
+            $platformFbAppId     = $config['facebook']['fb_appid'];
+            $platformFbAppSecret = $config['facebook']['fb_secret'];
+            $fbPage              = $config['facebook']['fb_page'];
+        }
+        $fb = new \Facebook\Facebook([
+            'app_id' => $platformFbAppId,
+            'app_secret' => $platformFbAppSecret,
+            'default_graph_version' => 'v3.1',
+        ]);
+
+        $helper = $fb->getRedirectLoginHelper();
+        $accessToken = $helper->getAccessToken();
+
+        if (isset($accessToken) || $session->offsetExists('fb_token')) {
+            if (isset($accessToken)) {
+                $session->offsetSet('fb_token', $accessToken);
+            }
+
+            // checking if user access token is not valid then ask user to login again
+            $debugToken = $fb->get('/debug_token?input_token='. $session->offsetGet('fb_token'), $platformFbAppId . '|' . $platformFbAppSecret)
+            ->getGraphNode()
+            ->asArray();
+            if (isset($debugToken['error']['code'])) {
+                $session->offsetUnset('fb_token');
+            } else {
+                // setting default user access token for future requests
+                $fb->setDefaultAccessToken($session->offsetGet('fb_token'));
+            }
+        }
         $filter    = $this->getEvent()->getRouteMatch()->getParam('filter');
         $type    = $this->getEvent()->getRouteMatch()->getParam('type');
 

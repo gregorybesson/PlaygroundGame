@@ -77,17 +77,6 @@ class MissionController extends GameController
         }
 
         $session = new Container('facebook');
-      // Redirect to fan gate if the game require to 'like' the page before playing
-        if ($session->offsetExists('signed_request')) {
-            if ($this->game->getFbFan()) {
-                if ($this->getGameService()->checkIsFan($this->game) === false) {
-                    return $this->redirect()->toRoute(
-                        $this->game->getClassType().'/fangate',
-                        array('id' => $this->game->getIdentifier())
-                    );
-                }
-            }
-        }
 
         if (!$this->user) {
           // The game is deployed on Facebook, and played from Facebook : retrieve/register user
