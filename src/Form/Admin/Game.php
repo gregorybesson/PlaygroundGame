@@ -428,17 +428,37 @@ class Game extends ProvidesEventsForm
             ));
         }
 
-        $fbAppIds = $this->getFbAppIds();
-        $fbAppIds_label = array();
-        foreach ($fbAppIds as $key => $title) {
-            $fbAppIds_label[$key] = $translator->translate($title, 'playgroundgame');
-        }
+        // $fbAppIds = $this->getFbAppIds();
+        // $fbAppIds_label = array();
+        // foreach ($fbAppIds as $key => $title) {
+        //     $fbAppIds_label[$key] = $translator->translate($title, 'playgroundgame');
+        // }
+        // $this->add(array(
+        //     'type' => 'Zend\Form\Element\Select',
+        //     'name' => 'fbAppId',
+        //     'options' => array(
+        //         'value_options' => $fbAppIds_label,
+        //         'label' => $translator->translate('Facebook Apps', 'playgroundgame')
+        //     )
+        // ));
+
         $this->add(array(
-            'type' => 'Zend\Form\Element\Select',
             'name' => 'fbAppId',
             'options' => array(
-                'value_options' => $fbAppIds_label,
-                'label' => $translator->translate('Facebook Apps', 'playgroundgame')
+                'label' => $translator->translate('Facebook app Id', 'playgroundgame')
+            ),
+            'attributes' => array(
+                'type' => 'text',
+                'placeholder' => $translator->translate('Facebook app Id', 'playgroundgame')
+            )
+        ));
+
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Select',
+            'name' => 'fbPageId',
+            'options' => array(
+                'value_options' => [],
+                'label' => $translator->translate('Facebook Pages', 'playgroundgame')
             )
         ));
 
@@ -450,6 +470,17 @@ class Game extends ProvidesEventsForm
             'attributes' => array(
                 'type' => 'text',
                 'placeholder' => $translator->translate('Game tab title', 'playgroundgame')
+            )
+        ));
+
+        $this->add(array(
+            'name' => 'fbPageTabPosition',
+            'options' => array(
+                'label' => $translator->translate('Game tab position', 'playgroundgame')
+            ),
+            'attributes' => array(
+                'type' => 'text',
+                'placeholder' => $translator->translate('Game tab position', 'playgroundgame')
             )
         ));
 
@@ -527,32 +558,6 @@ class Game extends ProvidesEventsForm
                         'cols' => '10',
                         'rows' => '10',
                         'id' => 'termsBlock'
-                )
-        ));
-
-        $this->add(array(
-            'type' => 'Zend\Form\Element\Select',
-            'name' => 'fbFan',
-               'options' => array(
-                   //'empty_option' => $translator->translate('Is the answer correct ?', 'playgroundgame'),
-                   'value_options' => array(
-                    '0' => $translator->translate('No', 'playgroundgame'),
-                       '1' => $translator->translate('Yes', 'playgroundgame'),
-                   ),
-                   'label' => $translator->translate('You must be fan to participate', 'playgroundgame'),
-               ),
-        ));
-
-        $this->add(array(
-                'type' => 'Zend\Form\Element\Textarea',
-                'name' => 'fbFanGate',
-                'options' => array(
-                        'label' => $translator->translate('Fan gate content', 'playgroundgame')
-                ),
-                'attributes' => array(
-                        'cols' => '10',
-                        'rows' => '10',
-                        'id' => 'fbFanGate'
                 )
         ));
 

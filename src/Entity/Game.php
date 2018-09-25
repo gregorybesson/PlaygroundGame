@@ -101,7 +101,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
     protected $broadcastPlatform = 0;
 
     /**
-     * @ORM\Column(type="string", length=255, unique=true, nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $domain;
 
@@ -263,6 +263,11 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
     private $prizes;
 
     /**
+     * @ORM\Column(name="fb_page_id", type="string", nullable=true)
+     */
+    protected $fbPageId;
+
+    /**
      * @ORM\Column(name="fb_app_id", type="string", nullable=true)
      */
     protected $fbAppId;
@@ -277,6 +282,13 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      * @ORM\Column(name="fb_page_tab_image", type="string", length=255, nullable=true)
      */
     protected $fbPageTabImage;
+
+    /**
+     * What is the tab's position. 0 : the highest
+     *
+     * @ORM\Column(name="fb_page_tab_position", type="integer", nullable=false)
+     */
+    protected $fbPageTabPosition = 0;
 
     /**
      * @Gedmo\Translatable
@@ -294,17 +306,6 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      * @ORM\Column(name="fb_request_message", type="text", nullable=true)
      */
     protected $fbRequestMessage;
-
-    /**
-     * @ORM\Column(type="boolean", nullable=true)
-     */
-    protected $fbFan = 0;
-
-    /**
-     * @Gedmo\Translatable
-     * @ORM\Column(name="fb_fan_gate", type="text", nullable=true)
-     */
-    protected $fbFanGate;
 
     /**
      * @Gedmo\Translatable
@@ -1336,6 +1337,27 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
         $this->invitations[] = $invitation;
     }
 
+
+    /**
+     *
+     * @return string the Facebook app_id
+     */
+    public function getFbPageId()
+    {
+        return $this->fbPageId;
+    }
+
+    /**
+     *
+     * @param string $fbPageId
+     */
+    public function setFbPageId($fbPageId)
+    {
+        $this->fbPageId = $fbPageId;
+
+        return $this;
+    }
+
     /**
      *
      * @return string the Facebook app_id
@@ -1398,6 +1420,26 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
 
     /**
      *
+     * @return string the Facebook fbPageTabPosition
+     */
+    public function getFbPageTabPosition()
+    {
+        return $this->fbPageTabPosition;
+    }
+
+    /**
+     *
+     * @param string $fbPageTabPosition
+     */
+    public function setFbPageTabPosition($fbPageTabPosition)
+    {
+        $this->fbPageTabPosition = $fbPageTabPosition;
+
+        return $this;
+    }
+
+    /**
+     *
      * @return the unknown_type
      */
     public function getFbShareMessage()
@@ -1452,46 +1494,6 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
     public function setFbRequestMessage($fbRequestMessage)
     {
         $this->fbRequestMessage = $fbRequestMessage;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return integer fbFan
-     */
-    public function getFbFan()
-    {
-        return $this->fbFan;
-    }
-
-    /**
-     *
-     * @param unknown_type $fbFan
-     */
-    public function setFbFan($fbFan)
-    {
-        $this->fbFan = $fbFan;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return the fbFanGate
-     */
-    public function getFbFanGate()
-    {
-        return $this->fbFanGate;
-    }
-
-    /**
-     *
-     * @param unknown_type $fbFanGate
-     */
-    public function setFbFanGate($fbFanGate)
-    {
-        $this->fbFanGate = $fbFanGate;
 
         return $this;
     }
@@ -1676,12 +1678,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
             )));
 
             $inputFilter->add($factory->createInput(array(
-               'name' => 'fbFan',
-               'required' => false
-            )));
-
-            $inputFilter->add($factory->createInput(array(
-                'name' => 'fbFanGate',
+                'name' => 'fbPageId',
                 'required' => false
             )));
 
@@ -1861,6 +1858,10 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
 
             $inputFilter->add($factory->createInput(array(
                 'name' => 'fbPageTabImage',
+                'required' => false
+            )));
+            $inputFilter->add($factory->createInput(array(
+                'name' => 'fbPageTabPosition',
                 'required' => false
             )));
 
