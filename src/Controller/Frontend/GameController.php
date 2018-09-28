@@ -141,7 +141,11 @@ class GameController extends AbstractActionController
                 $templatePathResolver->addPath($l[0].'custom/'.$controller->game->getIdentifier());
             }
 
-                $controller->user = $controller->zfcUserAuthentication()->getIdentity();
+            // if the current game runs under Facebook
+            if ($session->offsetExists('signed_request')) {
+                $controller->checkFbRegistration(null, $controller->game);
+            }
+            $controller->user = $controller->zfcUserAuthentication()->getIdentity();
             if ($controller->game &&
                     !$controller->user &&
                     !$controller->game->getAnonymousAllowed() &&
