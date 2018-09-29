@@ -24,10 +24,6 @@ class QuizController extends GameController
     {
         // the quiz is done for the first time in this entry
         $firstTime = true;
-        $redirectFb = $this->checkFbRegistration($this->user, $this->game);
-        if ($redirectFb) {
-            return $redirectFb;
-        }
 
         $entry = $this->getGameService()->play($this->game, $this->user);
         if (!$entry) {
