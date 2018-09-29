@@ -1731,6 +1731,11 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
             )));
 
             $inputFilter->add($factory->createInput(array(
+                'name' => 'broadcastEmbed',
+                'required' => false,
+            )));
+
+            $inputFilter->add($factory->createInput(array(
                'name' => 'closeDate',
                'required' => false,
             )));

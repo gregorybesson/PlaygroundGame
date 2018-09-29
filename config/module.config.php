@@ -42,6 +42,7 @@ return array(
                 array('controller' => PlaygroundGame\Controller\Frontend\PrizeCategory::class,  'roles' => array('guest', 'user')),
                 array('controller' => PlaygroundGame\Controller\Frontend\Mission::class,        'roles' => array('guest', 'user')),
                 array('controller' => PlaygroundGame\Controller\Frontend\TradingCard::class,    'roles' => array('guest', 'user')),
+                array('controller' => PlaygroundGame\Controller\Frontend\Webhook::class,        'roles' => array('guest', 'user')),
     
                 // Admin area
                 array('controller' => PlaygroundGame\Controller\Admin\Game::class,          'roles' => array('admin')),
@@ -152,6 +153,7 @@ return array(
             PlaygroundGame\Controller\Frontend\Mission::class => PlaygroundGame\Service\Factory\FrontendMissionControllerFactory::class,
             PlaygroundGame\Controller\Frontend\TradingCard::class => PlaygroundGame\Service\Factory\FrontendTradingCardControllerFactory::class,
             PlaygroundGame\Controller\Frontend\PrizeCategory::class => PlaygroundGame\Service\Factory\FrontendPrizeCategoryControllerFactory::class,
+            PlaygroundGame\Controller\Frontend\Webhook::class => PlaygroundGame\Service\Factory\FrontendWebhookControllerFactory::class,
 
             PlaygroundGame\Controller\Admin\Game::class => PlaygroundGame\Service\Factory\AdminGameControllerFactory::class,
             PlaygroundGame\Controller\Admin\Lottery::class => PlaygroundGame\Service\Factory\AdminLotteryControllerFactory::class,
@@ -231,6 +233,17 @@ return array(
                                 )
                             )
                         )
+                    ),
+                    'webhook' => array(
+                        'type' => 'Zend\Router\Http\Literal',
+                        'options' => array(
+                            'route' => 'webhook',
+                            'defaults' => array(
+                                'controller' => PlaygroundGame\Controller\Frontend\Webhook::class,
+                                'action' => 'index'
+                            )
+                        ),
+                        'may_terminate' => true,
                     ),
                     'tradingcard' => array(
                         'type' => 'Segment',
