@@ -30,7 +30,7 @@
 		"playground/core" : ">=4.0.0",
 		"playground/design" : ">=4.0.0",
 		"playground/user" : ">=4.0.0",
-		"playground/hybridauth" : ">=2.0.0",
+		"hybridauth/hybridauth": "@RC",
 		"playground/partnership" : ">4.0.0"
 	},
 	"require-dev" : {
