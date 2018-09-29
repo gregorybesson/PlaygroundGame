@@ -103,7 +103,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    protected $domain;
+    protected $domain = null;
 
     /**
      * @ORM\Column(name="broadcast_embed",type="boolean", nullable=true)
