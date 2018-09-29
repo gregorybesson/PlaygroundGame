@@ -149,6 +149,7 @@ class GameController extends AbstractActionController
                 ) {
                 // if the current game runs under Facebook
                 if ($session->offsetExists('signed_request')) {
+                    $session->offsetSet('fb-redirect', $controller->getRequest()->getUri());
                     // Let's start the FB registration dance !
                     $controller->forward()->dispatch(
                         'playgrounduser_user',
@@ -156,7 +157,6 @@ class GameController extends AbstractActionController
                             'controller' => 'playgrounduser_user',
                             'action'     => 'registerFacebookUser',
                             'provider'   => 'facebook',
-                            'redirect'   => $controller->getRequest()->getUri(),
                         )
                     );
                 }
