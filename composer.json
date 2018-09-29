@@ -17,11 +17,6 @@
 	"license" : [
 		"MIT"
 	],
-	"repositories" : [{
-			"type" : "git",
-			"url" : "https://github.com/gregorybesson/hybridauth"
-		}
-	],
 	"require" : {
 		"php" : ">=5.5",
 		"facebook/graph-sdk": "^5.6",
@@ -30,7 +25,6 @@
 		"playground/core" : ">=4.0.0",
 		"playground/design" : ">=4.0.0",
 		"playground/user" : ">=4.0.0",
-		"hybridauth/hybridauth": "@RC",
 		"playground/partnership" : ">4.0.0"
 	},
 	"require-dev" : {

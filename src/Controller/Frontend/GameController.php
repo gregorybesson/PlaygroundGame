@@ -141,16 +141,25 @@ class GameController extends AbstractActionController
                 $templatePathResolver->addPath($l[0].'custom/'.$controller->game->getIdentifier());
             }
 
-            // if the current game runs under Facebook
-            if ($session->offsetExists('signed_request')) {
-                $controller->checkFbRegistration(null, $controller->game);
-            }
             $controller->user = $controller->zfcUserAuthentication()->getIdentity();
             if ($controller->game &&
                     !$controller->user &&
                     !$controller->game->getAnonymousAllowed() &&
                     in_array($controller->params('action'), $controller->withAnyUser)
                 ) {
+                // if the current game runs under Facebook
+                if ($session->offsetExists('signed_request')) {
+                    // Let's start the FB registration dance !
+                    $controller->forward()->dispatch(
+                        'playgrounduser_user',
+                        array(
+                            'controller' => 'playgrounduser_user',
+                            'action'     => 'registerFacebookUser',
+                            'provider'   => 'facebook',
+                            'redirect'   => $controller->getRequest()->getUri(),
+                        )
+                    );
+                }
                 $redirect = urlencode(
                     $controller->url()->fromRoute(
                         'frontend/'.$controller->game->getClassType().'/'.$controller->params('action'),
@@ -1294,52 +1303,6 @@ class GameController extends AbstractActionController
         }
 
         return $viewModel;
-    }
-
-    /**
-     *
-     * @param \PlaygroundGame\Entity\Game $game
-     * @param \PlaygroundUser\Entity\User $user
-     */
-    public function checkFbRegistration($user, $game)
-    {
-        $redirect = false;
-        $session  = new Container('facebook');
-        if ($session->offsetExists('signed_request')) {
-            if (!$user) {
-                // Get Playground user from Facebook info
-                $beforeLayout = $this->layout()->getTemplate();
-                $view         = $this->forward()->dispatch(
-                    'playgrounduser_user',
-                    array(
-                        'controller' => 'playgrounduser_user',
-                        'action'     => 'registerFacebookUser',
-                        'provider'   => 'facebook',
-                    )
-                );
-
-                $this->layout()->setTemplate($beforeLayout);
-                $user = $view->user;
-
-                // If the user can not be created/retrieved from Facebook info, redirect to login/register form
-                if (!$user) {
-                    $redirectUrl = urlencode(
-                        $this->frontendUrl()->fromRoute(
-                            $game->getClassType().'/play',
-                            array('id'              => $game->getIdentifier()),
-                            array('force_canonical' => true)
-                        )
-                    );
-                    $redirect = $this->redirect()->toUrl(
-                        $this->frontendUrl()->fromRoute(
-                            'zfcuser/register'
-                        ).'?redirect='.$redirectUrl
-                    );
-                }
-            }
-        }
-
-        return $redirect;
     }
 
     /**

@@ -66,7 +66,7 @@ class Module
             // ******************************************
             $select = $sql->select();
             $select->from('game');
-            $select->where(array('active' => 1, 'domain IS NOT NULL'));
+            $select->where(array('active' => 1, 'domain IS NOT NULL', "domain != ''"));
             $statement = $sql->prepareStatementForSqlObject($select);
             $results = $statement->execute();
             foreach ($results as $result) {
