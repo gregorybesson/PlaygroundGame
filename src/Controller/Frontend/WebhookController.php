@@ -27,12 +27,7 @@ class WebhookController extends AbstractActionController
     {
         return $this->serviceLocator;
     }
-    
-    /**
-     * FB hooks : hub.mode=subscribe&
-     * hub.challenge=1158201444&
-     * hub.verify_token=meatyhamhock
-     */
+
     public function indexAction()
     {
 
@@ -41,7 +36,44 @@ class WebhookController extends AbstractActionController
         $token = $this->params()->fromQuery('hub_verify_token');
 
         $response = $this->getResponse();
-        $response->setContent(\Zend\Json\Json::encode($token));
+        $response->setContent($challenge);
+
+        file_get_contents('php://input');
+
+        return $response;
+    }
+
+    /**
+     * FB hooks : hub.mode=subscribe&
+     * hub.challenge=1158201444&
+     * hub.verify_token=meatyhamhock
+     */
+    public function facebookAction()
+    {
+
+        $mode = $this->params()->fromQuery('hub_mode');
+        $challenge = $this->params()->fromQuery('hub_challenge');
+        $token = $this->params()->fromQuery('hub_verify_token');
+
+        $response = $this->getResponse();
+        $response->setContent($challenge);
+
+        file_get_contents('php://input');
+
+        return $response;
+    }
+
+    public function instagramAction()
+    {
+
+        $mode = $this->params()->fromQuery('hub_mode');
+        $challenge = $this->params()->fromQuery('hub_challenge');
+        $token = $this->params()->fromQuery('hub_verify_token');
+
+        $response = $this->getResponse();
+        $response->setContent($challenge);
+
+        file_get_contents('php://input');
 
         return $response;
     }

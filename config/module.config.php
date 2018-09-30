@@ -235,7 +235,7 @@ return array(
                         )
                     ),
                     'webhook' => array(
-                        'type' => 'Zend\Router\Http\Literal',
+                        'type' => 'Segment',
                         'options' => array(
                             'route' => 'webhook',
                             'defaults' => array(
@@ -244,6 +244,28 @@ return array(
                             )
                         ),
                         'may_terminate' => true,
+                        'child_routes' => array(
+                            'facebook' => array(
+                                'type' => 'Zend\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/facebook',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\TradingCard::class,
+                                        'action' => 'index'
+                                    )
+                                )
+                            ),
+                            'instagram' => array(
+                                'type' => 'Zend\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/instagram',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\TradingCard::class,
+                                        'action' => 'instagram'
+                                    )
+                                )
+                            ),
+                        )
                     ),
                     'tradingcard' => array(
                         'type' => 'Segment',
