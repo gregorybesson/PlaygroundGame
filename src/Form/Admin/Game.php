@@ -133,6 +133,14 @@ class Game extends ProvidesEventsForm
         ));
 
         $this->add(array(
+            'type' => 'Zend\Form\Element\Checkbox',
+            'name' => 'broadcastFacebook',
+            'options' => array(
+                'label' => $translator->translate('Publish game on a Facebook Tab', 'playgroundgame'),
+            ),
+        ));
+
+        $this->add(array(
             'name' => 'domain',
             'type' => 'Zend\Form\Element\Text',
             'options' => array(
@@ -160,9 +168,9 @@ class Game extends ProvidesEventsForm
 
         $this->add(array(
             'type' => 'Zend\Form\Element\Checkbox',
-            'name' => 'broadcastEmbed',
+            'name' => 'broadcastPostFacebook',
                'options' => array(
-                   'label' => $translator->translate('Publish game on embed mode', 'playgroundgame'),
+                   'label' => $translator->translate('Publish the game as a Post Facebook', 'playgroundgame'),
                ),
         ));
 
@@ -170,7 +178,7 @@ class Game extends ProvidesEventsForm
                 'type' => 'Zend\Form\Element\Checkbox',
                 'name' => 'displayHome',
                 'options' => array(
-                    'label' => $translator->translate('Publish game on home page', 'playgroundgame'),
+                    'label' => $translator->translate('Publish the game on home page', 'playgroundgame'),
                 ),
         ));
 

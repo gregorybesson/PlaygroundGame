@@ -106,9 +106,9 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
     protected $domain = null;
 
     /**
-     * @ORM\Column(name="broadcast_embed",type="boolean", nullable=true)
+     * @ORM\Column(name="broadcast_post_facebook",type="boolean", nullable=true)
      */
-    protected $broadcastEmbed = 0;
+    protected $broadcastPostFacebook = 0;
 
     /**
      * @ORM\Column(name="push_home",type="boolean", nullable=true)
@@ -271,6 +271,11 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      * @ORM\Column(name="fb_app_id", type="string", nullable=true)
      */
     protected $fbAppId;
+
+    /**
+     * @ORM\Column(name="fb_post_id", type="string", nullable=true)
+     */
+    protected $fbPostId;
 
     /**
      * @Gedmo\Translatable
@@ -618,19 +623,19 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
     }
 
     /**
-     * @return integer $broadcastEmbed
+     * @return integer $broadcastPostFacebook
      */
-    public function getBroadcastEmbed()
+    public function getBroadcastPostFacebook()
     {
-        return $this->broadcastEmbed;
+        return $this->broadcastPostFacebook;
     }
 
     /**
-     * @param number $broadcastEmbed
+     * @param number $broadcastPostFacebook
      */
-    public function setBroadcastEmbed($broadcastEmbed)
+    public function setBroadcastPostFacebook($broadcastPostFacebook)
     {
-        $this->broadcastEmbed = $broadcastEmbed;
+        $this->broadcastPostFacebook = $broadcastPostFacebook;
 
         return $this;
     }
@@ -1380,6 +1385,26 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
 
     /**
      *
+     * @return string the Facebook app_id
+     */
+    public function getFbPostId()
+    {
+        return $this->fbPostId;
+    }
+
+    /**
+     *
+     * @param string $fbPostId
+     */
+    public function setFbPostId($fbPostId)
+    {
+        $this->fbPostId = $fbPostId;
+
+        return $this;
+    }
+
+    /**
+     *
      * @return string the Facebook fbPageTabTitle
      */
     public function getFbPageTabTitle()
@@ -1683,6 +1708,11 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
             )));
 
             $inputFilter->add($factory->createInput(array(
+                'name' => 'fbPostId',
+                'required' => false
+            )));
+
+            $inputFilter->add($factory->createInput(array(
                 'name' => 'prizes',
                 'required' => false
             )));
@@ -1727,11 +1757,6 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
 
             $inputFilter->add($factory->createInput(array(
                 'name' => 'endDate',
-                'required' => false,
-            )));
-
-            $inputFilter->add($factory->createInput(array(
-                'name' => 'broadcastEmbed',
                 'required' => false,
             )));
 

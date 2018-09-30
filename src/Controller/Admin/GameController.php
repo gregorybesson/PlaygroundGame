@@ -101,14 +101,11 @@ class GameController extends AbstractActionController
         if (isset($config['facebook'])) {
             $platformFbAppId     = $config['facebook']['fb_appid'];
             $platformFbAppSecret = $config['facebook']['fb_secret'];
-            $fbPage              = $config['facebook']['fb_page'];
         }
         $fb = new \Facebook\Facebook([
             'app_id' => $platformFbAppId,
             'app_secret' => $platformFbAppSecret,
             'default_graph_version' => 'v3.1',
-            //'cookie' => false,
-            //'default_access_token' => '{access-token}', // optional
         ]);
 
         $helper = $fb->getRedirectLoginHelper();
@@ -159,9 +156,12 @@ class GameController extends AbstractActionController
                         $this->game && 
                         !empty($this->game->getFbPageId()) &&
                         !empty($this->game->getFbAppId()) &&
-                        (   
-                            $this->game->getFbPageId() !== $data['fbPageId'] ||
-                            $this->game->getFbAppId() !== $data['fbAppId']
+                        (
+                            (   
+                                $this->game->getFbPageId() !== $data['fbPageId'] ||
+                                $this->game->getFbAppId() !== $data['fbAppId']
+                            ) ||
+                            $data['broadcastFacebook'] == 0
                         )
                     ) {
                         $oldPage = $fb->get('/' . $this->game->getFbPageId() . '?fields=access_token,name,id')
@@ -172,6 +172,24 @@ class GameController extends AbstractActionController
                                 [
                                     'tab' => 'app_'.$this->game->getFbAppId(),
                                 ],
+                                $oldPage['access_token']
+                            )
+                            ->getGraphNode()
+                            ->asArray();
+                    }
+
+                    // Removing a previously post set on this game
+                    if( 
+                        $this->game && 
+                        !empty($this->game->getFbPostId()) &&
+                        $data['broadcastPostFacebook'] == 0
+                    ) {
+                        $oldPage = $fb->get('/' . $this->game->getFbPageId() . '?fields=access_token,name,id')
+                            ->getGraphNode()
+                            ->asArray();
+                        $removePost = $fb->delete(
+                                '/' . $this->game->getFbPostId(),
+                                [],
                                 $oldPage['access_token']
                             )
                             ->getGraphNode()
@@ -235,54 +253,248 @@ class GameController extends AbstractActionController
             if (isset($data['drawDate']) && $data['drawDate']) {
                 $data['drawDate'] = \DateTime::createFromFormat('d/m/Y', $data['drawDate']);
             }
+
             $game = $this->getAdminGameService()->createOrUpdate($data, $this->game, $formId);
 
             if ($game) {
-                // Let's record the FB page tab if it is configured
-                if ($session->offsetExists('fb_token')) {        
-                    // adding page tab to selected page using page access token
+                
+                if ($session->offsetExists('fb_token')) {
                     if (!empty($data['fbPageId']) && !empty($data['fbAppId'])) {
                         $page = $fb->get('/' . $data['fbPageId'] . '?fields=access_token,name,id')
                         ->getGraphNode()
                         ->asArray();
 
-                        try {
-                            $addTab = $fb->post(
-                                '/' . $page['id'] . '/tabs',
-                                [
-                                    'app_id' => $data['fbAppId'],
-                                    'custom_name' => (!empty($data['fbPageTabTitle'])) ? $data['fbPageTabTitle'] : $data['title'],
-                                    'custom_image_url' => ($game->getFbPageTabImage() !== '') ? 
-                                        $this->getAdminGameService()->getServiceManager()->get('ViewRenderer')->url(
-                                            'frontend',
-                                            array(),
-                                            array('force_canonical' => true)
-                                        ).$game->getFbPageTabImage() :
-                                        null,
-                                    'position' => (!empty($data['fbPageTabPosition'])) ? $data['fbPageTabPosition'] : 99
-                                ],
-                                $page['access_token'])
-                                ->getGraphNode()
-                                ->asArray();
-                        } catch (\Exception $e) {
-                            // (#324) Missing or invalid image file
-                            if($e->getCode() == '324') {
-                                try {
-                                    $addTab = $fb->post(
-                                        '/' . $page['id'] . '/tabs',
-                                        [
-                                            'app_id' => $data['fbAppId'],
-                                            'custom_name' => (!empty($data['fbPageTabTitle'])) ? $data['fbPageTabTitle'] : $data['title'],
-                                            'position' => (!empty($data['fbPageTabPosition'])) ? $data['fbPageTabPosition'] : 99
-                                        ],
-                                        $page['access_token'])
-                                        ->getGraphNode()
-                                        ->asArray();
-                                } catch (\Exception $e) {
+                        // let's create a post on FB
+                        if ($data['broadcastPostFacebook'] && $game->getWelcomeBlock() != '' && $game->getMainImage() != '') {
+                            $imgPath = $this->url()->fromRoute('frontend',[],['force_canonical' => true],false).$game->getMainImage();
+                            // emoticons : $emoji = html_entity_decode('&#128520;');
+
+                            $message = str_replace('<p>', "", $game->getWelcomeBlock());
+                            $message = str_replace('</p>', "\n", $message);
+                            $message = strip_tags($message);
+
+                            // Create the post
+                            try {
+
+                                // Associate the fbAppId to the page so that we can receive the webhooks
+                                $linkAppToPage = $fb->post(
+                                    '/' . $page['id'] . '/subscribed_apps',
+                                    array(),
+                                    $page['access_token']
+                                );
+
+                                /**
+                                 *  post text and save the post_id to be able to get the likes and comments on the post
+                                 */
+                                // $post = $fb->post(
+                                //     '/' . $page['id'] . '/feed',
+                                //     array(
+                                //         'message'           => 'message',
+                                //     ),
+                                //     $page['access_token']
+                                // );
+    
+                                /**
+                                 * Post a photo
+                                 */
+                                // $post = $fb->post(
+                                //     '/' . $page['id'] . '/photos',
+                                //     array(
+                                //         'url'           => 'https://images.unsplash.com/photo-1538239010247-383da61e35db?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=22e9de10cd7e4d8e32d698099dc6d23c&auto=format&fit=crop&w=3289&q=80',
+                                //         'published'     => true,
+                                //     ),
+                                //     $page['access_token']
+                                // );
+    
+                                /**
+                                 * Upload an unpublished photo and include it in a post
+                                 */
+                                $img = $fb->post(
+                                    '/' . $page['id'] . '/photos',
+                                    array(
+                                        'url'           => $imgPath,
+                                        'published'     => false,
+                                    ),
+                                    $page['access_token']
+                                );
+                                $img = $img->getGraphNode()->asArray();
+                                
+                                if ($game->getFbPostId() != '') {
+                                    $post = $fb->post(
+                                        '/' . $game->getFbPostId(),
+                                        array(
+                                            'message'           => $message,
+                                            'attached_media[0]' => '{"media_fbid":"'.$img['id'].'"}',
+                                        ),
+                                        $page['access_token']
+                                    );
+                                } else {
+                                    $post = $fb->post(
+                                        '/' . $page['id'] . '/feed',
+                                        array(
+                                            'message'           => $message,
+                                            'attached_media[0]' => '{"media_fbid":"'.$img['id'].'"}',
+                                        ),
+                                        $page['access_token']
+                                    );
+                                }
+    
+                                /**
+                                 * Upload an unpublished photo and include it in a scheduled post
+                                 */
+                                // $img = $fb->post(
+                                //     '/' . $page['id'] . '/photos',
+                                //     array(
+                                //         'url'           => 'https://images.unsplash.com/photo-1538239010247-383da61e35db?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=22e9de10cd7e4d8e32d698099dc6d23c&auto=format&fit=crop&w=3289&q=80',
+                                //         'published'     => false,
+                                //         'temporary'     => true
+                                //     ),
+                                //     $page['access_token']
+                                // );
+                                // $img = $img->getGraphNode()->asArray();
+                                //
+                                // $post = $fb->post(
+                                //     '/' . $page['id'] . '/feed',
+                                //     array(
+                                //         'message'           => 'message avec image',
+                                //         'attached_media[0]' => '{"media_fbid":"'.$img['id'].'"}',
+                                //         'published'     => false,
+                                //         'scheduled_publish_time' => '1512068400',
+                                //         'unpublished_content_type' => 'SCHEDULED',
+                                //     ),
+                                //     $page['access_token']
+                                // );
+    
+                                /**
+                                 * publish multiple photos then associate these photos to a post
+                                 */
+                                // $endpoint = "/".$page['id']."/photos";
+                                // $multiple_photos = [
+                                //     'https://images.unsplash.com/photo-1538239010247-383da61e35db?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=22e9de10cd7e4d8e32d698099dc6d23c&auto=format&fit=crop&w=3289&q=80',
+                                //     'https://images.unsplash.com/photo-1538218952949-2f5dda4a9156?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=b79a9c7314dd5ca8eac2f187902ceca2&auto=format&fit=crop&w=2704&q=80',
+                                //     'https://images.unsplash.com/photo-1538157245064-badfdabb7142?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=dfa50d5dd51b85f25ca03f2b2667752a&auto=format&fit=crop&w=2700&q=80',
+                                // ];
+                                // $photos = [];
+                                // $data_post = ['attached_media' => [], 'message' => 'message', 'published' => true];
+                                // foreach ($multiple_photos as $file_url):
+                                //     array_push($photos, $fb->request('POST',$endpoint,['url' =>$file_url,'published' => false,'temporary' => true], $page['access_token']));
+                                // endforeach;
+                                // $uploaded_photos = $fb->sendBatchRequest($photos, $page['access_token']);
+                                // $uploaded_photos = $uploaded_photos->getGraphNode()->asArray();
+                                
+                                // foreach ($uploaded_photos as $photo):
+                                //     $photo = json_decode($photo['body']);
+                                //     array_push($data_post['attached_media'], '{"media_fbid":"'.$photo->id.'"}');
+                                // endforeach;
+                                // $post = $fb->sendRequest('POST', "/".$page['id']."/feed", $data_post, $page['access_token']);
+    
+                                /**
+                                 * publish a carrousel to a post
+                                 */
+                                // $data_post = [
+                                //     'child_attachments' => [],
+                                //     'message' => 'message',
+                                //     'link' => 'https://www.playground.gg',
+                                //     'multi_share_end_card' => false,
+                                //     'published' => true,
+                                // ];
+                                
+                                // $multiple_photos = [
+                                //     'https://images.unsplash.com/photo-1538239010247-383da61e35db?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=22e9de10cd7e4d8e32d698099dc6d23c&auto=format&fit=crop&w=3289&q=80',
+                                //     'https://images.unsplash.com/photo-1538218952949-2f5dda4a9156?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=b79a9c7314dd5ca8eac2f187902ceca2&auto=format&fit=crop&w=2704&q=80',
+                                //     'https://images.unsplash.com/photo-1538157245064-badfdabb7142?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=dfa50d5dd51b85f25ca03f2b2667752a&auto=format&fit=crop&w=2700&q=80',
+                                // ];
+                                // foreach ($multiple_photos as $k => $photo):
+                                //     array_push($data_post['child_attachments'], '{"link":"'.$photo.'", "name": "message_'.$k.'"}');
+                                // endforeach;
+                                // $post = $fb->sendRequest('POST', "/".$page['id']."/feed", $data_post, $page['access_token']);
+    
+                                /** Texte avec lien vers une page
+                                 * 
+                                 */
+                                // $post = $fb->post(
+                                //     '/' . $page['id'] . '/feed',
+                                //     array(
+                                //         'message'           => 'message',
+                                //         'link'              => 'https://images.unsplash.com/photo-1538239010247-383da61e35db?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=22e9de10cd7e4d8e32d698099dc6d23c&auto=format&fit=crop&w=3289&q=80',
+                                //         //'picture'           => 'https://images.unsplash.com/photo-1538239010247-383da61e35db?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=22e9de10cd7e4d8e32d698099dc6d23c&auto=format&fit=crop&w=3289&q=80',
+                                //         'call_to_action'    => '{"type":"BOOK_TRAVEL","value":{"link":"https://images.unsplash.com/photo-1538239010247-383da61e35db?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=22e9de10cd7e4d8e32d698099dc6d23c&auto=format&fit=crop&w=3289&q=80"}}',
+                                //     ),
+                                //     $page['access_token']
+                                // );
+                                
+                            } catch (\Exception $e) {
+                                if ($e->getMessage() == 'Missing or invalid image file') {
+                                    if ($game->getFbPostId() != '') {
+                                        $post = $fb->post(
+                                            '/' . $game->getFbPostId(),
+                                            array(
+                                                'message' => $message,
+                                            ),
+                                            $page['access_token']
+                                        );
+                                    } else {
+                                        $post = $fb->post(
+                                            '/' . $page['id'] . '/feed',
+                                            array(
+                                                'message' => $message,
+                                            ),
+                                            $page['access_token']
+                                        );
+                                    }
+                                } else {
                                     throw $e;
                                 }
                             }
+                            $post = $post->getGraphNode()->asArray();
+                            if (isset($post['id'])) {
+                                $game->setFbPostId($post['id']);
+                                $game = $this->getAdminGameService()->getGameMapper()->update($game);
+                            }
                         }
+
+                        // Let's record the FB page tab if it is configured
+                        // adding page tab to selected page using page access token
+                        if ($data['broadcastFacebook']) {
+                            try {
+                                $addTab = $fb->post(
+                                    '/' . $page['id'] . '/tabs',
+                                    [
+                                        'app_id' => $data['fbAppId'],
+                                        'custom_name' => (!empty($data['fbPageTabTitle'])) ? $data['fbPageTabTitle'] : $data['title'],
+                                        'custom_image_url' => ($game->getFbPageTabImage() !== '') ? 
+                                            $this->getAdminGameService()->getServiceManager()->get('ViewRenderer')->url(
+                                                'frontend',
+                                                array(),
+                                                array('force_canonical' => true)
+                                            ).$game->getFbPageTabImage() :
+                                            null,
+                                        'position' => (!empty($data['fbPageTabPosition'])) ? $data['fbPageTabPosition'] : 99
+                                    ],
+                                    $page['access_token'])
+                                    ->getGraphNode()
+                                    ->asArray();
+                            } catch (\Exception $e) {
+                                // (#324) Missing or invalid image file
+                                if($e->getCode() == '324') {
+                                    try {
+                                        $addTab = $fb->post(
+                                            '/' . $page['id'] . '/tabs',
+                                            [
+                                                'app_id' => $data['fbAppId'],
+                                                'custom_name' => (!empty($data['fbPageTabTitle'])) ? $data['fbPageTabTitle'] : $data['title'],
+                                                'position' => (!empty($data['fbPageTabPosition'])) ? $data['fbPageTabPosition'] : 99
+                                            ],
+                                            $page['access_token'])
+                                            ->getGraphNode()
+                                            ->asArray();
+                                    } catch (\Exception $e) {
+                                        throw $e;
+                                    }
+                                }
+                            }
+                        }
+                        
                     }
                 }
                 return $this->redirect()->toRoute('admin/playgroundgame/list');
@@ -316,7 +528,6 @@ class GameController extends AbstractActionController
         if (isset($config['facebook'])) {
             $platformFbAppId     = $config['facebook']['fb_appid'];
             $platformFbAppSecret = $config['facebook']['fb_secret'];
-            $fbPage              = $config['facebook']['fb_page'];
         }
         $fb = new \Facebook\Facebook([
             'app_id' => $platformFbAppId,
