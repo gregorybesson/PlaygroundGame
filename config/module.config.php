@@ -250,7 +250,7 @@ return array(
                                 'options' => array(
                                     'route' => '/facebook',
                                     'defaults' => array(
-                                        'controller' => PlaygroundGame\Controller\Frontend\TradingCard::class,
+                                        'controller' => PlaygroundGame\Controller\Frontend\Webhook::class,
                                         'action' => 'index'
                                     )
                                 )
@@ -260,7 +260,7 @@ return array(
                                 'options' => array(
                                     'route' => '/instagram',
                                     'defaults' => array(
-                                        'controller' => PlaygroundGame\Controller\Frontend\TradingCard::class,
+                                        'controller' => PlaygroundGame\Controller\Frontend\Webhook::class,
                                         'action' => 'instagram'
                                     )
                                 )

@@ -46,7 +46,7 @@ class QuizTest extends \PHPUnit_Framework_TestCase
             'timer' => '0',
             'victoryConditions' => '100',
             'broadcastPlatform' => '0',
-            'broadcastEmbed' => '0',
+            'broadcastPostFacebook' => '0',
             'displayHome' => 0,
             'anonymousAllowed' => 0,
             'mailWinner' => 0,

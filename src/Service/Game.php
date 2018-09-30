@@ -326,6 +326,11 @@ class Game
             ErrorHandler::stop(true);
         }
 
+        // Let's remove the fbPostId if there is no post to send anymore
+        if ($data['broadcastPostFacebook'] == 0) {
+            $game->setFbPostId(null);
+        }
+
         $game = $this->getGameMapper()->update($game);
 
         $prize_mapper = $this->serviceLocator->get('playgroundgame_prize_mapper');
