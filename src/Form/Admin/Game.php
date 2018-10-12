@@ -366,6 +366,18 @@ class Game extends ProvidesEventsForm
             )
         ));
 
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Select',
+            'name' => 'mailEntry',
+            'options' => array(
+                'value_options' => array(
+                    '0' => $translator->translate('No', 'playgroundgame'),
+                    '1' => $translator->translate('Yes', 'playgroundgame')
+                ),
+                'label' => $translator->translate('Send a mail for each entry', 'playgroundgame')
+            )
+        ));
+
         $options = $this->getServiceManager()->get('configuration');
 
         $layoutArray = array(

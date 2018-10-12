@@ -51,6 +51,16 @@ class WebhookController extends AbstractActionController
     public function facebookAction()
     {
 
+        error_log("APPEL RECU");
+        if ($this->getRequest()->isPost()) {
+            $in = file_get_contents('php://input');
+            error_log($in);
+            $in = json_decode($in);
+            error_log($in->entry[0]->changes[0]->field);
+            error_log($in->entry[0]->changes[0]->value->post_id);
+
+        }
+
         $mode = $this->params()->fromQuery('hub_mode');
         $challenge = $this->params()->fromQuery('hub_challenge');
         $token = $this->params()->fromQuery('hub_verify_token');

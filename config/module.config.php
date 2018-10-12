@@ -251,7 +251,7 @@ return array(
                                     'route' => '/facebook',
                                     'defaults' => array(
                                         'controller' => PlaygroundGame\Controller\Frontend\Webhook::class,
-                                        'action' => 'index'
+                                        'action' => 'facebook'
                                     )
                                 )
                             ),

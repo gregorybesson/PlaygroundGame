@@ -137,6 +137,11 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
     protected $mailLooser = 0;
 
     /**
+     * @ORM\Column(name="mail_entry",type="boolean", nullable=true)
+     */
+    protected $mailEntry = 0;
+
+    /**
      * @Gedmo\Translatable
      * @ORM\Column(name="mail_looser_block", type="text", nullable=true)
      */
@@ -670,6 +675,22 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
     public function setMailWinnerBlock($mailWinnerBlock)
     {
         $this->mailWinnerBlock = $mailWinnerBlock;
+    }
+
+    /**
+     * @return integer $mailEntry
+     */
+    public function getMailEntry()
+    {
+        return $this->mailEntry;
+    }
+
+    /**
+     * @param number $mailEntry
+     */
+    public function setMailEntry($mailEntry)
+    {
+        $this->mailEntry = $mailEntry;
     }
 
     /**
@@ -1868,6 +1889,11 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
 
             $inputFilter->add($factory->createInput(array(
                 'name' => 'mailLooser',
+                'required' => false
+            )));
+
+            $inputFilter->add($factory->createInput(array(
+                'name' => 'mailEntry',
                 'required' => false
             )));
 
