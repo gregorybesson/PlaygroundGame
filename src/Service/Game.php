@@ -636,7 +636,7 @@ class Game
     public function getGameIdentifierFromFacebook($fbPageId)
     {
         $identifier = null;
-        $game = $this->getGameMapper()->findOneBy(array('fbPageId' => $fbPageId));
+        $game = $this->getGameMapper()->findOneBy(array('fbPageId' => $fbPageId, 'broadcastFacebook' => 1));
 
         if($game && $game->getIdentifier() !== null) {
             $identifier = $game->getIdentifier();
@@ -1133,10 +1133,10 @@ class Game
     {
         $mailService = $this->serviceLocator->get('playgroundgame_message');
         $from = $this->getOptions()->getEmailFromAddress();
-        if ($user) {
-            $to = $user->getEmail();
-        } elseif ($entry->getAnonymousIdentifier()) {
+        if ($entry->getAnonymousIdentifier()) {
             $to = $entry->getAnonymousIdentifier();
+        } elseif ($user) {
+            $to = $user->getEmail();
         } else {
             return false;
         }
@@ -2108,6 +2108,12 @@ class Game
             !$lastEntry->getWinner()
         ) {
             $this->sendResultMail($game, $user, $lastEntry, 'looser');
+        }
+
+        if (($user || ($game->getAnonymousAllowed() && $game->getAnonymousIdentifier())) &&
+            $game->getMailEntry()
+        ) {
+            $this->sendResultMail($game, $user, $lastEntry);
         }
     }
 
