@@ -54,6 +54,11 @@ class Entry implements \JsonSerializable
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $ip;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    protected $geoloc;
     
     /**
      * @ORM\Column(name="anonymous_id", type="string", length=255, nullable=true)
@@ -217,6 +222,24 @@ class Entry implements \JsonSerializable
     public function setIp($ip)
     {
         $this->ip = $ip;
+        
+        return $this;
+    }
+
+    /**
+     * @return the $geoloc
+     */
+    public function getGeoloc()
+    {
+        return $this->geoloc;
+    }
+
+    /**
+     * @param field_type $geoloc
+     */
+    public function setGeoloc($geoloc)
+    {
+        $this->geoloc = $geoloc;
         
         return $this;
     }

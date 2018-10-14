@@ -496,6 +496,7 @@ class Game
             e.winner,
             e.socialShares,
             e.playerData,
+            e.geoloc,
             e.updated_at
             ')
             ->from('PlaygroundGame\Entity\Entry', 'e')
@@ -541,6 +542,7 @@ class Game
                 'winner' => 1
             );
         }
+        $header['geoloc'] = 1;
         $header['winner'] = 1;
         $header['socialShares'] = 1;
         $header['updated_at'] = 1;
@@ -848,11 +850,14 @@ class Game
                 return false;
             }
 
+            $ip = $this->getIp();
+            $geoloc = $this->getGeoloc($ip);
             $entry = new Entry();
             $entry->setGame($game);
             $entry->setUser($user);
             $entry->setPoints(0);
-            $entry->setIp($this->getIp());
+            $entry->setIp($ip);
+            $entry->setGeoloc($geoloc);
             $entry->setAnonymousId($this->getAnonymousId());
             if ($this->getAnonymousIdentifier()) {
                 $entry->setAnonymousIdentifier($this->getAnonymousIdentifier());
@@ -1728,6 +1733,21 @@ class Game
         }
 
         return $ipaddress;
+    }
+
+    public function getGeoloc($ip)
+    {
+        $geoloc = '';
+        try {
+            $res = unserialize(file_get_contents('http://www.geoplugin.net/php.gp?ip='.$ip));
+            if($res['geoplugin_latitude'] != '') {
+                $geoloc = $res['geoplugin_latitude'] . ',' . $res['geoplugin_longitude'];
+            }
+        } catch (\Exception $e) {
+
+        } 
+
+        return $geoloc;
     }
 
     public function getAnonymousId()
