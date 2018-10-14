@@ -317,15 +317,14 @@ class Game extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Select',
+            'type' => 'Zend\Form\Element\Checkbox',
             'name' => 'mailWinner',
+            'attributes' => array(
+                'class' => 'switch-input'
+            ),
             'options' => array(
-                'value_options' => array(
-                    '0' => $translator->translate('No', 'playgroundgame'),
-                    '1' => $translator->translate('Yes', 'playgroundgame')
-                ),
-                'label' => $translator->translate('Send a mail to winner', 'playgroundgame')
-            )
+                'label' => $translator->translate('Send a mail to winner', 'playgroundgame'),
+            ),
         ));
 
         $this->add(array(
@@ -342,15 +341,14 @@ class Game extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Select',
+            'type' => 'Zend\Form\Element\Checkbox',
             'name' => 'mailLooser',
+            'attributes' => array(
+                'class' => 'switch-input'
+            ),
             'options' => array(
-                'value_options' => array(
-                    '0' => $translator->translate('No', 'playgroundgame'),
-                    '1' => $translator->translate('Yes', 'playgroundgame')
-                ),
-                'label' => $translator->translate('Send a mail to looser', 'playgroundgame')
-            )
+                'label' => $translator->translate('Send a mail to looser', 'playgroundgame'),
+            ),
         ));
 
         $this->add(array(
@@ -367,15 +365,14 @@ class Game extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Select',
+            'type' => 'Zend\Form\Element\Checkbox',
             'name' => 'mailEntry',
+            'attributes' => array(
+                'class' => 'switch-input'
+            ),
             'options' => array(
-                'value_options' => array(
-                    '0' => $translator->translate('No', 'playgroundgame'),
-                    '1' => $translator->translate('Yes', 'playgroundgame')
-                ),
-                'label' => $translator->translate('Send a mail for each entry', 'playgroundgame')
-            )
+                'label' => $translator->translate('Send a mail for each entry', 'playgroundgame'),
+            ),
         ));
 
         $options = $this->getServiceManager()->get('configuration');
