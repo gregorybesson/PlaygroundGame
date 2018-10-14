@@ -1140,7 +1140,10 @@ class Game
         } else {
             return false;
         }
-        $subject = $game->getTitle();
+        $subject = $this->serviceLocator->get('MvcTranslator')->translate(
+            $this->getOptions()->getParticipationSubjectLine(),
+            'playgroundgame'
+        );
         $renderer = $this->serviceLocator->get('Zend\View\Renderer\RendererInterface');
         $skinUrl = $renderer->url(
             'frontend',
