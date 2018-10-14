@@ -403,7 +403,7 @@ class GameController extends AbstractActionController
                                 array(
                                     'id' => $this->game->getIdentifier(),
                                 )
-                            )
+                            ) .'?playLimitReached=1'
                         );
                     }
                 } else {
