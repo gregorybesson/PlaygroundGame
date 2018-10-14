@@ -26,7 +26,7 @@ class LotteryController extends GameController
                 $this->frontendUrl()->fromRoute(
                     'lottery/result',
                     array('id' => $this->game->getIdentifier())
-                )
+                ) .'?playLimitReached=1'
             );
         }
 
@@ -46,6 +46,10 @@ class LotteryController extends GameController
     public function resultAction()
     {
         $statusMail = null;
+        $playLimitReached = false;
+        if ($this->getRequest()->getQuery()->get('playLimitReached')) {
+            $playLimitReached = true;
+        }
         $secretKey = strtoupper(substr(sha1(uniqid('pg_', true).'####'.time()), 0, 15));
         $socialLinkUrl = $this->frontendUrl()->fromRoute(
             'lottery',
@@ -84,13 +88,16 @@ class LotteryController extends GameController
         // buildView must be before sendMail because it adds the game template path to the templateStack
         $viewModel = $this->buildView($this->game);
         
-        $this->getGameService()->sendMail($this->game, $this->user, $lastEntry);
+        if(!$playLimitReached) {
+            $this->getGameService()->sendMail($this->game, $this->user, $lastEntry);
+        }
 
         $viewModel->setVariables(array(
                 'statusMail'    => $statusMail,
                 'form'          => $form,
                 'socialLinkUrl' => $socialLinkUrl,
                 'secretKey'     => $secretKey,
+                'playLimitReached' => $playLimitReached,
             ));
 
         return $viewModel;
