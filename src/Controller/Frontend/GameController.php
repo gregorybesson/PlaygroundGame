@@ -392,6 +392,20 @@ class GameController extends AbstractActionController
                 // If register after play step, I search for the last entry created by play step.
 
                 if ($key < $keyplay || ($keyStep && !$keyplayStep && $key <= $keyplay)) {
+                    // I need to check if this anonymous user has already played. This one is transmitted through
+                    // a cookie... so I need to fill in this cookie if it's not already updated.
+                    if ($this->game->getAnonymousAllowed() &&
+                        $this->game->getAnonymousIdentifier() &&
+                        isset($data[$this->game->getAnonymousIdentifier()])
+                    ) {
+                        $session = new \Zend\Session\Container('anonymous_identifier');
+                        if (empty($session->offsetGet('anonymous_identifier'))) {
+                            $anonymousIdentifier = $data[$this->game->getAnonymousIdentifier()];
+                        
+                            // I must transmit this info during the whole game workflow
+                            $session->offsetSet('anonymous_identifier', $anonymousIdentifier);
+                        }
+                    }
                     $entry = $this->getGameService()->play($this->game, $this->user);
                     if (!$entry) {
                         // the user has already taken part of this game and the participation limit has been reached
