@@ -2343,6 +2343,16 @@ return array(
                                     )
                                 )
                             ),
+                            'draw' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/draw/:gameId',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Admin\Mission::class,
+                                        'action' => 'draw'
+                                    )
+                                )
+                            ),
                             'list' => array(
                                 'type' => 'Segment',
                                 'options' => array(
