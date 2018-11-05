@@ -145,7 +145,7 @@ class MissionController extends GameController
             $classGame,
             array(
             'controller' => $classGame,
-            'action'     => 'play',
+            'action'     => 'home',
             'id'         => $subGame->getIdentifier()
             )
         );

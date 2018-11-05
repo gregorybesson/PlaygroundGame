@@ -125,7 +125,7 @@ class Quiz extends Game
             ErrorHandler::stop(true);
         }
 
-        if (isset($data['delete_image']) && empty($data['upload_image']['tmp_name'])) {
+        if (isset($data['delete_image']) && !empty($data['delete_image']) && empty($data['upload_image']['tmp_name'])) {
             ErrorHandler::start();
             $image = $question->getImage();
             $image = str_replace($media_url, '', $image);
@@ -209,8 +209,9 @@ class Quiz extends Game
         // Very fast (native query inside)
         if ($question->getType() == 2) {
             foreach ($answers as $answer) {
+                $correct = (is_int($answer->getCorrect()))?$answer->getCorrect():0;
                 $value  = trim(strip_tags($answer->getAnswer()));
-                $points = ($answer->getCorrect())?$answer->getPoints():0;
+                $points = ($correct)?$answer->getPoints():0;
                 $sql    = "
                 UPDATE game_quiz_reply_answer AS ra
                 SET ra.points=IF(ra.answer=:answer, :points, 0),
@@ -222,14 +223,15 @@ class Quiz extends Game
                     array(
                         'answer'     => $value,
                         'points'     => $points,
-                        'isCorrect'  => $answer->getCorrect(),
+                        'isCorrect'  => $correct,
                         'questionId' => $question->getId()
                     )
                 );
             }
         } else {
             foreach ($answers as $answer) {
-                $points = ($answer->getCorrect())?$answer->getPoints():0;
+                $correct = (is_int($answer->getCorrect()))?$answer->getCorrect():0;
+                $points = ($correct)?$answer->getPoints():0;
                 $sql    = "
                 UPDATE game_quiz_reply_answer AS ra
                 SET ra.points=:points,
@@ -242,7 +244,7 @@ class Quiz extends Game
                 $stmt->execute(
                     array(
                         'points'     => $points,
-                        'isCorrect'  => $answer->getCorrect(),
+                        'isCorrect'  => $correct,
                         'questionId' => $question->getId(),
                         'answerId'   => $answer->getId()
                     )

@@ -192,23 +192,23 @@ class QuizQuestion extends ProvidesEventsForm
 
         // Adding an empty upload field to be able to correctly handle this on the service side.
         $this->add(array(
-                'name' => 'upload_image',
-                'attributes' => array(
-                    'type'  => 'file',
+            'name' => 'upload_image',
+            'attributes' => array(
+                'type'  => 'file',
+            ),
+            'options' => array(
+                'label' => $translator->translate('Image', 'playgroundgame'),
+                'label_attributes' => array(
+                    'class' => 'control-label',
                 ),
-                'options' => array(
-                    'label' => $translator->translate('Image', 'playgroundgame'),
-                    'label_attributes' => array(
-                        'class' => 'control-label',
-                    ),
-                ),
+            ),
         ));
         $this->add(array(
-                'name' => 'image',
-                'type'  => 'Zend\Form\Element\Hidden',
-                'attributes' => array(
-                    'value' => '',
-                ),
+            'name' => 'image',
+            'type'  => 'Zend\Form\Element\Hidden',
+            'attributes' => array(
+                'value' => '',
+            ),
         ));
         $this->add(array(
                 'name' => 'delete_image',
