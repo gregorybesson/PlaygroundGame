@@ -37,28 +37,28 @@ class QuizAnswerFieldset extends Fieldset
         ));
 
         $this->add(array(
+            'type' => 'Zend\Form\Element\Select',
+            'name' => 'correct',
+            'options' => array(
+                    'value_options' => array(
+                        '0' => $translator->translate('Non', 'playgroundgame'),
+                        '1' => $translator->translate('Oui', 'playgroundgame'),
+                    ),
+                    'label' => $translator->translate('Bonne réponse', 'playgroundgame'),
+            ),
+        ));
+
+        $this->add(array(
             'type' => 'Zend\Form\Element\Textarea',
             'name' => 'jsonData',
             'options' => array(
                 'label' => $translator->translate('json Data', 'playgroundgame'),
             ),
             'attributes' => array(
-                'cols' => '10',
-                'rows' => '2',
+                'cols' => '60',
+                'rows' => '4',
                 'id' => 'jsonData',
             ),
-        ));
-
-        $this->add(array(
-                'type' => 'Zend\Form\Element\Select',
-                'name' => 'correct',
-                'options' => array(
-                        'value_options' => array(
-                            '0' => $translator->translate('Non', 'playgroundgame'),
-                            '1' => $translator->translate('Oui', 'playgroundgame'),
-                        ),
-                        'label' => $translator->translate('Bonne réponse', 'playgroundgame'),
-                ),
         ));
 
         $this->add(array(
@@ -87,17 +87,6 @@ class QuizAnswerFieldset extends Fieldset
                 'id' => 'explanation'
             )
         ));
-
-        $this->add(array(
-            'type' => 'Zend\Form\Element\Button',
-            'name' => 'remove',
-            'options' => array(
-                'label' => $translator->translate('Remove', 'playgroundgame'),
-            ),
-            'attributes' => array(
-                'class' => 'delete-button',
-            )
-        ));
         
         $this->add(array(
             'type' => 'Zend\Form\Element\File',
@@ -112,20 +101,31 @@ class QuizAnswerFieldset extends Fieldset
 //                 'multiple' => true
             )
         ));
-//         $this->add(array(
-//             'name' => 'image',
-//             'type'  => 'Zend\Form\Element\Hidden',
-//             'attributes' => array(
-//                 'value' => '',
-//             ),
-//         ));
-//         $this->add(array(
-//             'name' => 'delete_image',
-//             'type' => 'Zend\Form\Element\Hidden',
-//             'attributes' => array(
-//                 'value' => '',
-//                 'class' => 'delete_image',
-//             ),
-//         ));
+        $this->add(array(
+            'name' => 'image',
+            'type'  => 'Zend\Form\Element\Hidden',
+            'attributes' => array(
+                'value' => '',
+            ),
+        ));
+        $this->add(array(
+            'name' => 'delete_image',
+            'type' => 'Zend\Form\Element\Hidden',
+            'attributes' => array(
+                'value' => '',
+                'class' => 'delete_image',
+            ),
+        ));
+
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Button',
+            'name' => 'remove',
+            'options' => array(
+                'label' => $translator->translate('Remove this answer', 'playgroundgame'),
+            ),
+            'attributes' => array(
+                'class' => 'btn btn-block btn-danger col-md-2',
+            )
+        ));
     }
 }

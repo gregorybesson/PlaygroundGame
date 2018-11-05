@@ -24,7 +24,6 @@ class QuizController extends GameController
     {
         // the quiz is done for the first time in this entry
         $firstTime = true;
-
         $entry = $this->getGameService()->play($this->game, $this->user);
         if (!$entry) {
             // the user has already taken part of this game and the participation limit has been reached
@@ -167,6 +166,43 @@ class QuizController extends GameController
 
         if ($this->getRequest()->isPost()) {
             $data = $this->getRequest()->getPost()->toArray();
+            $action = $this->params('action');
+    
+            // On POST, if the anonymousUser has not been created yet, I try to create it now 
+            // Maybe is there only one form for the quiz and the player data... I try...
+            // And if the formPlayer data was included in the form, I remove it
+            if (!$this->user && $this->game->getAnonymousAllowed() && $this->game->getAnonymousIdentifier()) {
+                $session = new \Zend\Session\Container('anonymous_identifier');
+                if (empty($session->offsetGet('anonymous_identifier'))) {
+                    $controller = __NAMESPACE__ . '\\' . ucfirst($this->game->getClassType());
+                    $registerUser  = $this->forward()->dispatch(
+                        $controller,
+                        array(
+                            'action' => 'register',
+                            'id'     => $this->game->getIdentifier()
+                        )
+                    );
+
+                    foreach($data as $index => $el) {
+                        if (! is_array($el)) {
+                            unset($data[$index]);
+                        }
+                    }
+                    $entry = $this->getGameService()->play($this->game, $this->user);
+                    if (!$entry) {
+                        // the user has already taken part to this game and the participation limit has been reached
+                        $this->flashMessenger()->addMessage('Vous avez déjà participé!');
+
+                        return $this->redirect()->toUrl(
+                            $this->frontendUrl()->fromRoute(
+                                $this->game->getClassType() . '/result',
+                                array('id' => $this->game->getIdentifier())
+                            )
+                        );
+                    }
+                }
+            }
+
             $form->setData($data);
 
             // Improve it : I don't validate the form in a timer quiz as no answer is mandatory
@@ -174,10 +210,10 @@ class QuizController extends GameController
                 unset($data['submitForm']);
                 $entry = $this->getGameService()->createQuizReply($data, $this->game, $this->user);
             }
-
+            
             return $this->redirect()->toUrl(
                 $this->frontendUrl()->fromRoute(
-                    $this->game->getClassType() . '/'. $this->game->nextStep($this->params('action')),
+                    $this->game->getClassType() . '/'. $this->game->nextStep($action),
                     array('id' => $this->game->getIdentifier())
                 )
             );
@@ -310,7 +346,11 @@ class QuizController extends GameController
 
         $viewModel = $this->buildView($this->game);
         
-        $this->getGameService()->sendMail($this->game, $this->user, $lastEntry);
+        // TODO: Change the way we know if the play step has been rejected
+        $messages = $this->flashMessenger()->getMessages();
+        if(!isset($messages[0]) || substr($messages[0], 0, 9) != 'Vous avez') {
+            $this->getGameService()->sendMail($this->game, $this->user, $lastEntry);
+        }
 
         $viewModel->setVariables(array(
             'entry'               => $lastEntry,

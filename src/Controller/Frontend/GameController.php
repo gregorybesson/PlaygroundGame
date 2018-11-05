@@ -362,17 +362,21 @@ class GameController extends AbstractActionController
                 $steps = $this->game->getStepsArray();
                 // sub steps of the game
                 $viewSteps = $this->game->getStepsViewsArray();
+                $keyStep = false;
 
                 // register position
                 $key = array_search($this->params('action'), $viewSteps);
-                if (!$key) {
+                if ($key === false) {
                     // register is not a substep of the game so it's a step
                     $key     = array_search($this->params('action'), $steps);
-                    $keyStep = true;
+                    if ($key !== false) {
+                        $keyStep = true;
+                    } else {
+                        $key = -1;
+                    }
                 } else {
-                    // register was a substep, i search the index of its parent
+                    // register was a substep, I search the index of its parent
                     $key     = array_search($key, $steps);
-                    $keyStep = false;
                 }
 
                 // play position
@@ -390,7 +394,6 @@ class GameController extends AbstractActionController
 
                 // If register step before play, I don't have no entry yet. I have to create one
                 // If register after play step, I search for the last entry created by play step.
-
                 if ($key < $keyplay || ($keyStep && !$keyplayStep && $key <= $keyplay)) {
                     // I need to check if this anonymous user has already played. This one is transmitted through
                     // a cookie... so I need to fill in this cookie if it's not already updated.
@@ -408,7 +411,7 @@ class GameController extends AbstractActionController
                     }
                     $entry = $this->getGameService()->play($this->game, $this->user);
                     if (!$entry) {
-                        // the user has already taken part of this game and the participation limit has been reached
+                        // the user has already taken part to this game and the participation limit has been reached
                         $this->flashMessenger()->addMessage('Vous avez déjà participé');
 
                         return $this->redirect()->toUrl(
@@ -1381,7 +1384,8 @@ class GameController extends AbstractActionController
             $actionData   = $stepsViews[$actionName];
             if (is_string($actionData)) {
                 $action     = $actionData;
-                $controller = $this->getEvent()->getRouteMatch()->getParam('controller', PlaygroundGame\Controller\Frontend\Game::class);
+                $classGame = __NAMESPACE__ . '\\' . ucfirst($this->game->getClassType());
+                $controller = $this->getEvent()->getRouteMatch()->getParam('controller', $classGame);
                 $view       = $this->forward()->dispatch(
                     $controller,
                     array(
@@ -1391,7 +1395,7 @@ class GameController extends AbstractActionController
                 );
             } elseif (is_array($actionData) && count($actionData) > 0) {
                 $action     = key($actionData);
-                $controller = $actionData[$action];
+                $controller = __NAMESPACE__ . '\\' . ucfirst($actionData[$action]);
                 $view       = $this->forward()->dispatch(
                     $controller,
                     array(

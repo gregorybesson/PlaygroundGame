@@ -773,12 +773,9 @@ class Game
                 isset($data[$game->getAnonymousIdentifier()])
             ) {
                 $session = new \Zend\Session\Container('anonymous_identifier');
+                $anonymousIdentifier = $data[$game->getAnonymousIdentifier()];
+                $entry->setAnonymousIdentifier($anonymousIdentifier);
                 if (empty($session->offsetGet('anonymous_identifier'))) {
-                    $anonymousIdentifier = $data[$game->getAnonymousIdentifier()];
-                
-                    $entry->setAnonymousIdentifier($anonymousIdentifier);
-                
-                    // I must transmit this info during the whole game workflow
                     $session->offsetSet('anonymous_identifier', $anonymousIdentifier);
                 }
             }
@@ -814,11 +811,12 @@ class Game
     
     public function getAnonymousIdentifier()
     {
-        if (is_null($this->anonymousIdentifier)) {
-            // If on Facebook, check if you have to be a FB fan to play the game
+        if (is_null($this->anonymousIdentifier) || $this->anonymousIdentifier === false) {
             $session = new Container('anonymous_identifier');
             
             if ($session->offsetExists('anonymous_identifier')) {
+            //if(isset($_SESSION['anonymous_identifier'])) {
+                //$this->anonymousIdentifier = $_SESSION['anonymous_identifier']['anonymous_identifier'];
                 $this->anonymousIdentifier = $session->offsetGet('anonymous_identifier');
             } else {
                 $this->anonymousIdentifier = false;
@@ -905,12 +903,19 @@ class Game
         if ($user) {
             return $this->getEntryMapper()->findLastEntriesByUser($game, $user, $limitDate);
         } elseif ($this->getAnonymousIdentifier()) {
-            return $this->getEntryMapper()->findLastEntriesByAnonymousIdentifier(
+            $entries = $this->getEntryMapper()->findLastEntriesByAnonymousIdentifier(
                 $game,
                 $this->getAnonymousIdentifier(),
                 $limitDate
             );
+
+            return $entries;
         } else {
+            // If the game is supposed to be a reguler user game or an anonymous identified game,
+            // it means that the registration/login is at the end of the game
+            if((!$user &&  !$game->getAnonymousAllowed()) || ($game->getAnonymousAllowed() && $game->getAnonymousIdentifier())) {
+                return 0;
+            }
             return $this->getEntryMapper()->findLastEntriesByIp($game, $this->getIp(), $limitDate);
         }
     }

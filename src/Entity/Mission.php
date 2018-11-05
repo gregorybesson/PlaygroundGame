@@ -85,6 +85,7 @@ class Mission extends Game implements InputFilterAwareInterface
         $sortedPlayableGames = array();
         foreach ($this->missionGames as $missionGame) {
             $g = $missionGame->getGame();
+            
             if ($g->isStarted() && $g->isOnline()) {
                 if (!$missionGame->getConditions() || $missionGame->fulfillConditions($entry)) {
                     $sortedPlayableGames[$missionGame->getPosition()] = $missionGame;
@@ -93,6 +94,27 @@ class Mission extends Game implements InputFilterAwareInterface
         }
 
         return $sortedPlayableGames;
+    }
+
+    /**
+     * Get the previous playable game if any
+     *
+     * @return \PlaygroundGame\Entity\Game
+     */
+    public function getPreviousGame($entry = null)
+    {
+        $currentGame = $this->getNextPlayableGame($entry);
+        $previousMissionGame = null;
+
+        foreach ($this->missionGames as $missionGame) {
+            if($missionGame->getGame()->getId() === $currentGame->getId()) {
+                return $previousMissionGame;
+            }
+
+            $previousMissionGame = $missionGame->getGame();
+        }
+
+        return null;
     }
 
     /**

@@ -162,6 +162,7 @@ return array(
     'Single response'    => 'Réponse unique',
     'Multiple choice'    => 'Choix multiple',
     'Input field'        => 'Champ de saisie',
+    'Remove this answer' => 'Supprimer cette réponse',
 
     // Admin Post & Vote
     'Create Post & Vote' => 'Créer un Post & Vote',
