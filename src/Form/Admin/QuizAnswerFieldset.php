@@ -118,6 +118,13 @@ class QuizAnswerFieldset extends Fieldset
         ));
 
         $this->add(array(
+            'name' => 'video',
+            'options' => array(
+                'label' => $translator->translate('Video URL', 'playgroundgame'),
+            ),
+        ));
+
+        $this->add(array(
             'type' => 'Zend\Form\Element\Button',
             'name' => 'remove',
             'options' => array(
