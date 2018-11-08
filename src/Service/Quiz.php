@@ -52,18 +52,20 @@ class Quiz extends Game
 
         $quiz = $this->getGameMapper()->findById($data['quiz_id']);
         if (!$form->isValid()) {
+
             return false;
         }
 
         $question->setQuiz($quiz);
 
         // If question is a prediction, no need to calculate max good answers
-        if (!$question->getPrediction()) {
-            // Max points and correct answers calculation for the question
-            if (!$question = $this->calculateMaxAnswersQuestion($question)) {
-                return false;
-            }
-        }
+        // if (!$question->getPrediction()) {
+        //     // Max points and correct answers calculation for the question
+        //     if (!$question = $this->calculateMaxAnswersQuestion($question)) {
+        //
+        //         return false;
+        //     }
+        // }
 
         // Max points and correct answers recalculation for the quiz
         $quiz = $this->calculateMaxAnswersQuiz($question->getQuiz());
@@ -107,12 +109,12 @@ class Quiz extends Game
         }
 
         // If question is a prediction, no need to calculate max good answers
-        if (!$question->getPrediction()) {
-            // Max points and correct answers calculation for the question
-            if (!$question = $this->calculateMaxAnswersQuestion($question)) {
-                return false;
-            }
-        }
+        // if (!$question->getPrediction()) {
+        //     // Max points and correct answers calculation for the question
+        //     if (!$question = $this->calculateMaxAnswersQuestion($question)) {
+        //         return false;
+        //     }
+        // }
 
         if (!empty($data['upload_image']['tmp_name'])) {
             ErrorHandler::start();
@@ -414,9 +416,9 @@ class Quiz extends Game
                     $question_max_correct_answers = 1;
                 }
             }
-            if ($question_max_correct_answers == 0) {
-                return false;
-            }
+            // if ($question_max_correct_answers == 0) {
+            //     return false;
+            // }
             // Closed question : Many answers allowed
         } elseif ($question->getType() == 1) {
             foreach ($question->getAnswers() as $answer) {
@@ -426,9 +428,9 @@ class Quiz extends Game
                     ++$question_max_correct_answers;
                 }
             }
-            if ($question_max_correct_answers == 0) {
-                return false;
-            }
+            // if ($question_max_correct_answers == 0) {
+            //     return false;
+            // }
             // Not a question : A textarea to fill in
         } elseif ($question->getType() == 2) {
             $question_max_correct_answers = 0;

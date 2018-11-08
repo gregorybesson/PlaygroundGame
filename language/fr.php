@@ -36,6 +36,9 @@ return array(
     'Games'                    => 'Jeux',
     'Players'                => 'Joueurs',
     'Online'                => 'En ligne',
+    'Create the player form' => 'Editer le formulaire d\'inscription',
+    'export the game'   => 'Exporter le jeu',
+    'Manage questions' => 'Gérer les questions du quiz',
 
     // Paginator
     'First'            => 'Premier',

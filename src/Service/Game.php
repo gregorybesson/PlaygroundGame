@@ -1480,7 +1480,7 @@ class Game
     }
 
     /**
-     * This function returns the list of games, order by $type
+     * This function returns the list of games, ordered by $type
      */
     public function getQueryGamesOrderBy($type = 'createdAt', $order = 'DESC')
     {
