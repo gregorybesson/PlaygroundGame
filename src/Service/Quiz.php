@@ -499,23 +499,49 @@ class Quiz extends Game
         }
 
         foreach ($data as $group) {
-            foreach ($group as $q => $a) {
-                if (strlen($q) > 5 && strpos($q, '-data', strlen($q)-5) !== false) {
-                    continue;// answer data is processed below
-                }
-                $question = $this->getQuizQuestionMapper()->findById((int) str_replace('q', '', $q));
-                ++$totalQuestions;
-                if (is_array($a)) {
-                    foreach ($a as $k => $answer_id) {
-                        $answer = $this->getQuizAnswerMapper()->findById($answer_id);
+            if(count($group) > 0) {
+                foreach ($group as $q => $a) {
+                    if (strlen($q) > 5 && strpos($q, '-data', strlen($q)-5) !== false) {
+                        continue;// answer data is processed below
+                    }
+                    $question = $this->getQuizQuestionMapper()->findById((int) str_replace('q', '', $q));
+                    ++$totalQuestions;
+                    if (is_array($a)) {
+                        foreach ($a as $k => $answer_id) {
+                            $answer = $this->getQuizAnswerMapper()->findById($answer_id);
+                            if ($answer) {
+                                if (isset($quizReplyAnswered[$question->getId()])) {
+                                    $this->getQuizReplyAnswerMapper()->remove($quizReplyAnswered[$question->getId()]);
+                                }
+
+                                $quizReplyAnswer = new QuizReplyAnswer();
+                                $quizReplyAnswer->setAnswer($answer->getAnswer());
+                                $quizReplyAnswer->setAnswerId($answer_id);
+                                $quizReplyAnswer->setQuestion($question->getQuestion());
+                                $quizReplyAnswer->setQuestionId($question->getId());
+                                $quizReplyAnswer->setPoints($answer->getPoints());
+                                $quizReplyAnswer->setCorrect($answer->getCorrect());
+
+                                $quizReply->addAnswer($quizReplyAnswer);
+
+                                $quizPoints += $answer->getPoints();
+                                $quizCorrectAnswers += $answer->getCorrect();
+
+                                if (isset($group[$q.'-'.$answer_id.'-data'])) {
+                                    $quizReplyAnswer->setAnswerData($group[$q.'-'.$answer_id.'-data']);
+                                }
+                            }
+                        }
+                    } elseif ($question->getType() == 0 || $question->getType() == 1) {
+                        ++$totalQuestions;
+                        $answer = $this->getQuizAnswerMapper()->findById($a);
                         if ($answer) {
                             if (isset($quizReplyAnswered[$question->getId()])) {
                                 $this->getQuizReplyAnswerMapper()->remove($quizReplyAnswered[$question->getId()]);
                             }
-
                             $quizReplyAnswer = new QuizReplyAnswer();
                             $quizReplyAnswer->setAnswer($answer->getAnswer());
-                            $quizReplyAnswer->setAnswerId($answer_id);
+                            $quizReplyAnswer->setAnswerId($a);
                             $quizReplyAnswer->setQuestion($question->getQuestion());
                             $quizReplyAnswer->setQuestionId($question->getId());
                             $quizReplyAnswer->setPoints($answer->getPoints());
@@ -525,75 +551,52 @@ class Quiz extends Game
 
                             $quizPoints += $answer->getPoints();
                             $quizCorrectAnswers += $answer->getCorrect();
-
-                            if (isset($group[$q.'-'.$answer_id.'-data'])) {
-                                $quizReplyAnswer->setAnswerData($group[$q.'-'.$answer_id.'-data']);
+                            if (isset($group[$q.'-'.$a.'-data'])) {
+                                $quizReplyAnswer->setAnswerData($group[$q.'-'.$a.'-data']);
                             }
                         }
-                    }
-                } elseif ($question->getType() == 0 || $question->getType() == 1) {
-                    ++$totalQuestions;
-                    $answer = $this->getQuizAnswerMapper()->findById($a);
-                    if ($answer) {
+                    } elseif ($question->getType() == 2) {
+                        ++$totalQuestions;
                         if (isset($quizReplyAnswered[$question->getId()])) {
                             $this->getQuizReplyAnswerMapper()->remove($quizReplyAnswered[$question->getId()]);
                         }
                         $quizReplyAnswer = new QuizReplyAnswer();
-                        $quizReplyAnswer->setAnswer($answer->getAnswer());
-                        $quizReplyAnswer->setAnswerId($a);
+                        $quizReplyAnswer->setAnswer($a);
+                        $quizReplyAnswer->setAnswerId(0);
                         $quizReplyAnswer->setQuestion($question->getQuestion());
                         $quizReplyAnswer->setQuestionId($question->getId());
-                        $quizReplyAnswer->setPoints($answer->getPoints());
-                        $quizReplyAnswer->setCorrect($answer->getCorrect());
+                        $quizReplyAnswer->setPoints(0);
+                        $quizReplyAnswer->setCorrect(0);
 
                         $quizReply->addAnswer($quizReplyAnswer);
 
-                        $quizPoints += $answer->getPoints();
-                        $quizCorrectAnswers += $answer->getCorrect();
+                        $quizPoints += 0;
+                        $quizCorrectAnswers += 0;
+                        $qAnswers = $question->getAnswers();
+                        foreach ($qAnswers as $qAnswer) {
+                            if (trim(strip_tags($a)) == trim(strip_tags($qAnswer->getAnswer()))) {
+                                $quizReplyAnswer->setPoints($qAnswer->getPoints());
+                                $quizPoints += $qAnswer->getPoints();
+                                $quizReplyAnswer->setCorrect($qAnswer->getCorrect());
+                                $quizCorrectAnswers += $qAnswer->getCorrect();
+                                break;
+                            }
+                        }
+
                         if (isset($group[$q.'-'.$a.'-data'])) {
                             $quizReplyAnswer->setAnswerData($group[$q.'-'.$a.'-data']);
                         }
                     }
-                } elseif ($question->getType() == 2) {
-                    ++$totalQuestions;
-                    if (isset($quizReplyAnswered[$question->getId()])) {
-                        $this->getQuizReplyAnswerMapper()->remove($quizReplyAnswered[$question->getId()]);
-                    }
-                    $quizReplyAnswer = new QuizReplyAnswer();
-                    $quizReplyAnswer->setAnswer($a);
-                    $quizReplyAnswer->setAnswerId(0);
-                    $quizReplyAnswer->setQuestion($question->getQuestion());
-                    $quizReplyAnswer->setQuestionId($question->getId());
-                    $quizReplyAnswer->setPoints(0);
-                    $quizReplyAnswer->setCorrect(0);
-
-                    $quizReply->addAnswer($quizReplyAnswer);
-
-                    $quizPoints += 0;
-                    $quizCorrectAnswers += 0;
-                    $qAnswers = $question->getAnswers();
-                    foreach ($qAnswers as $qAnswer) {
-                        if (trim(strip_tags($a)) == trim(strip_tags($qAnswer->getAnswer()))) {
-                            $quizReplyAnswer->setPoints($qAnswer->getPoints());
-                            $quizPoints += $qAnswer->getPoints();
-                            $quizReplyAnswer->setCorrect($qAnswer->getCorrect());
-                            $quizCorrectAnswers += $qAnswer->getCorrect();
-                            break;
-                        }
-                    }
-
-                    if (isset($group[$q.'-'.$a.'-data'])) {
-                        $quizReplyAnswer->setAnswerData($group[$q.'-'.$a.'-data']);
-                    }
                 }
             }
         }
-
+        // TODO : In the case of usage of stopdate, the calculation of quizCorrectAnswers
+        // and quizPoints is incorrect
         $winner = $this->isWinner($game, $quizCorrectAnswers);
 
         $entry->setWinner($winner);
         // Every winning participation is eligible to draw
-        // Make this modifiable in the admin (choose who can participate to draw)
+        // TODO : Make this modifiable in the admin (choose who can participate to draw)
         $entry->setDrawable($winner);
         $entry->setPoints($quizPoints);
         $entry->setActive(false);

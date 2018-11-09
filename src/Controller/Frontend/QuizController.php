@@ -59,14 +59,32 @@ class QuizController extends GameController
         $j = 0;
         $elementData = array();
         $explanations = array();
+        $data = $this->getRequest()->getPost()->toArray();
+        $anticheat = array();
 
         foreach ($questions as $q) {
-            if (($this->game->getQuestionGrouping() > 0 && $i % $this->game->getQuestionGrouping() === 0) ||
+            if (
+                ($this->game->getQuestionGrouping() > 0 && $i % $this->game->getQuestionGrouping() === 0) ||
                 ($i === 0 && $this->game->getQuestionGrouping() === 0)
             ) {
                 $fieldsetName = 'questionGroup' . ++ $j;
                 $fieldset = new Fieldset($fieldsetName);
             }
+
+            if ($this->getRequest()->isPost()) {
+                $jsonData = json_decode($q->getJsonData(), true);
+                // décalage de 2h avec  UTC
+                $date = (isset($jsonData['stopdate'])) ? strtotime($jsonData['stopdate']) - (2*60*60) : false;
+ 
+                if ($date) {
+                    $now = time();
+                    if ($now > $date) {
+                        $anticheat[] = $q->getId();
+                        continue;
+                    }
+                }
+            }
+
             $name = 'q' . $q->getId();
             $fieldsetFilter = new \Zend\InputFilter\InputFilter();
             
@@ -165,7 +183,19 @@ class QuizController extends GameController
         $form->setInputFilter($inputFilter);
 
         if ($this->getRequest()->isPost()) {
-            $data = $this->getRequest()->getPost()->toArray();
+            foreach ($anticheat as $id) {
+                $j = 0;
+                $i = 0;
+                foreach ($questions as $q) {
+                    if (($this->game->getQuestionGrouping() > 0 && $i % $this->game->getQuestionGrouping() == 0) || ($i == 0 && $this->game->getQuestionGrouping() == 0)) {
+                        $fieldsetName = 'questionGroup' . ++ $j;
+                    }
+                    if ($q->getId() == $id) {
+                        unset($data[$fieldsetName]['q'.$q->getId()]);
+                    }
+                    $i++;
+                }
+            }
             $action = $this->params('action');
     
             // On POST, if the anonymousUser has not been created yet, I try to create it now 
