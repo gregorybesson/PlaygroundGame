@@ -25,8 +25,8 @@ return array(
         'rule_providers' => array(
             'BjyAuthorize\Provider\Rule\Config' => array(
                 'allow' => array(
-                    array(array('admin'), 'game', array('list','add','edit','delete')),
-                    array(array('admin'), 'game', array('prizecategory_list','prizecategory_add','prizecategory_edit','prizecategory_delete')),
+                    array(array('campaign-manager', 'admin'), 'game', array('list','add','edit','delete')),
+                    array(array('campaign-manager', 'admin'), 'game', array('prizecategory_list','prizecategory_add','prizecategory_edit','prizecategory_delete')),
                     array(array('supervisor'), 'core', array('dashboard')),
                     array(array('supervisor'), 'game', array('list')),
                 ),
@@ -47,14 +47,14 @@ return array(
                 array('controller' => PlaygroundGame\Controller\Frontend\Webhook::class,        'roles' => array('guest', 'user')),
     
                 // Admin area admin
-                array('controller' => PlaygroundGame\Controller\Admin\Game::class,          'roles' => array('admin')),
-                array('controller' => PlaygroundGame\Controller\Admin\Lottery::class,       'roles' => array('admin')),
-                array('controller' => PlaygroundGame\Controller\Admin\InstantWin::class,    'roles' => array('admin')),
-                array('controller' => PlaygroundGame\Controller\Admin\Quiz::class,          'roles' => array('admin')),
-                array('controller' => PlaygroundGame\Controller\Admin\PostVote::class,      'roles' => array('admin')),
-                array('controller' => PlaygroundGame\Controller\Admin\Mission::class,       'roles' => array('admin')),
-                array('controller' => PlaygroundGame\Controller\Admin\TradingCard::class,   'roles' => array('admin')),
-                array('controller' => PlaygroundGame\Controller\Admin\PrizeCategory::class, 'roles' => array('admin')),
+                array('controller' => PlaygroundGame\Controller\Admin\Game::class,          'roles' => array('campaign-manager','admin')),
+                array('controller' => PlaygroundGame\Controller\Admin\Lottery::class,       'roles' => array('campaign-manager','admin')),
+                array('controller' => PlaygroundGame\Controller\Admin\InstantWin::class,    'roles' => array('campaign-manager','admin')),
+                array('controller' => PlaygroundGame\Controller\Admin\Quiz::class,          'roles' => array('campaign-manager','admin')),
+                array('controller' => PlaygroundGame\Controller\Admin\PostVote::class,      'roles' => array('campaign-manager','admin')),
+                array('controller' => PlaygroundGame\Controller\Admin\Mission::class,       'roles' => array('campaign-manager','admin')),
+                array('controller' => PlaygroundGame\Controller\Admin\TradingCard::class,   'roles' => array('campaign-manager','admin')),
+                array('controller' => PlaygroundGame\Controller\Admin\PrizeCategory::class, 'roles' => array('campaign-manager','admin')),
                 // Admin area supervisor
                 array('controller' => PlaygroundGame\Controller\Admin\Game::class, 'action' => ['list'], 'roles' => array('supervisor')),
                 array('controller' => PlaygroundGame\Controller\Admin\Lottery::class,  'action' => ['entry', 'download'], 'roles' => array('supervisor')),
