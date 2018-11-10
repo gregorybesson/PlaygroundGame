@@ -21,6 +21,7 @@ return array(
     'Add new Instant Win'   => 'Ajouter un instant gagnant',
     'Add new Post&Vote'     => 'Ajouter un Post&Vote',
     'Add new Treasure Hunt' => 'Ajouter une chasse au trésor',
+    'Add new trading card'  => 'Ajouter un jeu de cartes à collectionner',
     'Active'                => 'Actif',
     'Activate the game'     => 'Activer le jeu',
     'Desactivate the game'  => 'Désactiver le jeu',
