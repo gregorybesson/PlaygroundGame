@@ -74,7 +74,7 @@ class QuizController extends GameController
             if ($this->getRequest()->isPost()) {
                 $jsonData = json_decode($q->getJsonData(), true);
                 // décalage de 2h avec  UTC
-                $date = (isset($jsonData['stopdate'])) ? strtotime($jsonData['stopdate']) - (2*60*60) : false;
+                $date = (isset($jsonData['stopdate'])) ? strtotime($jsonData['stopdate']) : false;
  
                 if ($date) {
                     $now = time();
