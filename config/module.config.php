@@ -3315,6 +3315,22 @@ return array(
                         'route' => 'admin/lottery/entry',
                         'privilege' => 'list'
                     ),
+                    'create-instantwin' => array(
+                        'label' => 'Add new instant win',
+                        'route' => 'admin/playgroundgame/create-instantwin',
+                        'resource' => 'game',
+                        'privilege' => 'add'
+                    ),
+                    'edit-instantwin' => array(
+                        'label' => 'Editer un instant gagnant',
+                        'route' => 'admin/playgroundgame/edit-instantwin',
+                        'privilege' => 'edit'
+                    ),
+                    'entry-instantwin' => array(
+                        'label' => 'Participants',
+                        'route' => 'admin/instantwin/entry',
+                        'privilege' => 'list'
+                    ),
                     'create-quiz' => array(
                         'label' => 'Add new quiz',
                         'route' => 'admin/playgroundgame/create-quiz',
@@ -3347,22 +3363,6 @@ return array(
                         'route' => 'admin/postvote/entry',
                         'privilege' => 'list'
                     ),
-                    'create-instantwin' => array(
-                        'label' => 'Add new instant win',
-                        'route' => 'admin/playgroundgame/create-instantwin',
-                        'resource' => 'game',
-                        'privilege' => 'add'
-                    ),
-                    'edit-instantwin' => array(
-                        'label' => 'Editer un instant gagnant',
-                        'route' => 'admin/playgroundgame/edit-instantwin',
-                        'privilege' => 'edit'
-                    ),
-                    'entry-instantwin' => array(
-                        'label' => 'Participants',
-                        'route' => 'admin/instantwin/entry',
-                        'privilege' => 'list'
-                    ),
                     'quiz-question-list' => array(
                         'label' => 'Liste des questions',
                         'route' => 'admin/playgroundgame/quiz-question-list',
@@ -3379,6 +3379,18 @@ return array(
                                 'privilege' => 'edit'
                             )
                         )
+                    ),
+                    'create-tradingcard' => array(
+                        'label' => 'Add new trading card',
+                        'route' => 'admin/playgroundgame/create-tradingcard',
+                        'resource' => 'game',
+                        'privilege' => 'add'
+                    ),
+                    'create-mission' => array(
+                        'label' => 'Add new mission',
+                        'route' => 'admin/playgroundgame/create-mission',
+                        'resource' => 'game',
+                        'privilege' => 'add'
                     ),
                     'list-prizecategory' => array(
                         'label' => 'Manage categories gain',
@@ -3425,18 +3437,6 @@ return array(
                         'label' => 'Options du Post & vote',
                         'route' => 'admin/playgroundgame/postvote-form',
                         'privilege' => 'list'
-                    ),
-                    'create-mission' => array(
-                        'label' => 'Add new mission',
-                        'route' => 'admin/playgroundgame/create-mission',
-                        'resource' => 'game',
-                        'privilege' => 'add'
-                    ),
-                    'create-tradingcard' => array(
-                        'label' => 'Add new trading card',
-                        'route' => 'admin/playgroundgame/create-tradingcard',
-                        'resource' => 'game',
-                        'privilege' => 'add'
                     ),
                 )
             )
