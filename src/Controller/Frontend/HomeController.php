@@ -54,7 +54,8 @@ class HomeController extends AbstractActionController
 
         $layoutViewModel->addChild($slider, 'slider');
 
-        $games = $this->getGameService()->getActiveGames(true, '', '');
+        $games = $this->getGameService()->getActiveGames(false, '', '');
+
         $pages = $this->getPageService()->getActivePages();
 
         // I merge both types of articles and sort them in reverse order of their key
