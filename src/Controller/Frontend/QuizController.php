@@ -263,6 +263,10 @@ class QuizController extends GameController
 
     public function resultAction()
     {
+        $playLimitReached = false;
+        if ($this->getRequest()->getQuery()->get('playLimitReached')) {
+            $playLimitReached = true;
+        }
         $statusMail = null;
         $prediction = false;
         $userTimer = array();
@@ -397,6 +401,7 @@ class QuizController extends GameController
             'userTimer'           => $userTimer,
             'userAnswers'         => $userAnswers,
             'flashMessages'       => $this->flashMessenger()->getMessages(),
+            'playLimitReached'    => $playLimitReached,
         ));
 
         return $viewModel;
