@@ -98,6 +98,7 @@ class LotteryController extends GameController
                 'socialLinkUrl' => $socialLinkUrl,
                 'secretKey'     => $secretKey,
                 'playLimitReached' => $playLimitReached,
+                'entry' => $lastEntry
             ));
 
         return $viewModel;
