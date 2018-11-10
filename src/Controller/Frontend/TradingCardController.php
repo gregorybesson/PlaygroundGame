@@ -98,9 +98,18 @@ class TradingCardController extends GameController
 
     public function resultAction()
     {
+        $playLimitReached = false;
+        if ($this->getRequest()->getQuery()->get('playLimitReached')) {
+            $playLimitReached = true;
+        }
         $album = $this->getGameService()->getAlbum($this->game, $this->user);
         $viewModel = $this->buildView($this->game);
-        $viewModel->setVariables(array('album' => $album));
+        $viewModel->setVariables(
+            array(
+                'album' => $album,
+                'playLimitReached' => $playLimitReached,
+            )
+        );
 
         return $viewModel;
     }

@@ -87,6 +87,10 @@ class InstantWinController extends GameController
 
     public function resultAction()
     {
+        $playLimitReached = false;
+        if ($this->getRequest()->getQuery()->get('playLimitReached')) {
+            $playLimitReached = true;
+        }
         $lastEntry = $this->getGameService()->findLastInactiveEntry($this->game, $this->user);
 
         if (!$lastEntry) {
@@ -153,6 +157,7 @@ class InstantWinController extends GameController
                 'form'             => $form,
                 'socialLinkUrl'    => $socialLinkUrl,
                 'secretKey'        => $secretKey,
+                'playLimitReached' => $playLimitReached,
             ));
         }
         return $viewModel;

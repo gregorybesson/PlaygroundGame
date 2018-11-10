@@ -324,6 +324,10 @@ class PostVoteController extends GameController
      */
     public function resultAction()
     {
+        $playLimitReached = false;
+        if ($this->getRequest()->getQuery()->get('playLimitReached')) {
+            $playLimitReached = true;
+        }
         $lastEntry = $this->getGameService()->findLastInactiveEntry($this->game, $this->user);
         if ($lastEntry === null) {
             return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('postvote', array('id' => $identifier)));
@@ -368,6 +372,7 @@ class PostVoteController extends GameController
                 'statusMail' => null,
                 'post' => $post,
                 'form' => $form,
+                'playLimitReached' => $playLimitReached,
             ));
 
         return $viewModel;
