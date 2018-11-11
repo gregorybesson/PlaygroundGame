@@ -84,6 +84,17 @@ class TradingCardController extends GameController
     public function playAction()
     {
         $entry = $this->getGameService()->play($this->game, $this->user);
+        if (!$entry) {
+            // the user has already taken part to this game and the participation limit has been reached
+            $this->flashMessenger()->addMessage('Vous avez déjà participé');
+
+            return $this->redirect()->toUrl(
+                $this->frontendUrl()->fromRoute(
+                    'tradingcard/result',
+                    array('id' => $this->game->getIdentifier())
+                ) .'?playLimitReached=1'
+            );
+        }
         $viewModel = $this->buildView($this->game);
         $booster = null;
         if ($entry) {
@@ -91,7 +102,12 @@ class TradingCardController extends GameController
         }
         
         $album = $this->getGameService()->getAlbum($this->game, $this->user);
-        $viewModel->setVariables(array('booster' => $booster, 'album' => $album));
+        $viewModel->setVariables(
+            array(
+                'booster' => $booster,
+                'album' => $album
+            )
+        );
 
         return $viewModel;
     }

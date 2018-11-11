@@ -46,7 +46,7 @@ class Cron
 
         $game = $gameService->checkGame('qooqo');
 
-        // On recherche les joueurs qui n'ont pas partagé leur qquiz après avoir joué
+        // On recherche les joueurs qui n'ont pas partagé leur quiz après avoir joué
         // entry join user join game : distinct user et game et game_entry = 0 et updated_at <= jour-1 et > jour - 2
 
         $message = $mailService->createTextMessage(

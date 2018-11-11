@@ -17,7 +17,7 @@ class TradingCard extends Game
         if (!is_dir($path)) {
             mkdir($path, 0777, true);
         }
-        $path .= 'model'.$model->getId().DIRECTORY_SEPARATOR;
+        $path .= 'models'.DIRECTORY_SEPARATOR;
         if (!is_dir($path)) {
             mkdir($path, 0777, true);
         }
@@ -51,8 +51,8 @@ class TradingCard extends Game
         if (!$form->isValid()) {
             return false;
         }
-
         if (!empty($data['upload_image']['tmp_name'])) {
+            
             ErrorHandler::start();
             $data['upload_image']['name'] = $this->fileNewname(
                 $path,
@@ -153,8 +153,60 @@ class TradingCard extends Game
 
     public function getAlbum($game, $user)
     {
+        // all the models of the album
+        $models = $this->getTradingCardModelMapper()->findAll();
+
+        $em = $this->serviceLocator->get('doctrine.entitymanager.orm_default');
+        $qb = $em->createQueryBuilder();
+        $and = $qb->expr()->andx();
+        $and->add($qb->expr()->eq('g.id', ':game'));
+        $and->add($qb->expr()->eq('u.id', ':user'));
+        $qb->setParameter('game', $game);
+        $qb->select('c')
+            ->from('PlaygroundGame\Entity\TradingCardCard', 'c')
+            ->innerJoin('c.game', 'g')
+            ->innerJoin('c.model', 'm')
+            ->leftJoin('c.user', 'u')
+            ->where($and)
+            ->orderBy('m.id', 'ASC')
+            ->groupBy('c.model');
+        if ($user) {
+            $qb->setParameter('user', $user);
+        } else {
+            $qb->setParameter('user', null);
+        }
+        $query = $qb->getQuery();
+
+        // all the cards of the user
+        $cards = $query->getResult();
+        $cardsArray = [];
+        foreach ($cards as $card) {
+            $cardsArray[$card->getModel()->getId()] = $card;
+        }
+
+        $album = [];
+
+        // I create the complete album including the cards of the user
+        foreach($models as $model) {
+            $sticker['model'] = $model;
+            if(isset($cardsArray[$model->getId()])) {
+                $sticker['card'] = $cardsArray[$model->getId()];
+            } else {
+                $sticker['card'] = null;
+            }
+            $album[] = $sticker;
+        }
+
+        return $album;
+    }
+
+    public function getAlbumOld($game, $user)
+    {
         // get collection of cards from the user for this game
-        $album      = $this->getTradingCardCardMapper()->findBy(array('game' => $game, 'user' => $user), array('createdAt' => 'ASC'));
+        $album      = $this->getTradingCardCardMapper()->findBy(
+            array('game' => $game, 'user' => $user),
+            array('createdAt' => 'ASC')
+        );
         $eventAlbum = $this->getEventManager()->trigger(
             __FUNCTION__ .'.post',
             $this,
@@ -168,6 +220,7 @@ class TradingCard extends Game
         if ($eventAlbum) {
             $album = $eventAlbum;
         }
+
         return $album;
     }
 
