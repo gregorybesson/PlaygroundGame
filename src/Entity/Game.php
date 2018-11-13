@@ -324,9 +324,11 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
     protected $twShareMessage;
 
     /**
+     * available steps : index, register, play, result, bounce
+     * This string is transformed into an array and represents the workflow of the game
      * @ORM\Column(name="steps", type="string", length=255, nullable=true)
      */
-    protected $steps = '{"0":"index","1":"play","2":"result","3":"bounce"}';
+    protected $steps = 'play,result';
 
     /**
      * @ORM\Column(name="steps_views", type="string", length=255, nullable=true)
@@ -903,8 +905,10 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
     {
         $steps = null;
 
-        if ($this->getSteps()) {
+        if ($this->getSteps() && $this->getSteps()[0] === '{') {
             $steps = json_decode($this->getSteps(), true);
+        } else if ($this->getSteps()) {
+            $steps = explode(',', $this->getSteps());
         }
         if (!$steps) {
             $steps = array('index','play','result','bounce');
