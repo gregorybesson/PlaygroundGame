@@ -48,7 +48,7 @@ class QuizReplyAnswer implements InputFilterAwareInterface
     protected $answer_id;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="text")
      **/
     protected $answer;
 
