@@ -142,7 +142,8 @@ class GameController extends AbstractActionController
             }
 
             $controller->user = $controller->zfcUserAuthentication()->getIdentity();
-            if ($controller->game &&
+            if (
+                    $controller->game &&
                     !$controller->user &&
                     !$controller->game->getAnonymousAllowed() &&
                     in_array($controller->params('action'), $controller->withAnyUser)
@@ -266,6 +267,7 @@ class GameController extends AbstractActionController
 
         // If an entry has already been done during this session, I reset the anonymous_identifier cookie
         // so that another person can play the same game (if game conditions are fullfilled)
+        // or the same person can play another game
         $session = new Container('anonymous_identifier');
         if ($session->offsetExists('anonymous_identifier')) {
             $session->offsetUnset('anonymous_identifier');
