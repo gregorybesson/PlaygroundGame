@@ -58,14 +58,10 @@ class Quiz extends Game
 
         $question->setQuiz($quiz);
 
-        // If question is a prediction, no need to calculate max good answers
-        // if (!$question->getPrediction()) {
-        //     // Max points and correct answers calculation for the question
-        //     if (!$question = $this->calculateMaxAnswersQuestion($question)) {
-        //
-        //         return false;
-        //     }
-        // }
+        // Max points and correct answers calculation for the question
+        if (!$question = $this->calculateMaxAnswersQuestion($question)) {
+            return false;
+        }
 
         // Max points and correct answers recalculation for the quiz
         $quiz = $this->calculateMaxAnswersQuiz($question->getQuiz());
@@ -108,13 +104,10 @@ class Quiz extends Game
             return false;
         }
 
-        // If question is a prediction, no need to calculate max good answers
-        // if (!$question->getPrediction()) {
-        //     // Max points and correct answers calculation for the question
-        //     if (!$question = $this->calculateMaxAnswersQuestion($question)) {
-        //         return false;
-        //     }
-        // }
+        // Max points and correct answers calculation for the question
+        if (!$question = $this->calculateMaxAnswersQuestion($question)) {
+            return false;
+        }
 
         if (!empty($data['upload_image']['tmp_name'])) {
             ErrorHandler::start();
@@ -205,13 +198,16 @@ class Quiz extends Game
         /* @var $dbal \Doctrine\DBAL\Connection */
         $dbal = $em->getConnection();
 
-        $answers = $question->getAnswers($question->getQuiz());
+        $answers = $question->getAnswers();
+        $victoryCondition = $question->getQuiz()->getVictoryConditions()/100;
+        $maxCorrectAnswers = $question->getQuiz()->getMaxCorrectAnswers();
+        $nbQuestionsWinner = $victoryCondition * $maxCorrectAnswers;
 
         // I update all the answers with points and correctness
         // Very fast (native query inside)
         if ($question->getType() == 2) {
             foreach ($answers as $answer) {
-                $correct = (is_int($answer->getCorrect()))?$answer->getCorrect():0;
+                $correct = ($answer->getCorrect() == 1)?$answer->getCorrect():0;
                 $value  = trim(strip_tags($answer->getAnswer()));
                 $points = ($correct)?$answer->getPoints():0;
                 $sql    = "
@@ -232,7 +228,7 @@ class Quiz extends Game
             }
         } else {
             foreach ($answers as $answer) {
-                $correct = (is_int($answer->getCorrect()))?$answer->getCorrect():0;
+                $correct = ($answer->getCorrect() == 1)?$answer->getCorrect():0;
                 $points = ($correct)?$answer->getPoints():0;
                 $sql    = "
                 UPDATE game_quiz_reply_answer AS ra
@@ -254,7 +250,7 @@ class Quiz extends Game
             }
         }
 
-        // Entry update with points. WINNER as to be calculated also !
+        // Entry update with points. WINNER is calculated also !
         $sql = "
         UPDATE game_entry as e
         INNER JOIN
@@ -262,16 +258,19 @@ class Quiz extends Game
             SELECT e.id, SUM(ra.points) as points, SUM(ra.correct) as correct
             FROM game_entry as e
             INNER JOIN game_quiz_reply AS r ON r.entry_id = e.id
-            INNER JOIN game_quiz_reply_answer AS ra ON ra.reply_id = r.id AND ra.correct = 1
+            INNER JOIN game_quiz_reply_answer AS ra ON ra.reply_id = r.id
             GROUP BY e.id
         ) i ON e.id = i.id
-        SET e.points = i.points
+        SET e.points = i.points, e.winner = IF( i.correct >= :nbQuestionsWinner, 1, 0)
         WHERE e.game_id = :gameId
         ";
 
         $stmt = $dbal->prepare($sql);
         $stmt->execute(
-            array('gameId' => $question->getQuiz()->getId())
+            array(
+                'gameId' => $question->getQuiz()->getId(),
+                'nbQuestionsWinner' => $nbQuestionsWinner
+            )
         );
 
         $this->getEventManager()->trigger(
