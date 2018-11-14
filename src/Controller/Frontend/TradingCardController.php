@@ -118,12 +118,23 @@ class TradingCardController extends GameController
         if ($this->getRequest()->getQuery()->get('playLimitReached')) {
             $playLimitReached = true;
         }
+        $lastEntry = $this->getGameService()->findLastInactiveEntry($this->game, $this->user);
+        if (!$lastEntry) {
+            return $this->redirect()->toUrl(
+                $this->frontendUrl()->fromRoute(
+                    'tradingcard',
+                    array('id' => $this->game->getIdentifier()),
+                    array('force_canonical' => true)
+                )
+            );
+        }
         $album = $this->getGameService()->getAlbum($this->game, $this->user);
         $viewModel = $this->buildView($this->game);
         $viewModel->setVariables(
             array(
                 'album' => $album,
                 'playLimitReached' => $playLimitReached,
+                'entry' => $lastEntry
             )
         );
 

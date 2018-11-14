@@ -68,6 +68,58 @@ class Entry extends AbstractMapper
     public function findLastEntriesByUser($game, $user, $dateLimit)
     {
         $query = $this->em->createQuery(
+            'SELECT e.id FROM PlaygroundGame\Entity\Entry e 
+             WHERE e.user = :user AND e.game = :game AND (e.bonus = 0 OR e.bonus IS NULL) AND e.created_at >= :date'
+        );
+        $query->setParameter('user', $user);
+        $query->setParameter('game', $game);
+        $query->setParameter('date', $dateLimit);
+
+        $total = $query->getResult();
+
+        return $total;
+    }
+    
+    public function findLastEntriesByAnonymousIdentifier($game, $anonymousIdentifier, $dateLimit)
+    {
+        $query = $this->em->createQuery(
+            'SELECT e.id FROM PlaygroundGame\Entity\Entry e 
+             WHERE e.anonymousIdentifier = :anonymousIdentifier AND e.game = :game 
+             AND (e.bonus = 0 OR e.bonus IS NULL) AND e.created_at >= :date'
+        );
+        $query->setParameter('anonymousIdentifier', $anonymousIdentifier);
+        $query->setParameter('game', $game);
+        $query->setParameter('date', $dateLimit);
+    
+        $total = $query->getResult();
+
+        return $total;
+    }
+
+    public function findLastEntriesByIp($game, $ip, $dateLimit)
+    {
+        $query = $this->em->createQuery(
+            'SELECT e.id FROM PlaygroundGame\Entity\Entry e 
+             WHERE e.ip = :ip AND e.game = :game AND (e.bonus = 0 OR e.bonus IS NULL) AND e.created_at >= :date'
+        );
+        $query->setParameter('ip', $ip);
+        $query->setParameter('game', $game);
+        $query->setParameter('date', $dateLimit);
+    
+        $total = $query->getResult();
+    
+        return $total;
+    }
+
+    /**
+     * Get all the entries of the player except those offered as bonus
+     *
+     * @param unknown_type $game
+     * @param unknown_type $user
+     */
+    public function countLastEntriesByUser($game, $user, $dateLimit)
+    {
+        $query = $this->em->createQuery(
             'SELECT COUNT(e.id) FROM PlaygroundGame\Entity\Entry e 
              WHERE e.user = :user AND e.game = :game AND (e.bonus = 0 OR e.bonus IS NULL) AND e.created_at >= :date'
         );
@@ -80,7 +132,7 @@ class Entry extends AbstractMapper
         return $total;
     }
     
-    public function findLastEntriesByAnonymousIdentifier($game, $anonymousIdentifier, $dateLimit)
+    public function countLastEntriesByAnonymousIdentifier($game, $anonymousIdentifier, $dateLimit)
     {
         $query = $this->em->createQuery(
             'SELECT COUNT(e.id) FROM PlaygroundGame\Entity\Entry e 
@@ -96,7 +148,7 @@ class Entry extends AbstractMapper
         return $total;
     }
 
-    public function findLastEntriesByIp($game, $ip, $dateLimit)
+    public function countLastEntriesByIp($game, $ip, $dateLimit)
     {
         $query = $this->em->createQuery(
             'SELECT COUNT(e.id) FROM PlaygroundGame\Entity\Entry e 

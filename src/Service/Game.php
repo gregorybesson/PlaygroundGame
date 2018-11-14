@@ -510,7 +510,7 @@ class Game
 
     public function getEntriesHeader($game)
     {
-        if ($game->getPlayerForm()) {
+        if ($game->getAnonymousAllowed() && $game->getPlayerForm()) {
             $formPV = json_decode($game->getPlayerForm()->getForm(), true);
             $header = array('id'=> 1);
             foreach ($formPV as $element) {
@@ -520,6 +520,15 @@ class Game
                     }
                 }
             }
+        } elseif ($game->getAnonymousAllowed()) {
+            $header = array(
+                'id' => 1,
+                'ip' => 1,
+                'geoloc' => 1,
+                'winner' => 1,
+                'socialShares' => 1,
+                'updated_at' => 1,
+            );
         } else {
             $header = array(
                 'id' => 1,
@@ -815,8 +824,6 @@ class Game
             $session = new Container('anonymous_identifier');
             
             if ($session->offsetExists('anonymous_identifier')) {
-            //if(isset($_SESSION['anonymous_identifier'])) {
-                //$this->anonymousIdentifier = $_SESSION['anonymous_identifier']['anonymous_identifier'];
                 $this->anonymousIdentifier = $session->offsetGet('anonymous_identifier');
             } else {
                 $this->anonymousIdentifier = false;
@@ -901,9 +908,9 @@ class Game
         $limitDate = $this->getLimitDate($limitScale);
 
         if ($user) {
-            return $this->getEntryMapper()->findLastEntriesByUser($game, $user, $limitDate);
+            return $this->getEntryMapper()->countLastEntriesByUser($game, $user, $limitDate);
         } elseif ($this->getAnonymousIdentifier()) {
-            $entries = $this->getEntryMapper()->findLastEntriesByAnonymousIdentifier(
+            $entries = $this->getEntryMapper()->countLastEntriesByAnonymousIdentifier(
                 $game,
                 $this->getAnonymousIdentifier(),
                 $limitDate
@@ -916,7 +923,7 @@ class Game
             if((!$user &&  !$game->getAnonymousAllowed()) || ($game->getAnonymousAllowed() && $game->getAnonymousIdentifier())) {
                 return 0;
             }
-            return $this->getEntryMapper()->findLastEntriesByIp($game, $this->getIp(), $limitDate);
+            return $this->getEntryMapper()->countLastEntriesByIp($game, $this->getIp(), $limitDate);
         }
     }
 
