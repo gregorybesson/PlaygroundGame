@@ -155,28 +155,68 @@ class TradingCard extends Game
     {
         // all the models of the album
         $models = $this->getTradingCardModelMapper()->findAll();
-
         $em = $this->serviceLocator->get('doctrine.entitymanager.orm_default');
-        $qb = $em->createQueryBuilder();
-        $and = $qb->expr()->andx();
-        $and->add($qb->expr()->eq('g.id', ':game'));
-        $and->add($qb->expr()->eq('u.id', ':user'));
-        $qb->setParameter('game', $game);
-        $qb->select('c')
-            ->from('PlaygroundGame\Entity\TradingCardCard', 'c')
-            ->innerJoin('c.game', 'g')
-            ->innerJoin('c.model', 'm')
-            ->leftJoin('c.user', 'u')
-            ->where($and)
-            ->orderBy('m.id', 'ASC')
-            ->groupBy('c.model');
-        if ($user) {
-            $qb->setParameter('user', $user);
-        } else {
-            $qb->setParameter('user', null);
-        }
-        $query = $qb->getQuery();
 
+        if ($user) {
+            $qb = $em->createQueryBuilder();
+            $and = $qb->expr()->andx();
+            $and->add($qb->expr()->eq('g.id', ':game'));
+            $qb->setParameter('game', $game);
+            $and->add($qb->expr()->eq('u.id', ':user'));
+            $qb->setParameter('user', $user);
+            $qb->select('c')
+                ->from('PlaygroundGame\Entity\TradingCardCard', 'c')
+                ->innerJoin('c.game', 'g')
+                ->innerJoin('c.model', 'm')
+                ->innerJoin('c.user', 'u')
+                ->where($and)
+                ->orderBy('m.id', 'ASC')
+                ->groupBy('c.model');
+            $query = $qb->getQuery();
+        } elseif ($game->getAnonymousAllowed() && $this->getAnonymousIdentifier()) {
+            $limitDate = $this->getLimitDate('always');
+            $entries = $this->getEntryMapper()->findLastEntriesByAnonymousIdentifier(
+                $game,
+                $this->getAnonymousIdentifier(),
+                $limitDate
+            );
+            $qb = $em->createQueryBuilder();
+            $qb->andWhere('e.id IN (:entries)')->setParameter('entries', $entries);
+            $qb->select('c')
+                ->from('PlaygroundGame\Entity\TradingCardCard', 'c')
+                ->innerJoin('c.model', 'm')
+                ->innerJoin('c.game', 'g')
+                ->innerJoin('c.entry', 'e')
+                ->orderBy('m.id', 'ASC')
+                ->groupBy('c.model');
+            $query = $qb->getQuery();
+        } elseif ($game->getAnonymousAllowed()) {
+            $limitDate = $this->getLimitDate('always');
+            $entries = $this->getEntryMapper()->findLastEntriesByIp(
+                $game,
+                $this->getIp(),
+                $limitDate
+            );
+            $qb = $em->createQueryBuilder();
+            $qb->andWhere('e.id IN (:entries)')->setParameter('entries', $entries);
+            $qb->select('c')
+                ->from('PlaygroundGame\Entity\TradingCardCard', 'c')
+                ->innerJoin('c.model', 'm')
+                ->innerJoin('c.game', 'g')
+                ->innerJoin('c.entry', 'e')
+                ->orderBy('m.id', 'ASC')
+                ->groupBy('c.model');
+            $query = $qb->getQuery();
+        } else {
+            // If the game is supposed to be a regular user game or an anonymous identified game,
+            // it means that the registration/login is at the end of the game
+            if((!$user &&  !$game->getAnonymousAllowed()) || ($game->getAnonymousAllowed() && $game->getAnonymousIdentifier())) {
+                return 0;
+            }
+            return $this->getEntryMapper()->findLastEntriesByIp($game, $this->getIp(), $limitDate);
+        }
+
+        
         // all the cards of the user
         $cards = $query->getResult();
         $cardsArray = [];
@@ -195,30 +235,6 @@ class TradingCard extends Game
                 $sticker['card'] = null;
             }
             $album[] = $sticker;
-        }
-
-        return $album;
-    }
-
-    public function getAlbumOld($game, $user)
-    {
-        // get collection of cards from the user for this game
-        $album      = $this->getTradingCardCardMapper()->findBy(
-            array('game' => $game, 'user' => $user),
-            array('createdAt' => 'ASC')
-        );
-        $eventAlbum = $this->getEventManager()->trigger(
-            __FUNCTION__ .'.post',
-            $this,
-            array(
-                'game'  => $game,
-                'user'  => $user,
-                'album' => $album,
-            )
-        )->last();
-
-        if ($eventAlbum) {
-            $album = $eventAlbum;
         }
 
         return $album;
