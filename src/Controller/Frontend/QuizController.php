@@ -327,6 +327,9 @@ class QuizController extends GameController
             );
         }
 
+        // The distribution of answers for each question
+        $distribution = $this->getGameService()->getAnswersDistribution($this->game);
+
         // Je prépare le tableau des bonnes réponses trouvées et non trouvées
         $ga = array();
         $questions = $this->game->getQuestions();
@@ -402,6 +405,7 @@ class QuizController extends GameController
             'userAnswers'         => $userAnswers,
             'flashMessages'       => $this->flashMessenger()->getMessages(),
             'playLimitReached'    => $playLimitReached,
+            'distribution'        => $distribution,
         ));
 
         return $viewModel;

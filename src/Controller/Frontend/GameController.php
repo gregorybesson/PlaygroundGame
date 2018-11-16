@@ -59,6 +59,17 @@ class GameController extends AbstractActionController
         'result',
     );
 
+    /**
+     * These steps are available only when the game is started
+     */
+    protected $withStartedGame = array(
+        'preview',
+        'createTeam',
+        'inviteToTeam',
+        'register',
+        'play',
+    );
+
     protected $withAnyUser = array(
         'share',
         'result',
@@ -190,6 +201,28 @@ class GameController extends AbstractActionController
                 // ligne    $controller->getRequest()->getUri()->getHost() === $customUrl
                 // ligne ) {
                 return $controller->redirect()->toUrl($urlRegister);
+            }
+
+            // If the game is finished, I redirect some actions to result (you can't play it anymore)
+            if (
+                $controller->game &&
+                $controller->game->isFinished() &&
+                in_array($controller->params('action'), $controller->withStartedGame)
+            ) {
+                if ($this->isSoloGame) {
+                    $urlResult = $controller->url()->fromRoute(
+                        'frontend.'.$customUrl.'/'.$controller->game->getClassType().'/result',
+                        array('id' => $controller->game->getIdentifier()),
+                        array('force_canonical' => true)
+                    );
+                } else {
+                    $urlResult = $controller->url()->fromRoute(
+                        'frontend/'.$controller->game->getClassType().'/result',
+                        array('id' => $controller->game->getIdentifier()),
+                        array('force_canonical' => true)
+                    );
+                }
+                return $controller->redirect()->toUrl($urlResult);
             }
 
                 return;

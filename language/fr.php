@@ -165,6 +165,15 @@ return array(
     'Instant win creation frequency ?' => 'Création des instants gagnants sur quelle fréquence ?',
     'Creation frequency' => 'Fréquence de création',
     'Game Image scraping' => 'Image de grattage du jeu',
+    'Make this game available to the users' => 'Activer le jeu',
+    'Anonymous players allowed' => 'Ce jeu est en mode anonyme ou identifié',
+    'Anonymous Identifier' => "Champ de d'identification de votre formulaire d'inscription",
+    'This date corresponds to the launch of the game. You may have an annoucement phase between this date and the start date.' => "Cette date correspond au lancement du jeu. Vous pouvez avoir une phase d'annonce ou de pré-inscription avant le début du jeu par exemple. Si vous ne souhaitez pas de phase d'annonce, laissez cette date vide.",
+    'This date corresponds to the start of the game : The players can now play the game' => "Cette date correspond au démarrage du jeu : A partir de maintenant, les joueurs peuvent jouer !",
+    "This date corresponds to the end of the game : The players can't play the game anymore" => "Cette date correspond à la fin du jeu : Les joueurs ne peuvent plus jouer.",
+    "This date corresponds to the end of the game's display : You can use this phase to present the winners" => "Cette date correspond à la fermeture du jeu : Vous pouvez utiliser par exemple cette phase pour présenter les gagnants. Si vous ne souhaitez pas d'une phase d'annonce de fin de jeu, laissez cette date vide.",
+    'Is this game only available to authenticated users (users who have created an account on the platform) ? If you check this option, you make the game available to every visitors.' => "Ce jeu est-il disponible uniquement aux utilisateurs authentifiés de playground (ceux qui ont créé ou qui vont créer un compte avec login et mot de passe) ? Si vous cochez cette case, vous rendez le jeu disponible à tous les visiteurs (vous pouvez leur faire remplir un formulaire d'identification, mais vous ne leur créez pas un compte avec login et mot de passe).",
+    'If you create a player form for this game and want to identify the players based on one of the fields of this form (frequently the email), enter the field name here.' => "Si vous créez un formulaire d'identification, vous pouvez identifier chaque joueur sur l'un des champs de ce formulaire (souvent le mail est utilisé). Saisissez le nom du champ ici",
 
     // Admin Entry list
     'User'                => 'Joueur',
@@ -174,6 +183,12 @@ return array(
     // Admin Quiz
     'Create quiz' => 'Créer un quizz',
     'Edit quiz'    => 'Editer un quizz',
+    '(perfect for a poll) Choose to display the poll statistics at the end of each entry, at the end of the game, or never !' => "Parfait pour un sondage : Choisissez d'afficher les statistiques du sondage après chaque participation, à la fin du jeu, ou jamais !",
+    '(perfect for a quiz) Choose to display the good answers after each question, after each entry, after the end of the game, or never !' => "Parfait pour un Quiz : Choisissez d'afficher les bonnes réponses après chaque question, après chaque participation, à la fin du jeu, ou jamais !",
+    'Never' => 'Jamais',
+    'After each question' => 'Après chaque question',
+    'After each entry' => 'Après chaque participation',
+    'At the end of the game' => 'A la fin du jeu',
 
     // Admin Quiz List
     'Add new question'    => 'Ajouter une question',

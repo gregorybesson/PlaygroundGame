@@ -59,6 +59,39 @@ class Quiz extends Game
         ));
 
         $this->add(array(
+            'type' => 'Zend\Form\Element\Select',
+            'name' => 'displayStats',
+            'attributes' =>  array(
+                'id' => 'displayStats',
+                'options' => array(
+                    'never' => $translator->translate('Never', 'playgroundgame'),
+                    'entry' => $translator->translate('After each entry', 'playgroundgame'),
+                    'game' => $translator->translate('At the end of the game', 'playgroundgame'),
+                ),
+            ),
+            'options' => array(
+                'label' => $translator->translate('Display statistics', 'playgroundgame'),
+            ),
+        ));
+
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Select',
+            'name' => 'displayGoodAnswers',
+            'attributes' =>  array(
+                'id' => 'displayGoodAnswers',
+                'options' => array(
+                    'never' => $translator->translate('Never', 'playgroundgame'),
+                    'question' => $translator->translate('After each question', 'playgroundgame'),
+                    'entry' => $translator->translate('After each entry', 'playgroundgame'),
+                    'game' => $translator->translate('At the end of the game', 'playgroundgame'),
+                ),
+            ),
+            'options' => array(
+                'label' => $translator->translate('Display the answers', 'playgroundgame'),
+            ),
+        ));
+
+        $this->add(array(
             'name' => 'timer',
             'type' => 'Zend\Form\Element\Radio',
             'attributes' => array(
