@@ -1909,15 +1909,15 @@ return array(
                                 )
                             ),
                             'verification' => array(
-		                        'type' => 'Zend\Router\Http\Literal',
-		                        'options' => array(
-		                            'route' => '/verification',
-		                            'defaults' => array(
-		                                'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
-		                                'action'     => 'check-token',
-		                            ),
-		                        ),
-		                    ),
+                                'type' => 'Zend\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/verification',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
+                                        'action'     => 'check-token',
+                                    ),
+                                ),
+                            ),
                             'optin' => array(
                                 'type' => 'Segment',
                                 'options' => array(

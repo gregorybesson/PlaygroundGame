@@ -9,8 +9,8 @@ if(isset($this->game)) :
     $twShareMsg = ($this->game->getTwShareMessage()) ?
     $this->game->getTwShareMessage() :
     $defaultMsg;
-    $fbShareMsg = ($this->game->getFbShareMessage()) ?
-    $this->game->getFbShareMessage() :
+    $fbShareMsg = ($this->game->getFbShareDescription()) ?
+    $this->game->getFbShareDescription() :
     $defaultMsg;
     $fbRequestMsg = ($this->game->getFbRequestMessage()) ?
     $this->game->getFbRequestMessage() :

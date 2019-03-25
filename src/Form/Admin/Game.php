@@ -375,6 +375,39 @@ class Game extends ProvidesEventsForm
             ),
         ));
 
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Checkbox',
+            'name' => 'emailShare',
+            'attributes' => array(
+                'class' => 'switch-input'
+            ),
+            'options' => array(
+                'label' => $translator->translate('Share the game by mail', 'playgroundgame'),
+            ),
+        ));
+
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Checkbox',
+            'name' => 'fbShare',
+            'attributes' => array(
+                'class' => 'switch-input'
+            ),
+            'options' => array(
+                'label' => $translator->translate('Share the game with Facebook', 'playgroundgame'),
+            ),
+        ));
+
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Checkbox',
+            'name' => 'twShare',
+            'attributes' => array(
+                'class' => 'switch-input'
+            ),
+            'options' => array(
+                'label' => $translator->translate('Share the game with Twitter', 'playgroundgame'),
+            ),
+        ));
+
         $options = $this->getServiceManager()->get('configuration');
 
         $layoutArray = array(
@@ -580,14 +613,14 @@ class Game extends ProvidesEventsForm
 
         $this->add(array(
                 'type' => 'Zend\Form\Element\Textarea',
-                'name' => 'fbShareMessage',
+                'name' => 'fbShareDescription',
                 'options' => array(
-                        'label' => $translator->translate('Facebook share message', 'playgroundgame')
+                        'label' => $translator->translate('Facebook share description', 'playgroundgame')
                 ),
                 'attributes' => array(
-                        'cols' => '10',
+                        'cols' => '40',
                         'rows' => '4',
-                        'id' => 'fbShareMessage'
+                        'id' => 'fbShareDescription'
                 )
         ));
 
@@ -617,44 +650,70 @@ class Game extends ProvidesEventsForm
         ));
 
         $this->add(array(
-                'type' => 'Zend\Form\Element\Textarea',
-                'name' => 'fbRequestMessage',
-                'options' => array(
-                    'label' => $translator->translate('Facebook invitation message', 'playgroundgame')
-                ),
-                'attributes' => array(
-                        'cols' => '10',
-                        'rows' => '4',
-                        'id' => 'fbRequestMessage'
-                )
+            'type' => 'Zend\Form\Element\Textarea',
+            'name' => 'fbRequestMessage',
+            'options' => array(
+                'label' => $translator->translate('Facebook invitation message', 'playgroundgame')
+            ),
+            'attributes' => array(
+                'cols' => '10',
+                'rows' => '4',
+                'id' => 'fbRequestMessage'
+            )
         ));
 
         $this->add(array(
-                'type' => 'Zend\Form\Element\Textarea',
-                'name' => 'twShareMessage',
-                'options' => array(
-                    'label' => $translator->translate('Twitter share message', 'playgroundgame')
-                ),
-                'attributes' => array(
-                    'cols' => '10',
-                    'rows' => '4',
-                    'id' => 'twShareMessage'
-                )
+            'type' => 'Zend\Form\Element\Textarea',
+            'name' => 'twShareMessage',
+            'options' => array(
+                'label' => $translator->translate('Twitter share message', 'playgroundgame')
+            ),
+            'attributes' => array(
+                'cols' => '40',
+                'rows' => '4',
+                'id' => 'twShareMessage'
+            )
+        ));
+
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Textarea',
+            'name' => 'emailShareSubject',
+            'options' => array(
+                'label' => $translator->translate('Email subject', 'playgroundgame')
+            ),
+            'attributes' => array(
+                'cols' => '40',
+                'rows' => '4',
+                'id' => 'emailShareSubject'
+            )
+        ));
+
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Textarea',
+            'name' => 'emailShareMessage',
+            'options' => array(
+                'label' => $translator->translate('Email message', 'playgroundgame')
+            ),
+            'attributes' => array(
+                'cols' => '40',
+                'rows' => '4',
+                'id' => 'emailShareMessage'
+            )
         ));
 
         $prizeFieldset = new PrizeFieldset(null, $sm, $translator);
         $this->add(array(
-                'type'    => 'Zend\Form\Element\Collection',
-                'name'    => 'prizes',
-                'options' => array(
-                        'id'    => 'prizes',
-                        'label' => $translator->translate('List of prizes', 'playgroundgame'),
-                        'count' => 0,
-                        'should_create_template' => true,
-                        'allow_add' => true,
-                        'allow_remove' => true,
-                        'target_element' => $prizeFieldset
-                )
+            'type'    => 'Zend\Form\Element\Collection',
+            'name'    => 'prizes',
+            'options' => array(
+                'id'    => 'prizes',
+                'label' => $translator->translate('List of prizes', 'playgroundgame'),
+                'count' => 0,
+                'should_create_template' => true,
+                'allow_add' => true,
+                'allow_remove' => true,
+                'target_element' => $prizeFieldset
+            )
         ));
 
         $this->add(array(

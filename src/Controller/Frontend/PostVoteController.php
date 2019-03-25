@@ -141,11 +141,13 @@ class PostVoteController extends GameController
             }
         }
 
-        $viewModel->setVariables(array(
-            'playerData' => $entry->getPlayerData(),
-            'form' => $form,
-            'post' => $post,
-        ));
+        $viewModel->setVariables(
+            array(
+                'playerData' => $entry->getPlayerData(),
+                'form' => $form,
+                'post' => $post,
+            )
+        );
 
         return $viewModel;
     }
@@ -884,7 +886,7 @@ class PostVoteController extends GameController
             if ($form->isValid()) {
                 $data['comment'] = $comment;
                 $subject = $this->getGameService()->getOptions()->getShareCommentSubjectLine();
-                $result = $this->getGameService()->sendShareMail($data, $this->game, $this->user, null, 'share-comment', null, array(), $subject);
+                $result = $this->getGameService()->sendShareMail($data, $this->game, $this->user, null, 'share-comment', $subject);
                 if ($result) {
                     $statusMail = true;
                 }

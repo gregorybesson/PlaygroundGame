@@ -379,6 +379,42 @@ class Quiz extends Game
         );
     }
 
+    public function getAnswersDistribution($game) {
+        $em = $this->serviceLocator->get('doctrine.entitymanager.orm_default');
+
+        /* @var $dbal \Doctrine\DBAL\Connection */
+        $dbal = $em->getConnection();
+        $sql    = "
+        select q.id as question_id, q.question, qa.id as answer_id, qa.answer, count(a.id) as count from game as g
+        inner join game_quiz_question as q on g.id = q.quiz_id
+        inner join game_quiz_answer as qa on q.id = qa.question_id
+        left join game_quiz_reply_answer as a on a.answer_id = qa.id
+        where g.id = :quizId
+        group by q.id, qa.id
+        ";
+
+        $stmt = $dbal->prepare($sql);
+        $stmt->execute(
+            array(
+                'quizId' => $game->getId()
+            )
+        );
+
+        $rows = $stmt->fetchAll();
+        $result = [];
+        foreach($rows as $row) {
+            $result[$row['question_id']][] = $row;
+        }
+
+        $this->getEventManager()->trigger(
+            __FUNCTION__ .'.post',
+            $this,
+            array('game' => $game)
+        );
+
+        return $result;
+    }
+
     /**
      * This function update the sort order of the questions in a Quiz
      *

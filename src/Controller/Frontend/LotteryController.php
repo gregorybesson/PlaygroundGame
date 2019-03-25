@@ -50,14 +50,6 @@ class LotteryController extends GameController
         if ($this->getRequest()->getQuery()->get('playLimitReached')) {
             $playLimitReached = true;
         }
-        $secretKey = strtoupper(substr(sha1(uniqid('pg_', true).'####'.time()), 0, 15));
-        $socialLinkUrl = $this->frontendUrl()->fromRoute(
-            'lottery',
-            array('id' => $this->game->getIdentifier()),
-            array('force_canonical' => true)
-        ).'?key='.$secretKey;
-        // With core shortener helper
-        $socialLinkUrl = $this->shortenUrl()->shortenUrl($socialLinkUrl);
 
         $lastEntry = $this->getGameService()->findLastInactiveEntry($this->game, $this->user);
         if (!$lastEntry) {
@@ -95,8 +87,6 @@ class LotteryController extends GameController
         $viewModel->setVariables(array(
                 'statusMail'    => $statusMail,
                 'form'          => $form,
-                'socialLinkUrl' => $socialLinkUrl,
-                'secretKey'     => $secretKey,
                 'playLimitReached' => $playLimitReached,
                 'entry' => $lastEntry
             ));

@@ -59,6 +59,17 @@ class GameController extends AbstractActionController
         'result',
     );
 
+    /**
+     * These steps are available only when the game is started
+     */
+    protected $withStartedGame = array(
+        'preview',
+        'createTeam',
+        'inviteToTeam',
+        'register',
+        'play',
+    );
+
     protected $withAnyUser = array(
         'share',
         'result',
@@ -190,6 +201,28 @@ class GameController extends AbstractActionController
                 // ligne    $controller->getRequest()->getUri()->getHost() === $customUrl
                 // ligne ) {
                 return $controller->redirect()->toUrl($urlRegister);
+            }
+
+            // If the game is finished, I redirect some actions to result (you can't play it anymore)
+            if (
+                $controller->game &&
+                $controller->game->isFinished() &&
+                in_array($controller->params('action'), $controller->withStartedGame)
+            ) {
+                if ($this->isSoloGame) {
+                    $urlResult = $controller->url()->fromRoute(
+                        'frontend.'.$customUrl.'/'.$controller->game->getClassType().'/result',
+                        array('id' => $controller->game->getIdentifier()),
+                        array('force_canonical' => true)
+                    );
+                } else {
+                    $urlResult = $controller->url()->fromRoute(
+                        'frontend/'.$controller->game->getClassType().'/result',
+                        array('id' => $controller->game->getIdentifier()),
+                        array('force_canonical' => true)
+                    );
+                }
+                return $controller->redirect()->toUrl($urlResult);
             }
 
                 return;
@@ -591,47 +624,7 @@ class GameController extends AbstractActionController
     public function shareAction()
     {
         $statusMail = null;
-        $lastEntry  = null;
-
-        // steps of the game
-        $steps = $this->game->getStepsArray();
-        // sub steps of the game
-        $viewSteps = $this->game->getStepsViewsArray();
-
-        // share position
-        $key = array_search($this->params('action'), $viewSteps);
-        if (!$key) {
-            // share is not a substep of the game so it's a step
-            $key = array_search($this->params('action'), $steps);
-        } else {
-            // share was a substep, I search the index of its parent
-            $key = array_search($key, $steps);
-        }
-
-        // play position
-        $keyplay = array_search('play', $viewSteps);
-
-        if (!$keyplay) {
-            // play is not a substep, so it's a step
-            $keyplay = array_search('play', $steps);
-        } else {
-            // play is a substep so I search the index of its parent
-            $keyplay = array_search($keyplay, $steps);
-        }
-
-        if ($key && $keyplay && $keyplay <= $key) {
-            // Has the user finished the game ?
-            $lastEntry = $this->getGameService()->findLastInactiveEntry($this->game, $this->user);
-
-            if ($lastEntry === null) {
-                return $this->redirect()->toUrl(
-                    $this->frontendUrl()->fromRoute(
-                        $this->game->getClassType(),
-                        array('id' => $this->game->getIdentifier())
-                    )
-                );
-            }
-        }
+        $lastEntry = $this->getGameService()->findLastInactiveEntry($this->game, $this->user);
 
         $form = $this->getServiceLocator()->get('playgroundgame_sharemail_form');
         $form->setAttribute('method', 'post');
@@ -1343,7 +1336,7 @@ class GameController extends AbstractActionController
 
             if ($game) {
                 $this->addMetaTitle($game);
-                $this->addMetaBitly();
+                //$this->addMetaBitly();
                 $this->addGaEvent($game);
 
                 $this->customizeGameDesign($game);
@@ -1360,12 +1353,16 @@ class GameController extends AbstractActionController
                         'action'        => $this->params('action'),
                         'game'          => $game,
                         'flashMessages' => $this->flashMessenger()->getMessages(),
-
                     )
                 );
 
                 $viewModel->setVariables($this->getShareData($game));
-                $viewModel->setVariables(array('game' => $game, 'user' => $this->user));
+                $viewModel->setVariables(
+                    array(
+                        'game' => $game,
+                        'user' => $this->user
+                    )
+                );
             }
         }
 
@@ -1432,7 +1429,7 @@ class GameController extends AbstractActionController
         // Google Analytics event
         $ga    = $this->getServiceLocator()->get('google-analytics');
         $event = new \PlaygroundCore\Analytics\Event($game->getClassType(), $this->params('action'));
-        $event->setLabel($game->getTitle());
+        $event->setLabel(str_replace("'", "\'", $game->getTitle()));
         $ga->addEvent($event);
     }
 
@@ -1441,7 +1438,6 @@ class GameController extends AbstractActionController
      */
     public function addMetaTitle($game)
     {
-        //$title = $this->translate($game->getTitle());
         $title = $game->getTitle();
         $this->getGameService()->getServiceManager()->get('ViewHelperManager')->get('HeadTitle')->set($title);
         // Meta set in the layout
@@ -1493,16 +1489,7 @@ class GameController extends AbstractActionController
             $fo->setId($game->getFbAppId());
         }
 
-        // If I want to add a share block in my view
-        if ($game->getFbShareMessage()) {
-            $fbShareMessage = $game->getFbShareMessage();
-        } else {
-            $fbShareMessage = str_replace(
-                '__placeholder__',
-                $game->getTitle(),
-                $this->getOptions()->getDefaultShareMessage()
-            );
-        }
+        $fbShareDescription = $game->getFbShareDescription();
 
         if ($game->getFbShareImage()) {
             $fbShareImage = $this->frontendUrl()->fromRoute(
@@ -1521,15 +1508,25 @@ class GameController extends AbstractActionController
         }
 
         $secretKey = strtoupper(substr(sha1(uniqid('pg_', true).'####'.time()), 0, 15));
-
-        // Without bit.ly shortener
         $socialLinkUrl = $this->frontendUrl()->fromRoute(
             $game->getClassType(),
-            array('id'              => $game->getIdentifier()),
+            array('id' => $this->game->getIdentifier()),
             array('force_canonical' => true)
-        );
+        ).'?key='.$secretKey;
         // With core shortener helper
         $socialLinkUrl = $this->shortenUrl()->shortenUrl($socialLinkUrl);
+
+        $fbShareUrl = $this->frontendUrl()->fromRoute(
+            $game->getClassType().'/fbshare',
+            array('id' => $this->game->getIdentifier()),
+            array('force_canonical' => true)
+        ).'?fbId='.$secretKey;
+
+        $twShareUrl = $this->frontendUrl()->fromRoute(
+            $game->getClassType().'/tweet',
+            array('id' => $this->game->getIdentifier()),
+            array('force_canonical' => true)
+        ).'?fbId='.$secretKey;
 
         // FB Requests only work when it's a FB app
         if ($game->getFbRequestMessage()) {
@@ -1542,29 +1539,38 @@ class GameController extends AbstractActionController
             );
         }
 
-        if ($game->getTwShareMessage()) {
-            $twShareMessage = $game->getTwShareMessage().$socialLinkUrl;
-        } else {
-            $twShareMessage = str_replace(
-                '__placeholder__',
-                $game->getTitle(),
-                $this->getOptions()->getDefaultShareMessage()
-            ).$socialLinkUrl;
-        }
+        $twShareMessage = $game->getTwShareMessage().$socialLinkUrl;
 
-        $ogTitle = new \PlaygroundCore\Opengraph\Tag('og:title', $fbShareMessage);
+        // I add OG tags to the meta
+        $ogTitle = new \PlaygroundCore\Opengraph\Tag('og:title', $game->getTitle());
+        $ogDescription = new \PlaygroundCore\Opengraph\Tag('og:description', $fbShareDescription);
         $ogImage = new \PlaygroundCore\Opengraph\Tag('og:image', $fbShareImage);
+        $twTitle = new \PlaygroundCore\Opengraph\Tag('twitter:title', $game->getTitle());
+        $twDescription =  new \PlaygroundCore\Opengraph\Tag('twitter:description', $this->game->getTwShareMessage());
+        $twImage =  new \PlaygroundCore\Opengraph\Tag('twitter:image', $fbShareImage);
+        $twUrl = new \PlaygroundCore\Opengraph\Tag('twitter:url', $socialLinkUrl);
 
         $fo->addTag($ogTitle);
+        $fo->addTag($ogDescription);
         $fo->addTag($ogImage);
+        $fo->addTag($twTitle);
+        $fo->addTag($twDescription);
+        $fo->addTag($twImage);
+        $fo->addTag($twUrl);
+        
+        // I add variables + js to make the share easy
+        $renderer = $this->serviceLocator->get('Zend\View\Renderer\RendererInterface');
+        $headScript = $this->getServiceLocator()->get('ViewHelperManager')->get('HeadScript');
+        $headScript->appendScript("var pgGameUrl = '" . $socialLinkUrl . "';\nvar pgFbShareUrl = '" . $fbShareUrl . "';\nvar pgTwShareUrl = '" . $twShareUrl . "';");
+        $headScript->appendFile($renderer->frontendAssetPath() . '/js/pg/share.js');
 
         $data = array(
-            'socialLinkUrl'    => $socialLinkUrl,
-            'secretKey'        => $secretKey,
-            'fbShareMessage'   => $fbShareMessage,
-            'fbShareImage'     => $fbShareImage,
-            'fbRequestMessage' => $fbRequestMessage,
-            'twShareMessage'   => $twShareMessage,
+            'socialLinkUrl'         => $socialLinkUrl,
+            'secretKey'             => $secretKey,
+            'fbShareDescription'    => $fbShareDescription,
+            'fbShareImage'          => $fbShareImage,
+            'fbRequestMessage'      => $fbRequestMessage,
+            'twShareMessage'        => $twShareMessage,
         );
 
         return $data;

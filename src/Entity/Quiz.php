@@ -26,12 +26,35 @@ class Quiz extends Game implements InputFilterAwareInterface
     /**
      * @ORM\Column(type="integer", nullable=false)
      */
-    protected $winners;
+    protected $winners = 0;
 
     /**
      * @ORM\Column(type="integer", nullable=false)
      */
-    protected $substitutes;
+    protected $substitutes = 0;
+
+    /**
+     * display the stats about the quiz (how many entries + distribution of each answer
+     * )
+     * entry : After each entry
+     * game : At the end of the game
+     * never : ...
+     * 
+     * @ORM\Column(name="display_stats", type="string", nullable=false)
+     */
+    protected $displayStats = 'never';
+
+    /**
+     * display the good answers
+     * 
+     * question : After the answer to the question
+     * entry : after each entry
+     * game : at the end of the game
+     * never : ...
+     * 
+     * @ORM\Column(name="display_good_answers", type="string", nullable=false)
+     */
+    protected $displayGoodAnswers = 'never';
 
     /**
      * @ORM\Column(type="boolean", nullable=false)
@@ -74,6 +97,42 @@ class Quiz extends Game implements InputFilterAwareInterface
         parent::__construct();
         $this->setClassType(self::CLASSTYPE);
         $this->questions = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * @return string
+     */
+    public function getDisplayStats()
+    {
+        return $this->displayStats;
+    }
+
+    /**
+     * @param string $displayStats
+     */
+    public function setDisplayStats($displayStats)
+    {
+        $this->displayStats = $displayStats;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDisplayGoodAnswers()
+    {
+        return $this->displayGoodAnswers;
+    }
+
+    /**
+     * @param string $displayGoodAnswers
+     */
+    public function setDisplayGoodAnswers($displayGoodAnswers)
+    {
+        $this->displayGoodAnswers = $displayGoodAnswers;
+
+        return $this;
     }
 
     /**
@@ -309,6 +368,14 @@ class Quiz extends Game implements InputFilterAwareInterface
         if (isset($data['maxCorrectAnswers']) && $data['maxCorrectAnswers'] !== null) {
             $this->maxCorrectAnswers = $data['maxCorrectAnswers'];
         }
+
+        if (isset($data['displayGoodAnswers']) && $data['displayGoodAnswers'] !== null) {
+            $this->displayGoodAnswers = $data['displayGoodAnswers'];
+        }
+
+        if (isset($data['displayStats']) && $data['displayStats'] !== null) {
+            $this->displayStats = $data['displayStats'];
+        }
     }
 
     public function setInputFilter(InputFilterInterface $inputFilter)
@@ -354,6 +421,16 @@ class Quiz extends Game implements InputFilterAwareInterface
 
             $inputFilter->add($factory->createInput(array(
                 'name' => 'timer',
+                'required' => false
+            )));
+
+            $inputFilter->add($factory->createInput(array(
+                'name' => 'displayGoodAnswers',
+                'required' => false
+            )));
+
+            $inputFilter->add($factory->createInput(array(
+                'name' => 'displayStats',
                 'required' => false
             )));
 

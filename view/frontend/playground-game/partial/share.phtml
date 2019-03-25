@@ -1,4 +1,4 @@
-<?php $fbShareMsg = ($this->game->getFbShareMessage()) ? $this->game->getFbShareMessage() : 'Venez jouez au jeu : ' . $this->game->getTitle() . ' du Club Playground '; ?>
+<?php $fbShareMsg = ($this->game->getFbShareDescription()) ? $this->game->getFbShareDescription() : 'Venez jouez au jeu : ' . $this->game->getTitle() . ' du Club Playground '; ?>
 <?php $fbShareImg = ($this->game->getFbShareImage()) ? $this->url('frontend', array(), array('force_canonical' => true)). $this->game->getFbShareImage() : $this->url('frontend', array(), array('force_canonical' => true)) . $this->game->getMainImage(); ?> 
 <?php $twShareMsg = ($this->game->getTwShareMessage()) ? $this->game->getTwShareMessage() : 'Venez jouez au jeu : ' . $game->getTitle() . ' du Club Playground '; ?>
 <?php $color = ($this->color) ? $this->color : 'grey'; ?>

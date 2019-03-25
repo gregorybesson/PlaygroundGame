@@ -137,15 +137,30 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
     protected $mailLooser = 0;
 
     /**
+     * @Gedmo\Translatable
+     * @ORM\Column(name="mail_looser_block", type="text", nullable=true)
+     */
+    protected $mailLooserBlock;
+
+    /**
      * @ORM\Column(name="mail_entry",type="boolean", nullable=true)
      */
     protected $mailEntry = 0;
 
     /**
-     * @Gedmo\Translatable
-     * @ORM\Column(name="mail_looser_block", type="text", nullable=true)
+     * @ORM\Column(name="email_share",type="boolean", nullable=true)
      */
-    protected $mailLooserBlock;
+    protected $emailShare = 0;
+
+    /**
+     * @ORM\Column(name="fb_share",type="boolean", nullable=true)
+     */
+    protected $fbShare = 0;
+
+    /**
+     * @ORM\Column(name="tw_share",type="boolean", nullable=true)
+     */
+    protected $twShare = 0;
 
     /**
      * @ORM\Column(type="boolean", nullable=false)
@@ -302,9 +317,21 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
 
     /**
      * @Gedmo\Translatable
-     * @ORM\Column(name="fb_share_message", type="text", nullable=true)
+     * @ORM\Column(name="email_share_subject", type="text", nullable=true)
      */
-    protected $fbShareMessage;
+    protected $emailShareSubject;
+
+    /**
+     * @Gedmo\Translatable
+     * @ORM\Column(name="email_share_message", type="text", nullable=true)
+     */
+    protected $emailShareMessage;
+
+    /**
+     * @Gedmo\Translatable
+     * @ORM\Column(name="fb_share_description", type="text", nullable=true)
+     */
+    protected $fbShareDescription;
 
     /**
      * @ORM\Column(name="fb_share_image", type="string", length=255, nullable=true)
@@ -693,6 +720,54 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
     public function setMailEntry($mailEntry)
     {
         $this->mailEntry = $mailEntry;
+    }
+
+    /**
+     * @return boolean $emailShare
+     */
+    public function getEmailShare()
+    {
+        return $this->emailShare;
+    }
+
+    /**
+     * @param boolean $emailShare
+     */
+    public function setEmailShare($emailShare)
+    {
+        $this->emailShare = $emailShare;
+    }
+
+    /**
+     * @return boolean $fbShare
+     */
+    public function getFbShare()
+    {
+        return $this->fbShare;
+    }
+
+    /**
+     * @param boolean $fbShare
+     */
+    public function setFbShare($fbShare)
+    {
+        $this->fbShare = $fbShare;
+    }
+
+    /**
+     * @return boolean $twShare
+     */
+    public function getTwShare()
+    {
+        return $this->twShare;
+    }
+
+    /**
+     * @param boolean $twShare
+     */
+    public function setTwShare($twShare)
+    {
+        $this->twShare = $twShare;
     }
 
     /**
@@ -1490,20 +1565,60 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
 
     /**
      *
-     * @return the unknown_type
+     * @return the string
      */
-    public function getFbShareMessage()
+    public function getEmailShareSubject()
     {
-        return $this->fbShareMessage;
+        return $this->emailShareSubject;
     }
 
     /**
      *
-     * @param unknown_type $fbShareMessage
+     * @param string $emailShareSubject
      */
-    public function setFbShareMessage($fbShareMessage)
+    public function setEmailShareSubject($emailShareSubject)
     {
-        $this->fbShareMessage = $fbShareMessage;
+        $this->emailShareSubject = $emailShareSubject;
+
+        return $this;
+    }
+
+    /**
+     *
+     * @return the unknown_type
+     */
+    public function getEmailShareMessage()
+    {
+        return $this->emailShareMessage;
+    }
+
+    /**
+     *
+     * @param unknown_type $emailShareMessage
+     */
+    public function setEmailShareMessage($emailShareMessage)
+    {
+        $this->emailShareMessage = $emailShareMessage;
+
+        return $this;
+    }
+
+    /**
+     *
+     * @return the string
+     */
+    public function getFbShareDescription()
+    {
+        return $this->fbShareDescription;
+    }
+
+    /**
+     *
+     * @param string $fbShareDescription
+     */
+    public function setFbShareDescription($fbShareDescription)
+    {
+        $this->fbShareDescription = $fbShareDescription;
 
         return $this;
     }
@@ -1690,10 +1805,12 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
         $this->termsBlock       = (isset($data['termsBlock'])) ? $data['termsBlock'] : null;
         $this->conditionsBlock  = (isset($data['conditionsBlock'])) ? $data['conditionsBlock'] : null;
 
-        $this->fbShareMessage   = (isset($data['fbShareMessage'])) ? $data['fbShareMessage'] : null;
+        $this->fbShareDescription   = (isset($data['fbShareDescription'])) ? $data['fbShareDescription'] : null;
         $this->fbShareImage     = (isset($data['fbShareImage'])) ? $data['fbShareImage'] : null;
         $this->fbRequestMessage = (isset($data['fbRequestMessage'])) ? $data['fbRequestMessage'] : null;
         $this->twShareMessage   = (isset($data['twShareMessage'])) ? $data['twShareMessage'] : null;
+        $this->emailSubjectMessage   = (isset($data['emailSubjectMessage'])) ? $data['emailSubjectMessage'] : null;
+        $this->emailShareMessage   = (isset($data['emailShareMessage'])) ? $data['emailShareMessage'] : null;
     }
 
     public function setInputFilter(InputFilterInterface $inputFilter)
@@ -1902,6 +2019,21 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
             )));
 
             $inputFilter->add($factory->createInput(array(
+                'name' => 'emailShare',
+                'required' => false
+            )));
+
+            $inputFilter->add($factory->createInput(array(
+                'name' => 'fbShare',
+                'required' => false
+            )));
+
+            $inputFilter->add($factory->createInput(array(
+                'name' => 'twShare',
+                'required' => false
+            )));
+
+            $inputFilter->add($factory->createInput(array(
                 'name' => 'prizeCategory',
                 'required' => false,
                 'filters' => array(
@@ -1995,26 +2127,72 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
             )));
 
             $inputFilter->add($factory->createInput(array(
-                    'name' => 'fbShareMessage',
-                    'required' => false,
-                    'filters' => array(
-                            array(
-                                    'name' => 'StripTags'
-                            ),
-                            array(
-                                    'name' => 'StringTrim'
-                            )
+                'name' => 'emailSubjectMessage',
+                'required' => false,
+                'filters' => array(
+                    array(
+                            'name' => 'StripTags'
                     ),
-                    'validators' => array(
-                        array(
-                            'name' => 'StringLength',
-                            'options' => array(
-                                'encoding' => 'UTF-8',
-                                'min' => 1,
-                                'max' => 500
-                             )
+                    array(
+                            'name' => 'StringTrim'
+                    )
+                ),
+                'validators' => array(
+                    array(
+                        'name' => 'StringLength',
+                        'options' => array(
+                            'encoding' => 'UTF-8',
+                            'min' => 1,
+                            'max' => 500
                         )
                     )
+                )
+            )));
+
+            $inputFilter->add($factory->createInput(array(
+                'name' => 'emailShareMessage',
+                'required' => false,
+                'filters' => array(
+                    array(
+                            'name' => 'StripTags'
+                    ),
+                    array(
+                            'name' => 'StringTrim'
+                    )
+                ),
+                'validators' => array(
+                    array(
+                        'name' => 'StringLength',
+                        'options' => array(
+                            'encoding' => 'UTF-8',
+                            'min' => 1,
+                            'max' => 500
+                        )
+                    )
+                )
+            )));
+
+            $inputFilter->add($factory->createInput(array(
+                'name' => 'fbShareDescription',
+                'required' => false,
+                'filters' => array(
+                        array(
+                                'name' => 'StripTags'
+                        ),
+                        array(
+                                'name' => 'StringTrim'
+                        )
+                ),
+                'validators' => array(
+                    array(
+                        'name' => 'StringLength',
+                        'options' => array(
+                            'encoding' => 'UTF-8',
+                            'min' => 1,
+                            'max' => 500
+                            )
+                    )
+                )
             )));
 
             $inputFilter->add($factory->createInput(array(
