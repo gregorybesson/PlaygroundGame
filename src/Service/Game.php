@@ -1052,8 +1052,6 @@ class Game
         $user,
         $entry,
         $template = 'share_game',
-        $topic = null,
-        $userTimer = array(),
         $subject = ''
     ) {
         $mailService = $this->serviceLocator->get('playgroundgame_message');
@@ -1061,15 +1059,7 @@ class Game
         $from = $this->getOptions()->getEmailFromAddress();
 
         if (empty($subject)) {
-            $subject = $this->serviceLocator->get('MvcTranslator')->translate(
-                $this->getOptions()->getShareSubjectLine(),
-                'playgroundgame'
-            );
-        } else {
-            $subject = $this->serviceLocator->get('MvcTranslator')->translate(
-                $subject,
-                'playgroundgame'
-            );
+            $subject = $game->getEmailShareSubject();
         }
 
         $renderer = $this->serviceLocator->get('Zend\View\Renderer\RendererInterface');
@@ -1079,10 +1069,6 @@ class Game
             array('force_canonical' => true)
         );
         $secretKey = strtoupper(substr(sha1(uniqid('pg_', true) . '####' . time()), 0, 15));
-
-        if (! $topic) {
-            $topic = $game->getTitle();
-        }
 
         if (isset($data['email']) && !is_array($data['email'])) {
             $data['email'] = array($data['email']);
@@ -1103,7 +1089,7 @@ class Game
                         'to' => $to,
                         'secretKey' => $secretKey,
                         'skinUrl' => $skinUrl,
-                        'userTimer' => $userTimer
+                        'message' => $game->getEmailShareMessage()
                     )
                 );
                 try {
@@ -1127,11 +1113,11 @@ class Game
             
             $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array(
                 'user' => $user,
-                'topic' => $topic,
                 'secretKey' => $secretKey,
                 'data' => $data,
                 'game' => $game,
-                'entry' => $entry
+                'entry' => $entry,
+                'message' => $game->getEmailShareMessage()
             ));
 
             return true;

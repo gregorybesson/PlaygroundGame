@@ -182,16 +182,6 @@ class MissionController extends GameController
         $subGameIdentifier = $this->getEvent()->getRouteMatch()->getParam('gameId');
         $subGame           = $this->getGameService()->checkGame($subGameIdentifier);
 
-        $secretKey     = strtoupper(substr(sha1(uniqid('pg_', true).'####'.time()), 0, 15));
-        $socialLinkUrl = $this->frontendUrl()->fromRoute(
-            'mission',
-            array('id'              => $this->game->getIdentifier()),
-            array('force_canonical' => true)
-        ).'?key='.$secretKey;
-
-        // With core shortener helper
-        $socialLinkUrl = $this->shortenUrl()->shortenUrl($socialLinkUrl);
-
         if (!$this->user && !$this->game->getAnonymousAllowed()) {
             $redirect = urlencode(
                 $this->frontendUrl()->fromRoute(

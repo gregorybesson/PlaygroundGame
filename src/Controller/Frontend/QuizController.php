@@ -270,15 +270,6 @@ class QuizController extends GameController
         $statusMail = null;
         $prediction = false;
         $userTimer = array();
-        $secretKey = strtoupper(substr(sha1(uniqid('pg_', true).'####'.time()), 0, 15));
-        $socialLinkUrl = $this->frontendUrl()->fromRoute(
-            'quiz',
-            array('id' => $this->game->getIdentifier()),
-            array('force_canonical' => true)
-        ).'?key='.$secretKey;
-
-        // With core shortener helper
-        $socialLinkUrl = $this->shortenUrl()->shortenUrl($socialLinkUrl);
 
         $lastEntry = $this->getGameService()->findLastEntry($this->game, $this->user);
         if (!$lastEntry) {
@@ -399,8 +390,6 @@ class QuizController extends GameController
             'maxCorrectAnswers'   => $maxCorrectAnswers,
             'ratioCorrectAnswers' => $ratioCorrectAnswers,
             'gameCorrectAnswers'  => $ga,
-            'socialLinkUrl'       => $socialLinkUrl,
-            'secretKey'           => $secretKey,
             'userTimer'           => $userTimer,
             'userAnswers'         => $userAnswers,
             'flashMessages'       => $this->flashMessenger()->getMessages(),

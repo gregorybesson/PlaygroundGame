@@ -86,7 +86,7 @@ class Mission extends Game implements InputFilterAwareInterface
         foreach ($this->missionGames as $missionGame) {
             $g = $missionGame->getGame();
             
-            if ($g->isStarted() && $g->isOnline()) {
+            if ($g->isStarted() && $g->getActive()) {
                 if (!$missionGame->getConditions() || $missionGame->fulfillConditions($entry)) {
                     $sortedPlayableGames[$missionGame->getPosition()] = $missionGame;
                 }

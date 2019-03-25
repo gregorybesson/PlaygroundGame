@@ -113,15 +113,6 @@ class InstantWinController extends GameController
             $occurrence = current($occurrences);
         }
 
-        $secretKey = strtoupper(substr(sha1(uniqid('pg_', true).'####'.time()), 0, 15));
-        $socialLinkUrl = $this->frontendUrl()->fromRoute(
-            'instantwin',
-            array('id' => $this->game->getIdentifier(), ),
-            array('force_canonical' => true)
-        ).'?key='.$secretKey;
-        // With core shortener helper
-        $socialLinkUrl = $this->shortenUrl()->shortenUrl($socialLinkUrl);
-
         $form = $this->getServiceLocator()->get('playgroundgame_sharemail_form');
         $form->setAttribute('method', 'post');
 
@@ -155,8 +146,6 @@ class InstantWinController extends GameController
                 'statusMail'       => $statusMail,
                 'winner'           => $winner,
                 'form'             => $form,
-                'socialLinkUrl'    => $socialLinkUrl,
-                'secretKey'        => $secretKey,
                 'playLimitReached' => $playLimitReached,
             ));
         }
