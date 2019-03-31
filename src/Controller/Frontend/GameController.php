@@ -256,6 +256,7 @@ class GameController extends AbstractActionController
         $uri      = str_replace("/".$this->getEvent()->getRouteMatch()->getParam('locale')."/", "/", $uri);
         $template = 'playground-game/'.$controllerPath.'/custom'.$uri;
 
+        $template = (substr($template, -strlen('.html')) === '.html') ? $template : $template . '.phtml';
         if (false === $templatePathResolver->resolve($template)) {
             $viewRender = $this->getServiceLocator()->get('ViewRenderer');
 
