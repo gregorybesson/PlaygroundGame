@@ -199,12 +199,16 @@ class PostVote extends Game
             $post = $this->confirmPost($game, $user);
         }
 
-        $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array(
-            'user' => $user,
-            'game' => $game,
-            'post' => $post,
-            'entry' => $entry
-        ));
+        $this->getEventManager()->trigger(
+            __FUNCTION__ . '.post',
+            $this,
+            [
+                'user' => $user,
+                'game' => $game,
+                'post' => $post,
+                'entry' => $entry,
+            ]
+        );
 
         return $post;
     }
@@ -243,12 +247,16 @@ class PostVote extends Game
         $entry->setActive(0);
         $entryMapper->update($entry);
 
-        $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array(
-            'user' => $user,
-            'game' => $game,
-            'entry' => $entry,
-            'post' => $post
-        ));
+        $this->getEventManager()->trigger(
+            __FUNCTION__ . '.post',
+            $this,
+            [
+                'user' => $user,
+                'game' => $game,
+                'entry' => $entry,
+                'post' => $post,
+            ]
+        );
 
         return $post;
     }

@@ -990,7 +990,6 @@ return array(
                             )
                         )
                     ),
-                    
                     'quiz' => array(
                         'type' => 'Segment',
                         'options' => array(
@@ -1266,7 +1265,6 @@ return array(
                             )
                         )
                     ),
-
                     'lottery' => array(
                         'type' => 'Segment',
                         'options' => array(
@@ -1542,7 +1540,6 @@ return array(
                             )
                         )
                     ),
-
                     'instantwin' => array(
                         'type' => 'Segment',
                         'options' => array(
@@ -1818,7 +1815,6 @@ return array(
                             )
                         )
                     ),
-
                     'postvote' => array(
                         'type' => 'Segment',
                         'options' => array(
@@ -2284,6 +2280,18 @@ return array(
                             )
                         )
                     ),
+                    'other-routes' => array(
+                        'type' => 'Zend\Router\Http\Regex',
+                        'priority' => -1000,
+                        'options' => array(
+                            'regex' => '.*',
+                            'spec' => '%url%',
+                            'defaults' => array(
+                                'controller' => PlaygroundGame\Controller\Frontend\Game::class,
+                                'action' => 'not-found'
+                            )
+                        )
+                    )
                 )
             ),
 
