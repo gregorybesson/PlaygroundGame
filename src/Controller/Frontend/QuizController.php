@@ -63,9 +63,8 @@ class QuizController extends GameController
         $anticheat = array();
 
         foreach ($questions as $q) {
-            if (
-                ($this->game->getQuestionGrouping() > 0 && $i % $this->game->getQuestionGrouping() === 0) ||
-                ($i === 0 && $this->game->getQuestionGrouping() === 0)
+            if (($this->game->getQuestionGrouping() > 0 && $i % $this->game->getQuestionGrouping() === 0)
+                || ($i === 0 && $this->game->getQuestionGrouping() === 0)
             ) {
                 $fieldsetName = 'questionGroup' . ++ $j;
                 $fieldset = new Fieldset($fieldsetName);
@@ -156,24 +155,28 @@ class QuizController extends GameController
                 $fieldset->add($elementData);
             }
 
-            $fieldsetFilter->add($factory->createInput(array(
-                'name'     => $name,
-                'required' => true,
-                'validators'=>array(
-                    array(
-                        'name'=>'NotEmpty',
-                        'options'=>array(
-                            'messages'=>array(
-                                'isEmpty' => 'Merci de répondre à la question.',
-                            ),
-                        ),
-                    ),
+            $fieldsetFilter->add(
+                $factory->createInput(
+                    [
+                        'name'     => $name,
+                        'required' => true,
+                        'validators' => [
+                            [
+                                'name' =>'NotEmpty',
+                                'options' => [
+                                    'messages' => [
+                                        'isEmpty' => 'Merci de répondre à la question.',
+                                    ],
+                                ],
+                            ],
+                        ]
+                    ]
                 )
-            )));
+            );
 
             $i ++;
-            if (($this->game->getQuestionGrouping() > 0 && $i % $this->game->getQuestionGrouping() == 0 && $i > 0) ||
-                $i == $totalQuestions
+            if (($this->game->getQuestionGrouping() > 0 && $i % $this->game->getQuestionGrouping() == 0 && $i > 0)
+                || $i == $totalQuestions
             ) {
                 $form->add($fieldset);
                 $inputFilter->add($fieldsetFilter, $fieldsetName);
@@ -250,13 +253,15 @@ class QuizController extends GameController
         }
 
         $viewModel = $this->buildView($this->game);
-        $viewModel->setVariables(array(
-            'firstTime' => $firstTime,
-            'questions' => $questions,
-            'form'      => $form,
-            'explanations' => $explanations,
-            'flashMessages' => $this->flashMessenger()->getMessages(),
-        ));
+        $viewModel->setVariables(
+            [
+                'firstTime' => $firstTime,
+                'questions' => $questions,
+                'form'      => $form,
+                'explanations' => $explanations,
+                'flashMessages' => $this->flashMessenger()->getMessages(),
+            ]
+        );
 
         return $viewModel;
     }
@@ -289,14 +294,16 @@ class QuizController extends GameController
         $userCorrectAnswers = 0;
         $correctAnswers = array();
         $userAnswers = array();
-        
-        foreach ($reply->getAnswers() as $answer) {
-            if ($answer->getCorrect()) {
-                $correctAnswers[$answer->getQuestionId()][$answer->getAnswerId()] = true;
-                ++$userCorrectAnswers;
+
+        if ($reply !== null) {
+            foreach ($reply->getAnswers() as $answer) {
+                if ($answer->getCorrect()) {
+                    $correctAnswers[$answer->getQuestionId()][$answer->getAnswerId()] = true;
+                    ++$userCorrectAnswers;
+                }
+                $userAnswers[$answer->getQuestionId()][$answer->getAnswerId()] = true;
+                $userAnswers[$answer->getQuestionId()]['answer'] = $answer->getAnswer();
             }
-            $userAnswers[$answer->getQuestionId()][$answer->getAnswerId()] = true;
-            $userAnswers[$answer->getQuestionId()]['answer'] = $answer->getAnswer();
         }
 
         $ratioCorrectAnswers = 0;
@@ -380,22 +387,25 @@ class QuizController extends GameController
             $this->getGameService()->sendMail($this->game, $this->user, $lastEntry);
         }
 
-        $viewModel->setVariables(array(
-            'entry'               => $lastEntry,
-            'statusMail'          => $statusMail,
-            'form'                => $form,
-            'winner'              => $winner,
-            'prediction'          => $prediction,
-            'userCorrectAnswers'  => $userCorrectAnswers,
-            'maxCorrectAnswers'   => $maxCorrectAnswers,
-            'ratioCorrectAnswers' => $ratioCorrectAnswers,
-            'gameCorrectAnswers'  => $ga,
-            'userTimer'           => $userTimer,
-            'userAnswers'         => $userAnswers,
-            'flashMessages'       => $this->flashMessenger()->getMessages(),
-            'playLimitReached'    => $playLimitReached,
-            'distribution'        => $distribution,
-        ));
+        $viewModel->setVariables(
+            [
+                'game'                => $this->game,
+                'entry'               => $lastEntry,
+                'statusMail'          => $statusMail,
+                'form'                => $form,
+                'winner'              => $winner,
+                'prediction'          => $prediction,
+                'userCorrectAnswers'  => $userCorrectAnswers,
+                'maxCorrectAnswers'   => $maxCorrectAnswers,
+                'ratioCorrectAnswers' => $ratioCorrectAnswers,
+                'gameCorrectAnswers'  => $ga,
+                'userTimer'           => $userTimer,
+                'userAnswers'         => $userAnswers,
+                'flashMessages'       => $this->flashMessenger()->getMessages(),
+                'playLimitReached'    => $playLimitReached,
+                'distribution'        => $distribution,
+            ]
+        );
 
         return $viewModel;
     }
