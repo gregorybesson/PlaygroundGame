@@ -389,7 +389,6 @@ class QuizController extends GameController
 
         $viewModel->setVariables(
             [
-                'game'                => $this->game,
                 'entry'               => $lastEntry,
                 'statusMail'          => $statusMail,
                 'form'                => $form,
