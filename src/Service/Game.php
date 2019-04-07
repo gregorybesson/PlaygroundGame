@@ -869,11 +869,15 @@ class Game
             }
 
             $entry = $this->getEntryMapper()->insert($entry);
-            $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array(
-                'user' => $user,
-                'game' => $game,
-                'entry' => $entry
-            ));
+            $this->getEventManager()->trigger(
+                __FUNCTION__ . '.post',
+                $this,
+                [
+                    'user' => $user,
+                    'game' => $game,
+                    'entry' => $entry,
+                ]
+            );
         }
 
         return $entry;
