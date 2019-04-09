@@ -423,6 +423,8 @@ class PostVote extends Game
 
         if ($entryUser && $entryUser > 0) {
             $postvoteVoteMapper->remove($vote);
+
+            return 0;
         } else {
             $vote = new \PlaygroundGame\Entity\PostVoteVote();
             $vote->setPost($post);
@@ -450,7 +452,7 @@ class PostVote extends Game
             array('user' => $user, 'game' => $game, 'post' => $post, 'vote' => $vote)
         );
 
-        return true;
+        return 1;
     }
 
     public function removeVote($user, $ipAddress, $post)
