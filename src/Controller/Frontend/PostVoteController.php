@@ -663,13 +663,13 @@ class PostVoteController extends GameController
                     $post,
                     $comment
                 )) {
-                    $response->setContent(\Zend\Json\Json::encode(array(
-                    'success' => 1
-                    )));
+                    $response->setContent(
+                        \Zend\Json\Json::encode(['success' => 1])
+                    );
                 } else {
-                    $response->setContent(\Zend\Json\Json::encode(array(
-                    'success' => 0
-                    )));
+                    $response->setContent(
+                        \Zend\Json\Json::encode(['success' => 0])
+                    );
                 }
             }
         }
