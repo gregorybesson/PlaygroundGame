@@ -126,6 +126,9 @@ class Game extends ProvidesEventsForm
 
         $this->add(array(
             'type' => 'Zend\Form\Element\Checkbox',
+            'attributes' => array(
+                'class' => 'switch-input'
+            ),
             'name' => 'broadcastPlatform',
             'options' => array(
                 'label' => $translator->translate('Publish game on plateform', 'playgroundgame'),
@@ -134,6 +137,9 @@ class Game extends ProvidesEventsForm
 
         $this->add(array(
             'type' => 'Zend\Form\Element\Checkbox',
+            'attributes' => array(
+                'class' => 'switch-input'
+            ),
             'name' => 'broadcastFacebook',
             'options' => array(
                 'label' => $translator->translate('Publish game on a Facebook Tab', 'playgroundgame'),
@@ -150,6 +156,9 @@ class Game extends ProvidesEventsForm
 
         $this->add(array(
             'type' => 'Zend\Form\Element\Checkbox',
+            'attributes' => array(
+                'class' => 'switch-input'
+            ),
             'name' => 'anonymousAllowed',
             'options' => array(
                 'label' => $translator->translate('Anonymous players allowed', 'playgroundgame'),
@@ -168,6 +177,9 @@ class Game extends ProvidesEventsForm
 
         $this->add(array(
             'type' => 'Zend\Form\Element\Checkbox',
+            'attributes' => array(
+                'class' => 'switch-input'
+            ),
             'name' => 'broadcastPostFacebook',
                'options' => array(
                    'label' => $translator->translate('Publish the game as a Post Facebook', 'playgroundgame'),
@@ -176,14 +188,20 @@ class Game extends ProvidesEventsForm
 
         $this->add(array(
                 'type' => 'Zend\Form\Element\Checkbox',
+                'attributes' => array(
+                    'class' => 'switch-input'
+                ),
                 'name' => 'displayHome',
                 'options' => array(
-                    'label' => $translator->translate('Publish the game on home page', 'playgroundgame'),
+                    'label' => $translator->translate('Display the game on the homepage', 'playgroundgame'),
                 ),
         ));
 
         $this->add(array(
             'type' => 'Zend\Form\Element\Checkbox',
+            'attributes' => array(
+                'class' => 'switch-input'
+            ),
             'name' => 'pushHome',
             'options' => array(
                 'label' => $translator->translate('Publish game on home page slider', 'playgroundgame'),
