@@ -379,7 +379,7 @@ class Game
      *
      * @return Array of PlaygroundGame\Entity\Game
      */
-    public function getActiveGames($displayHome = true, $classType = '', $order = '')
+    public function getActiveGames($displayHome = null, $classType = '', $order = '')
     {
         $em = $this->serviceLocator->get('doctrine.entitymanager.orm_default');
         $today = new \DateTime("now");
@@ -413,8 +413,8 @@ class Game
             $qb->setParameter('classType', $classType);
         }
         
-        if ($displayHome) {
-            $and->add($qb->expr()->eq('g.displayHome', true));
+        if ($displayHome !== null) {
+            $and->add($qb->expr()->eq('g.displayHome', $displayHome));
         }
         
         $qb->select('g')

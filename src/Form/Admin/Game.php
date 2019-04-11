@@ -182,7 +182,7 @@ class Game extends ProvidesEventsForm
             ),
             'name' => 'broadcastPostFacebook',
                'options' => array(
-                   'label' => $translator->translate('Publish the game as a Post Facebook', 'playgroundgame'),
+                   'label' => $translator->translate('Publish the game as a Facebook Post', 'playgroundgame'),
                ),
         ));
 

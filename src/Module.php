@@ -350,7 +350,7 @@ class Module
     public function getViewHelperConfig()
     {
         return array(
-            'factories'                => array(
+            'factories' => [
                 'playgroundPrizeCategory' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $viewHelper = new View\Helper\PrizeCategory;
                     $viewHelper->setPrizeCategoryService($sm->get('playgroundgame_prizecategory_service'));
@@ -361,8 +361,12 @@ class Module
                     $service = $sm->get('playgroundgame_postvote_service');
 
                     return new \PlaygroundGame\View\Helper\PostvoteShareEvents($service);
-                }
-            ),
+                },
+                \PlaygroundGame\View\Helper\GameWidget::class =>  \PlaygroundGame\View\Helper\GameWidgetFactory::class,
+            ],
+            'aliases' => [
+                'gameWidget' => \PlaygroundGame\View\Helper\GameWidget::class,
+            ]
         );
     }
 
