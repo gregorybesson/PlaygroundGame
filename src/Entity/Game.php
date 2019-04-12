@@ -363,6 +363,13 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
     protected $stepsViews = '{"index":{},"play":{},"result":{},"bounce":{}}';
 
     /**
+     * If you enter a value, this will be the condition to enter the game
+     * The cost will apply to the "wallet" of the player which correspond to a leaderboard
+     * @ORM\Column(name="cost_to_play", type="integer", nullable=true)
+     */
+    protected $costToPlay = 0;
+
+    /**
      * Doctrine accessible value of discriminator (field 'type' is not
      * accessible through query)
      * And I want to be able to sort game collection based on type
@@ -944,8 +951,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
     {
         $today = new DateTime('now');
         if (((!$this->getStartDate() || $this->getStartDate() <= $today))
-                &&
-                (!$this->getEndDate() || $this->getEndDate() > $today)
+            && (!$this->getEndDate() || $this->getEndDate() > $today)
         ) {
             return true;
         }
@@ -990,8 +996,6 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
         }
         return $steps;
     }
-
-
 
     public function getStepsViewsArray()
     {
@@ -1372,6 +1376,26 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
     public function setActive($active)
     {
         $this->active = $active;
+
+        return $this;
+    }
+
+    /**
+     *
+     * @return the $costToPlay
+     */
+    public function getCostToPlay()
+    {
+        return $this->costToPlay;
+    }
+
+    /**
+     *
+     * @param field_type $costToPlay
+     */
+    public function setCostToPlay($costToPlay)
+    {
+        $this->costToPlay = $costToPlay;
 
         return $this;
     }
@@ -1903,8 +1927,8 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
             )));
 
             $inputFilter->add($factory->createInput(array(
-               'name' => 'closeDate',
-               'required' => false,
+                'name' => 'closeDate',
+                'required' => false,
             )));
 
             $inputFilter->add($factory->createInput(array(
@@ -1987,6 +2011,15 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
                 'name' => 'onInvitation',
                 'required' => false
             )));
+
+            $inputFilter->add(
+                $factory->createInput(
+                    [
+                        'name' => 'costToPlay',
+                        'required' => false
+                    ]
+                )
+            );
 
             $inputFilter->add($factory->createInput(array(
                 'name' => 'displayHome',

@@ -176,25 +176,36 @@ return array(
         ),
     ),
 
-    'service_manager' => array(
-        'aliases' => array(
-            'playgroundgame_partner_service' => 'playgroundpartnership_partner_service',
-            'playgroundgame_message'         => 'playgroundcore_message',
-        ),
-        'factories' => array(
-            'playgroundgame_game_service'              => 'PlaygroundGame\Service\Factory\GameFactory',
-            'playgroundgame_lottery_service'           => 'PlaygroundGame\Service\Factory\LotteryFactory',
-            'playgroundgame_postvote_service'          => 'PlaygroundGame\Service\Factory\PostVoteFactory',
-            'playgroundgame_quiz_service'              => 'PlaygroundGame\Service\Factory\QuizFactory',
-            'playgroundgame_instantwin_service'        => 'PlaygroundGame\Service\Factory\InstantWinFactory',
-            'playgroundgame_mission_service'           => 'PlaygroundGame\Service\Factory\MissionFactory',
-            'playgroundgame_mission_game_service'      => 'PlaygroundGame\Service\Factory\MissionGameFactory',
-            'playgroundgame_tradingcard_service'       => 'PlaygroundGame\Service\Factory\TradingCardFactory',
-            'playgroundgame_prize_service'             => 'PlaygroundGame\Service\Factory\PrizeFactory',
-            'playgroundgame_prizecategory_service'     => 'PlaygroundGame\Service\Factory\PrizeCategoryFactory',
-            'playgroundgame_prizecategoryuser_service' => 'PlaygroundGame\Service\Factory\PrizeCategoryUserFactory',
-        ),
-    ),
+    'service_manager' => [
+        'aliases' => [
+            'playgroundgame_partner_service'           => 'playgroundpartnership_partner_service',
+            'playgroundgame_message'                   => 'playgroundcore_message',
+            'playgroundgame_game_service'              => PlaygroundGame\Service\Game::class,
+            'playgroundgame_lottery_service'           => PlaygroundGame\Service\Lottery::class,
+            'playgroundgame_postvote_service'          => PlaygroundGame\Service\PostVote::class,
+            'playgroundgame_quiz_service'              => PlaygroundGame\Service\Quiz::class,
+            'playgroundgame_instantwin_service'        => PlaygroundGame\Service\InstantWin::class,
+            'playgroundgame_mission_service'           => PlaygroundGame\Service\Mission::class,
+            'playgroundgame_mission_game_service'      => PlaygroundGame\Service\MissionGame::class,
+            'playgroundgame_tradingcard_service'       => PlaygroundGame\Service\TradingCard::class,
+            'playgroundgame_prize_service'             => PlaygroundGame\Service\Prize::class,
+            'playgroundgame_prizecategory_service'     => PlaygroundGame\Service\PrizeCategory::class,
+            'playgroundgame_prizecategoryuser_service' => PlaygroundGame\Service\PrizeCategoryUser::class,
+        ],
+        'factories' => [
+            PlaygroundGame\Service\Game::class => PlaygroundGame\Service\Factory\GameFactory::class,
+            PlaygroundGame\Service\Lottery::class => PlaygroundGame\Service\Factory\LotteryFactory::class,
+            PlaygroundGame\Service\PostVote::class => PlaygroundGame\Service\Factory\PostVoteFactory::class,
+            PlaygroundGame\Service\Quiz::class => PlaygroundGame\Service\Factory\QuizFactory::class,
+            PlaygroundGame\Service\InstantWin::class => PlaygroundGame\Service\Factory\InstantWinFactory::class,
+            PlaygroundGame\Service\Mission::class => PlaygroundGame\Service\Factory\MissionFactory::class,
+            PlaygroundGame\Service\MissionGame::class => PlaygroundGame\Service\Factory\MissionGameFactory::class,
+            PlaygroundGame\Service\TradingCard::class => PlaygroundGame\Service\Factory\TradingCardFactory::class,
+            PlaygroundGame\Service\Prize::class => PlaygroundGame\Service\Factory\PrizeFactory::class,
+            PlaygroundGame\Service\PrizeCategory::class => PlaygroundGame\Service\Factory\PrizeCategoryFactory::class,
+            PlaygroundGame\Service\PrizeCategoryUser::class => PlaygroundGame\Service\Factory\PrizeCategoryUserFactory::class,
+        ],
+    ],
 
     'router' => array(
         'routes' => array(

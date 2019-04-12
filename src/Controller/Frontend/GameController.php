@@ -118,16 +118,16 @@ class GameController extends AbstractActionController
      
             $controller->game = $controller->getGameService()->checkGame($identifier, false);
 
-            if (!$controller->game &&
-                    in_array($controller->params('action'), $controller->withGame)
-                ) {
+            if (!$controller->game
+                && in_array($controller->params('action'), $controller->withGame)
+            ) {
                 return $controller->notFoundAction();
             }
 
-            if ($controller->game &&
-                    $controller->game->isClosed() &&
-                    in_array($controller->params('action'), $controller->withOnlineGame)
-                ) {
+            if ($controller->game
+                && $controller->game->isClosed()
+                && in_array($controller->params('action'), $controller->withOnlineGame)
+            ) {
                 return $controller->notFoundAction();
             }
 
@@ -135,12 +135,11 @@ class GameController extends AbstractActionController
             $customUrl = str_replace('frontend.', '', $e->getRouteMatch()->getMatchedRouteName());
             $customUrl = explode("/", $customUrl)[0];
 
-            if (
-                    isset($config['custom_games']) &&
-                    $controller->game !== false &&
-                    isset($config['custom_games'][$controller->game->getIdentifier()]) &&
-                    $controller->getRequest()->getUri()->getHost() === $customUrl
-                ) {
+            if (isset($config['custom_games'])
+                && $controller->game !== false
+                && isset($config['custom_games'][$controller->game->getIdentifier()])
+                && $controller->getRequest()->getUri()->getHost() === $customUrl
+            ) {
                 $this->isSoloGame = true;
             }
 
@@ -153,12 +152,11 @@ class GameController extends AbstractActionController
             }
 
             $controller->user = $controller->zfcUserAuthentication()->getIdentity();
-            if (
-                    $controller->game &&
-                    !$controller->user &&
-                    !$controller->game->getAnonymousAllowed() &&
-                    in_array($controller->params('action'), $controller->withAnyUser)
-                ) {
+            if ($controller->game
+                && !$controller->user
+                && !$controller->game->getAnonymousAllowed()
+                && in_array($controller->params('action'), $controller->withAnyUser)
+            ) {
                 // if the current game runs under Facebook
                 if ($session->offsetExists('signed_request')) {
                     $session->offsetSet('fb-redirect', $controller->getRequest()->getUri());
@@ -204,10 +202,9 @@ class GameController extends AbstractActionController
             }
 
             // If the game is finished, I redirect some actions to result (you can't play it anymore)
-            if (
-                $controller->game &&
-                $controller->game->isFinished() &&
-                in_array($controller->params('action'), $controller->withStartedGame)
+            if ($controller->game
+                && $controller->game->isFinished()
+                && in_array($controller->params('action'), $controller->withStartedGame)
             ) {
                 if ($this->isSoloGame) {
                     $urlResult = $controller->url()->fromRoute(

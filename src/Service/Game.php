@@ -379,7 +379,7 @@ class Game
      *
      * @return Array of PlaygroundGame\Entity\Game
      */
-    public function getActiveGames($displayHome = true, $classType = '', $order = '')
+    public function getActiveGames($displayHome = null, $classType = '', $order = '')
     {
         $em = $this->serviceLocator->get('doctrine.entitymanager.orm_default');
         $today = new \DateTime("now");
@@ -413,14 +413,15 @@ class Game
             $qb->setParameter('classType', $classType);
         }
         
-        if ($displayHome) {
-            $and->add($qb->expr()->eq('g.displayHome', true));
+        if ($displayHome !== null) {
+            $boolVal = ($displayHome) ? 1 : 0;
+            $and->add($qb->expr()->eq('g.displayHome', $boolVal));
         }
         
         $qb->select('g')
-        ->from('PlaygroundGame\Entity\Game', 'g')
-        ->where($and)
-        ->orderBy($orderBy, 'DESC');
+            ->from('PlaygroundGame\Entity\Game', 'g')
+            ->where($and)
+            ->orderBy($orderBy, 'DESC');
         
         $query = $qb->getQuery();
         $games = $query->getResult();
@@ -854,6 +855,9 @@ class Game
             if ($this->hasReachedPlayLimit($game, $user)) {
                 return false;
             }
+            if (!$this->payToPlay($game, $user)) {
+                return false;
+            }
 
             $ip = $this->getIp();
             $geoloc = $this->getGeoloc($ip);
@@ -900,6 +904,46 @@ class Game
                 return true;
             }
         }
+        return false;
+    }
+
+    /**
+     * If the game has a cost to be played (costToPlay>0)
+     * I check and decrement the price from the leaderboard all of the user
+     * 
+     * @param \PlaygroundGame\Entity\Game $game
+     * @param \PlaygroundUser\Entity\UserInterface $user
+     */
+    public function payToPlay($game, $user)
+    {
+        // Is there a limitation on the game ?
+        $cost = $game->getCostToPlay();
+        if ($cost && $cost > 0) {
+            $availableAmount = $this->getEventManager()->trigger(
+                'leaderboardUserTotal',
+                $this,
+                [
+                    'user' => $user,
+                ]
+            )->last();
+            if ($availableAmount && $availableAmount >= $cost) {
+                $leaderboard = $this->getEventManager()->trigger(
+                    'leaderboardUserUpdate',
+                    $this,
+                    [
+                        'user' => $user,
+                        'points' => -$cost,
+                    ]
+                )->last();
+
+                if ($leaderboard->getTotalPoints() === ($availableAmount - $cost)) {
+                    return true;
+                }
+            }
+        } else {
+            return true;
+        }
+
         return false;
     }
     
