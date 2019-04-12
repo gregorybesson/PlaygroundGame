@@ -151,6 +151,7 @@ return array(
     'Random' => 'Au hasard',
     'Display posts orber by' => 'Afficher les Posts triés par',
     'Posts display mode' => 'Mode d\'affichage des Posts',
+    'Allow votes on this game' => 'Autoriser les votes par les autres joueurs sur ce jeu',
     'Allow anonymous visitors to vote' => 'Autoriser le vote aux visiteurs anonymes',
     'Moderation type' => 'Type de modération',
     'Pre moderation' => 'Modération avant publication des posts',

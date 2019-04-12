@@ -50,9 +50,28 @@ class PostVote extends Game
             ),
         ));
 
+        $this->add(
+            array(
+                'type' => 'Zend\Form\Element\Checkbox',
+                'name' => 'voteActive',
+                'attributes' => array(
+                    'class' => 'switch-input',
+                    'value' => 1,
+                ),
+                'options' => array(
+                    'label' => $translator->translate('Allow votes on this game', 'playgroundgame'),
+                    'checked_value' => 1,
+                    'unchecked_value' => 0,
+                ),
+            )
+        );
+
         $this->add(array(
             'type' => 'Zend\Form\Element\Checkbox',
             'name' => 'voteAnonymous',
+            'attributes' => array(
+                'class' => 'switch-input'
+            ),
             'options' => array(
                 'label' => $translator->translate('Allow anonymous visitors to vote', 'playgroundgame'),
             ),

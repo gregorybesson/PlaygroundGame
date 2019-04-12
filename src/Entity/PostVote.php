@@ -37,6 +37,12 @@ class PostVote extends Game implements InputFilterAwareInterface
     protected $postDisplayNumber = 0;
 
     /**
+     * Is it possible to vote ?
+     * @ORM\Column(name="vote_active", type="boolean", nullable=false)
+     */
+    protected $voteActive = 1;
+
+    /**
      * Is it possible to vote anonymously ?
      * @ORM\Column(name="vote_anonymous", type="boolean", nullable=false)
      */
@@ -146,6 +152,24 @@ class PostVote extends Game implements InputFilterAwareInterface
     /**
      * @return the unknown_type
      */
+    public function getVoteActive()
+    {
+        return $this->voteActive;
+    }
+
+    /**
+     * @param unknown_type $voteActive
+     */
+    public function setVoteActive($voteActive)
+    {
+        $this->voteActive = $voteActive;
+
+        return $this;
+    }
+
+    /**
+     * @return the unknown_type
+     */
     public function getVoteAnonymous()
     {
         return $this->voteAnonymous;
@@ -234,6 +258,21 @@ class PostVote extends Game implements InputFilterAwareInterface
                                 'options' => array(
                                     'haystack' => array('date', 'vote', 'random')
                                 )
+                            )
+                        )
+                    )
+                )
+            );
+
+            $inputFilter->add(
+                $factory->createInput(
+                    array(
+                        'name' => 'voteActive',
+                        'required' => true,
+                        'validators' => array(
+                            array(
+                                'name' => 'Between',
+                                'options' => array('min' => 0, 'max' => 1)
                             )
                         )
                     )
