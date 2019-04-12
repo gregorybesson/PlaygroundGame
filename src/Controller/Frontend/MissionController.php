@@ -54,7 +54,7 @@ class MissionController extends GameController
                 $this->frontendUrl()->fromRoute(
                     'mission/result',
                     array('id' => $this->game->getIdentifier())
-                )
+                ) .'?playLimitReached=1'
             );
         }
 

@@ -33,7 +33,7 @@ class QuizController extends GameController
                 $this->frontendUrl()->fromRoute(
                     $this->game->getClassType() . '/result',
                     array('id' => $this->game->getIdentifier())
-                )
+                ) .'?playLimitReached=1'
             );
         }
 

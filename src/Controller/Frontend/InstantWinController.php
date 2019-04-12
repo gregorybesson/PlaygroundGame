@@ -27,7 +27,7 @@ class InstantWinController extends GameController
                     $this->frontendUrl()->fromRoute(
                         'instantwin/result',
                         array('id' => $this->game->getIdentifier())
-                    )
+                    ) .'?playLimitReached=1'
                 );
             }
 

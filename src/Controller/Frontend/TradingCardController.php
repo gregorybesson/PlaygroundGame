@@ -42,10 +42,14 @@ class TradingCardController extends GameController
 
         $entry = $this->getGameService()->play($this->game, $this->user);
         if (!$entry) {
-            // the user has already taken part of this game and the participation limit has been reached
-            $this->getResponse()->setContent(\Zend\Json\Json::encode(array(
-                'success' => 0
-            )));
+            // the user has already taken part to this game and the participation limit has been reached
+            $this->getResponse()->setContent(
+                \Zend\Json\Json::encode(
+                    array(
+                        'success' => 0
+                    )
+                )
+            );
 
             return $this->getResponse();
         }
