@@ -54,7 +54,7 @@ class HomeController extends AbstractActionController
 
         $layoutViewModel->addChild($slider, 'slider');
 
-        $games = $this->getGameService()->getActiveGames(false, '', '');
+        $games = $this->getGameService()->getActiveGames(true, '', '');
 
         $pages = $this->getPageService()->getActivePages();
 
