@@ -414,8 +414,8 @@ class Game
         }
         
         if ($displayHome !== null) {
-            $boolVal = ($displayHome) ? 1 : 0;
-            $and->add($qb->expr()->eq('g.displayHome', $boolVal));
+            $and->add($qb->expr()->eq('g.displayHome', ':key'));
+            $qb->setParameter('key', $displayHome);
         }
         
         $qb->select('g')
