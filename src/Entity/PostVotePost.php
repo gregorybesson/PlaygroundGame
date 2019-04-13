@@ -406,6 +406,20 @@ class PostVotePost implements InputFilterAwareInterface, Translatable, \JsonSeri
     }
 
     /**
+     * @return ArrayCollection unknown_type
+     */
+    public function getPostElementsAsArray()
+    {
+        $arElements = [];
+
+        foreach ($this->postElements as $k => $elt) {
+            $arElements[$elt->getName()] = $elt->getValue();
+        }
+
+        return $arElements;
+    }
+
+    /**
      * Convert the object to an array.
      *
      * @return array
