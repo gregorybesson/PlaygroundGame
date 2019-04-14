@@ -185,8 +185,9 @@ class PostVote extends Game
             } elseif (!empty($value)) {
                 $postElement->setValue($value);
             }
-            $postElement->setPost($post);
-            $postVotePostElementMapper->insert($postElement);
+            $post->addPostElement($postElement);
+            // $postElement->setPost($post);
+            // $postVotePostElementMapper->insert($postElement);
             $position++;
         }
 
@@ -242,7 +243,7 @@ class PostVote extends Game
             $post->setStatus(2);
         }
 
-        $postvotePostMapper->update($post);
+        $post = $postvotePostMapper->update($post);
 
         $entry->setActive(0);
         $entryMapper->update($entry);
