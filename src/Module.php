@@ -363,9 +363,11 @@ class Module
                     return new \PlaygroundGame\View\Helper\PostvoteShareEvents($service);
                 },
                 \PlaygroundGame\View\Helper\GameWidget::class =>  \PlaygroundGame\View\Helper\GameWidgetFactory::class,
+                \PlaygroundGame\View\Helper\NextGameWidget::class =>  \PlaygroundGame\View\Helper\NextGameWidgetFactory::class,
             ],
             'aliases' => [
                 'gameWidget' => \PlaygroundGame\View\Helper\GameWidget::class,
+                'nextGameWidget' => \PlaygroundGame\View\Helper\NextGameWidget::class,
             ]
         );
     }

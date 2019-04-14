@@ -373,7 +373,78 @@ class Game
 
         return $game;
     }
-    
+ 
+    /**
+     * getNextGames
+     *
+     * @return Array of PlaygroundGame\Entity\Game
+     */
+    public function getNextGames($dateStart = null, $dateEnd = null, $classType = null, $cost = null, $order = null, $dir = 'DESC')
+    {
+        $em = $this->serviceLocator->get('doctrine.entitymanager.orm_default');
+        if ($dateStart === null) {
+            $today = new \DateTime("now");
+        } else {
+            $today = new \DateTime($dateStart);
+        }
+        
+        $today = $today->format('Y-m-d H:i:s');
+        $orderBy = 'g.startDate';
+        if ($order != null) {
+            $orderBy = 'g.'.$order;
+        }
+
+        $qb = $em->createQueryBuilder();
+        $and = $qb->expr()->andx();
+        $and->add($qb->expr()->gte('g.startDate', ':date'));
+        $qb->setParameter('date', $today);
+        if ($dateEnd != null) {
+            $dateEnd = new \DateTime($dateEnd);
+            $end = $dateEnd->format('Y-m-d H:i:s');
+            $and->add($qb->expr()->lte('g.endDate', ':datefin'));
+            $qb->setParameter('datefin', $end);
+        }
+        
+        $and->add($qb->expr()->eq('g.active', '1'));
+        $and->add($qb->expr()->eq('g.broadcastPlatform', '1'));
+        
+        if ($classType != '') {
+            $and->add($qb->expr()->eq('g.classType', ':classType'));
+            $qb->setParameter('classType', $classType);
+        }
+        
+        if ($cost !== null) {
+            $and->add($qb->expr()->eq('g.costToPlay', ':cost'));
+            $qb->setParameter('cost', $cost);
+        }
+        
+        $qb->select('g')
+            ->from('PlaygroundGame\Entity\Game', 'g')
+            ->where($and)
+            ->orderBy($orderBy, $dir);
+        
+        $query = $qb->getQuery();
+        //echo $query->getSql();
+        $games = $query->getResult();
+        
+        // je les classe par date de publication (date comme clé dans le tableau afin de pouvoir merger les objets
+        // de type article avec le même procédé en les classant naturellement par date asc ou desc
+        $arrayGames = array();
+        foreach ($games as $game) {
+            if ($game->getPublicationDate()) {
+                $key = $game->getPublicationDate()->format('Ymd');
+            } elseif ($game->getStartDate()) {
+                $key = $game->getStartDate()->format('Ymd');
+            } else {
+                $key = $game->getUpdatedAt()->format('Ymd');
+            }
+            $key .= $game->getUpdatedAt()->format('Ymd') . '-' . $game->getId();
+            $arrayGames[$key] = $game;
+        }
+
+        return $arrayGames;
+    }
+
     /**
      * getActiveGames
      *
