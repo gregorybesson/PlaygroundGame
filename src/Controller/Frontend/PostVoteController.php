@@ -370,12 +370,14 @@ class PostVoteController extends GameController
 
         $viewModel = $this->buildView($this->game);
 
-        $viewModel->setVariables(array(
+        $viewModel->setVariables(
+            [
                 'statusMail' => null,
                 'post' => $post,
                 'form' => $form,
                 'playLimitReached' => $playLimitReached,
-            ));
+            ]
+        );
 
         return $viewModel;
         //}

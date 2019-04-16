@@ -45,12 +45,12 @@ class GameController extends AbstractActionController
     {
         $gameId = $this->getEvent()->getRouteMatch()->getParam('gameId');
         if (!$gameId) {
-            return $this->redirect()->toRoute('admin/playgroundgame/list');
+            return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/list'));
         }
         
         $game = $this->getAdminGameService()->getGameMapper()->findById($gameId);
         if (!$game) {
-            return $this->redirect()->toRoute('admin/playgroundgame/list');
+            return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/list'));
         }
         $this->game = $game;
     }
@@ -110,8 +110,8 @@ class GameController extends AbstractActionController
 
         $helper = $fb->getRedirectLoginHelper();
         $fb_args_param = array('req_perms' => 'manage_pages,publish_pages');
-        $fb_login_url = $helper->getLoginUrl($this->url()->fromRoute(
-            'admin/playgroundgame/list',
+        $fb_login_url = $helper->getLoginUrl($this->adminUrl()->fromRoute(
+            'playgroundgame/list',
             array(),
             array('force_canonical' => true)), $fb_args_param);
         $accessToken = $helper->getAccessToken();
@@ -208,8 +208,8 @@ class GameController extends AbstractActionController
         $form   = $this->getServiceLocator()->get($formId);
         $form->setAttribute(
             'action',
-            $this->url()->fromRoute(
-                'admin/playgroundgame/edit-' . $this->game->getClassType(),
+            $this->adminUrl()->fromRoute(
+                'playgroundgame/edit-' . $this->game->getClassType(),
                 array('gameId' => $this->game->getId())
             )
         );
@@ -497,7 +497,7 @@ class GameController extends AbstractActionController
                         
                     }
                 }
-                return $this->redirect()->toRoute('admin/playgroundgame/list');
+                return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/list'));
             }
         }
 
@@ -632,10 +632,7 @@ class GameController extends AbstractActionController
             $service->getInvitationMapper()->remove($invitation);
         }
 
-        return $this->redirect()->toRoute(
-            'admin/'. $this->game->getClassType() .'/invitation',
-            array('gameId'=>$this->game->getId())
-        );
+        return $this->redirect()->toUrl($this->adminUrl()->fromRoute($this->game->getClassType() .'/invitation', array('gameId'=>$this->game->getId())));
     }
     
     public function downloadAction()
@@ -734,7 +731,7 @@ class GameController extends AbstractActionController
     public function importAction()
     {
         $form = $this->getServiceLocator()->get('playgroundgame_import_form');
-        $form->setAttribute('action', $this->url()->fromRoute('admin/playgroundgame/import'));
+        $form->setAttribute('action', $this->adminUrl()->fromRoute('playgroundgame/import'));
         $form->setAttribute('method', 'post');
         
         if ($this->getRequest()->isPost()) {
@@ -758,7 +755,7 @@ class GameController extends AbstractActionController
                 ErrorHandler::stop(true);
             }
             
-            return $this->redirect()->toRoute('admin/playgroundgame/list');
+            return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/list'));
         }
         
         return array(
@@ -779,7 +776,7 @@ class GameController extends AbstractActionController
             );
         }
 
-        return $this->redirect()->toRoute('admin/playgroundgame/list');
+        return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/list'));
     }
 
     public function setActiveAction()
@@ -789,7 +786,7 @@ class GameController extends AbstractActionController
         $this->game->setActive(!$this->game->getActive());
         $this->getAdminGameService()->getGameMapper()->update($this->game);
 
-        return $this->redirect()->toRoute('admin/playgroundgame/list');
+        return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/list'));
     }
 
     public function formAction()

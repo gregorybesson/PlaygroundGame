@@ -11,10 +11,12 @@ use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\Factory as InputFactory;
 use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity @HasLifecycleCallbacks
  * @ORM\Table(name="game_quiz_question")
+ * @Gedmo\TranslationEntity(class="PlaygroundGame\Entity\QuizQuestionTranslation")
  */
 class QuizQuestion implements InputFilterAwareInterface
 {
@@ -49,6 +51,7 @@ class QuizQuestion implements InputFilterAwareInterface
     protected $type = 0;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(type="text", nullable=false)
      */
     protected $question;
@@ -59,6 +62,7 @@ class QuizQuestion implements InputFilterAwareInterface
     protected $position = 0;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(type="string", nullable=true)
      */
     protected $video;
@@ -69,6 +73,7 @@ class QuizQuestion implements InputFilterAwareInterface
     protected $image;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(type="integer", nullable=true)
      */
     protected $audio = 0;
@@ -79,11 +84,13 @@ class QuizQuestion implements InputFilterAwareInterface
     protected $autoplay = 0;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(type="text", nullable=true)
      */
     protected $hint;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(name="json_data", type="text", nullable=true)
      */
     protected $jsonData;

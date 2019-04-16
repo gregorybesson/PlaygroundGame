@@ -3198,94 +3198,117 @@ return array(
             'playgroundgame' => array(
                 'label' => 'Jeux concours',
                 'route' => 'gameslist',
+                'use_route_match' => true,
                 'pages' => array(
                     'quiz' => array(
                         'label' => 'Quiz',
-                        'route' => 'quiz'
+                        'route' => 'quiz',
+                        'use_route_match' => true,
                     ),
                     'quiz_play' => array(
                         'label' => 'Quiz',
-                        'route' => 'quiz/play'
+                        'route' => 'quiz/play',
+                        'use_route_match' => true,
                     ),
                     'quiz_result' => array(
                         'label' => 'Quiz',
-                        'route' => 'quiz/result'
+                        'route' => 'quiz/result',
+                        'use_route_match' => true,
                     ),
                     'quiz_bounce' => array(
                         'label' => 'Quiz',
-                        'route' => 'quiz/bounce'
+                        'route' => 'quiz/bounce',
+                        'use_route_match' => true,
                     ),
                     'quiz_terms' => array(
                         'label' => 'Quiz',
-                        'route' => 'quiz/terms'
+                        'route' => 'quiz/terms',
+                        'use_route_match' => true,
                     ),
                     'quiz_conditions' => array(
                         'label' => 'Quiz',
-                        'route' => 'quiz/conditions'
+                        'route' => 'quiz/conditions',
+                        'use_route_match' => true,
                     ),
                     'lottery' => array(
                         'label' => 'Tirage au sort',
-                        'route' => 'lottery'
+                        'route' => 'lottery',
+                        'use_route_match' => true,
                     ),
                     'lottery_result' => array(
                         'label' => 'Tirage au sort',
-                        'route' => 'lottery/result'
+                        'route' => 'lottery/result',
+                        'use_route_match' => true,
                     ),
                     'lottery_bounce' => array(
                         'label' => 'Tirage au sort',
-                        'route' => 'lottery/bounce'
+                        'route' => 'lottery/bounce',
+                        'use_route_match' => true,
                     ),
                     'lottery_terms' => array(
                         'label' => 'Tirage au sort',
-                        'route' => 'lottery/terms'
+                        'route' => 'lottery/terms',
+                        'use_route_match' => true,
                     ),
                     'lottery_conditions' => array(
                         'label' => 'Tirage au sort',
-                        'route' => 'lottery/conditions'
+                        'route' => 'lottery/conditions',
+                        'use_route_match' => true,
                     ),
                     'instanwin' => array(
                         'label' => 'Instant gagnant',
-                        'route' => 'instantwin'
+                        'route' => 'instantwin',
+                        'use_route_match' => true,
                     ),
                     'instanwin_play' => array(
                         'label' => 'Instant gagnant',
-                        'route' => 'instantwin/play'
+                        'route' => 'instantwin/play',
+                        'use_route_match' => true,
                     ),
                     'instanwin_result' => array(
                         'label' => 'Instant gagnant',
-                        'route' => 'instantwin/result'
+                        'route' => 'instantwin/result',
+                        'use_route_match' => true,
                     ),
                     'instanwin_bounce' => array(
                         'label' => 'Instant gagnant',
-                        'route' => 'instantwin/bounce'
+                        'route' => 'instantwin/bounce',
+                        'use_route_match' => true,
                     ),
                     'instanwin_terms' => array(
                         'label' => 'Instant gagnant',
-                        'route' => 'instantwin/terms'
+                        'route' => 'instantwin/terms',
+                        'use_route_match' => true,
                     ),
                     'instanwin_conditions' => array(
                         'label' => 'Instant gagnant',
-                        'route' => 'instantwin/conditions'
+                        'route' => 'instantwin/conditions',
+                        'use_route_match' => true,
                     ),
                     'postvote' => array(
                         'label' => 'Post & vote',
-                        'route' => 'postvote'
+                        'route' => 'postvote',
+                        'use_route_match' => true,
                     ),
                     'postvote_play' => array(
                         'label' => 'Post & vote',
-                        'route' => 'postvote/play'
+                        'route' => 'postvote/play',
+                        'use_route_match' => true,
                     ),
                     'postvote_preview' => array(
                         'label' => 'Post & vote',
-                        'route' => 'postvote/preview'
+                        'route' => 'postvote/preview',
+                        'use_route_match' => true,
                     ),
                     'postvote_result' => array(
                         'label' => 'Post & vote',
-                        'route' => 'postvote/result'
+                        'route' => 'postvote/result',
+                        'use_route_match' => true,
                     ),
                     'postvote_post' => array(
                         'label' => 'Post & vote',
-                        'route' => 'postvote/post'
+                        'route' => 'postvote/post',
+                        'use_route_match' => true,
                     ),
                     'postvote_list' => array(
                         'label' => 'Post & vote',
@@ -3293,7 +3316,8 @@ return array(
                     ),
                     'postvote_bounce' => array(
                         'label' => 'Post & vote',
-                        'route' => 'postvote/bounce'
+                        'route' => 'postvote/bounce',
+                        'use_route_match' => true,
                     )
                 )
             ),
@@ -3301,7 +3325,8 @@ return array(
                 'label' => 'Thématiques',
                 'route' => 'thematiques/:id',
                 'controller' => 'playgroundgame_prizecategories',
-                'action' => 'index'
+                'action' => 'index',
+                'use_route_match' => true,
             )
         ),
         'admin' => array(
@@ -3311,91 +3336,108 @@ return array(
                 'resource' => 'game',
                 'privilege' => 'list',
                 'target' => 'nav-icon icon-game-controller',
+                'use_route_match' => true,
                 'pages' => array(
                     'list' => array(
                         'label' => 'Games list',
                         'route' => 'admin/playgroundgame/list',
                         'resource' => 'game',
-                        'privilege' => 'list'
+                        'privilege' => 'list',
+                        'use_route_match' => true,
                     ),
                     'create-lottery' => array(
                         'label' => 'Add new lottery',
                         'route' => 'admin/playgroundgame/create-lottery',
                         'resource' => 'game',
-                        'privilege' => 'add'
+                        'privilege' => 'add',
+                        'use_route_match' => true,
                     ),
                     'edit-lottery' => array(
                         'label' => 'Editer un tirage au sort',
                         'route' => 'admin/playgroundgame/edit-lottery',
-                        'privilege' => 'edit'
+                        'privilege' => 'edit',
+                        'use_route_match' => true,
                     ),
                     'entry-lottery' => array(
                         'label' => 'Participants',
                         'route' => 'admin/lottery/entry',
-                        'privilege' => 'list'
+                        'privilege' => 'list',
+                        'use_route_match' => true,
                     ),
                     'create-instantwin' => array(
                         'label' => 'Add new instant win',
                         'route' => 'admin/playgroundgame/create-instantwin',
                         'resource' => 'game',
-                        'privilege' => 'add'
+                        'privilege' => 'add',
+                        'use_route_match' => true,
                     ),
                     'edit-instantwin' => array(
                         'label' => 'Editer un instant gagnant',
                         'route' => 'admin/playgroundgame/edit-instantwin',
-                        'privilege' => 'edit'
+                        'privilege' => 'edit',
+                        'use_route_match' => true,
                     ),
                     'entry-instantwin' => array(
                         'label' => 'Participants',
                         'route' => 'admin/instantwin/entry',
-                        'privilege' => 'list'
+                        'privilege' => 'list',
+                        'use_route_match' => true,
                     ),
                     'create-quiz' => array(
                         'label' => 'Add new quiz',
                         'route' => 'admin/playgroundgame/create-quiz',
                         'resource' => 'game',
-                        'privilege' => 'add'
+                        'privilege' => 'add',
+                        'use_route_match' => true,
                     ),
                     'edit-quiz' => array(
                         'label' => 'Editer un quiz',
                         'route' => 'admin/playgroundgame/edit-quiz',
-                        'privilege' => 'edit'
+                        'privilege' => 'edit',
+                        'use_route_match' => true,
                     ),
                     'entry-quiz' => array(
                         'label' => 'Participants',
                         'route' => 'admin/quiz/entry',
-                        'privilege' => 'list'
+                        'privilege' => 'list',
+                        'use_route_match' => true,
                     ),
                     'create-postvote' => array(
                         'label' => 'Add new post & vote',
                         'route' => 'admin/playgroundgame/create-postvote',
                         'resource' => 'game',
-                        'privilege' => 'add'
+                        'privilege' => 'add',
+                        'use_route_match' => true,
                     ),
                     'edit-postvote' => array(
                         'label' => 'Editer un Post & Vote',
                         'route' => 'admin/playgroundgame/edit-postvote',
-                        'privilege' => 'edit'
+                        'privilege' => 'edit',
+                        'use_route_match' => true,
                     ),
                     'entry-postvote' => array(
                         'label' => 'Participants',
                         'route' => 'admin/postvote/entry',
-                        'privilege' => 'list'
+                        'privilege' => 'list',
+                        'use_route_match' => true,
                     ),
                     'quiz-question-list' => array(
                         'label' => 'Liste des questions',
                         'route' => 'admin/playgroundgame/quiz-question-list',
                         'privilege' => 'list',
+                        'use_route_match' => true,
                         'pages' => array(
                             'quiz-question-add' => array(
                                 'label' => 'Ajouter des questions',
                                 'route' => 'admin/playgroundgame/quiz-question-add',
-                                'privilege' => 'add'
+                                'privilege' => 'add',
+                                'use_route_match' => true,
                             ),
                             'quiz-question-edit' => array(
                                 'label' => 'Editer une question',
                                 'route' => 'admin/playgroundgame/quiz-question-edit',
-                                'privilege' => 'edit'
+                                'privilege' => 'edit',
+                                'use_route_match' => true,
                             )
                         )
                     ),
@@ -3403,19 +3445,22 @@ return array(
                         'label' => 'Add new trading card',
                         'route' => 'admin/playgroundgame/create-tradingcard',
                         'resource' => 'game',
-                        'privilege' => 'add'
+                        'privilege' => 'add',
+                        'use_route_match' => true,
                     ),
                     'create-mission' => array(
                         'label' => 'Add new mission',
                         'route' => 'admin/playgroundgame/create-mission',
                         'resource' => 'game',
-                        'privilege' => 'add'
+                        'privilege' => 'add',
+                        'use_route_match' => true,
                     ),
                     'list-prizecategory' => array(
                         'label' => 'Manage categories gain',
                         'route' => 'admin/playgroundgame/prize-category-list',
                         'resource' => 'game',
-                        'privilege' => 'prizecategory_list'
+                        'privilege' => 'prizecategory_list',
+                        'use_route_match' => true,
                     ),
                     /*
                     'list-postvotemod' => array(
@@ -3423,39 +3468,46 @@ return array(
                         'route'     => 'admin/playgroundgame/postvote-mod-list',
                         'resource'  => 'game',
                         'privilege' => 'list',
+                        'use_route_match' => true,
                     ),
                     */
                     'instantwin-occurence-list' => array(
                         'label' => 'Liste des instant gagnants',
                         'route' => 'admin/playgroundgame/instantwin-occurrence-list',
                         'privilege' => 'list',
+                        'use_route_match' => true,
                         'pages' => array(
                             'instantwin-occurrence-add' => array(
                                 'label' => 'Add new instant win',
                                 'route' => 'admin/playgroundgame/instantwin-occurrence-add',
-                                'privilege' => 'add'
+                                'privilege' => 'add',
+                                'use_route_match' => true,
                             ),
                             'instantwin-occurrence-edit' => array(
                                 'label' => 'Editer un instant gagnant',
                                 'route' => 'admin/playgroundgame/instantwin-occurrence-edit',
-                                'privilege' => 'edit'
+                                'privilege' => 'edit',
+                                'use_route_match' => true,
                             ),
                             'instantwin-code-occurrences-add' => array(
                                 'label' => 'Add new instant win',
                                 'route' => 'admin/playgroundgame/instantwin-code-occurrences-add',
-                                'privilege' => 'add'
+                                'privilege' => 'add',
+                                'use_route_match' => true,
                             ),
                             'instantwin-occurrences-export' => array(
                                 'route' => 'admin/playgroundgame/instantwin-occurrences-export',
                                 'label' => 'Export to csv',
-                                'privilege' => 'download'
+                                'privilege' => 'download',
+                                'use_route_match' => true,
                             )
                         )
                     ),
                     'postvote-form' => array(
                         'label' => 'Options du Post & vote',
                         'route' => 'admin/playgroundgame/postvote-form',
-                        'privilege' => 'list'
+                        'privilege' => 'list',
+                        'use_route_match' => true,
                     ),
                 )
             )

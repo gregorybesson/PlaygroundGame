@@ -34,8 +34,8 @@ class TradingCardController extends GameController
         $form->get('submit')->setAttribute('label', 'Add');
         $form->setAttribute(
             'action',
-            $this->url()->fromRoute(
-                'admin/playgroundgame/create-tradingcard',
+            $this->adminUrl()->fromRoute(
+                'playgroundgame/create-tradingcard',
                 array('gameId' => 0)
             )
         );
@@ -54,7 +54,7 @@ class TradingCardController extends GameController
             if ($game) {
                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The game has been created');
 
-                return $this->redirect()->toRoute('admin/playgroundgame/list');
+                return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/list'));
             }
         }
         $gameForm->setVariables(array('form' => $form, 'game' => $tradingcard));
@@ -111,8 +111,8 @@ class TradingCardController extends GameController
 
         $form->setAttribute(
             'action',
-            $this->url()->fromRoute(
-                'admin/playgroundgame/tradingcard-model-add',
+            $this->adminUrl()->fromRoute(
+                'playgroundgame/tradingcard-model-add',
                 array('gameId' => $this->game->getId())
             )
         );
@@ -131,10 +131,7 @@ class TradingCardController extends GameController
             if ($model) {
                 // Redirect to list of games
                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The model has been created');
-                return $this->redirect()->toRoute(
-                    'admin/playgroundgame/tradingcard-model-list',
-                    array('gameId' => $this->game->getId())
-                );
+                return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/tradingcard-model-list', array('gameId' => $this->game->getId()));
             }
         }
         return $viewModel->setVariables(
@@ -178,10 +175,7 @@ class TradingCardController extends GameController
             if ($model) {
                 // Redirect to list of games
                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The model has been edited');
-                return $this->redirect()->toRoute(
-                    'admin/playgroundgame/tradingcard-model-list',
-                    array('gameId' => $this->game->getId())
-                );
+                return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/tradingcard-model-list', array('gameId' => $this->game->getId()));
             }
         }
         return $viewModel->setVariables(
@@ -252,7 +246,7 @@ class TradingCardController extends GameController
         $service = $this->getAdminGameService();
         $modelId = $this->getEvent()->getRouteMatch()->getParam('modelId');
         if (!$modelId) {
-            return $this->redirect()->toRoute('admin/playgroundgame/list');
+            return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/list'));
         }
         $model         = $service->getTradingCardModelMapper()->findById($modelId);
         $tradingcardId = $model->getTradingCard()->getId();
@@ -266,10 +260,7 @@ class TradingCardController extends GameController
             );
         }
 
-        return $this->redirect()->toRoute(
-            'admin/playgroundgame/tradingcard-model-list',
-            array('gameId' => $tradingcardId)
-        );
+        return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/tradingcard-model-list', array('gameId' => $tradingcardId)));
     }
 
     public function getAdminGameService()
