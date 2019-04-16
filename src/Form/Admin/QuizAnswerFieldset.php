@@ -131,7 +131,7 @@ class QuizAnswerFieldset extends Fieldset
                 'label' => $translator->translate('Remove this answer', 'playgroundgame'),
             ),
             'attributes' => array(
-                'class' => 'btn btn-block btn-danger col-md-2',
+                'class' => 'btn btn-block btn-danger col-md-2 delete-button',
             )
         ));
     }
