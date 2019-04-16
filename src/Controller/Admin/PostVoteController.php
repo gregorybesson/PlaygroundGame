@@ -39,8 +39,8 @@ class PostVoteController extends GameController
         $form->get('submit')->setAttribute('label', 'Add');
         $form->setAttribute(
             'action',
-            $this->url()->fromRoute(
-                'admin/playgroundgame/create-postvote',
+            $this->adminUrl()->fromRoute(
+                'playgroundgame/create-postvote',
                 array('gameId' => 0)
             )
         );
@@ -59,7 +59,7 @@ class PostVoteController extends GameController
             if ($game) {
                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The game was created');
 
-                return $this->redirect()->toRoute('admin/playgroundgame/list');
+                return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/list'));
             }
         }
         $gameForm->setVariables(array('form' => $form, 'game' => $postVote));
@@ -101,12 +101,12 @@ class PostVoteController extends GameController
         $status = $this->getEvent()->getRouteMatch()->getParam('status');
 
         if (!$postId) {
-            return $this->redirect()->toUrl($this->url()->fromRoute('admin/postvote/entry', array('gameId' => 0)));
+            return $this->redirect()->toUrl($this->adminUrl()->fromRoute('postvote/entry', array('gameId' => 0)));
         }
         $post = $service->getPostVotePostMapper()->findById($postId);
 
         if (! $post) {
-            return $this->redirect()->toUrl($this->url()->fromRoute('admin/postvote/entry', array('gameId' => 0)));
+            return $this->redirect()->toUrl($this->adminUrl()->fromRoute('postvote/entry', array('gameId' => 0)));
         }
         $game = $post->getPostvote();
 
@@ -115,8 +115,8 @@ class PostVoteController extends GameController
             $service->getPostVotePostMapper()->update($post);
 
             return $this->redirect()->toUrl(
-                $this->url()->fromRoute(
-                    'admin/postvote/entry',
+                $this->adminUrl()->fromRoute(
+                    'postvote/entry',
                     array('gameId' => $game->getId())
                 )
             );
@@ -125,8 +125,8 @@ class PostVoteController extends GameController
             $service->getPostVotePostMapper()->update($post);
 
             return $this->redirect()->toUrl(
-                $this->url()->fromRoute(
-                    'admin/postvote/entry',
+                $this->adminUrl()->fromRoute(
+                    'postvote/entry',
                     array('gameId' => $game->getId())
                 )
             );
@@ -142,12 +142,12 @@ class PostVoteController extends GameController
         $pushed = $this->getEvent()->getRouteMatch()->getParam('pushed');
     
         if (!$postId) {
-            return $this->redirect()->toUrl($this->url()->fromRoute('admin/postvote/entry', array('gameId' => 0)));
+            return $this->redirect()->toUrl($this->adminUrl()->fromRoute('postvote/entry', array('gameId' => 0)));
         }
         $post = $service->getPostVotePostMapper()->findById($postId);
     
         if (! $post) {
-            return $this->redirect()->toUrl($this->url()->fromRoute('admin/postvote/entry', array('gameId' => 0)));
+            return $this->redirect()->toUrl($this->adminUrl()->fromRoute('postvote/entry', array('gameId' => 0)));
         }
         $game = $post->getPostvote();
     
@@ -155,8 +155,8 @@ class PostVoteController extends GameController
         $service->getPostVotePostMapper()->update($post);
     
         return $this->redirect()->toUrl(
-            $this->url()->fromRoute(
-                'admin/postvote/entry',
+            $this->adminUrl()->fromRoute(
+                'postvote/entry',
                 array('gameId' => $game->getId())
             )
         );

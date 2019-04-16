@@ -9,10 +9,12 @@ use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\Factory as InputFactory;
 use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity @HasLifecycleCallbacks
  * @ORM\Table(name="game_quiz_answer")
+ * @Gedmo\TranslationEntity(class="PlaygroundGame\Entity\QuizAnswerTranslation")
  */
 class QuizAnswer implements InputFilterAwareInterface
 {
@@ -32,27 +34,32 @@ class QuizAnswer implements InputFilterAwareInterface
     protected $question;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(type="text", nullable=true)
      */
     protected $answer;
 
     /**
      * Explanation of the answer
+     * @Gedmo\Translatable
      * @ORM\Column(type="text", nullable=true)
      */
     protected $explanation;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(name="json_data", type="text", nullable=true)
      */
     protected $jsonData;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(type="string", nullable=true)
      */
     protected $video;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(type="string", nullable=true)
      */
     protected $image;

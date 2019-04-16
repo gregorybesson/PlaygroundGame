@@ -25,7 +25,7 @@ class InstantWinController extends GameController
         $this->getAdminGameService()->getGameMapper()->remove($this->game);
         $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The game has been removed');
 
-        return $this->redirect()->toRoute('admin/playgroundgame/list');
+        return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/list'));
     }
 
     public function createInstantWinAction()
@@ -43,7 +43,7 @@ class InstantWinController extends GameController
         $form->bind($instantwin);
         $form->setAttribute(
             'action',
-            $this->url()->fromRoute('admin/playgroundgame/create-instantwin', array('gameId' => 0))
+            $this->adminUrl()->fromRoute('playgroundgame/create-instantwin', array('gameId' => 0))
         );
         $form->setAttribute('method', 'post');
 
@@ -60,7 +60,7 @@ class InstantWinController extends GameController
             if ($game) {
                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The game was created');
 
-                return $this->redirect()->toRoute('admin/playgroundgame/list');
+                return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/list'));
             }
         }
         $gameForm->setVariables(array('form' => $form, 'game' => $instantwin));
@@ -118,8 +118,8 @@ class InstantWinController extends GameController
 
         $form->setAttribute(
             'action',
-            $this->url()->fromRoute(
-                'admin/playgroundgame/instantwin-occurrence-add',
+            $this->adminUrl()->fromRoute(
+                'playgroundgame/instantwin-occurrence-add',
                 array('gameId' => $this->game->getId())
             )
         );
@@ -142,10 +142,7 @@ class InstantWinController extends GameController
             if ($occurrence) {
                 // Redirect to list of games
                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The occurrence was created');
-                return $this->redirect()->toRoute(
-                    'admin/playgroundgame/instantwin-occurrence-list',
-                    array('gameId'=>$this->game->getId())
-                );
+                return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/instantwin-occurrence-list', array('gameId' => $this->game->getId())));
             }
         }
         return $viewModel->setVariables(
@@ -170,8 +167,8 @@ class InstantWinController extends GameController
         $form->get('submit')->setAttribute('label', 'Import');
         $form->setAttribute(
             'action',
-            $this->url()->fromRoute(
-                'admin/playgroundgame/instantwin-occurrences-import',
+            $this->adminUrl()->fromRoute(
+                'playgroundgame/instantwin-occurrences-import',
                 array('gameId' => $this->game->getId())
             )
         );
@@ -206,10 +203,7 @@ class InstantWinController extends GameController
                     $this->flashMessenger()->setNamespace('playgroundgame')->addMessage(
                         $created.' occurrences were created !'
                     );
-                    return $this->redirect()->toRoute(
-                        'admin/playgroundgame/instantwin-occurrence-list',
-                        array('gameId'=>$this->game->getId())
-                    );
+                    return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/instantwin-occurrence-list', array('gameId' => $this->game->getId())));
                 }
             }
         }
@@ -237,10 +231,7 @@ class InstantWinController extends GameController
             $this->flashMessenger()->setNamespace('playgroundgame')->addMessage(
                 'This occurrence has a winner, you can not update it.'
             );
-            return $this->redirect()->toRoute(
-                'admin/playgroundgame/instantwin-occurrence-list',
-                array('gameId'=>$this->game->getId())
-            );
+            return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/instantwin-occurrence-list', array('gameId'=>$this->game->getId())));
         }
         $form = $this->getServiceLocator()->get('playgroundgame_instantwinoccurrence_form');
         $form->remove('occurrences_file');
@@ -262,10 +253,7 @@ class InstantWinController extends GameController
             if ($occurrence) {
                 // Redirect to list of games
                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The occurrence was edited');
-                return $this->redirect()->toRoute(
-                    'admin/playgroundgame/instantwin-occurrence-list',
-                    array('gameId'=>$this->game->getId())
-                );
+                return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/instantwin-occurrence-list', array('gameId' => $this->game->getId())));
             }
         }
         return $viewModel->setVariables(
@@ -284,7 +272,7 @@ class InstantWinController extends GameController
         $service = $this->getAdminGameService();
         $occurrenceId = $this->getEvent()->getRouteMatch()->getParam('occurrenceId');
         if (!$occurrenceId) {
-            return $this->redirect()->toRoute('admin/playgroundgame/list');
+            return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/list'));
         }
         $occurrence   = $service->getInstantWinOccurrenceMapper()->findById($occurrenceId);
         $instantwinId = $occurrence->getInstantWin()->getId();
@@ -298,10 +286,7 @@ class InstantWinController extends GameController
             );
         }
 
-        return $this->redirect()->toRoute(
-            'admin/playgroundgame/instantwin-occurrence-list',
-            array('gameId'=>$instantwinId)
-        );
+        return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/instantwin-occurrence-list', array('gameId'=>$instantwinId)));
     }
 
     public function exportOccurrencesAction()

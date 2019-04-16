@@ -24,7 +24,7 @@ class QuizController extends GameController
         $service = $this->getAdminGameService();
         $quizId = $this->getEvent()->getRouteMatch()->getParam('quizId');
         if (!$quizId) {
-            return $this->redirect()->toRoute('admin/playgroundgame/list');
+            return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/list'));
         }
         $quiz = $service->getGameMapper()->findById($quizId);
         $questions = $service->getQuizQuestionMapper()->findByGameId($quizId);
@@ -53,7 +53,7 @@ class QuizController extends GameController
         $quizId = $this->getEvent()->getRouteMatch()->getParam('quizId');
 
         if (!$quizId) {
-            return $this->redirect()->toRoute('admin/playgroundgame/list');
+            return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/list'));
         }
 
         $form = $this->getServiceLocator()->get('playgroundgame_quizquestion_form');
@@ -61,7 +61,7 @@ class QuizController extends GameController
         $form->get('quiz_id')->setAttribute('value', $quizId);
         $form->setAttribute(
             'action',
-            $this->url()->fromRoute('admin/playgroundgame/quiz-question-add', array('quizId' => $quizId))
+            $this->adminUrl()->fromRoute('playgroundgame/quiz-question-add', array('quizId' => $quizId))
         );
         $form->setAttribute('method', 'post');
 
@@ -79,7 +79,7 @@ class QuizController extends GameController
                 // Redirect to list of games
                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The question was created');
 
-                return $this->redirect()->toRoute('admin/playgroundgame/quiz-question-list', array('quizId'=>$quizId));
+                return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/quiz-question-list', array('quizId'=>$quizId)));
             } else { // Creation failed
                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage(
                     'The question was not updated - create at least one good answer'
@@ -98,7 +98,7 @@ class QuizController extends GameController
 
         $questionId = $this->getEvent()->getRouteMatch()->getParam('questionId');
         if (!$questionId) {
-            return $this->redirect()->toRoute('admin/playgroundgame/list');
+            return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/list'));
         }
         $question   = $service->getQuizQuestionMapper()->findById($questionId);
         $quizId     = $question->getQuiz()->getId();
@@ -108,7 +108,7 @@ class QuizController extends GameController
         $form->get('quiz_id')->setAttribute('value', $quizId);
         $form->setAttribute(
             'action',
-            $this->url()->fromRoute('admin/playgroundgame/quiz-question-edit', array('questionId' => $questionId))
+            $this->adminUrl()->fromRoute('playgroundgame/quiz-question-edit', array('questionId' => $questionId))
         );
         $form->setAttribute('method', 'post');
 
@@ -125,7 +125,8 @@ class QuizController extends GameController
                 // Redirect to list of games
                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The question was updated');
 
-                return $this->redirect()->toRoute('admin/playgroundgame/quiz-question-list', array('quizId'=>$quizId));
+                return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/quiz-question-list', array('quizId'=>$quizId)));
+                
             } else {
                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage(
                     'The question was not updated - create at least one good answer'
@@ -141,7 +142,7 @@ class QuizController extends GameController
         $service = $this->getAdminGameService();
         $questionId = $this->getEvent()->getRouteMatch()->getParam('questionId');
         if (!$questionId) {
-            return $this->redirect()->toRoute('admin/playgroundgame/list');
+            return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/list'));
         }
         $question   = $service->getQuizQuestionMapper()->findById($questionId);
         $quizId     = $question->getQuiz()->getId();
@@ -149,7 +150,7 @@ class QuizController extends GameController
         $service->getQuizQuestionMapper()->remove($question);
         $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The question was created');
 
-        return $this->redirect()->toRoute('admin/playgroundgame/quiz-question-list', array('quizId'=>$quizId));
+        return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/quiz-question-list', array('quizId'=>$quizId)));
     }
 
     public function sortQuestionAction()
@@ -177,8 +178,8 @@ class QuizController extends GameController
         $form->get('submit')->setAttribute('label', 'Add');
         $form->setAttribute(
             'action',
-            $this->url()->fromRoute(
-                'admin/playgroundgame/create-quiz',
+            $this->adminUrl()->fromRoute(
+                'playgroundgame/create-quiz',
                 array('gameId' => 0)
             )
         );
@@ -197,7 +198,7 @@ class QuizController extends GameController
             if ($game) {
                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The game was created');
 
-                return $this->redirect()->toRoute('admin/playgroundgame/list');
+                return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/list'));
             }
         }
         $gameForm->setVariables(array('form' => $form, 'game' => $quiz));

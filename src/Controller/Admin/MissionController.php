@@ -32,8 +32,8 @@ class MissionController extends GameController
         $form->get('submit')->setAttribute('label', 'Add');
         $form->setAttribute(
             'action',
-            $this->url()->fromRoute(
-                'admin/playgroundgame/create-mission',
+            $this->adminUrl()->fromRoute(
+                'playgroundgame/create-mission',
                 array('gameId' => 0)
             )
         );
@@ -53,7 +53,7 @@ class MissionController extends GameController
             if ($game) {
                 $this->flashMessenger()->setNamespace('mission')->addMessage('The game was created');
 
-                return $this->redirect()->toRoute('admin/playgroundgame/list');
+                return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/list'));
             }
         }
         $gameForm->setVariables(array('form' => $form, 'game' => $mission));
@@ -68,7 +68,7 @@ class MissionController extends GameController
         $gameId = $this->getEvent()->getRouteMatch()->getParam('gameId');
 
         if (!$gameId) {
-            return $this->redirect()->toRoute('admin/playgroundgame/createMission');
+            return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/createMission'));
         }
 
         $game = $service->getGameMapper()->findById($gameId);
@@ -82,8 +82,8 @@ class MissionController extends GameController
         $form   = $this->getServiceLocator()->get('playgroundgame_mission_form');
         $form->setAttribute(
             'action',
-            $this->url()->fromRoute(
-                'admin/playgroundgame/edit-mission',
+            $this->adminUrl()->fromRoute(
+                'playgroundgame/edit-mission',
                 array('gameId' => $gameId)
             )
         );
@@ -117,7 +117,7 @@ class MissionController extends GameController
             $result = $service->createOrUpdate($data, $game, 'playgroundgame_mission_form');
 
             if ($result) {
-                return $this->redirect()->toRoute('admin/playgroundgame/list');
+                return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/list'));
             }
         }
 

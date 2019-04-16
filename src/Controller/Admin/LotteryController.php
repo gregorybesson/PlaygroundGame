@@ -30,8 +30,8 @@ class LotteryController extends GameController
         $form->get('submit')->setAttribute('label', 'Add');
         $form->setAttribute(
             'action',
-            $this->url()->fromRoute(
-                'admin/playgroundgame/create-lottery',
+            $this->adminUrl()->fromRoute(
+                'playgroundgame/create-lottery',
                 array('gameId' => 0)
             )
         );
@@ -53,7 +53,7 @@ class LotteryController extends GameController
             if ($game) {
                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The game was created');
 
-                return $this->redirect()->toRoute('admin/playgroundgame/list');
+                return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/list'));
             }
         }
         $gameForm->setVariables(array('form' => $form, 'game' => $lottery));

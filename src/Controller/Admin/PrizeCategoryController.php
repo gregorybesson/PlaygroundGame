@@ -72,7 +72,7 @@ class PrizeCategoryController extends AbstractActionController
             if ($category) {
                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('la catégorie a été créée');
 
-                return $this->redirect()->toRoute('admin/playgroundgame/prize-category-list');
+                return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/prize-category-list'));
             }
         }
 
@@ -108,7 +108,7 @@ class PrizeCategoryController extends AbstractActionController
                     'La catégorie a été mise à jour'
                 );
 
-                return $this->redirect()->toRoute('admin/playgroundgame/prize-category-list');
+                return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/prize-category-list'));
             }
         }
 
