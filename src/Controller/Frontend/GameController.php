@@ -641,10 +641,12 @@ class GameController extends AbstractActionController
             }
         }
 
-        $viewModel->setVariables(array(
+        $viewModel->setVariables(
+            [
                 'statusMail' => $statusMail,
                 'form'       => $form,
-            ));
+            ]
+        );
 
         return $viewModel;
     }
