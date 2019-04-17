@@ -1220,6 +1220,18 @@ class Game
                     $shares = json_decode($entry->getSocialShares(), true);
                     (!isset($shares['mail']))? $shares['mail'] = 1:$shares['mail'] += 1;
                 }
+                $this->getEventManager()->trigger(
+                    __FUNCTION__ . '.post',
+                    $this, array(
+                        'user' => $user,
+                        'secretKey' => $secretKey,
+                        'data' => $data,
+                        'game' => $game,
+                        'entry' => $entry,
+                        'message' => $game->getEmailShareMessage(),
+                        'to' => $to,
+                    )
+                );
             }
         }
 
@@ -1229,15 +1241,6 @@ class Game
                 $entry->setSocialShares($sharesJson);
                 $entry = $this->getEntryMapper()->update($entry);
             }
-            
-            $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array(
-                'user' => $user,
-                'secretKey' => $secretKey,
-                'data' => $data,
-                'game' => $game,
-                'entry' => $entry,
-                'message' => $game->getEmailShareMessage()
-            ));
 
             return true;
         }
