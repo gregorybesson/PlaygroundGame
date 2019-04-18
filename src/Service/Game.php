@@ -1177,8 +1177,13 @@ class Game
         $mailSent = false;
         $from = $this->getOptions()->getEmailFromAddress();
 
-        if (empty($subject)) {
+        if (empty($subject) && $game) {
             $subject = $game->getEmailShareSubject();
+        }
+
+        $message = '';
+        if ($game && !empty($game->getEmailShareMessage())) {
+            $message = $game->getEmailShareMessage();
         }
 
         $renderer = $this->serviceLocator->get('Zend\View\Renderer\RendererInterface');
@@ -1208,7 +1213,7 @@ class Game
                         'to' => $to,
                         'secretKey' => $secretKey,
                         'skinUrl' => $skinUrl,
-                        'message' => $game->getEmailShareMessage()
+                        'message' => $message,
                     )
                 );
                 try {
@@ -1228,7 +1233,7 @@ class Game
                         'data' => $data,
                         'game' => $game,
                         'entry' => $entry,
-                        'message' => $game->getEmailShareMessage(),
+                        'message' => $message,
                         'to' => $to,
                     )
                 );

@@ -4,6 +4,7 @@ namespace PlaygroundGame\Controller\Frontend;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Zend\View\Model\JsonModel;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 class HomeController extends AbstractActionController
@@ -17,6 +18,8 @@ class HomeController extends AbstractActionController
      * @var \PlaygroundCms\Service\Page
      */
     protected $pageService;
+
+    protected $options;
     
     /**
      *
@@ -82,6 +85,63 @@ class HomeController extends AbstractActionController
                 'items'    => $paginator,
                )
         );
+    }
+
+    public function shareAction()
+    {
+        $statusMail = null;
+
+        $form = $this->getServiceLocator()->get('playgroundgame_sharemail_form');
+        $form->setAttribute('method', 'post');
+
+        // buildView must be before sendMail because it adds the game template path to the templateStack
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $viewModel = new JsonModel();
+        } else {
+            $viewModel = new ViewModel();
+        }
+
+        $user = $this->zfcUserAuthentication()->getIdentity();
+
+        if ($this->getRequest()->isPost()) {
+            $data = $this->getRequest()->getPost()->toArray();
+            $form->setData($data);
+            if ($form->isValid()) {
+                $subject = $this->serviceLocator->get('MvcTranslator')->translate(
+                    $this->getOptions()->getDefaultSubjectLine(),
+                    'playgroundgame'
+                );
+                $result = $this->getGameService()->sendShareMail($data, null, $user, null, 'share_game', $subject);
+                if ($result) {
+                    $statusMail = true;
+                }
+            }
+        }
+
+        $viewModel->setVariables(
+            [
+                'statusMail' => $statusMail,
+                'form'       => $form,
+            ]
+        );
+
+        return $viewModel;
+    }
+
+    public function getOptions()
+    {
+        if (!$this->options) {
+            $this->setOptions($this->getServiceLocator()->get('playgroundgame_module_options'));
+        }
+
+        return $this->options;
+    }
+
+    public function setOptions($options)
+    {
+        $this->options = $options;
+
+        return $this;
     }
     
     public function getGameService()

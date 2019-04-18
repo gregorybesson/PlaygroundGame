@@ -229,6 +229,16 @@ return array(
                             'constraints' => array('p' => '[0-9]*'),
                         ),
                     ),
+                    'share' => array(
+                        'type' => 'Zend\Router\Http\Literal',
+                        'options' => array(
+                            'route' => 'partager',
+                            'defaults' => array(
+                                'controller' => PlaygroundGame\Controller\Frontend\Home::class,
+                                'action' => 'share'
+                            )
+                        )
+                    ),
                     'gameslist' => array(
                         'type' => 'Zend\Router\Http\Literal',
                         'options' => array(
