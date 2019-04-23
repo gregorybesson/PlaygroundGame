@@ -38,6 +38,18 @@ class Entry implements \JsonSerializable
     protected $active = 1;
 
     /**
+     * Has this entry been paid
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    protected $paid = false;
+
+    /**
+     * The amount paid for this entry
+     * @ORM\Column(name="paid_amount", type="integer", nullable=true)
+     */
+    protected $paidAmount = 0;
+
+    /**
      * An entry marked as bonus means that it's not taken into account
      * in the limit calculation. It's offered, for example, when you share the game to a friend.
      *
@@ -313,7 +325,7 @@ class Entry implements \JsonSerializable
     }
 
     /**
-     * @return integer status
+     * @return boolean active
      */
     public function getActive()
     {
@@ -321,11 +333,47 @@ class Entry implements \JsonSerializable
     }
 
     /**
-     * @param integer $active
+     * @param boolean $active
      */
     public function setActive($active)
     {
         $this->active = $active;
+        
+        return $this;
+    }
+
+    /**
+     * @return boolean paid
+     */
+    public function getPaid()
+    {
+        return $this->paid;
+    }
+
+    /**
+     * @param boolean $paid
+     */
+    public function setPaid($paid)
+    {
+        $this->paid = $paid;
+        
+        return $this;
+    }
+
+    /**
+     * @return integer paidAmount
+     */
+    public function getPaidAmount()
+    {
+        return $this->paidAmount;
+    }
+
+    /**
+     * @param integer $paidAmount
+     */
+    public function setPaidAmount($paidAmount)
+    {
+        $this->paidAmount = $paidAmount;
         
         return $this;
     }

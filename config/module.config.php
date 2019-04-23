@@ -1352,15 +1352,15 @@ return array(
                                 )
                             ),
                             'verification' => array(
-		                        'type' => 'Zend\Router\Http\Literal',
-		                        'options' => array(
-		                            'route' => '/verification',
-		                            'defaults' => array(
-		                                'controller' => PlaygroundGame\Controller\Frontend\Lottery::class,
-		                                'action'     => 'check-token',
-		                            ),
-		                        ),
-		                    ),
+                                'type' => 'Zend\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/verification',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Lottery::class,
+                                        'action'     => 'check-token',
+                                    ),
+                                ),
+                            ),
                             'optin' => array(
                                 'type' => 'Segment',
                                 'options' => array(
@@ -1368,6 +1368,16 @@ return array(
                                     'defaults' => array(
                                         'controller' => PlaygroundGame\Controller\Frontend\Lottery::class,
                                         'action' => 'optin'
+                                    )
+                                )
+                            ),
+                            'terms-optin' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/terms-optin',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Lottery::class,
+                                        'action' => 'termsOptin'
                                     )
                                 )
                             ),

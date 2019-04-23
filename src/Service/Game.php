@@ -450,7 +450,7 @@ class Game
      *
      * @return Array of PlaygroundGame\Entity\Game
      */
-    public function getActiveGames($displayHome = null, $classType = '', $order = '')
+    public function getActiveGames($displayHome = null, $classType = '', $order = '', $dir = 'DESC')
     {
         $em = $this->serviceLocator->get('doctrine.entitymanager.orm_default');
         $today = new \DateTime("now");
@@ -492,7 +492,7 @@ class Game
         $qb->select('g')
             ->from('PlaygroundGame\Entity\Game', 'g')
             ->where($and)
-            ->orderBy($orderBy, 'DESC');
+            ->orderBy($orderBy, $dir);
         
         $query = $qb->getQuery();
         $games = $query->getResult();
@@ -906,27 +906,107 @@ class Game
     }
 
     /**
+     * setTermsOptin
+     *
+     * @return Boolean the result of the terms optin update
+     */
+    public function setTermsOptin($optin, $game, $user)
+    {
+        $entry = $this->checkExistingEntry($game, $user, true);
+
+        if ($entry) {
+            $entry->setTermsOptin($optin);
+            $entry = $this->getEntryMapper()->update($entry);
+        } else {
+            if (!$this->hasReachedPlayLimit($game, $user)
+                && $this->canPayToPlay($game, $user)
+            ) {
+                $ip = $this->getIp();
+                $geoloc = $this->getGeoloc($ip);
+                $entry = new Entry();
+                $entry->setGame($game);
+                $entry->setUser($user);
+                $entry->setPoints(0);
+                $entry->setIp($ip);
+                $entry->setGeoloc($geoloc);
+                $entry->setAnonymousId($this->getAnonymousId());
+                if ($this->getAnonymousIdentifier()) {
+                    $entry->setAnonymousIdentifier($this->getAnonymousIdentifier());
+                }
+                $entry->setTermsOptin($optin);
+                $entry = $this->getEntryMapper()->insert($entry);
+            }
+        }
+
+        if ($entry) {
+            $this->getEventManager()->trigger(
+                __FUNCTION__ . '.post',
+                $this,
+                [
+                    'user' => $user,
+                    'game' => $game,
+                    'entry' => $entry,
+                ]
+            );
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * errors :
-     * -1 : user not connected
-     * -2 : limit entry games for this user reached
+     * -1 : limit entry games for this user reached
+     * -2 : no terms optin
+     * -3 : no payment
      *
      * @param \PlaygroundGame\Entity\Game $game
      * @param \PlaygroundUser\Entity\UserInterface $user
      * @return number unknown
      */
-    public function play($game, $user)
+    public function play($game, $user, &$error=null)
     {
-
-        // certaines participations peuvent rester ouvertes.
-        // On autorise alors le joueur à reprendre là ou il en était
-        // par exemple les postvote...
+        //some entries can stay open during days.
+        // The player can take back the entry to go on playing
+        // like in a postvote or for quizzes
+        // We create also an entry before the game when an optin is needed
         $entry = $this->checkExistingEntry($game, $user, true);
 
+        // If the game needs an optin and the player has not opted in
+        if ($entry && $game->getTermsOptin() && !$entry->getTermsOptin()) {
+            $error = -2;
+            return false;
+        }
+
+        // If the game has a cost and the player has not paid yet
+        // (this case occurs when the entry has been created by the termsOptin
+        // and the game has a price to play)
+        if ($entry && !$entry->getPaid() && $game->getCostToPlay() > 0) {
+            if (!$this->payToPlay($game, $user, $entry)) {
+                $error = -3;
+                return false;
+            } else {
+                $entry->setPaid(1);
+                $entry->setPaidAmount($game->getCostToPlay());
+                $entry = $this->getEntryMapper()->update($entry);
+            }
+        }
+
         if (! $entry) {
+            // Play limit reached
             if ($this->hasReachedPlayLimit($game, $user)) {
+                $error = -1;
                 return false;
             }
-            if (!$this->payToPlay($game, $user)) {
+            // Can't pay for the game
+            if (!$this->canPayToPlay($game, $user)) {
+                $error = -3;
+                return false;
+            }
+            // Terms optin not checked
+            if ($game->getTermsOptin()) {
+                $error = -2;
                 return false;
             }
 
@@ -939,20 +1019,43 @@ class Game
             $entry->setIp($ip);
             $entry->setGeoloc($geoloc);
             $entry->setAnonymousId($this->getAnonymousId());
+            
             if ($this->getAnonymousIdentifier()) {
                 $entry->setAnonymousIdentifier($this->getAnonymousIdentifier());
             }
-
-            $entry = $this->getEntryMapper()->insert($entry);
-            $this->getEventManager()->trigger(
-                __FUNCTION__ . '.post',
-                $this,
-                [
-                    'user' => $user,
-                    'game' => $game,
-                    'entry' => $entry,
-                ]
-            );
+            if ($game->getCostToPlay() === 0) {
+                $entry->setPaid(true);
+                $entry = $this->getEntryMapper()->insert($entry);
+                $this->getEventManager()->trigger(
+                    __FUNCTION__ . '.post',
+                    $this,
+                    [
+                        'user' => $user,
+                        'game' => $game,
+                        'entry' => $entry,
+                    ]
+                );
+            } else {
+                $entry = $this->getEntryMapper()->insert($entry);
+                $entryPaid = $this->payToPlay($game, $user, $entry);
+                if ($entryPaid) {
+                    $entry = $this->getEntryMapper()->update($entryPaid);
+                    $this->getEventManager()->trigger(
+                        __FUNCTION__ . '.post',
+                        $this,
+                        [
+                            'user' => $user,
+                            'game' => $game,
+                            'entry' => $entry,
+                        ]
+                    );
+                } else {
+                    $entry->setActive(false);
+                    $entry = $this->getEntryMapper()->update($entry);
+                    $error = -3;
+                    return false;
+                }
+            }
         }
 
         return $entry;
@@ -985,7 +1088,7 @@ class Game
      * @param \PlaygroundGame\Entity\Game $game
      * @param \PlaygroundUser\Entity\UserInterface $user
      */
-    public function payToPlay($game, $user)
+    public function canPayToPlay($game, $user)
     {
         // Is there a limitation on the game ?
         $cost = $game->getCostToPlay();
@@ -998,21 +1101,47 @@ class Game
                 ]
             )->last();
             if ($availableAmount && $availableAmount >= $cost) {
+                
+                return true;
+            }
+        } else {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * If the game has a cost to be played (costToPlay>0)
+     * I check and decrement the price from the leaderboard all of the user
+     * 
+     * @param \PlaygroundGame\Entity\Game $game
+     * @param \PlaygroundUser\Entity\UserInterface $user
+     */
+    public function payToPlay($game, $user, $entry)
+    {
+        // Is there a limitation on the game ?
+        $cost = $game->getCostToPlay();
+        if ($cost && $cost > 0) {
+            if ($this->canPayToPlay($game, $user)) {
+                $entry->setPaid(true);
+                $entry->setPaidAmount(-$cost);
                 $leaderboard = $this->getEventManager()->trigger(
                     'leaderboardUserUpdate',
                     $this,
                     [
                         'user' => $user,
+                        'game' => $game,
                         'points' => -$cost,
+                        'entry' => $entry,
                     ]
                 )->last();
 
-                if ($leaderboard->getTotalPoints() === ($availableAmount - $cost)) {
-                    return true;
-                }
+                return $entry;
             }
         } else {
-            return true;
+            $entry->setPaid(true);
+            return $entry;
         }
 
         return false;

@@ -24,9 +24,9 @@ class GameWidget extends AbstractHelper
      * @param  array  $options array of options
      * @return string
      */
-    public function __invoke($displayHome = null, $classType = '', $order = '', $nbItems = 5)
+    public function __invoke($displayHome = null, $classType = '', $order = '', $dir = 'DESC', $nbItems = 5)
     {
-        $games = $this->getGameService()->getActiveGames($displayHome, $classType, $order);
+        $games = $this->getGameService()->getActiveGames($displayHome, $classType, $order, $dir);
 
         return $games;
     }

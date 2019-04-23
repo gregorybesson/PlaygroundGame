@@ -41,6 +41,7 @@ class GameController extends AbstractActionController
         'prize',
         'share',
         'optin',
+        'terms-optin',
         'login',
         'logout',
         'ajaxforgot',
@@ -442,19 +443,43 @@ class GameController extends AbstractActionController
                             $session->offsetSet('anonymous_identifier', $anonymousIdentifier);
                         }
                     }
-                    $entry = $this->getGameService()->play($this->game, $this->user);
+                    $playError = null;
+                    $entry = $this->getGameService()->play($this->game, $this->user, $playError);
                     if (!$entry) {
-                        // the user has already taken part to this game and the participation limit has been reached
-                        $this->flashMessenger()->addMessage('Vous avez déjà participé');
-
-                        return $this->redirect()->toUrl(
-                            $this->frontendUrl()->fromRoute(
+                        $reason = "";
+                        if ($playError === -1) {
+                            // the user has already taken part to this game and the participation limit has been reached
+                            $this->flashMessenger()->addMessage('Vous avez déjà participé');
+                            $reason = '?playLimitReached=1';
+                            $noEntryRedirect = $this->frontendUrl()->fromRoute(
                                 $this->game->getClassType().'/result',
                                 array(
                                     'id' => $this->game->getIdentifier(),
                                 )
-                            ) .'?playLimitReached=1'
-                        );
+                            ) .$reason;
+                        } else if ($playError === -2) {
+                            // the user has not accepted the mandatory rules of the game
+                            $this->flashMessenger()->addMessage('Vous devez accepter le réglement');
+                            $reason = '?NoOptin=1';
+                            $noEntryRedirect = $this->frontendUrl()->fromRoute(
+                                $this->game->getClassType(),
+                                array(
+                                    'id' => $this->game->getIdentifier(),
+                                )
+                            ) .$reason;
+                        } else if ($playError === -3) {
+                            // the user has enough points to buy an entry to this game
+                            $this->flashMessenger()->addMessage("Vous ne pouvez pas acheter la partie");
+                            $reason = '?NotPaid=1';
+                            $noEntryRedirect = $this->frontendUrl()->fromRoute(
+                                $this->game->getClassType(),
+                                array(
+                                    'id' => $this->game->getIdentifier(),
+                                )
+                            ) .$reason;
+                        }
+
+                        return $this->redirect()->toUrl($noEntryRedirect);
                     }
                 } else {
                     // I'm looking for an entry without anonymousIdentifier (the active entry in fact).
@@ -489,9 +514,11 @@ class GameController extends AbstractActionController
         }
 
         $viewModel = $this->buildView($this->game);
-        $viewModel->setVariables(array(
+        $viewModel->setVariables(
+            array(
                 'form' => $form,
-            ));
+            )
+        );
 
         return $viewModel;
     }
@@ -852,6 +879,21 @@ class GameController extends AbstractActionController
                 array('id' => $this->game->getIdentifier())
             )
         );
+    }
+
+    public function termsOptinAction()
+    {
+        $viewModel = $this->buildView($this->game);
+
+        if ($this->getRequest()->isPost()) {
+            $optin = $this->params()->fromPost('termsOptin');
+            $result = $this->getGameService()->setTermsOptin($optin, $this->game, $this->user);
+            $viewModel->setVariables(
+                ['success' => $result]
+            );
+        }
+
+        return $viewModel;
     }
 
     public function loginAction()
