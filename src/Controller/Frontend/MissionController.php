@@ -45,17 +45,43 @@ class MissionController extends GameController
     public function playAction()
     {
         $subGameIdentifier = $this->getEvent()->getRouteMatch()->getParam('gameId');
-        $entry             = $this->getGameService()->play($this->game, $this->user);
+        $playError = null;
+        $entry = $this->getGameService()->play($this->game, $this->user, $playError);
         if (!$entry) {
-          // the user has already taken part of this game and the participation limit has been reached
-            $this->flashMessenger()->addMessage('You have already played');
+            $reason = "";
+            if ($playError === -1) {
+                // the user has already taken part to this game and the participation limit has been reached
+                $this->flashMessenger()->addMessage('Vous avez déjà participé');
+                $reason = '?playLimitReached=1';
+                $noEntryRedirect = $this->frontendUrl()->fromRoute(
+                    $this->game->getClassType().'/result',
+                    array(
+                        'id' => $this->game->getIdentifier(),
+                    )
+                ) .$reason;
+            } else if ($playError === -2) {
+                // the user has not accepted the mandatory rules of the game
+                $this->flashMessenger()->addMessage('Vous devez accepter le réglement');
+                $reason = '?NoOptin=1';
+                $noEntryRedirect = $this->frontendUrl()->fromRoute(
+                    $this->game->getClassType(),
+                    array(
+                        'id' => $this->game->getIdentifier(),
+                    )
+                ) .$reason;
+            } else if ($playError === -3) {
+                // the user has enough points to buy an entry to this game
+                $this->flashMessenger()->addMessage("Vous ne pouvez pas acheter la partie");
+                $reason = '?NotPaid=1';
+                $noEntryRedirect = $this->frontendUrl()->fromRoute(
+                    $this->game->getClassType(),
+                    array(
+                        'id' => $this->game->getIdentifier(),
+                    )
+                ) .$reason;
+            }
 
-            return $this->redirect()->toUrl(
-                $this->frontendUrl()->fromRoute(
-                    'mission/result',
-                    array('id' => $this->game->getIdentifier())
-                ) .'?playLimitReached=1'
-            );
+            return $this->redirect()->toUrl($noEntryRedirect);
         }
 
         if (!$subGameIdentifier) {
