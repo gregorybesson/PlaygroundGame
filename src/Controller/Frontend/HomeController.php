@@ -19,6 +19,11 @@ class HomeController extends AbstractActionController
      */
     protected $pageService;
 
+    /**
+     * @var \PlaygroundDesign\Service\Settings
+     */
+    protected $settingsService;
+
     protected $options;
     
     /**
@@ -39,6 +44,7 @@ class HomeController extends AbstractActionController
     
     public function indexAction()
     {
+        $paginationSettings = $this->getSettingsService()->getSettingsMapper()->findById(1);
         $layoutViewModel = $this->layout();
 
         $slider = new ViewModel();
@@ -66,25 +72,21 @@ class HomeController extends AbstractActionController
         $items = array_merge($games, $pages);
         krsort($items);
 
-        if (is_array($items)) {
+        if (is_array($items)
+            && $paginationSettings
+            && $paginationSettings->getHomePagination() !== null
+            && $paginationSettings->getHomePagination() > 0
+        ) {
             $paginator = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\ArrayAdapter($items));
-            $paginator->setItemCountPerPage(7);
+            $paginator->setItemCountPerPage($paginationSettings->getHomePagination());
             $paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
         } else {
             $paginator = $items;
         }
 
-        $this->layout()->setVariables(
-            array(
-                'sliderItems'    => $sliderItems,
-            )
-        );
+        $this->layout()->setVariables(['sliderItems' => $sliderItems]);
 
-        return new ViewModel(
-            array(
-                'items'    => $paginator,
-               )
-        );
+        return new ViewModel(['items' => $paginator]);
     }
 
     public function shareAction()
@@ -167,6 +169,15 @@ class HomeController extends AbstractActionController
         }
     
         return $this->pageService;
+    }
+
+    public function getSettingsService()
+    {
+        if (!$this->settingsService) {
+            $this->settingsService = $this->getServiceLocator()->get('playgrounddesign_settings_service');
+        }
+    
+        return $this->settingsService;
     }
     
     public function setPageService(\PlaygroundCms\Service\Page $pageService)
