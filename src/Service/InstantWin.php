@@ -474,7 +474,18 @@ class InstantWin extends Game
         if (!$entry) {
             return false;
         }
-        return $this->setOccurrenceEntry($game, $user, $entry, $occurrence);
+        $this->getEventManager()->trigger(
+            __FUNCTION__ . '.pre',
+            $this,
+            array('user' => $user, 'game' => $game, 'entry' => $entry)
+        );
+        $occurrence = $this->setOccurrenceEntry($game, $user, $entry, $occurrence);
+        $this->getEventManager()->trigger(
+            __FUNCTION__ . '.post',
+            $this,
+            array('user' => $user, 'game' => $game, 'entry' => $entry, 'occurrence' => $occurrence)
+        );
+        return $occurrence;
     }
 
     /**
@@ -503,11 +514,6 @@ class InstantWin extends Game
             $entry->setWinner(false);
         }
         $entry = $entryMapper->update($entry);
-        $this->getEventManager()->trigger(
-            'complete_instantwin.post',
-            $this,
-            array('user' => $user, 'game' => $game, 'entry' => $entry)
-        );
 
         return $occurrence;
     }
