@@ -746,8 +746,8 @@ class Game
 
         // for preview stuff as admin
         if ($this->isAllowed('game', 'edit')) {
-            $r =$this->serviceLocator->get('request');
-            if ($r->getQuery()->get('preview')) {
+            //$r =$this->serviceLocator->get('request');
+            //if ($r->getQuery()->get('preview')) {
                 $game->setActive(true);
                 $game->setStartDate(null);
                 $game->setEndDate(null);
@@ -762,7 +762,7 @@ class Game
                     ->markReadOnly($game);
                     
                 return $game;
-            }
+            //}
         }
 
         // The game is inactive
