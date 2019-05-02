@@ -164,7 +164,7 @@ class Lottery extends Game implements InputFilterAwareInterface
 
             $inputFilter->add($factory->createInput(array(
                 'name' => 'drawDate',
-                'required' => false
+                'required' => false,
             )));
 
             $this->inputFilter = $inputFilter;

@@ -555,7 +555,7 @@ class InstantWin extends Game
             if ($game->getOccurrenceType() === 'code' || ($game->getOccurrenceType() === 'datetime' && $winner)) {
                 $entry = $this->getEntryMapper()->findById($entry['id']);
                 $occurrence = $this->getInstantWinOccurrenceMapper()->findByEntry($entry);
-                if( $occurrence !== NULL) {
+                if ($occurrence !== null) {
                     $results[$k]['value'] = $occurrence->getValue();
                     if ($occurrence->getPrize()) {
                         $results[$k]['prize'] = $occurrence->getPrize()->getTitle();

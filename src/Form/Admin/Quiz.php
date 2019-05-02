@@ -39,23 +39,23 @@ class Quiz extends Game
         $this->add(array(
             'name' => 'winners',
             'options' => array(
-                'label' => $translator->translate('Winners number', 'playgroundgame')
+                'label' => $translator->translate('Winners number', 'playgroundgame'),
             ),
             'attributes' => array(
                 'type' => 'text',
-                'placeholder' => $translator->translate('Winners number', 'playgroundgame')
-            )
+                'placeholder' => $translator->translate('Winners number', 'playgroundgame'),
+            ),
         ));
 
         $this->add(array(
             'name' => 'substitutes',
             'options' => array(
-                'label' => $translator->translate('Substitutes number', 'playgroundgame')
+                'label' => $translator->translate('Substitutes number', 'playgroundgame'),
             ),
             'attributes' => array(
                 'type' => 'text',
-                'placeholder' => $translator->translate('Substitutes number', 'playgroundgame')
-            )
+                'placeholder' => $translator->translate('Substitutes number', 'playgroundgame'),
+            ),
         ));
 
         $this->add(array(
@@ -123,7 +123,7 @@ class Quiz extends Game
             'type' => 'Zend\Form\Element\Text',
             'attributes' => array(
                 'placeholder' => $translator->translate('% good answers', 'playgroundgame'),
-                'id' => 'victoryConditions'
+                'id' => 'victoryConditions',
             ),
             'options' => array(
                 'label' => $translator->translate('Victory conditions', 'playgroundgame'),

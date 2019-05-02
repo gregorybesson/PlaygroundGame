@@ -25,8 +25,8 @@ class ShareMail extends ProvidesEventsForm
                 'type' => 'email',
                 'placeholder' => $translator->translate('Email address', 'playgroundgame').' 1',
                 'class' => 'large-input',
-                'autocomplete' => 'off'
-            )
+                'autocomplete' => 'off',
+            ),
         ));
 
         $this->add(array(
@@ -38,8 +38,8 @@ class ShareMail extends ProvidesEventsForm
                 'type' => 'email',
                 'placeholder' => $translator->translate('Email address', 'playgroundgame').' 2',
                 'class' => 'large-input',
-                'autocomplete' => 'off'
-            )
+                'autocomplete' => 'off',
+            ),
         ));
 
         $this->add(array(
@@ -51,8 +51,8 @@ class ShareMail extends ProvidesEventsForm
                 'type' => 'email',
                 'placeholder' => $translator->translate('Email address', 'playgroundgame').' 3',
                 'class' => 'large-input',
-                'autocomplete' => 'off'
-            )
+                'autocomplete' => 'off',
+            ),
         ));
 
         $this->add(array(
@@ -64,8 +64,8 @@ class ShareMail extends ProvidesEventsForm
                 'type' => 'email',
                 'placeholder' => $translator->translate('Email address', 'playgroundgame').' 4',
                 'class' => 'large-input',
-                'autocomplete' => 'off'
-            )
+                'autocomplete' => 'off',
+            ),
         ));
         
         $this->add(array(
@@ -77,19 +77,19 @@ class ShareMail extends ProvidesEventsForm
                 'type' => 'email',
                 'placeholder' => $translator->translate('Email address', 'playgroundgame').' 5',
                 'class' => 'large-input',
-                'autocomplete' => 'off'
-            )
+                'autocomplete' => 'off',
+            ),
         ));
         
         $submitElement = new Element\Button('submit');
         $submitElement->setLabel($translator->translate('Send', 'playgroundgame'))
             ->setAttributes(array(
-            'type' => 'submit',
-            'class'=> 'btn btn-warning'
+                'type' => 'submit',
+                'class'=> 'btn btn-warning',
             ));
 
         $this->add($submitElement, array(
-            'priority' => - 100
+            'priority' => - 100,
         ));
     }
 
@@ -107,6 +107,7 @@ class ShareMail extends ProvidesEventsForm
      * Set service manager instance
      *
      * @param  ServiceManager $serviceManager
+     *
      * @return ShareMail
      */
     public function setServiceManager(ServiceManager $serviceManager)

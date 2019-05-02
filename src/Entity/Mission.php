@@ -107,7 +107,7 @@ class Mission extends Game implements InputFilterAwareInterface
         $previousMissionGame = null;
 
         foreach ($this->missionGames as $missionGame) {
-            if($missionGame->getGame()->getId() === $currentGame->getId()) {
+            if ($missionGame->getGame()->getId() === $currentGame->getId()) {
                 return $previousMissionGame;
             }
 
@@ -126,7 +126,7 @@ class Mission extends Game implements InputFilterAwareInterface
     {
         $sortedPlayableGames = $this->getPlayableGames($entry);
 
-        return (count($sortedPlayableGames)>=1)?current($sortedPlayableGames)->getGame():null;
+        return (count($sortedPlayableGames) >= 1)?current($sortedPlayableGames)->getGame():null;
     }
 
     /**

@@ -32,43 +32,43 @@ class Register extends \PlaygroundUser\Form\Register
         $this->add(array(
             'name' => 'address',
             'options' => array(
-                'label' => $translator->translate('Address', 'playgrounduser')
+                'label' => $translator->translate('Address', 'playgrounduser'),
             ),
             'attributes' => array(
                 'type' => 'text',
                 'class' => 'large-input required',
-                'placeholder' => $translator->translate('Address', 'playgrounduser')
-            )
+                'placeholder' => $translator->translate('Address', 'playgrounduser'),
+            ),
         ));
 
         $this->add(array(
             'name' => 'address2',
             'options' => array(
-                'label' => $translator->translate('Address2', 'playgrounduser')
+                'label' => $translator->translate('Address2', 'playgrounduser'),
             ),
             'attributes' => array(
                 'type' => 'text',
                 'class' => 'large-input required',
-                'placeholder' => $translator->translate('Address2', 'playgrounduser')
-            )
+                'placeholder' => $translator->translate('Address2', 'playgrounduser'),
+            ),
         ));
 
         $this->add(array(
             'name' => 'city',
             'options' => array(
-                'label' => $translator->translate('City', 'playgrounduser')
+                'label' => $translator->translate('City', 'playgrounduser'),
             ),
             'attributes' => array(
                 'type' => 'text',
                 'class'=> 'large-input required',
-                'placeholder' => $translator->translate('City', 'playgrounduser')
-            )
+                'placeholder' => $translator->translate('City', 'playgrounduser'),
+            ),
         ));
 
         $this->add(array(
             'name' => 'telephone',
             'options' => array(
-                'label' => $translator->translate('Telephone', 'playgrounduser')
+                'label' => $translator->translate('Telephone', 'playgrounduser'),
             ),
             'attributes' => array(
                 'id' => 'telephone',
@@ -76,8 +76,8 @@ class Register extends \PlaygroundUser\Form\Register
                 'class'=> 'medium-input required number',
                 'minlength' => 5,
                 'maxlength' => 10,
-                'placeholder' => $translator->translate('Telephone', 'playgrounduser')
-            )
+                'placeholder' => $translator->translate('Telephone', 'playgrounduser'),
+            ),
         ));
     }
 

@@ -42,7 +42,8 @@ class PrizeCategory
         $this->serviceLocator = $locator;
     }
 
-    public function getEventManager() {
+    public function getEventManager()
+    {
         if (null === $this->event) {
             $this->event = new EventManager($this->serviceLocator->get('SharedEventManager'), [get_class($this)]);
         }

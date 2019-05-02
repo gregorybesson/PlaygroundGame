@@ -126,7 +126,6 @@ class QuizController extends GameController
                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The question was updated');
 
                 return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/quiz-question-list', array('quizId'=>$quizId)));
-                
             } else {
                 $this->flashMessenger()->setNamespace('playgroundgame')->addMessage(
                     'The question was not updated - create at least one good answer'

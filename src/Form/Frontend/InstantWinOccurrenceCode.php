@@ -27,7 +27,7 @@ class InstantWinOccurrenceCode extends ProvidesEventsForm
                 'allow_empty' => false,
                 'required' => true,
                 ),
-            ));
+        ));
 
         $this->add(array(
             'name' => 'submit',

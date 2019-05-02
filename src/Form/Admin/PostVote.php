@@ -70,7 +70,7 @@ class PostVote extends Game
             'type' => 'Zend\Form\Element\Checkbox',
             'name' => 'voteAnonymous',
             'attributes' => array(
-                'class' => 'switch-input'
+                'class' => 'switch-input',
             ),
             'options' => array(
                 'label' => $translator->translate('Allow anonymous visitors to vote', 'playgroundgame'),

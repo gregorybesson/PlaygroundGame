@@ -230,8 +230,8 @@ class QuizQuestion extends ProvidesEventsForm
                 'should_create_template' => true,
                 'allow_add' => true,
                 'allow_remove' => true,
-                'target_element' => $quizAnswerFieldset
-            )
+                'target_element' => $quizAnswerFieldset,
+            ),
         ));
 
         $submitElement = new Element\Button('submit');

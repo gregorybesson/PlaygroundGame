@@ -21,7 +21,7 @@ class MissionGameFieldset extends Fieldset implements InputFilterProviderInterfa
 
         $this->add(array(
             'type' => 'Zend\Form\Element\Hidden',
-            'name' => 'id'
+            'name' => 'id',
         ));
 
         $this->add(array(
@@ -32,12 +32,12 @@ class MissionGameFieldset extends Fieldset implements InputFilterProviderInterfa
                 'label' => $translator->translate('Game', 'playgroundgame'),
                 'object_manager' => $entityManager,
                 'target_class' => 'PlaygroundGame\Entity\Game',
-                'property' => 'title'
+                'property' => 'title',
             ),
             'attributes' => array(
                 'required' => false,
                 //'multiple' => 'multiple',
-            )
+            ),
         ));
         
         $this->add(array(
@@ -59,8 +59,8 @@ class MissionGameFieldset extends Fieldset implements InputFilterProviderInterfa
                 'should_create_template' => true,
                 'allow_add' => true,
                 'allow_remove' => true,
-                'target_element' => $gameMissionConditionFieldset
-            )
+                'target_element' => $gameMissionConditionFieldset,
+            ),
         ));
         
         $this->add(array(
@@ -71,7 +71,7 @@ class MissionGameFieldset extends Fieldset implements InputFilterProviderInterfa
             ),
             'attributes' => array(
                 'class' => 'addCondition',
-            )
+            ),
         ));
     }
     

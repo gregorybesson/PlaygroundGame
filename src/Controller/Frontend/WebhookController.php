@@ -58,7 +58,6 @@ class WebhookController extends AbstractActionController
             $in = json_decode($in);
             error_log($in->entry[0]->changes[0]->field);
             error_log($in->entry[0]->changes[0]->value->post_id);
-
         }
 
         $mode = $this->params()->fromQuery('hub_mode');

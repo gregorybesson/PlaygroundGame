@@ -990,7 +990,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
 
         if ($this->getSteps() && $this->getSteps()[0] === '{') {
             $steps = json_decode($this->getSteps(), true);
-        } else if ($this->getSteps()) {
+        } elseif ($this->getSteps()) {
             $steps = explode(',', $this->getSteps());
         }
         if (!$steps) {

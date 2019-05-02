@@ -127,18 +127,18 @@ class InstantWin extends Game
         $this->add(array(
                 'name' => 'uploadScratchcardImage',
                 'attributes' => array(
-                    'type' => 'file'
+                    'type' => 'file',
                 ),
                 'options' => array(
-                    'label' => $translator->translate('Game Image scraping', 'playgroundgame')
-                )
+                    'label' => $translator->translate('Game Image scraping', 'playgroundgame'),
+                ),
         ));
         $this->add(array(
                 'name' => 'scratchcardImage',
                 'type' => 'Zend\Form\Element\Hidden',
                 'attributes' => array(
-                    'value' => ''
-                )
+                    'value' => '',
+                ),
         ));
         $this->add(array(
             'name' => 'deleteScratchcardImage',
@@ -146,7 +146,7 @@ class InstantWin extends Game
             'attributes' => array(
                 'value' => '',
                 'class' => 'delete_scratch_image',
-            )
+            ),
         ));
     }
 }

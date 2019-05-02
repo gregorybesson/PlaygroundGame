@@ -29,13 +29,13 @@ class Import extends ProvidesEventsForm
         ));
         
         $this->add(array(
-          'name' => 'import_file',
-          'options' => array(
-            'label' => $translator->translate('Import game', 'playgroundgame')
-          ),
-          'attributes' => array(
+            'name' => 'import_file',
+            'options' => array(
+            'label' => $translator->translate('Import game', 'playgroundgame'),
+            ),
+            'attributes' => array(
             'type' => 'file',
-          )
+            ),
         ));
                
         $submitElement = new Element\Button('submit');

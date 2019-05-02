@@ -150,7 +150,7 @@ class PostVoteVote implements InputFilterAwareInterface, \JsonSerializable
     /**
      * @param unknown_type $post
      */
-    public function setPost($post, $isAVoteForPost=false)
+    public function setPost($post, $isAVoteForPost = false)
     {
         // echo get_class($post);
         // echo $post->getId();

@@ -32,29 +32,29 @@ class Game extends ProvidesEventsForm
             'name' => 'id',
             'type' => 'Zend\Form\Element\Hidden',
             'attributes' => array(
-                'value' => 0
-            )
+                'value' => 0,
+            ),
         ));
 
         $this->add(array(
             'name' => 'title',
             'options' => array(
-                'label' => $translator->translate('Title', 'playgroundgame')
+                'label' => $translator->translate('Title', 'playgroundgame'),
             ),
             'attributes' => array(
                 'type' => 'text',
-                'placeholder' => $translator->translate('Title', 'playgroundgame')
-            )
+                'placeholder' => $translator->translate('Title', 'playgroundgame'),
+            ),
         ));
 
         $this->add(array(
             'name' => 'identifier',
             'options' => array(
-                'label' => $translator->translate('Slug', 'playgroundgame')
+                'label' => $translator->translate('Slug', 'playgroundgame'),
             ),
             'attributes' => array(
-                'type' => 'text'
-            )
+                'type' => 'text',
+            ),
         ));
 
         // Adding an empty upload field to be able to correctly handle this on
@@ -62,18 +62,18 @@ class Game extends ProvidesEventsForm
         $this->add(array(
             'name' => 'uploadMainImage',
             'attributes' => array(
-                'type' => 'file'
+                'type' => 'file',
             ),
             'options' => array(
-                'label' => $translator->translate('Main image', 'playgroundgame')
-            )
+                'label' => $translator->translate('Main image', 'playgroundgame'),
+            ),
         ));
         $this->add(array(
             'name' => 'mainImage',
             'type' => 'Zend\Form\Element\Hidden',
             'attributes' => array(
-                'value' => ''
-            )
+                'value' => '',
+            ),
         ));
         $this->add(array(
             'name' => 'deleteMainImage',
@@ -89,18 +89,18 @@ class Game extends ProvidesEventsForm
         $this->add(array(
             'name' => 'uploadSecondImage',
             'attributes' => array(
-                'type' => 'file'
+                'type' => 'file',
             ),
             'options' => array(
-                'label' => $translator->translate('Secondary image', 'playgroundgame')
-            )
+                'label' => $translator->translate('Secondary image', 'playgroundgame'),
+            ),
         ));
         $this->add(array(
             'name' => 'secondImage',
             'type' => 'Zend\Form\Element\Hidden',
             'attributes' => array(
-                'value' => ''
-            )
+                'value' => '',
+            ),
         ));
         $this->add(array(
             'name' => 'deleteSecondImage',
@@ -119,7 +119,7 @@ class Game extends ProvidesEventsForm
                 'empty_option' => $translator->translate('No category for this game', 'playgroundgame'),
                 'value_options' => $categories,
                 'label' => $translator->translate('Category benefit', 'playgroundgame'),
-                'disable_inarray_validator' => true
+                'disable_inarray_validator' => true,
             ),
 
         ));
@@ -127,7 +127,7 @@ class Game extends ProvidesEventsForm
         $this->add(array(
             'type' => 'Zend\Form\Element\Checkbox',
             'attributes' => array(
-                'class' => 'switch-input'
+                'class' => 'switch-input',
             ),
             'name' => 'broadcastPlatform',
             'options' => array(
@@ -138,7 +138,7 @@ class Game extends ProvidesEventsForm
         $this->add(array(
             'type' => 'Zend\Form\Element\Checkbox',
             'attributes' => array(
-                'class' => 'switch-input'
+                'class' => 'switch-input',
             ),
             'name' => 'broadcastFacebook',
             'options' => array(
@@ -157,7 +157,7 @@ class Game extends ProvidesEventsForm
         $this->add(array(
             'type' => 'Zend\Form\Element\Checkbox',
             'attributes' => array(
-                'class' => 'switch-input'
+                'class' => 'switch-input',
             ),
             'name' => 'anonymousAllowed',
             'options' => array(
@@ -168,17 +168,17 @@ class Game extends ProvidesEventsForm
         $this->add(array(
             'name' => 'anonymousIdentifier',
             'options' => array(
-                'label' => $translator->translate('Anonymous Identifier', 'playgroundgame')
+                'label' => $translator->translate('Anonymous Identifier', 'playgroundgame'),
             ),
             'attributes' => array(
-                'type' => 'text'
-            )
+                'type' => 'text',
+            ),
         ));
 
         $this->add(array(
             'type' => 'Zend\Form\Element\Checkbox',
             'attributes' => array(
-                'class' => 'switch-input'
+                'class' => 'switch-input',
             ),
             'name' => 'broadcastPostFacebook',
                'options' => array(
@@ -189,7 +189,7 @@ class Game extends ProvidesEventsForm
         $this->add(array(
                 'type' => 'Zend\Form\Element\Checkbox',
                 'attributes' => array(
-                    'class' => 'switch-input'
+                    'class' => 'switch-input',
                 ),
                 'name' => 'displayHome',
                 'options' => array(
@@ -200,7 +200,7 @@ class Game extends ProvidesEventsForm
         $this->add(array(
             'type' => 'Zend\Form\Element\Checkbox',
             'attributes' => array(
-                'class' => 'switch-input'
+                'class' => 'switch-input',
             ),
             'name' => 'pushHome',
             'options' => array(
@@ -213,12 +213,12 @@ class Game extends ProvidesEventsForm
             'name' => 'publicationDate',
             'options' => array(
                 'label' => $translator->translate('Publication date', 'playgroundgame'),
-                'format' => 'd/m/Y H:i:s'
+                'format' => 'd/m/Y H:i:s',
             ),
             'attributes' => array(
                 'type' => 'text',
-                'class'=> 'datepicker'
-            )
+                'class'=> 'datepicker',
+            ),
         ));
 
         $this->add(array(
@@ -226,12 +226,12 @@ class Game extends ProvidesEventsForm
             'name' => 'startDate',
             'options' => array(
                 'label' => $translator->translate('Start Date', 'playgroundgame'),
-                'format' => 'd/m/Y H:i:s'
+                'format' => 'd/m/Y H:i:s',
             ),
             'attributes' => array(
                 'type' => 'text',
-                'class'=> 'datepicker'
-            )
+                'class'=> 'datepicker',
+            ),
         ));
 
         $this->add(array(
@@ -239,12 +239,12 @@ class Game extends ProvidesEventsForm
             'name' => 'endDate',
             'options' => array(
                 'label' => $translator->translate('End Date', 'playgroundgame'),
-                'format' => 'd/m/Y H:i:s'
+                'format' => 'd/m/Y H:i:s',
             ),
             'attributes' => array(
                 'type' => 'text',
-                'class'=> 'datepicker'
-            )
+                'class'=> 'datepicker',
+            ),
         ));
 
         $this->add(array(
@@ -252,12 +252,12 @@ class Game extends ProvidesEventsForm
             'name' => 'closeDate',
             'options' => array(
                 'label' => $translator->translate('Unpublished date', 'playgroundgame'),
-                'format' => 'd/m/Y H:i:s'
+                'format' => 'd/m/Y H:i:s',
             ),
             'attributes' => array(
                 'type' => 'text',
-                'class'=> 'datepicker'
-            )
+                'class'=> 'datepicker',
+            ),
         ));
 
         $this->add(array(
@@ -312,7 +312,7 @@ class Game extends ProvidesEventsForm
             'type' => 'Zend\Form\Element\Checkbox',
             'name' => 'active',
             'attributes' => array(
-                'class' => 'switch-input'
+                'class' => 'switch-input',
             ),
             'options' => array(
                 'label' => $translator->translate('Make this game available to the users', 'playgroundgame'),
@@ -325,20 +325,20 @@ class Game extends ProvidesEventsForm
             'options' => array(
                 'value_options' => array(
                     '0' => $translator->translate('No', 'playgroundgame'),
-                    '1' => $translator->translate('Yes', 'playgroundgame')
+                    '1' => $translator->translate('Yes', 'playgroundgame'),
                 ),
-                'label' => $translator->translate('On Invitation', 'playgroundgame')
+                'label' => $translator->translate('On Invitation', 'playgroundgame'),
             ),
             'attributes' => array(
-                'id' => 'onInvitation'
-            )
+                'id' => 'onInvitation',
+            ),
         ));
 
         $this->add(array(
             'type' => 'Zend\Form\Element\Checkbox',
             'name' => 'mailWinner',
             'attributes' => array(
-                'class' => 'switch-input'
+                'class' => 'switch-input',
             ),
             'options' => array(
                 'label' => $translator->translate('Send a mail to winner', 'playgroundgame'),
@@ -349,20 +349,20 @@ class Game extends ProvidesEventsForm
             'type' => 'Zend\Form\Element\Textarea',
             'name' => 'mailWinnerBlock',
             'options' => array(
-                'label' => $translator->translate('Mail winner content', 'playgroundgame')
+                'label' => $translator->translate('Mail winner content', 'playgroundgame'),
             ),
             'attributes' => array(
                 'cols' => '10',
                 'rows' => '10',
-                'id' => 'mailWinnerBlock'
-            )
+                'id' => 'mailWinnerBlock',
+            ),
         ));
 
         $this->add(array(
             'type' => 'Zend\Form\Element\Checkbox',
             'name' => 'mailLooser',
             'attributes' => array(
-                'class' => 'switch-input'
+                'class' => 'switch-input',
             ),
             'options' => array(
                 'label' => $translator->translate('Send a mail to looser', 'playgroundgame'),
@@ -373,20 +373,20 @@ class Game extends ProvidesEventsForm
             'type' => 'Zend\Form\Element\Textarea',
             'name' => 'mailLooserBlock',
             'options' => array(
-                'label' => $translator->translate('Mail looser content', 'playgroundgame')
+                'label' => $translator->translate('Mail looser content', 'playgroundgame'),
             ),
             'attributes' => array(
                 'cols' => '10',
                 'rows' => '10',
-                'id' => 'mailLooserBlock'
-            )
+                'id' => 'mailLooserBlock',
+            ),
         ));
 
         $this->add(array(
             'type' => 'Zend\Form\Element\Checkbox',
             'name' => 'mailEntry',
             'attributes' => array(
-                'class' => 'switch-input'
+                'class' => 'switch-input',
             ),
             'options' => array(
                 'label' => $translator->translate('Send a mail for each entry', 'playgroundgame'),
@@ -397,7 +397,7 @@ class Game extends ProvidesEventsForm
             'type' => 'Zend\Form\Element\Checkbox',
             'name' => 'emailShare',
             'attributes' => array(
-                'class' => 'switch-input'
+                'class' => 'switch-input',
             ),
             'options' => array(
                 'label' => $translator->translate('Share the game by mail', 'playgroundgame'),
@@ -408,7 +408,7 @@ class Game extends ProvidesEventsForm
             'type' => 'Zend\Form\Element\Checkbox',
             'name' => 'fbShare',
             'attributes' => array(
-                'class' => 'switch-input'
+                'class' => 'switch-input',
             ),
             'options' => array(
                 'label' => $translator->translate('Share the game with Facebook', 'playgroundgame'),
@@ -419,7 +419,7 @@ class Game extends ProvidesEventsForm
             'type' => 'Zend\Form\Element\Checkbox',
             'name' => 'twShare',
             'attributes' => array(
-                'class' => 'switch-input'
+                'class' => 'switch-input',
             ),
             'options' => array(
                 'label' => $translator->translate('Share the game with Twitter', 'playgroundgame'),
@@ -429,7 +429,7 @@ class Game extends ProvidesEventsForm
         $options = $this->getServiceManager()->get('configuration');
 
         $layoutArray = array(
-            '' => $translator->translate('Use layout per default', 'playgroundgame')
+            '' => $translator->translate('Use layout per default', 'playgroundgame'),
         );
         if (isset($options['core_layout']) &&
             isset($options['core_layout']['PlaygroundGame']) &&
@@ -448,13 +448,13 @@ class Game extends ProvidesEventsForm
             'options' => array(
                 // 'empty_option' => $translator->translate('Ce jeu n\'a pas de catégorie', 'playgroundgame'),
                 'value_options' => $layoutArray,
-                'label' => $translator->translate('Layout', 'playgroundgame')
-            )
+                'label' => $translator->translate('Layout', 'playgroundgame'),
+            ),
         ));
 
         // The additional Stylesheets are populated by the controllers
         $stylesheetArray = array(
-            '' => $translator->translate('Use default style sheet', 'playgroundgame')
+            '' => $translator->translate('Use default style sheet', 'playgroundgame'),
         );
 
         $this->add(array(
@@ -462,18 +462,18 @@ class Game extends ProvidesEventsForm
             'name' => 'stylesheet',
             'options' => array(
                 'value_options' => $stylesheetArray,
-                'label' => $translator->translate('Style sheet', 'playgroundgame')
-            )
+                'label' => $translator->translate('Style sheet', 'playgroundgame'),
+            ),
         ));
 
         $this->add(array(
             'name' => 'uploadStylesheet',
             'attributes' => array(
-                'type' => 'file'
+                'type' => 'file',
             ),
             'options' => array(
-                'label' => $translator->translate('Add style sheet', 'playgroundgame')
-            )
+                'label' => $translator->translate('Add style sheet', 'playgroundgame'),
+            ),
         ));
 
         $partners = $this->getPartners();
@@ -482,8 +482,8 @@ class Game extends ProvidesEventsForm
                 'name' => 'partner',
                 'type' => 'Zend\Form\Element\Hidden',
                 'attributes' => array(
-                    'value' => 0
-                )
+                    'value' => 0,
+                ),
             ));
         } else {
             $this->add(array(
@@ -491,8 +491,8 @@ class Game extends ProvidesEventsForm
                 'name' => 'partner',
                 'options' => array(
                     'value_options' => $partners,
-                    'label' => $translator->translate('Sponsor', 'playgroundgame')
-                )
+                    'label' => $translator->translate('Sponsor', 'playgroundgame'),
+                ),
             ));
         }
 
@@ -513,12 +513,12 @@ class Game extends ProvidesEventsForm
         $this->add(array(
             'name' => 'fbAppId',
             'options' => array(
-                'label' => $translator->translate('Facebook app Id', 'playgroundgame')
+                'label' => $translator->translate('Facebook app Id', 'playgroundgame'),
             ),
             'attributes' => array(
                 'type' => 'text',
-                'placeholder' => $translator->translate('Facebook app Id', 'playgroundgame')
-            )
+                'placeholder' => $translator->translate('Facebook app Id', 'playgroundgame'),
+            ),
         ));
 
         $this->add(array(
@@ -526,47 +526,47 @@ class Game extends ProvidesEventsForm
             'name' => 'fbPageId',
             'options' => array(
                 'value_options' => [],
-                'label' => $translator->translate('Facebook Pages', 'playgroundgame')
-            )
+                'label' => $translator->translate('Facebook Pages', 'playgroundgame'),
+            ),
         ));
 
         $this->add(array(
             'name' => 'fbPageTabTitle',
             'options' => array(
-                'label' => $translator->translate('Game tab title', 'playgroundgame')
+                'label' => $translator->translate('Game tab title', 'playgroundgame'),
             ),
             'attributes' => array(
                 'type' => 'text',
-                'placeholder' => $translator->translate('Game tab title', 'playgroundgame')
-            )
+                'placeholder' => $translator->translate('Game tab title', 'playgroundgame'),
+            ),
         ));
 
         $this->add(array(
             'name' => 'fbPageTabPosition',
             'options' => array(
-                'label' => $translator->translate('Game tab position', 'playgroundgame')
+                'label' => $translator->translate('Game tab position', 'playgroundgame'),
             ),
             'attributes' => array(
                 'type' => 'text',
-                'placeholder' => $translator->translate('Game tab position', 'playgroundgame')
-            )
+                'placeholder' => $translator->translate('Game tab position', 'playgroundgame'),
+            ),
         ));
 
         $this->add(array(
             'name' => 'uploadFbPageTabImage',
             'attributes' => array(
-                'type' => 'file'
+                'type' => 'file',
             ),
             'options' => array(
-                'label' => $translator->translate('Game tab icone', 'playgroundgame')
-            )
+                'label' => $translator->translate('Game tab icone', 'playgroundgame'),
+            ),
         ));
         $this->add(array(
             'name' => 'fbPageTabImage',
             'type' => 'Zend\Form\Element\Hidden',
             'attributes' => array(
-                'value' => ''
-            )
+                'value' => '',
+            ),
         ));
         $this->add(array(
             'name' => 'deleteFbPageTabImage',
@@ -581,13 +581,13 @@ class Game extends ProvidesEventsForm
             'type' => 'Zend\Form\Element\Textarea',
             'name' => 'welcomeBlock',
             'options' => array(
-                'label' => $translator->translate('Welcome block', 'playgroundgame')
+                'label' => $translator->translate('Welcome block', 'playgroundgame'),
             ),
             'attributes' => array(
                 'cols' => '10',
                 'rows' => '10',
-                'id' => 'welcomeBlock'
-            )
+                'id' => 'welcomeBlock',
+            ),
         ));
 
         $this->add(array(
@@ -607,56 +607,56 @@ class Game extends ProvidesEventsForm
                 'type' => 'Zend\Form\Element\Textarea',
                 'name' => 'conditionsBlock',
                 'options' => array(
-                        'label' => $translator->translate('Legal status', 'playgroundgame')
+                        'label' => $translator->translate('Legal status', 'playgroundgame'),
                 ),
                 'attributes' => array(
                         'cols' => '10',
                         'rows' => '10',
-                        'id' => 'conditionsBlock'
-                )
+                        'id' => 'conditionsBlock',
+                ),
         ));
 
         $this->add(array(
                 'type' => 'Zend\Form\Element\Textarea',
                 'name' => 'termsBlock',
                 'options' => array(
-                        'label' => $translator->translate('Payment page', 'playgroundgame')
+                        'label' => $translator->translate('Payment page', 'playgroundgame'),
                 ),
                 'attributes' => array(
                         'cols' => '10',
                         'rows' => '10',
-                        'id' => 'termsBlock'
-                )
+                        'id' => 'termsBlock',
+                ),
         ));
 
         $this->add(array(
                 'type' => 'Zend\Form\Element\Textarea',
                 'name' => 'fbShareDescription',
                 'options' => array(
-                        'label' => $translator->translate('Facebook share description', 'playgroundgame')
+                        'label' => $translator->translate('Facebook share description', 'playgroundgame'),
                 ),
                 'attributes' => array(
                         'cols' => '40',
                         'rows' => '4',
-                        'id' => 'fbShareDescription'
-                )
+                        'id' => 'fbShareDescription',
+                ),
         ));
 
         $this->add(array(
             'name' => 'uploadFbShareImage',
             'attributes' => array(
-                'type' => 'file'
+                'type' => 'file',
             ),
             'options' => array(
-                'label' => $translator->translate('Facebook share image', 'playgroundgame')
-            )
+                'label' => $translator->translate('Facebook share image', 'playgroundgame'),
+            ),
         ));
         $this->add(array(
             'name' => 'fbShareImage',
             'type' => 'Zend\Form\Element\Hidden',
             'attributes' => array(
-                'value' => ''
-            )
+                'value' => '',
+            ),
         ));
         $this->add(array(
             'name' => 'deleteFbShareImage',
@@ -671,52 +671,52 @@ class Game extends ProvidesEventsForm
             'type' => 'Zend\Form\Element\Textarea',
             'name' => 'fbRequestMessage',
             'options' => array(
-                'label' => $translator->translate('Facebook invitation message', 'playgroundgame')
+                'label' => $translator->translate('Facebook invitation message', 'playgroundgame'),
             ),
             'attributes' => array(
                 'cols' => '10',
                 'rows' => '4',
-                'id' => 'fbRequestMessage'
-            )
+                'id' => 'fbRequestMessage',
+            ),
         ));
 
         $this->add(array(
             'type' => 'Zend\Form\Element\Textarea',
             'name' => 'twShareMessage',
             'options' => array(
-                'label' => $translator->translate('Twitter share message', 'playgroundgame')
+                'label' => $translator->translate('Twitter share message', 'playgroundgame'),
             ),
             'attributes' => array(
                 'cols' => '40',
                 'rows' => '4',
-                'id' => 'twShareMessage'
-            )
+                'id' => 'twShareMessage',
+            ),
         ));
 
         $this->add(array(
             'type' => 'Zend\Form\Element\Textarea',
             'name' => 'emailShareSubject',
             'options' => array(
-                'label' => $translator->translate('Email subject', 'playgroundgame')
+                'label' => $translator->translate('Email subject', 'playgroundgame'),
             ),
             'attributes' => array(
                 'cols' => '40',
                 'rows' => '4',
-                'id' => 'emailShareSubject'
-            )
+                'id' => 'emailShareSubject',
+            ),
         ));
 
         $this->add(array(
             'type' => 'Zend\Form\Element\Textarea',
             'name' => 'emailShareMessage',
             'options' => array(
-                'label' => $translator->translate('Email message', 'playgroundgame')
+                'label' => $translator->translate('Email message', 'playgroundgame'),
             ),
             'attributes' => array(
                 'cols' => '40',
                 'rows' => '4',
-                'id' => 'emailShareMessage'
-            )
+                'id' => 'emailShareMessage',
+            ),
         ));
 
         $prizeFieldset = new PrizeFieldset(null, $sm, $translator);
@@ -730,8 +730,8 @@ class Game extends ProvidesEventsForm
                 'should_create_template' => true,
                 'allow_add' => true,
                 'allow_remove' => true,
-                'target_element' => $prizeFieldset
-            )
+                'target_element' => $prizeFieldset,
+            ),
         ));
 
         $this->add(array(
@@ -773,11 +773,11 @@ class Game extends ProvidesEventsForm
 
         $submitElement = new Element\Button('submit');
         $submitElement->setAttributes(array(
-            'type' => 'submit'
+            'type' => 'submit',
         ));
 
         $this->add($submitElement, array(
-            'priority' => - 100
+            'priority' => - 100,
         ));
     }
 
@@ -791,11 +791,11 @@ class Game extends ProvidesEventsForm
     public function getPartners()
     {
         $partners = array(
-            '0' => 'Ce jeu n\'est pas sponsorisé'
+            '0' => 'Ce jeu n\'est pas sponsorisé',
         );
         $results = $this->getEventManager()
             ->trigger(__FUNCTION__, $this, array(
-            'partners' => $partners
+                'partners' => $partners,
             ))
             ->last();
 
@@ -819,7 +819,7 @@ class Game extends ProvidesEventsForm
 
         $results = $this->getEventManager()
             ->trigger(__FUNCTION__, $this, array(
-            'apps' => $apps
+                'apps' => $apps,
             ))
             ->last();
 
@@ -849,11 +849,13 @@ class Game extends ProvidesEventsForm
 
     public function getEventManager()
     {
-        if ($this->event === NULL) {
+        if ($this->event === null) {
             $this->event = new EventManager(
-                $this->getServiceManager()->get('SharedEventManager'), [get_class($this)]
+                $this->getServiceManager()->get('SharedEventManager'),
+                [get_class($this)]
             );
         }
+
         return $this->event;
     }
 
@@ -871,6 +873,7 @@ class Game extends ProvidesEventsForm
      * Set service manager instance
      *
      * @param  ServiceManager $serviceManager
+     *
      * @return Game
      */
     public function setServiceManager(ServiceManager $serviceManager)
