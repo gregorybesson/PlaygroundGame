@@ -41,46 +41,46 @@ class PrizeFieldset extends Fieldset
         $this->add(array(
             'name' => 'identifier',
             'options' => array(
-                'label' => $translator->translate('Slug', 'playgroundgame')
+                'label' => $translator->translate('Slug', 'playgroundgame'),
             ),
             'attributes' => array(
-                'type' => 'text'
-            )
+                'type' => 'text',
+            ),
         ));
 
         $this->add(array(
             'type' => 'Zend\Form\Element\Textarea',
             'name' => 'prizeContent',
                'options' => array(
-                   'label' => $translator->translate('Description', 'playgroundgame')
+                   'label' => $translator->translate('Description', 'playgroundgame'),
                ),
                'attributes' => array(
                    'cols' => '10',
                    'rows' => '10',
                'id' =>'prizeContent',
-               )
+               ),
         ));
         
         $this->add(array(
             'name' => 'qty',
             'options' => array(
-                   'label' => $translator->translate('Quantity', 'playgroundgame')
+                   'label' => $translator->translate('Quantity', 'playgroundgame'),
                ),
                'attributes' => array(
                    'type' => 'text',
-                   'placeholder' => $translator->translate('Quantity', 'playgroundgame')
-               )
+                   'placeholder' => $translator->translate('Quantity', 'playgroundgame'),
+               ),
         ));
         
         $this->add(array(
             'name' => 'unitPrice',
             'options' => array(
-                   'label' => $translator->translate('Prix', 'playgroundgame')
+                   'label' => $translator->translate('Prix', 'playgroundgame'),
                ),
                'attributes' => array(
                    'type' => 'text',
-                   'placeholder' => $translator->translate('Prix', 'playgroundgame')
-               )
+                   'placeholder' => $translator->translate('Prix', 'playgroundgame'),
+               ),
         ));
         
         $this->add(array(
@@ -100,20 +100,20 @@ class PrizeFieldset extends Fieldset
         ));
         
         $this->add(array(
-          'name' => 'picture_file',
-          'options' => array(
-            'label' => $translator->translate('Picture', 'playgroundgame')
-          ),
-          'attributes' => array(
+            'name' => 'picture_file',
+            'options' => array(
+            'label' => $translator->translate('Picture', 'playgroundgame'),
+            ),
+            'attributes' => array(
             'type' => 'file',
-          )
+            ),
         ));
         $this->add(array(
                 'name' => 'picture',
                 'type' => 'Zend\Form\Element\Hidden',
                 'attributes' => array(
-                    'value' => ''
-                )
+                    'value' => '',
+                ),
         ));
 
         $this->add(array(
@@ -124,7 +124,7 @@ class PrizeFieldset extends Fieldset
                 ),
                 'attributes' => array(
                         'class' => 'delete-button',
-                )
+                ),
         ));
     }
 }

@@ -61,7 +61,8 @@ class Game
         $this->serviceLocator = $locator;
     }
 
-    public function getEventManager() {
+    public function getEventManager()
+    {
         if (null === $this->event) {
             $this->event = new EventManager($this->serviceLocator->get('SharedEventManager'), [get_class($this)]);
         }
@@ -721,7 +722,7 @@ class Game
         $identifier = null;
         $game = $this->getGameMapper()->findOneBy(array('fbPageId' => $fbPageId, 'broadcastFacebook' => 1));
 
-        if($game && $game->getIdentifier() !== null) {
+        if ($game && $game->getIdentifier() !== null) {
             $identifier = $game->getIdentifier();
         }
 
@@ -965,7 +966,7 @@ class Game
      * @param \PlaygroundUser\Entity\UserInterface $user
      * @return number unknown
      */
-    public function play($game, $user, &$error=null)
+    public function play($game, $user, &$error = null)
     {
         //some entries can stay open during days.
         // The player can take back the entry to go on playing
@@ -1084,7 +1085,7 @@ class Game
     /**
      * If the game has a cost to be played (costToPlay>0)
      * I check and decrement the price from the leaderboard all of the user
-     * 
+     *
      * @param \PlaygroundGame\Entity\Game $game
      * @param \PlaygroundUser\Entity\UserInterface $user
      */
@@ -1101,7 +1102,6 @@ class Game
                 ]
             )->last();
             if ($availableAmount && $availableAmount >= $cost) {
-                
                 return true;
             }
         } else {
@@ -1114,7 +1114,7 @@ class Game
     /**
      * If the game has a cost to be played (costToPlay>0)
      * I check and decrement the price from the leaderboard all of the user
-     * 
+     *
      * @param \PlaygroundGame\Entity\Game $game
      * @param \PlaygroundUser\Entity\UserInterface $user
      */
@@ -1168,7 +1168,7 @@ class Game
         } else {
             // If the game is supposed to be a reguler user game or an anonymous identified game,
             // it means that the registration/login is at the end of the game
-            if((!$user &&  !$game->getAnonymousAllowed()) || ($game->getAnonymousAllowed() && $game->getAnonymousIdentifier())) {
+            if ((!$user &&  !$game->getAnonymousAllowed()) || ($game->getAnonymousAllowed() && $game->getAnonymousIdentifier())) {
                 return 0;
             }
             return $this->getEntryMapper()->countLastEntriesByIp($game, $this->getIp(), $limitDate);
@@ -1356,7 +1356,8 @@ class Game
                 }
                 $this->getEventManager()->trigger(
                     __FUNCTION__ . '.post',
-                    $this, array(
+                    $this,
+                    array(
                         'user' => $user,
                         'secretKey' => $secretKey,
                         'data' => $data,
@@ -1994,12 +1995,11 @@ class Game
         $geoloc = '';
         try {
             $res = unserialize(file_get_contents('http://www.geoplugin.net/php.gp?ip='.$ip));
-            if($res['geoplugin_latitude'] != '') {
+            if ($res['geoplugin_latitude'] != '') {
                 $geoloc = $res['geoplugin_latitude'] . ',' . $res['geoplugin_longitude'];
             }
         } catch (\Exception $e) {
-
-        } 
+        }
 
         return $geoloc;
     }

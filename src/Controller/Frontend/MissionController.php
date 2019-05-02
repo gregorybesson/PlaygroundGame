@@ -59,7 +59,7 @@ class MissionController extends GameController
                         'id' => $this->game->getIdentifier(),
                     )
                 ) .$reason;
-            } else if ($playError === -2) {
+            } elseif ($playError === -2) {
                 // the user has not accepted the mandatory rules of the game
                 $this->flashMessenger()->addMessage('Vous devez accepter le réglement');
                 $reason = '?NoOptin=1';
@@ -69,7 +69,7 @@ class MissionController extends GameController
                         'id' => $this->game->getIdentifier(),
                     )
                 ) .$reason;
-            } else if ($playError === -3) {
+            } elseif ($playError === -3) {
                 // the user has enough points to buy an entry to this game
                 $this->flashMessenger()->addMessage("Vous ne pouvez pas acheter la partie");
                 $reason = '?NotPaid=1';

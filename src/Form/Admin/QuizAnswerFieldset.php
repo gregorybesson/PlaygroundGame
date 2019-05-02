@@ -20,7 +20,7 @@ class QuizAnswerFieldset extends Fieldset
 
         $this->add(array(
             'type' => 'Zend\Form\Element\Hidden',
-            'name' => 'id'
+            'name' => 'id',
         ));
 
         $this->add(array(
@@ -64,14 +64,14 @@ class QuizAnswerFieldset extends Fieldset
         $this->add(array(
             'name' => 'points',
             'options' => array(
-                'label' => 'Points'
+                'label' => 'Points',
             ),
         ));
 
         $this->add(array(
             'name' => 'position',
             'options' => array(
-                'label' => 'Position'
+                'label' => 'Position',
             ),
         ));
 
@@ -84,8 +84,8 @@ class QuizAnswerFieldset extends Fieldset
             'attributes' => array(
                 'cols' => '10',
                 'rows' => '10',
-                'id' => 'explanation'
-            )
+                'id' => 'explanation',
+            ),
         ));
         
         $this->add(array(
@@ -97,9 +97,9 @@ class QuizAnswerFieldset extends Fieldset
             'attributes' => array(
                 'cols' => '10',
                 'rows' => '10',
-//                 'id' => 'image',
-//                 'multiple' => true
-            )
+            //                 'id' => 'image',
+            //                 'multiple' => true
+            ),
         ));
         $this->add(array(
             'name' => 'image',
@@ -132,7 +132,7 @@ class QuizAnswerFieldset extends Fieldset
             ),
             'attributes' => array(
                 'class' => 'btn btn-block btn-danger col-md-2 delete-button',
-            )
+            ),
         ));
     }
 }

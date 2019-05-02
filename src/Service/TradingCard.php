@@ -52,7 +52,6 @@ class TradingCard extends Game
             return false;
         }
         if (!empty($data['upload_image']['tmp_name'])) {
-            
             ErrorHandler::start();
             $data['upload_image']['name'] = $this->fileNewname(
                 $path,
@@ -210,7 +209,7 @@ class TradingCard extends Game
         } else {
             // If the game is supposed to be a regular user game or an anonymous identified game,
             // it means that the registration/login is at the end of the game
-            if((!$user &&  !$game->getAnonymousAllowed()) || ($game->getAnonymousAllowed() && $game->getAnonymousIdentifier())) {
+            if ((!$user &&  !$game->getAnonymousAllowed()) || ($game->getAnonymousAllowed() && $game->getAnonymousIdentifier())) {
                 return 0;
             }
             return $this->getEntryMapper()->findLastEntriesByIp($game, $this->getIp(), $limitDate);
@@ -227,9 +226,9 @@ class TradingCard extends Game
         $album = [];
 
         // I create the complete album including the cards of the user
-        foreach($models as $model) {
+        foreach ($models as $model) {
             $sticker['model'] = $model;
-            if(isset($cardsArray[$model->getId()])) {
+            if (isset($cardsArray[$model->getId()])) {
                 $sticker['card'] = $cardsArray[$model->getId()];
             } else {
                 $sticker['card'] = null;

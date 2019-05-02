@@ -15,12 +15,12 @@ class PostVoteVote extends Form
 
         //pass captcha image options
         $captchaImage = new CaptchaImage(array(
-                'font' => $dirdata . '/fonts/arial.ttf',
+                'font' => $dirdata.'/fonts/arial.ttf',
                 'width' => 110,
                 'height' => 60,
                 'wordlen' => 4,
                 'dotNoiseLevel' => 20,
-                'lineNoiseLevel' => 1));
+        'lineNoiseLevel' => 1, ));
 
         $captchaImage->setImgDir($dirdata.'/captcha');
         $captchaImage->setImgUrl($urlcaptcha);
@@ -39,7 +39,7 @@ class PostVoteVote extends Form
             'name' => 'submit',
             'attributes' => array(
                 'type'  => 'submit',
-                'value' => 'Voter'
+                'value' => 'Voter',
             ),
         ));
     }

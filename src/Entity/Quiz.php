@@ -39,19 +39,19 @@ class Quiz extends Game implements InputFilterAwareInterface
      * entry : After each entry
      * game : At the end of the game
      * never : ...
-     * 
+     *
      * @ORM\Column(name="display_stats", type="string", nullable=false)
      */
     protected $displayStats = 'never';
 
     /**
      * display the good answers
-     * 
+     *
      * question : After the answer to the question
      * entry : after each entry
      * game : at the end of the game
      * never : ...
-     * 
+     *
      * @ORM\Column(name="display_good_answers", type="string", nullable=false)
      */
     protected $displayGoodAnswers = 'never';

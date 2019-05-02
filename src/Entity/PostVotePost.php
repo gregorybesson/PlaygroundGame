@@ -281,7 +281,9 @@ class PostVotePost implements InputFilterAwareInterface, Translatable, \JsonSeri
     public function getComments($category = null)
     {
         if ($category != null) {
-            if (!is_array($category)) $category = [$category];
+            if (!is_array($category)) {
+                $category = [$category];
+            }
             $criteria = Criteria::create()->where(Criteria::expr()->in("category", $category));
 
             return $this->getComments()->matching($criteria);

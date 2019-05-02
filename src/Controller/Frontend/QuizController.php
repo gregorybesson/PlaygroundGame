@@ -38,7 +38,7 @@ class QuizController extends GameController
                         'id' => $this->game->getIdentifier(),
                     )
                 ) .$reason;
-            } else if ($playError === -2) {
+            } elseif ($playError === -2) {
                 // the user has not accepted the mandatory rules of the game
                 $this->flashMessenger()->addMessage('Vous devez accepter le réglement');
                 $reason = '?NoOptin=1';
@@ -48,7 +48,7 @@ class QuizController extends GameController
                         'id' => $this->game->getIdentifier(),
                     )
                 ) .$reason;
-            } else if ($playError === -3) {
+            } elseif ($playError === -3) {
                 // the user has enough points to buy an entry to this game
                 $this->flashMessenger()->addMessage("Vous ne pouvez pas acheter la partie");
                 $reason = '?NotPaid=1';
@@ -227,7 +227,7 @@ class QuizController extends GameController
             }
             $action = $this->params('action');
     
-            // On POST, if the anonymousUser has not been created yet, I try to create it now 
+            // On POST, if the anonymousUser has not been created yet, I try to create it now
             // Maybe is there only one form for the quiz and the player data... I try...
             // And if the formPlayer data was included in the form, I remove it
             if (!$this->user && $this->game->getAnonymousAllowed() && $this->game->getAnonymousIdentifier()) {
@@ -242,7 +242,7 @@ class QuizController extends GameController
                         )
                     );
 
-                    foreach($data as $index => $el) {
+                    foreach ($data as $index => $el) {
                         if (! is_array($el)) {
                             unset($data[$index]);
                         }
@@ -261,7 +261,7 @@ class QuizController extends GameController
                                     'id' => $this->game->getIdentifier(),
                                 )
                             ) .$reason;
-                        } else if ($playError === -2) {
+                        } elseif ($playError === -2) {
                             // the user has not accepted the mandatory rules of the game
                             $this->flashMessenger()->addMessage('Vous devez accepter le réglement');
                             $reason = '?NoOptin=1';
@@ -271,7 +271,7 @@ class QuizController extends GameController
                                     'id' => $this->game->getIdentifier(),
                                 )
                             ) .$reason;
-                        } else if ($playError === -3) {
+                        } elseif ($playError === -3) {
                             // the user has enough points to buy an entry to this game
                             $this->flashMessenger()->addMessage("Vous ne pouvez pas acheter la partie");
                             $reason = '?NotPaid=1';
@@ -435,7 +435,7 @@ class QuizController extends GameController
         
         // TODO: Change the way we know if the play step has been rejected
         $messages = $this->flashMessenger()->getMessages();
-        if(!isset($messages[0]) || substr($messages[0], 0, 9) != 'Vous avez') {
+        if (!isset($messages[0]) || substr($messages[0], 0, 9) != 'Vous avez') {
             $this->getGameService()->sendMail($this->game, $this->user, $lastEntry);
         }
 

@@ -52,7 +52,6 @@ class Quiz extends Game
 
         $quiz = $this->getGameMapper()->findById($data['quiz_id']);
         if (!$form->isValid()) {
-
             return false;
         }
 
@@ -379,7 +378,8 @@ class Quiz extends Game
         );
     }
 
-    public function getAnswersDistribution($game) {
+    public function getAnswersDistribution($game)
+    {
         $em = $this->serviceLocator->get('doctrine.entitymanager.orm_default');
 
         /* @var $dbal \Doctrine\DBAL\Connection */
@@ -402,7 +402,7 @@ class Quiz extends Game
 
         $rows = $stmt->fetchAll();
         $result = [];
-        foreach($rows as $row) {
+        foreach ($rows as $row) {
             $result[$row['question_id']][] = $row;
         }
 
@@ -534,7 +534,7 @@ class Quiz extends Game
         }
 
         foreach ($data as $group) {
-            if(count($group) > 0) {
+            if (count($group) > 0) {
                 foreach ($group as $q => $a) {
                     if (strlen($q) > 5 && strpos($q, '-data', strlen($q)-5) !== false) {
                         continue;// answer data is processed below

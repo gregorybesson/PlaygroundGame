@@ -141,11 +141,13 @@ class PostVote extends Game implements InputFilterAwareInterface
     
     /**
      * @param int $postDisplayNumber
+     *
      * @return PostVote
      */
     public function setPostDisplayNumber($postDisplayNumber)
     {
         $this->postDisplayNumber = $postDisplayNumber;
+
         return $this;
     }
 
@@ -256,10 +258,10 @@ class PostVote extends Game implements InputFilterAwareInterface
                             array(
                                 'name' => 'InArray',
                                 'options' => array(
-                                    'haystack' => array('date', 'vote', 'random')
-                                )
-                            )
-                        )
+                                    'haystack' => array('date', 'vote', 'random'),
+                                ),
+                            ),
+                        ),
                     )
                 )
             );
@@ -272,9 +274,9 @@ class PostVote extends Game implements InputFilterAwareInterface
                         'validators' => array(
                             array(
                                 'name' => 'Between',
-                                'options' => array('min' => 0, 'max' => 1)
-                            )
-                        )
+                                'options' => array('min' => 0, 'max' => 1),
+                            ),
+                        ),
                     )
                 )
             );
@@ -287,9 +289,9 @@ class PostVote extends Game implements InputFilterAwareInterface
                         'validators' => array(
                             array(
                                 'name' => 'Between',
-                                'options' => array('min' => 0, 'max' => 1)
-                            )
-                        )
+                                'options' => array('min' => 0, 'max' => 1),
+                            ),
+                        ),
                     )
                 )
             );
@@ -302,9 +304,9 @@ class PostVote extends Game implements InputFilterAwareInterface
                         'validators' => array(
                             array(
                                 'name' => 'Between',
-                                'options' => array('min' => 0, 'max' => 1)
-                            )
-                        )
+                                'options' => array('min' => 0, 'max' => 1),
+                            ),
+                        ),
                     )
                 )
             );

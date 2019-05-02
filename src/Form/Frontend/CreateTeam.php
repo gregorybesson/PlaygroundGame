@@ -25,19 +25,19 @@ class CreateTeam extends ProvidesEventsForm
                 'type' => 'email',
                 'placeholder' => $translator->translate('Team name', 'playgroundgame').' 1',
                 'class' => 'large-input',
-                'autocomplete' => 'off'
-            )
+                'autocomplete' => 'off',
+            ),
         ));
         
         $submitElement = new Element\Button('submit');
         $submitElement->setLabel($translator->translate('Send', 'playgroundgame'))
             ->setAttributes(array(
-            'type' => 'submit',
-            'class'=> 'btn btn-warning'
+                'type' => 'submit',
+                'class'=> 'btn btn-warning',
             ));
 
         $this->add($submitElement, array(
-            'priority' => - 100
+            'priority' => - 100,
         ));
     }
 
@@ -55,6 +55,7 @@ class CreateTeam extends ProvidesEventsForm
      * Set service manager instance
      *
      * @param  ServiceManager $serviceManager
+     *
      * @return ShareMail
      */
     public function setServiceManager(ServiceManager $serviceManager)

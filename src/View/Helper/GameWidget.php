@@ -12,7 +12,7 @@ class GameWidget extends AbstractHelper
      */
     protected $gameService;
 
-    public function __construct(\PlaygroundGame\Service\Game $gameService) 
+    public function __construct(\PlaygroundGame\Service\Game $gameService)
     {
         return $this->gameService = $gameService;
     }

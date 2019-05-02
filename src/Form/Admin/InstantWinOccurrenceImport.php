@@ -33,7 +33,7 @@ class InstantWinOccurrenceImport extends ProvidesEventsForm
                 'label' => $translator->translate('CSV file containing occurrences', 'playgroundgame'),
             ),
             'attributes' => array(
-                'id' => 'file'
+                'id' => 'file',
             ),
             'validators' => array(
                 array('Exists'),
@@ -82,6 +82,7 @@ class InstantWinOccurrenceImport extends ProvidesEventsForm
      * Set service manager instance
      *
      * @param  ServiceManager $serviceManager
+     *
      * @return InstantWinOccurrenceImport
      */
     public function setServiceManager(ServiceManager $serviceManager)

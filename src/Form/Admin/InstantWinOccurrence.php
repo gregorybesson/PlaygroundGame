@@ -40,7 +40,7 @@ class InstantWinOccurrence extends ProvidesEventsForm
             ),
             'attributes' => array(
                 'type' => 'text',
-                'id' => 'value'
+                'id' => 'value',
             ),
         ));
 
@@ -75,8 +75,8 @@ class InstantWinOccurrence extends ProvidesEventsForm
             'options' => array(
                 'empty_option' => $translator->translate('Ce jeu n\'a pas de lot associé', 'playgroundgame'),
                 'value_options' => $prizes,
-                'label' => $translator->translate('Lots', 'playgroundgame')
-            )
+                'label' => $translator->translate('Lots', 'playgroundgame'),
+            ),
         ));
 
         $submitElement = new Element\Button('submit');
@@ -121,6 +121,7 @@ class InstantWinOccurrence extends ProvidesEventsForm
      * Set service manager instance
      *
      * @param  ServiceManager $serviceManager
+     *
      * @return InstantWinOccurrence
      */
     public function setServiceManager(ServiceManager $serviceManager)

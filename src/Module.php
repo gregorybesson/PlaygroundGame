@@ -20,10 +20,10 @@ class Module
         $eventManager = $manager->getEventManager();
 
         /*
-		 * This event change the config before it's cached
-		 * The change will apply to 'template_path_stack'
-		 * This config take part in the Playground Theme Management
-		 */
+         * This event change the config before it's cached
+         * The change will apply to 'template_path_stack'
+         * This config take part in the Playground Theme Management
+         */
         $eventManager->attach(\Zend\ModuleManager\ModuleEvent::EVENT_MERGE_CONFIG, array($this, 'onMergeConfig'), 50);
     }
 
@@ -43,7 +43,6 @@ class Module
 
         // If custom games need a specific route. I create these routes
         if (PHP_SAPI !== 'cli') {
-
             $configDatabaseDoctrine = $config['doctrine']['connection']['orm_default']['params'];
             $configDatabase = array('driver' => 'Mysqli',
                 'database' => $configDatabaseDoctrine['dbname'],

@@ -39,11 +39,11 @@ class PrizeCategory extends ProvidesEventsForm
         $this->add(array(
             'name' => 'identifier',
             'options' => array(
-                'label' => $translator->translate('Slug', 'playgroundgame')
+                'label' => $translator->translate('Slug', 'playgroundgame'),
             ),
             'attributes' => array(
-                'type' => 'text'
-            )
+                'type' => 'text',
+            ),
         ));
 
         $this->add(array(

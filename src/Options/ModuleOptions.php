@@ -66,6 +66,7 @@ class ModuleOptions extends AbstractOptions implements GameEditOptionsInterface
      * Set game entity class name
      *
      * @param $gameEntityClass
+     *
      * @return ModuleOptions
      */
     public function setGameEntityClass($gameEntityClass)
@@ -86,7 +87,8 @@ class ModuleOptions extends AbstractOptions implements GameEditOptionsInterface
     /**
      * Set media path
      *
-     * @param  string                           $media_path
+     * @param  string $media_path
+     *
      * @return \PlaygroundGame\Options\ModuleOptions
      */
     public function setMediaPath($media_path)
@@ -106,7 +108,8 @@ class ModuleOptions extends AbstractOptions implements GameEditOptionsInterface
 
     /**
      *
-     * @param  string                           $media_url
+     * @param  string $media_url
+     *
      * @return \PlaygroundGame\Options\ModuleOptions
      */
     public function setMediaUrl($media_url)
@@ -196,7 +199,8 @@ class ModuleOptions extends AbstractOptions implements GameEditOptionsInterface
 
     /**
      *
-     * @param  string                           $core_layout
+     * @param  string $core_layout
+     *
      * @return \PlaygroundGame\Options\ModuleOptions
      */
     public function setCoreLayout($core_layout)

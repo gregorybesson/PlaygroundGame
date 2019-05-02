@@ -41,7 +41,7 @@ class TradingCardModel extends ProvidesEventsForm
             ),
             'attributes' => array(
                 'type' => 'text',
-                'id' => 'title'
+                'id' => 'title',
             ),
         ));
 
@@ -52,7 +52,7 @@ class TradingCardModel extends ProvidesEventsForm
             ),
             'attributes' => array(
                 'type' => 'text',
-                'id' => 'type'
+                'id' => 'type',
             ),
         ));
 
@@ -63,7 +63,7 @@ class TradingCardModel extends ProvidesEventsForm
             ),
             'attributes' => array(
                 'type' => 'text',
-                'id' => 'family'
+                'id' => 'family',
             ),
         ));
 
@@ -74,7 +74,7 @@ class TradingCardModel extends ProvidesEventsForm
             ),
             'attributes' => array(
                 'type' => 'text',
-                'id' => 'points'
+                'id' => 'points',
             ),
         ));
         $this->add(array(
@@ -96,7 +96,7 @@ class TradingCardModel extends ProvidesEventsForm
             ),
             'attributes' => array(
                 'type' => 'text',
-                'id' => 'distribution'
+                'id' => 'distribution',
             ),
         ));
 
@@ -134,12 +134,12 @@ class TradingCardModel extends ProvidesEventsForm
                 'name' => 'availability',
                 'options' => array(
                     'label' => $translator->translate('Availability date', 'playgroundgame'),
-                    'format' => 'd/m/Y H:i:s'
+                    'format' => 'd/m/Y H:i:s',
                 ),
                 'attributes' => array(
                     'type' => 'text',
                     'class'=> 'datepicker',
-                    'id' => 'availability'
+                    'id' => 'availability',
                 ),
         ));
 
@@ -186,6 +186,7 @@ class TradingCardModel extends ProvidesEventsForm
      * Set service manager instance
      *
      * @param  ServiceManager $serviceManager
+     *
      * @return InstantWinOccurrence
      */
     public function setServiceManager(ServiceManager $serviceManager)

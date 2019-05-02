@@ -113,7 +113,8 @@ class GameController extends AbstractActionController
         $fb_login_url = $helper->getLoginUrl($this->adminUrl()->fromRoute(
             'playgroundgame/list',
             array(),
-            array('force_canonical' => true)), $fb_args_param);
+            array('force_canonical' => true)
+        ), $fb_args_param);
         $accessToken = $helper->getAccessToken();
 
         if (isset($accessToken) || $session->offsetExists('fb_token')) {
@@ -152,12 +153,11 @@ class GameController extends AbstractActionController
                         $this->getRequest()->getFiles()->toArray()
                     );
                     // Removing a previously page tab set on this game
-                    if( 
-                        $this->game && 
+                    if ($this->game &&
                         !empty($this->game->getFbPageId()) &&
                         !empty($this->game->getFbAppId()) &&
                         (
-                            (   
+                            (
                                 $this->game->getFbPageId() !== $data['fbPageId'] ||
                                 $this->game->getFbAppId() !== $data['fbAppId']
                             ) ||
@@ -168,19 +168,18 @@ class GameController extends AbstractActionController
                             ->getGraphNode()
                             ->asArray();
                         $removeTab = $fb->delete(
-                                '/' . $this->game->getFbPageId() . '/tabs',
-                                [
+                            '/' . $this->game->getFbPageId() . '/tabs',
+                            [
                                     'tab' => 'app_'.$this->game->getFbAppId(),
                                 ],
-                                $oldPage['access_token']
-                            )
+                            $oldPage['access_token']
+                        )
                             ->getGraphNode()
                             ->asArray();
                     }
 
                     // Removing a previously post set on this game
-                    if( 
-                        $this->game && 
+                    if ($this->game &&
                         !empty($this->game->getFbPostId()) &&
                         $data['broadcastPostFacebook'] == 0
                     ) {
@@ -188,10 +187,10 @@ class GameController extends AbstractActionController
                             ->getGraphNode()
                             ->asArray();
                         $removePost = $fb->delete(
-                                '/' . $this->game->getFbPostId(),
-                                [],
-                                $oldPage['access_token']
-                            )
+                            '/' . $this->game->getFbPostId(),
+                            [],
+                            $oldPage['access_token']
+                        )
                             ->getGraphNode()
                             ->asArray();
                     }
@@ -216,7 +215,7 @@ class GameController extends AbstractActionController
         $form->setAttribute('method', 'post');
 
         $pageIds = $form->get('fbPageId')->getOption('value_options');
-        foreach($appsArray as $k => $v) {
+        foreach ($appsArray as $k => $v) {
             $pageIds[$k] = $v;
         }
         $form->get('fbPageId')->setAttribute('options', $pageIds);
@@ -257,7 +256,6 @@ class GameController extends AbstractActionController
             $game = $this->getAdminGameService()->createOrUpdate($data, $this->game, $formId);
 
             if ($game) {
-                
                 if ($session->offsetExists('fb_token')) {
                     if (!empty($data['fbPageId']) && !empty($data['fbAppId'])) {
                         $page = $fb->get('/' . $data['fbPageId'] . '?fields=access_token,name,id')
@@ -266,7 +264,7 @@ class GameController extends AbstractActionController
 
                         // let's create a post on FB
                         if ($data['broadcastPostFacebook'] && $game->getWelcomeBlock() != '' && $game->getMainImage() != '') {
-                            $imgPath = $this->url()->fromRoute('frontend',[],['force_canonical' => true],false).$game->getMainImage();
+                            $imgPath = $this->url()->fromRoute('frontend', [], ['force_canonical' => true], false).$game->getMainImage();
                             // emoticons : $emoji = html_entity_decode('&#128520;');
 
                             $message = str_replace('<p>', "", $game->getWelcomeBlock());
@@ -275,7 +273,6 @@ class GameController extends AbstractActionController
 
                             // Create the post
                             try {
-
                                 // Associate the fbAppId to the page so that we can receive the webhooks
                                 $linkAppToPage = $fb->post(
                                     '/' . $page['id'] . '/subscribed_apps',
@@ -410,7 +407,7 @@ class GameController extends AbstractActionController
                                 // $post = $fb->sendRequest('POST', "/".$page['id']."/feed", $data_post, $page['access_token']);
     
                                 /** Texte avec lien vers une page
-                                 * 
+                                 *
                                  */
                                 // $post = $fb->post(
                                 //     '/' . $page['id'] . '/feed',
@@ -422,7 +419,6 @@ class GameController extends AbstractActionController
                                 //     ),
                                 //     $page['access_token']
                                 // );
-                                
                             } catch (\Exception $e) {
                                 if ($e->getMessage() == 'Missing or invalid image file') {
                                     if ($game->getFbPostId() != '') {
@@ -462,7 +458,7 @@ class GameController extends AbstractActionController
                                     [
                                         'app_id' => $data['fbAppId'],
                                         'custom_name' => (!empty($data['fbPageTabTitle'])) ? $data['fbPageTabTitle'] : $data['title'],
-                                        'custom_image_url' => ($game->getFbPageTabImage() !== '') ? 
+                                        'custom_image_url' => ($game->getFbPageTabImage() !== '') ?
                                             $this->getAdminGameService()->getServiceManager()->get('ViewRenderer')->url(
                                                 'frontend',
                                                 array(),
@@ -471,12 +467,13 @@ class GameController extends AbstractActionController
                                             null,
                                         'position' => (!empty($data['fbPageTabPosition'])) ? $data['fbPageTabPosition'] : 99
                                     ],
-                                    $page['access_token'])
+                                    $page['access_token']
+                                )
                                     ->getGraphNode()
                                     ->asArray();
                             } catch (\Exception $e) {
                                 // (#324) Missing or invalid image file
-                                if($e->getCode() == '324') {
+                                if ($e->getCode() == '324') {
                                     try {
                                         $addTab = $fb->post(
                                             '/' . $page['id'] . '/tabs',
@@ -485,7 +482,8 @@ class GameController extends AbstractActionController
                                                 'custom_name' => (!empty($data['fbPageTabTitle'])) ? $data['fbPageTabTitle'] : $data['title'],
                                                 'position' => (!empty($data['fbPageTabPosition'])) ? $data['fbPageTabPosition'] : 99
                                             ],
-                                            $page['access_token'])
+                                            $page['access_token']
+                                        )
                                             ->getGraphNode()
                                             ->asArray();
                                     } catch (\Exception $e) {
@@ -494,7 +492,6 @@ class GameController extends AbstractActionController
                                 }
                             }
                         }
-                        
                     }
                 }
                 return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/list'));

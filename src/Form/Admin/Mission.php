@@ -32,8 +32,8 @@ class Mission extends Game
                 'should_create_template' => true,
                 'allow_add' => true,
                 'allow_remove' => true,
-                'target_element' => $gameMissionFieldset
-            )
+                'target_element' => $gameMissionFieldset,
+            ),
         ));
     }
 }

@@ -20,8 +20,8 @@ class PrizeCategoryUser extends ProvidesEventsForm
             'name' => 'user',
             'type' => 'Zend\Form\Element\Hidden',
             'attributes' => array(
-                'value' => 0
-            )
+                'value' => 0,
+            ),
         ));
 
         $categories = $this->getPrizeCategories();
@@ -30,8 +30,8 @@ class PrizeCategoryUser extends ProvidesEventsForm
                     'name' => 'prizeCategory',
                     'type' => 'Zend\Form\Element\Hidden',
                     'attributes' => array(
-                        'value' => 0
-                    )
+                        'value' => 0,
+                    ),
             ));
         } else {
             $this->add(array(
@@ -39,20 +39,20 @@ class PrizeCategoryUser extends ProvidesEventsForm
                 'name' => 'prizeCategory',
                 'options' => array(
                     'value_options' => $categories,
-                    'label' => $translator->translate('Catégorie de gain', 'playgroundgame')
+                    'label' => $translator->translate('Catégorie de gain', 'playgroundgame'),
                 ),
-                'attributes' => array()
+                'attributes' => array(),
             ));
         }
 
         $submitElement = new Element\Button('submit');
         $submitElement->setLabel($translator->translate('Create', 'playgroundgame'))
             ->setAttributes(array(
-            'type' => 'submit'
+                'type' => 'submit',
             ));
 
         $this->add($submitElement, array(
-            'priority' => - 100
+            'priority' => - 100,
         ));
     }
 
@@ -87,6 +87,7 @@ class PrizeCategoryUser extends ProvidesEventsForm
      * Set service manager instance
      *
      * @param  ServiceManager $serviceManager
+     *
      * @return PrizeCategoryUser
      */
     public function setServiceManager(ServiceManager $serviceManager)
