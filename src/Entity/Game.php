@@ -81,11 +81,13 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
     protected $playerForm;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(name="main_image", type="string", length=255, nullable=true)
      */
     protected $mainImage;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(name="second_image", type="string", length=255, nullable=true)
      */
     protected $secondImage;

@@ -3,6 +3,8 @@ namespace PlaygroundGame\Entity;
 
 use PlaygroundGame\Entity\Game;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Translatable\Translatable;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\Factory as InputFactory;
@@ -61,6 +63,7 @@ class InstantWin extends Game implements InputFilterAwareInterface
     protected $occurrenceDrawFrequency;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(name="scratchcard_image", type="string", length=255, nullable=true)
      */
     protected $scratchcardImage;
