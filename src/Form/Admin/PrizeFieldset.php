@@ -60,7 +60,18 @@ class PrizeFieldset extends Fieldset
                'id' =>'prizeContent',
                ),
         ));
-        
+
+        $this->add(array(
+            'name' => 'points',
+            'options' => array(
+                   'label' => $translator->translate('Points', 'playgroundgame'),
+               ),
+               'attributes' => array(
+                   'type' => 'text',
+                   'placeholder' => $translator->translate('Points', 'playgroundgame'),
+               ),
+        ));
+
         $this->add(array(
             'name' => 'qty',
             'options' => array(
@@ -71,7 +82,7 @@ class PrizeFieldset extends Fieldset
                    'placeholder' => $translator->translate('Quantity', 'playgroundgame'),
                ),
         ));
-        
+
         $this->add(array(
             'name' => 'unitPrice',
             'options' => array(
@@ -108,6 +119,7 @@ class PrizeFieldset extends Fieldset
             'type' => 'file',
             ),
         ));
+
         $this->add(array(
                 'name' => 'picture',
                 'type' => 'Zend\Form\Element\Hidden',

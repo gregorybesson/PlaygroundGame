@@ -52,6 +52,12 @@ class Prize implements \JsonSerializable
     protected $prizeContent;
 
     /**
+     * The points you win when you grab this prize
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $points = 0;
+
+    /**
      * @ORM\Column(type="integer", nullable=false)
      */
     protected $qty = 0;
@@ -197,6 +203,24 @@ class Prize implements \JsonSerializable
     public function setPrizeContent($prizeContent)
     {
         $this->prizeContent = $prizeContent;
+
+        return $this;
+    }
+
+    /**
+     * @return integer unknown_type
+     */
+    public function getPoints()
+    {
+        return $this->points;
+    }
+
+    /**
+     * @param unknown_type $points
+     */
+    public function setPoints($points)
+    {
+        $this->points = $points;
 
         return $this;
     }
