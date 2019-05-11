@@ -57,7 +57,7 @@ class InstantWin extends Game
                 ErrorHandler::stop(true);
             }
 
-            if ($game->getOccurrenceNumber() && $game->getScheduleOccurrenceAuto()) {
+            if ($game->getScheduleOccurrenceAuto()) {
                 $this->scheduleOccurrences($game, $data);
             }
         }
@@ -115,6 +115,27 @@ class InstantWin extends Game
 
     public function createRandomOccurrences($game, $beginning, $end, $quantity)
     {
+        $prizes = $game->getPrizes();
+        $randomPrizes = [];
+        $insertPrize = false;
+        $exactCount = false;
+        foreach ($prizes as $prize) {
+            $qty = $prize->getQty();
+            if ($qty > 0) {
+                for ($i = 0; $i < $qty; $i++) {
+                    $randomPrizes[] = $prize;
+                }
+            } 
+        }
+        $min = 0;
+        $max = count($randomPrizes);
+        if ($max > $min) {
+            $insertPrize = true;
+            if ($quantity === $max) {
+                $exactCount = true;
+            }
+        }
+
         for ($i=1; $i<=$quantity; $i++) {
             $randomDate = $this->getRandomDate($beginning->format('U'), $end->format('U'));
             $randomDate = \DateTime::createFromFormat('Y-m-d H:i:s', $randomDate);
@@ -122,9 +143,35 @@ class InstantWin extends Game
             $occurrence->setInstantwin($game);
             $occurrence->setValue($randomDate->format('Y-m-d H:i:s'));
             $occurrence->setActive(1);
+            if ($insertPrize) {
+                $toPick = rand($min, $max - 1);
+                $occurrence->setPrize($randomPrizes[$toPick]);
+                if ($exactCount) {
+                    array_splice($randomPrizes, $toPick, 1);
+                    --$max;
+                }
+            }
 
             $this->getInstantWinOccurrenceMapper()->insert($occurrence);
         }
+    }
+
+    /**
+     * Get the number of occurrences to create for the instantwin
+     */
+    public function getOccurrenceNumber($game)
+    {
+        $nb = 0;
+        if ($game->getOccurrenceNumber() > 0) {
+            $nb = $game->getOccurrenceNumber();
+        } else {
+            $prizes = $game->getPrizes();
+            foreach ($prizes as $prize) {
+                $nb += $prize->getQty();
+            }
+        }
+
+        return $nb;
     }
 
     public function scheduleDateOccurrences($game)
@@ -175,7 +222,7 @@ class InstantWin extends Game
         switch ($f) {
             case null:
             case 'game':
-                $nbOccurencesToCreate = $game->getOccurrenceNumber() - $nbExistingOccurrences;
+                $nbOccurencesToCreate = $this->getOccurrenceNumber($game) - $nbExistingOccurrences;
                 if ($nbOccurencesToCreate > 0) {
                     $this->createRandomOccurrences($game, $beginning, $end, $nbOccurencesToCreate);
                 }

@@ -65,7 +65,7 @@ class Prize implements \JsonSerializable
     /**
      * @ORM\Column(name="unit_price", type="float", nullable=false)
      */
-    protected $unitPrice = 1;
+    protected $unitPrice = 0;
 
     /**
      * @ORM\Column(type="string", length=10, nullable=true)

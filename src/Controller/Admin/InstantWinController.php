@@ -135,7 +135,7 @@ class InstantWinController extends GameController
             );
 
             // Change the format of the date
-            $value = \DateTime::createFromFormat('d/m/Y H:i', $data['value']);
+            $value = \DateTime::createFromFormat('d/m/Y H:i:s', $data['value']);
             $data['value'] = $value->format('Y-m-d H:i:s');
             
             $occurrence = $this->getAdminGameService()->updateOccurrence($data, $occurrence->getId());
@@ -266,6 +266,15 @@ class InstantWinController extends GameController
         );
     }
 
+    public function removeAllOccurrencesAction()
+    {
+        $this->checkGame();
+        $service = $this->getAdminGameService();
+        $occurrences   = $service->getInstantWinOccurrenceMapper()->findBy(['instantwin' => $this->game, 'entry' => null]);
+        $service->getInstantWinOccurrenceMapper()->removeAll($occurrences);
+
+        return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/instantwin-occurrence-list', array('gameId'=>$this->game->getId())));
+    }
 
     public function removeOccurrenceAction()
     {
@@ -279,10 +288,10 @@ class InstantWinController extends GameController
 
         if ($occurrence->getActive()) {
             $service->getInstantWinOccurrenceMapper()->remove($occurrence);
-            $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The occurrence was deleted');
+            $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The occurrence has been deleted');
         } else {
             $this->flashMessenger()->setNamespace('playgroundgame')->addMessage(
-                'Il y a un participant à cet instant gagnant. Vous ne pouvez plus le supprimer'
+                "A player has already won this occurrence. You can't delete it anymore"
             );
         }
 
@@ -301,8 +310,8 @@ class InstantWinController extends GameController
 
         $headers = new \Zend\Http\Headers();
         $headers->addHeaderLine('Content-Type', 'text/csv')
-                ->addHeaderLine('Content-Disposition', 'attachment; filename="' . $file . '"')
-                ->addHeaderLine('Content-Length', filesize($file));
+            ->addHeaderLine('Content-Disposition', 'attachment; filename="' . $file . '"')
+            ->addHeaderLine('Content-Length', filesize($file));
 
         $response->setHeaders($headers);
         unlink($file);

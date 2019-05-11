@@ -59,10 +59,10 @@ class InstantWin extends Game
             'name' => 'occurrenceNumber',
             'type' => 'Zend\Form\Element\Text',
             'attributes' => array(
-                'placeholder' => $translator->translate('Number occurences', 'playgroundgame'),
+                'placeholder' => $translator->translate('Number occurrences', 'playgroundgame'),
             ),
             'options' => array(
-                'label' => $translator->translate('Number occurences', 'playgroundgame'),
+                'label' => $translator->translate('Number occurrences', 'playgroundgame'),
             ),
         ));
 

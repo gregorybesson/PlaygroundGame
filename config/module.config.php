@@ -1637,15 +1637,15 @@ return array(
                                 )
                             ),
                             'verification' => array(
-		                        'type' => 'Zend\Router\Http\Literal',
-		                        'options' => array(
-		                            'route' => '/verification',
-		                            'defaults' => array(
-		                                'controller' => PlaygroundGame\Controller\Frontend\InstantWin::class,
-		                                'action'     => 'check-token',
-		                            ),
-		                        ),
-		                    ),
+                                'type' => 'Zend\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/verification',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\InstantWin::class,
+                                        'action'     => 'check-token',
+                                    ),
+                                ),
+                            ),
                             'optin' => array(
                                 'type' => 'Segment',
                                 'options' => array(
@@ -2891,6 +2891,17 @@ return array(
                                     ),
                                     'constraints' => array(
                                         'filter' => '[a-zA-Z][a-zA-Z0-9_-]*'
+                                    )
+                                )
+                            ),
+                            'instantwin-occurrence-remove-all' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/instantwin-occurrence-remove-all/:gameId',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Admin\InstantWin::class,
+                                        'action' => 'removeAllOccurrences',
+                                        'gameId' => 0
                                     )
                                 )
                             ),
