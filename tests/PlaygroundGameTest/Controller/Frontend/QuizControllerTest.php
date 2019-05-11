@@ -26,7 +26,6 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $pluginManager = $this->getApplicationServiceLocator()->get('ControllerPluginManager');
    
         $game = new GameEntity();
-        $game->setFbFan(true);
         $game->setIdentifier('gameid');
         $game->setClassType('quiz');
         $game->setVictoryConditions(0);
@@ -41,13 +40,13 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
     
         $serviceManager->setService('playgroundgame_quiz_service', $f);
     
-        $ZfcUserMock = $this->getMock('ZfcUser\Entity\User');
+        $ZfcUserMock = $this->createMock('ZfcUser\Entity\User');
     
         $ZfcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
     
-        $authMock = $this->getMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
     
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -82,7 +81,6 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $pluginManager    = $this->getApplicationServiceLocator()->get('ControllerPluginManager');
 
         $game = new GameEntity();
-        $game->setFbFan(true);
 
         //mocking the method checkExistingEntry
         $f = $this->getMockBuilder('PlaygroundGame\Service\Game')
@@ -97,13 +95,13 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue(false));
 
-        $ZfcUserMock = $this->getMock('ZfcUser\Entity\User');
+        $ZfcUserMock = $this->createMock('ZfcUser\Entity\User');
 
         $ZfcUserMock->expects($this->any())
          ->method('getId')
          ->will($this->returnValue('1'));
 
-        $authMock = $this->getMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
 
         $authMock->expects($this->any())
          ->method('hasIdentity')
@@ -127,7 +125,6 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
     //     $pluginManager = $this->getApplicationServiceLocator()->get('ControllerPluginManager');
 
     //     $game = new GameEntity();
-    //     $game->setFbFan(true);
     //     $game->setIdentifier('gameid');
     //     $game->setClassType('quiz');
 
@@ -139,13 +136,13 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
 
     //     $serviceManager->setService('playgroundgame_quiz_service', $f);
 
-    //     $ZfcUserMock = $this->getMock('ZfcUser\Entity\User');
+    //     $ZfcUserMock = $this->createMock('ZfcUser\Entity\User');
 
     //     $ZfcUserMock->expects($this->any())
     //     ->method('getId')
     //     ->will($this->returnValue('1'));
 
-    //     $authMock = $this->getMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+    //     $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
 
     //     $authMock->expects($this->any())
     //     ->method('hasIdentity')
@@ -191,7 +188,6 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $pluginManager = $this->getApplicationServiceLocator()->get('ControllerPluginManager');
 
         $game = new GameEntity();
-        $game->setFbFan(true);
         $game->setIdentifier('gameid');
         $game->setClassType('quiz');
         $game->setVictoryConditions(0);
@@ -205,13 +201,13 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
 
         $serviceManager->setService('playgroundgame_quiz_service', $f);
 
-        $ZfcUserMock = $this->getMock('ZfcUser\Entity\User');
+        $ZfcUserMock = $this->createMock('ZfcUser\Entity\User');
 
         $ZfcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->getMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -253,7 +249,6 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $pluginManager = $this->getApplicationServiceLocator()->get('ControllerPluginManager');
 
         $game = new GameEntity();
-        $game->setFbFan(true);
         $game->setIdentifier('gameid');
         $game->setClassType('quiz');
         $game->setStylesheet('skin');
@@ -271,13 +266,13 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
 
         $serviceManager->setService('playgroundgame_quiz_service', $f);
 
-        $ZfcUserMock = $this->getMock('ZfcUser\Entity\User');
+        $ZfcUserMock = $this->createMock('ZfcUser\Entity\User');
 
         $ZfcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->getMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -331,13 +326,13 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
          ->method('checkGame')
          ->will($this->returnValue(false));
 
-        $ZfcUserMock = $this->getMock('PlaygroundUser\Entity\User');
+        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
         $ZfcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->getMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -387,7 +382,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         ->method('findLastEntry')
         ->will($this->returnValue(false));
 
-        $ZfcUserMock = $this->getMock('ZfcUser\Entity\User');
+        $ZfcUserMock = $this->createMock('ZfcUser\Entity\User');
 
         $ZfcUserMock->expects($this->any())
         ->method('getId')
@@ -402,7 +397,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         ->method('shortenUrl')
         ->will($this->returnValue('http://shorturl.com/shurl'));
 
-        $authMock = $this->getMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('getIdentity')
@@ -443,13 +438,13 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
          ->method('checkGame')
          ->will($this->returnValue(false));
 
-        $ZfcUserMock = $this->getMock('PlaygroundUser\Entity\User');
+        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
         $ZfcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->getMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -490,13 +485,13 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue(false));
 
-        $ZfcUserMock = $this->getMock('PlaygroundUser\Entity\User');
+        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
         $ZfcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->getMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -542,13 +537,13 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue($game));
 
-        $ZfcUserMock = $this->getMock('PlaygroundUser\Entity\User');
+        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
         $ZfcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->getMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -597,13 +592,13 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue($game));
 
-        $ZfcUserMock = $this->getMock('PlaygroundUser\Entity\User');
+        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
         $ZfcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->getMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -667,13 +662,13 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
 //     	->method('checkGame')
 //     	->will($this->returnValue($game));
 
-//     	$ZfcUserMock = $this->getMock('PlaygroundUser\Entity\User');
+//     	$ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
 //     	$ZfcUserMock->expects($this->any())
 //     	->method('getId')
 //     	->will($this->returnValue('1'));
 
-//     	$authMock = $this->getMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+//     	$authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
 
 //     	$authMock->expects($this->any())
 //     	->method('hasIdentity')
@@ -750,13 +745,13 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue(false));
 
-        $ZfcUserMock = $this->getMock('PlaygroundUser\Entity\User');
+        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
         $ZfcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->getMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -819,13 +814,13 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue($game));
 
-        $ZfcUserMock = $this->getMock('PlaygroundUser\Entity\User');
+        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
         $ZfcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->getMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -892,13 +887,13 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue($game));
 
-        $ZfcUserMock = $this->getMock('PlaygroundUser\Entity\User');
+        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
         $ZfcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->getMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -967,13 +962,13 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue($game));
 
-        $ZfcUserMock = $this->getMock('PlaygroundUser\Entity\User');
+        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
         $ZfcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->getMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -1048,13 +1043,13 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue($game));
 
-        $ZfcUserMock = $this->getMock('PlaygroundUser\Entity\User');
+        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
         $ZfcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->getMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -1130,13 +1125,13 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue(false));
 
-        $ZfcUserMock = $this->getMock('PlaygroundUser\Entity\User');
+        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
         $ZfcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->getMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -1199,13 +1194,13 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue($game));
 
-        $ZfcUserMock = $this->getMock('PlaygroundUser\Entity\User');
+        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
         $ZfcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->getMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -1272,13 +1267,13 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue($game));
 
-        $ZfcUserMock = $this->getMock('PlaygroundUser\Entity\User');
+        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
         $ZfcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->getMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -1347,13 +1342,13 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue($game));
 
-        $ZfcUserMock = $this->getMock('PlaygroundUser\Entity\User');
+        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
         $ZfcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->getMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -1428,13 +1423,13 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue($game));
 
-        $ZfcUserMock = $this->getMock('PlaygroundUser\Entity\User');
+        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
         $ZfcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->getMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -1510,13 +1505,13 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue(false));
 
-        $ZfcUserMock = $this->getMock('PlaygroundUser\Entity\User');
+        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
         $ZfcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->getMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -1579,13 +1574,13 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue($game));
 
-        $ZfcUserMock = $this->getMock('PlaygroundUser\Entity\User');
+        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
         $ZfcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->getMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -1652,13 +1647,13 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue($game));
 
-        $ZfcUserMock = $this->getMock('PlaygroundUser\Entity\User');
+        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
         $ZfcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->getMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -1727,13 +1722,13 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue($game));
 
-        $ZfcUserMock = $this->getMock('PlaygroundUser\Entity\User');
+        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
         $ZfcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->getMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -1812,13 +1807,13 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
           ->method('addAnotherChance')
            ->will($this->returnValue($entry));
 
-        $ZfcUserMock = $this->getMock('PlaygroundUser\Entity\User');
+        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
         $ZfcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->getMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -1875,13 +1870,13 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue(false));
 
-        $ZfcUserMock = $this->getMock('PlaygroundUser\Entity\User');
+        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
         $ZfcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->getMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -1922,13 +1917,13 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue(false));
 
-        $ZfcUserMock = $this->getMock('PlaygroundUser\Entity\User');
+        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
         $ZfcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->getMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -1988,13 +1983,13 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         ->method('getServiceManager')
         ->will($this->returnValue($serviceManager));
 
-        $ZfcUserMock = $this->getMock('PlaygroundUser\Entity\User');
+        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
         $ZfcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->getMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -2004,7 +1999,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         ->method('getIdentity')
         ->will($this->returnValue($ZfcUserMock));
 
-        $partnerMock = $this->getMock('PlaygroundPartnership\View\Helper\PartnerSubscriber');
+        $partnerMock = $this->createMock('PlaygroundPartnership\View\Helper\PartnerSubscriber');
         $partnerMock->expects($this->any())
         ->method('__invoke')
         ->will($this->returnValue(false));
@@ -2043,13 +2038,13 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue(false));
 
-        $ZfcUserMock = $this->getMock('PlaygroundUser\Entity\User');
+        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
         $ZfcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->getMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -2100,13 +2095,13 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue($game));
 
-        $ZfcUserMock = $this->getMock('PlaygroundUser\Entity\User');
+        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
         $ZfcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->getMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -2152,13 +2147,13 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue(false));
 
-        $ZfcUserMock = $this->getMock('PlaygroundUser\Entity\User');
+        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
         $ZfcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->getMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -2208,13 +2203,13 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue($game));
 
-        $ZfcUserMock = $this->getMock('PlaygroundUser\Entity\User');
+        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
         $ZfcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->getMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -2256,9 +2251,9 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         
         $serviceManager->setService('playgroundgame_quiz_service', $f);
 
-        $ZfcUserMock = $this->getMock('PlaygroundUser\Entity\User');
+        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
-        $authMock = $this->getMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('getIdentity')
@@ -2305,13 +2300,13 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue(false));
 
-        $ZfcUserMock = $this->getMock('PlaygroundUser\Entity\User');
+        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
         $ZfcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->getMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -2357,13 +2352,13 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue($game));
 
-        $ZfcUserMock = $this->getMock('PlaygroundUser\Entity\User');
+        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
         $ZfcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->getMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -2430,13 +2425,13 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue($game));
 
-        $ZfcUserMock = $this->getMock('PlaygroundUser\Entity\User');
+        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
         $ZfcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->getMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -2482,13 +2477,13 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue(false));
 
-        $ZfcUserMock = $this->getMock('PlaygroundUser\Entity\User');
+        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
         $ZfcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->getMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -2552,13 +2547,13 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue($game));
 
-        $ZfcUserMock = $this->getMock('PlaygroundUser\Entity\User');
+        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
         $ZfcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->getMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -2628,13 +2623,13 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue($game));
 
-        $ZfcUserMock = $this->getMock('PlaygroundUser\Entity\User');
+        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
         $ZfcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->getMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')

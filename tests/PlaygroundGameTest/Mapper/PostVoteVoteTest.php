@@ -5,7 +5,7 @@ namespace PlaygroundGameTest\Mapper;
 use \PlaygroundGame\Entity\PostVoteVote as PostVoteVoteEntity;
 use PlaygroundGameTest\Bootstrap;
 
-class PostVoteVoteTest extends \PHPUnit_Framework_TestCase
+class PostVoteVoteTest extends \PHPUnit\Framework\TestCase
 {
     protected $traceError = true;
 

@@ -5,7 +5,7 @@ namespace PlaygroundGameTest\Mapper;
 use \PlaygroundGame\Entity\quizreply as QuizReplyEntity;
 use PlaygroundGameTest\Bootstrap;
 
-class QuizReplyTest extends \PHPUnit_Framework_TestCase
+class QuizReplyTest extends \PHPUnit\Framework\TestCase
 {
     protected $traceError = true;
 

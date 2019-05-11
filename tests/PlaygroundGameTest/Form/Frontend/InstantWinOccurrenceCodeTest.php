@@ -5,7 +5,7 @@ namespace PlaygroundGameTest\Form\Frontend;
 use PlaygroundGameTest\Bootstrap;
 use PlaygroundGame\Form\Frontend\InstantWinOccurrenceCode;
 
-class InstantWinOccurrenceCodeTest extends \PHPUnit_Framework_TestCase
+class InstantWinOccurrenceCodeTest extends \PHPUnit\Framework\TestCase
 {
     protected $sm;
 
