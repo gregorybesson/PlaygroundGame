@@ -5,7 +5,7 @@ namespace PlaygroundGameTest\Service;
 use PlaygroundGameTest\Bootstrap;
 use \PlaygroundGame\Entity\Lottery as GameEntity;
 
-class GameTest extends \PHPUnit_Framework_TestCase
+class GameTest extends \PHPUnit\Framework\TestCase
 {
     protected $traceError = true;
 
@@ -255,7 +255,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
             }
             return $ok;
         }))
-        ->will($this->returnValue($this->getMock('PlaygroundGame\Entity\Entry')));
+        ->will($this->returnValue($this->createMock('PlaygroundGame\Entity\Entry')));
 
         $gs->checkExistingEntry($game, true, null);
     }
@@ -286,7 +286,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
             }
             return $ok;
         }))
-        ->will($this->returnValue($this->getMock('PlaygroundGame\Entity\Entry')));
+        ->will($this->returnValue($this->createMock('PlaygroundGame\Entity\Entry')));
 
         $gs->checkExistingEntry($game, true, null, 1);
     }

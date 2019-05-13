@@ -4,12 +4,12 @@ namespace PlaygroundGameTest\Controller\Admin;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use PlaygroundGameTest\Bootstrap;
-use \PlaygroundGame\Entity\Game as GameEntity;
+use PlaygroundGame\Entity\Game as GameEntity;
 use PlaygroundGame\Controller\Admin\GameController;
 use Zend\Http\Request;
 use Zend\Http\Response;
 use Zend\Mvc\MvcEvent;
-use Zend\Mvc\Router\RouteMatch;
+use Zend\Router\Http\RouteMatch;
 
 class GameControllerTest extends AbstractHttpControllerTestCase
 {

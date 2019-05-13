@@ -5,7 +5,7 @@ namespace PlaygroundGameTest\Entity;
 use PlaygroundGameTest\Bootstrap;
 use PlaygroundGame\Entity\QuizQuestion;
 
-class QuizQuestionTest extends \PHPUnit_Framework_TestCase
+class QuizQuestionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Service Manager
