@@ -6,7 +6,7 @@ use \PlaygroundGame\Entity\PostVotePostElement as PostVotePostElementEntity;
 use \PlaygroundGame\Entity\PostVotePost as PostVotePostEntity;
 use PlaygroundGameTest\Bootstrap;
 
-class PostVotePostElementTest extends \PHPUnit_Framework_TestCase
+class PostVotePostElementTest extends \PHPUnit\Framework\TestCase
 {
     protected $traceError = true;
 

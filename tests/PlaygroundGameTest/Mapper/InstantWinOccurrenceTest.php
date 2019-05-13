@@ -5,7 +5,7 @@ namespace PlaygroundGameTest\Mapper;
 use PlaygroundGame\Entity\InstantWin;
 use PlaygroundGameTest\Bootstrap;
 
-class InstantWinOccurrenceTest extends \PHPUnit_Framework_TestCase
+class InstantWinOccurrenceTest extends \PHPUnit\Framework\TestCase
 {
     protected $traceError = true;
 

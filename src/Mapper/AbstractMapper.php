@@ -97,4 +97,12 @@ abstract class AbstractMapper
         $this->em->remove($entity);
         $this->em->flush();
     }
+
+    public function removeAll($entities)
+    {
+        foreach ($entities as $entity) {
+            $this->em->remove($entity);
+        }
+        $this->em->flush();
+    }
 }

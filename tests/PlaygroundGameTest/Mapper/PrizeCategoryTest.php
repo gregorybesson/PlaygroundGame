@@ -5,7 +5,7 @@ namespace PlaygroundGameTest\Mapper;
 use \PlaygroundGame\Entity\PrizeCategory as PrizeCategoryEntity;
 use PlaygroundGameTest\Bootstrap;
 
-class PrizeCategoryTest extends \PHPUnit_Framework_TestCase
+class PrizeCategoryTest extends \PHPUnit\Framework\TestCase
 {
     protected $traceError = true;
 
@@ -13,7 +13,7 @@ class PrizeCategoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->sm = Bootstrap::getServiceManager();
         $this->em = $this->sm->get('doctrine.entitymanager.orm_default');
-        $this->tm = $this->sm->get('playgroundgame_prizeCategory_mapper');
+        $this->tm = $this->sm->get('playgroundgame_prizecategory_mapper');
         $tool = new \Doctrine\ORM\Tools\SchemaTool($this->em);
         $classes = $this->em->getMetadataFactory()->getAllMetadata();
         $tool->dropSchema($classes);

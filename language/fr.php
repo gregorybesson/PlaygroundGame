@@ -298,6 +298,8 @@ return array(
     'Customer' => 'Client',
     'What player type can participate' => 'Quel type de joueur peut participer',
     'Player type who can participate' => 'Type de joueur pouvant participer',
+    'Number occurrences' => "Nombre d'occurences",
+    'If you set the auto occurrence, and let the number of occurrences to 0,  the number of occurrences to generate will be automatically taken from the prizes set in the prizes tab.' => "Si vous activez la génération automatique des occurences et laissez le nombre d'occurences à créer à 0, les occurences seront créées à partir des quantités de lots définies dans l'onglet 'lots'",
 
 
     // Admin Instantwin occurrence

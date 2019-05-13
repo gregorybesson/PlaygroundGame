@@ -6,7 +6,7 @@ use PlaygroundGameTest\Bootstrap;
 use PlaygroundGame\Form\Admin\QuizQuestion;
 use PlaygroundGame\Entity\QuizQuestion as QuizQuestionEntity;
 
-class QuizQuestionTest extends \PHPUnit_Framework_TestCase
+class QuizQuestionTest extends \PHPUnit\Framework\TestCase
 {
     protected $sm;
 

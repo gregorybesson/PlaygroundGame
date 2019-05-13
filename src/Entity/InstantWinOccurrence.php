@@ -29,7 +29,7 @@ class InstantWinOccurrence implements InputFilterAwareInterface, \JsonSerializab
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="InstantWin", inversedBy="occurrences", cascade={"persist","remove"})
+     * @ORM\ManyToOne(targetEntity="InstantWin", inversedBy="occurrences", cascade={"persist"})
      * @ORM\JoinColumn(name="instantwin_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $instantwin;
