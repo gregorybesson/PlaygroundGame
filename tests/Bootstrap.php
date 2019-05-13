@@ -24,19 +24,19 @@ class Bootstrap
             $testConfig = include __DIR__ . '/TestConfig.php.dist';
         }
 
-        $zf2ModulePaths = array();
+        $zf3ModulePaths = array();
 
         if (isset($testConfig['module_listener_options']['module_paths'])) {
             $modulePaths = $testConfig['module_listener_options']['module_paths'];
             foreach ($modulePaths as $modulePath) {
                 if (($path = static::findParentPath($modulePath))) {
-                    $zf2ModulePaths[] = $path;
+                    $zf3ModulePaths[] = $path;
                 }
             }
         }
 
-        $zf2ModulePaths  = implode(PATH_SEPARATOR, $zf2ModulePaths) . PATH_SEPARATOR;
-        $zf2ModulePaths .= getenv('ZF2_MODULES_TEST_PATHS') ?: (defined('ZF2_MODULES_TEST_PATHS')?
+        $zf3ModulePaths  = implode(PATH_SEPARATOR, $zf3ModulePaths) . PATH_SEPARATOR;
+        $zf3ModulePaths .= getenv('ZF2_MODULES_TEST_PATHS') ?: (defined('ZF2_MODULES_TEST_PATHS')?
             ZF2_MODULES_TEST_PATHS :
             ''
         );
@@ -46,7 +46,7 @@ class Bootstrap
         // use ModuleManager to load this module and it's dependencies
         $baseConfig = array(
             'module_listener_options' => array(
-                'module_paths' => explode(PATH_SEPARATOR, $zf2ModulePaths),
+                'module_paths' => explode(PATH_SEPARATOR, $zf3ModulePaths),
             ),
         );
 

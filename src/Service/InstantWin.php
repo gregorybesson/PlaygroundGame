@@ -553,8 +553,12 @@ class InstantWin extends Game
             if ($occurrence->getWinning()) {
                 $entry->setWinner(true);
             } else {
-                $entry->setPoints(0);
                 $entry->setWinner(false);
+            }
+            if ($occurrence->getPrize()) {
+                $entry->setPoints($occurrence->getPrize()->getPoints());
+            } else {
+                $entry->setPoints(0);
             }
         } else {
             $entry->setPoints(0);
