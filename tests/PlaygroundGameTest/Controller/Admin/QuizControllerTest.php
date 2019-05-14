@@ -18,8 +18,8 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         parent::setUp();
     }
 
-    public function testAddQuestionAction()
-    {
+    //public function testAddQuestionAction()
+    //{
         /*
 
         La vue n'est pas mockable
@@ -75,7 +75,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $this->assertControllerClass('QuizController');
         $this->assertActionName('addQuestion');
         //$this->assertMatchedRouteName('frontend/lottery');*/
-    }
+    //}
 
     public function testRemoveQuestionAction()
     {

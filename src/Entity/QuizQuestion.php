@@ -30,7 +30,7 @@ class QuizQuestion implements InputFilterAwareInterface
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Quiz", inversedBy="questions")
+     * @ORM\ManyToOne(targetEntity="Quiz", inversedBy="questions", cascade={"persist"})
      * @ORM\JoinColumn(name="quiz_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $quiz;
