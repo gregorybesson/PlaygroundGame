@@ -510,39 +510,45 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         $game->setActive(true);
         $game->setIdentifier('gameid');
 
+        $fr = function($game, $user, &$error)
+        {
+            $error = -1;
+            return false;
+        };
+
         $f = $this->getMockBuilder('PlaygroundGame\Service\Game')
-        ->setMethods(array('checkGame', 'checkIsFan', 'checkExistingEntry', 'getServiceManager', 'play'))
-        ->disableOriginalConstructor()
-        ->getMock();
+            ->setMethods(array('checkGame', 'checkIsFan', 'checkExistingEntry', 'getServiceManager', 'play'))
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $serviceManager->setService('playgroundgame_lottery_service', $f);
 
         // I check that the array in findOneBy contains the parameter 'active' = 1
         $f->expects($this->once())
-        ->method('checkGame')
-        ->will($this->returnValue($game));
+            ->method('checkGame')
+            ->will($this->returnValue($game));
 
         $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
         $ZfcUserMock->expects($this->any())
-        ->method('getId')
-        ->will($this->returnValue('1'));
+            ->method('getId')
+            ->will($this->returnValue('1'));
 
         $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
 
         $authMock->expects($this->any())
-        ->method('hasIdentity')
-        -> will($this->returnValue(true));
+            ->method('hasIdentity')
+            -> will($this->returnValue(true));
 
         $authMock->expects($this->any())
-        ->method('getIdentity')
-        ->will($this->returnValue($ZfcUserMock));
+            ->method('getIdentity')
+            ->will($this->returnValue($ZfcUserMock));
 
         $pluginManager->setService('zfcUserAuthentication', $authMock);
 
         $f->expects($this->once())
-        ->method('play')
-        ->will($this->returnValue(false));
+            ->method('play')
+            ->will($this->returnCallback($fr));
 
         $this->dispatch('/loterie/gameid/jouer');
 
@@ -552,7 +558,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         $this->assertActionName('play');
         $this->assertMatchedRouteName('frontend/lottery/play');
 
-        $this->assertRedirectTo('/loterie/gameid/resultat');
+        $this->assertRedirectTo('/loterie/gameid/resultat?playLimitReached=1');
     }
 
     public function testPlayActionEntry()
@@ -1900,49 +1906,50 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         $this->assertQuery('#subtitle-test');
     }
 
-    public function testFangateAction()
-    {
-        $serviceManager = $this->getApplicationServiceLocator();
-        $serviceManager->setAllowOverride(true);
+    // deprecated
+    // public function testFangateAction()
+    // {
+    //     $serviceManager = $this->getApplicationServiceLocator();
+    //     $serviceManager->setAllowOverride(true);
         
-        $pluginManager    = $this->getApplicationServiceLocator()->get('ControllerPluginManager');
+    //     $pluginManager    = $this->getApplicationServiceLocator()->get('ControllerPluginManager');
         
-        $game = new GameEntity();
+    //     $game = new GameEntity();
         
-        $f = $this->getMockBuilder('PlaygroundGame\Service\Game')
-        ->setMethods(array('checkGame', 'checkIsFan', 'checkExistingEntry', 'getServiceManager'))
-        ->disableOriginalConstructor()
-        ->getMock();
+    //     $f = $this->getMockBuilder('PlaygroundGame\Service\Game')
+    //     ->setMethods(array('checkGame', 'checkIsFan', 'checkExistingEntry', 'getServiceManager'))
+    //     ->disableOriginalConstructor()
+    //     ->getMock();
         
-        $serviceManager->setService('playgroundgame_lottery_service', $f);
+    //     $serviceManager->setService('playgroundgame_lottery_service', $f);
 
-        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
+    //     $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
-        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+    //     $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
 
-        $authMock->expects($this->any())
-        ->method('getIdentity')
-        ->will($this->returnValue(false));
+    //     $authMock->expects($this->any())
+    //     ->method('getIdentity')
+    //     ->will($this->returnValue(false));
 
-        $pluginManager->setService('zfcUserAuthentication', $authMock);
+    //     $pluginManager->setService('zfcUserAuthentication', $authMock);
         
-        // I check that the array in findOneBy contains the parameter 'active' = 1
-        $f->expects($this->once())
-        ->method('checkGame')
-        ->will($this->returnValue($game));
+    //     // I check that the array in findOneBy contains the parameter 'active' = 1
+    //     $f->expects($this->once())
+    //     ->method('checkGame')
+    //     ->will($this->returnValue($game));
 
-        $f->expects($this->any())
-        ->method('getServiceManager')
-        ->will($this->returnValue($serviceManager));
+    //     $f->expects($this->any())
+    //     ->method('getServiceManager')
+    //     ->will($this->returnValue($serviceManager));
         
-        $this->dispatch('/loterie/gameid/fangate');
+    //     $this->dispatch('/loterie/gameid/fangate');
 
-        $this->assertModuleName('playgroundgame');
-        $this->assertControllerName('playgroundgame\controller\frontend\lottery');
-        $this->assertControllerClass('LotteryController');
-        $this->assertActionName('fangate');
-        $this->assertMatchedRouteName('frontend/lottery/fangate');
-    }
+    //     $this->assertModuleName('playgroundgame');
+    //     $this->assertControllerName('playgroundgame\controller\frontend\lottery');
+    //     $this->assertControllerClass('LotteryController');
+    //     $this->assertActionName('fangate');
+    //     $this->assertMatchedRouteName('frontend/lottery/fangate');
+    // }
 
     public function testPrizesActionNonExistentGame()
     {

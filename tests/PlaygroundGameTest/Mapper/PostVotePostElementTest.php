@@ -46,6 +46,7 @@ class PostVotePostElementTest extends \PHPUnit\Framework\TestCase
     {
         $postvotepostelement = new PostVotePostElementEntity();
         $postvotepostelement->setName('Name');
+        $postvotepostelement->setId(10);
         $postvotepostelement = $this->tm->update($postvotepostelement);
         $id = $postvotepostelement->getId();
         $this->tm->remove($postvotepostelement);

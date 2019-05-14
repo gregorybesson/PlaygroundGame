@@ -349,28 +349,41 @@ class GameTest extends \PHPUnit\Framework\TestCase
     public function testPlayNonExistingEntry()
     {
         $mapper = $this->getMockBuilder('PlaygroundGame\Mapper\Entry')
-        ->disableOriginalConstructor()
-        ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $game = new GameEntity();
 
         //mocking the method checkExistingEntry
         $f = $this->getMockBuilder('PlaygroundGame\Service\Game')
-        ->setMethods(array('checkExistingEntry'))
-        ->disableOriginalConstructor()
-        ->getMock();
+            ->setMethods(array('checkExistingEntry', 'getEventManager'))
+            ->disableOriginalConstructor()
+            ->getMock();
+        
+        $e = $this->getMockBuilder('Zend\EventManager\EventManager')
+            ->setMethods(array('trigger'))
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $f->setEntryMapper($mapper);
 
         // I check that the array in findOneBy contains the parameter 'active' = 1
         $f->expects($this->once())
-        ->method('checkExistingEntry')
-        ->will($this->returnValue(false));
+            ->method('checkExistingEntry')
+            ->will($this->returnValue(false));
+        
+        $f->expects($this->once())
+            ->method('getEventManager')
+            ->will($this->returnValue($e));
+        
+        $e->expects($this->once())
+            ->method('trigger')
+            ->will($this->returnValue(true));
 
         $f->getEntryMapper()
-        ->expects($this->once())
-        ->method('insert')
-        ->will($this->returnValue(new \PlaygroundGame\Entity\Entry));
+            ->expects($this->once())
+            ->method('insert')
+            ->will($this->returnValue(new \PlaygroundGame\Entity\Entry));
 
         $entry = $f->play($game, null);
 
@@ -410,8 +423,8 @@ class GameTest extends \PHPUnit\Framework\TestCase
     public function testPlayNonExistingEntryWithUnderLimit()
     {
         $mapper = $this->getMockBuilder('PlaygroundGame\Mapper\Entry')
-        ->disableOriginalConstructor()
-        ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $game = new GameEntity();
         $game->setPlayLimit(1);
@@ -419,25 +432,34 @@ class GameTest extends \PHPUnit\Framework\TestCase
 
         //mocking the method checkExistingEntry
         $f = $this->getMockBuilder('PlaygroundGame\Service\Game')
-        ->setMethods(array('checkExistingEntry', 'findLastEntries'))
-        ->disableOriginalConstructor()
-        ->getMock();
+            ->setMethods(array('checkExistingEntry', 'findLastEntries', 'getEventManager'))
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $e = $this->getMockBuilder('Zend\EventManager\EventManager')
+            ->setMethods(array('trigger'))
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $f->setEntryMapper($mapper);
 
         // I check that the array in findOneBy contains the parameter 'active' = 1
         $f->expects($this->once())
-        ->method('checkExistingEntry')
-        ->will($this->returnValue(false));
+            ->method('checkExistingEntry')
+            ->will($this->returnValue(false));
+
+        $f->expects($this->once())
+            ->method('getEventManager')
+            ->will($this->returnValue($e));
         
         $f->expects($this->once())
-        ->method('findLastEntries')
-        ->will($this->returnValue(0));
+            ->method('findLastEntries')
+            ->will($this->returnValue(0));
 
         $f->getEntryMapper()
-        ->expects($this->once())
-        ->method('insert')
-        ->will($this->returnValue(new \PlaygroundGame\Entity\Entry));
+            ->expects($this->once())
+            ->method('insert')
+            ->will($this->returnValue(new \PlaygroundGame\Entity\Entry));
 
         $entry = $f->play($game, null);
 

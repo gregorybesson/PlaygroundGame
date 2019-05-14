@@ -622,7 +622,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $this->assertActionName('play');
         $this->assertMatchedRouteName('frontend/quiz/play');
 
-        $this->assertRedirectTo('/quiz/gameid/resultat');
+        $this->assertRedirectTo('/quiz/gameid?Error=1');
     }
 
 //     public function testPlayActionEntry()
@@ -2235,49 +2235,50 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $this->assertQuery('#subtitle-test');
     }
 
-    public function testFangateAction()
-    {
-        $serviceManager = $this->getApplicationServiceLocator();
-        $serviceManager->setAllowOverride(true);
+    // DEPRECATED
+    // public function testFangateAction()
+    // {
+    //     $serviceManager = $this->getApplicationServiceLocator();
+    //     $serviceManager->setAllowOverride(true);
 
-        $pluginManager    = $this->getApplicationServiceLocator()->get('ControllerPluginManager');
+    //     $pluginManager    = $this->getApplicationServiceLocator()->get('ControllerPluginManager');
         
-        $game = new GameEntity();
+    //     $game = new GameEntity();
         
-        $f = $this->getMockBuilder('PlaygroundGame\Service\Game')
-        ->setMethods(array('checkGame', 'checkIsFan', 'checkExistingEntry', 'getServiceManager'))
-        ->disableOriginalConstructor()
-        ->getMock();
+    //     $f = $this->getMockBuilder('PlaygroundGame\Service\Game')
+    //     ->setMethods(array('checkGame', 'checkIsFan', 'checkExistingEntry', 'getServiceManager'))
+    //     ->disableOriginalConstructor()
+    //     ->getMock();
         
-        $serviceManager->setService('playgroundgame_quiz_service', $f);
+    //     $serviceManager->setService('playgroundgame_quiz_service', $f);
 
-        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
+    //     $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
-        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+    //     $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
 
-        $authMock->expects($this->any())
-        ->method('getIdentity')
-        ->will($this->returnValue(false));
+    //     $authMock->expects($this->any())
+    //     ->method('getIdentity')
+    //     ->will($this->returnValue(false));
 
-        $pluginManager->setService('zfcUserAuthentication', $authMock);
+    //     $pluginManager->setService('zfcUserAuthentication', $authMock);
         
-        // I check that the array in findOneBy contains the parameter 'active' = 1
-        $f->expects($this->once())
-        ->method('checkGame')
-        ->will($this->returnValue($game));
+    //     // I check that the array in findOneBy contains the parameter 'active' = 1
+    //     $f->expects($this->once())
+    //     ->method('checkGame')
+    //     ->will($this->returnValue($game));
 
-        $f->expects($this->any())
-        ->method('getServiceManager')
-        ->will($this->returnValue($serviceManager));
+    //     $f->expects($this->any())
+    //     ->method('getServiceManager')
+    //     ->will($this->returnValue($serviceManager));
         
-        $this->dispatch('/quiz/gameid/fangate');
+    //     $this->dispatch('/quiz/gameid/fangate');
 
-        $this->assertModuleName('playgroundgame');
-        $this->assertControllerName('playgroundgame\controller\frontend\quiz');
-        $this->assertControllerClass('QuizController');
-        $this->assertActionName('fangate');
-        $this->assertMatchedRouteName('frontend/quiz/fangate');
-    }
+    //     $this->assertModuleName('playgroundgame');
+    //     $this->assertControllerName('playgroundgame\controller\frontend\quiz');
+    //     $this->assertControllerClass('QuizController');
+    //     $this->assertActionName('fangate');
+    //     $this->assertMatchedRouteName('frontend/quiz/fangate');
+    // }
 
     public function testPrizesActionNonExistentGame()
     {

@@ -67,15 +67,7 @@ abstract class AbstractMapper
 
     public function insert($entity)
     {
-        try {
-            $entity = $this->persist($entity);
-        } catch (DBALException $e) {
-            throw $e;
-        } catch (\Exception $e) {
-            throw $e;
-        }
-
-        return $entity;
+        return $this->persist($entity);
     }
 
     protected function persist($entity)

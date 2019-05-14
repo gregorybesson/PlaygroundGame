@@ -61,7 +61,7 @@ class QuizTest extends AbstractHttpControllerTestCase
             'submit' => '',
             'quiz_id' => '3',
             'type' => '0',
-            'question' => '<p>Question ?</p>',
+            //'question' => '<p>Question ?</p>',
             'hint' => '',
             'timer_duration' => '',
             'position' => '0',
@@ -131,15 +131,16 @@ class QuizTest extends AbstractHttpControllerTestCase
     {
         $quiz = new QuizEntity();
         $quiz->setTitle("title");
+        $quiz->setIdentifier("identifier");
         $startDate = new \DateTime("now");
         $quiz->setStartDate($startDate);
 
         $gameMapper = $this->getMockBuilder('PlaygroundGame\Mapper\Game')
-        ->disableOriginalConstructor()
-        ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $gameMapper->expects($this->any())
-        ->method('findById')
-        ->will($this->returnValue($quiz));
+            ->method('findById')
+            ->will($this->returnValue($quiz));
 
         $this->getServiceManager()->setService('playgroundgame_game_mapper', $gameMapper);
         $qs = new \PlaygroundGame\Service\Quiz($this->getServiceManager());

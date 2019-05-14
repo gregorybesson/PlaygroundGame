@@ -58,6 +58,15 @@ class QuizController extends GameController
                         'id' => $this->game->getIdentifier(),
                     )
                 ) .$reason;
+            } else {
+                $this->flashMessenger()->addMessage("An error occurred. Please try again later");
+                $reason = '?Error=1';
+                $noEntryRedirect = $this->frontendUrl()->fromRoute(
+                    $this->game->getClassType(),
+                    array(
+                        'id' => $this->game->getIdentifier(),
+                    )
+                ) .$reason;
             }
 
             return $this->redirect()->toUrl($noEntryRedirect);

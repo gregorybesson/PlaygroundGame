@@ -525,15 +525,15 @@ class GameController extends AbstractActionController
         if (isset($config['facebook'])) {
             $platformFbAppId     = $config['facebook']['fb_appid'];
             $platformFbAppSecret = $config['facebook']['fb_secret'];
-        }
-        $fb = new \Facebook\Facebook([
-            'app_id' => $platformFbAppId,
-            'app_secret' => $platformFbAppSecret,
-            'default_graph_version' => 'v3.1',
-        ]);
+            $fb = new \Facebook\Facebook([
+                'app_id' => $platformFbAppId,
+                'app_secret' => $platformFbAppSecret,
+                'default_graph_version' => 'v3.1',
+            ]);
 
-        $helper = $fb->getRedirectLoginHelper();
-        $accessToken = $helper->getAccessToken();
+            $helper = $fb->getRedirectLoginHelper();
+            $accessToken = $helper->getAccessToken();
+        }
 
         if (isset($accessToken) || $session->offsetExists('fb_token')) {
             if (isset($accessToken)) {
