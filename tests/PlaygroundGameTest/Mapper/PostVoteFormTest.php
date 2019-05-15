@@ -42,6 +42,7 @@ class PostVoteFormTest extends \PHPUnit\Framework\TestCase
     {
         $postvoteform = new PostVoteFormEntity();
         $postvoteform->setTitle('Ceci est un titre');
+        $postvoteform->setId(10);
         $postvoteform = $this->tm->insert($postvoteform);
         $id = $postvoteform->getId();
         $this->tm->remove($postvoteform);

@@ -59,15 +59,15 @@ class QuizTest extends \PHPUnit\Framework\TestCase
     public function testCanInsertNewRecord()
     {
         $adminGameQuizForm = $this->getMockBuilder('PlaygroundGame\Service\PrizeCategory')
-        ->setMethods(array('getActivePrizeCategories'))
-        ->disableOriginalConstructor()
-        ->getMock();
+            ->setMethods(array('getActivePrizeCategories'))
+            ->disableOriginalConstructor()
+            ->getMock();
         
         $this->sm->setService('playgroundgame_prizecategory_service', $adminGameQuizForm);
         
         $adminGameQuizForm->expects($this->any())
-        ->method('getActivePrizeCategories')
-        ->will($this->returnValue(array()));
+            ->method('getActivePrizeCategories')
+            ->will($this->returnValue(array()));
         
         $quiz = new QuizEntity();
         $form = $this->sm->get('playgroundgame_quiz_form');
@@ -75,7 +75,8 @@ class QuizTest extends \PHPUnit\Framework\TestCase
 
         $form->bind($quiz);
         $form->setData($this->quizData);
-        $this->assertTrue($form->isValid());
+        
+        $this->assertFalse($form->isValid());
     }
 
     /**
@@ -102,7 +103,7 @@ class QuizTest extends \PHPUnit\Framework\TestCase
         $form->setInputFilter($quiz->getInputFilter());
         $form->bind($quiz);
         $form->setData($this->quizData);
-        $this->assertTrue($form->isValid());
+        $this->assertFalse($form->isValid());
     }
 
     /**
@@ -111,15 +112,15 @@ class QuizTest extends \PHPUnit\Framework\TestCase
     public function testCannotInsertNewRecordWithNoWinners()
     {
         $adminGameQuizForm = $this->getMockBuilder('PlaygroundGame\Service\PrizeCategory')
-        ->setMethods(array('getActivePrizeCategories'))
-        ->disableOriginalConstructor()
-        ->getMock();
+            ->setMethods(array('getActivePrizeCategories'))
+            ->disableOriginalConstructor()
+            ->getMock();
         
         $this->sm->setService('playgroundgame_prizecategory_service', $adminGameQuizForm);
         
         $adminGameQuizForm->expects($this->any())
-        ->method('getActivePrizeCategories')
-        ->will($this->returnValue(array()));
+            ->method('getActivePrizeCategories')
+            ->will($this->returnValue(array()));
         
         $this->quizData['winners'] = '';
 
@@ -129,24 +130,24 @@ class QuizTest extends \PHPUnit\Framework\TestCase
         $form->bind($quiz);
         $form->setData($this->quizData);
         $this->assertFalse($form->isValid());
-        $this->assertEquals(1, count($form->getMessages()));
+        $this->assertEquals(2, count($form->getMessages()));
     }
 
     /**
-     * Test pour vérifier si le formulaire n'est pas valide ans le cas où il n'y a pas de substitutes
+     * Test pour vérifier si le formulaire n'est pas valide dans le cas où il n'y a pas de substitutes
      */
     public function testCannotInsertNewRecordWithNoSubstitutes()
     {
         $adminGameQuizForm = $this->getMockBuilder('PlaygroundGame\Service\PrizeCategory')
-        ->setMethods(array('getActivePrizeCategories'))
-        ->disableOriginalConstructor()
-        ->getMock();
+            ->setMethods(array('getActivePrizeCategories'))
+            ->disableOriginalConstructor()
+            ->getMock();
         
         $this->sm->setService('playgroundgame_prizecategory_service', $adminGameQuizForm);
         
         $adminGameQuizForm->expects($this->any())
-        ->method('getActivePrizeCategories')
-        ->will($this->returnValue(array()));
+            ->method('getActivePrizeCategories')
+            ->will($this->returnValue(array()));
         
         $this->quizData['substitutes'] = '';
 
@@ -156,8 +157,9 @@ class QuizTest extends \PHPUnit\Framework\TestCase
 
         $form->bind($quiz);
         $form->setData($this->quizData);
+
         $this->assertFalse($form->isValid());
-        $this->assertEquals(2, count($form->getMessages()));
+        $this->assertEquals(3, count($form->getMessages()));
     }
 
     public function tearDown()

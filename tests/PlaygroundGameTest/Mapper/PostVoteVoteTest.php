@@ -42,6 +42,7 @@ class PostVoteVoteTest extends \PHPUnit\Framework\TestCase
     {
         $postvotevote = new PostVoteVoteEntity();
         $postvotevote->setUser(null);
+        $postvotevote->setId(10);
         $postvotevote = $this->tm->insert($postvotevote);
         $id = $postvotevote->getId();
         $this->tm->remove($postvotevote);

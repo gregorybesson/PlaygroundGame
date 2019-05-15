@@ -325,11 +325,11 @@ class GameControllerTest extends AbstractHttpControllerTestCase
         $this->assertControllerClass('GameController');
         $this->assertActionName('remove');
 
-        $this->assertRedirectTo('/admin/game/list/createdAt/DESC');
+        $this->assertRedirectTo('/fr_FR/admin/game/list/createdAt/DESC');
     }
 
-    public function testSetActiveAction()
-    {
+    // public function testSetActiveAction()
+    // {
         /*$serviceManager = $this->getApplicationServiceLocator();
         $serviceManager->setAllowOverride(true);
 
@@ -369,7 +369,7 @@ class GameControllerTest extends AbstractHttpControllerTestCase
         $this->assertActionName('set-active');
 
         $this->assertRedirectTo('/admin/game/list/createdAt/DESC');*/
-    }
+    //}
 
     public function tearDown()
     {
