@@ -627,22 +627,22 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
 
 //     public function testPlayActionEntry()
 //     {
-//     	$serviceManager = $this->getApplicationServiceLocator();
-//     	$serviceManager->setAllowOverride(true);
+//      $serviceManager = $this->getApplicationServiceLocator();
+//      $serviceManager->setAllowOverride(true);
 
-//     	$pluginManager    = $this->getApplicationServiceLocator()->get('ControllerPluginManager');
+//      $pluginManager    = $this->getApplicationServiceLocator()->get('ControllerPluginManager');
 
-//     	$game = new GameEntity();
-//     	$game->setBroadcastPlatform(true);
-//     	$game->setActive(true);
-//     	$game->setIdentifier('gameid');
-//     	$game->setVictoryConditions(0);
-//     	$game->setQuestions(array());
+//      $game = new GameEntity();
+//      $game->setBroadcastPlatform(true);
+//      $game->setActive(true);
+//      $game->setIdentifier('gameid');
+//      $game->setVictoryConditions(0);
+//      $game->setQuestions(array());
 
-//     	$entry = new \PlaygroundGame\Entity\Entry();
+//      $entry = new \PlaygroundGame\Entity\Entry();
 
-//     	$f = $this->getMockBuilder('PlaygroundGame\Service\Game')
-//     	->setMethods(
+//      $f = $this->getMockBuilder('PlaygroundGame\Service\Game')
+//      ->setMethods(
     //     array(
     //         'checkGame',
     //         'checkIsFan',
@@ -652,61 +652,61 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
     //         'play'
     //     )
     // )
-//     	->disableOriginalConstructor()
-//     	->getMock();
+//      ->disableOriginalConstructor()
+//      ->getMock();
 
-//     	$serviceManager->setService('playgroundgame_quiz_service', $f);
+//      $serviceManager->setService('playgroundgame_quiz_service', $f);
 
-//     	// I check that the array in findOneBy contains the parameter 'active' = 1
-//     	$f->expects($this->once())
-//     	->method('checkGame')
-//     	->will($this->returnValue($game));
+//      // I check that the array in findOneBy contains the parameter 'active' = 1
+//      $f->expects($this->once())
+//      ->method('checkGame')
+//      ->will($this->returnValue($game));
 
-//     	$ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
+//      $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
-//     	$ZfcUserMock->expects($this->any())
-//     	->method('getId')
-//     	->will($this->returnValue('1'));
+//      $ZfcUserMock->expects($this->any())
+//      ->method('getId')
+//      ->will($this->returnValue('1'));
 
-//     	$authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+//      $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
 
-//     	$authMock->expects($this->any())
-//     	->method('hasIdentity')
-//     	-> will($this->returnValue(true));
+//      $authMock->expects($this->any())
+//      ->method('hasIdentity')
+//      -> will($this->returnValue(true));
 
-//     	$authMock->expects($this->any())
-//     	->method('getIdentity')
-//     	->will($this->returnValue($ZfcUserMock));
+//      $authMock->expects($this->any())
+//      ->method('getIdentity')
+//      ->will($this->returnValue($ZfcUserMock));
 
-//     	$pluginManager->setService('zfcUserAuthentication', $authMock);
+//      $pluginManager->setService('zfcUserAuthentication', $authMock);
 
-//     	$f->expects($this->once())
-//     	->method('play')
-//     	->will($this->returnValue($entry));
+//      $f->expects($this->once())
+//      ->method('play')
+//      ->will($this->returnValue($entry));
 
-//     	$entryMock = $this->getMockBuilder('PlaygroundGame\Mapper\Entry')
-//     	->disableOriginalConstructor()
-//     	->getMock();
+//      $entryMock = $this->getMockBuilder('PlaygroundGame\Mapper\Entry')
+//      ->disableOriginalConstructor()
+//      ->getMock();
 
-//     	$f->expects($this->once())
-//     	->method('getEntryMapper')
-//     	->will($this->returnValue($entryMock));
+//      $f->expects($this->once())
+//      ->method('getEntryMapper')
+//      ->will($this->returnValue($entryMock));
 
-//     	$entryMock->expects($this->once())
-//     	->method('update')
-//     	->will($this->returnValue($entry));
+//      $entryMock->expects($this->once())
+//      ->method('update')
+//      ->will($this->returnValue($entry));
 
-//     	$this->dispatch('/quiz/gameid/jouer');
+//      $this->dispatch('/quiz/gameid/jouer');
 
-//     	$this->assertEquals(true, $entry->getWinner());
-//     	$this->assertEquals(false, $entry->getActive());
-//     	$this->assertModuleName('playgroundgame');
-//     	$this->assertControllerName('playgroundgame\controller\frontend\quiz');
-//     	$this->assertControllerClass('QuizController');
-//     	$this->assertActionName('play');
-//     	$this->assertMatchedRouteName('frontend/quiz/play');
+//      $this->assertEquals(true, $entry->getWinner());
+//      $this->assertEquals(false, $entry->getActive());
+//      $this->assertModuleName('playgroundgame');
+//      $this->assertControllerName('playgroundgame\controller\frontend\quiz');
+//      $this->assertControllerClass('QuizController');
+//      $this->assertActionName('play');
+//      $this->assertMatchedRouteName('frontend/quiz/play');
 
-//     	$this->assertRedirectTo('/quiz/gameid/resultat');
+//      $this->assertRedirectTo('/quiz/gameid/resultat');
 //     }
 
     public function testFbshareActionNoGame()

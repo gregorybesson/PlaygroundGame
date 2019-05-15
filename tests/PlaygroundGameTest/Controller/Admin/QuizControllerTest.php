@@ -64,7 +64,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $adminFormQuiz->expects($this->any())
             ->method('setAttribute')
             ->will($this->returnValue(null));
-       
+
         $adminFormQuiz->expects($this->any())
             ->method('bind')
             ->will($this->returnValue(null));

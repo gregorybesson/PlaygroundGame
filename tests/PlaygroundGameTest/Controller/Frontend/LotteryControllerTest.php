@@ -510,8 +510,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         $game->setActive(true);
         $game->setIdentifier('gameid');
 
-        $fr = function($game, $user, &$error)
-        {
+        $fr = function ($game, $user, &$error) {
             $error = -1;
             return false;
         };

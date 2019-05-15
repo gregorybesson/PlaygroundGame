@@ -9,7 +9,7 @@ return array(
         'Zend\Mvc\Console',
         'Zend\Mvc\Plugin\FilePrg',
         'Zend\ServiceManager\Di',
-    	'Zend\Router',
+        'Zend\Router',
         'Zend\Navigation',
         'Zend\I18n',
         'Zend\Mvc\I18n',

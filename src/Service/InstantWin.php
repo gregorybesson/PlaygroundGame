@@ -125,7 +125,7 @@ class InstantWin extends Game
                 for ($i = 0; $i < $qty; $i++) {
                     $randomPrizes[] = $prize;
                 }
-            } 
+            }
         }
         $min = 0;
         $max = count($randomPrizes);
