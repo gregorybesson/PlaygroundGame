@@ -11,6 +11,19 @@ class Lottery extends Game
      */
     protected $lotteryMapper;
 
+    public function subscribeToLottery($game, $user, $entry)
+    {
+        $entry->setDrawable(true);
+        $entry->setActive(false);
+        $this->getEntryMapper()->update($entry);
+
+        $this->getEventManager()->trigger(
+            __FUNCTION__ . '.post',
+            $this,
+            array('user' => $user, 'game' => $game, 'entry' => $entry)
+        );
+    }
+
     public function getGameEntity()
     {
         return new \PlaygroundGame\Entity\Lottery;
