@@ -56,10 +56,7 @@ class LotteryController extends GameController
             return $this->redirect()->toUrl($noEntryRedirect);
         }
 
-        // Every entry is eligible to draw
-        $entry->setDrawable(true);
-        $entry->setActive(false);
-        $this->getGameService()->getEntryMapper()->update($entry);
+        $this->getGameService()->subscribeToLottery($game, $user, $entry);
 
         return $this->redirect()->toUrl(
             $this->frontendUrl()->fromRoute(

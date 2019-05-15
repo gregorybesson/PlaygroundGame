@@ -545,6 +545,8 @@ class InstantWin extends Game
         $occurrenceMapper = $this->getInstantWinOccurrenceMapper();
 
         $entry->setActive(0);
+        $entry->setWinner(false);
+        $entry->setPoints(0);
         if ($occurrence) {
             $occurrence->setEntry($entry);
             $occurrence->setUser($user);
@@ -552,17 +554,10 @@ class InstantWin extends Game
             $occurrence = $occurrenceMapper->update($occurrence);
             if ($occurrence->getWinning()) {
                 $entry->setWinner(true);
-            } else {
-                $entry->setWinner(false);
             }
             if ($occurrence->getPrize()) {
                 $entry->setPoints($occurrence->getPrize()->getPoints());
-            } else {
-                $entry->setPoints(0);
             }
-        } else {
-            $entry->setPoints(0);
-            $entry->setWinner(false);
         }
         $entry = $entryMapper->update($entry);
 

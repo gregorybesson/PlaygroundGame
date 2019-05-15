@@ -609,6 +609,7 @@ class Game
                 'title' => 1,
                 'firstname' => 1,
                 'lastname' => 1,
+                'displayName' => 1,
                 'email' => 1,
                 'optin' => 1,
                 'optinPartner' => 1,

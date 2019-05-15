@@ -630,6 +630,9 @@ class PostVote extends Game
                 }
             }
         }
+        if ($game->getVoteActive()) {
+            $header['votes'] = 1;
+        }
 
         return $header;
     }
@@ -645,6 +648,7 @@ class PostVote extends Game
             u.title,
             u.firstname,
             u.lastname,
+            u.displayName,
             u.email,
             u.optin,
             u.optinPartner,
@@ -700,6 +704,11 @@ class PostVote extends Game
                         $results[$k][$key] = (is_array($e->getValue()))?implode(', ', $e->getValue()):$e->getValue();
                         break;
                     }
+                }
+
+                if ($key === 'votes') {
+                    $results[$k][$key] = count($entry[0]->getVotes());
+                    break;
                 }
             }
         }
