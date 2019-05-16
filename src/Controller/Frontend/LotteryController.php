@@ -56,7 +56,7 @@ class LotteryController extends GameController
             return $this->redirect()->toUrl($noEntryRedirect);
         }
 
-        $this->getGameService()->subscribeToLottery($game, $user, $entry);
+        $entry = $this->getGameService()->subscribeToLottery($this->game, $this->user, $entry);
 
         return $this->redirect()->toUrl(
             $this->frontendUrl()->fromRoute(
