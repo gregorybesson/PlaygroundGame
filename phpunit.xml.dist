@@ -20,8 +20,8 @@
     </testsuites>
     
     <filter>
-        <whitelist>
-            <directory suffix=".php">./src/PlaygroundGame</directory>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./src</directory>
             <exclude>
                 <directory suffix=".php">./tests/</directory>
             </exclude>
