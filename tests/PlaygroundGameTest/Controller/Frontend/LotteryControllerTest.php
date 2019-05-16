@@ -510,8 +510,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         $game->setActive(true);
         $game->setIdentifier('gameid');
 
-        $fr = function($game, $user, &$error)
-        {
+        $fr = function ($game, $user, &$error) {
             $error = -1;
             return false;
         };
@@ -577,52 +576,48 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         $entry = new \PlaygroundGame\Entity\Entry();
 
         $f = $this->getMockBuilder('PlaygroundGame\Service\Game')
-        ->setMethods(
-            array('checkGame', 'checkIsFan', 'checkExistingEntry', 'getEntryMapper', 'getServiceManager', 'play')
-        )
-        ->disableOriginalConstructor()
-        ->getMock();
+            ->setMethods(
+                array('checkGame', 'checkIsFan', 'checkExistingEntry', 'getEntryMapper', 'getServiceManager', 'play', 'subscribeToLottery')
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $serviceManager->setService('playgroundgame_lottery_service', $f);
 
         // I check that the array in findOneBy contains the parameter 'active' = 1
         $f->expects($this->once())
-        ->method('checkGame')
-        ->will($this->returnValue($game));
+            ->method('checkGame')
+            ->will($this->returnValue($game));
 
         $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
         $ZfcUserMock->expects($this->any())
-        ->method('getId')
-        ->will($this->returnValue('1'));
+            ->method('getId')
+            ->will($this->returnValue('1'));
 
         $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
 
         $authMock->expects($this->any())
-        ->method('hasIdentity')
-        -> will($this->returnValue(true));
+            ->method('hasIdentity')
+            -> will($this->returnValue(true));
 
         $authMock->expects($this->any())
-        ->method('getIdentity')
-        ->will($this->returnValue($ZfcUserMock));
+            ->method('getIdentity')
+            ->will($this->returnValue($ZfcUserMock));
 
         $pluginManager->setService('zfcUserAuthentication', $authMock);
 
         $f->expects($this->once())
-        ->method('play')
-        ->will($this->returnValue($entry));
+            ->method('play')
+            ->will($this->returnValue($entry));
 
         $entryMock = $this->getMockBuilder('PlaygroundGame\Mapper\Entry')
-        ->disableOriginalConstructor()
-        ->getMock();
-
+            ->disableOriginalConstructor()
+            ->getMock();
+        
         $f->expects($this->once())
-        ->method('getEntryMapper')
-        ->will($this->returnValue($entryMock));
-
-        $entryMock->expects($this->once())
-        ->method('update')
-        ->will($this->returnValue($entry));
+            ->method('subscribeToLottery')
+            ->will($this->returnValue($entry->setActive(false)));
 
         $this->dispatch('/loterie/gameid/jouer');
 

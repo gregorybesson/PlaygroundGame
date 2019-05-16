@@ -15,13 +15,15 @@ class Lottery extends Game
     {
         $entry->setDrawable(true);
         $entry->setActive(false);
-        $this->getEntryMapper()->update($entry);
+        $entry = $this->getEntryMapper()->update($entry);
 
         $this->getEventManager()->trigger(
             __FUNCTION__ . '.post',
             $this,
             array('user' => $user, 'game' => $game, 'entry' => $entry)
         );
+
+        return $entry;
     }
 
     public function getGameEntity()
