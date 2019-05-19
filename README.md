@@ -22,6 +22,8 @@ The Game module : This module currently propose 4 types of games:
 - Sweepstakes
 - Instant Win
 - Quiz
+- Trading Card
+- Memory
 
 And has been conceived to give you the ability to create almost any type of games !
 

@@ -653,6 +653,36 @@ class Module
                     return $mapper;
                 },
 
+                'playgroundgame_memory_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
+                    $mapper = new Mapper\Memory(
+                        $sm->get('doctrine.entitymanager.orm_default'),
+                        $sm->get('playgroundgame_module_options'),
+                        $sm
+                    );
+
+                    return $mapper;
+                },
+
+                'playgroundgame_memory_card_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
+                    $mapper = new Mapper\MemoryCard(
+                        $sm->get('doctrine.entitymanager.orm_default'),
+                        $sm->get('playgroundgame_module_options'),
+                        $sm
+                    );
+
+                    return $mapper;
+                },
+
+                'playgroundgame_memory_score_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
+                    $mapper = new Mapper\MemoryScore(
+                        $sm->get('doctrine.entitymanager.orm_default'),
+                        $sm->get('playgroundgame_module_options'),
+                        $sm
+                    );
+
+                    return $mapper;
+                },
+
                 'playgroundgame_tradingcardmodel_form' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $translator = $sm->get('MvcTranslator');
                     $form = new Form\Admin\TradingCardModel(null, $sm, $translator);
@@ -667,6 +697,24 @@ class Module
                     $form = new Form\Admin\TradingCard(null, $sm, $translator);
                     $tradingcard = new Entity\TradingCard();
                     $form->setInputFilter($tradingcard->getInputFilter());
+
+                    return $form;
+                },
+
+                'playgroundgame_memory_form' => function (\Zend\ServiceManager\ServiceManager $sm) {
+                    $translator = $sm->get('MvcTranslator');
+                    $form = new Form\Admin\Memory(null, $sm, $translator);
+                    $memory = new Entity\Memory();
+                    $form->setInputFilter($memory->getInputFilter());
+
+                    return $form;
+                },
+
+                'playgroundgame_memorycard_form' => function (\Zend\ServiceManager\ServiceManager $sm) {
+                    $translator = $sm->get('MvcTranslator');
+                    $form = new Form\Admin\MemoryCard(null, $sm, $translator);
+                    $memoryCard = new Entity\MemoryCard();
+                    $form->setInputFilter($memoryCard->getInputFilter());
 
                     return $form;
                 },
@@ -703,13 +751,13 @@ class Module
                     $form = new Form\Frontend\Register(null, $zfcUserOptions, $translator, $sm);
                     $form->setInputFilter(new \ZfcUser\Form\RegisterFilter(
                         new \ZfcUser\Validator\NoRecordExists(array(
-                                    'mapper' => $sm->get('zfcuser_user_mapper'),
-                                    'key'    => 'email',
-                                )),
+                            'mapper' => $sm->get('zfcuser_user_mapper'),
+                            'key'    => 'email',
+                        )),
                         new \ZfcUser\Validator\NoRecordExists(array(
-                                    'mapper' => $sm->get('zfcuser_user_mapper'),
-                                    'key'    => 'username',
-                                )),
+                            'mapper' => $sm->get('zfcuser_user_mapper'),
+                            'key'    => 'username',
+                        )),
                         $zfcUserOptions
                     ));
 
