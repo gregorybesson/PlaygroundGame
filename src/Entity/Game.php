@@ -20,7 +20,8 @@ use Zend\InputFilter\InputFilterInterface;
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="type", type="string")
  * @ORM\DiscriminatorMap({"quiz" = "Quiz", "lottery" = "Lottery", "instantwin" =
- * "InstantWin", "postvote" = "PostVote", "mission" = "Mission", "tradingcard" = "TradingCard"})
+ * "InstantWin", "postvote" = "PostVote", "mission" = "Mission", "tradingcard" = "TradingCard",
+ * "memory" = "Memory"})
  * @ORM\Table(name="game")
  * @Gedmo\TranslationEntity(class="PlaygroundGame\Entity\GameTranslation")
  */

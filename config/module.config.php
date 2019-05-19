@@ -44,6 +44,7 @@ return array(
                 array('controller' => PlaygroundGame\Controller\Frontend\PrizeCategory::class,  'roles' => array('guest', 'user')),
                 array('controller' => PlaygroundGame\Controller\Frontend\Mission::class,        'roles' => array('guest', 'user')),
                 array('controller' => PlaygroundGame\Controller\Frontend\TradingCard::class,    'roles' => array('guest', 'user')),
+                array('controller' => PlaygroundGame\Controller\Frontend\Memory::class,         'roles' => array('guest', 'user')),
                 array('controller' => PlaygroundGame\Controller\Frontend\Webhook::class,        'roles' => array('guest', 'user')),
     
                 // Admin area admin
@@ -54,6 +55,7 @@ return array(
                 array('controller' => PlaygroundGame\Controller\Admin\PostVote::class,      'roles' => array('game-manager','admin')),
                 array('controller' => PlaygroundGame\Controller\Admin\Mission::class,       'roles' => array('game-manager','admin')),
                 array('controller' => PlaygroundGame\Controller\Admin\TradingCard::class,   'roles' => array('game-manager','admin')),
+                array('controller' => PlaygroundGame\Controller\Admin\Memory::class,        'roles' => array('game-manager','admin')),
                 array('controller' => PlaygroundGame\Controller\Admin\PrizeCategory::class, 'roles' => array('game-manager','admin')),
                 // Admin area supervisor
                 array('controller' => PlaygroundGame\Controller\Admin\Game::class, 'action' => ['list'], 'roles' => array('supervisor')),
@@ -63,6 +65,7 @@ return array(
                 array('controller' => PlaygroundGame\Controller\Admin\PostVote::class,  'action' => ['entry', 'download'], 'roles' => array('supervisor')),
                 array('controller' => PlaygroundGame\Controller\Admin\Mission::class,  'action' => ['entry', 'download'], 'roles' => array('supervisor')),
                 array('controller' => PlaygroundGame\Controller\Admin\TradingCard::class,  'action' => ['entry', 'download'], 'roles' => array('supervisor')),
+                array('controller' => PlaygroundGame\Controller\Admin\Memory::class,  'action' => ['entry', 'download'], 'roles' => array('supervisor')),
             ),
         ),
     ),
@@ -144,7 +147,7 @@ return array(
     ),
 
     'controllers' => array(
-	 'aliases' => array(
+        'aliases' => array(
             PlaygroundGame\Controller\Frontend\Instantwin::class => PlaygroundGame\Controller\Frontend\InstantWin::class,
             PlaygroundGame\Controller\Frontend\Postvote::class => PlaygroundGame\Controller\Frontend\PostVote::class,
             PlaygroundGame\Controller\Frontend\Tradingcard::class => PlaygroundGame\Controller\Frontend\TradingCard::class,
@@ -162,6 +165,7 @@ return array(
             PlaygroundGame\Controller\Frontend\PostVote::class => PlaygroundGame\Service\Factory\FrontendPostVoteControllerFactory::class,
             PlaygroundGame\Controller\Frontend\Mission::class => PlaygroundGame\Service\Factory\FrontendMissionControllerFactory::class,
             PlaygroundGame\Controller\Frontend\TradingCard::class => PlaygroundGame\Service\Factory\FrontendTradingCardControllerFactory::class,
+            PlaygroundGame\Controller\Frontend\Memory::class => PlaygroundGame\Service\Factory\FrontendMemoryControllerFactory::class,
             PlaygroundGame\Controller\Frontend\PrizeCategory::class => PlaygroundGame\Service\Factory\FrontendPrizeCategoryControllerFactory::class,
             PlaygroundGame\Controller\Frontend\Webhook::class => PlaygroundGame\Service\Factory\FrontendWebhookControllerFactory::class,
 
@@ -172,6 +176,7 @@ return array(
             PlaygroundGame\Controller\Admin\Quiz::class => PlaygroundGame\Service\Factory\AdminQuizControllerFactory::class,
             PlaygroundGame\Controller\Admin\Mission::class => PlaygroundGame\Service\Factory\AdminMissionControllerFactory::class,
             PlaygroundGame\Controller\Admin\TradingCard::class => PlaygroundGame\Service\Factory\AdminTradingCardControllerFactory::class,
+            PlaygroundGame\Controller\Admin\Memory::class => PlaygroundGame\Service\Factory\AdminMemoryControllerFactory::class,
             PlaygroundGame\Controller\Admin\PrizeCategory::class => PlaygroundGame\Service\Factory\AdminPrizeCategoryControllerFactory::class,
         ),
     ),
@@ -188,21 +193,23 @@ return array(
             'playgroundgame_mission_service'           => PlaygroundGame\Service\Mission::class,
             'playgroundgame_mission_game_service'      => PlaygroundGame\Service\MissionGame::class,
             'playgroundgame_tradingcard_service'       => PlaygroundGame\Service\TradingCard::class,
+            'playgroundgame_memory_service'            => PlaygroundGame\Service\Memory::class,
             'playgroundgame_prize_service'             => PlaygroundGame\Service\Prize::class,
             'playgroundgame_prizecategory_service'     => PlaygroundGame\Service\PrizeCategory::class,
             'playgroundgame_prizecategoryuser_service' => PlaygroundGame\Service\PrizeCategoryUser::class,
         ],
         'factories' => [
-            PlaygroundGame\Service\Game::class => PlaygroundGame\Service\Factory\GameFactory::class,
-            PlaygroundGame\Service\Lottery::class => PlaygroundGame\Service\Factory\LotteryFactory::class,
-            PlaygroundGame\Service\PostVote::class => PlaygroundGame\Service\Factory\PostVoteFactory::class,
-            PlaygroundGame\Service\Quiz::class => PlaygroundGame\Service\Factory\QuizFactory::class,
-            PlaygroundGame\Service\InstantWin::class => PlaygroundGame\Service\Factory\InstantWinFactory::class,
-            PlaygroundGame\Service\Mission::class => PlaygroundGame\Service\Factory\MissionFactory::class,
-            PlaygroundGame\Service\MissionGame::class => PlaygroundGame\Service\Factory\MissionGameFactory::class,
-            PlaygroundGame\Service\TradingCard::class => PlaygroundGame\Service\Factory\TradingCardFactory::class,
-            PlaygroundGame\Service\Prize::class => PlaygroundGame\Service\Factory\PrizeFactory::class,
-            PlaygroundGame\Service\PrizeCategory::class => PlaygroundGame\Service\Factory\PrizeCategoryFactory::class,
+            PlaygroundGame\Service\Game::class              => PlaygroundGame\Service\Factory\GameFactory::class,
+            PlaygroundGame\Service\Lottery::class           => PlaygroundGame\Service\Factory\LotteryFactory::class,
+            PlaygroundGame\Service\PostVote::class          => PlaygroundGame\Service\Factory\PostVoteFactory::class,
+            PlaygroundGame\Service\Quiz::class              => PlaygroundGame\Service\Factory\QuizFactory::class,
+            PlaygroundGame\Service\InstantWin::class        => PlaygroundGame\Service\Factory\InstantWinFactory::class,
+            PlaygroundGame\Service\Mission::class           => PlaygroundGame\Service\Factory\MissionFactory::class,
+            PlaygroundGame\Service\MissionGame::class       => PlaygroundGame\Service\Factory\MissionGameFactory::class,
+            PlaygroundGame\Service\TradingCard::class       => PlaygroundGame\Service\Factory\TradingCardFactory::class,
+            PlaygroundGame\Service\Memory::class            => PlaygroundGame\Service\Factory\MemoryFactory::class,
+            PlaygroundGame\Service\Prize::class             => PlaygroundGame\Service\Factory\PrizeFactory::class,
+            PlaygroundGame\Service\PrizeCategory::class     => PlaygroundGame\Service\Factory\PrizeCategoryFactory::class,
             PlaygroundGame\Service\PrizeCategoryUser::class => PlaygroundGame\Service\Factory\PrizeCategoryUserFactory::class,
         ],
     ],
@@ -1571,6 +1578,291 @@ return array(
                             )
                         )
                     ),
+                    'memory' => array(
+                        'type' => 'Segment',
+                        'options' => array(
+                            'route' => 'memory[/:id]',
+                            'defaults' => array(
+                                'controller' => PlaygroundGame\Controller\Frontend\Memory::class,
+                                'action' => 'home'
+                            )
+                        ),
+                        'may_terminate' => true,
+                        'child_routes' => array(
+                            'index' => array(
+                                'type' => 'Zend\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/index',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Memory::class,
+                                        'action' => 'index'
+                                    )
+                                )
+                            ),
+                            'ajaxforgotpassword' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/ajax-mot-passe-oublie',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Memory::class,
+                                        'action'     => 'ajaxforgot',
+                                    ),
+                                ),
+                            ),
+                            'resetpassword' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/reset-password/:userId/:token',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Memory::class,
+                                        'action'     => 'userreset',
+                                    ),
+                                    'constraints' => array(
+                                        'userId'  => '[0-9]+',
+                                        'token' => '[A-F0-9]+',
+                                    ),
+                                ),
+                            ),
+                            'login' => array(
+                                'type' => 'Zend\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/connexion',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Memory::class,
+                                        'action' => 'login'
+                                    )
+                                )
+                            ),
+                            'user-register' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/inscription[/:socialnetwork]',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Memory::class,
+                                        'action' => 'userregister'
+                                    )
+                                )
+                            ),
+                            'verification' => array(
+                                'type' => 'Zend\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/verification',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Memory::class,
+                                        'action'     => 'check-token',
+                                    ),
+                                ),
+                            ),
+                            'optin' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/optin[/:gameId]',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Memory::class,
+                                        'action' => 'optin'
+                                    )
+                                )
+                            ),
+                            'terms-optin' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/terms-optin',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Memory::class,
+                                        'action' => 'termsOptin'
+                                    )
+                                )
+                            ),
+                            'play' => array(
+                                'type' => 'Zend\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/jouer',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Memory::class,
+                                        'action' => 'play'
+                                    )
+                                )
+                            ),
+                            'result' => array(
+                                'type' => 'Zend\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/resultat',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Memory::class,
+                                        'action' => 'result'
+                                    )
+                                )
+                            ),
+                            'register' => array(
+                                'type' => 'Zend\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/register',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Memory::class,
+                                        'action' => 'register'
+                                    )
+                                )
+                            ),
+                            'fbshare' => array(
+                                'type' => 'Zend\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/fbshare',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Memory::class,
+                                        'action' => 'fbshare'
+                                    )
+                                )
+                            ),
+                            'fbrequest' => array(
+                                'type' => 'Zend\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/fbrequest',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Memory::class,
+                                        'action' => 'fbrequest'
+                                    )
+                                )
+                            ),
+                            'tweet' => array(
+                                'type' => 'Zend\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/tweet',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Memory::class,
+                                        'action' => 'tweet'
+                                    )
+                                )
+                            ),
+                            'google' => array(
+                                'type' => 'Zend\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/google',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Memory::class,
+                                        'action' => 'google'
+                                    )
+                                )
+                            ),
+                            'bounce' => array(
+                                'type' => 'Zend\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/essayez-aussi',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Memory::class,
+                                        'action' => 'bounce'
+                                    )
+                                )
+                            ),
+                            'terms' => array(
+                                'type' => 'Zend\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/reglement',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Memory::class,
+                                        'action' => 'terms'
+                                    )
+                                )
+                            ),
+                            'conditions' => array(
+                                'type' => 'Zend\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/mentions-legales',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Memory::class,
+                                        'action' => 'conditions'
+                                    )
+                                )
+                            ),
+                            'fangate' => array(
+                                'type' => 'Zend\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/fangate',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Memory::class,
+                                        'action' => 'fangate'
+                                    )
+                                )
+                            ),
+                            'prizes' => array(
+                                'type' => 'Zend\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/lots',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Memory::class,
+                                        'action' => 'prizes'
+                                    )
+                                ),
+                                'may_terminate' => true,
+                                'child_routes' => array(
+                                    'prize' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/:prize',
+                                            'defaults' => array(
+                                                'controller' => PlaygroundGame\Controller\Frontend\Memory::class,
+                                                'action' => 'prize'
+                                            )
+                                        )
+                                    )
+                                )
+                            ),
+                            'share' => array(
+                                'type' => 'Zend\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/partager',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Memory::class,
+                                        'action' => 'share'
+                                    )
+                                )
+                            ),
+                            'create-team' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/creation-team',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Memory::class,
+                                        'action' => 'createTeam',
+                                    )
+                                )
+                            ),
+                            'invite-to-team' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/rejoins-ma-team',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Memory::class,
+                                        'action' => 'inviteToTeam',
+                                    )
+                                )
+                            ),
+                            'leaderboard' => array(
+                                'type' => 'segment',
+                                'options' => array(
+                                    'route' => '/leaderboard[/:filter][/:p]',
+                                    'constraints' => array(
+                                        'filter' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                    ),
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Memory::class,
+                                        'action'     => 'leaderboard'
+                                    ),
+                                ),
+                            ),
+                            'other-routes' => array(
+                                'type' => 'Zend\Router\Http\Regex',
+                                'priority' => -1000,
+                                'options' => array(
+                                    'regex' => '.*',
+                                    'spec' => '%url%',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Memory::class,
+                                        'action' => 'not-found'
+                                    )
+                                )
+                            )
+                        )
+                    ),
                     'instantwin' => array(
                         'type' => 'Segment',
                         'options' => array(
@@ -2680,6 +2972,40 @@ return array(
                             ),
                         )
                     ),
+                    'memory' => array(
+                        'type' => 'Zend\Router\Http\Literal',
+                        'priority' => 1000,
+                        'options' => array(
+                            'route' => '/memory',
+                            'defaults' => array(
+                                'controller' => PlaygroundGame\Controller\Admin\Memory::class,
+                                'action' => 'index'
+                            )
+                        ),
+                        'child_routes' => array(
+                            'entry' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/entry/:gameId[/:p]',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Admin\Memory::class,
+                                        'action' => 'entry',
+                                        'gameId' => 0
+                                    )
+                                )
+                            ),
+                            'download' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/download/:gameId',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Admin\Memory::class,
+                                        'action' => 'download'
+                                    )
+                                )
+                            ),
+                        )
+                    ),
                     'playgroundgame' => array(
                         'type' => 'Zend\Router\Http\Literal',
                         'priority' => 1000,
@@ -3041,6 +3367,76 @@ return array(
                                     'defaults' => array(
                                         'controller' => PlaygroundGame\Controller\Admin\PostVote::class,
                                         'action' => 'push'
+                                    )
+                                )
+                            ),
+                            'create-memory' => array(
+                                'type' => 'Zend\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/create-memory',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Admin\Memory::class,
+                                        'action' => 'createMemory'
+                                    )
+                                )
+                            ),
+                            'edit-memory' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/edit-memory/:gameId',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Admin\Memory::class,
+                                        'action' => 'editMemory',
+                                        'gameId' => 0
+                                    )
+                                )
+                            ),
+                            'memory-card-list' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/memory-card-list/:gameId[/:filter][/:p]',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Admin\Memory::class,
+                                        'action' => 'listCard',
+                                        'gameId' => 0,
+                                        'filter' => 'DESC'
+                                    ),
+                                    'constraints' => array(
+                                        'filter' => '[a-zA-Z][a-zA-Z0-9_-]*'
+                                    )
+                                )
+                            ),
+                            'memory-card-add' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/memory-card-add/:gameId',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Admin\Memory::class,
+                                        'action' => 'addCard',
+                                        'gameId' => 0
+                                    )
+                                )
+                            ),
+                            'memory-card-edit' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/memory-card-edit/:gameId/:cardId',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Admin\Memory::class,
+                                        'action' => 'editCard',
+                                        'gameId' => 0,
+                                        'cardId' => 0
+                                    )
+                                )
+                            ),
+                            'memory-card-remove' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/memory-card-remove/:cardId',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Admin\Memory::class,
+                                        'action' => 'removeCard',
+                                        'cardId' => 0
                                     )
                                 )
                             ),
@@ -3475,6 +3871,13 @@ return array(
                     'create-tradingcard' => array(
                         'label' => 'Add new trading card',
                         'route' => 'admin/playgroundgame/create-tradingcard',
+                        'resource' => 'game',
+                        'privilege' => 'add',
+                        'use_route_match' => true,
+                    ),
+                    'create-memory' => array(
+                        'label' => 'Add new memory game',
+                        'route' => 'admin/playgroundgame/create-memory',
                         'resource' => 'game',
                         'privilege' => 'add',
                         'use_route_match' => true,

@@ -221,9 +221,11 @@ class TradingCardController extends GameController
 
             // update coo of Model
             $jsonModel = new \Zend\View\Model\JsonModel();
-            $jsonModel->setVariables(array(
+            $jsonModel->setVariables(
+                array(
                     'success' => true,
-                ));
+                )
+            );
 
             return $jsonModel;
         }
@@ -245,7 +247,7 @@ class TradingCardController extends GameController
         );
     }
 
-    public function removeOccurrenceAction()
+    public function removeModelAction()
     {
         $service = $this->getAdminGameService();
         $modelId = $this->getEvent()->getRouteMatch()->getParam('modelId');
