@@ -51,11 +51,13 @@ class PostVoteForm implements InputFilterAwareInterface, Translatable
     protected $description;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(type="text", nullable=true)
      */
     protected $form;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(name="form_template", type="text", nullable=true)
      */
     protected $formTemplate;

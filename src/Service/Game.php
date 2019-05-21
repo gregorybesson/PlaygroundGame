@@ -2116,6 +2116,7 @@ class Game
     public function decorate($element, $attr, $inputFilter)
     {
         $factory = new InputFactory();
+        $element->setLabel($attr['label']);
         $element->setAttributes(
             array(
                 'placeholder'   => $attr['placeholder'],
@@ -2176,6 +2177,7 @@ class Game
 
         return $element;
     }
+
     /**
      * Create a ZF2 Form from json data
      * @return Form
