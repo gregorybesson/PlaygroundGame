@@ -53,6 +53,12 @@ class PostVotePostElement implements InputFilterAwareInterface, Translatable, \J
     protected $value;
 
     /**
+     * @Gedmo\Translatable
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $label;
+
+    /**
      * @ORM\Column(type="string", nullable=true)
      */
     protected $position;
@@ -126,6 +132,24 @@ class PostVotePostElement implements InputFilterAwareInterface, Translatable, \J
     public function getValue()
     {
         return $this->value;
+    }
+
+    /**
+     * @param unknown_type $label
+     */
+    public function setLabel($label)
+    {
+        $this->label = $label;
+
+        return $this;
+    }
+
+    /**
+     * @return the unknown_type
+     */
+    public function getLabel()
+    {
+        return $this->label;
     }
 
     /**

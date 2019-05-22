@@ -145,6 +145,12 @@ class PostVote extends Game
                 $postElement = new \PlaygroundGame\Entity\PostVotePostElement();
             }
             $postElement->setName($name);
+            foreach($form as $e) {
+                if ($e->getName() == $name) {
+                    $postElement->setLabel($e->getLabel());
+                    break;
+                }
+            }
             $postElement->setPosition($position);
 
             if (is_array($value) && isset($value['tmp_name'])) {
