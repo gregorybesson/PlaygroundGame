@@ -5,7 +5,7 @@ namespace PlaygroundGame\View\Helper;
 use Zend\View\Helper\AbstractHelper;
 use Interop\Container\ContainerInterface;
 
-class GameWidget extends AbstractHelper
+class GamesWidget extends AbstractHelper
 {
     /**
      * @var GameService
@@ -24,11 +24,11 @@ class GameWidget extends AbstractHelper
      * @param  array  $options array of options
      * @return string
      */
-    public function __invoke($identifier = null)
+    public function __invoke($displayHome = null, $classType = '', $order = '', $dir = 'DESC', $nbItems = 5)
     {
-        $game = $this->getGameService()->getGameMapper()->findByIdentifier($identifier);
+        $games = $this->getGameService()->getActiveGames($displayHome, $classType, $order, $dir);
 
-        return $game;
+        return $games;
     }
 
     /**

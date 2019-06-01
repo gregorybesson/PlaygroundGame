@@ -362,11 +362,13 @@ class Module
                     return new \PlaygroundGame\View\Helper\PostvoteShareEvents($service);
                 },
                 \PlaygroundGame\View\Helper\GameWidget::class =>  \PlaygroundGame\View\Helper\GameWidgetFactory::class,
-                \PlaygroundGame\View\Helper\NextGameWidget::class =>  \PlaygroundGame\View\Helper\NextGameWidgetFactory::class,
+                \PlaygroundGame\View\Helper\GamesWidget::class =>  \PlaygroundGame\View\Helper\GamesWidgetFactory::class,
+                \PlaygroundGame\View\Helper\NextGamesWidget::class =>  \PlaygroundGame\View\Helper\NextGamesWidgetFactory::class,
             ],
             'aliases' => [
                 'gameWidget' => \PlaygroundGame\View\Helper\GameWidget::class,
-                'nextGameWidget' => \PlaygroundGame\View\Helper\NextGameWidget::class,
+                'gamesWidget' => \PlaygroundGame\View\Helper\GamesWidget::class,
+                'nextGamesWidget' => \PlaygroundGame\View\Helper\NextGamesWidget::class,
             ]
         );
     }
