@@ -60,7 +60,7 @@ class PostVote extends Game implements InputFilterAwareInterface
     private $form;
 
     /**
-     * @ORM\OneToMany(targetEntity="PostVotePost", mappedBy="post_vote")
+     * @ORM\OneToMany(targetEntity="PostVotePost", mappedBy="postvote")
      **/
     private $posts;
 
