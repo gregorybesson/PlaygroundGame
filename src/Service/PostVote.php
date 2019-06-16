@@ -12,6 +12,8 @@ class PostVote extends Game
     protected $postVoteVoteMapper;
     protected $postVoteCommentMapper;
     protected $postVotePostElementMapper;
+    protected $postVoteShareMapper;
+    protected $postVoteViewMapper;
 
     public function getGameEntity()
     {
@@ -581,19 +583,48 @@ class PostVote extends Game
         return true;
     }
 
-
-    public function addShare($post)
+    public function addView($user, $ipAddress, $post)
     {
-        $postvotePostMapper = $this->getPostVotePostMapper();
-        $post->setShares($post->getShares()+1);
-        $postvotePostMapper->update($post);
+        $postvoteViewMapper = $this->getPostVoteViewMapper();
+        $postView = new \PlaygroundGame\Entity\PostVoteView();
+        $postView->setPost($post)
+            ->setPostvote($post->getPostvote())
+            ->setUser($user)
+            ->setIp($ipAddress);
+        $postvoteViewMapper->insert($postView);
 
-        $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array(
-            'post' => $post
-        ));
+        $this->getEventManager()->trigger(
+            __FUNCTION__ . '.post',
+            $this,
+            array(
+                'post' => $post
+            )
+        );
 
         return true;
     }
+
+    public function addShare($post, $user)
+    {
+        $postvoteShareMapper = $this->getPostVoteShareMapper();
+        $postShare = new \PlaygroundGame\Entity\PostVoteShare();
+        $postShare->setPost($post)
+            ->setPostvote($post->getPostvote())
+            ->setUser($user)
+            ->setOrigin('mail');
+        $postvoteShareMapper->insert($postShare);
+
+        $this->getEventManager()->trigger(
+            __FUNCTION__ . '.post',
+            $this,
+            array(
+                'post' => $post
+            )
+        );
+
+        return true;
+    }
+
     /**
      * Get all comments for this game
      */
@@ -795,6 +826,24 @@ class PostVote extends Game
         }
 
         return $this->postVotePostMapper;
+    }
+
+    public function getPostVoteShareMapper()
+    {
+        if (null === $this->postVoteShareMapper) {
+            $this->postVoteShareMapper = $this->serviceLocator->get('playgroundgame_postvoteshare_mapper');
+        }
+
+        return $this->postVoteShareMapper;
+    }
+
+    public function getPostVoteViewMapper()
+    {
+        if (null === $this->postVoteViewMapper) {
+            $this->postVoteViewMapper = $this->serviceLocator->get('playgroundgame_postvoteview_mapper');
+        }
+
+        return $this->postVoteViewMapper;
     }
 
     public function setPostVotePostMapper($postVotePostMapper)

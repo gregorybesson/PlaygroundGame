@@ -236,17 +236,24 @@ class PostVoteController extends GameController
                 )
             );
         }
+        $this->getGameService()->addView(
+            $this->user,
+            $this->getRequest()->getServer('REMOTE_ADDR'),
+            $post
+        );
 
         $formModeration = new Form();
         $formModeration->setAttribute('method', 'post');
 
-        $formModeration->add(array(
-            'name' => 'moderation',
-            'attributes' => array(
-                'type' => 'hidden',
-                'value' => '1'
-            ),
-        ));
+        $formModeration->add(
+            array(
+                'name' => 'moderation',
+                'attributes' => array(
+                    'type' => 'hidden',
+                    'value' => '1'
+                ),
+            )
+        );
 
         $form = new \PlaygroundGame\Form\Frontend\PostVoteVote(
             $this->frontendUrl()->fromRoute(
@@ -644,17 +651,25 @@ class PostVoteController extends GameController
         $response = $this->getResponse();
 
         if (! $this->game) {
-            $response->setContent(\Zend\Json\Json::encode(array(
-                'success' => 0
-            )));
+            $response->setContent(
+                \Zend\Json\Json::encode(
+                    array(
+                        'success' => 0
+                    )
+                )
+            );
 
             return $response;
         }
 
         if (!$this->zfcUserAuthentication()->hasIdentity()) {
-            $response->setContent(\Zend\Json\Json::encode(array(
-                'success' => 0
-            )));
+            $response->setContent(
+                \Zend\Json\Json::encode(
+                    array(
+                        'success' => 0
+                    )
+                )
+            );
         } else {
             if ($request->isPost()) {
                 $post = $this->getGameService()->getPostvotePostMapper()->findById($postId);
@@ -847,7 +862,7 @@ class PostVoteController extends GameController
                 $result = $this->getGameService()->sendShareMail($data, $this->game, $this->user, null, 'share-post');
                 if ($result) {
                     $statusMail = true;
-                    $this->getGameService()->addShare($post);
+                    $this->getGameService()->addShare($this->user, $this->getRequest()->getServer('REMOTE_ADDR'), $post);
                 }
             } else {
                 foreach ($form->getMessages() as $el => $errors) {
@@ -860,13 +875,15 @@ class PostVoteController extends GameController
 
         $viewModel = $this->buildView($this->game);
             
-        $viewModel->setVariables(array(
-            'statusMail'       => $statusMail,
-            'message'          => $message,
-            'form'             => $form,
-            'socialLinkUrl'    => $socialLinkUrl,
-            'post'             => $post
-        ));
+        $viewModel->setVariables(
+            array(
+                'statusMail'       => $statusMail,
+                'message'          => $message,
+                'form'             => $form,
+                'socialLinkUrl'    => $socialLinkUrl,
+                'post'             => $post
+            )
+        );
     
         return $viewModel;
     }

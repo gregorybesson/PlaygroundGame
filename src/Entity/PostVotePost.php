@@ -52,21 +52,27 @@ class PostVotePost implements InputFilterAwareInterface, Translatable, \JsonSeri
 
     /**
      * @ORM\ManyToOne(targetEntity="Entry")
-     * @ORM\JoinColumn(name="entry_id", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\JoinColumn(name="entry_id",referencedColumnName="id",onDelete="CASCADE")
      **/
     protected $entry;
 
     /**
      * @ORM\OneToMany(targetEntity="PostVoteVote", mappedBy="post")
-     * @ORM\OrderBy({"createdAt" = "DESC"})
+     * @ORM\OrderBy({"createdAt"="DESC"})
      */
     private $votes;
 
     /**
      * @ORM\OneToMany(targetEntity="PostVoteComment", mappedBy="post")
-     * @ORM\OrderBy({"createdAt" = "DESC"})
+     * @ORM\OrderBy({"createdAt"="DESC"})
      */
     private $comments;
+
+    /**
+     * @ORM\OneToMany(targetEntity="PostVoteView", mappedBy="post")
+     * @ORM\OrderBy({"createdAt"="DESC"})
+     */
+    private $views;
 
     /**
      * @ORM\OneToMany(targetEntity="PostVotePostElement", mappedBy="post", cascade={"persist","remove"})
@@ -77,7 +83,12 @@ class PostVotePost implements InputFilterAwareInterface, Translatable, \JsonSeri
      * # of shares (FB, Twitter, mails...)
      * @ORM\Column(type="integer", nullable=false)
      */
-    protected $shares = 0;
+
+    /**
+     * @ORM\OneToMany(targetEntity="PostVoteShare", mappedBy="post")
+     * @ORM\OrderBy({"createdAt"="DESC"})
+     */
+    protected $shares;
 
     /**
      * values :
@@ -111,6 +122,8 @@ class PostVotePost implements InputFilterAwareInterface, Translatable, \JsonSeri
         $this->postElements = new ArrayCollection();
         $this->votes = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->shares = new ArrayCollection();
+        $this->views = new ArrayCollection();
     }
 
     /**
@@ -335,6 +348,80 @@ class PostVotePost implements InputFilterAwareInterface, Translatable, \JsonSeri
         return $this;
     }
 
+    /**
+     * Add an entry to the share.
+     *
+     * @param PostVoteShare $share
+     *
+     * @return void
+     */
+    public function addShare(PostVoteShare $share)
+    {
+        $this->shares[] = $share;
+    }
+
+    public function addShares(ArrayCollection $shares)
+    {
+        foreach ($shares as $share) {
+            $share->setPost($this);
+            $this->shares->add($share);
+        }
+    }
+
+    public function removeShares(\Doctrine\Common\Collections\Collection $shares)
+    {
+        foreach ($shares as $share) {
+            $share->setPost(null);
+            $this->shares->removeElement($share);
+        }
+    }
+
+    /**
+     * Add an entry to the view.
+     *
+     * @param PostVoteView $view
+     *
+     * @return void
+     */
+    public function addView(PostVoteView $view)
+    {
+        $this->views[] = $view;
+    }
+
+    /**
+     * @return the collection of views. You can filter on it based on one or more categories
+     */
+    public function getViews()
+    {
+        return $this->views;
+    }
+
+    /**
+     * @param unknown_type $views
+     */
+    public function setViews($views)
+    {
+        $this->views = $views;
+
+        return $this;
+    }
+
+    public function addViews(ArrayCollection $views)
+    {
+        foreach ($views as $view) {
+            $view->setPost($this);
+            $this->views->add($view);
+        }
+    }
+
+    public function removeViews(\Doctrine\Common\Collections\Collection $views)
+    {
+        foreach ($views as $view) {
+            $view->setPost(null);
+            $this->views->removeElement($view);
+        }
+    }
+    
     /**
      * @return integer unknown_type
      */
