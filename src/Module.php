@@ -555,6 +555,26 @@ class Module
                     return $mapper;
                 },
 
+                'playgroundgame_postvoteshare_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
+                    $mapper = new \PlaygroundGame\Mapper\PostVoteShare(
+                        $sm->get('doctrine.entitymanager.orm_default'),
+                        $sm->get('playgroundgame_module_options'),
+                        $sm
+                    );
+
+                    return $mapper;
+                },
+
+                'playgroundgame_postvoteview_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
+                    $mapper = new \PlaygroundGame\Mapper\PostVoteView(
+                        $sm->get('doctrine.entitymanager.orm_default'),
+                        $sm->get('playgroundgame_module_options'),
+                        $sm
+                    );
+
+                    return $mapper;
+                },
+
                 'playgroundgame_prize_mapper' => function (\Zend\ServiceManager\ServiceManager $sm) {
                     $mapper = new \PlaygroundGame\Mapper\Prize(
                         $sm->get('doctrine.entitymanager.orm_default'),
