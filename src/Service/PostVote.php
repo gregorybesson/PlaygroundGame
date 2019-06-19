@@ -671,6 +671,9 @@ class PostVote extends Game
             $header['votes'] = 1;
         }
 
+        $header['views'] = 1;
+        $header['shares'] = 1;
+
         return $header;
     }
 
@@ -745,7 +748,12 @@ class PostVote extends Game
 
                 if ($key === 'votes') {
                     $results[$k][$key] = count($entry[0]->getVotes());
-                    break;
+                }
+                if ($key === 'views') {
+                    $results[$k][$key] = count($entry[0]->getViews());
+                }
+                if ($key === 'shares') {
+                    $results[$k][$key] = count($entry[0]->getShares());
                 }
             }
         }
