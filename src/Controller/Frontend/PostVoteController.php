@@ -862,7 +862,8 @@ class PostVoteController extends GameController
                 $result = $this->getGameService()->sendShareMail($data, $this->game, $this->user, null, 'share-post');
                 if ($result) {
                     $statusMail = true;
-                    $this->getGameService()->addShare($this->user, $this->getRequest()->getServer('REMOTE_ADDR'), $post);
+                    //$this->getGameService()->addShare($post, $this->user, $this->getRequest()->getServer('REMOTE_ADDR'));
+                    $this->getGameService()->addShare($post, $this->user);
                 }
             } else {
                 foreach ($form->getMessages() as $el => $errors) {
