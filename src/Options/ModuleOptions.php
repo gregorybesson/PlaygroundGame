@@ -49,6 +49,11 @@ class ModuleOptions extends AbstractOptions implements GameEditOptionsInterface
     /**
      * @var string
      */
+    protected $sharePostSubjectLine = '';
+
+    /**
+     * @var string
+     */
     protected $inviteToTeamSubjectLine = '';
 
     /**
@@ -163,6 +168,18 @@ class ModuleOptions extends AbstractOptions implements GameEditOptionsInterface
         return $this->participationSubjectLine;
     }
     
+    public function setSharePostSubjectLine($sharePostSubjectLine)
+    {
+        $this->sharePostSubjectLine = $sharePostSubjectLine;
+
+        return $this;
+    }
+    
+    public function getSharePostSubjectLine()
+    {
+        return $this->sharePostSubjectLine;
+    }
+
     public function setShareCommentSubjectLine($shareCommentSubjectLine)
     {
         $this->shareCommentSubjectLine = $shareCommentSubjectLine;
