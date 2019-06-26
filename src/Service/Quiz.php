@@ -721,7 +721,7 @@ class Quiz extends Game
 
         $qb->setParameter('game', $game);
 
-        return $qb->getQuery();
+        return $qb;
     }
 
     public function getGameEntity()

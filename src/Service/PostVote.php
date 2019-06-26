@@ -714,7 +714,7 @@ class PostVote extends Game
         
         $qb->setParameter('game', $game);
 
-        return $qb->getQuery();
+        return $qb;
     }
 
     /**
