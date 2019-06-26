@@ -1779,7 +1779,7 @@ class Game
 
         $query = $qb->getQuery();
 
-        return $qb;
+        return $query;
     }
 
     public function draw($game)
