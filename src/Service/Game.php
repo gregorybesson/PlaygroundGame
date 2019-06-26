@@ -578,7 +578,7 @@ class Game
         
         $qb->setParameter('game', $game);
 
-        return $qb->getQuery();
+        return $qb;
     }
 
     public function getEntriesHeader($game)
@@ -1779,7 +1779,7 @@ class Game
 
         $query = $qb->getQuery();
 
-        return $query;
+        return $qb;
     }
 
     public function draw($game)
