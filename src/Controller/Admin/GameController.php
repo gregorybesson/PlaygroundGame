@@ -13,12 +13,6 @@ use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use Zend\Stdlib\ErrorHandler;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\Session\Container;
-use ZfcDatagrid\Column;
-use ZfcDatagrid\Action;
-use ZfcDatagrid\Column\Formatter;
-use ZfcDatagrid\Column\Type;
-use ZfcDatagrid\Column\Style;
-use ZfcDatagrid\Filter;
 
 class GameController extends AbstractActionController
 {
@@ -581,89 +575,7 @@ class GameController extends AbstractActionController
     {
         $this->checkGame();
 
-        $qb = $this->getAdminGameService()->getEntriesQuery($this->game);
-        // $query = $qb->getQuery();
-        // $adapter = new DoctrineAdapter(new LargeTablePaginator($query));
-        // $paginator = new Paginator($adapter);
-        // $paginator->setItemCountPerPage(50);
-        // $paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
-
-        // $header = $this->getAdminGameService()->getEntriesHeader($this->game);
-        // $entries = $this->getAdminGameService()->getGameEntries($header, $paginator, $this->game);
-
-        // return array(
-        //     'paginator' => $paginator,
-        //     'entries' => $entries,
-        //     'header' => $header,
-        //     'game' => $this->game,
-        //     'gameId' => $this->game->getId()
-        // );
-
-        /* @var $grid \ZfcDatagrid\Datagrid */
-        $grid = $this->getServiceLocator()->get('ZfcDatagrid\Datagrid');
-        $grid->setTitle('Entries');
-        $grid->setDataSource($qb);
-
-        $col = new Column\Select('id', 'u');
-        $col->setLabel('Id');
-        $col->setIdentity(true);
-        $grid->addColumn($col);
-        
-        $colType = new Type\DateTime(
-            'Y-m-d H:i:s',
-            \IntlDateFormatter::MEDIUM,
-            \IntlDateFormatter::MEDIUM
-        );
-        $colType->setSourceTimezone('UTC');
-
-        $col = new Column\Select('created_at', 'u');
-        $col->setLabel('Created');
-        $col->setType($colType);
-        $grid->addColumn($col);
-
-        $col = new Column\Select('username', 'u');
-        $col->setLabel('Username');
-        $grid->addColumn($col);
-
-        $col = new Column\Select('email', 'u');
-        $col->setLabel('Email');
-        $grid->addColumn($col);
-
-        $col = new Column\Select('firstname', 'u');
-        $col->setLabel('Firstname');
-        $grid->addColumn($col);
-
-        $col = new Column\Select('lastname', 'u');
-        $col->setLabel('Lastname');
-        $grid->addColumn($col);
-
-        $col = new Column\Select('winner', 'e');
-        $col->setLabel('Status');
-        $col->setReplaceValues(
-            [
-                0 => 'looser',
-                1 => 'winner',
-            ]
-        );
-        $grid->addColumn($col);
-
-        // $actions = new Column\Action();
-        // $actions->setLabel('');
-
-        // $viewAction = new Column\Action\Button();
-        // $viewAction->setLabel('Reset Password');
-        // $rowId = $viewAction->getRowIdPlaceholder();
-        // $viewAction->setLink('/admin/user/reset/'.$rowId);
-        // $actions->addAction($viewAction);
-
-        // $grid->addColumn($actions);
-
-        // $action = new Action\Mass();
-        // $action->setTitle('This is incredible');
-        // $action->setLink('/test');
-        // $action->setConfirm(true);
-        // $grid->addMassAction($action);
-
+        $grid = $this->getAdminGameService()->getGrid($this->game);
         $grid->render();
         
         return $grid->getResponse();

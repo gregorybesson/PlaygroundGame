@@ -564,6 +564,9 @@ class InstantWin extends Game
         return $occurrence;
     }
 
+    /**
+     * DEPRECATED
+     */
     public function getEntriesHeader($game)
     {
         $header = parent::getEntriesHeader($game);
@@ -574,10 +577,11 @@ class InstantWin extends Game
     }
 
     /**
-    * getGameEntries : All entries of a game
-    *
-    * @return Array of PlaygroundGame\Entity\Game
-    */
+     * DEPRECATED
+     * getGameEntries : All entries of a game
+     *
+     * @return Array of PlaygroundGame\Entity\Game
+     */
     public function getGameEntries($header, $entries, $game)
     {
         $results = array();

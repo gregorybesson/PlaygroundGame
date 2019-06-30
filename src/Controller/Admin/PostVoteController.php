@@ -110,19 +110,8 @@ class PostVoteController extends GameController
         }
         $game = $post->getPostvote();
 
-        if ($status && $status=='validation') {
-            $post->setStatus(2);
-            $service->getPostVotePostMapper()->update($post);
-
-            return $this->redirect()->toUrl(
-                $this->adminUrl()->fromRoute(
-                    'postvote/entry',
-                    array('gameId' => $game->getId())
-                )
-            );
-        } elseif ($status && $status=='rejection') {
-            $post->setStatus(9);
-            $service->getPostVotePostMapper()->update($post);
+        if ($status) {
+            $service->moderatePost($post, $status);
 
             return $this->redirect()->toUrl(
                 $this->adminUrl()->fromRoute(

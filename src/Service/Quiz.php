@@ -678,20 +678,25 @@ class Quiz extends Game
         return $winner;
     }
 
+    /**
+     * DEPRECATED
+     */
     public function getEntriesHeader($game)
     {
-        $header                        = parent::getEntriesHeader($game);
+        $header = parent::getEntriesHeader($game);
         $header['totalCorrectAnswers'] = 1;
 
         return $header;
     }
+
 
     public function getEntriesQuery($game)
     {
         $em = $this->serviceLocator->get('doctrine.entitymanager.orm_default');
 
         $qb = $em->createQueryBuilder();
-        $qb->select('
+        $qb->select(
+            '
             r.id,
             u.username,
             u.title,
@@ -713,11 +718,12 @@ class Quiz extends Game
             e.playerData,
             e.updated_at,
             r.totalCorrectAnswers
-            ')
-        ->from('PlaygroundGame\Entity\QuizReply', 'r')
-        ->innerJoin('r.entry', 'e')
-        ->leftJoin('e.user', 'u')
-        ->where($qb->expr()->eq('e.game', ':game'));
+            '
+        )
+            ->from('PlaygroundGame\Entity\QuizReply', 'r')
+            ->innerJoin('r.entry', 'e')
+            ->leftJoin('e.user', 'u')
+            ->where($qb->expr()->eq('e.game', ':game'));
 
         $qb->setParameter('game', $game);
 

@@ -3,6 +3,13 @@
 namespace PlaygroundGame\Service;
 
 use Zend\Stdlib\ErrorHandler;
+use ZfcDatagrid\Column;
+use ZfcDatagrid\Action;
+use ZfcDatagrid\Column\Formatter;
+use ZfcDatagrid\Column\Type;
+use ZfcDatagrid\Column\Style;
+use ZfcDatagrid\Filter;
+use Doctrine\ORM\Query\Expr;
 
 class PostVote extends Game
 {
@@ -268,6 +275,43 @@ class PostVote extends Game
         );
 
         return $post;
+    }
+
+    /**
+     * This service moderate a post depending on the status
+     */
+    public function moderatePost($post, $status = null)
+    {
+        if ($status && strtolower($status) === 'validation') {
+            $post->setStatus(2);
+            $this->getPostVotePostMapper()->update($post);
+
+            $this->getEventManager()->trigger(
+                __FUNCTION__ .'.validation',
+                $this,
+                array('user' => $post->getUser(), 'game' => $post->getPostvote(), 'entry' => $post->getEntry(), 'post' => $post)
+            );
+        //} elseif ($status && strtolower($status) === 'rejection' && $post->getStatus() !== 9) {
+        } elseif ($status && strtolower($status) === 'rejection') {
+            // We reject the $post
+            $post->setStatus(9);
+            $this->getPostVotePostMapper()->update($post);
+
+            // We signal we want to remove the initial points earned from the $post
+            $entry = $post->getEntry();
+            $entry->setPoints(-$entry->getPoints());
+
+            $this->getEventManager()->trigger(
+                __FUNCTION__ .'.rejection',
+                $this,
+                array('user' => $post->getUser(), 'game' => $post->getPostvote(), 'entry' => $entry, 'post' => $post)
+            );
+
+            // We set the points from the $entry to 0;
+            $entry->setPoints(0);
+            $entryMapper = $this->getEntryMapper();
+            $entryMapper->update($entry);
+        }
     }
 
     /**
@@ -654,6 +698,9 @@ class PostVote extends Game
         return false;
     }
 
+    /**
+     * DEPRECATED
+     */
     public function getEntriesHeader($game)
     {
         $header = parent::getEntriesHeader($game);
@@ -668,13 +715,98 @@ class PostVote extends Game
             }
         }
         if ($game->getVoteActive()) {
-            $header['votes'] = 1;
+            $header['p.votes'] = 1;
         }
 
-        $header['views'] = 1;
-        $header['shares'] = 1;
+        $header['p.views'] = 1;
+        $header['p.shares'] = 1;
 
         return $header;
+    }
+
+    public function getGrid($game)
+    {
+        $qb = $this->getEntriesQuery($game);
+
+        /* @var $grid \ZfcDatagrid\Datagrid */
+        $grid = $this->serviceLocator->get('ZfcDatagrid\Datagrid');
+        $grid->setTitle('Entries');
+        $grid->setDataSource($qb);
+
+        $col = new Column\Select('id', 'u');
+        $col->setLabel('Id');
+        $col->setIdentity(true);
+        $grid->addColumn($col);
+        
+        $colType = new Type\DateTime(
+            'Y-m-d H:i:s',
+            \IntlDateFormatter::MEDIUM,
+            \IntlDateFormatter::MEDIUM
+        );
+        $colType->setSourceTimezone('UTC');
+
+        $col = new Column\Select('created_at', 'u');
+        $col->setLabel('Created');
+        $col->setType($colType);
+        $grid->addColumn($col);
+
+        $col = new Column\Select('username', 'u');
+        $col->setLabel('Username');
+        $grid->addColumn($col);
+
+        $col = new Column\Select('email', 'u');
+        $col->setLabel('Email');
+        $grid->addColumn($col);
+
+        $col = new Column\Select('firstname', 'u');
+        $col->setLabel('Firstname');
+        $grid->addColumn($col);
+
+        $col = new Column\Select('lastname', 'u');
+        $col->setLabel('Lastname');
+        $grid->addColumn($col);
+
+        $col = new Column\Select('winner', 'e');
+        $col->setLabel('Status');
+        $col->setReplaceValues(
+            [
+                0 => 'looser',
+                1 => 'winner',
+            ]
+        );
+        $grid->addColumn($col);
+
+        if ($game->getForm()) {
+            $form = json_decode($game->getForm()->getForm(), true);
+            foreach ($form as $element) {
+                foreach ($element as $k => $v) {
+                    if ($k !== 'form_properties') {
+                        $selectString .= "MAX(CASE WHEN f.name = '".$v[0]['name']."' THEN f.value ELSE '' END) AS " .$v[0]['name']. ",";
+                        $querySelect = new Expr\Select("MAX(CASE WHEN f.name = '".$v[0]['name']."' THEN f.value ELSE '' END)");
+                        $col = new Column\Select($querySelect, $v[0]['name']);
+                        $col->setLabel($v[0]['name']);
+                        $col->setUserFilterDisabled(true);
+                        $grid->addColumn($col);
+                    }
+                }
+            }
+        }
+
+        if ($game->getVoteActive()) {
+            $col = new Column\Select('votes', 'p');
+            $col->setLabel('Votes');
+            $grid->addColumn($col);
+        }
+    
+        // $col = new Column\Select('views', 'p');
+        // $col->setLabel('Views');
+        // $grid->addColumn($col);
+
+        // $col = new Column\Select('shares', 'p');
+        // $col->setLabel('Shares');
+        // $grid->addColumn($col);
+
+        return $grid;
     }
 
     public function getEntriesQuery($game)
@@ -682,35 +814,27 @@ class PostVote extends Game
         $em = $this->serviceLocator->get('doctrine.entitymanager.orm_default');
 
         $qb = $em->createQueryBuilder();
-        $qb->select('
-            p.id,
-            u.username,
-            u.title,
-            u.firstname,
-            u.lastname,
-            u.displayName,
-            u.email,
-            u.optin,
-            u.optinPartner,
-            u.address,
-            u.address2,
-            u.postalCode,
-            u.city,
-            u.telephone,
-            u.mobile,
-            u.created_at,
-            u.dob,
-            e.winner,
-            e.socialShares,
-            e.playerData,
-            e.updated_at,
-            p.status,
-            p
-            ')
+
+        $selectString = '';
+
+        if ($game->getForm()) {
+            $form = json_decode($game->getForm()->getForm(), true);
+            foreach ($form as $element) {
+                foreach ($element as $k => $v) {
+                    if ($k !== 'form_properties') {
+                        $selectString .= "MAX(CASE WHEN f.name = '".$v[0]['name']."' THEN f.value ELSE '' END) AS " .$v[0]['name']. ",";
+                    }
+                }
+            }
+        }
+        $selectString .= 'p, u, e';
+        $qb->select($selectString)
             ->from('PlaygroundGame\Entity\PostVotePost', 'p')
+            ->innerJoin('p.postElements', 'f')
             ->innerJoin('p.entry', 'e')
             ->leftJoin('p.user', 'u')
-            ->where($qb->expr()->eq('e.game', ':game'));
+            ->where($qb->expr()->eq('e.game', ':game'))
+            ->groupBy('p.id');
         
         $qb->setParameter('game', $game);
 
@@ -718,10 +842,11 @@ class PostVote extends Game
     }
 
     /**
-    * getGameEntries : All entries of a game
-    *
-    * @return Array of PlaygroundGame\Entity\Game
-    */
+     * DEPRECATED
+     * getGameEntries : All entries of a game
+     *
+     * @return Array of PlaygroundGame\Entity\Game
+     */
     public function getGameEntries($header, $entries, $game)
     {
         $results = array();
