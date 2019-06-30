@@ -135,7 +135,7 @@ class InstantWinController extends GameController
             );
 
             // Change the format of the date
-            $value = \DateTime::createFromFormat('d/m/Y H:i:s', $data['value']);
+            $value = \DateTime::createFromFormat('d/m/Y H:i:s', $data['value']. ':00');
             $data['value'] = $value->format('Y-m-d H:i:s');
             
             $occurrence = $this->getAdminGameService()->updateOccurrence($data, $occurrence->getId());
