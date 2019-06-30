@@ -17,6 +17,13 @@ use Zend\Form\Element;
 use Zend\Form\Form;
 use Zend\InputFilter\Factory as InputFactory;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use ZfcDatagrid\Column;
+use ZfcDatagrid\Action;
+use ZfcDatagrid\Column\Formatter;
+use ZfcDatagrid\Column\Type;
+use ZfcDatagrid\Column\Style;
+use ZfcDatagrid\Filter;
+use Doctrine\ORM\Query\Expr;
 
 class Game
 {
@@ -543,6 +550,78 @@ class Game
         return $games;
     }
 
+    public function getGrid($game)
+    {
+        $qb = $this->getEntriesQuery($game);
+
+        /* @var $grid \ZfcDatagrid\Datagrid */
+        $grid = $this->serviceLocator->get('ZfcDatagrid\Datagrid');
+        $grid->setTitle('Entries');
+        $grid->setDataSource($qb);
+
+        $col = new Column\Select('id', 'u');
+        $col->setLabel('Id');
+        $col->setIdentity(true);
+        $grid->addColumn($col);
+        
+        $colType = new Type\DateTime(
+            'Y-m-d H:i:s',
+            \IntlDateFormatter::MEDIUM,
+            \IntlDateFormatter::MEDIUM
+        );
+        $colType->setSourceTimezone('UTC');
+
+        $col = new Column\Select('created_at', 'u');
+        $col->setLabel('Created');
+        $col->setType($colType);
+        $grid->addColumn($col);
+
+        $col = new Column\Select('username', 'u');
+        $col->setLabel('Username');
+        $grid->addColumn($col);
+
+        $col = new Column\Select('email', 'u');
+        $col->setLabel('Email');
+        $grid->addColumn($col);
+
+        $col = new Column\Select('firstname', 'u');
+        $col->setLabel('Firstname');
+        $grid->addColumn($col);
+
+        $col = new Column\Select('lastname', 'u');
+        $col->setLabel('Lastname');
+        $grid->addColumn($col);
+
+        $col = new Column\Select('winner', 'e');
+        $col->setLabel('Status');
+        $col->setReplaceValues(
+            [
+                0 => 'looser',
+                1 => 'winner',
+            ]
+        );
+        $grid->addColumn($col);
+
+        // $actions = new Column\Action();
+        // $actions->setLabel('');
+
+        // $viewAction = new Column\Action\Button();
+        // $viewAction->setLabel('Reset Password');
+        // $rowId = $viewAction->getRowIdPlaceholder();
+        // $viewAction->setLink('/admin/user/reset/'.$rowId);
+        // $actions->addAction($viewAction);
+
+        // $grid->addColumn($actions);
+
+        // $action = new Action\Mass();
+        // $action->setTitle('This is incredible');
+        // $action->setLink('/test');
+        // $action->setConfirm(true);
+        // $grid->addMassAction($action);
+
+        return $grid;
+    }
+
     public function getEntriesQuery($game)
     {
         $em = $this->serviceLocator->get('doctrine.entitymanager.orm_default');
@@ -581,6 +660,9 @@ class Game
         return $qb;
     }
 
+    /**
+     * DEPRECATED
+     */
     public function getEntriesHeader($game)
     {
         if ($game->getAnonymousAllowed() && $game->getPlayerForm()) {
@@ -595,49 +677,45 @@ class Game
             }
         } elseif ($game->getAnonymousAllowed()) {
             $header = array(
-                'id' => 1,
-                'ip' => 1,
-                'geoloc' => 1,
-                'winner' => 1,
-                'socialShares' => 1,
-                'updated_at' => 1,
+                'u.id' => 1,
+                'u.ip' => 1
             );
         } else {
             $header = array(
-                'id' => 1,
-                'username' => 1,
-                'title' => 1,
-                'firstname' => 1,
-                'lastname' => 1,
-                'displayName' => 1,
-                'email' => 1,
-                'optin' => 1,
-                'optinPartner' => 1,
-                'address' => 1,
-                'address2' => 1,
-                'postalCode' => 1,
-                'city' => 1,
-                'country' => 1,
-                'telephone' => 1,
-                'mobile' => 1,
-                'created_at' => 1,
-                'dob' => 1,
-                'winner' => 1
+                'u.id' => 1,
+                'u.username' => 1,
+                'u.title' => 1,
+                'u.firstname' => 1,
+                'u.lastname' => 1,
+                'u.displayName' => 1,
+                'u.email' => 1,
+                'u.optin' => 1,
+                'u.optinPartner' => 1,
+                'u.address' => 1,
+                'u.address2' => 1,
+                'u.postalCode' => 1,
+                'u.city' => 1,
+                'u.country' => 1,
+                'u.telephone' => 1,
+                'u.mobile' => 1,
+                'u.created_at' => 1,
+                'u.dob' => 1
             );
         }
-        $header['geoloc'] = 1;
-        $header['winner'] = 1;
-        $header['socialShares'] = 1;
-        $header['updated_at'] = 1;
+        $header['e.geoloc'] = 1;
+        $header['e.winner'] = 1;
+        $header['e.socialShares'] = 1;
+        $header['e.updated_at'] = 1;
 
         return $header;
     }
 
     /**
-    * getGameEntries : I create an array of entries based on playerData + header
-    *
-    * @return Array of PlaygroundGame\Entity\Game
-    */
+     * DEPRECATED
+     * getGameEntries : I create an array of entries based on playerData + header
+     *
+     * @return Array of PlaygroundGame\Entity\Game
+     */
     public function getGameEntries($header, $entries, $game)
     {
         $header = $this->getEntriesHeader($game);
