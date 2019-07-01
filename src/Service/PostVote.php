@@ -727,13 +727,15 @@ class PostVote extends Game
     public function getGrid($game)
     {
         $qb = $this->getEntriesQuery($game);
+        // echo $qb->getQuery()->getSQL();
+        // die('---');
 
         /* @var $grid \ZfcDatagrid\Datagrid */
         $grid = $this->serviceLocator->get('ZfcDatagrid\Datagrid');
         $grid->setTitle('Entries');
         $grid->setDataSource($qb);
 
-        $col = new Column\Select('id', 'u');
+        $col = new Column\Select('id', 'p');
         $col->setLabel('Id');
         $col->setIdentity(true);
         $grid->addColumn($col);
@@ -781,7 +783,6 @@ class PostVote extends Game
             foreach ($form as $element) {
                 foreach ($element as $k => $v) {
                     if ($k !== 'form_properties') {
-                        $selectString .= "MAX(CASE WHEN f.name = '".$v[0]['name']."' THEN f.value ELSE '' END) AS " .$v[0]['name']. ",";
                         $querySelect = new Expr\Select("MAX(CASE WHEN f.name = '".$v[0]['name']."' THEN f.value ELSE '' END)");
                         $col = new Column\Select($querySelect, $v[0]['name']);
                         $col->setLabel($v[0]['name']);
@@ -793,18 +794,41 @@ class PostVote extends Game
         }
 
         if ($game->getVoteActive()) {
-            $col = new Column\Select('votes', 'p');
-            $col->setLabel('Votes');
+            $querySelect = new Expr\Select("COUNT(vo.id)");
+            $col = new Column\Select($querySelect, "votes");
+            $col->setLabel("Votes");
+            $col->setUserFilterDisabled(true);
             $grid->addColumn($col);
         }
     
-        // $col = new Column\Select('views', 'p');
-        // $col->setLabel('Views');
-        // $grid->addColumn($col);
+        $querySelect = new Expr\Select("COUNT(v.id)");
+        $col = new Column\Select($querySelect, "views");
+        $col->setLabel("Views");
+        $col->setUserFilterDisabled(true);
+        $grid->addColumn($col);
 
-        // $col = new Column\Select('shares', 'p');
-        // $col->setLabel('Shares');
-        // $grid->addColumn($col);
+        $querySelect = new Expr\Select("COUNT(s.id)");
+        $col = new Column\Select($querySelect, "shares");
+        $col->setLabel("Shares");
+        $col->setUserFilterDisabled(true);
+        $grid->addColumn($col);
+
+        $actions = new Column\Action();
+        $actions->setLabel('');
+
+        $viewAction = new Column\Action\Button();
+        $viewAction->setLabel('Moderate');
+        $rowId = $viewAction->getRowIdPlaceholder();
+        $viewAction->setLink('/admin/game/postvote-moderation-edit/'.$rowId);
+        $actions->addAction($viewAction);
+
+        $grid->addColumn($actions);
+
+        // $action = new Action\Mass();
+        // $action->setTitle('This is incredible');
+        // $action->setLink('/admin/game/postvote-mod-list');
+        // $action->setConfirm(true);
+        // $grid->addMassAction($action);
 
         return $grid;
     }
@@ -830,6 +854,9 @@ class PostVote extends Game
         $selectString .= 'p, u, e';
         $qb->select($selectString)
             ->from('PlaygroundGame\Entity\PostVotePost', 'p')
+            ->leftJoin('p.votes', 'vo')
+            ->leftJoin('p.shares', 's')
+            ->leftJoin('p.views', 'v')
             ->innerJoin('p.postElements', 'f')
             ->innerJoin('p.entry', 'e')
             ->leftJoin('p.user', 'u')
