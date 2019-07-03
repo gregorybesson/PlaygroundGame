@@ -602,6 +602,19 @@ class Game
         );
         $grid->addColumn($col);
 
+        if ($game->getDrawAuto()) {
+            $adminUrl = $this->serviceLocator->get('ControllerPluginManager')->get('adminUrl');
+
+            $grid->setToolbarTemplateVariables(
+                ['globalActions' =>
+                    [
+                        $this->serviceLocator->get('MvcTranslator')->translate('Draw') =>
+                        $adminUrl->fromRoute($game->getClassType() .'/draw', array('gameId' => $game->getId()))
+                    ]
+                ]
+            );
+        }
+
         // $actions = new Column\Action();
         // $actions->setLabel('');
 
