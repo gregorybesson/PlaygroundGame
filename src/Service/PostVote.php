@@ -734,6 +734,7 @@ class PostVote extends Game
         $grid = $this->serviceLocator->get('ZfcDatagrid\Datagrid');
         $grid->setTitle('Entries');
         $grid->setDataSource($qb);
+        $grid->setDefaultItemsPerPage(50);
 
         $col = new Column\Select('id', 'p');
         $col->setLabel('Id');
@@ -778,13 +779,25 @@ class PostVote extends Game
         );
         $grid->addColumn($col);
 
+        $imageFormatter = new Formatter\Image();
+        //Set the prefix of the image path and the prefix of the link
+        $imageFormatter->setPrefix('/');
+        $imageFormatter->setAttribute('width', '120');
+        $imageFormatter->setLinkAttribute('class', 'pop');
+
         if ($game->getForm()) {
             $form = json_decode($game->getForm()->getForm(), true);
             foreach ($form as $element) {
                 foreach ($element as $k => $v) {
                     if ($k !== 'form_properties') {
                         $querySelect = new Expr\Select("MAX(CASE WHEN f.name = '".$v[0]['name']."' THEN f.value ELSE '' END)");
-                        $col = new Column\Select($querySelect, $v[0]['name']);
+                        if ($v[0]['type'] == 'file') {
+                            $col = new Column\Select($querySelect, $v[0]['name']);
+                            //$col->setType(new Type\Image());
+                            $col->addFormatter($imageFormatter);
+                        } else {
+                            $col = new Column\Select($querySelect, $v[0]['name']);
+                        }
                         $col->setLabel($v[0]['name']);
                         $col->setUserFilterDisabled(true);
                         $grid->addColumn($col);
