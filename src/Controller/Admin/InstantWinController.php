@@ -88,22 +88,27 @@ class InstantWinController extends GameController
     {
         $this->checkGame();
 
-        $adapter = new DoctrineAdapter(
-            new LargeTablePaginator(
-                $this->getAdminGameService()->getInstantWinOccurrenceMapper()->queryByGame($this->game)
-            )
-        );
-        $paginator = new Paginator($adapter);
-        $paginator->setItemCountPerPage(25);
-        $paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
+        $grid = $this->getAdminGameService()->getOccurrencesGrid($this->game);
+        $grid->render();
+        
+        return $grid->getResponse();
 
-        return new ViewModel(
-            array(
-                'occurrences' => $paginator,
-                'gameId'      => $this->game->getId(),
-                'game'        => $this->game,
-            )
-        );
+        // $adapter = new DoctrineAdapter(
+        //     new LargeTablePaginator(
+        //         $this->getAdminGameService()->getInstantWinOccurrenceMapper()->queryByGame($this->game)
+        //     )
+        // );
+        // $paginator = new Paginator($adapter);
+        // $paginator->setItemCountPerPage(25);
+        // $paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
+
+        // return new ViewModel(
+        //     array(
+        //         'occurrences' => $paginator,
+        //         'gameId'      => $this->game->getId(),
+        //         'game'        => $this->game,
+        //     )
+        // );
     }
 
     public function addOccurrenceAction()
