@@ -602,7 +602,7 @@ class Game
         );
         $grid->addColumn($col);
 
-        if ($game->getDrawAuto()) {
+        if (method_exists($game, 'getDrawAuto') && $game->getDrawAuto()) {
             $adminUrl = $this->serviceLocator->get('ControllerPluginManager')->get('adminUrl');
 
             $grid->setToolbarTemplateVariables(
