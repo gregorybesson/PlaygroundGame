@@ -3,6 +3,13 @@
 namespace PlaygroundGame\Service;
 
 use Zend\Stdlib\ErrorHandler;
+use ZfcDatagrid\Column;
+use ZfcDatagrid\Action;
+use ZfcDatagrid\Column\Formatter;
+use ZfcDatagrid\Column\Type;
+use ZfcDatagrid\Column\Style;
+use ZfcDatagrid\Filter;
+use Doctrine\ORM\Query\Expr;
 
 class InstantWin extends Game
 {
@@ -81,6 +88,84 @@ class InstantWin extends Game
         } elseif ($game->getOccurrenceType() === 'datetime') {
             return $this->scheduleDateOccurrences($game);
         }
+    }
+
+    public function getOccurrencesGrid($game = null)
+    {
+        $qb = $this->getOccurrencesQuery($game);
+        $adminUrl = $this->serviceLocator->get('ControllerPluginManager')->get('adminUrl');
+
+        /* @var $grid \ZfcDatagrid\Datagrid */
+        $grid = $this->serviceLocator->get('ZfcDatagrid\Datagrid');
+        $grid->setTitle('Occurrences');
+        $grid->setDataSource($qb);
+        $grid->setDefaultItemsPerPage(50);
+
+        $col = new Column\Select('id', 'i');
+        $col->setLabel('Id');
+        $col->setIdentity(true);
+        $grid->addColumn($col);
+
+        $col = new Column\Select('value', 'i');
+        $col->setLabel('Value');
+        $grid->addColumn($col);
+
+        $col = new Column\Select('email', 'u');
+        $col->setLabel('Email');
+        $grid->addColumn($col);
+
+        $col = new Column\Select('title', 'p');
+        $col->setLabel('Prize');
+        $grid->addColumn($col);
+
+        $col = new Column\Select('winning', 'i');
+        $col->setLabel('Status');
+        $col->setReplaceValues(
+            [
+                0 => 'not winning',
+                1 => 'winning',
+            ]
+        );
+        $grid->addColumn($col);
+
+        $actions = new Column\Action();
+        $actions->setLabel('');
+
+        $viewAction = new Column\Action\Button();
+        $viewAction->setLabel('Edit');
+        $rowId = $viewAction->getRowIdPlaceholder();
+        $viewAction->setLink($adminUrl->fromRoute('playgroundgame/instantwin-occurrence-edit', array('gameId' => $game->getId(), 'occurrenceId' => $rowId)));
+        $actions->addAction($viewAction);
+
+        $viewAction = new Column\Action\Button();
+        $viewAction->setLabel('Delete');
+        $rowId = $viewAction->getRowIdPlaceholder();
+        $viewAction->setLink($adminUrl->fromRoute('playgroundgame/instantwin-occurrence-remove', array('occurrenceId' => $rowId)));
+        $actions->addAction($viewAction);
+
+        $grid->addColumn($actions);
+
+        return $grid;
+    }
+
+    public function getOccurrencesQuery($game)
+    {
+        $em = $this->serviceLocator->get('doctrine.entitymanager.orm_default');
+
+        $qb = $em->createQueryBuilder();
+        $selectString = 'i, e, u, p, g';
+        $qb->select($selectString)
+            ->from('PlaygroundGame\Entity\InstantWinOccurrence', 'i')
+            ->leftJoin('i.entry', 'e')
+            ->leftJoin('i.prize', 'p')
+            ->innerJoin('i.instantwin', 'g')
+            ->leftJoin('i.user', 'u')
+            ->where($qb->expr()->eq('i.instantwin', ':game'))
+            ->orderBy('i.id');
+
+        $qb->setParameter('game', $game);
+
+        return $qb;
     }
 
     public function scheduleCodeOccurrences($game, $data)
