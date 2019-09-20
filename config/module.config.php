@@ -2316,10 +2316,14 @@ return array(
                             'vote' => array(
                                 'type' => 'Segment',
                                 'options' => array(
-                                    'route' => '/vote[/:post][/:comment]',
+                                    'route' => '/vote[/:post][/:note][/:comment]',
+                                    // 'constraints' => array(
+                                    //     'note' => '[0-9]+'
+                                    // ),
                                     'defaults' => array(
                                         'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
-                                        'action' => 'ajaxVote'
+                                        'action' => 'ajaxVote',
+                                        'note' => 1,
                                     )
                                 ),
                                 'may_terminate' => true,

@@ -384,7 +384,7 @@ class PostVote extends Game
             );
         }
         
-        $qb->select('p, COUNT(DISTINCT v) AS votesCount, COUNT(distinct av) AS voted')
+        $qb->select('p, SUM(DISTINCT v.note) AS votesCount, SUM(distinct av.note) AS voted')
             ->from('PlaygroundGame\Entity\PostVotePost', 'p')
             ->innerJoin('p.postvote', 'g')
             ->leftJoin('p.user', 'u')
@@ -422,7 +422,7 @@ class PostVote extends Game
         }
         
         $query = $qb->getQuery();
-        
+        // echo $query->getSql();
         $posts = $query->getResult();
         $arrayPosts = array();
         $i=0;
@@ -437,6 +437,7 @@ class PostVote extends Game
                 $arrayPosts[$i]['data']  = $data;
                 $arrayPosts[$i]['votes'] = count($post->getVotes());
                 $arrayPosts[$i]['voted'] = $postRaw['voted'];
+                $arrayPosts[$i]['votesCount'] = $postRaw['votesCount'];
                 $arrayPosts[$i]['id']    = $post->getId();
                 $arrayPosts[$i]['user']  = $post->getUser();
                 $arrayPosts[$i]['createdAt']  = $post->getCreatedAt();
@@ -447,7 +448,7 @@ class PostVote extends Game
         return $arrayPosts;
     }
 
-    public function toggleVote($user, $ipAddress, $post, $comment = null)
+    public function toggleVote($user, $ipAddress, $post, $comment = null, $note = 1)
     {
         $postvoteVoteMapper = $this->getPostVoteVoteMapper();
         $postId = $post->getId();
@@ -481,7 +482,7 @@ class PostVote extends Game
             $vote = new \PlaygroundGame\Entity\PostVoteVote();
             $vote->setPost($post);
             $vote->setIp($ipAddress);
-            $vote->setNote(1);
+            $vote->setNote($note);
             // If the vote is for a comment
             if ($comment != null) {
                 $vote->setPostComment($comment);

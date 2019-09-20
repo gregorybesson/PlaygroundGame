@@ -647,6 +647,7 @@ class PostVoteController extends GameController
         session_write_close();
         $postId = $this->getEvent()->getRouteMatch()->getParam('post');
         $commentId = $this->getEvent()->getRouteMatch()->getParam('comment');
+        $note = $this->getEvent()->getRouteMatch()->getParam('note');
         $request = $this->getRequest();
         $response = $this->getResponse();
 
@@ -678,7 +679,8 @@ class PostVoteController extends GameController
                     $this->user,
                     $this->getRequest()->getServer('REMOTE_ADDR'),
                     $post,
-                    $comment
+                    $comment,
+                    $note
                 )) {
                     $response->setContent(
                         \Zend\Json\Json::encode(['success' => 1])
