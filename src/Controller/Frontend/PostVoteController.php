@@ -190,6 +190,11 @@ class PostVoteController extends GameController
                     array('id' => $this->game->getIdentifier())
                 );
 
+                // If a redirect is asked after the preview.
+                if ($this->getRequest()->getQuery()->get('redirect') != '') {
+                    $redirectUrl = $this->getRequest()->getQuery()->get('redirect');
+                }
+
                 return $this->redirect()->toUrl($redirectUrl);
             }
         }
