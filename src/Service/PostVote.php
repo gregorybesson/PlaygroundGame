@@ -384,7 +384,7 @@ class PostVote extends Game
             );
         }
 
-        $qb->select('p, SUM(CASE WHEN (e.position = 1) THEN v.note ELSE 0 END) AS votesCount, SUM(CASE WHEN (e.position = 1) THEN v.note ELSE 0 END) AS voted')
+        $qb->select('p, SUM(CASE WHEN (e.position = 1) THEN v.note ELSE 0 END) AS votesCount, SUM(CASE WHEN (e.position = 1 AND v.user = :user) THEN v.note ELSE 0 END) AS voted')
             ->from('PlaygroundGame\Entity\PostVotePost', 'p')
             ->innerJoin('p.postvote', 'g')
             ->leftJoin('p.user', 'u')
