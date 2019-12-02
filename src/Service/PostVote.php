@@ -178,7 +178,7 @@ class PostVote extends Game
                             $image->correctOrientation()->save();
                         }
                         $postElement->setValue($media_url . $value['name']);
-                        
+
                         if (class_exists("Imagick")) {
                             $ext = pathinfo($value['name'], PATHINFO_EXTENSION);
                             $img = new \Imagick($path . $value['name']);
@@ -357,12 +357,12 @@ class PostVote extends Game
         $em = $this->serviceLocator->get('doctrine.entitymanager.orm_default');
         $qb = $em->createQueryBuilder();
         $and = $qb->expr()->andx();
-        
+
         $and->add($qb->expr()->eq('p.status', 2));
 
         $and->add($qb->expr()->eq('g.id', ':game'));
         $qb->setParameter('game', $game);
-        
+
         if ($search != '') {
             $and->add(
                 $qb->expr()->orX(
@@ -375,7 +375,7 @@ class PostVote extends Game
             );
             $qb->setParameter('search', $search);
         }
-        
+
         if ('push' == $filter) {
             $and->add(
                 $qb->expr()->andX(
@@ -383,8 +383,8 @@ class PostVote extends Game
                 )
             );
         }
-        
-        $qb->select('p, SUM(DISTINCT v.note) AS votesCount, SUM(distinct av.note) AS voted')
+
+        $qb->select('p, SUM(CASE WHEN (e.position = 1) THEN v.note ELSE 0 END) AS votesCount, SUM(CASE WHEN (e.position = 1) THEN v.note ELSE 0 END) AS voted')
             ->from('PlaygroundGame\Entity\PostVotePost', 'p')
             ->innerJoin('p.postvote', 'g')
             ->leftJoin('p.user', 'u')
@@ -393,7 +393,7 @@ class PostVote extends Game
             ->leftJoin('p.votes', 'av', 'WITH', 'av.user = :user')
             ->where($and)
             ->groupBy('p.id');
- 
+
         if ($user) {
             $qb->setParameter('user', $user);
         } else {
@@ -420,7 +420,7 @@ class PostVote extends Game
                 $qb->orderBy('p.createdAt', 'ASC');
                 break;
         }
-        
+
         $query = $qb->getQuery();
         // echo $query->getSql();
         $posts = $query->getResult();
@@ -618,7 +618,7 @@ class PostVote extends Game
         }
 
         $postvoteCommentMapper->insert($comment);
-        
+
         $this->getEventManager()->trigger(
             __FUNCTION__ .'.post',
             $this,
@@ -741,7 +741,7 @@ class PostVote extends Game
         $col->setLabel('Id');
         $col->setIdentity(true);
         $grid->addColumn($col);
-        
+
         $colType = new Type\DateTime(
             'Y-m-d H:i:s',
             \IntlDateFormatter::MEDIUM,
@@ -793,9 +793,19 @@ class PostVote extends Game
                     if ($k !== 'form_properties') {
                         $querySelect = new Expr\Select("MAX(CASE WHEN f.name = '".$v[0]['name']."' THEN f.value ELSE '' END)");
                         if ($v[0]['type'] == 'file') {
+                            // print_r($v[0]['data']['fileextension']);
+                            // die('---');
                             $col = new Column\Select($querySelect, $v[0]['name']);
                             //$col->setType(new Type\Image());
-                            $col->addFormatter($imageFormatter);
+                            if (strpos($v[0]['data']['fileextension'], 'png') !== false) {
+                                $col->addFormatter($imageFormatter);
+                            }
+                            if (strpos($v[0]['data']['fileextension'], 'mp4') !== false) {
+                                $col->addFormatter(new Formatter\Link());
+                            }
+                            if (strpos($v[0]['data']['fileextension'], 'pdf') !== false) {
+                                $col->addFormatter(new Formatter\Link());
+                            }
                         } else {
                             $col = new Column\Select($querySelect, $v[0]['name']);
                         }
@@ -814,7 +824,7 @@ class PostVote extends Game
             $col->setUserFilterDisabled(true);
             $grid->addColumn($col);
         }
-    
+
         $querySelect = new Expr\Select("COUNT(v.id)");
         $col = new Column\Select($querySelect, "views");
         $col->setLabel("Views");
@@ -876,7 +886,7 @@ class PostVote extends Game
             ->leftJoin('p.user', 'u')
             ->where($qb->expr()->eq('e.game', ':game'))
             ->groupBy('p.id');
-        
+
         $qb->setParameter('game', $game);
 
         return $qb;
