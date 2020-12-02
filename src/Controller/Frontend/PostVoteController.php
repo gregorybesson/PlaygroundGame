@@ -70,7 +70,7 @@ class PostVoteController extends GameController
                         array(
                             'id' => $this->game->getIdentifier(),
                             'post' => $postId,
-                            
+
                         )
                     )
                 );
@@ -155,7 +155,7 @@ class PostVoteController extends GameController
     public function previewAction()
     {
         $entry = $this->getGameService()->findLastActiveEntry($this->game, $this->user);
-         
+
         if (!$entry) {
             // the user has already taken part of this game and the participation limit has been reached
             return $this->redirect()->toUrl(
@@ -272,7 +272,7 @@ class PostVoteController extends GameController
 
         if ($this->user) {
             $form->remove('captcha');
-            if (count($this->getGameService()->getPostvoteVoteMapper()->findBy(array('user' => $this->user, 'post' =>$post))) > 0) {
+            if (count($this->getGameService()->getPostvoteVoteMapper()->findBy(array('user' => $this->user, 'post' => $post, 'postComment' => null))) > 0) {
                 $voted = true;
             }
         }
@@ -593,7 +593,7 @@ class PostVoteController extends GameController
         }
 
         $viewModel = $this->buildView($this->game);
-        
+
         if ($postId) {
             $postTarget = $this->getGameService()->getPostVotePostMapper()->findById($postId);
             if ($postTarget) {
@@ -606,9 +606,9 @@ class PostVoteController extends GameController
                     ) . $element->getValue();
                     break;
                 }
-                
+
                 $secretKey = strtoupper(substr(sha1(uniqid('pg_', true).'####'.time()), 0, 15));
-                
+
                 // Without bit.ly shortener
                 $socialLinkUrl = $this->frontendUrl()->fromRoute(
                     'postvote/list',
@@ -619,7 +619,7 @@ class PostVoteController extends GameController
                 ).'?id='.$postTarget->getId().'&key='.$secretKey;
                 // With core shortener helper
                 $socialLinkUrl = $this->shortenUrl()->shortenUrl($socialLinkUrl);
-                
+
                 $this->getViewHelper('HeadMeta')->setProperty('og:image', $fbShareImage);
                 $this->getViewHelper('HeadMeta')->setProperty('twitter:card', "photo");
                 $this->getViewHelper('HeadMeta')->setProperty('twitter:site', "@alfie_selfie");
@@ -629,7 +629,7 @@ class PostVoteController extends GameController
                 $this->getViewHelper('HeadMeta')->setProperty('twitter:url', $socialLinkUrl);
             }
         }
-        
+
         $viewModel->setVariables(array(
                 'posts' => $paginator,
                 'form' => $form,
@@ -842,10 +842,10 @@ class PostVoteController extends GameController
     {
         $statusMail = false;
         $message = '';
-    
+
         $postId = $this->getEvent()->getRouteMatch()->getParam('post');
         $post = $this->getGameService()->getPostVotePostMapper()->findById($postId);
-    
+
         $secretKey = strtoupper(substr(sha1(uniqid('pg_', true).'####'.time()), 0, 15));
         $socialLinkUrl = $this->frontendUrl()->fromRoute(
             'postvote/post',
@@ -857,10 +857,10 @@ class PostVoteController extends GameController
         ).'?key='.$secretKey;
         // With core shortener helper
         $socialLinkUrl = $this->shortenUrl()->shortenUrl($socialLinkUrl);
-    
+
         $form = $this->getServiceLocator()->get('playgroundgame_sharemail_form');
         $form->setAttribute('method', 'post');
-    
+
         if ($this->getRequest()->isPost()) {
             $data = $this->getRequest()->getPost()->toArray();
             $form->setData($data);
@@ -883,7 +883,7 @@ class PostVoteController extends GameController
         }
 
         $viewModel = $this->buildView($this->game);
-            
+
         $viewModel->setVariables(
             array(
                 'statusMail'       => $statusMail,
@@ -893,7 +893,7 @@ class PostVoteController extends GameController
                 'post'             => $post
             )
         );
-    
+
         return $viewModel;
     }
 
@@ -901,13 +901,13 @@ class PostVoteController extends GameController
     {
         $statusMail = false;
         $message = '';
-    
+
         $commentId = $this->getEvent()->getRouteMatch()->getParam('comment');
         $comment = $this->getGameService()->getPostVoteCommentMapper()->findById($commentId);
-    
+
         $form = $this->getServiceLocator()->get('playgroundgame_sharemail_form');
         $form->setAttribute('method', 'post');
-    
+
         if ($this->getRequest()->isPost()) {
             $data = $this->getRequest()->getPost()->toArray();
             $form->setData($data);
@@ -928,24 +928,24 @@ class PostVoteController extends GameController
         }
 
         $viewModel = $this->buildView($this->game);
-            
+
         $viewModel->setVariables(array(
             'statusMail' => $statusMail,
             'message'    => $message,
             'form'       => $form,
             'comment'    => $comment
         ));
-    
+
         return $viewModel;
     }
 
     public function shareAction()
     {
         $statusMail = null;
-    
+
         // Has the user finished the game ?
         $lastEntry = $this->getGameService()->findLastInactiveEntry($this->game, $this->user);
-    
+
         if ($lastEntry === null) {
             return $this->redirect()->toUrl(
                 $this->frontendUrl()->fromRoute(
@@ -954,9 +954,9 @@ class PostVoteController extends GameController
                 )
             );
         }
-    
+
         $post = $this->getGameService()->getPostVotePostMapper()->findOneBy(array('entry' => $lastEntry));
-    
+
         $secretKey = strtoupper(substr(sha1(uniqid('pg_', true).'####'.time()), 0, 15));
         $socialLinkUrl = $this->frontendUrl()->fromRoute(
             'postvote/post',
@@ -968,10 +968,10 @@ class PostVoteController extends GameController
         ).'?key='.$secretKey;
         // With core shortener helper
         $socialLinkUrl = $this->shortenUrl()->shortenUrl($socialLinkUrl);
-    
+
         $form = $this->getServiceLocator()->get('playgroundgame_sharemail_form');
         $form->setAttribute('method', 'post');
-    
+
         if ($this->getRequest()->isPost()) {
             $data = $this->getRequest()->getPost()->toArray();
             $form->setData($data);
@@ -984,7 +984,7 @@ class PostVoteController extends GameController
         }
 
         $viewModel = $this->buildView($this->game);
-    
+
         foreach ($post->getPostElements() as $element) {
             $fbShareImage = $this->frontendUrl()->fromRoute(
                 '',
@@ -1002,14 +1002,14 @@ class PostVoteController extends GameController
         $this->getViewHelper('HeadMeta')->setProperty('twitter:description', "");
         $this->getViewHelper('HeadMeta')->setProperty('twitter:image', $fbShareImage);
         $this->getViewHelper('HeadMeta')->setProperty('twitter:url', $socialLinkUrl);
-            
+
         $viewModel->setVariables(array(
             'statusMail'       => $statusMail,
             'form'             => $form,
             'socialLinkUrl'    => $socialLinkUrl,
             'post'             => $post
         ));
-    
+
         return $viewModel;
     }
 
