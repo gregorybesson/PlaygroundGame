@@ -52,7 +52,7 @@ class Game
     protected $invitationMapper;
 
     protected $userMapper;
-    
+
     protected $anonymousIdentifier = null;
 
     /**
@@ -381,7 +381,7 @@ class Game
 
         return $game;
     }
- 
+
     /**
      * getNextGames
      *
@@ -395,7 +395,7 @@ class Game
         } else {
             $today = new \DateTime($dateStart);
         }
-        
+
         $today = $today->format('Y-m-d H:i:s');
         $orderBy = 'g.startDate';
         if ($order != null) {
@@ -412,29 +412,29 @@ class Game
             $and->add($qb->expr()->lte('g.endDate', ':datefin'));
             $qb->setParameter('datefin', $end);
         }
-        
+
         $and->add($qb->expr()->eq('g.active', '1'));
         $and->add($qb->expr()->eq('g.broadcastPlatform', '1'));
-        
+
         if ($classType != '') {
             $and->add($qb->expr()->eq('g.classType', ':classType'));
             $qb->setParameter('classType', $classType);
         }
-        
+
         if ($cost !== null) {
             $and->add($qb->expr()->eq('g.costToPlay', ':cost'));
             $qb->setParameter('cost', $cost);
         }
-        
+
         $qb->select('g')
             ->from('PlaygroundGame\Entity\Game', 'g')
             ->where($and)
             ->orderBy($orderBy, $dir);
-        
+
         $query = $qb->getQuery();
         //echo $query->getSql();
         $games = $query->getResult();
-        
+
         // je les classe par date de publication (date comme clé dans le tableau afin de pouvoir merger les objets
         // de type article avec le même procédé en les classant naturellement par date asc ou desc
         $arrayGames = array();
@@ -483,28 +483,28 @@ class Game
             )
         );
         $qb->setParameter('date', $today);
-        
+
         $and->add($qb->expr()->eq('g.active', '1'));
         $and->add($qb->expr()->eq('g.broadcastPlatform', '1'));
-        
+
         if ($classType != '') {
             $and->add($qb->expr()->eq('g.classType', ':classType'));
             $qb->setParameter('classType', $classType);
         }
-        
+
         if ($displayHome !== null) {
             $and->add($qb->expr()->eq('g.displayHome', ':key'));
             $qb->setParameter('key', $displayHome);
         }
-        
+
         $qb->select('g')
             ->from('PlaygroundGame\Entity\Game', 'g')
             ->where($and)
             ->orderBy($orderBy, $dir);
-        
+
         $query = $qb->getQuery();
         $games = $query->getResult();
-        
+
         // je les classe par date de publication (date comme clé dans le tableau afin de pouvoir merger les objets
         // de type article avec le même procédé en les classant naturellement par date asc ou desc
         $arrayGames = array();
@@ -563,7 +563,7 @@ class Game
         $col->setLabel('Id');
         $col->setIdentity(true);
         $grid->addColumn($col);
-        
+
         $colType = new Type\DateTime(
             'Y-m-d H:i:s',
             \IntlDateFormatter::MEDIUM,
@@ -667,7 +667,7 @@ class Game
             ->from('PlaygroundGame\Entity\Entry', 'e')
             ->leftJoin('e.user', 'u')
             ->where($qb->expr()->eq('e.game', ':game'));
-        
+
         $qb->setParameter('game', $game);
 
         return $qb;
@@ -852,7 +852,7 @@ class Game
                     ->get('doctrine.entitymanager.orm_default')
                     ->getUnitOfWork()
                     ->markReadOnly($game);
-                    
+
                 return $game;
             //}
         }
@@ -903,7 +903,7 @@ class Game
             $search['anonymousId'] = $this->getAnonymousId();
             $search['user'] = null;
         }
-        
+
         if (! is_null($active)) {
             $search['active'] = $active;
         }
@@ -982,19 +982,19 @@ class Game
 
         return false;
     }
-    
+
     public function getAnonymousIdentifier()
     {
         if (is_null($this->anonymousIdentifier) || $this->anonymousIdentifier === false) {
             $session = new Container('anonymous_identifier');
-            
+
             if ($session->offsetExists('anonymous_identifier')) {
                 $this->anonymousIdentifier = $session->offsetGet('anonymous_identifier');
             } else {
                 $this->anonymousIdentifier = false;
             }
         }
-    
+
         return $this->anonymousIdentifier;
     }
 
@@ -1112,7 +1112,7 @@ class Game
             $entry->setIp($ip);
             $entry->setGeoloc($geoloc);
             $entry->setAnonymousId($this->getAnonymousId());
-            
+
             if ($this->getAnonymousIdentifier()) {
                 $entry->setAnonymousIdentifier($this->getAnonymousIdentifier());
             }
@@ -1238,7 +1238,7 @@ class Game
 
         return false;
     }
-    
+
     /**
      * @param \PlaygroundGame\Entity\Game $game
      * @param \PlaygroundUser\Entity\UserInterface $user
@@ -1418,7 +1418,7 @@ class Game
         if (isset($data['email']) && !is_array($data['email'])) {
             $data['email'] = array($data['email']);
         }
-        
+
         foreach ($data['email'] as $to) {
             $mailSent = true;
             if (!empty($to)) {
@@ -1441,7 +1441,7 @@ class Game
                     $mailService->send($message);
                 } catch (\Zend\Mail\Protocol\Exception\RuntimeException $e) {
                 }
-                
+
                 if ($entry) {
                     $shares = json_decode($entry->getSocialShares(), true);
                     (!isset($shares['mail']))? $shares['mail'] = 1:$shares['mail'] += 1;
@@ -1538,7 +1538,7 @@ class Game
     public function postFbWall($secretKey, $game, $user, $entry)
     {
         $topic = $game->getTitle();
-        
+
         $shares = json_decode($entry->getSocialShares(), true);
         if (!isset($shares['fbwall'])) {
             $shares['fbwall'] = 1;
@@ -1548,7 +1548,7 @@ class Game
         $sharesJson = json_encode($shares);
         $entry->setSocialShares($sharesJson);
         $entry = $this->getEntryMapper()->update($entry);
-        
+
         $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array(
             'user' => $user,
             'game' => $game,
@@ -1572,7 +1572,7 @@ class Game
         $sharesJson = json_encode($shares);
         $entry->setSocialShares($sharesJson);
         $entry = $this->getEntryMapper()->update($entry);
-        
+
         $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array(
             'user' => $user,
             'game' => $game,
@@ -1597,7 +1597,7 @@ class Game
         $sharesJson = json_encode($shares);
         $entry->setSocialShares($sharesJson);
         $entry = $this->getEntryMapper()->update($entry);
-        
+
         $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array(
             'user' => $user,
             'game' => $game,
@@ -1612,7 +1612,7 @@ class Game
     public function postGoogle($secretKey, $game, $user, $entry)
     {
         $topic = $game->getTitle();
-        
+
         $shares = json_decode($entry->getSocialShares(), true);
         if (!isset($shares['fbrequest'])) {
             $shares['google'] = 1;
@@ -1781,7 +1781,7 @@ class Game
                 @move_uploaded_file($file["tmp_name"], $path . $fileNewname);
             }
 
-            
+
             if (class_exists("Imagick")) {
                 $ext = pathinfo($fileNewname, PATHINFO_EXTENSION);
                 $img = new \Imagick($path . $fileNewname);
@@ -1851,7 +1851,7 @@ class Game
 
         $qb = $em->createQueryBuilder();
         $qb->select('g')->from('PlaygroundGame\Entity\Game', 'g');
-        
+
         switch ($type) {
             case 'startDate':
                 $qb->orderBy('g.startDate', $order);
@@ -2159,7 +2159,7 @@ class Game
         fclose($out);
         return ob_get_clean(); // ... then return it as a string!
     }
-    
+
     public function getAttributes($attributes)
     {
         $a = array();
@@ -2184,6 +2184,8 @@ class Game
         $a['fileextension']   = isset($attributes->data->fileextension)?
             str_replace(', ', ',', $attributes->data->fileextension) :
             'png,jpg,jpeg,gif';
+        $a['key']   = isset($attributes->data->key)?
+            $attributes->data->key : null;
 
         // hiddenRequired('fileexcludeextension', '').appendTo(li);
         // hiddenRequired('filemimetype', '').appendTo(li);
@@ -2276,20 +2278,39 @@ class Game
     public function createFormFromJson($jsonForm, $id = 'jsonForm')
     {
         $formPV = json_decode($jsonForm);
-        
+
         $form = new Form();
         $form->setAttribute('id', $id);
         $form->setAttribute('enctype', 'multipart/form-data');
-        
+
         $inputFilter = new \Zend\InputFilter\InputFilter();
         $factory = new InputFactory();
-        
+
         foreach ($formPV as $element) {
             if (isset($element->line_text)) {
                 $attr  = $this->getAttributes($element->line_text[0]);
                 $element = new Element\Text($attr['name']);
                 $element = $this->decorate($element, $attr, $inputFilter);
                 $form->add($element);
+            }
+            if (isset($element->line_key)) {
+                $attr  = $this->getAttributes($element->line_key[0]);
+                $element = new Element\Text($attr['name']);
+                $element = $this->decorate($element, $attr, $inputFilter);
+                $form->add($element);
+
+                $inputFilter->add($factory->createInput(array(
+                    'name'     => $attr['name'],
+                    'required' => $attr['required'],
+                    'validators' => array(
+                        array(
+                            'name' => 'InArray',
+                            'options' => array(
+                                'haystack' => array($attr['key']),
+                            ),
+                        ),
+                    ),
+                )));
             }
             if (isset($element->line_password)) {
                 $attr = $this->getAttributes($element->line_password[0]);
@@ -2328,15 +2349,15 @@ class Game
                     $values[] = $value->label;
                 }
                 $element->setValueOptions($values);
-        
+
                 $options = array();
                 $options['encoding'] = 'UTF-8';
                 $options['disable_inarray_validator'] = true;
-        
+
                 $element->setOptions($options);
-        
+
                 $form->add($element);
-        
+
                 $inputFilter->add($factory->createInput(array(
                     'name'     => $attr['name'],
                     'required' => $attr['required'],
@@ -2346,7 +2367,7 @@ class Game
             if (isset($element->line_checkbox)) {
                 $attr = $this->getAttributes($element->line_checkbox[0]);
                 $element = new Element\MultiCheckbox($attr['name']);
-        
+
                 $element->setLabel($attr['label']);
                 $element->setAttributes(
                     array(
@@ -2364,13 +2385,13 @@ class Game
                 }
                 $element->setValueOptions($values);
                 $form->add($element);
-        
+
                 $options = array();
                 $options['encoding'] = 'UTF-8';
                 $options['disable_inarray_validator'] = true;
-        
+
                 $element->setOptions($options);
-        
+
                 $inputFilter->add($factory->createInput(array(
                     'name'      => $attr['name'],
                     'required'  => $attr['required'],
@@ -2397,13 +2418,13 @@ class Game
                 }
                 $element->setValueOptions($values);
                 $form->add($element);
-        
+
                 $options = array();
                 $options['encoding'] = 'UTF-8';
                 $options['disable_inarray_validator'] = true;
-        
+
                 $element->setOptions($options);
-        
+
                 $inputFilter->add($factory->createInput(array(
                     'name'     => $attr['name'],
                     'required' => $attr['required'],
@@ -2452,9 +2473,9 @@ class Game
                 )));
             }
         }
-        
+
         $form->setInputFilter($inputFilter);
-        
+
         return $form;
     }
 
