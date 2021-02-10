@@ -21,7 +21,7 @@ return array(
                 'game' => array(),
             ),
         ),
-    
+
         'rule_providers' => array(
             'BjyAuthorize\Provider\Rule\Config' => array(
                 'allow' => array(
@@ -32,7 +32,7 @@ return array(
                 ),
             ),
         ),
-    
+
         'guards' => array(
             'BjyAuthorize\Guard\Controller' => array(
                 array('controller' => PlaygroundGame\Controller\Frontend\Home::class,           'roles' => array('guest', 'user')),
@@ -46,7 +46,7 @@ return array(
                 array('controller' => PlaygroundGame\Controller\Frontend\TradingCard::class,    'roles' => array('guest', 'user')),
                 array('controller' => PlaygroundGame\Controller\Frontend\Memory::class,         'roles' => array('guest', 'user')),
                 array('controller' => PlaygroundGame\Controller\Frontend\Webhook::class,        'roles' => array('guest', 'user')),
-    
+
                 // Admin area admin
                 array('controller' => PlaygroundGame\Controller\Admin\Game::class,          'roles' => array('game-manager','admin')),
                 array('controller' => PlaygroundGame\Controller\Admin\Lottery::class,       'roles' => array('game-manager','admin')),
@@ -327,7 +327,7 @@ return array(
                                 )
                             ),
                             'play' => array(
-                                'type' => 'Segment', 
+                                'type' => 'Segment',
                                 'options' => array(
                                     'route' => '/jouer',
                                     'defaults' => array(
@@ -695,7 +695,7 @@ return array(
                                 )
                             ),
                             'play' => array(
-                                'type' => 'Segment', 
+                                'type' => 'Segment',
                                 'options' => array(
                                     'route' => '/jouer[/:gameId]',
                                     'defaults' => array(
@@ -2180,6 +2180,16 @@ return array(
                                                 'action' => 'list'
                                             )
                                         )
+                                    )
+                                )
+                            ),
+                            'moderation' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/moderation/:postId[/:status]',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
+                                        'action' => 'ajaxModeration'
                                     )
                                 )
                             ),

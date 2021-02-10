@@ -2185,7 +2185,7 @@ class Game
             str_replace(', ', ',', $attributes->data->fileextension) :
             'png,jpg,jpeg,gif';
         $a['key']   = isset($attributes->data->key)?
-            $attributes->data->key : null;
+        $attributes->data->key : null;
 
         // hiddenRequired('fileexcludeextension', '').appendTo(li);
         // hiddenRequired('filemimetype', '').appendTo(li);

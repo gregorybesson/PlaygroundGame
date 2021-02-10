@@ -772,6 +772,46 @@ class PostVoteController extends GameController
         return $this->redirect()->toUrl($this->getRequest()->getServer('HTTP_REFERER'));
     }
 
+    public function ajaxModerationAction()
+    {
+        $service = $this->getGameService();
+        $postId = $this->getEvent()->getRouteMatch()->getParam('postId');
+        $status = $this->getEvent()->getRouteMatch()->getParam('status');
+        $response = $this->getResponse();
+
+        $response->setContent(
+            \Zend\Json\Json::encode(
+                array(
+                    'success' => 0
+                )
+            )
+        );
+
+        if (!$postId) {
+             $response->setContent(\Zend\Json\Json::encode(array(
+                'success' => 0
+            )));
+        }
+        $post = $service->getPostVotePostMapper()->findById($postId);
+
+        if (! $post) {
+             $response->setContent(\Zend\Json\Json::encode(array(
+                'success' => 0
+            )));
+        }
+        $game = $post->getPostvote();
+
+        if ($status) {
+            $service->moderatePost($post, $status);
+
+            $response->setContent(\Zend\Json\Json::encode(array(
+                'success' => 1
+            )));
+        }
+
+        return $response;
+    }
+
     public function ajaxRemoveCommentAction()
     {
         // Call this for the session lock to be released (other ajax calls can then be made)
