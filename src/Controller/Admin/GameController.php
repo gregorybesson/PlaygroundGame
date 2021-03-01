@@ -571,6 +571,11 @@ class GameController extends AbstractActionController
         );
     }
 
+    /**
+     * Return the list of entries for the game
+     *
+     * @return void
+     */
     public function entryAction()
     {
         $this->checkGame();

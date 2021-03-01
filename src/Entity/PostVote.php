@@ -3,6 +3,8 @@ namespace PlaygroundGame\Entity;
 
 use PlaygroundGame\Entity\Game;
 use Doctrine\Common\Collections\ArrayCollection;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Translatable\Translatable;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Zend\InputFilter\InputFilter;
@@ -27,7 +29,7 @@ class PostVote extends Game implements InputFilterAwareInterface
      * @ORM\Column(name="post_display_mode", type="string", nullable=false)
      */
     protected $postDisplayMode = 'date';
-    
+
     /**
      * Number of Post displayed :
      * 0 : infinite
@@ -53,6 +55,28 @@ class PostVote extends Game implements InputFilterAwareInterface
      * @ORM\Column(name="moderation_type", type="boolean", nullable=false, options={"default" = 0})
      */
     protected $moderationType = 0;
+
+        /**
+     * @ORM\Column(name="mail_moderation_validated",type="boolean", nullable=true)
+     */
+    protected $mailModerationValidated = 0;
+
+    /**
+     * @Gedmo\Translatable
+     * @ORM\Column(name="mail_moderation_validated_block", type="text", nullable=true)
+     */
+    protected $mailModerationValidatedBlock;
+
+    /**
+     * @ORM\Column(name="mail_moderation_rejected",type="boolean", nullable=true)
+     */
+    protected $mailModerationRejected = 0;
+
+    /**
+     * @Gedmo\Translatable
+     * @ORM\Column(name="mail_moderation_rejected_block", type="text", nullable=true)
+     */
+    protected $mailModerationRejectedBlock;
 
     /**
      * @ORM\OneToOne(targetEntity="PostVoteForm", mappedBy="postvote", cascade={"persist","remove"})
@@ -130,7 +154,7 @@ class PostVote extends Game implements InputFilterAwareInterface
 
         return $this;
     }
-    
+
     /**
      * @return int
      */
@@ -138,7 +162,7 @@ class PostVote extends Game implements InputFilterAwareInterface
     {
         return $this->postDisplayNumber;
     }
-    
+
     /**
      * @param int $postDisplayNumber
      *
@@ -201,6 +225,78 @@ class PostVote extends Game implements InputFilterAwareInterface
     public function setModerationType($moderationType)
     {
         $this->moderationType = $moderationType;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getMailModerationValidated()
+    {
+        return $this->mailModerationValidated;
+    }
+
+    /**
+     * @param bool $mailModerationValidated
+     */
+    public function setMailModerationValidated($mailModerationValidated)
+    {
+        $this->mailModerationValidated = $mailModerationValidated;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getMailModerationValidatedBlock()
+    {
+        return $this->mailModerationValidatedBlock;
+    }
+
+    /**
+     * @param bool $mailModerationValidatedBlock
+     */
+    public function setMailModerationValidatedBlock($mailModerationValidatedBlock)
+    {
+        $this->mailModerationValidatedBlock = $mailModerationValidatedBlock;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getMailModerationRejected()
+    {
+        return $this->mailModerationRejected;
+    }
+
+    /**
+     * @param bool $mailModerationRejected
+     */
+    public function setMailModerationRejected($mailModerationRejected)
+    {
+        $this->mailModerationRejected = $mailModerationRejected;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getMailModerationRejectedBlock()
+    {
+        return $this->mailModerationRejectedBlock;
+    }
+
+    /**
+     * @param bool $mailModerationRejectedBlock
+     */
+    public function setMailModerationRejectedBlock($mailModerationRejectedBlock)
+    {
+        $this->mailModerationRejectedBlock = $mailModerationRejectedBlock;
 
         return $this;
     }

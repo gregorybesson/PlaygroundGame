@@ -291,6 +291,10 @@ class PostVote extends Game
                 $this,
                 array('user' => $post->getUser(), 'game' => $post->getPostvote(), 'entry' => $post->getEntry(), 'post' => $post)
             );
+
+            if ($post->getPostvote()->getMailModerationValidated()) {
+                $this->sendResultMail($post->getPostvote(), $post->getUser(), $post->getEntry(), 'moderation-validated');
+            }
         //} elseif ($status && strtolower($status) === 'rejection' && $post->getStatus() !== 9) {
         } elseif ($status && strtolower($status) === 'rejection') {
             // We reject the $post
@@ -311,6 +315,10 @@ class PostVote extends Game
             $entry->setPoints(0);
             $entryMapper = $this->getEntryMapper();
             $entryMapper->update($entry);
+
+            if ($post->getPostvote()->getMailModerationRejected()) {
+                $this->sendResultMail($post->getPostvote(), $post->getUser(), $post->getEntry(), 'moderation-validated');
+            }
         }
     }
 
@@ -754,9 +762,9 @@ class PostVote extends Game
         $col->setType($colType);
         $grid->addColumn($col);
 
-        $col = new Column\Select('username', 'u');
-        $col->setLabel('Username');
-        $grid->addColumn($col);
+        // $col = new Column\Select('username', 'u');
+        // $col->setLabel('Username');
+        // $grid->addColumn($col);
 
         $col = new Column\Select('email', 'u');
         $col->setLabel('Email');
@@ -770,15 +778,15 @@ class PostVote extends Game
         $col->setLabel('Lastname');
         $grid->addColumn($col);
 
-        $col = new Column\Select('winner', 'e');
-        $col->setLabel('Status');
-        $col->setReplaceValues(
-            [
-                0 => 'looser',
-                1 => 'winner',
-            ]
-        );
-        $grid->addColumn($col);
+        // $col = new Column\Select('winner', 'e');
+        // $col->setLabel('Status');
+        // $col->setReplaceValues(
+        //     [
+        //         0 => 'looser',
+        //         1 => 'winner',
+        //     ]
+        // );
+        // $grid->addColumn($col);
 
         $imageFormatter = new Formatter\Image();
         //Set the prefix of the image path and the prefix of the link
@@ -809,7 +817,7 @@ class PostVote extends Game
                         } else {
                             $col = new Column\Select($querySelect, $v[0]['name']);
                         }
-                        $col->setLabel($v[0]['name']);
+                        $col->setLabel($v[0]['data']['label']);
                         $col->setUserFilterDisabled(true);
                         $grid->addColumn($col);
                     }
@@ -831,10 +839,31 @@ class PostVote extends Game
         $col->setUserFilterDisabled(true);
         $grid->addColumn($col);
 
-        $querySelect = new Expr\Select("COUNT(s.id)");
-        $col = new Column\Select($querySelect, "shares");
-        $col->setLabel("Shares");
-        $col->setUserFilterDisabled(true);
+        // $querySelect = new Expr\Select("COUNT(s.id)");
+        // $col = new Column\Select($querySelect, "shares");
+        // $col->setLabel("Shares");
+        // $col->setUserFilterDisabled(true);
+        // $grid->addColumn($col);
+
+        /**
+         * values :
+         *          0 : draft
+         *          1 : user confirmed
+         *          2 : admin accepted
+         *          8 : user rejected
+         *          9 : admin rejected
+         */
+        $col = new Column\Select('status', 'p');
+        $col->setLabel('Moderation');
+        $col->setReplaceValues(
+            [
+                0 => 'Draft',
+                1 => 'Pending',
+                2 => 'Validated',
+                8 => 'Canceled by the player',
+                9 => 'Rejected',
+            ]
+        );
         $grid->addColumn($col);
 
         $actions = new Column\Action();
