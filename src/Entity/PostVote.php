@@ -63,6 +63,12 @@ class PostVote extends Game implements InputFilterAwareInterface
 
     /**
      * @Gedmo\Translatable
+     * @ORM\Column(name="mail_moderation_validated_subject",type="string", nullable=true)
+     */
+    protected $mailModerationValidatedSubject;
+
+    /**
+     * @Gedmo\Translatable
      * @ORM\Column(name="mail_moderation_validated_block", type="text", nullable=true)
      */
     protected $mailModerationValidatedBlock;
@@ -71,6 +77,12 @@ class PostVote extends Game implements InputFilterAwareInterface
      * @ORM\Column(name="mail_moderation_rejected",type="boolean", nullable=true)
      */
     protected $mailModerationRejected = 0;
+
+    /**
+     * @Gedmo\Translatable
+     * @ORM\Column(name="mail_moderation_rejected_subject", type="string", nullable=true)
+     */
+    protected $mailModerationRejectedSubject;
 
     /**
      * @Gedmo\Translatable
@@ -250,6 +262,24 @@ class PostVote extends Game implements InputFilterAwareInterface
     /**
      * @return bool
      */
+    public function getMailModerationValidatedSubject()
+    {
+        return $this->mailModerationValidatedSubject;
+    }
+
+    /**
+     * @param bool $mailModerationValidatedSubject
+     */
+    public function setMailModerationValidatedSubject($mailModerationValidatedSubject)
+    {
+        $this->mailModerationValidatedSubject = $mailModerationValidatedSubject;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
     public function getMailModerationValidatedBlock()
     {
         return $this->mailModerationValidatedBlock;
@@ -279,6 +309,24 @@ class PostVote extends Game implements InputFilterAwareInterface
     public function setMailModerationRejected($mailModerationRejected)
     {
         $this->mailModerationRejected = $mailModerationRejected;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getMailModerationRejectedSubject()
+    {
+        return $this->mailModerationRejectedSubject;
+    }
+
+    /**
+     * @param bool $mailModerationRejectedSubject
+     */
+    public function setMailModerationRejectedSubject($mailModerationRejectedSubject)
+    {
+        $this->mailModerationRejectedSubject = $mailModerationRejectedSubject;
 
         return $this;
     }

@@ -105,6 +105,18 @@ class PostVote extends Game
     ]);
 
     $this->add([
+      'type' => 'Zend\Form\Element\Text',
+      'name' => 'mailModerationValidatedSubject',
+      'attributes' => [
+        'id' => 'mailModerationValidatedSubject',
+      ],
+      'options' => [
+        'empty_option' => $translator->translate('Mail subject', 'playgroundgame'),
+        'label' => $translator->translate('Mail subject', 'playgroundgame'),
+      ],
+    ]);
+
+    $this->add([
       'type' => 'Zend\Form\Element\Textarea',
       'name' => 'mailModerationValidatedBlock',
       'options' => [
@@ -125,6 +137,18 @@ class PostVote extends Game
       ],
       'options' => [
         'label' => $translator->translate('Send a mail to the player when the post is validated', 'playgroundgame'),
+      ],
+    ]);
+
+    $this->add([
+      'type' => 'Zend\Form\Element\Text',
+      'name' => 'mailModerationRejectedSubject',
+      'attributes' => [
+        'id' => 'mailModerationRejectedSubject',
+      ],
+      'options' => [
+        'empty_option' => $translator->translate('Mail subject', 'playgroundgame'),
+        'label' => $translator->translate('Mail subject', 'playgroundgame'),
       ],
     ]);
 

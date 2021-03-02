@@ -1476,6 +1476,25 @@ class Game
     }
 
     /**
+     * New standard function to send mails
+     *
+     */
+    public function mail($from, $to, $subject, $template, $data)
+    {
+        $mailService = $this->serviceLocator->get('playgroundgame_message');
+        $renderer = $this->serviceLocator->get('Zend\View\Renderer\RendererInterface');
+        $skinUrl = $renderer->url(
+            'frontend',
+            array(),
+            array('force_canonical' => true)
+        );
+        $data['skinUrl'] = $skinUrl;
+        $template = 'playground-game/email/' . $template;
+        $message = $mailService->createHtmlMessage($from, $to, $subject, $template, $data);
+        $mailService->send($message);
+    }
+
+    /**
      * @param \PlaygroundGame\Entity\Game $game
      * @param \PlaygroundUser\Entity\User $user
      * @param Entry $entry
