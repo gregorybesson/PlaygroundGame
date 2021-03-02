@@ -382,6 +382,10 @@ class PostVoteController extends GameController
 
         $viewModel = $this->buildView($this->game);
 
+        if (!$playLimitReached) {
+            $this->getGameService()->sendMail($this->game, $this->user, $lastEntry);
+        }
+
         $viewModel->setVariables(
             [
                 'statusMail' => null,
