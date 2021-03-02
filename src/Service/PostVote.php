@@ -282,6 +282,9 @@ class PostVote extends Game
      */
     public function moderatePost($post, $status = null)
     {
+        $entry = $post->getEntry();
+        $game = $post->getPostvote();
+
         if ($status && strtolower($status) === 'validation') {
             $post->setStatus(2);
             $this->getPostVotePostMapper()->update($post);
@@ -289,26 +292,37 @@ class PostVote extends Game
             $this->getEventManager()->trigger(
                 __FUNCTION__ .'.validation',
                 $this,
-                array('user' => $post->getUser(), 'game' => $post->getPostvote(), 'entry' => $post->getEntry(), 'post' => $post)
+                array('user' => $post->getUser(), 'game' => $game, 'entry' => $entry, 'post' => $post)
             );
 
-            if ($post->getPostvote()->getMailModerationValidated()) {
-                $this->sendResultMail($post->getPostvote(), $post->getUser(), $post->getEntry(), 'moderation-validated');
+            if ($game->getMailModerationValidated()) {
+                $from = $this->getOptions()->getEmailFromAddress();
+                if ($entry->getAnonymousIdentifier()) {
+                    $to = $entry->getAnonymousIdentifier();
+                } elseif ($post->getUser()) {
+                    $to = $post->getUser()->getEmail();
+                }
+                $subject = $game->getMailModerationValidatedSubject();
+                $data = [
+                    'game' => $game,
+                    'user' => $post->getUser(),
+                    'entry' => $entry,
+                    'content' => $game->getMailModerationValidatedBlock(),
+                ];
+                $this->mail($from, $to, $subject, 'moderation-validated', $data);
             }
-        //} elseif ($status && strtolower($status) === 'rejection' && $post->getStatus() !== 9) {
         } elseif ($status && strtolower($status) === 'rejection') {
             // We reject the $post
             $post->setStatus(9);
             $this->getPostVotePostMapper()->update($post);
 
             // We signal we want to remove the initial points earned from the $post
-            $entry = $post->getEntry();
             $entry->setPoints(-$entry->getPoints());
 
             $this->getEventManager()->trigger(
                 __FUNCTION__ .'.rejection',
                 $this,
-                array('user' => $post->getUser(), 'game' => $post->getPostvote(), 'entry' => $entry, 'post' => $post)
+                array('user' => $post->getUser(), 'game' => $game, 'entry' => $entry, 'post' => $post)
             );
 
             // We set the points from the $entry to 0;
@@ -316,8 +330,21 @@ class PostVote extends Game
             $entryMapper = $this->getEntryMapper();
             $entryMapper->update($entry);
 
-            if ($post->getPostvote()->getMailModerationRejected()) {
-                $this->sendResultMail($post->getPostvote(), $post->getUser(), $post->getEntry(), 'moderation-validated');
+            if ($game->getMailModerationRejected()) {
+                $from = $this->getOptions()->getEmailFromAddress();
+                if ($entry->getAnonymousIdentifier()) {
+                    $to = $entry->getAnonymousIdentifier();
+                } elseif ($post->getUser()) {
+                    $to = $post->getUser()->getEmail();
+                }
+                $subject = $game->getMailModerationRejectedSubject();
+                $data = [
+                    'game' => $game,
+                    'user' => $post->getUser(),
+                    'entry' => $entry,
+                    'content' => $game->getMailModerationRejectedBlock(),
+                ];
+                $this->mail($from, $to, $subject, 'moderation-rejected', $data);
             }
         }
     }
