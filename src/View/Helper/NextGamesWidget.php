@@ -2,7 +2,7 @@
 
 namespace PlaygroundGame\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
+use Laminas\View\Helper\AbstractHelper;
 use Interop\Container\ContainerInterface;
 
 class NextGamesWidget extends AbstractHelper

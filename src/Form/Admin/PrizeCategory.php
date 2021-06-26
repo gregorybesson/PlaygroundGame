@@ -2,10 +2,10 @@
 
 namespace PlaygroundGame\Form\Admin;
 
-use Zend\Form\Element;
+use Laminas\Form\Element;
 use ZfcUser\Form\ProvidesEventsForm;
-use Zend\Mvc\I18n\Translator;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\Mvc\I18n\Translator;
+use Laminas\ServiceManager\ServiceManager;
 
 class PrizeCategory extends ProvidesEventsForm
 {
@@ -30,7 +30,7 @@ class PrizeCategory extends ProvidesEventsForm
 
         $this->add(array(
             'name' => 'id',
-            'type'  => 'Zend\Form\Element\Hidden',
+            'type'  => 'Laminas\Form\Element\Hidden',
             'attributes' => array(
                 'value' => 0,
             ),
@@ -47,7 +47,7 @@ class PrizeCategory extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Select',
+            'type' => 'Laminas\Form\Element\Select',
             'name' => 'active',
             'options' => array(
                 'value_options' => array(
@@ -70,7 +70,7 @@ class PrizeCategory extends ProvidesEventsForm
         ));
         $this->add(array(
                 'name' => 'picto',
-                'type'  => 'Zend\Form\Element\Hidden',
+                'type'  => 'Laminas\Form\Element\Hidden',
                 'attributes' => array(
                         'value' => '',
                 ),

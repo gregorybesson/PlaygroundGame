@@ -3,10 +3,10 @@
 namespace PlaygroundGame\Form\Admin;
 
 use PlaygroundGame\Entity\MissionGameCondition;
-use Zend\Form\Fieldset;
-use Zend\Mvc\I18n\Translator;
+use Laminas\Form\Fieldset;
+use Laminas\Mvc\I18n\Translator;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\ServiceManager\ServiceManager;
 
 class MissionGameConditionFieldset extends Fieldset
 {
@@ -19,12 +19,12 @@ class MissionGameConditionFieldset extends Fieldset
         ->setObject(new MissionGameCondition());
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Hidden',
+            'type' => 'Laminas\Form\Element\Hidden',
             'name' => 'id',
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Select',
+            'type' => 'Laminas\Form\Element\Select',
             'name' => 'attribute',
             'options' => array(
                 'empty_option' => $translator->translate('Select the attribute', 'playgroundgame'),
@@ -37,7 +37,7 @@ class MissionGameConditionFieldset extends Fieldset
         ));
         
         $this->add(array(
-            'type' => 'Zend\Form\Element\Select',
+            'type' => 'Laminas\Form\Element\Select',
             'name' => 'comparison',
             'options' => array(
                 'empty_option' => $translator->translate('Type of comparison', 'playgroundgame'),

@@ -16,7 +16,7 @@ class QuizQuestionTest extends \PHPUnit\Framework\TestCase
 
     protected $quizQuestionData;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->sm = Bootstrap::getServiceManager();
         $this->sm->setAllowOverride(true);

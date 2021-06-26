@@ -5,7 +5,7 @@ namespace PlaygroundGame\Service;
 use PlaygroundGame\Entity\QuizReply;
 use PlaygroundGame\Entity\QuizReplyAnswer;
 use PlaygroundGame\Mapper\GameInterface as GameMapperInterface;
-use Zend\Stdlib\ErrorHandler;
+use Laminas\Stdlib\ErrorHandler;
 
 class Quiz extends Game
 {

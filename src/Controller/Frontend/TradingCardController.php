@@ -1,7 +1,7 @@
 <?php
 namespace PlaygroundGame\Controller\Frontend;
 
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 class TradingCardController extends GameController
 {
@@ -25,7 +25,7 @@ class TradingCardController extends GameController
      *    body: 'photo=' + image
      * },
      *
-     * @return \Zend\Stdlib\ResponseInterface
+     * @return \Laminas\Stdlib\ResponseInterface
      */
     public function ajaxuploadAction()
     {
@@ -33,7 +33,7 @@ class TradingCardController extends GameController
         session_write_close();
 
         if (! $this->game) {
-            $this->getResponse()->setContent(\Zend\Json\Json::encode(array(
+            $this->getResponse()->setContent(\Laminas\Json\Json::encode(array(
                 'success' => 0
             )));
 
@@ -44,7 +44,7 @@ class TradingCardController extends GameController
         if (!$entry) {
             // the user has already taken part to this game and the participation limit has been reached
             $this->getResponse()->setContent(
-                \Zend\Json\Json::encode(
+                \Laminas\Json\Json::encode(
                     array(
                         'success' => 0
                     )
@@ -77,7 +77,7 @@ class TradingCardController extends GameController
             $result = $media_url.$uploadFile;
         }
 
-        $this->getResponse()->setContent(\Zend\Json\Json::encode(array(
+        $this->getResponse()->setContent(\Laminas\Json\Json::encode(array(
             'success' => true,
             'fileUrl' => $result
         )));

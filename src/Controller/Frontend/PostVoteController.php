@@ -2,8 +2,8 @@
 
 namespace PlaygroundGame\Controller\Frontend;
 
-use Zend\Form\Form;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\Form\Form;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 class PostVoteController extends GameController
 {
@@ -102,7 +102,7 @@ class PostVoteController extends GameController
                         $elementInput->setRequired(false);
                         $form->get($element->getName())->setAttribute('required', false);
                     }
-                } catch (\Zend\Form\Exception\InvalidElementException $e) {
+                } catch (\Laminas\Form\Exception\InvalidElementException $e) {
                 }
             }
         }
@@ -207,7 +207,7 @@ class PostVoteController extends GameController
 
     /**
      * View the Post page
-     * @return multitype:|\Zend\Http\Response|\Zend\View\Model\ViewModel
+     * @return multitype:|\Laminas\Http\Response|\Laminas\View\Model\ViewModel
      */
     public function postAction()
     {
@@ -369,11 +369,11 @@ class PostVoteController extends GameController
         //     )
         // );
 
-        // if ($view && $view instanceof \Zend\View\Model\ViewModel) {
+        // if ($view && $view instanceof \Laminas\View\Model\ViewModel) {
         //     $view->setVariables(array('post' => $post));
 
         //     return $view;
-        // } elseif ($view && $view instanceof \Zend\Http\PhpEnvironment\Response) {
+        // } elseif ($view && $view instanceof \Laminas\Http\PhpEnvironment\Response) {
         //     return $view;
         // } else {
         $form = $this->getServiceLocator()
@@ -409,7 +409,7 @@ class PostVoteController extends GameController
      *    body: 'photo=' + image
      * },
      *
-     * @return \Zend\Stdlib\ResponseInterface
+     * @return \Laminas\Stdlib\ResponseInterface
      */
     public function ajaxuploadAction()
     {
@@ -417,7 +417,7 @@ class PostVoteController extends GameController
         session_write_close();
 
         if (! $this->game) {
-            $this->getResponse()->setContent(\Zend\Json\Json::encode(array(
+            $this->getResponse()->setContent(\Laminas\Json\Json::encode(array(
                 'success' => 0
             )));
 
@@ -430,7 +430,7 @@ class PostVoteController extends GameController
         );
         if (!$entry) {
             // the user has already taken part of this game and the participation limit has been reached
-            $this->getResponse()->setContent(\Zend\Json\Json::encode(array(
+            $this->getResponse()->setContent(\Laminas\Json\Json::encode(array(
                 'success' => 0
             )));
 
@@ -453,7 +453,7 @@ class PostVoteController extends GameController
             );
         }
 
-        $this->getResponse()->setContent(\Zend\Json\Json::encode(array(
+        $this->getResponse()->setContent(\Laminas\Json\Json::encode(array(
             'success' => true,
             'fileUrl' => $uploadFile
         )));
@@ -466,7 +466,7 @@ class PostVoteController extends GameController
         $response = $this->getResponse();
 
         if (! $this->game) {
-            $response->setContent(\Zend\Json\Json::encode(array(
+            $response->setContent(\Laminas\Json\Json::encode(array(
                 'success' => 0
             )));
 
@@ -476,7 +476,7 @@ class PostVoteController extends GameController
         $entry = $this->getGameService()->findLastActiveEntry($this->game, $this->user);
         if (!$entry) {
             // the user has already taken part of this game and the participation limit has been reached
-            $response->setContent(\Zend\Json\Json::encode(array(
+            $response->setContent(\Laminas\Json\Json::encode(array(
                 'success' => 0
             )));
 
@@ -487,7 +487,7 @@ class PostVoteController extends GameController
             $this->getGameService()->deleteFilePosted($data, $this->game, $this->user);
         }
 
-        $response->setContent(\Zend\Json\Json::encode(array(
+        $response->setContent(\Laminas\Json\Json::encode(array(
             'success' => true,
         )));
 
@@ -500,7 +500,7 @@ class PostVoteController extends GameController
         $postId = $this->getEvent()->getRouteMatch()->getParam('post');
 
         if (! $postId) {
-            $response->setContent(\Zend\Json\Json::encode(array(
+            $response->setContent(\Laminas\Json\Json::encode(array(
                 'success' => 0
             )));
 
@@ -510,7 +510,7 @@ class PostVoteController extends GameController
         $post = $this->getGameService()->getPostVotePostMapper()->findById($postId);
 
         if (! $post || $post->getUser()->getId() !== $this->user->getId()) {
-            $response->setContent(\Zend\Json\Json::encode(array(
+            $response->setContent(\Laminas\Json\Json::encode(array(
                 'success' => 0
             )));
 
@@ -524,7 +524,7 @@ class PostVoteController extends GameController
             $postvotePostMapper->update($post);
         }
 
-        $response->setContent(\Zend\Json\Json::encode(array(
+        $response->setContent(\Laminas\Json\Json::encode(array(
             'success' => true,
         )));
 
@@ -555,7 +555,7 @@ class PostVoteController extends GameController
         $posts = $this->getGameService()->findArrayOfValidatedPosts($this->game, $this->user, $filter, $search);
 
         if (is_array($posts)) {
-            $paginator = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\ArrayAdapter($posts));
+            $paginator = new \Laminas\Paginator\Paginator(new \Laminas\Paginator\Adapter\ArrayAdapter($posts));
             $paginator->setItemCountPerPage($this->game->getPostDisplayNumber());
             $paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
         } else {
@@ -662,7 +662,7 @@ class PostVoteController extends GameController
 
         if (! $this->game) {
             $response->setContent(
-                \Zend\Json\Json::encode(
+                \Laminas\Json\Json::encode(
                     array(
                         'success' => 0
                     )
@@ -674,7 +674,7 @@ class PostVoteController extends GameController
 
         if (!$this->zfcUserAuthentication()->hasIdentity()) {
             $response->setContent(
-                \Zend\Json\Json::encode(
+                \Laminas\Json\Json::encode(
                     array(
                         'success' => 0
                     )
@@ -692,11 +692,11 @@ class PostVoteController extends GameController
                     $note
                 )) {
                     $response->setContent(
-                        \Zend\Json\Json::encode(['success' => 1])
+                        \Laminas\Json\Json::encode(['success' => 1])
                     );
                 } else {
                     $response->setContent(
-                        \Zend\Json\Json::encode(['success' => 0])
+                        \Laminas\Json\Json::encode(['success' => 0])
                     );
                 }
             }
@@ -716,7 +716,7 @@ class PostVoteController extends GameController
         }
 
         if (is_array($comments)) {
-            $paginator = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\ArrayAdapter($comments));
+            $paginator = new \Laminas\Paginator\Paginator(new \Laminas\Paginator\Adapter\ArrayAdapter($comments));
             $paginator->setItemCountPerPage(25);
             $paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
         } else {
@@ -741,7 +741,7 @@ class PostVoteController extends GameController
         $post = $this->getGameService()->getPostvotePostMapper()->findById($postId);
 
         if (!$this->zfcUserAuthentication()->hasIdentity()) {
-            $response->setContent(\Zend\Json\Json::encode(array(
+            $response->setContent(\Laminas\Json\Json::encode(array(
                 'success' => 0
             )));
         } else {
@@ -753,11 +753,11 @@ class PostVoteController extends GameController
                     $this->params()->fromPost('comment'),
                     $this->params()->fromPost('category')
                 )) {
-                    $response->setContent(\Zend\Json\Json::encode(array(
+                    $response->setContent(\Laminas\Json\Json::encode(array(
                         'success' => 1
                     )));
                 } else {
-                    $response->setContent(\Zend\Json\Json::encode(array(
+                    $response->setContent(\Laminas\Json\Json::encode(array(
                         'success' => 0
                     )));
                 }
@@ -784,7 +784,7 @@ class PostVoteController extends GameController
         $response = $this->getResponse();
 
         $response->setContent(
-            \Zend\Json\Json::encode(
+            \Laminas\Json\Json::encode(
                 array(
                     'success' => 0
                 )
@@ -792,14 +792,14 @@ class PostVoteController extends GameController
         );
 
         if (!$postId) {
-             $response->setContent(\Zend\Json\Json::encode(array(
+             $response->setContent(\Laminas\Json\Json::encode(array(
                 'success' => 0
             )));
         }
         $post = $service->getPostVotePostMapper()->findById($postId);
 
         if (! $post) {
-             $response->setContent(\Zend\Json\Json::encode(array(
+             $response->setContent(\Laminas\Json\Json::encode(array(
                 'success' => 0
             )));
         }
@@ -808,7 +808,7 @@ class PostVoteController extends GameController
         if ($status) {
             $service->moderatePost($post, $status);
 
-            $response->setContent(\Zend\Json\Json::encode(array(
+            $response->setContent(\Laminas\Json\Json::encode(array(
                 'success' => 1
             )));
         }
@@ -825,7 +825,7 @@ class PostVoteController extends GameController
         $response = $this->getResponse();
 
         if (! $this->game) {
-            $response->setContent(\Zend\Json\Json::encode(array(
+            $response->setContent(\Laminas\Json\Json::encode(array(
                 'success' => 0
             )));
 
@@ -833,7 +833,7 @@ class PostVoteController extends GameController
         }
 
         if (!$this->zfcUserAuthentication()->hasIdentity()) {
-            $response->setContent(\Zend\Json\Json::encode(array(
+            $response->setContent(\Laminas\Json\Json::encode(array(
                 'success' => 0
             )));
         } else {
@@ -843,11 +843,11 @@ class PostVoteController extends GameController
                     $this->getRequest()->getServer('REMOTE_ADDR'),
                     $commentId
                 )) {
-                    $response->setContent(\Zend\Json\Json::encode(array(
+                    $response->setContent(\Laminas\Json\Json::encode(array(
                         'success' => 1
                     )));
                 } else {
-                    $response->setContent(\Zend\Json\Json::encode(array(
+                    $response->setContent(\Laminas\Json\Json::encode(array(
                         'success' => 0
                     )));
                 }

@@ -4,8 +4,8 @@ namespace PlaygroundGame\Controller\Frontend;
 
 use PlaygroundGame\Controller\Frontend\GameController;
 use PlaygroundGame\Service\GameService;
-use Zend\Session\Container;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\Session\Container;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 class MissionController extends GameController
 {
@@ -193,7 +193,7 @@ class MissionController extends GameController
         $this->layout()->setTemplate($beforeLayout);
 
       // give the ability to the mission to have its customized look and feel.
-        $templatePathResolver = $this->getServiceLocator()->get('Zend\View\Resolver\TemplatePathStack');
+        $templatePathResolver = $this->getServiceLocator()->get('Laminas\View\Resolver\TemplatePathStack');
         $l                    = $templatePathResolver->getPaths();
       // I've already added the path for the game so the base path is $l[1]
         $templatePathResolver->addPath($l[1].'custom/'.$this->game->getIdentifier());
@@ -252,7 +252,7 @@ class MissionController extends GameController
         $this->layout()->setTemplate($beforeLayout);
 
         // give the ability to the mission to have its customized look and feel.
-        $templatePathResolver = $this->getServiceLocator()->get('Zend\View\Resolver\TemplatePathStack');
+        $templatePathResolver = $this->getServiceLocator()->get('Laminas\View\Resolver\TemplatePathStack');
         $l                    = $templatePathResolver->getPaths();
         // I've already added the path for the game so the base path is $l[1]
         $templatePathResolver->addPath($l[1].'custom/'.$this->game->getIdentifier());
@@ -275,7 +275,7 @@ class MissionController extends GameController
         }
 
         $response = $this->getResponse();
-        $response->setContent(\Zend\Json\Json::encode(array(
+        $response->setContent(\Laminas\Json\Json::encode(array(
                     'success'   => $result,
                     'playBonus' => $bonusEntry,
                 )));
@@ -297,7 +297,7 @@ class MissionController extends GameController
         }
 
         $response = $this->getResponse();
-        $response->setContent(\Zend\Json\Json::encode(array(
+        $response->setContent(\Laminas\Json\Json::encode(array(
                     'success'   => $result,
                     'playBonus' => $bonusEntry,
                 )));
@@ -319,7 +319,7 @@ class MissionController extends GameController
         }
 
         $response = $this->getResponse();
-        $response->setContent(\Zend\Json\Json::encode(array(
+        $response->setContent(\Laminas\Json\Json::encode(array(
                     'success'   => $result,
                     'playBonus' => $bonusEntry,
                 )));
@@ -341,7 +341,7 @@ class MissionController extends GameController
         }
 
         $response = $this->getResponse();
-        $response->setContent(\Zend\Json\Json::encode(array(
+        $response->setContent(\Laminas\Json\Json::encode(array(
                     'success'   => $result,
                     'playBonus' => $bonusEntry,
                 )));

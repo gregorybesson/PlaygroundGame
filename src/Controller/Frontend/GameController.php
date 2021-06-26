@@ -4,13 +4,13 @@ namespace PlaygroundGame\Controller\Frontend;
 
 use PlaygroundGame\Service\GameService;
 use PlaygroundGame\Service\Prize as PrizeService;
-use Zend\Http\PhpEnvironment\Response;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\Session\Container;
-use Zend\Stdlib\Parameters;
-use Zend\View\Model\JsonModel;
-use Zend\View\Model\ViewModel;
+use Laminas\Http\PhpEnvironment\Response;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\Session\Container;
+use Laminas\Stdlib\Parameters;
+use Laminas\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
 
 class GameController extends AbstractActionController
 {
@@ -98,13 +98,13 @@ class GameController extends AbstractActionController
         return $this->serviceLocator;
     }
 
-    public function setEventManager(\Zend\EventManager\EventManagerInterface $events)
+    public function setEventManager(\Laminas\EventManager\EventManagerInterface $events)
     {
         parent::setEventManager($events);
 
         $controller = $this;
 
-        $events->attach('dispatch', function (\Zend\Mvc\MvcEvent $e) use ($controller) {
+        $events->attach('dispatch', function (\Laminas\Mvc\MvcEvent $e) use ($controller) {
 
             $session = new Container('facebook');
             $identifier = $e->getRouteMatch()->getParam('id');
@@ -147,7 +147,7 @@ class GameController extends AbstractActionController
             if ($controller->game) {
                 // this is possible to create a specific game design in /design/frontend/default/custom.
                 //It will precede all others templates.
-                $templatePathResolver = $controller->getServiceLocator()->get('Zend\View\Resolver\TemplatePathStack');
+                $templatePathResolver = $controller->getServiceLocator()->get('Laminas\View\Resolver\TemplatePathStack');
                 $l = $templatePathResolver->getPaths();
                 $templatePathResolver->addPath($l[0].'custom/'.$controller->game->getIdentifier());
             }
@@ -229,7 +229,7 @@ class GameController extends AbstractActionController
 
     /**
      * Action called if matched action does not exist
-     * For this view not to be catched by Zend\Mvc\View\RouteNotFoundStrategy
+     * For this view not to be catched by Laminas\Mvc\View\RouteNotFoundStrategy
      * it has to be rendered in the controller. Hence the code below.
      *
      * This action is injected as a catchall action for each custom_games definition
@@ -237,11 +237,11 @@ class GameController extends AbstractActionController
      * view can be defined in design/frontend/default/custom/$slug/playground_game/$gametype/404.phtml
      *
      *
-     * @return \Zend\Stdlib\ResponseInterface
+     * @return \Laminas\Stdlib\ResponseInterface
      */
     public function notFoundAction()
     {
-        $templatePathResolver = $this->getServiceLocator()->get('Zend\View\Resolver\TemplatePathStack');
+        $templatePathResolver = $this->getServiceLocator()->get('Laminas\View\Resolver\TemplatePathStack');
 
         // I create a template path in which I can find a custom template
         $controller     = explode('\\', get_class($this));
@@ -371,7 +371,7 @@ class GameController extends AbstractActionController
      * This action has been designed to be called by other controllers
      * It gives the ability to display an information form and persist it in the game entry
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     public function registerAction()
     {
@@ -435,7 +435,7 @@ class GameController extends AbstractActionController
                         $this->game->getAnonymousIdentifier() &&
                         isset($data[$this->game->getAnonymousIdentifier()])
                     ) {
-                        $session = new \Zend\Session\Container('anonymous_identifier');
+                        $session = new \Laminas\Session\Container('anonymous_identifier');
                         if (empty($session->offsetGet('anonymous_identifier'))) {
                             $anonymousIdentifier = $data[$this->game->getAnonymousIdentifier()];
                         
@@ -613,7 +613,7 @@ class GameController extends AbstractActionController
 
         $games = $this->getGameService()->getActiveGames(false, '', 'endDate');
         if (is_array($games)) {
-            $paginator = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\ArrayAdapter($games));
+            $paginator = new \Laminas\Paginator\Paginator(new \Laminas\Paginator\Adapter\ArrayAdapter($games));
         } else {
             $paginator = $games;
         }
@@ -979,7 +979,7 @@ class GameController extends AbstractActionController
             )
         );
 
-        if ($viewModel && $viewModel instanceof \Zend\View\Model\ViewModel) {
+        if ($viewModel && $viewModel instanceof \Laminas\View\Model\ViewModel) {
             $this->layout()->setVariables(array('game' => $this->game));
             $viewModel->setVariables(array('game'      => $this->game));
         }
@@ -1252,7 +1252,7 @@ class GameController extends AbstractActionController
             )
         );
 
-        if ($viewModel && $viewModel instanceof \Zend\View\Model\ViewModel) {
+        if ($viewModel && $viewModel instanceof \Laminas\View\Model\ViewModel) {
             $this->layout()->setVariables(array('game' => $this->game));
             $viewModel->setVariables(array('game' => $this->game));
         }
@@ -1271,7 +1271,7 @@ class GameController extends AbstractActionController
             )
         );
 
-        if ($viewModel && $viewModel instanceof \Zend\View\Model\ViewModel) {
+        if ($viewModel && $viewModel instanceof \Laminas\View\Model\ViewModel) {
             $this->layout()->setVariables(array('game' => $this->game));
             $viewModel->setVariables(array('game'      => $this->game));
         }
@@ -1292,7 +1292,7 @@ class GameController extends AbstractActionController
             )
         );
 
-        if ($viewModel && $viewModel instanceof \Zend\View\Model\ViewModel) {
+        if ($viewModel && $viewModel instanceof \Laminas\View\Model\ViewModel) {
             $this->layout()->setVariables(array('game' => $this->game));
             $viewModel->setVariables(array('game'      => $this->game));
         }
@@ -1311,7 +1311,7 @@ class GameController extends AbstractActionController
             )
         );
 
-        if ($view && $view instanceof \Zend\View\Model\ViewModel) {
+        if ($view && $view instanceof \Laminas\View\Model\ViewModel) {
             $this->layout()->setVariables(array('game' => $this->game));
             $view->setVariables(array('game'           => $this->game));
         }
@@ -1331,7 +1331,7 @@ class GameController extends AbstractActionController
             )
         );
 
-        if ($viewModel && $viewModel instanceof \Zend\View\Model\ViewModel) {
+        if ($viewModel && $viewModel instanceof \Laminas\View\Model\ViewModel) {
             $this->layout()->setVariables(array('game' => $this->game));
             $viewModel->setVariables(array('game'      => $this->game));
         }
@@ -1351,7 +1351,7 @@ class GameController extends AbstractActionController
             )
         );
 
-        if ($viewModel && $viewModel instanceof \Zend\View\Model\ViewModel) {
+        if ($viewModel && $viewModel instanceof \Laminas\View\Model\ViewModel) {
             $this->layout()->setVariables(array('game' => $this->game));
             $viewModel->setVariables(array('game'      => $this->game));
         }
@@ -1369,7 +1369,7 @@ class GameController extends AbstractActionController
             $viewModel = new JsonModel();
             if ($game) {
                 $view = $this->addAdditionalView($game);
-                if ($view && $view instanceof \Zend\View\Model\ViewModel) {
+                if ($view && $view instanceof \Laminas\View\Model\ViewModel) {
                     $viewModel->setVariables($view->getVariables());
                 }
             }
@@ -1384,9 +1384,9 @@ class GameController extends AbstractActionController
                 $this->customizeGameDesign($game);
 
                 $view = $this->addAdditionalView($game);
-                if ($view && $view instanceof \Zend\View\Model\ViewModel) {
+                if ($view && $view instanceof \Laminas\View\Model\ViewModel) {
                     $viewModel->addChild($view, 'additional');
-                } elseif ($view && $view instanceof \Zend\Http\PhpEnvironment\Response) {
+                } elseif ($view && $view instanceof \Laminas\Http\PhpEnvironment\Response) {
                     return $view;
                 }
 
@@ -1601,7 +1601,7 @@ class GameController extends AbstractActionController
         $fo->addTag($twUrl);
         
         // I add variables + js to make the share easy
-        $renderer = $this->serviceLocator->get('Zend\View\Renderer\RendererInterface');
+        $renderer = $this->serviceLocator->get('Laminas\View\Renderer\RendererInterface');
         $headScript = $this->getServiceLocator()->get('ViewHelperManager')->get('HeadScript');
         $headScript->appendScript("var pgGameUrl = '" . $socialLinkUrl . "';\nvar pgFbShareUrl = '" . $fbShareUrl . "';\nvar pgTwShareUrl = '" . $twShareUrl . "';");
         $headScript->appendFile($renderer->frontendAssetPath() . '/js/pg/share.js');
@@ -1622,7 +1622,7 @@ class GameController extends AbstractActionController
      * return ajax response in json format
      *
      * @param array $data
-     * @return \Zend\View\Model\JsonModel
+     * @return \Laminas\View\Model\JsonModel
      */
     protected function successJson($data = null)
     {
@@ -1637,7 +1637,7 @@ class GameController extends AbstractActionController
      * return ajax response in json format
      *
      * @param string $message
-     * @return \Zend\View\Model\JsonModel
+     * @return \Laminas\View\Model\JsonModel
      */
     protected function errorJson($message = null)
     {

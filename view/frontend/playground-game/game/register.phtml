@@ -11,7 +11,7 @@ $form->prepare();
                     $element->setAttributes(array('class' => 'form-control'));
             		$requiredContent = '';
 					(!empty($required)) ? $requiredContent = '<span class="text-error">*</span>' : '';
-					if ($element instanceof Zend\Form\Element\Text) : ?>
+					if ($element instanceof Laminas\Form\Element\Text) : ?>
     					<div class="row">
     						 <label class="col-md-4">
     						 	<b>
@@ -23,7 +23,7 @@ $form->prepare();
     							<?php echo $this->formElementErrors($element) ?>
     						 </div>
     					</div>
-    		        <?php elseif ($element instanceof Zend\Form\Element\Email) : ?>
+    		        <?php elseif ($element instanceof Laminas\Form\Element\Email) : ?>
     					<div class="row">
     						 <label class="col-md-4">
     						 	<b>
@@ -35,7 +35,7 @@ $form->prepare();
     							<?php echo $this->formElementErrors($element) ?>
     						 </div>
     					</div>
-    			    <?php elseif ($element instanceof Zend\Form\Element\MultiCheckbox) : ?>
+    			    <?php elseif ($element instanceof Laminas\Form\Element\MultiCheckbox) : ?>
     					<div class="row">
     						 <label class="col-md-4">
     						 	<b>
@@ -47,7 +47,7 @@ $form->prepare();
     							<?php echo $this->formElementErrors($element) ?>
     						 </div>
     					</div>
-                    <?php elseif ($element instanceof Zend\Form\Element\Textarea): ?>
+                    <?php elseif ($element instanceof Laminas\Form\Element\Textarea): ?>
 		                <div class="row">
                                 <label class="col-md-4">
                                     <b>

@@ -1,7 +1,7 @@
 <?php
 namespace PlaygroundGame\Controller\Frontend;
 
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 class MemoryController extends GameController
 {
@@ -150,7 +150,7 @@ class MemoryController extends GameController
 
         $response = $this->getResponse();
         $response->setContent(
-            \Zend\Json\Json::encode(
+            \Laminas\Json\Json::encode(
                 array(
                     'success' => $result,
                     'playBonus' => $bonusEntry
@@ -171,7 +171,7 @@ class MemoryController extends GameController
         }
 
         $response = $this->getResponse();
-        $response->setContent(\Zend\Json\Json::encode(array(
+        $response->setContent(\Laminas\Json\Json::encode(array(
             'success' => $result,
             'playBonus' => $bonusEntry
         )));
@@ -189,7 +189,7 @@ class MemoryController extends GameController
         }
 
         $response = $this->getResponse();
-        $response->setContent(\Zend\Json\Json::encode(array(
+        $response->setContent(\Laminas\Json\Json::encode(array(
             'success' => $result,
             'playBonus' => $bonusEntry
         )));
@@ -207,7 +207,7 @@ class MemoryController extends GameController
         }
 
         $response = $this->getResponse();
-        $response->setContent(\Zend\Json\Json::encode(array(
+        $response->setContent(\Laminas\Json\Json::encode(array(
             'success' => $result,
             'playBonus' => $bonusEntry
         )));

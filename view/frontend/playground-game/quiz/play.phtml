@@ -55,11 +55,11 @@ $form->setAttribute('action', $this->url('frontend/quiz/play', array('id' => $th
         					</div>
         					<div class="span5">
         						<div class="row-fluid">
-        						<?php if ($element instanceof Zend\Form\Element\Radio): ?>
+        						<?php if ($element instanceof Laminas\Form\Element\Radio): ?>
                                     <?php echo $this->formRadio($element) ?>
-                                <?php elseif ($element instanceof Zend\Form\Element\MultiCheckbox): ?>
+                                <?php elseif ($element instanceof Laminas\Form\Element\MultiCheckbox): ?>
                                     <?php echo $this->formMultiCheckbox($element);?>
-                                <?php elseif ($element instanceof Zend\Form\Element\Textarea): ?>
+                                <?php elseif ($element instanceof Laminas\Form\Element\Textarea): ?>
                                     <?php echo $this->formTextarea($element); ?>
                                 <?php endif;?>
                                 <?php //echo $this->formElementErrors($element) ?>
@@ -68,11 +68,11 @@ $form->setAttribute('action', $this->url('frontend/quiz/play', array('id' => $th
         					</div>
         				</div>
     				<?php else:?>
-        				<?php if ($element instanceof Zend\Form\Element\Radio): ?>
+        				<?php if ($element instanceof Laminas\Form\Element\Radio): ?>
                             <?php echo $this->formRadio($element) ?>
-                        <?php elseif ($element instanceof Zend\Form\Element\MultiCheckbox): ?>
+                        <?php elseif ($element instanceof Laminas\Form\Element\MultiCheckbox): ?>
                             <?php echo $this->formMultiCheckbox($element);?>
-                        <?php elseif ($element instanceof Zend\Form\Element\Textarea): ?>
+                        <?php elseif ($element instanceof Laminas\Form\Element\Textarea): ?>
                             <?php echo $this->formTextarea($element); ?>
                         <?php endif;?>
                         <?php //echo $this->formElementErrors($element); ?>

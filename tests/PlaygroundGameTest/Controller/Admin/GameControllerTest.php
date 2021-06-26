@@ -2,20 +2,20 @@
 
 namespace PlaygroundGameTest\Controller\Admin;
 
-use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
+use Laminas\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use PlaygroundGameTest\Bootstrap;
 use PlaygroundGame\Entity\Game as GameEntity;
 use PlaygroundGame\Controller\Admin\GameController;
-use Zend\Http\Request;
-use Zend\Http\Response;
-use Zend\Mvc\MvcEvent;
-use Zend\Router\Http\RouteMatch;
+use Laminas\Http\Request;
+use Laminas\Http\Response;
+use Laminas\Mvc\MvcEvent;
+use Laminas\Router\Http\RouteMatch;
 
 class GameControllerTest extends AbstractHttpControllerTestCase
 {
     protected $traceError = true;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->setApplicationConfig(
             include __DIR__ . '/../../../TestConfig.php'
@@ -44,9 +44,9 @@ class GameControllerTest extends AbstractHttpControllerTestCase
         $this->controller->setEvent($this->event);
 
         $result = $this->controller->listAction();
-        $this->assertInternalType('array', $result);
-        //$this->assertInstanceOf('Zend\View\Model\ViewModel', $result);
- 
+        $this->assertIsArray($result);
+        //$this->assertInstanceOf('Laminas\View\Model\ViewModel', $result);
+
         // Test the parameters contained in the View model
         //$vars = $result->getVariables();
         $this->assertTrue(isset($result['type']));
@@ -171,13 +171,22 @@ class GameControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue(array()));
 
             $query = $this->getMockBuilder('Query')
+            ->setMethods(array('getQuery'))
+            ->disableOriginalConstructor()
+            ->getMock();
+
+            $result = $this->getMockBuilder('Result')
                 ->setMethods(array('getResult'))
                 ->disableOriginalConstructor()
                 ->getMock();
 
             $query->expects($this->any())
+                ->method('getQuery')
+                ->will($this->returnValue($result));
+
+            $result->expects($this->any())
                 ->method('getResult')
-                ->will($this->returnValue(true));
+                ->will($this->returnValue(''));
 
             $adminGameService->expects($this->any())
                 ->method('getEntriesQuery')
@@ -252,13 +261,22 @@ class GameControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue(array()));
 
             $query = $this->getMockBuilder('Query')
+            ->setMethods(array('getQuery'))
+            ->disableOriginalConstructor()
+            ->getMock();
+
+            $result = $this->getMockBuilder('Result')
                 ->setMethods(array('getResult'))
                 ->disableOriginalConstructor()
                 ->getMock();
 
             $query->expects($this->any())
+                ->method('getQuery')
+                ->will($this->returnValue($result));
+
+            $result->expects($this->any())
                 ->method('getResult')
-                ->will($this->returnValue(true));
+                ->will($this->returnValue(''));
 
             $adminGameService->expects($this->any())
                 ->method('getEntriesQuery')
@@ -371,7 +389,7 @@ class GameControllerTest extends AbstractHttpControllerTestCase
         $this->assertRedirectTo('/admin/game/list/createdAt/DESC');*/
     //}
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         $tool = new \Doctrine\ORM\Tools\SchemaTool($this->em);
         $classes = $this->em->getMetadataFactory()->getAllMetadata();

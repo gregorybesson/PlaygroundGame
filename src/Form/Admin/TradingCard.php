@@ -3,8 +3,8 @@
 namespace PlaygroundGame\Form\Admin;
 
 use PlaygroundCore\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
-use Zend\Mvc\I18n\Translator;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\Mvc\I18n\Translator;
+use Laminas\ServiceManager\ServiceManager;
 
 class TradingCard extends Game
 {
@@ -22,7 +22,7 @@ class TradingCard extends Game
 
         $this->add(array(
             'name' => 'boosterCardNumber',
-            'type' => 'Zend\Form\Element\Text',
+            'type' => 'Laminas\Form\Element\Text',
             'attributes' => array(
                 'placeholder' => $translator->translate('Number of cards in booster', 'playgroundgame'),
             ),
@@ -33,7 +33,7 @@ class TradingCard extends Game
 
         $this->add(array(
             'name' => 'boosterDrawQuantity',
-            'type' => 'Zend\Form\Element\Text',
+            'type' => 'Laminas\Form\Element\Text',
             'attributes' => array(
                 'placeholder' => $translator->translate('Number of boosters', 'playgroundgame'),
             ),

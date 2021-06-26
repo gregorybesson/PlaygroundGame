@@ -2,9 +2,9 @@
 
 namespace PlaygroundGame\Form\Admin;
 
-use Zend\Mvc\I18n\Translator;
+use Laminas\Mvc\I18n\Translator;
 use PlaygroundCore\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\ServiceManager\ServiceManager;
 
 class Quiz extends Game
 {
@@ -22,7 +22,7 @@ class Quiz extends Game
         parent::__construct($name, $sm, $translator);
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Select',
+            'type' => 'Laminas\Form\Element\Select',
             'name' => 'drawAuto',
             'attributes' =>  array(
                 'id' => 'drawAuto',
@@ -59,7 +59,7 @@ class Quiz extends Game
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Select',
+            'type' => 'Laminas\Form\Element\Select',
             'name' => 'displayStats',
             'attributes' =>  array(
                 'id' => 'displayStats',
@@ -75,7 +75,7 @@ class Quiz extends Game
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Select',
+            'type' => 'Laminas\Form\Element\Select',
             'name' => 'displayGoodAnswers',
             'attributes' =>  array(
                 'id' => 'displayGoodAnswers',
@@ -93,7 +93,7 @@ class Quiz extends Game
 
         $this->add(array(
             'name' => 'timer',
-            'type' => 'Zend\Form\Element\Radio',
+            'type' => 'Laminas\Form\Element\Radio',
             'attributes' => array(
                 'required' => 'required',
                 'value' => '0',
@@ -109,7 +109,7 @@ class Quiz extends Game
 
         $this->add(array(
             'name' => 'timerDuration',
-            'type' => 'Zend\Form\Element\Text',
+            'type' => 'Laminas\Form\Element\Text',
             'attributes' => array(
                 'placeholder' => $translator->translate('Duration in seconds', 'playgroundgame'),
             ),
@@ -120,7 +120,7 @@ class Quiz extends Game
 
         $this->add(array(
             'name' => 'victoryConditions',
-            'type' => 'Zend\Form\Element\Text',
+            'type' => 'Laminas\Form\Element\Text',
             'attributes' => array(
                 'placeholder' => $translator->translate('% good answers', 'playgroundgame'),
                 'id' => 'victoryConditions',
@@ -132,7 +132,7 @@ class Quiz extends Game
 
         $this->add(array(
             'name' => 'questionGrouping',
-            'type' => 'Zend\Form\Element\Text',
+            'type' => 'Laminas\Form\Element\Text',
             'attributes' => array(
                 'required' => 'required',
             ),

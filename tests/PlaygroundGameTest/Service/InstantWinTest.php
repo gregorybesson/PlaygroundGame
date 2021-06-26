@@ -4,14 +4,14 @@ namespace PlaygroundGameTest\Service;
 
 use PlaygroundGame\Entity\InstantWin as InstantWinEntity;
 use PlaygroundGameTest\Bootstrap;
-use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
+use Laminas\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
 class InstantWinTest extends AbstractHttpControllerTestCase
 {
     protected $traceError = true;
     protected $sm = null;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->setApplicationConfig(
             include __DIR__ . '/../../TestConfig.php'
@@ -522,7 +522,7 @@ class InstantWinTest extends AbstractHttpControllerTestCase
         return $this->sm;
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         $this->sm = null;
         unset($this->sm);

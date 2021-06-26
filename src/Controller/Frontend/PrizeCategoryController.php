@@ -2,8 +2,8 @@
 
 namespace PlaygroundGame\Controller\Frontend;
 
-use Zend\View\Model\ViewModel;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\View\Model\ViewModel;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 class PrizeCategoryController extends GameController
 {
@@ -45,7 +45,7 @@ class PrizeCategoryController extends GameController
         }
 
         if (is_array($games)) {
-            $paginator = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\ArrayAdapter($games));
+            $paginator = new \Laminas\Paginator\Paginator(new \Laminas\Paginator\Adapter\ArrayAdapter($games));
             $paginator->setItemCountPerPage(7);
             $paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
         } else {

@@ -238,7 +238,7 @@ return array(
                         ),
                     ),
                     'share' => array(
-                        'type' => 'Zend\Router\Http\Literal',
+                        'type' => 'Laminas\Router\Http\Literal',
                         'options' => array(
                             'route' => 'partager',
                             'defaults' => array(
@@ -248,7 +248,7 @@ return array(
                         )
                     ),
                     'gameslist' => array(
-                        'type' => 'Zend\Router\Http\Literal',
+                        'type' => 'Laminas\Router\Http\Literal',
                         'options' => array(
                             'route' => 'gameslist',
                             'defaults' => array(
@@ -285,7 +285,7 @@ return array(
                         'may_terminate' => true,
                         'child_routes' => array(
                             'facebook' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/facebook',
                                     'defaults' => array(
@@ -295,7 +295,7 @@ return array(
                                 )
                             ),
                             'instagram' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/instagram',
                                     'defaults' => array(
@@ -318,7 +318,7 @@ return array(
                         'may_terminate' => true,
                         'child_routes' => array(
                             'index' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/index',
                                     'defaults' => array(
@@ -339,7 +339,7 @@ return array(
                                 'may_terminate' => true,
                                 'child_routes' => array(
                                     'ajaxupload' => array(
-                                        'type' => 'Zend\Router\Http\Literal',
+                                        'type' => 'Laminas\Router\Http\Literal',
                                         'options' => array(
                                             'route' => '/ajaxupload',
                                             'defaults' => array(
@@ -349,7 +349,7 @@ return array(
                                         )
                                     ),
                                     'ajaxdelete' => array(
-                                        'type' => 'Zend\Router\Http\Literal',
+                                        'type' => 'Laminas\Router\Http\Literal',
                                         'options' => array(
                                             'route' => '/ajaxdelete',
                                             'defaults' => array(
@@ -395,7 +395,7 @@ return array(
                                 )
                             ),
                             'logout' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/logout',
                                     'defaults' => array(
@@ -415,7 +415,7 @@ return array(
                                 )
                             ),
                             'verification' => array(
-		                        'type' => 'Zend\Router\Http\Literal',
+		                        'type' => 'Laminas\Router\Http\Literal',
 		                        'options' => array(
 		                            'route' => '/verification',
 		                            'defaults' => array(
@@ -445,7 +445,7 @@ return array(
                                 )
                             ),
                             'register' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/register',
                                     'defaults' => array(
@@ -455,7 +455,7 @@ return array(
                                 )
                             ),
                             'profile' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/profil',
                                     'defaults' => array(
@@ -483,7 +483,7 @@ return array(
                                 ),
                             ),
                             'fbshare' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/fbshare',
                                     'defaults' => array(
@@ -493,7 +493,7 @@ return array(
                                 )
                             ),
                             'fbrequest' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/fbrequest',
                                     'defaults' => array(
@@ -503,7 +503,7 @@ return array(
                                 )
                             ),
                             'tweet' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/tweet',
                                     'defaults' => array(
@@ -513,7 +513,7 @@ return array(
                                 )
                             ),
                             'google' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/google',
                                     'defaults' => array(
@@ -523,7 +523,7 @@ return array(
                                 )
                             ),
                             'share' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/partager',
                                     'defaults' => array(
@@ -553,7 +553,7 @@ return array(
                                 )
                             ),
                             'bounce' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/essayez-aussi',
                                     'defaults' => array(
@@ -563,7 +563,7 @@ return array(
                                 )
                             ),
                             'terms' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/reglement',
                                     'defaults' => array(
@@ -573,7 +573,7 @@ return array(
                                 )
                             ),
                             'conditions' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/mentions-legales',
                                     'defaults' => array(
@@ -583,7 +583,7 @@ return array(
                                 )
                             ),
                             'fangate' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/fangate',
                                     'defaults' => array(
@@ -593,7 +593,7 @@ return array(
                                 )
                             ),
                             'prizes' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/lots',
                                     'defaults' => array(
@@ -661,7 +661,7 @@ return array(
                                 ),
                             ),
                             'other-routes' => array(
-                                'type' => 'Zend\Router\Http\Regex',
+                                'type' => 'Laminas\Router\Http\Regex',
                                 'priority' => -1000,
                                 'options' => array(
                                     'regex' => '.*',
@@ -686,7 +686,7 @@ return array(
                         'may_terminate' => true,
                         'child_routes' => array(
                             'index' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/index',
                                     'defaults' => array(
@@ -740,7 +740,7 @@ return array(
                                 )
                             ),
                             'logout' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/logout',
                                     'defaults' => array(
@@ -760,7 +760,7 @@ return array(
                                 )
                             ),
                             'verification' => array(
-		                        'type' => 'Zend\Router\Http\Literal',
+		                        'type' => 'Laminas\Router\Http\Literal',
 		                        'options' => array(
 		                            'route' => '/verification',
 		                            'defaults' => array(
@@ -790,7 +790,7 @@ return array(
                                 )
                             ),
                             'register' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/register',
                                     'defaults' => array(
@@ -800,7 +800,7 @@ return array(
                                 )
                             ),
                             'profile' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/profil',
                                     'defaults' => array(
@@ -828,7 +828,7 @@ return array(
                                 ),
                             ),
                             'fbshare' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/fbshare',
                                     'defaults' => array(
@@ -838,7 +838,7 @@ return array(
                                 )
                             ),
                             'fbrequest' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/fbrequest',
                                     'defaults' => array(
@@ -848,7 +848,7 @@ return array(
                                 )
                             ),
                             'tweet' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/tweet',
                                     'defaults' => array(
@@ -858,7 +858,7 @@ return array(
                                 )
                             ),
                             'google' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/google',
                                     'defaults' => array(
@@ -868,7 +868,7 @@ return array(
                                 )
                             ),
                             'share' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/partager',
                                     'defaults' => array(
@@ -898,7 +898,7 @@ return array(
                                 )
                             ),
                             'bounce' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/essayez-aussi',
                                     'defaults' => array(
@@ -908,7 +908,7 @@ return array(
                                 )
                             ),
                             'terms' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/reglement',
                                     'defaults' => array(
@@ -918,7 +918,7 @@ return array(
                                 )
                             ),
                             'conditions' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/mentions-legales',
                                     'defaults' => array(
@@ -928,7 +928,7 @@ return array(
                                 )
                             ),
                             'fangate' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/fangate',
                                     'defaults' => array(
@@ -938,7 +938,7 @@ return array(
                                 )
                             ),
                             'prizes' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/lots',
                                     'defaults' => array(
@@ -1006,7 +1006,7 @@ return array(
                                 ),
                             ),
                             'other-routes' => array(
-                                'type' => 'Zend\Router\Http\Regex',
+                                'type' => 'Laminas\Router\Http\Regex',
                                 'priority' => -1000,
                                 'options' => array(
                                     'regex' => '.*',
@@ -1031,7 +1031,7 @@ return array(
                         'may_terminate' => true,
                         'child_routes' => array(
                             'index' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/index',
                                     'defaults' => array(
@@ -1065,7 +1065,7 @@ return array(
                                 ),
                             ),
                             'login' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/connexion',
                                     'defaults' => array(
@@ -1085,7 +1085,7 @@ return array(
                                 )
                             ),
                             'verification' => array(
-		                        'type' => 'Zend\Router\Http\Literal',
+		                        'type' => 'Laminas\Router\Http\Literal',
 		                        'options' => array(
 		                            'route' => '/verification',
 		                            'defaults' => array(
@@ -1105,7 +1105,7 @@ return array(
                                 )
                             ),
                             'play' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/jouer',
                                     'defaults' => array(
@@ -1115,7 +1115,7 @@ return array(
                                 )
                             ),
                             'result' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/resultat',
                                     'defaults' => array(
@@ -1125,7 +1125,7 @@ return array(
                                 )
                             ),
                             'register' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/register',
                                     'defaults' => array(
@@ -1135,7 +1135,7 @@ return array(
                                 )
                             ),
                             'fbshare' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/fbshare',
                                     'defaults' => array(
@@ -1145,7 +1145,7 @@ return array(
                                 )
                             ),
                             'fbrequest' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/fbrequest',
                                     'defaults' => array(
@@ -1155,7 +1155,7 @@ return array(
                                 )
                             ),
                             'tweet' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/tweet',
                                     'defaults' => array(
@@ -1165,7 +1165,7 @@ return array(
                                 )
                             ),
                             'google' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/google',
                                     'defaults' => array(
@@ -1175,7 +1175,7 @@ return array(
                                 )
                             ),
                             'bounce' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/essayez-aussi',
                                     'defaults' => array(
@@ -1185,7 +1185,7 @@ return array(
                                 )
                             ),
                             'terms' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/reglement',
                                     'defaults' => array(
@@ -1195,7 +1195,7 @@ return array(
                                 )
                             ),
                             'conditions' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/mentions-legales',
                                     'defaults' => array(
@@ -1205,7 +1205,7 @@ return array(
                                 )
                             ),
                             'fangate' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/fangate',
                                     'defaults' => array(
@@ -1215,7 +1215,7 @@ return array(
                                 )
                             ),
                             'prizes' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/lots',
                                     'defaults' => array(
@@ -1238,7 +1238,7 @@ return array(
                                 )
                             ),
                             'share' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/partager',
                                     'defaults' => array(
@@ -1281,7 +1281,7 @@ return array(
                                 ),
                             ),
                             'other-routes' => array(
-                                'type' => 'Zend\Router\Http\Regex',
+                                'type' => 'Laminas\Router\Http\Regex',
                                 'priority' => -1000,
                                 'options' => array(
                                     'regex' => '.*',
@@ -1306,7 +1306,7 @@ return array(
                         'may_terminate' => true,
                         'child_routes' => array(
                             'index' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/index',
                                     'defaults' => array(
@@ -1340,7 +1340,7 @@ return array(
                                 ),
                             ),
                             'login' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/connexion',
                                     'defaults' => array(
@@ -1360,7 +1360,7 @@ return array(
                                 )
                             ),
                             'verification' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/verification',
                                     'defaults' => array(
@@ -1390,7 +1390,7 @@ return array(
                                 )
                             ),
                             'play' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/jouer',
                                     'defaults' => array(
@@ -1400,7 +1400,7 @@ return array(
                                 )
                             ),
                             'result' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/resultat',
                                     'defaults' => array(
@@ -1410,7 +1410,7 @@ return array(
                                 )
                             ),
                             'register' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/register',
                                     'defaults' => array(
@@ -1420,7 +1420,7 @@ return array(
                                 )
                             ),
                             'fbshare' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/fbshare',
                                     'defaults' => array(
@@ -1430,7 +1430,7 @@ return array(
                                 )
                             ),
                             'fbrequest' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/fbrequest',
                                     'defaults' => array(
@@ -1440,7 +1440,7 @@ return array(
                                 )
                             ),
                             'tweet' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/tweet',
                                     'defaults' => array(
@@ -1450,7 +1450,7 @@ return array(
                                 )
                             ),
                             'google' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/google',
                                     'defaults' => array(
@@ -1460,7 +1460,7 @@ return array(
                                 )
                             ),
                             'bounce' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/essayez-aussi',
                                     'defaults' => array(
@@ -1470,7 +1470,7 @@ return array(
                                 )
                             ),
                             'terms' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/reglement',
                                     'defaults' => array(
@@ -1480,7 +1480,7 @@ return array(
                                 )
                             ),
                             'conditions' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/mentions-legales',
                                     'defaults' => array(
@@ -1490,7 +1490,7 @@ return array(
                                 )
                             ),
                             'fangate' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/fangate',
                                     'defaults' => array(
@@ -1500,7 +1500,7 @@ return array(
                                 )
                             ),
                             'prizes' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/lots',
                                     'defaults' => array(
@@ -1523,7 +1523,7 @@ return array(
                                 )
                             ),
                             'share' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/partager',
                                     'defaults' => array(
@@ -1566,7 +1566,7 @@ return array(
                                 ),
                             ),
                             'other-routes' => array(
-                                'type' => 'Zend\Router\Http\Regex',
+                                'type' => 'Laminas\Router\Http\Regex',
                                 'priority' => -1000,
                                 'options' => array(
                                     'regex' => '.*',
@@ -1591,7 +1591,7 @@ return array(
                         'may_terminate' => true,
                         'child_routes' => array(
                             'index' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/index',
                                     'defaults' => array(
@@ -1625,7 +1625,7 @@ return array(
                                 ),
                             ),
                             'login' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/connexion',
                                     'defaults' => array(
@@ -1645,7 +1645,7 @@ return array(
                                 )
                             ),
                             'verification' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/verification',
                                     'defaults' => array(
@@ -1675,7 +1675,7 @@ return array(
                                 )
                             ),
                             'play' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/jouer',
                                     'defaults' => array(
@@ -1685,7 +1685,7 @@ return array(
                                 )
                             ),
                             'result' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/resultat',
                                     'defaults' => array(
@@ -1695,7 +1695,7 @@ return array(
                                 )
                             ),
                             'register' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/register',
                                     'defaults' => array(
@@ -1705,7 +1705,7 @@ return array(
                                 )
                             ),
                             'fbshare' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/fbshare',
                                     'defaults' => array(
@@ -1715,7 +1715,7 @@ return array(
                                 )
                             ),
                             'fbrequest' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/fbrequest',
                                     'defaults' => array(
@@ -1725,7 +1725,7 @@ return array(
                                 )
                             ),
                             'tweet' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/tweet',
                                     'defaults' => array(
@@ -1735,7 +1735,7 @@ return array(
                                 )
                             ),
                             'google' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/google',
                                     'defaults' => array(
@@ -1745,7 +1745,7 @@ return array(
                                 )
                             ),
                             'bounce' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/essayez-aussi',
                                     'defaults' => array(
@@ -1755,7 +1755,7 @@ return array(
                                 )
                             ),
                             'terms' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/reglement',
                                     'defaults' => array(
@@ -1765,7 +1765,7 @@ return array(
                                 )
                             ),
                             'conditions' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/mentions-legales',
                                     'defaults' => array(
@@ -1775,7 +1775,7 @@ return array(
                                 )
                             ),
                             'fangate' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/fangate',
                                     'defaults' => array(
@@ -1785,7 +1785,7 @@ return array(
                                 )
                             ),
                             'prizes' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/lots',
                                     'defaults' => array(
@@ -1808,7 +1808,7 @@ return array(
                                 )
                             ),
                             'share' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/partager',
                                     'defaults' => array(
@@ -1851,7 +1851,7 @@ return array(
                                 ),
                             ),
                             'other-routes' => array(
-                                'type' => 'Zend\Router\Http\Regex',
+                                'type' => 'Laminas\Router\Http\Regex',
                                 'priority' => -1000,
                                 'options' => array(
                                     'regex' => '.*',
@@ -1876,7 +1876,7 @@ return array(
                         'may_terminate' => true,
                         'child_routes' => array(
                             'index' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/index',
                                     'defaults' => array(
@@ -1910,7 +1910,7 @@ return array(
                                 ),
                             ),
                             'login' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/connexion',
                                     'defaults' => array(
@@ -1930,7 +1930,7 @@ return array(
                                 )
                             ),
                             'verification' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/verification',
                                     'defaults' => array(
@@ -1950,7 +1950,7 @@ return array(
                                 )
                             ),
                             'play' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/jouer',
                                     'defaults' => array(
@@ -1960,7 +1960,7 @@ return array(
                                 )
                             ),
                             'result' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/resultat',
                                     'defaults' => array(
@@ -1970,7 +1970,7 @@ return array(
                                 )
                             ),
                             'register' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/register',
                                     'defaults' => array(
@@ -1980,7 +1980,7 @@ return array(
                                 )
                             ),
                             'fbshare' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/fbshare',
                                     'defaults' => array(
@@ -1990,7 +1990,7 @@ return array(
                                 )
                             ),
                             'fbrequest' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/fbrequest',
                                     'defaults' => array(
@@ -2000,7 +2000,7 @@ return array(
                                 )
                             ),
                             'tweet' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/tweet',
                                     'defaults' => array(
@@ -2010,7 +2010,7 @@ return array(
                                 )
                             ),
                             'google' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/google',
                                     'defaults' => array(
@@ -2020,7 +2020,7 @@ return array(
                                 )
                             ),
                             'bounce' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/essayez-aussi',
                                     'defaults' => array(
@@ -2030,7 +2030,7 @@ return array(
                                 )
                             ),
                             'terms' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/reglement',
                                     'defaults' => array(
@@ -2040,7 +2040,7 @@ return array(
                                 )
                             ),
                             'conditions' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/mentions-legales',
                                     'defaults' => array(
@@ -2050,7 +2050,7 @@ return array(
                                 )
                             ),
                             'fangate' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/fangate',
                                     'defaults' => array(
@@ -2060,7 +2060,7 @@ return array(
                                 )
                             ),
                             'prizes' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/lots',
                                     'defaults' => array(
@@ -2083,7 +2083,7 @@ return array(
                                 )
                             ),
                             'share' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/partager',
                                     'defaults' => array(
@@ -2126,7 +2126,7 @@ return array(
                                 ),
                             ),
                             'other-routes' => array(
-                                'type' => 'Zend\Router\Http\Regex',
+                                'type' => 'Laminas\Router\Http\Regex',
                                 'priority' => -1000,
                                 'options' => array(
                                     'regex' => '.*',
@@ -2151,7 +2151,7 @@ return array(
                         'may_terminate' => true,
                         'child_routes' => array(
                             'index' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/index',
                                     'defaults' => array(
@@ -2219,7 +2219,7 @@ return array(
                                 ),
                             ),
                             'login' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/connexion',
                                     'defaults' => array(
@@ -2239,7 +2239,7 @@ return array(
                                 )
                             ),
                             'verification' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/verification',
                                     'defaults' => array(
@@ -2259,7 +2259,7 @@ return array(
                                 )
                             ),
                             'play' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/jouer',
                                     'defaults' => array(
@@ -2270,7 +2270,7 @@ return array(
                                 'may_terminate' => true,
                                 'child_routes' => array(
                                     'ajaxupload' => array(
-                                        'type' => 'Zend\Router\Http\Literal',
+                                        'type' => 'Laminas\Router\Http\Literal',
                                         'options' => array(
                                             'route' => '/ajaxupload',
                                             'defaults' => array(
@@ -2280,7 +2280,7 @@ return array(
                                         )
                                     ),
                                     'ajaxdelete' => array(
-                                        'type' => 'Zend\Router\Http\Literal',
+                                        'type' => 'Laminas\Router\Http\Literal',
                                         'options' => array(
                                             'route' => '/ajaxdelete',
                                             'defaults' => array(
@@ -2292,7 +2292,7 @@ return array(
                                 )
                             ),
                             'preview' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/previsualiser',
                                     'defaults' => array(
@@ -2412,7 +2412,7 @@ return array(
                                 )
                             ),
                             'result' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/resultat',
                                     'defaults' => array(
@@ -2422,7 +2422,7 @@ return array(
                                 )
                             ),
                             'register' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/register',
                                     'defaults' => array(
@@ -2432,7 +2432,7 @@ return array(
                                 )
                             ),
                             'fbshare' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/fbshare',
                                     'defaults' => array(
@@ -2442,7 +2442,7 @@ return array(
                                 )
                             ),
                             'fbrequest' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/fbrequest',
                                     'defaults' => array(
@@ -2452,7 +2452,7 @@ return array(
                                 )
                             ),
                             'tweet' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/tweet',
                                     'defaults' => array(
@@ -2462,7 +2462,7 @@ return array(
                                 )
                             ),
                             'google' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/google',
                                     'defaults' => array(
@@ -2472,7 +2472,7 @@ return array(
                                 )
                             ),
                             'bounce' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/essayez-aussi',
                                     'defaults' => array(
@@ -2482,7 +2482,7 @@ return array(
                                 )
                             ),
                             'terms' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/reglement',
                                     'defaults' => array(
@@ -2492,7 +2492,7 @@ return array(
                                 )
                             ),
                             'conditions' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/mentions-legales',
                                     'defaults' => array(
@@ -2502,7 +2502,7 @@ return array(
                                 )
                             ),
                             'fangate' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/fangate',
                                     'defaults' => array(
@@ -2512,7 +2512,7 @@ return array(
                                 )
                             ),
                             'prizes' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/lots',
                                     'defaults' => array(
@@ -2535,7 +2535,7 @@ return array(
                                 )
                             ),
                             'share' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/partager',
                                     'defaults' => array(
@@ -2578,7 +2578,7 @@ return array(
                                 ),
                             ),
                             'other-routes' => array(
-                                'type' => 'Zend\Router\Http\Regex',
+                                'type' => 'Laminas\Router\Http\Regex',
                                 'priority' => -1000,
                                 'options' => array(
                                     'regex' => '.*',
@@ -2619,7 +2619,7 @@ return array(
                         )
                     ),
                     'other-routes' => array(
-                        'type' => 'Zend\Router\Http\Regex',
+                        'type' => 'Laminas\Router\Http\Regex',
                         'priority' => -1000,
                         'options' => array(
                             'regex' => '.*',
@@ -2636,7 +2636,7 @@ return array(
             'admin' => array(
                 'child_routes' => array(
                     'mission' => array(
-                        'type' => 'Zend\Router\Http\Literal',
+                        'type' => 'Laminas\Router\Http\Literal',
                         'options' => array(
                             'route' => '/mission',
                             'defaults' => array(
@@ -2710,7 +2710,7 @@ return array(
                                 )
                             ),
                             'create' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/create',
                                     'defaults' => array(
@@ -2777,7 +2777,7 @@ return array(
                         )
                     ),
                     'quiz' => array(
-                        'type' => 'Zend\Router\Http\Literal',
+                        'type' => 'Laminas\Router\Http\Literal',
                         'priority' => 1000,
                         'options' => array(
                             'route' => '/quiz',
@@ -2831,7 +2831,7 @@ return array(
                         )
                     ),
                     'lottery' => array(
-                        'type' => 'Zend\Router\Http\Literal',
+                        'type' => 'Laminas\Router\Http\Literal',
                         'priority' => 1000,
                         'options' => array(
                             'route' => '/lottery',
@@ -2875,7 +2875,7 @@ return array(
                         )
                     ),
                     'instantwin' => array(
-                        'type' => 'Zend\Router\Http\Literal',
+                        'type' => 'Laminas\Router\Http\Literal',
                         'priority' => 1000,
                         'options' => array(
                             'route' => '/instantwin',
@@ -2909,7 +2909,7 @@ return array(
                         )
                     ),
                     'postvote' => array(
-                        'type' => 'Zend\Router\Http\Literal',
+                        'type' => 'Laminas\Router\Http\Literal',
                         'priority' => 1000,
                         'options' => array(
                             'route' => '/postvote',
@@ -2943,7 +2943,7 @@ return array(
                         )
                     ),
                     'tradingcard' => array(
-                        'type' => 'Zend\Router\Http\Literal',
+                        'type' => 'Laminas\Router\Http\Literal',
                         'priority' => 1000,
                         'options' => array(
                             'route' => '/tradingcard',
@@ -2988,7 +2988,7 @@ return array(
                         )
                     ),
                     'memory' => array(
-                        'type' => 'Zend\Router\Http\Literal',
+                        'type' => 'Laminas\Router\Http\Literal',
                         'priority' => 1000,
                         'options' => array(
                             'route' => '/memory',
@@ -3022,7 +3022,7 @@ return array(
                         )
                     ),
                     'playgroundgame' => array(
-                        'type' => 'Zend\Router\Http\Literal',
+                        'type' => 'Laminas\Router\Http\Literal',
                         'priority' => 1000,
                         'options' => array(
                             'route' => '/game',
@@ -3045,7 +3045,7 @@ return array(
                                 )
                             ),
                             'create' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/create',
                                     'defaults' => array(
@@ -3087,7 +3087,7 @@ return array(
                                 )
                             ),
                             'create-tradingcard' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/create-tradingcard',
                                     'defaults' => array(
@@ -3179,7 +3179,7 @@ return array(
                                 )
                             ),
                             'create-lottery' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/create-lottery',
                                     'defaults' => array(
@@ -3200,7 +3200,7 @@ return array(
                                 )
                             ),
                             'create-instantwin' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/create-instantwin',
                                     'defaults' => array(
@@ -3303,7 +3303,7 @@ return array(
                                 )
                             ),
                             'create-quiz' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/create-quiz',
                                     'defaults' => array(
@@ -3324,7 +3324,7 @@ return array(
                                 )
                             ),
                             'create-postvote' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/create-postvote',
                                     'defaults' => array(
@@ -3386,7 +3386,7 @@ return array(
                                 )
                             ),
                             'create-memory' => array(
-                                'type' => 'Zend\Router\Http\Literal',
+                                'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
                                     'route' => '/create-memory',
                                     'defaults' => array(

@@ -4,10 +4,10 @@ namespace PlaygroundGame\Controller\Admin;
 
 use PlaygroundGame\Entity\PrizeCategory;
 use PlaygroundGame\Service\PrizeCategory as PrizeCategoryService;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\View\Model\ViewModel;
 use PlaygroundGame\Options\ModuleOptions;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 class PrizeCategoryController extends AbstractActionController
 {
@@ -40,7 +40,7 @@ class PrizeCategoryController extends AbstractActionController
         $categories = $service->getPrizeCategoryMapper()->findAll();
 
         if (is_array($categories)) {
-            $paginator = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\ArrayAdapter($categories));
+            $paginator = new \Laminas\Paginator\Paginator(new \Laminas\Paginator\Adapter\ArrayAdapter($categories));
         } else {
             $paginator = $categories;
         }

@@ -2,7 +2,7 @@
 
 namespace PlaygroundGame\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
+use Laminas\View\Helper\AbstractHelper;
 
 class PostvoteShareEvents extends AbstractHelper
 {
@@ -17,7 +17,7 @@ class PostvoteShareEvents extends AbstractHelper
     {
         // this is possible to create a specific game design in /design/frontend/default/custom.
         //It will precede all others templates.
-        $templatePathResolver = $this->service->getServiceManager()->get('Zend\View\Resolver\TemplatePathStack');
+        $templatePathResolver = $this->service->getServiceManager()->get('Laminas\View\Resolver\TemplatePathStack');
         $l = $templatePathResolver->getPaths();
         $templatePathResolver->addPath($l[0].'custom/'.$identifier);
         $game = $this->service->checkGame($identifier, false);

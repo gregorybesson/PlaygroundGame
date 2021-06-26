@@ -1,11 +1,11 @@
 <?php
 namespace PlaygroundGame\Controller\Frontend;
 
-use Zend\Form\Element;
-use Zend\Form\Fieldset;
-use Zend\Form\Form;
-use Zend\InputFilter\Factory as InputFactory;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\Form\Element;
+use Laminas\Form\Fieldset;
+use Laminas\Form\Form;
+use Laminas\InputFilter\Factory as InputFactory;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 class QuizController extends GameController
 {
@@ -87,7 +87,7 @@ class QuizController extends GameController
 
         $form = new Form();
 
-        $inputFilter = new \Zend\InputFilter\InputFilter();
+        $inputFilter = new \Laminas\InputFilter\InputFilter();
         $factory = new InputFactory();
 
         $i = 0;
@@ -120,7 +120,7 @@ class QuizController extends GameController
             }
 
             $name = 'q' . $q->getId();
-            $fieldsetFilter = new \Zend\InputFilter\InputFilter();
+            $fieldsetFilter = new \Laminas\InputFilter\InputFilter();
             
             if ($q->getType() === 0) {
                 $element = new Element\Radio($name);
@@ -240,7 +240,7 @@ class QuizController extends GameController
             // Maybe is there only one form for the quiz and the player data... I try...
             // And if the formPlayer data was included in the form, I remove it
             if (!$this->user && $this->game->getAnonymousAllowed() && $this->game->getAnonymousIdentifier()) {
-                $session = new \Zend\Session\Container('anonymous_identifier');
+                $session = new \Laminas\Session\Container('anonymous_identifier');
                 if (empty($session->offsetGet('anonymous_identifier'))) {
                     $controller = __NAMESPACE__ . '\\' . ucfirst($this->game->getClassType());
                     $registerUser  = $this->forward()->dispatch(
@@ -484,7 +484,7 @@ class QuizController extends GameController
         }
 
         $response = $this->getResponse();
-        $response->setContent(\Zend\Json\Json::encode(array(
+        $response->setContent(\Laminas\Json\Json::encode(array(
                 'success' => $result,
                 'playBonus' => $bonusEntry
         )));
@@ -505,7 +505,7 @@ class QuizController extends GameController
         }
 
         $response = $this->getResponse();
-        $response->setContent(\Zend\Json\Json::encode(array(
+        $response->setContent(\Laminas\Json\Json::encode(array(
             'success' => $result,
             'playBonus' => $bonusEntry
         )));
@@ -526,7 +526,7 @@ class QuizController extends GameController
         }
 
         $response = $this->getResponse();
-        $response->setContent(\Zend\Json\Json::encode(array(
+        $response->setContent(\Laminas\Json\Json::encode(array(
             'success' => $result,
             'playBonus' => $bonusEntry
         )));
@@ -547,7 +547,7 @@ class QuizController extends GameController
         }
 
         $response = $this->getResponse();
-        $response->setContent(\Zend\Json\Json::encode(array(
+        $response->setContent(\Laminas\Json\Json::encode(array(
             'success' => $result,
             'playBonus' => $bonusEntry
         )));

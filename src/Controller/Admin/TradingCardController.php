@@ -8,8 +8,8 @@ use PlaygroundGame\Controller\Admin\GameController;
 use PlaygroundGame\Entity\TradingCard;
 use PlaygroundGame\Entity\TradingCardModel;
 use PlaygroundGame\Service\Game as AdminGameService;
-use Zend\Paginator\Paginator;
-use Zend\View\Model\ViewModel;
+use Laminas\Paginator\Paginator;
+use Laminas\View\Model\ViewModel;
 
 class TradingCardController extends GameController
 {
@@ -220,7 +220,7 @@ class TradingCardController extends GameController
             }
 
             // update coo of Model
-            $jsonModel = new \Zend\View\Model\JsonModel();
+            $jsonModel = new \Laminas\View\Model\JsonModel();
             $jsonModel->setVariables(
                 array(
                     'success' => true,

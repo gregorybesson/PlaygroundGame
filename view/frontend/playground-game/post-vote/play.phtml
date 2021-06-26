@@ -64,7 +64,7 @@ $form->setAttribute('action', $this->url('postvote/play', array('id' => $this->g
 							(!empty($required)) ? $requiredContent = '<span class="text-error">*</span>' : '';
 						?>
 		            	
-		    			<?php if ($element instanceof Zend\Form\Element\Text): ?>
+		    			<?php if ($element instanceof Laminas\Form\Element\Text): ?>
 		        			
 	    					<div class="form-input">
 	    						 <label class="span4">
@@ -77,7 +77,7 @@ $form->setAttribute('action', $this->url('postvote/play', array('id' => $this->g
 	    					</div>
 	    		
 		    				
-		                <?php elseif ($element instanceof Zend\Form\Element\Textarea): ?>
+		                <?php elseif ($element instanceof Laminas\Form\Element\Textarea): ?>
 			                <div class="form-textarea">
 					               <label class="span4">
 					               <b><?php echo ($element->getLabel()) ? $this->formLabel($element) . ' ' . $requiredContent : ''; ?></b>
@@ -93,7 +93,7 @@ $form->setAttribute('action', $this->url('postvote/play', array('id' => $this->g
 					         </div>
 		                	
 
-		                <?php elseif ($element instanceof Zend\Form\Element\File): ?>
+		                <?php elseif ($element instanceof Laminas\Form\Element\File): ?>
 		                    <div class="photo-file" data-url="<?php echo $this->url('postvote/play/ajaxupload', array('id' => $this->game->getIdentifier()))?>" data-canonical="<?php echo $this->url('frontend', array(), array('force_canonical' => true)) ?>">
 		                    	
 		    					<label class="span4">

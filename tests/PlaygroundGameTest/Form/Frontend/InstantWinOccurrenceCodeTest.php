@@ -15,7 +15,7 @@ class InstantWinOccurrenceCodeTest extends \PHPUnit\Framework\TestCase
 
     protected $codeInputData;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->sm = Bootstrap::getServiceManager();
 

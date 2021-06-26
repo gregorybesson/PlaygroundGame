@@ -1,7 +1,7 @@
 <?php
 namespace PlaygroundGame\Controller\Frontend;
 
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 class InstantWinController extends GameController
 {
@@ -104,7 +104,7 @@ class InstantWinController extends GameController
         }
         
         $viewModel = $this->buildView($this->game);
-        if ($viewModel instanceof \Zend\View\Model\ViewModel) {
+        if ($viewModel instanceof \Laminas\View\Model\ViewModel) {
             $viewModel->setVariables($viewVariables);
         }
 
@@ -166,7 +166,7 @@ class InstantWinController extends GameController
         
         $this->getGameService()->sendMail($this->game, $this->user, $lastEntry, $prize);
 
-        if ($viewModel instanceof \Zend\View\Model\ViewModel) {
+        if ($viewModel instanceof \Laminas\View\Model\ViewModel) {
             $viewModel->setVariables(array(
                 'occurrence'       => $occurrence,
                 'statusMail'       => $statusMail,

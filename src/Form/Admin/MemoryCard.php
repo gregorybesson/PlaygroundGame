@@ -2,10 +2,10 @@
 
 namespace PlaygroundGame\Form\Admin;
 
-use Zend\Form\Element;
+use Laminas\Form\Element;
 use ZfcUser\Form\ProvidesEventsForm;
-use Zend\Mvc\I18n\Translator;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\Mvc\I18n\Translator;
+use Laminas\ServiceManager\ServiceManager;
 
 class MemoryCard extends ProvidesEventsForm
 {
@@ -20,7 +20,7 @@ class MemoryCard extends ProvidesEventsForm
 
         $this->add(array(
             'name' => 'memory_id',
-            'type'  => 'Zend\Form\Element\Hidden',
+            'type'  => 'Laminas\Form\Element\Hidden',
             'attributes' => array(
                 'value' => 0,
             ),
@@ -28,7 +28,7 @@ class MemoryCard extends ProvidesEventsForm
 
         $this->add(array(
             'name' => 'id',
-            'type'  => 'Zend\Form\Element\Hidden',
+            'type'  => 'Laminas\Form\Element\Hidden',
             'attributes' => array(
                 'value' => 0,
             ),
@@ -46,7 +46,7 @@ class MemoryCard extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Textarea',
+            'type' => 'Laminas\Form\Element\Textarea',
             'name' => 'description',
             'options' => array(
                 'label' => $translator->translate('Description', 'playgroundgame'),
@@ -72,14 +72,14 @@ class MemoryCard extends ProvidesEventsForm
         ));
         $this->add(array(
                 'name' => 'image',
-                'type'  => 'Zend\Form\Element\Hidden',
+                'type'  => 'Laminas\Form\Element\Hidden',
                 'attributes' => array(
                     'value' => '',
                 ),
         ));
         $this->add(array(
                 'name' => 'delete_image',
-                'type' => 'Zend\Form\Element\Hidden',
+                'type' => 'Laminas\Form\Element\Hidden',
                 'attributes' => array(
                     'value' => '',
                     'class' => 'delete_image',
@@ -87,7 +87,7 @@ class MemoryCard extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Textarea',
+            'type' => 'Laminas\Form\Element\Textarea',
             'name' => 'jsonData',
             'options' => array(
                 'label' => $translator->translate('Json Data', 'playgroundgame'),

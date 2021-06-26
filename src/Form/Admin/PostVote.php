@@ -3,8 +3,8 @@
 namespace PlaygroundGame\Form\Admin;
 
 use PlaygroundCore\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
-use Zend\Mvc\I18n\Translator;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\Mvc\I18n\Translator;
+use Laminas\ServiceManager\ServiceManager;
 
 class PostVote extends Game
 {
@@ -22,7 +22,7 @@ class PostVote extends Game
     parent::__construct($name, $sm, $translator);
 
     $this->add([
-      'type' => 'Zend\Form\Element\Select',
+      'type' => 'Laminas\Form\Element\Select',
       'name' => 'postDisplayMode',
       'attributes' => [
         'id' => 'postDisplayMode',
@@ -39,7 +39,7 @@ class PostVote extends Game
     ]);
 
     $this->add([
-      'type' => 'Zend\Form\Element\Text',
+      'type' => 'Laminas\Form\Element\Text',
       'name' => 'postDisplayNumber',
       'attributes' => [
         'id' => 'postDisplayNumber',
@@ -52,7 +52,7 @@ class PostVote extends Game
 
     $this->add(
       [
-        'type' => 'Zend\Form\Element\Checkbox',
+        'type' => 'Laminas\Form\Element\Checkbox',
         'name' => 'voteActive',
         'attributes' => [
           'class' => 'switch-input',
@@ -67,7 +67,7 @@ class PostVote extends Game
     );
 
     $this->add([
-      'type' => 'Zend\Form\Element\Checkbox',
+      'type' => 'Laminas\Form\Element\Checkbox',
       'name' => 'voteAnonymous',
       'attributes' => [
         'class' => 'switch-input',
@@ -78,7 +78,7 @@ class PostVote extends Game
     ]);
 
     $this->add([
-      'type' => 'Zend\Form\Element\Select',
+      'type' => 'Laminas\Form\Element\Select',
       'name' => 'moderationType',
       'attributes' => [
         'id' => 'moderationType',
@@ -94,7 +94,7 @@ class PostVote extends Game
     ]);
 
     $this->add([
-      'type' => 'Zend\Form\Element\Checkbox',
+      'type' => 'Laminas\Form\Element\Checkbox',
       'name' => 'mailModerationValidated',
       'attributes' => [
         'class' => 'switch-input',
@@ -105,7 +105,7 @@ class PostVote extends Game
     ]);
 
     $this->add([
-      'type' => 'Zend\Form\Element\Text',
+      'type' => 'Laminas\Form\Element\Text',
       'name' => 'mailModerationValidatedSubject',
       'attributes' => [
         'id' => 'mailModerationValidatedSubject',
@@ -117,7 +117,7 @@ class PostVote extends Game
     ]);
 
     $this->add([
-      'type' => 'Zend\Form\Element\Textarea',
+      'type' => 'Laminas\Form\Element\Textarea',
       'name' => 'mailModerationValidatedBlock',
       'options' => [
         'label' => $translator->translate('Validated moderation mail\'s content', 'playgroundgame'),
@@ -130,7 +130,7 @@ class PostVote extends Game
     ]);
 
     $this->add([
-      'type' => 'Zend\Form\Element\Checkbox',
+      'type' => 'Laminas\Form\Element\Checkbox',
       'name' => 'mailModerationRejected',
       'attributes' => [
         'class' => 'switch-input',
@@ -141,7 +141,7 @@ class PostVote extends Game
     ]);
 
     $this->add([
-      'type' => 'Zend\Form\Element\Text',
+      'type' => 'Laminas\Form\Element\Text',
       'name' => 'mailModerationRejectedSubject',
       'attributes' => [
         'id' => 'mailModerationRejectedSubject',
@@ -153,7 +153,7 @@ class PostVote extends Game
     ]);
 
     $this->add([
-      'type' => 'Zend\Form\Element\Textarea',
+      'type' => 'Laminas\Form\Element\Textarea',
       'name' => 'mailModerationRejectedBlock',
       'options' => [
         'label' => $translator->translate('Validated moderation mail\'s content', 'playgroundgame'),

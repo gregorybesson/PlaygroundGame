@@ -2,10 +2,10 @@
 
 namespace PlaygroundGame\Form\Admin;
 
-use Zend\Form\Element;
+use Laminas\Form\Element;
 use ZfcUser\Form\ProvidesEventsForm;
-use Zend\Mvc\I18n\Translator;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\Mvc\I18n\Translator;
+use Laminas\ServiceManager\ServiceManager;
 
 class InstantWinOccurrence extends ProvidesEventsForm
 {
@@ -19,7 +19,7 @@ class InstantWinOccurrence extends ProvidesEventsForm
 
         $this->add(array(
             'name' => 'instant_win_id',
-            'type'  => 'Zend\Form\Element\Hidden',
+            'type'  => 'Laminas\Form\Element\Hidden',
             'attributes' => array(
                 'value' => 0,
             ),
@@ -27,7 +27,7 @@ class InstantWinOccurrence extends ProvidesEventsForm
 
         $this->add(array(
             'name' => 'id',
-            'type'  => 'Zend\Form\Element\Hidden',
+            'type'  => 'Laminas\Form\Element\Hidden',
             'attributes' => array(
                 'value' => 0,
             ),
@@ -45,7 +45,7 @@ class InstantWinOccurrence extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Select',
+            'type' => 'Laminas\Form\Element\Select',
             'name' => 'active',
             'options' => array(
                 'value_options' => array(
@@ -57,7 +57,7 @@ class InstantWinOccurrence extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Select',
+            'type' => 'Laminas\Form\Element\Select',
             'name' => 'winning',
             'options' => array(
                 'value_options' => array(
@@ -70,7 +70,7 @@ class InstantWinOccurrence extends ProvidesEventsForm
 
         $prizes = $this->getPrizes();
         $this->add(array(
-            'type' => 'Zend\Form\Element\Select',
+            'type' => 'Laminas\Form\Element\Select',
             'name' => 'prize',
             'options' => array(
                 'empty_option' => $translator->translate('Ce jeu n\'a pas de lot associé', 'playgroundgame'),

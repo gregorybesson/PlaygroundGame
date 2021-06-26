@@ -2,13 +2,13 @@
 
 namespace PlaygroundGame\Controller\Admin;
 
-use Zend\View\Model\JsonModel;
+use Laminas\View\Model\JsonModel;
 use PlaygroundGame\Entity\Quiz;
 use PlaygroundGame\Entity\QuizQuestion;
 use PlaygroundGame\Controller\Admin\GameController;
 use PlaygroundGame\Service\Game as AdminGameService;
-use Zend\View\Model\ViewModel;
-use Zend\Paginator\Paginator;
+use Laminas\View\Model\ViewModel;
+use Laminas\Paginator\Paginator;
 
 class QuizController extends GameController
 {
@@ -30,7 +30,7 @@ class QuizController extends GameController
         $questions = $service->getQuizQuestionMapper()->findByGameId($quizId);
 
         if (is_array($questions)) {
-            $paginator = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\ArrayAdapter($questions));
+            $paginator = new \Laminas\Paginator\Paginator(new \Laminas\Paginator\Adapter\ArrayAdapter($questions));
         } else {
             $paginator = $questions;
         }

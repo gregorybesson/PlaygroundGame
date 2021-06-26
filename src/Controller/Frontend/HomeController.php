@@ -2,10 +2,10 @@
 
 namespace PlaygroundGame\Controller\Frontend;
 
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
-use Zend\View\Model\JsonModel;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\View\Model\ViewModel;
+use Laminas\View\Model\JsonModel;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 class HomeController extends AbstractActionController
 {
@@ -77,7 +77,7 @@ class HomeController extends AbstractActionController
             && $paginationSettings->getHomePagination() !== null
             && $paginationSettings->getHomePagination() > 0
         ) {
-            $paginator = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\ArrayAdapter($items));
+            $paginator = new \Laminas\Paginator\Paginator(new \Laminas\Paginator\Adapter\ArrayAdapter($items));
             $paginator->setItemCountPerPage($paginationSettings->getHomePagination());
             $paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
         } else {

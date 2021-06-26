@@ -16,7 +16,7 @@ $form->prepare();
         <?php echo $this->formElementErrors($form->get('identifier')); ?>
 	</div>
 	<div class="label-input">
-        <?php if(($form->get('partner') instanceof Zend\Form\Element\Select )):?>
+        <?php if(($form->get('partner') instanceof Laminas\Form\Element\Select )):?>
             <?php echo $this->formLabel($form->get('partner')); ?>
             <?php echo $this->formSelect($form->get('partner')); ?>
             <?php echo $this->formElementErrors($form->get('partner')) ?>
@@ -89,7 +89,7 @@ $form->prepare();
         <?php if($form->get('fbAppId')->getValue() && $form->get('fbAppId')->getValue() != 0):?>
            <br/> Ce jeu est associé à l'app_id <?php echo $form->get('fbAppId')->getValue();?>
         <?php endif;?>
-        <?php if(($form->get('fbAppId') instanceof Zend\Form\Element\Select )):?>
+        <?php if(($form->get('fbAppId') instanceof Laminas\Form\Element\Select )):?>
             <?php echo $this->formLabel($form->get('fbAppId')); ?>
             <?php echo $this->formSelect($form->get('fbAppId')); ?>
             <?php echo $this->formElementErrors($form->get('fbAppId')) ?>

@@ -2,13 +2,13 @@
 
 namespace PlaygroundGameTest\Controller\Admin;
 
-use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
+use Laminas\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
 class InstantWinControllerTest extends AbstractHttpControllerTestCase
 {
     protected $traceError = true;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->setApplicationConfig(
             include __DIR__ . '/../../../TestConfig.php'
@@ -54,13 +54,22 @@ class InstantWinControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue(array()));
 
         $query = $this->getMockBuilder('Query')
+            ->setMethods(array('getQuery'))
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $result = $this->getMockBuilder('Result')
             ->setMethods(array('getResult'))
             ->disableOriginalConstructor()
             ->getMock();
 
         $query->expects($this->any())
+            ->method('getQuery')
+            ->will($this->returnValue($result));
+
+        $result->expects($this->any())
             ->method('getResult')
-            ->will($this->returnValue(true));
+            ->will($this->returnValue(''));
 
         $adminGameService->expects($this->any())
             ->method('getEntriesQuery')
@@ -142,13 +151,22 @@ class InstantWinControllerTest extends AbstractHttpControllerTestCase
             ->will($this->returnValue(array()));
 
         $query = $this->getMockBuilder('Query')
+            ->setMethods(array('getQuery'))
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $result = $this->getMockBuilder('Result')
             ->setMethods(array('getResult'))
             ->disableOriginalConstructor()
             ->getMock();
 
         $query->expects($this->any())
+            ->method('getQuery')
+            ->will($this->returnValue($result));
+
+        $result->expects($this->any())
             ->method('getResult')
-            ->will($this->returnValue(true));
+            ->will($this->returnValue(''));
 
         $adminGameService->expects($this->any())
             ->method('getEntriesQuery')

@@ -1,7 +1,7 @@
 <?php $this->plugin('translate')->setTranslatorTextDomain('playgroundgame');// Pour le texte ?>
 <?php 
 	try {
-	    $channel = \Zend\Feed\Reader\Reader::import($this->rssUrl);
+	    $channel = \Laminas\Feed\Reader\Reader::import($this->rssUrl);
 	} catch (Exception $e){
 	    $channel = array();
 	}

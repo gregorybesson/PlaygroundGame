@@ -3,16 +3,16 @@
 namespace PlaygroundGame\Controller\Admin;
 
 use PlaygroundGame\Service\Game as AdminGameService;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\View\Model\ViewModel;
 use PlaygroundGame\Options\ModuleOptions;
-use Zend\Paginator\Paginator;
+use Laminas\Paginator\Paginator;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use PlaygroundCore\ORM\Pagination\LargeTablePaginator;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
-use Zend\Stdlib\ErrorHandler;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\Session\Container;
+use Laminas\Stdlib\ErrorHandler;
+use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\Session\Container;
 
 class GameController extends AbstractActionController
 {
@@ -688,7 +688,7 @@ class GameController extends AbstractActionController
     
     /**
      * This method serialize a game an export it as a txt file
-     * @return \Zend\Stdlib\ResponseInterface
+     * @return \Laminas\Stdlib\ResponseInterface
      */
     public function exportAction()
     {

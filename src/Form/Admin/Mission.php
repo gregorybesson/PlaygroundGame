@@ -3,8 +3,8 @@
 namespace PlaygroundGame\Form\Admin;
 
 use PlaygroundCore\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
-use Zend\Mvc\I18n\Translator;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\Mvc\I18n\Translator;
+use Laminas\ServiceManager\ServiceManager;
 use PlaygroundGame\Form\Admin\Game;
 
 class Mission extends Game
@@ -23,7 +23,7 @@ class Mission extends Game
 
         $gameMissionFieldset = new MissionGameFieldset(null, $sm, $translator);
         $this->add(array(
-            'type'    => 'Zend\Form\Element\Collection',
+            'type'    => 'Laminas\Form\Element\Collection',
             'name'    => 'missionGames',
             'options' => array(
                 'id'    => 'missionGames',

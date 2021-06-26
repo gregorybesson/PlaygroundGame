@@ -2,7 +2,7 @@
 
 namespace PlaygroundGame\Service;
 
-use Zend\Stdlib\ErrorHandler;
+use Laminas\Stdlib\ErrorHandler;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\Action;
 use ZfcDatagrid\Column\Formatter;
@@ -194,7 +194,7 @@ class PostVote extends Game
                         $postElement->setValue($media_url . $value['name']);
                     }
                 }
-            } elseif (is_array($value) || $form->get($name) instanceof \Zend\Form\Element\Select) {
+            } elseif (is_array($value) || $form->get($name) instanceof \Laminas\Form\Element\Select) {
                 $arValues = $form->get($name)->getValueOptions();
                 $postElement->setValue($arValues[$value[0]]);
             } elseif (!empty($value)) {
