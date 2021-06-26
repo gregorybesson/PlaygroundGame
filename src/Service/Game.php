@@ -2,21 +2,21 @@
 namespace PlaygroundGame\Service;
 
 use PlaygroundGame\Entity\Entry;
-use Zend\Session\Container;
-use Zend\ServiceManager\ServiceManager;
-use Zend\EventManager\EventManagerAwareTrait;
-use Zend\EventManager\EventManager;
+use Laminas\Session\Container;
+use Laminas\ServiceManager\ServiceManager;
+use Laminas\EventManager\EventManagerAwareTrait;
+use Laminas\EventManager\EventManager;
 use PlaygroundGame\Options\ModuleOptions;
 use PlaygroundGame\Mapper\GameInterface as GameMapperInterface;
 use DoctrineModule\Validator\NoObjectExists as NoObjectExistsValidator;
-use Zend\Validator\File\Size;
-use Zend\Validator\File\IsImage;
-use Zend\Stdlib\ErrorHandler;
+use Laminas\Validator\File\Size;
+use Laminas\Validator\File\IsImage;
+use Laminas\Stdlib\ErrorHandler;
 use PlaygroundCore\Filter\Sanitize;
-use Zend\Form\Element;
-use Zend\Form\Form;
-use Zend\InputFilter\Factory as InputFactory;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\Form\Element;
+use Laminas\Form\Form;
+use Laminas\InputFilter\Factory as InputFactory;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 use ZfcDatagrid\Column;
 use ZfcDatagrid\Action;
 use ZfcDatagrid\Column\Formatter;
@@ -934,7 +934,7 @@ class Game
                     $elementInput = $filter->get($element->getName());
                     $elementInput->setRequired(false);
                     $form->get($element->getName())->setAttribute('required', false);
-                } catch (\Zend\Form\Exception\InvalidElementException $e) {
+                } catch (\Laminas\Form\Exception\InvalidElementException $e) {
                 }
             }
         }
@@ -946,7 +946,7 @@ class Game
                 $game->getAnonymousIdentifier() &&
                 isset($data[$game->getAnonymousIdentifier()])
             ) {
-                $session = new \Zend\Session\Container('anonymous_identifier');
+                $session = new \Laminas\Session\Container('anonymous_identifier');
                 $anonymousIdentifier = $data[$game->getAnonymousIdentifier()];
                 $entry->setAnonymousIdentifier($anonymousIdentifier);
                 if (empty($session->offsetGet('anonymous_identifier'))) {
@@ -1366,7 +1366,7 @@ class Game
                 );
                 try {
                     $mailService->send($message);
-                } catch (\Zend\Mail\Protocol\Exception\RuntimeException $e) {
+                } catch (\Laminas\Mail\Protocol\Exception\RuntimeException $e) {
                     return ['result' => true, 'message' => $this->serviceLocator->get('MvcTranslator')->translate(
                         'mail error'
                     )];
@@ -1407,7 +1407,7 @@ class Game
             $message = $game->getEmailShareMessage();
         }
 
-        $renderer = $this->serviceLocator->get('Zend\View\Renderer\RendererInterface');
+        $renderer = $this->serviceLocator->get('Laminas\View\Renderer\RendererInterface');
         $skinUrl = $renderer->url(
             'frontend',
             array(),
@@ -1439,7 +1439,7 @@ class Game
                 );
                 try {
                     $mailService->send($message);
-                } catch (\Zend\Mail\Protocol\Exception\RuntimeException $e) {
+                } catch (\Laminas\Mail\Protocol\Exception\RuntimeException $e) {
                 }
 
                 if ($entry) {
@@ -1482,7 +1482,7 @@ class Game
     public function mail($from, $to, $subject, $template, $data)
     {
         $mailService = $this->serviceLocator->get('playgroundgame_message');
-        $renderer = $this->serviceLocator->get('Zend\View\Renderer\RendererInterface');
+        $renderer = $this->serviceLocator->get('Laminas\View\Renderer\RendererInterface');
         $skinUrl = $renderer->url(
             'frontend',
             array(),
@@ -1515,7 +1515,7 @@ class Game
             $this->getOptions()->getParticipationSubjectLine(),
             'playgroundgame'
         );
-        $renderer = $this->serviceLocator->get('Zend\View\Renderer\RendererInterface');
+        $renderer = $this->serviceLocator->get('Laminas\View\Renderer\RendererInterface');
         $skinUrl = $renderer->url(
             'frontend',
             array(),
@@ -1539,7 +1539,7 @@ class Game
             $this->getOptions()->getParticipationSubjectLine(),
             'playgroundgame'
         );
-        $renderer = $this->serviceLocator->get('Zend\View\Renderer\RendererInterface');
+        $renderer = $this->serviceLocator->get('Laminas\View\Renderer\RendererInterface');
         $skinUrl = $renderer->url(
             'frontend',
             array(),
@@ -1782,7 +1782,7 @@ class Game
 
                 return $fileNewname;
             } else {
-                $adapter = new \Zend\File\Transfer\Adapter\Http();
+                $adapter = new \Laminas\File\Transfer\Adapter\Http();
                 // 1Mo
                 $size = new Size(array(
                     'max' => 1024000
@@ -2223,7 +2223,7 @@ class Game
     }
 
     /**
-     * @param \Zend\InputFilter\InputFilter $inputFilter
+     * @param \Laminas\InputFilter\InputFilter $inputFilter
      */
     public function decorate($element, $attr, $inputFilter)
     {
@@ -2247,7 +2247,7 @@ class Game
             $options['max'] = $attr['lengthMax'];
             $element->setAttribute('maxlength', $attr['lengthMax']);
             $options['messages'] = array(
-                \Zend\Validator\StringLength::TOO_LONG => sprintf(
+                \Laminas\Validator\StringLength::TOO_LONG => sprintf(
                     $this->serviceLocator->get('MvcTranslator')->translate(
                         'This field contains more than %s characters',
                         'playgroundgame'
@@ -2302,7 +2302,7 @@ class Game
         $form->setAttribute('id', $id);
         $form->setAttribute('enctype', 'multipart/form-data');
 
-        $inputFilter = new \Zend\InputFilter\InputFilter();
+        $inputFilter = new \Laminas\InputFilter\InputFilter();
         $factory = new InputFactory();
 
         foreach ($formPV as $element) {
@@ -2476,15 +2476,15 @@ class Game
                     'required' => $attr['required'],
                     'validators' => array(
                         array(
-                            'name' => '\Zend\Validator\File\Size',
+                            'name' => '\Laminas\Validator\File\Size',
                             'options' => array('min' => $attr['filesizeMin'], 'max' => $attr['filesizeMax'])
                         ),
                         array(
-                            'name' => '\Zend\Validator\File\Extension',
+                            'name' => '\Laminas\Validator\File\Extension',
                             'options'  => array(
                                 $attr['fileextension'],
                                 'messages' => array(
-                                    \Zend\Validator\File\Extension::FALSE_EXTENSION =>'Veuillez télécharger un fichier avec la bonne extension'
+                                    \Laminas\Validator\File\Extension::FALSE_EXTENSION =>'Veuillez télécharger un fichier avec la bonne extension'
                                 )
                             )
                         ),

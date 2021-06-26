@@ -2,7 +2,7 @@
 
 namespace PlaygroundGame\Form\Frontend;
 
-use Zend\InputFilter\InputFilter;
+use Laminas\InputFilter\InputFilter;
 
 class InstantWinOccurrenceCodeFilter extends InputFilter
 {

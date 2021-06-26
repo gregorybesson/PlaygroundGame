@@ -3,11 +3,11 @@
 namespace PlaygroundGame\Service;
 
 use DoctrineModule\Validator\NoObjectExists as NoObjectExistsValidator;
-use Zend\ServiceManager\ServiceManager;
-use Zend\EventManager\EventManagerAwareTrait;
+use Laminas\ServiceManager\ServiceManager;
+use Laminas\EventManager\EventManagerAwareTrait;
 use PlaygroundGame\Options\ModuleOptions;
 use PlaygroundGame\Mapper\Prize as PrizeMapper;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 class Prize
 {

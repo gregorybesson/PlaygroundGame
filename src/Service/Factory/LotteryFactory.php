@@ -2,7 +2,7 @@
 namespace PlaygroundGame\Service\Factory;
 
 use PlaygroundGame\Service\Lottery;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Interop\Container\ContainerInterface;
 
 class LotteryFactory implements FactoryInterface

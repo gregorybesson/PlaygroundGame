@@ -4,7 +4,7 @@ namespace PlaygroundGame\Controller\Admin;
 
 use PlaygroundGame\Service\Game as AdminGameService;
 use PlaygroundGame\Entity\PostVote;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 class PostVoteController extends GameController
 {
@@ -84,7 +84,7 @@ class PostVoteController extends GameController
         $posts = $service->getPostVotePostMapper()->findBy(array('status' => 1));
 
         if (is_array($posts)) {
-            $paginator = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\ArrayAdapter($posts));
+            $paginator = new \Laminas\Paginator\Paginator(new \Laminas\Paginator\Adapter\ArrayAdapter($posts));
             $paginator->setItemCountPerPage(10);
             $paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
         } else {

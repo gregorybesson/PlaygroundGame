@@ -2,7 +2,7 @@
 
 namespace PlaygroundGame\Service;
 
-use Zend\ServiceManager\ServiceManager;
+use Laminas\ServiceManager\ServiceManager;
 use PlaygroundGame\Service\Game;
 use PlaygroundGame\Entity\MissionGameCondition as MissionGameConditionEntity;
 

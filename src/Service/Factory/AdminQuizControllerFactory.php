@@ -2,7 +2,7 @@
 namespace PlaygroundGame\Service\Factory;
 
 use PlaygroundGame\Controller\Admin\QuizController;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Interop\Container\ContainerInterface;
 
 class AdminQuizControllerFactory implements FactoryInterface

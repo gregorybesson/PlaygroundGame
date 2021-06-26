@@ -1,8 +1,8 @@
 <?php
 namespace PlaygroundGame\Form\Frontend;
 
-use Zend\Form\Form;
-use Zend\Captcha\Image as CaptchaImage;
+use Laminas\Form\Form;
+use Laminas\Captcha\Image as CaptchaImage;
 
 class PostVoteVote extends Form
 {
@@ -27,7 +27,7 @@ class PostVoteVote extends Form
 
         //add captcha element...
         $this->add(array(
-            'type' => 'Zend\Form\Element\Captcha',
+            'type' => 'Laminas\Form\Element\Captcha',
             'name' => 'captcha',
             'options' => array(
                 'label' => 'Saisissez le texte ci-dessous :*',

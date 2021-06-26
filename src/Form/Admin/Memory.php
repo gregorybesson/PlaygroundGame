@@ -3,8 +3,8 @@
 namespace PlaygroundGame\Form\Admin;
 
 use PlaygroundCore\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
-use Zend\Mvc\I18n\Translator;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\Mvc\I18n\Translator;
+use Laminas\ServiceManager\ServiceManager;
 
 class Memory extends Game
 {
@@ -22,7 +22,7 @@ class Memory extends Game
 
         $this->add(array(
             'name' => 'victoryConditions',
-            'type' => 'Zend\Form\Element\Text',
+            'type' => 'Laminas\Form\Element\Text',
             'attributes' => array(
                 'placeholder' => $translator->translate('% good picks vs mistakes', 'playgroundgame'),
                 'id' => 'victoryConditions',
@@ -45,14 +45,14 @@ class Memory extends Game
         ));
         $this->add(array(
                 'name' => 'backImage',
-                'type' => 'Zend\Form\Element\Hidden',
+                'type' => 'Laminas\Form\Element\Hidden',
                 'attributes' => array(
                     'value' => '',
                 ),
         ));
         $this->add(array(
             'name' => 'deleteBackImage',
-            'type' => 'Zend\Form\Element\Hidden',
+            'type' => 'Laminas\Form\Element\Hidden',
             'attributes' => array(
                 'value' => '',
                 'class' => 'delete_scratch_image',

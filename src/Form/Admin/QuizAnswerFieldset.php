@@ -3,10 +3,10 @@
 namespace PlaygroundGame\Form\Admin;
 
 use PlaygroundGame\Entity\QuizAnswer;
-use Zend\Form\Fieldset;
-use Zend\Mvc\I18n\Translator;
+use Laminas\Form\Fieldset;
+use Laminas\Mvc\I18n\Translator;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\ServiceManager\ServiceManager;
 
 class QuizAnswerFieldset extends Fieldset
 {
@@ -19,12 +19,12 @@ class QuizAnswerFieldset extends Fieldset
         ->setObject(new QuizAnswer());
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Hidden',
+            'type' => 'Laminas\Form\Element\Hidden',
             'name' => 'id',
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Textarea',
+            'type' => 'Laminas\Form\Element\Textarea',
             'name' => 'answer',
             'options' => array(
                 'label' => $translator->translate('Réponse', 'playgroundgame'),
@@ -37,7 +37,7 @@ class QuizAnswerFieldset extends Fieldset
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Select',
+            'type' => 'Laminas\Form\Element\Select',
             'name' => 'correct',
             'options' => array(
                     'value_options' => array(
@@ -49,7 +49,7 @@ class QuizAnswerFieldset extends Fieldset
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Textarea',
+            'type' => 'Laminas\Form\Element\Textarea',
             'name' => 'jsonData',
             'options' => array(
                 'label' => $translator->translate('json Data', 'playgroundgame'),
@@ -76,7 +76,7 @@ class QuizAnswerFieldset extends Fieldset
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Textarea',
+            'type' => 'Laminas\Form\Element\Textarea',
             'name' => 'explanation',
             'options' => array(
                 'label' => $translator->translate('Explanation', 'playgroundgame'),
@@ -89,7 +89,7 @@ class QuizAnswerFieldset extends Fieldset
         ));
         
         $this->add(array(
-            'type' => 'Zend\Form\Element\File',
+            'type' => 'Laminas\Form\Element\File',
             'name' => 'upload_image',
             'options' => array(
                 'label' => $translator->translate('Image', 'playgroundgame'),
@@ -103,14 +103,14 @@ class QuizAnswerFieldset extends Fieldset
         ));
         $this->add(array(
             'name' => 'image',
-            'type'  => 'Zend\Form\Element\Hidden',
+            'type'  => 'Laminas\Form\Element\Hidden',
             'attributes' => array(
                 'value' => '',
             ),
         ));
         $this->add(array(
             'name' => 'delete_image',
-            'type' => 'Zend\Form\Element\Hidden',
+            'type' => 'Laminas\Form\Element\Hidden',
             'attributes' => array(
                 'value' => '',
                 'class' => 'delete_image',
@@ -125,7 +125,7 @@ class QuizAnswerFieldset extends Fieldset
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Button',
+            'type' => 'Laminas\Form\Element\Button',
             'name' => 'remove',
             'options' => array(
                 'label' => $translator->translate('Remove this answer', 'playgroundgame'),

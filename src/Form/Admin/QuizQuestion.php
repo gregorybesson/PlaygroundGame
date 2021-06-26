@@ -2,12 +2,12 @@
 
 namespace PlaygroundGame\Form\Admin;
 
-use Zend\Form\Element;
+use Laminas\Form\Element;
 use ZfcUser\Form\ProvidesEventsForm;
-use Zend\Mvc\I18n\Translator;
+use Laminas\Mvc\I18n\Translator;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use PlaygroundCore\Stdlib\Hydrator\Strategy\BooleanStrategy;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\ServiceManager\ServiceManager;
 
 class QuizQuestion extends ProvidesEventsForm
 {
@@ -33,7 +33,7 @@ class QuizQuestion extends ProvidesEventsForm
 
         $this->add(array(
             'name' => 'quiz_id',
-            'type'  => 'Zend\Form\Element\Hidden',
+            'type'  => 'Laminas\Form\Element\Hidden',
             'attributes' => array(
                 'value' => 0,
             ),
@@ -41,14 +41,14 @@ class QuizQuestion extends ProvidesEventsForm
 
         $this->add(array(
             'name' => 'id',
-            'type'  => 'Zend\Form\Element\Hidden',
+            'type'  => 'Laminas\Form\Element\Hidden',
             'attributes' => array(
                 'value' => 0,
             ),
         ));
 
         $this->add(array(
-                'type' => 'Zend\Form\Element\Textarea',
+                'type' => 'Laminas\Form\Element\Textarea',
                 'name' => 'question',
                 'options' => array(
                     'label' => $translator->translate('Question', 'playgroundgame'),
@@ -65,7 +65,7 @@ class QuizQuestion extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Textarea',
+            'type' => 'Laminas\Form\Element\Textarea',
             'name' => 'hint',
             'options' => array(
                 'label' => $translator->translate('Indice', 'playgroundgame'),
@@ -82,7 +82,7 @@ class QuizQuestion extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Textarea',
+            'type' => 'Laminas\Form\Element\Textarea',
             'name' => 'jsonData',
             'options' => array(
                 'label' => $translator->translate('Json Data', 'playgroundgame'),
@@ -99,7 +99,7 @@ class QuizQuestion extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Checkbox',
+            'type' => 'Laminas\Form\Element\Checkbox',
             'name' => 'prediction',
             'options' => array(
                 'label' => 'Question pronostic',
@@ -111,7 +111,7 @@ class QuizQuestion extends ProvidesEventsForm
 
         $this->add(array(
             'name' => 'timer',
-            'type'  => 'Zend\Form\Element\Hidden',
+            'type'  => 'Laminas\Form\Element\Hidden',
             'attributes' => array(
                 'value' => 0,
             ),
@@ -129,7 +129,7 @@ class QuizQuestion extends ProvidesEventsForm
 
         $this->add(array(
             'name' => 'type',
-            'type' => 'Zend\Form\Element\Radio',
+            'type' => 'Laminas\Form\Element\Radio',
             'options' => array(
                 'label' => $translator->translate('Type', 'playgroundgame'),
                 'label_attributes' => array(
@@ -144,7 +144,7 @@ class QuizQuestion extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'type'  => 'Zend\Form\Element\Hidden',
+            'type'  => 'Laminas\Form\Element\Hidden',
             'name' => 'weight',
             'options' => array(
                 'label' => $translator->translate('Weight', 'playgroundgame'),
@@ -176,7 +176,7 @@ class QuizQuestion extends ProvidesEventsForm
         
         $this->add(array(
             'name' => 'audio',
-            'type' => 'Zend\Form\Element\Hidden',
+            'type' => 'Laminas\Form\Element\Hidden',
             'attributes' => array(
                 'value' => 0,
             ),
@@ -184,7 +184,7 @@ class QuizQuestion extends ProvidesEventsForm
         
         $this->add(array(
             'name' => 'autoplay',
-            'type' => 'Zend\Form\Element\Hidden',
+            'type' => 'Laminas\Form\Element\Hidden',
             'attributes' => array(
                 'value' => 0,
             ),
@@ -205,14 +205,14 @@ class QuizQuestion extends ProvidesEventsForm
         ));
         $this->add(array(
             'name' => 'image',
-            'type'  => 'Zend\Form\Element\Hidden',
+            'type'  => 'Laminas\Form\Element\Hidden',
             'attributes' => array(
                 'value' => '',
             ),
         ));
         $this->add(array(
                 'name' => 'delete_image',
-                'type' => 'Zend\Form\Element\Hidden',
+                'type' => 'Laminas\Form\Element\Hidden',
                 'attributes' => array(
                     'value' => '',
                     'class' => 'delete_image',
@@ -221,7 +221,7 @@ class QuizQuestion extends ProvidesEventsForm
 
         $quizAnswerFieldset = new QuizAnswerFieldset(null, $serviceManager, $translator);
         $this->add(array(
-            'type'    => 'Zend\Form\Element\Collection',
+            'type'    => 'Laminas\Form\Element\Collection',
             'name'    => 'answers',
             'options' => array(
                 'id'    => 'answers',

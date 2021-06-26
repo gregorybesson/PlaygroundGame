@@ -2,13 +2,13 @@
 
 namespace PlaygroundGame\Service;
 
-use Zend\ServiceManager\ServiceManager;
-use Zend\EventManager\EventManagerAwareTrait;
+use Laminas\ServiceManager\ServiceManager;
+use Laminas\EventManager\EventManagerAwareTrait;
 use PlaygroundGame\Options\ModuleOptions;
 use PlaygroundGame\Mapper\PrizeCategory as PrizeCategoryMapper;
-use Zend\Stdlib\ErrorHandler;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\EventManager\EventManager;
+use Laminas\Stdlib\ErrorHandler;
+use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\EventManager\EventManager;
 
 class PrizeCategory
 {

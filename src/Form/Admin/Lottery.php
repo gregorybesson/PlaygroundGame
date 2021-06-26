@@ -3,8 +3,8 @@
 namespace PlaygroundGame\Form\Admin;
 
 use PlaygroundCore\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
-use Zend\Mvc\I18n\Translator;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\Mvc\I18n\Translator;
+use Laminas\ServiceManager\ServiceManager;
 
 class Lottery extends Game
 {
@@ -21,7 +21,7 @@ class Lottery extends Game
         parent::__construct($name, $sm, $translator);
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Select',
+            'type' => 'Laminas\Form\Element\Select',
             'name' => 'drawAuto',
             'attributes' =>  array(
                 'id' => 'drawAuto',
@@ -36,7 +36,7 @@ class Lottery extends Game
         ));
 
         $this->add(array(
-                'type' => 'Zend\Form\Element\DateTime',
+                'type' => 'Laminas\Form\Element\DateTime',
                 'name' => 'drawDate',
                 'options' => array(
                     'label' => $translator->translate('Date du tirage au sort', 'playgroundgame'),

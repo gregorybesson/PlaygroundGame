@@ -2,7 +2,7 @@
 namespace PlaygroundGame\Service\Factory;
 
 use PlaygroundGame\Service\PrizeCategoryUser;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Interop\Container\ContainerInterface;
 
 class PrizeCategoryUserFactory implements FactoryInterface

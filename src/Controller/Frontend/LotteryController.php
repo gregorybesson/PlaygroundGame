@@ -1,7 +1,7 @@
 <?php
 namespace PlaygroundGame\Controller\Frontend;
 
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 class LotteryController extends GameController
 {
@@ -127,7 +127,7 @@ class LotteryController extends GameController
         }
 
         $response = $this->getResponse();
-        $response->setContent(\Zend\Json\Json::encode(array(
+        $response->setContent(\Laminas\Json\Json::encode(array(
             'success' => $result,
             'playBonus' => $bonusEntry
          )));
@@ -145,7 +145,7 @@ class LotteryController extends GameController
         }
 
         $response = $this->getResponse();
-        $response->setContent(\Zend\Json\Json::encode(array(
+        $response->setContent(\Laminas\Json\Json::encode(array(
             'success' => $result,
             'playBonus' => $bonusEntry
         )));
@@ -163,7 +163,7 @@ class LotteryController extends GameController
         }
 
         $response = $this->getResponse();
-        $response->setContent(\Zend\Json\Json::encode(array(
+        $response->setContent(\Laminas\Json\Json::encode(array(
             'success' => $result,
             'playBonus' => $bonusEntry
         )));
@@ -181,7 +181,7 @@ class LotteryController extends GameController
         }
 
         $response = $this->getResponse();
-        $response->setContent(\Zend\Json\Json::encode(array(
+        $response->setContent(\Laminas\Json\Json::encode(array(
             'success' => $result,
             'playBonus' => $bonusEntry
         )));

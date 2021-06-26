@@ -2,10 +2,10 @@
 
 namespace PlaygroundGame\Form\Admin;
 
-use Zend\Form\Element;
+use Laminas\Form\Element;
 use ZfcUser\Form\ProvidesEventsForm;
-use Zend\Mvc\I18n\Translator;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\Mvc\I18n\Translator;
+use Laminas\ServiceManager\ServiceManager;
 
 class InstantWinOccurrenceImport extends ProvidesEventsForm
 {
@@ -20,7 +20,7 @@ class InstantWinOccurrenceImport extends ProvidesEventsForm
 
         $this->add(array(
             'name' => 'instant_win_id',
-            'type'  => 'Zend\Form\Element\Hidden',
+            'type'  => 'Laminas\Form\Element\Hidden',
             'attributes' => array(
                 'value' => 0,
             ),
@@ -28,7 +28,7 @@ class InstantWinOccurrenceImport extends ProvidesEventsForm
 
         $this->add(array(
             'name' => 'file',
-            'type' => 'Zend\Form\Element\File',
+            'type' => 'Laminas\Form\Element\File',
             'options' => array(
                 'label' => $translator->translate('CSV file containing occurrences', 'playgroundgame'),
             ),
@@ -42,7 +42,7 @@ class InstantWinOccurrenceImport extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Select',
+            'type' => 'Laminas\Form\Element\Select',
             'name' => 'active',
             'options' => array(
                 'value_options' => array(
@@ -55,7 +55,7 @@ class InstantWinOccurrenceImport extends ProvidesEventsForm
 
         $prizes = $this->getPrizes();
         $this->add(array(
-            'type' => 'Zend\Form\Element\Select',
+            'type' => 'Laminas\Form\Element\Select',
             'name' => 'prize',
             'required' => false,
             'allowEmpty' => true,

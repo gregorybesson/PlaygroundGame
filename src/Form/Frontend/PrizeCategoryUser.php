@@ -1,10 +1,10 @@
 <?php
 namespace PlaygroundGame\Form\Frontend;
 
-use Zend\Form\Element;
+use Laminas\Form\Element;
 use ZfcUser\Form\ProvidesEventsForm;
-use Zend\Mvc\I18n\Translator;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\Mvc\I18n\Translator;
+use Laminas\ServiceManager\ServiceManager;
 
 class PrizeCategoryUser extends ProvidesEventsForm
 {
@@ -18,7 +18,7 @@ class PrizeCategoryUser extends ProvidesEventsForm
 
         $this->add(array(
             'name' => 'user',
-            'type' => 'Zend\Form\Element\Hidden',
+            'type' => 'Laminas\Form\Element\Hidden',
             'attributes' => array(
                 'value' => 0,
             ),
@@ -28,14 +28,14 @@ class PrizeCategoryUser extends ProvidesEventsForm
         if (count($categories) == 0) {
             $this->add(array(
                     'name' => 'prizeCategory',
-                    'type' => 'Zend\Form\Element\Hidden',
+                    'type' => 'Laminas\Form\Element\Hidden',
                     'attributes' => array(
                         'value' => 0,
                     ),
             ));
         } else {
             $this->add(array(
-                'type' => 'Zend\Form\Element\MultiCheckbox',
+                'type' => 'Laminas\Form\Element\MultiCheckbox',
                 'name' => 'prizeCategory',
                 'options' => array(
                     'value_options' => $categories,

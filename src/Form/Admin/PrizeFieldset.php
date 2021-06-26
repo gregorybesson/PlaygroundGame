@@ -3,10 +3,10 @@
 namespace PlaygroundGame\Form\Admin;
 
 use PlaygroundGame\Entity\Prize;
-use Zend\Form\Fieldset;
-use Zend\Mvc\I18n\Translator;
+use Laminas\Form\Fieldset;
+use Laminas\Mvc\I18n\Translator;
 use PlaygroundCore\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\ServiceManager\ServiceManager;
 
 class PrizeFieldset extends Fieldset
 {
@@ -29,7 +29,7 @@ class PrizeFieldset extends Fieldset
         $this->add(
             array(
                 'name' => 'id',
-                'type'  => 'Zend\Form\Element\Hidden',
+                'type'  => 'Laminas\Form\Element\Hidden',
             )
         );
 
@@ -60,7 +60,7 @@ class PrizeFieldset extends Fieldset
 
         $this->add(
             array(
-                'type' => 'Zend\Form\Element\Textarea',
+                'type' => 'Laminas\Form\Element\Textarea',
                 'name' => 'prizeContent',
                 'options' => array(
                     'label' => $translator->translate('Description', 'playgroundgame'),
@@ -115,7 +115,7 @@ class PrizeFieldset extends Fieldset
         
         $this->add(
             array(
-               'type' => 'Zend\Form\Element\Select',
+               'type' => 'Laminas\Form\Element\Select',
                'name' => 'currency',
                'attributes' =>  array(
                     'id' => 'currency',
@@ -146,7 +146,7 @@ class PrizeFieldset extends Fieldset
         $this->add(
             array(
                 'name' => 'picture',
-                'type' => 'Zend\Form\Element\Hidden',
+                'type' => 'Laminas\Form\Element\Hidden',
                 'attributes' => array(
                     'value' => '',
                 ),
@@ -155,7 +155,7 @@ class PrizeFieldset extends Fieldset
 
         $this->add(
             array(
-                'type' => 'Zend\Form\Element\Button',
+                'type' => 'Laminas\Form\Element\Button',
                 'name' => 'remove',
                 'options' => array(
                         'label' => $translator->translate('Supprimer', 'playgroundgame'),

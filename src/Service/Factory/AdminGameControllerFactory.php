@@ -2,7 +2,7 @@
 namespace PlaygroundGame\Service\Factory;
 
 use PlaygroundGame\Controller\Admin\GameController;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Interop\Container\ContainerInterface;
 
 class AdminGameControllerFactory implements FactoryInterface

@@ -4,7 +4,7 @@ namespace PlaygroundGameTest\Service;
 
 use PlaygroundGame\Entity\Quiz as QuizEntity;
 use PlaygroundGameTest\Bootstrap;
-use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
+use Laminas\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
 class QuizTest extends AbstractHttpControllerTestCase
 {
@@ -12,7 +12,7 @@ class QuizTest extends AbstractHttpControllerTestCase
     protected $sm = null;
     protected $data;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->setApplicationConfig(
             include __DIR__ . '/../../TestConfig.php'
@@ -154,7 +154,7 @@ class QuizTest extends AbstractHttpControllerTestCase
         return $this->sm;
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         $tool = new \Doctrine\ORM\Tools\SchemaTool($this->em);
         $classes = $this->em->getMetadataFactory()->getAllMetadata();

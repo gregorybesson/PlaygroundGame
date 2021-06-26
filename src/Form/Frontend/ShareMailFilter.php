@@ -2,7 +2,7 @@
 
 namespace PlaygroundGame\Form\Frontend;
 
-use Zend\InputFilter\InputFilter;
+use Laminas\InputFilter\InputFilter;
 
 class ShareMailFilter extends InputFilter
 {
@@ -12,10 +12,10 @@ class ShareMailFilter extends InputFilter
             'name'       => 'email1',
             'required'   => false,
             'filters' => array(
-                array('name' => 'Zend\Filter\StringTrim'),
+                array('name' => 'Laminas\Filter\StringTrim'),
             ),
             'validators' => array(
-                array('name' => 'Zend\Validator\EmailAddress'),
+                array('name' => 'Laminas\Validator\EmailAddress'),
             ),
         ));
 
@@ -23,10 +23,10 @@ class ShareMailFilter extends InputFilter
                 'name'       => 'email2',
                 'required'   => false,
                 'filters' => array(
-                        array('name' => 'Zend\Filter\StringTrim'),
+                        array('name' => 'Laminas\Filter\StringTrim'),
                 ),
                 'validators' => array(
-                        array('name' => 'Zend\Validator\EmailAddress'),
+                        array('name' => 'Laminas\Validator\EmailAddress'),
                 ),
         ));
 
@@ -34,10 +34,10 @@ class ShareMailFilter extends InputFilter
                 'name'       => 'email3',
                 'required'   => false,
                 'filters' => array(
-                        array('name' => 'Zend\Filter\StringTrim'),
+                        array('name' => 'Laminas\Filter\StringTrim'),
                 ),
                 'validators' => array(
-                        array('name' => 'Zend\Validator\EmailAddress'),
+                        array('name' => 'Laminas\Validator\EmailAddress'),
                 ),
         ));
         
@@ -45,10 +45,10 @@ class ShareMailFilter extends InputFilter
             'name'       => 'email4',
             'required'   => false,
             'filters' => array(
-                array('name' => 'Zend\Filter\StringTrim'),
+                array('name' => 'Laminas\Filter\StringTrim'),
             ),
             'validators' => array(
-                array('name' => 'Zend\Validator\EmailAddress'),
+                array('name' => 'Laminas\Validator\EmailAddress'),
             ),
         ));
         
@@ -56,10 +56,10 @@ class ShareMailFilter extends InputFilter
             'name'       => 'email5',
             'required'   => false,
             'filters' => array(
-                array('name' => 'Zend\Filter\StringTrim'),
+                array('name' => 'Laminas\Filter\StringTrim'),
             ),
             'validators' => array(
-                array('name' => 'Zend\Validator\EmailAddress'),
+                array('name' => 'Laminas\Validator\EmailAddress'),
             ),
         ));
     }

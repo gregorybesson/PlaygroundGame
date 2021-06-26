@@ -4,7 +4,7 @@ namespace PlaygroundGame\Mapper;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\DBAL\DBALException;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 use PlaygroundGame\Options\ModuleOptions;
 
 abstract class AbstractMapper

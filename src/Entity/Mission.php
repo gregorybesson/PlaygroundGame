@@ -5,9 +5,9 @@ use PlaygroundGame\Entity\Game;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
-use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\Factory as InputFactory;
-use Zend\InputFilter\InputFilterAwareInterface;
+use Laminas\InputFilter\InputFilter;
+use Laminas\InputFilter\Factory as InputFactory;
+use Laminas\InputFilter\InputFilterAwareInterface;
 
 /**
  * @ORM\Entity @HasLifecycleCallbacks

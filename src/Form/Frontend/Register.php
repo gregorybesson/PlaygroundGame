@@ -2,7 +2,7 @@
 namespace PlaygroundGame\Form\Frontend;
 
 use ZfcUser\Options\RegistrationOptionsInterface;
-use Zend\Mvc\I18n\Translator;
+use Laminas\Mvc\I18n\Translator;
 
 class Register extends \PlaygroundUser\Form\Register
 {

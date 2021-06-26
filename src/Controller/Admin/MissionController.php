@@ -5,7 +5,7 @@ namespace PlaygroundGame\Controller\Admin;
 use PlaygroundGame\Entity\Mission;
 use PlaygroundGame\Controller\Admin\GameController;
 use PlaygroundGame\Service\Game as AdminGameService;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 class MissionController extends GameController
 {

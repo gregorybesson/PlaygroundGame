@@ -2,7 +2,7 @@
 
 namespace PlaygroundGame\Service;
 
-use Zend\Stdlib\ErrorHandler;
+use Laminas\Stdlib\ErrorHandler;
 
 class TradingCard extends Game
 {

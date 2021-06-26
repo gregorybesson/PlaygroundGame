@@ -8,8 +8,8 @@ use PlaygroundGame\Service\Game as AdminGameService;
 use PlaygroundGame\Entity\Memory;
 use PlaygroundGame\Entity\MemoryCard;
 use PlaygroundGame\Controller\Admin\GameController;
-use Zend\View\Model\ViewModel;
-use Zend\Paginator\Paginator;
+use Laminas\View\Model\ViewModel;
+use Laminas\Paginator\Paginator;
 
 class MemoryController extends GameController
 {

@@ -3,11 +3,11 @@
 namespace PlaygroundGame\Form\Admin;
 
 use PlaygroundGame\Entity\MissionGame;
-use Zend\Form\Fieldset;
-use Zend\Mvc\I18n\Translator;
+use Laminas\Form\Fieldset;
+use Laminas\Mvc\I18n\Translator;
 use PlaygroundCore\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
-use Zend\ServiceManager\ServiceManager;
-use Zend\InputFilter\InputFilterProviderInterface;
+use Laminas\ServiceManager\ServiceManager;
+use Laminas\InputFilter\InputFilterProviderInterface;
 
 class MissionGameFieldset extends Fieldset implements InputFilterProviderInterface
 {
@@ -20,7 +20,7 @@ class MissionGameFieldset extends Fieldset implements InputFilterProviderInterfa
         ->setObject(new MissionGame());
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Hidden',
+            'type' => 'Laminas\Form\Element\Hidden',
             'name' => 'id',
         ));
 
@@ -41,7 +41,7 @@ class MissionGameFieldset extends Fieldset implements InputFilterProviderInterfa
         ));
         
         $this->add(array(
-            'type' => 'Zend\Form\Element\Hidden',
+            'type' => 'Laminas\Form\Element\Hidden',
             'name' => 'position',
             'attributes' =>  array(
                 'id' => 'position__index__',
@@ -50,7 +50,7 @@ class MissionGameFieldset extends Fieldset implements InputFilterProviderInterfa
         
         $gameMissionConditionFieldset = new MissionGameConditionFieldset(null, $serviceManager, $translator);
         $this->add(array(
-            'type'    => 'Zend\Form\Element\Collection',
+            'type'    => 'Laminas\Form\Element\Collection',
             'name'    => 'conditions',
             'options' => array(
                 'id'    => 'conditions',
@@ -64,7 +64,7 @@ class MissionGameFieldset extends Fieldset implements InputFilterProviderInterfa
         ));
         
         $this->add(array(
-            'type' => 'Zend\Form\Element\Button',
+            'type' => 'Laminas\Form\Element\Button',
             'name' => 'add_condition',
             'options' => array(
                 'label' => $translator->translate('Add Condition', 'playgroundgame'),

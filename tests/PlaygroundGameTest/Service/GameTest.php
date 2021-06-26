@@ -9,7 +9,7 @@ class GameTest extends \PHPUnit\Framework\TestCase
 {
     protected $traceError = true;
 
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
     }
@@ -304,7 +304,7 @@ class GameTest extends \PHPUnit\Framework\TestCase
         $game = new GameEntity();
         $gs = new \PlaygroundGame\Service\Game(Bootstrap::getServiceManager());
 
-        $session = new \Zend\Session\Container('facebook');
+        $session = new \Laminas\Session\Container('facebook');
 
         $data = array('page' => array('liked' => 0));
         $session->offsetSet('signed_request', $data);
@@ -317,7 +317,7 @@ class GameTest extends \PHPUnit\Framework\TestCase
         $game = new GameEntity();
         $gs = new \PlaygroundGame\Service\Game(Bootstrap::getServiceManager());
 
-        $session = new \Zend\Session\Container('facebook');
+        $session = new \Laminas\Session\Container('facebook');
 
         $data = array('page' => array('liked' => 1));
         $session->offsetSet('signed_request', $data);
@@ -360,7 +360,7 @@ class GameTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         
-        $e = $this->getMockBuilder('Zend\EventManager\EventManager')
+        $e = $this->getMockBuilder('Laminas\EventManager\EventManager')
             ->setMethods(array('trigger'))
             ->disableOriginalConstructor()
             ->getMock();
@@ -436,7 +436,7 @@ class GameTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $e = $this->getMockBuilder('Zend\EventManager\EventManager')
+        $e = $this->getMockBuilder('Laminas\EventManager\EventManager')
             ->setMethods(array('trigger'))
             ->disableOriginalConstructor()
             ->getMock();

@@ -4,11 +4,11 @@ namespace PlaygroundGame\Controller\Admin;
 
 use PlaygroundGame\Entity\InstantWin;
 use PlaygroundGame\Entity\InstantWinOccurrence;
-use Zend\InputFilter;
-use Zend\Validator;
+use Laminas\InputFilter;
+use Laminas\Validator;
 use PlaygroundGame\Controller\Admin\GameController;
-use Zend\View\Model\ViewModel;
-use Zend\Paginator\Paginator;
+use Laminas\View\Model\ViewModel;
+use Laminas\Paginator\Paginator;
 use PlaygroundCore\ORM\Pagination\LargeTablePaginator;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 
@@ -309,11 +309,11 @@ class InstantWinController extends GameController
 
         $file = $this->getAdminGameService()->setOccurencesToCSV($this->game);
 
-        $response = new \Zend\Http\Response\Stream();
+        $response = new \Laminas\Http\Response\Stream();
         $response->setStream(fopen($file, 'r'));
         $response->setStatusCode(200);
 
-        $headers = new \Zend\Http\Headers();
+        $headers = new \Laminas\Http\Headers();
         $headers->addHeaderLine('Content-Type', 'text/csv')
             ->addHeaderLine('Content-Disposition', 'attachment; filename="' . $file . '"')
             ->addHeaderLine('Content-Length', filesize($file));

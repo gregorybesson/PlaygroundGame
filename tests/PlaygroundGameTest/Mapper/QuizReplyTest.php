@@ -9,7 +9,7 @@ class QuizReplyTest extends \PHPUnit\Framework\TestCase
 {
     protected $traceError = true;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->sm = Bootstrap::getServiceManager();
         $this->em = $this->sm->get('doctrine.entitymanager.orm_default');
@@ -96,7 +96,7 @@ class QuizReplyTest extends \PHPUnit\Framework\TestCase
     //     $this->assertEquals(4, count($quizreplies));
     // }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         $tool = new \Doctrine\ORM\Tools\SchemaTool($this->em);
         $classes = $this->em->getMetadataFactory()->getAllMetadata();

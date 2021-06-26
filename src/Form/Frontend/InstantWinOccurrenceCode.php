@@ -2,8 +2,8 @@
 namespace PlaygroundGame\Form\Frontend;
 
 use ZfcUser\Form\ProvidesEventsForm;
-use Zend\Mvc\I18n\Translator;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\Mvc\I18n\Translator;
+use Laminas\ServiceManager\ServiceManager;
 
 class InstantWinOccurrenceCode extends ProvidesEventsForm
 {
@@ -17,7 +17,7 @@ class InstantWinOccurrenceCode extends ProvidesEventsForm
         $this->setAttribute('method', 'post');
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Text',
+            'type' => 'Laminas\Form\Element\Text',
             'name' => 'code-input',
             'options' => array(
                 'label' => $translator->translate('Entrez votre code'),

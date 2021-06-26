@@ -2,10 +2,10 @@
 
 namespace PlaygroundGame\Form\Admin;
 
-use Zend\Form\Element;
+use Laminas\Form\Element;
 use ZfcUser\Form\ProvidesEventsForm;
-use Zend\Mvc\I18n\Translator;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\Mvc\I18n\Translator;
+use Laminas\ServiceManager\ServiceManager;
 
 class TradingCardModel extends ProvidesEventsForm
 {
@@ -20,7 +20,7 @@ class TradingCardModel extends ProvidesEventsForm
 
         $this->add(array(
             'name' => 'trading_card_id',
-            'type'  => 'Zend\Form\Element\Hidden',
+            'type'  => 'Laminas\Form\Element\Hidden',
             'attributes' => array(
                 'value' => 0,
             ),
@@ -28,7 +28,7 @@ class TradingCardModel extends ProvidesEventsForm
 
         $this->add(array(
             'name' => 'id',
-            'type'  => 'Zend\Form\Element\Hidden',
+            'type'  => 'Laminas\Form\Element\Hidden',
             'attributes' => array(
                 'value' => 0,
             ),
@@ -78,7 +78,7 @@ class TradingCardModel extends ProvidesEventsForm
             ),
         ));
         $this->add(array(
-            'type' => 'Zend\Form\Element\Textarea',
+            'type' => 'Laminas\Form\Element\Textarea',
             'name' => 'description',
             'options' => array(
                 'label' => $translator->translate('Description', 'playgroundgame'),
@@ -115,14 +115,14 @@ class TradingCardModel extends ProvidesEventsForm
         ));
         $this->add(array(
                 'name' => 'image',
-                'type'  => 'Zend\Form\Element\Hidden',
+                'type'  => 'Laminas\Form\Element\Hidden',
                 'attributes' => array(
                     'value' => '',
                 ),
         ));
         $this->add(array(
                 'name' => 'delete_image',
-                'type' => 'Zend\Form\Element\Hidden',
+                'type' => 'Laminas\Form\Element\Hidden',
                 'attributes' => array(
                     'value' => '',
                     'class' => 'delete_image',
@@ -130,7 +130,7 @@ class TradingCardModel extends ProvidesEventsForm
         ));
 
         $this->add(array(
-                'type' => 'Zend\Form\Element\DateTime',
+                'type' => 'Laminas\Form\Element\DateTime',
                 'name' => 'availability',
                 'options' => array(
                     'label' => $translator->translate('Availability date', 'playgroundgame'),
@@ -144,7 +144,7 @@ class TradingCardModel extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Textarea',
+            'type' => 'Laminas\Form\Element\Textarea',
             'name' => 'jsonData',
             'options' => array(
                 'label' => $translator->translate('Json Data', 'playgroundgame'),

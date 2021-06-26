@@ -2,14 +2,14 @@
 
 namespace PlaygroundGameTest\Controller\Admin;
 
-use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
+use Laminas\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use \PlaygroundGame\Entity\Game as GameEntity;
 
 class QuizControllerTest extends AbstractHttpControllerTestCase
 {
     protected $traceError = true;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->setApplicationConfig(
             include __DIR__ . '/../../../TestConfig.php'

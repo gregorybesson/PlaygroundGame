@@ -2,14 +2,14 @@
 
 namespace PlaygroundGameTest\Controller\Frontend;
 
-use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
+use Laminas\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use \PlaygroundGame\Entity\Quiz as GameEntity;
 
 class QuizControllerTest extends AbstractHttpControllerTestCase
 {
     protected $traceError = true;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->setApplicationConfig(
             include __DIR__ . '/../../../TestConfig.php'
@@ -2655,7 +2655,7 @@ class QuizControllerTest extends AbstractHttpControllerTestCase
         $this->assertMatchedRouteName('frontend/quiz/prizes/prize');
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
     }

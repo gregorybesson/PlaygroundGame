@@ -3,8 +3,8 @@
 namespace PlaygroundGame\Form\Admin;
 
 use PlaygroundCore\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
-use Zend\Mvc\I18n\Translator;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\Mvc\I18n\Translator;
+use Laminas\ServiceManager\ServiceManager;
 
 class InstantWin extends Game
 {
@@ -23,7 +23,7 @@ class InstantWin extends Game
         parent::__construct($name, $sm, $translator);
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Select',
+            'type' => 'Laminas\Form\Element\Select',
             'name' => 'occurrenceType',
             'attributes' =>  array(
                 'id' => 'occurrenceType',
@@ -41,7 +41,7 @@ class InstantWin extends Game
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Select',
+            'type' => 'Laminas\Form\Element\Select',
             'name' => 'scheduleOccurrenceAuto',
             'attributes' =>  array(
                 'id' => 'scheduleOccurrenceAuto',
@@ -57,7 +57,7 @@ class InstantWin extends Game
 
         $this->add(array(
             'name' => 'occurrenceNumber',
-            'type' => 'Zend\Form\Element\Text',
+            'type' => 'Laminas\Form\Element\Text',
             'attributes' => array(
                 'placeholder' => $translator->translate('Number occurrences', 'playgroundgame'),
             ),
@@ -68,7 +68,7 @@ class InstantWin extends Game
 
         $this->add(array(
             'name' => 'winningOccurrenceNumber',
-            'type' => 'Zend\Form\Element\Text',
+            'type' => 'Laminas\Form\Element\Text',
             'attributes' => array(
                 'placeholder' => $translator->translate('Number winning occurences', 'playgroundgame'),
             ),
@@ -81,7 +81,7 @@ class InstantWin extends Game
 
         $this->add(array(
             'name' => 'occurrenceValueMask',
-            'type' => 'Zend\Form\Element\Text',
+            'type' => 'Laminas\Form\Element\Text',
             'attributes' => array(
                 'placeholder' => $translator->translate('Value mask', 'playgroundgame'),
             ),
@@ -93,7 +93,7 @@ class InstantWin extends Game
 
         $this->add(array(
             'name' => 'occurrenceValueSize',
-            'type' => 'Zend\Form\Element\Text',
+            'type' => 'Laminas\Form\Element\Text',
             'attributes' => array(
                 'placeholder' => $translator->translate('Number of characters', 'playgroundgame'),
             ),
@@ -104,7 +104,7 @@ class InstantWin extends Game
         ));
         
         $this->add(array(
-                'type' => 'Zend\Form\Element\Select',
+                'type' => 'Laminas\Form\Element\Select',
                 'name' => 'occurrenceDrawFrequency',
                 'attributes' =>  array(
                         'id' => 'occurrenceDrawFrequency',
@@ -135,14 +135,14 @@ class InstantWin extends Game
         ));
         $this->add(array(
                 'name' => 'scratchcardImage',
-                'type' => 'Zend\Form\Element\Hidden',
+                'type' => 'Laminas\Form\Element\Hidden',
                 'attributes' => array(
                     'value' => '',
                 ),
         ));
         $this->add(array(
             'name' => 'deleteScratchcardImage',
-            'type' => 'Zend\Form\Element\Hidden',
+            'type' => 'Laminas\Form\Element\Hidden',
             'attributes' => array(
                 'value' => '',
                 'class' => 'delete_scratch_image',

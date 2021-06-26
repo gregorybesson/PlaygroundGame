@@ -2,11 +2,11 @@
 namespace PlaygroundGame\Form\Admin;
 
 use PlaygroundGame\Options\ModuleOptions;
-use Zend\Form\Element;
+use Laminas\Form\Element;
 use ZfcUser\Form\ProvidesEventsForm;
-use Zend\Mvc\I18n\Translator;
-use Zend\ServiceManager\ServiceManager;
-use Zend\EventManager\EventManager;
+use Laminas\Mvc\I18n\Translator;
+use Laminas\ServiceManager\ServiceManager;
+use Laminas\EventManager\EventManager;
 
 class Game extends ProvidesEventsForm
 {
@@ -30,7 +30,7 @@ class Game extends ProvidesEventsForm
 
         $this->add(array(
             'name' => 'id',
-            'type' => 'Zend\Form\Element\Hidden',
+            'type' => 'Laminas\Form\Element\Hidden',
             'attributes' => array(
                 'value' => 0,
             ),
@@ -70,14 +70,14 @@ class Game extends ProvidesEventsForm
         ));
         $this->add(array(
             'name' => 'mainImage',
-            'type' => 'Zend\Form\Element\Hidden',
+            'type' => 'Laminas\Form\Element\Hidden',
             'attributes' => array(
                 'value' => '',
             ),
         ));
         $this->add(array(
             'name' => 'deleteMainImage',
-            'type' => 'Zend\Form\Element\Hidden',
+            'type' => 'Laminas\Form\Element\Hidden',
             'attributes' => array(
                 'value' => '',
                 'class' => 'delete_main_image',
@@ -97,14 +97,14 @@ class Game extends ProvidesEventsForm
         ));
         $this->add(array(
             'name' => 'secondImage',
-            'type' => 'Zend\Form\Element\Hidden',
+            'type' => 'Laminas\Form\Element\Hidden',
             'attributes' => array(
                 'value' => '',
             ),
         ));
         $this->add(array(
             'name' => 'deleteSecondImage',
-            'type' => 'Zend\Form\Element\Hidden',
+            'type' => 'Laminas\Form\Element\Hidden',
             'attributes' => array(
                 'value' => '',
                 'class' => 'delete_second_image',
@@ -113,7 +113,7 @@ class Game extends ProvidesEventsForm
 
         $categories = $this->getPrizeCategories();
         $this->add(array(
-            'type' => 'Zend\Form\Element\Select',
+            'type' => 'Laminas\Form\Element\Select',
             'name' => 'prizeCategory',
             'options' => array(
                 'empty_option' => $translator->translate('No category for this game', 'playgroundgame'),
@@ -125,7 +125,7 @@ class Game extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Checkbox',
+            'type' => 'Laminas\Form\Element\Checkbox',
             'attributes' => array(
                 'class' => 'switch-input',
             ),
@@ -136,7 +136,7 @@ class Game extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Checkbox',
+            'type' => 'Laminas\Form\Element\Checkbox',
             'attributes' => array(
                 'class' => 'switch-input',
             ),
@@ -148,14 +148,14 @@ class Game extends ProvidesEventsForm
 
         $this->add(array(
             'name' => 'domain',
-            'type' => 'Zend\Form\Element\Text',
+            'type' => 'Laminas\Form\Element\Text',
             'options' => array(
                 'label' => $translator->translate('Give a domain name to this game', 'playgroundgame'),
             ),
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Checkbox',
+            'type' => 'Laminas\Form\Element\Checkbox',
             'attributes' => array(
                 'class' => 'switch-input',
             ),
@@ -176,7 +176,7 @@ class Game extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Checkbox',
+            'type' => 'Laminas\Form\Element\Checkbox',
             'attributes' => array(
                 'class' => 'switch-input',
             ),
@@ -187,7 +187,7 @@ class Game extends ProvidesEventsForm
         ));
 
         $this->add(array(
-                'type' => 'Zend\Form\Element\Checkbox',
+                'type' => 'Laminas\Form\Element\Checkbox',
                 'attributes' => array(
                     'class' => 'switch-input',
                 ),
@@ -198,7 +198,7 @@ class Game extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Checkbox',
+            'type' => 'Laminas\Form\Element\Checkbox',
             'attributes' => array(
                 'class' => 'switch-input',
             ),
@@ -209,7 +209,7 @@ class Game extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\DateTime',
+            'type' => 'Laminas\Form\Element\DateTime',
             'name' => 'publicationDate',
             'options' => array(
                 'label' => $translator->translate('Publication date', 'playgroundgame'),
@@ -222,7 +222,7 @@ class Game extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\DateTime',
+            'type' => 'Laminas\Form\Element\DateTime',
             'name' => 'startDate',
             'options' => array(
                 'label' => $translator->translate('Start Date', 'playgroundgame'),
@@ -235,7 +235,7 @@ class Game extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\DateTime',
+            'type' => 'Laminas\Form\Element\DateTime',
             'name' => 'endDate',
             'options' => array(
                 'label' => $translator->translate('End Date', 'playgroundgame'),
@@ -248,7 +248,7 @@ class Game extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\DateTime',
+            'type' => 'Laminas\Form\Element\DateTime',
             'name' => 'closeDate',
             'options' => array(
                 'label' => $translator->translate('Unpublished date', 'playgroundgame'),
@@ -262,7 +262,7 @@ class Game extends ProvidesEventsForm
 
         $this->add(array(
             'name' => 'playLimit',
-            'type' => 'Zend\Form\Element\Text',
+            'type' => 'Laminas\Form\Element\Text',
             'attributes' => array(
                 'placeholder' => $translator->translate('Tries limit per player', 'playgroundgame'),
             ),
@@ -272,7 +272,7 @@ class Game extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Select',
+            'type' => 'Laminas\Form\Element\Select',
             'name' => 'playLimitScale',
             'attributes' =>  array(
                 'id' => 'playLimitScale',
@@ -291,7 +291,7 @@ class Game extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Select',
+            'type' => 'Laminas\Form\Element\Select',
             'name' => 'playBonus',
             'attributes' =>  array(
                 'id' => 'playBonus',
@@ -309,7 +309,7 @@ class Game extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Checkbox',
+            'type' => 'Laminas\Form\Element\Checkbox',
             'name' => 'active',
             'attributes' => array(
                 'class' => 'switch-input',
@@ -320,7 +320,7 @@ class Game extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Select',
+            'type' => 'Laminas\Form\Element\Select',
             'name' => 'onInvitation',
             'options' => array(
                 'value_options' => array(
@@ -335,7 +335,7 @@ class Game extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Checkbox',
+            'type' => 'Laminas\Form\Element\Checkbox',
             'name' => 'mailWinner',
             'attributes' => array(
                 'class' => 'switch-input',
@@ -346,7 +346,7 @@ class Game extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Textarea',
+            'type' => 'Laminas\Form\Element\Textarea',
             'name' => 'mailWinnerBlock',
             'options' => array(
                 'label' => $translator->translate('Mail winner content', 'playgroundgame'),
@@ -359,7 +359,7 @@ class Game extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Checkbox',
+            'type' => 'Laminas\Form\Element\Checkbox',
             'name' => 'mailLooser',
             'attributes' => array(
                 'class' => 'switch-input',
@@ -370,7 +370,7 @@ class Game extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Textarea',
+            'type' => 'Laminas\Form\Element\Textarea',
             'name' => 'mailLooserBlock',
             'options' => array(
                 'label' => $translator->translate('Mail looser content', 'playgroundgame'),
@@ -383,7 +383,7 @@ class Game extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Checkbox',
+            'type' => 'Laminas\Form\Element\Checkbox',
             'name' => 'mailEntry',
             'attributes' => array(
                 'class' => 'switch-input',
@@ -394,7 +394,7 @@ class Game extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Checkbox',
+            'type' => 'Laminas\Form\Element\Checkbox',
             'name' => 'emailShare',
             'attributes' => array(
                 'class' => 'switch-input',
@@ -405,7 +405,7 @@ class Game extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Checkbox',
+            'type' => 'Laminas\Form\Element\Checkbox',
             'name' => 'fbShare',
             'attributes' => array(
                 'class' => 'switch-input',
@@ -416,7 +416,7 @@ class Game extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Checkbox',
+            'type' => 'Laminas\Form\Element\Checkbox',
             'name' => 'twShare',
             'attributes' => array(
                 'class' => 'switch-input',
@@ -443,7 +443,7 @@ class Game extends ProvidesEventsForm
         }
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Select',
+            'type' => 'Laminas\Form\Element\Select',
             'name' => 'layout',
             'options' => array(
                 // 'empty_option' => $translator->translate('Ce jeu n\'a pas de catégorie', 'playgroundgame'),
@@ -458,7 +458,7 @@ class Game extends ProvidesEventsForm
         );
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Select',
+            'type' => 'Laminas\Form\Element\Select',
             'name' => 'stylesheet',
             'options' => array(
                 'value_options' => $stylesheetArray,
@@ -480,14 +480,14 @@ class Game extends ProvidesEventsForm
         if (count($partners) <= 1) {
             $this->add(array(
                 'name' => 'partner',
-                'type' => 'Zend\Form\Element\Hidden',
+                'type' => 'Laminas\Form\Element\Hidden',
                 'attributes' => array(
                     'value' => 0,
                 ),
             ));
         } else {
             $this->add(array(
-                'type' => 'Zend\Form\Element\Select',
+                'type' => 'Laminas\Form\Element\Select',
                 'name' => 'partner',
                 'options' => array(
                     'value_options' => $partners,
@@ -502,7 +502,7 @@ class Game extends ProvidesEventsForm
         //     $fbAppIds_label[$key] = $translator->translate($title, 'playgroundgame');
         // }
         // $this->add(array(
-        //     'type' => 'Zend\Form\Element\Select',
+        //     'type' => 'Laminas\Form\Element\Select',
         //     'name' => 'fbAppId',
         //     'options' => array(
         //         'value_options' => $fbAppIds_label,
@@ -522,7 +522,7 @@ class Game extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Select',
+            'type' => 'Laminas\Form\Element\Select',
             'name' => 'fbPageId',
             'options' => array(
                 'value_options' => [],
@@ -563,14 +563,14 @@ class Game extends ProvidesEventsForm
         ));
         $this->add(array(
             'name' => 'fbPageTabImage',
-            'type' => 'Zend\Form\Element\Hidden',
+            'type' => 'Laminas\Form\Element\Hidden',
             'attributes' => array(
                 'value' => '',
             ),
         ));
         $this->add(array(
             'name' => 'deleteFbPageTabImage',
-            'type' => 'Zend\Form\Element\Hidden',
+            'type' => 'Laminas\Form\Element\Hidden',
             'attributes' => array(
                 'value' => '',
                 'class' => 'delete_fb_page_tab_image',
@@ -578,7 +578,7 @@ class Game extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Textarea',
+            'type' => 'Laminas\Form\Element\Textarea',
             'name' => 'welcomeBlock',
             'options' => array(
                 'label' => $translator->translate('Welcome block', 'playgroundgame'),
@@ -591,7 +591,7 @@ class Game extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Select',
+            'type' => 'Laminas\Form\Element\Select',
             'name' => 'termsOptin',
             'options' => array(
                 //'empty_option' => $translator->translate('Is the answer correct ?', 'playgroundgame'),
@@ -604,7 +604,7 @@ class Game extends ProvidesEventsForm
         ));
 
         $this->add(array(
-                'type' => 'Zend\Form\Element\Textarea',
+                'type' => 'Laminas\Form\Element\Textarea',
                 'name' => 'conditionsBlock',
                 'options' => array(
                         'label' => $translator->translate('Legal status', 'playgroundgame'),
@@ -617,7 +617,7 @@ class Game extends ProvidesEventsForm
         ));
 
         $this->add(array(
-                'type' => 'Zend\Form\Element\Textarea',
+                'type' => 'Laminas\Form\Element\Textarea',
                 'name' => 'termsBlock',
                 'options' => array(
                         'label' => $translator->translate('Payment page', 'playgroundgame'),
@@ -630,7 +630,7 @@ class Game extends ProvidesEventsForm
         ));
 
         $this->add(array(
-                'type' => 'Zend\Form\Element\Textarea',
+                'type' => 'Laminas\Form\Element\Textarea',
                 'name' => 'fbShareDescription',
                 'options' => array(
                         'label' => $translator->translate('Facebook share description', 'playgroundgame'),
@@ -653,14 +653,14 @@ class Game extends ProvidesEventsForm
         ));
         $this->add(array(
             'name' => 'fbShareImage',
-            'type' => 'Zend\Form\Element\Hidden',
+            'type' => 'Laminas\Form\Element\Hidden',
             'attributes' => array(
                 'value' => '',
             ),
         ));
         $this->add(array(
             'name' => 'deleteFbShareImage',
-            'type' => 'Zend\Form\Element\Hidden',
+            'type' => 'Laminas\Form\Element\Hidden',
             'attributes' => array(
                 'value' => '',
                 'class' => 'delete_fb_share_image',
@@ -668,7 +668,7 @@ class Game extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Textarea',
+            'type' => 'Laminas\Form\Element\Textarea',
             'name' => 'fbRequestMessage',
             'options' => array(
                 'label' => $translator->translate('Facebook invitation message', 'playgroundgame'),
@@ -681,7 +681,7 @@ class Game extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Textarea',
+            'type' => 'Laminas\Form\Element\Textarea',
             'name' => 'twShareMessage',
             'options' => array(
                 'label' => $translator->translate('Twitter share message', 'playgroundgame'),
@@ -694,7 +694,7 @@ class Game extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Textarea',
+            'type' => 'Laminas\Form\Element\Textarea',
             'name' => 'emailShareSubject',
             'options' => array(
                 'label' => $translator->translate('Email subject', 'playgroundgame'),
@@ -707,7 +707,7 @@ class Game extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Textarea',
+            'type' => 'Laminas\Form\Element\Textarea',
             'name' => 'emailShareMessage',
             'options' => array(
                 'label' => $translator->translate('Email message', 'playgroundgame'),
@@ -721,7 +721,7 @@ class Game extends ProvidesEventsForm
 
         $prizeFieldset = new PrizeFieldset(null, $sm, $translator);
         $this->add(array(
-            'type'    => 'Zend\Form\Element\Collection',
+            'type'    => 'Laminas\Form\Element\Collection',
             'name'    => 'prizes',
             'options' => array(
                 'id'    => 'prizes',
@@ -736,7 +736,7 @@ class Game extends ProvidesEventsForm
 
         $this->add(array(
             'name' => 'steps',
-            'type' => 'Zend\Form\Element\Text',
+            'type' => 'Laminas\Form\Element\Text',
             'attributes' => array(
                 'placeholder' => $translator->translate('Game steps', 'playgroundgame'),
                 'value' => 'index,play,result,bounce',
@@ -748,7 +748,7 @@ class Game extends ProvidesEventsForm
 
         $this->add(array(
             'name' => 'stepsViews',
-            'type' => 'Zend\Form\Element\Text',
+            'type' => 'Laminas\Form\Element\Text',
             'attributes' => array(
                 'placeholder' => $translator->translate('steps views', 'playgroundgame'),
                 'value' => '{"index":{},"play":{},"result":{},"bounce":{}}',
@@ -761,7 +761,7 @@ class Game extends ProvidesEventsForm
         $this->add(
             array(
                 'name' => 'costToPlay',
-                'type' => 'Zend\Form\Element\Text',
+                'type' => 'Laminas\Form\Element\Text',
                 'attributes' => array(
                     'placeholder' => $translator->translate('Amount to pay by the player to play the game', 'playgroundgame'),
                 ),

@@ -9,7 +9,7 @@ class QuizQuestionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Service Manager
-     * @var Zend\ServiceManager\ServiceManager
+     * @var Laminas\ServiceManager\ServiceManager
      */
     protected $sm;
     
@@ -25,7 +25,7 @@ class QuizQuestionTest extends \PHPUnit\Framework\TestCase
      */
     protected $quizQuestionData;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->sm = Bootstrap::getServiceManager();
         $this->em = $this->sm->get('doctrine.entitymanager.orm_default');
@@ -117,7 +117,7 @@ class QuizQuestionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(null, $quizQuestion->getAutoplay());
     }
         
-    public function tearDown()
+    protected function tearDown(): void
     {
         $tool = new \Doctrine\ORM\Tools\SchemaTool($this->em);
         $classes = $this->em->getMetadataFactory()->getAllMetadata();
