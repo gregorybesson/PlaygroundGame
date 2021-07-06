@@ -2194,6 +2194,8 @@ class Game
         $a['lengthMin']     = isset($attributes->data->length)? $attributes->data->length->min : '';
         $a['lengthMax']     = isset($attributes->data->length)? $attributes->data->length->max : '';
         $a['validator']     = isset($attributes->data->validator)? $attributes->data->validator : '';
+        $a['email_domain_validator']     = isset($attributes->data->email_domain_validator)? $attributes->data->email_domain_validator : '';
+        $a['email_email_validator']     = isset($attributes->data->email_email_validator)? $attributes->data->email_email_validator : '';
         $a['innerData']     = isset($attributes->data->innerData)? $attributes->data->innerData : array();
         $a['dropdownValues']= isset($attributes->data->dropdownValues)?
             $attributes->data->dropdownValues :
@@ -2275,6 +2277,22 @@ class Game
                 'options' => array($matches[1])
             );
             $validators[] = $valArray;
+        }
+
+        if ($attr['email_email_validator'] && !empty($attr['email_email_validator'])) {
+            $arrayOfEmails = explode("\n", $attr['email_email_validator']);
+            $validators[] = [
+                'name' => '\PlaygroundCore\Validator\EmailList',
+                'options' => $arrayOfEmails
+            ];
+        }
+
+        if ($attr['email_domain_validator'] && !empty($attr['email_domain_validator'])) {
+            $arrayOfDomains = explode("\n", $attr['email_domain_validator']);
+            $validators[] = [
+                'name'    => '\PlaygroundCore\Validator\MailDomain',
+                'options' => $arrayOfDomains,
+            ];
         }
 
         $inputFilter->add($factory->createInput(array(
