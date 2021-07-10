@@ -3326,6 +3326,16 @@ return array(
                             )
                         ),
                         'child_routes' => array(
+                            'cors' => array(
+                                'type' => 'Laminas\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/cors',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Admin\TreasureHunt::class,
+                                        'action' => 'cors'
+                                    )
+                                )
+                            ),
                             'entry' => array(
                                 'type' => 'Segment',
                                 'options' => array(

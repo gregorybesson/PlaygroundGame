@@ -69,6 +69,14 @@ class TreasureHuntController extends GameController
         );
     }
 
+		public function corsAction()
+    {
+        $viewModel = new ViewModel();
+        $viewModel->setTerminal(true);
+				$viewModel->setTemplate('playground-game/treasure-hunt/cors');
+        return $viewModel;
+    }
+
     public function areapickerAction()
     {
     	$viewModel = new ViewModel();
