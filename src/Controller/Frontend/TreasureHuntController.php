@@ -55,14 +55,14 @@ class TreasureHuntController extends GameController
 
                 // If the user can not be created/retrieved from Facebook info, redirect to login/register form
                 if (!$user){
-                    $redirect = urlencode($this->frontendUrl()->fromRoute('treasurehunt/play', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)));
+                    $redirect = urlencode($this->frontendUrl()->fromRoute('treasurehunt/play', array('id' => $game->getIdentifier()), array('force_canonical' => true)));
                     return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('zfcuser/register', array('channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))) . '?redirect='.$redirect);
                 }
 
                 // The game is not played from Facebook : redirect to login/register form
 
             } elseif(!$game->getAnonymousAllowed()) {
-                $redirect = urlencode($this->frontendUrl()->fromRoute('treasurehunt/play', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)));
+                $redirect = urlencode($this->frontendUrl()->fromRoute('treasurehunt/play', array('id' => $game->getIdentifier()), array('force_canonical' => true)));
                 return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('zfcuser/register', array('channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))) . '?redirect='.$redirect);
             }
 
@@ -116,29 +116,23 @@ class TreasureHuntController extends GameController
     public function resultAction()
     {
     	$identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-        $user = $this->zfcUserAuthentication()->getIdentity();
         $sg = $this->getGameService();
 
         $statusMail = null;
 
-        $game = $sg->checkGame($identifier);
-        if (!$game || $game->isClosed()) {
-            return $this->notFoundAction();
-        }
-
         $secretKey = strtoupper(substr(sha1(uniqid('pg_', true).'####'.time()),0,15));
-        $socialLinkUrl = $this->frontendUrl()->fromRoute('treasurehunt', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)).'?key='.$secretKey;
+        $socialLinkUrl = $this->frontendUrl()->fromRoute('treasurehunt', array('id' => $this->game->getIdentifier()), array('force_canonical' => true)).'?key='.$secretKey;
         // With core shortener helper
         $socialLinkUrl = $this->shortenUrl()->shortenUrl($socialLinkUrl);
 
-        $lastEntry = $this->getGameService()->findLastInactiveEntry($game, $user, $this->params()->fromQuery('anonymous_identifier'));
+        $lastEntry = $this->getGameService()->findLastInactiveEntry($this->game, $this->user, $this->params()->fromQuery('anonymous_identifier'));
         if (!$lastEntry) {
-            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('treasurehunt', array('id' => $game->getIdentifier(), 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel')), array('force_canonical' => true)));
+            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('treasurehunt', array('id' => $this->game->getIdentifier()), array('force_canonical' => true)));
         }
 
-        if (!$user && !$game->getAnonymousAllowed()) {
-            $redirect = urlencode($this->frontendUrl()->fromRoute('treasurehunt/result', array('id' => $game->getIdentifier())));
-            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('zfcuser/register', array('channel' => $channel)) . '?redirect='.$redirect);
+        if (!$this->user && !$this->game->getAnonymousAllowed()) {
+            $redirect = urlencode($this->frontendUrl()->fromRoute('treasurehunt/result', array('id' => $this->game->getIdentifier())));
+            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('zfcuser/register') . '?redirect='.$redirect);
         }
 
         $form = $this->getServiceLocator()->get('playgroundgame_sharemail_form');
@@ -148,25 +142,25 @@ class TreasureHuntController extends GameController
             $data = $this->getRequest()->getPost()->toArray();
             $form->setData($data);
             if ($form->isValid()) {
-                $result = $this->getGameService()->sendShareMail($data, $game, $user, $lastEntry);
+                $result = $this->getGameService()->sendShareMail($data, $this->game, $this->user, $lastEntry);
                 if ($result) {
                     $statusMail = true;
-                    //$bonusEntry = $sg->addAnotherChance($game, $user, 1);
+                    //$bonusEntry = $sg->addAnotherChance($this->game, $this->user, 1);
                 }
             }
         }
 
         // buildView must be before sendMail because it adds the game template path to the templateStack
         // TODO : Improve this.
-        $viewModel = $this->buildView($game);
+        $viewModel = $this->buildView($this->game);
 
-        $this->sendMail($game, $user, $lastEntry);
-
-        $nextGame = parent::getMissionGameService()->checkCondition($game, $lastEntry->getWinner(), true, $lastEntry);
+        $this->getGameService()->sendMail($this->game, $this->user, $lastEntry);
+        $missionService = $this->getServiceLocator()->get('playgroundgame_mission_game_service');
+        $nextGame = $missionService->checkCondition($this->game, $lastEntry->getWinner(), true, $lastEntry);
 
         $viewModel->setVariables(array(
                 'statusMail'       => $statusMail,
-                'game'             => $game,
+                'game'             => $this->game,
                 'flashMessages'    => $this->flashMessenger()->getMessages(),
                 'form'             => $form,
                 'socialLinkUrl'    => $socialLinkUrl,
