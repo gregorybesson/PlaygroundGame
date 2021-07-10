@@ -55,7 +55,7 @@ class MemoryController extends GameController
             }
             $game = $service->createOrUpdate($data, $memory, 'playgroundgame_memory_form');
             if ($game) {
-                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The game was created');
+                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The game has been created');
 
                 return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/list'));
             }

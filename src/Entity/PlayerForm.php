@@ -163,7 +163,6 @@ class PlayerForm implements InputFilterAwareInterface
      */
     public function getArrayCopy()
     {
-        $obj_vars = parent::getArrayCopy();
         array_merge($obj_vars, get_object_vars($this));
 
         return $obj_vars;
@@ -187,7 +186,6 @@ class PlayerForm implements InputFilterAwareInterface
     {
         if (!$this->inputFilter) {
             $inputFilter = new InputFilter();
-            $inputFilter = parent::getInputFilter();
             $this->inputFilter = $inputFilter;
         }
 

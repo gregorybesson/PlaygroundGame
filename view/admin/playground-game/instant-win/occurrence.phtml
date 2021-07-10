@@ -51,7 +51,7 @@ $form->prepare();
 
 <?php if ($this->game->getOccurrenceType() == 'datetime') : ?>
 <script type="text/javascript">
-    jQuery(document).ready(function ($) {
+    document.addEventListener("DOMContentLoaded", function(event) {
         $('#tabs').tab();
         $('#value').datetimepicker({
         	dateFormat : 'dd/mm/yy'

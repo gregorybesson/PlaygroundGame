@@ -21,7 +21,7 @@ use Laminas\InputFilter\InputFilterInterface;
  * @ORM\DiscriminatorColumn(name="type", type="string")
  * @ORM\DiscriminatorMap({"quiz" = "Quiz", "lottery" = "Lottery", "instantwin" =
  * "InstantWin", "postvote" = "PostVote", "mission" = "Mission", "tradingcard" = "TradingCard",
- * "memory" = "Memory"})
+ * "memory" = "Memory", "treasurehunt" = "TreasureHunt"})
  * @ORM\Table(name="game")
  * @Gedmo\TranslationEntity(class="PlaygroundGame\Entity\GameTranslation")
  */

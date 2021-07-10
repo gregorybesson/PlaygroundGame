@@ -77,7 +77,7 @@ class QuizController extends GameController
             $question = $service->createQuestion($data);
             if ($question) {
                 // Redirect to list of games
-                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The question was created');
+                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The question has been created');
 
                 return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/quiz-question-list', array('quizId'=>$quizId)));
             } else { // Creation failed
@@ -147,7 +147,7 @@ class QuizController extends GameController
         $quizId     = $question->getQuiz()->getId();
 
         $service->getQuizQuestionMapper()->remove($question);
-        $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The question was created');
+        $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The question has been created');
 
         return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/quiz-question-list', array('quizId'=>$quizId)));
     }
@@ -195,7 +195,7 @@ class QuizController extends GameController
             }
             $game = $service->createOrUpdate($data, $quiz, 'playgroundgame_quiz_form');
             if ($game) {
-                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The game was created');
+                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The game has been created');
 
                 return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/list'));
             }

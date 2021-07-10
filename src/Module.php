@@ -59,7 +59,7 @@ class Module
 
             $adapter = new Adapter($configDatabase);
             $sql = new Sql($adapter);
-    
+
             // ******************************************
             // Check if games with specific domains have been configured
             // ******************************************
@@ -705,6 +705,26 @@ class Module
                     return $mapper;
                 },
 
+                'playgroundgame_treasurehunt_mapper' => function (\Laminas\ServiceManager\ServiceManager $sm) {
+                	$mapper = new Mapper\TreasureHunt(
+                        $sm->get('doctrine.entitymanager.orm_default'),
+                        $sm->get('playgroundgame_module_options'),
+                        $sm
+                	);
+
+                	return $mapper;
+                },
+
+                'playgroundgame_treasurehuntpuzzle_mapper' => function (\Laminas\ServiceManager\ServiceManager $sm) {
+                	$mapper = new Mapper\TreasureHuntPuzzle(
+                        $sm->get('doctrine.entitymanager.orm_default'),
+                        $sm->get('playgroundgame_module_options'),
+                        $sm
+                	);
+
+                	return $mapper;
+                },
+
                 'playgroundgame_tradingcardmodel_form' => function (\Laminas\ServiceManager\ServiceManager $sm) {
                     $translator = $sm->get('MvcTranslator');
                     $form = new Form\Admin\TradingCardModel(null, $sm, $translator);
@@ -890,6 +910,24 @@ class Module
                     $form = new Form\Frontend\CreateTeam(null, $sm, $translator);
 
                     return $form;
+                },
+
+                'playgroundgame_treasurehunt_form' => function(\Laminas\ServiceManager\ServiceManager $sm) {
+                	$translator = $sm->get('translator');
+                	$form = new Form\Admin\TreasureHunt(null, $sm, $translator);
+                	$treasurehunt = new Entity\TreasureHunt();
+                	$form->setInputFilter($treasurehunt->getInputFilter());
+
+                	return $form;
+                },
+
+                'playgroundgame_treasurehuntpuzzle_form' => function(\Laminas\ServiceManager\ServiceManager $sm) {
+                	$translator = $sm->get('translator');
+                	$form = new Form\Admin\TreasureHuntPuzzle(null, $sm, $translator);
+                	$treasurehuntPuzzle = new Entity\TreasureHuntPuzzle();
+                	$form->setInputFilter($treasurehuntPuzzle->getInputFilter());
+
+                	return $form;
                 },
             ),
         );

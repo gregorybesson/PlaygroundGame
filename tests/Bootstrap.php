@@ -97,7 +97,7 @@ class Bootstrap
                 );
             }
 
-            include $zf2Path . '/Zend/Loader/AutoloaderFactory.php';
+            include $zf2Path . '/Laminas/Loader/AutoloaderFactory.php';
         }
 
         AutoloaderFactory::factory(array(

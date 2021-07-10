@@ -120,7 +120,7 @@ $form->prepare();
 </div>
 <?php echo $this->form()->closeTag() ?>
 <script type="text/javascript">
-    jQuery(document).ready(function ($) {
+    document.addEventListener("DOMContentLoaded", function(event) {
         $('#tabs').tab();
         $('.datepicker').datepicker();
     });

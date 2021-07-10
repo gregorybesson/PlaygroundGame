@@ -58,7 +58,7 @@ class InstantWinController extends GameController
             }
             $game = $service->createOrUpdate($data, $instantwin, 'playgroundgame_instantwin_form');
             if ($game) {
-                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The game was created');
+                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The game has been created');
 
                 return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/list'));
             }
@@ -146,7 +146,7 @@ class InstantWinController extends GameController
             $occurrence = $this->getAdminGameService()->updateOccurrence($data, $occurrence->getId());
             if ($occurrence) {
                 // Redirect to list of games
-                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The occurrence was created');
+                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The occurrence has been created');
                 return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/instantwin-occurrence-list', array('gameId' => $this->game->getId())));
             }
         }

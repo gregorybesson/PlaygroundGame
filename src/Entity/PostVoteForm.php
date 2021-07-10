@@ -179,8 +179,7 @@ class PostVoteForm implements InputFilterAwareInterface, Translatable
      */
     public function getArrayCopy()
     {
-        $obj_vars = parent::getArrayCopy();
-        array_merge($obj_vars, get_object_vars($this));
+        array_merge(get_object_vars($this));
 
         return $obj_vars;
     }
@@ -203,7 +202,6 @@ class PostVoteForm implements InputFilterAwareInterface, Translatable
     {
         if (!$this->inputFilter) {
             $inputFilter = new InputFilter();
-            $inputFilter = parent::getInputFilter();
 
             $this->inputFilter = $inputFilter;
         }

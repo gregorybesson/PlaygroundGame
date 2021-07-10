@@ -116,7 +116,7 @@ class GameController extends AbstractActionController
                 $sr = $session->offsetGet('signed_request');
                 $identifier = $controller->getGameService()->getGameIdentifierFromFacebook($sr['page']['id']);
             }
-     
+
             $controller->game = $controller->getGameService()->checkGame($identifier, false);
 
             if (!$controller->game
@@ -438,7 +438,7 @@ class GameController extends AbstractActionController
                         $session = new \Laminas\Session\Container('anonymous_identifier');
                         if (empty($session->offsetGet('anonymous_identifier'))) {
                             $anonymousIdentifier = $data[$this->game->getAnonymousIdentifier()];
-                        
+
                             // I must transmit this info during the whole game workflow
                             $session->offsetSet('anonymous_identifier', $anonymousIdentifier);
                         }
@@ -1599,7 +1599,7 @@ class GameController extends AbstractActionController
         $fo->addTag($twDescription);
         $fo->addTag($twImage);
         $fo->addTag($twUrl);
-        
+
         // I add variables + js to make the share easy
         $renderer = $this->serviceLocator->get('Laminas\View\Renderer\RendererInterface');
         $headScript = $this->getServiceLocator()->get('ViewHelperManager')->get('HeadScript');
