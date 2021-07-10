@@ -45,6 +45,7 @@ return array(
                 array('controller' => PlaygroundGame\Controller\Frontend\Mission::class,        'roles' => array('guest', 'user')),
                 array('controller' => PlaygroundGame\Controller\Frontend\TradingCard::class,    'roles' => array('guest', 'user')),
                 array('controller' => PlaygroundGame\Controller\Frontend\Memory::class,         'roles' => array('guest', 'user')),
+                array('controller' => PlaygroundGame\Controller\Frontend\TreasureHunt::class,   'roles' => array('guest', 'user')),
                 array('controller' => PlaygroundGame\Controller\Frontend\Webhook::class,        'roles' => array('guest', 'user')),
 
                 // Admin area admin
@@ -56,6 +57,7 @@ return array(
                 array('controller' => PlaygroundGame\Controller\Admin\Mission::class,           'roles' => array('game-manager','admin')),
                 array('controller' => PlaygroundGame\Controller\Admin\TradingCard::class,       'roles' => array('game-manager','admin')),
                 array('controller' => PlaygroundGame\Controller\Admin\Memory::class,            'roles' => array('game-manager','admin')),
+                array('controller' => PlaygroundGame\Controller\Admin\TreasureHunt::class,      'roles' => array('game-manager','admin')),
                 array('controller' => PlaygroundGame\Controller\Admin\PrizeCategory::class,     'roles' => array('game-manager','admin')),
 
                 // Admin area supervisor
@@ -67,6 +69,7 @@ return array(
                 array('controller' => PlaygroundGame\Controller\Admin\Mission::class,           'action' => ['entry', 'download'], 'roles' => array('supervisor')),
                 array('controller' => PlaygroundGame\Controller\Admin\TradingCard::class,       'action' => ['entry', 'download'], 'roles' => array('supervisor')),
                 array('controller' => PlaygroundGame\Controller\Admin\Memory::class,            'action' => ['entry', 'download'], 'roles' => array('supervisor')),
+                array('controller' => PlaygroundGame\Controller\Admin\TreasureHunt::class,      'action' => ['entry', 'download'], 'roles' => array('supervisor')),
             ),
         ),
     ),
@@ -152,10 +155,12 @@ return array(
             PlaygroundGame\Controller\Frontend\Instantwin::class => PlaygroundGame\Controller\Frontend\InstantWin::class,
             PlaygroundGame\Controller\Frontend\Postvote::class => PlaygroundGame\Controller\Frontend\PostVote::class,
             PlaygroundGame\Controller\Frontend\Tradingcard::class => PlaygroundGame\Controller\Frontend\TradingCard::class,
+            PlaygroundGame\Controller\Frontend\Treasurehunt::class => PlaygroundGame\Controller\Frontend\TreasureHunt::class,
 
             PlaygroundGame\Controller\Admin\Instantwin::class => PlaygroundGame\Controller\Admin\InstantWin::class,
             PlaygroundGame\Controller\Admin\Postvote::class => PlaygroundGame\Controller\Admin\PostVote::class,
             PlaygroundGame\Controller\Admin\Tradingcard::class => PlaygroundGame\Controller\Admin\TradingCard::class,
+            PlaygroundGame\Controller\Admin\Treasurehunt::class => PlaygroundGame\Controller\Admin\TreasureHunt::class,
         ),
         'factories' => array(
             PlaygroundGame\Controller\Frontend\Home::class => PlaygroundGame\Service\Factory\FrontendHomeControllerFactory::class,
@@ -167,6 +172,7 @@ return array(
             PlaygroundGame\Controller\Frontend\Mission::class => PlaygroundGame\Service\Factory\FrontendMissionControllerFactory::class,
             PlaygroundGame\Controller\Frontend\TradingCard::class => PlaygroundGame\Service\Factory\FrontendTradingCardControllerFactory::class,
             PlaygroundGame\Controller\Frontend\Memory::class => PlaygroundGame\Service\Factory\FrontendMemoryControllerFactory::class,
+            PlaygroundGame\Controller\Frontend\TreasureHunt::class => PlaygroundGame\Service\Factory\FrontendTreasureHuntControllerFactory::class,
             PlaygroundGame\Controller\Frontend\PrizeCategory::class => PlaygroundGame\Service\Factory\FrontendPrizeCategoryControllerFactory::class,
             PlaygroundGame\Controller\Frontend\Webhook::class => PlaygroundGame\Service\Factory\FrontendWebhookControllerFactory::class,
 
@@ -178,6 +184,7 @@ return array(
             PlaygroundGame\Controller\Admin\Mission::class => PlaygroundGame\Service\Factory\AdminMissionControllerFactory::class,
             PlaygroundGame\Controller\Admin\TradingCard::class => PlaygroundGame\Service\Factory\AdminTradingCardControllerFactory::class,
             PlaygroundGame\Controller\Admin\Memory::class => PlaygroundGame\Service\Factory\AdminMemoryControllerFactory::class,
+            PlaygroundGame\Controller\Admin\TreasureHunt::class => PlaygroundGame\Service\Factory\AdminTreasureHuntControllerFactory::class,
             PlaygroundGame\Controller\Admin\PrizeCategory::class => PlaygroundGame\Service\Factory\AdminPrizeCategoryControllerFactory::class,
         ),
     ),
@@ -195,6 +202,7 @@ return array(
             'playgroundgame_mission_game_service'      => PlaygroundGame\Service\MissionGame::class,
             'playgroundgame_tradingcard_service'       => PlaygroundGame\Service\TradingCard::class,
             'playgroundgame_memory_service'            => PlaygroundGame\Service\Memory::class,
+            'playgroundgame_treasurehunt_service'      => PlaygroundGame\Service\TreasureHunt::class,
             'playgroundgame_prize_service'             => PlaygroundGame\Service\Prize::class,
             'playgroundgame_prizecategory_service'     => PlaygroundGame\Service\PrizeCategory::class,
             'playgroundgame_prizecategoryuser_service' => PlaygroundGame\Service\PrizeCategoryUser::class,
@@ -209,6 +217,7 @@ return array(
             PlaygroundGame\Service\MissionGame::class       => PlaygroundGame\Service\Factory\MissionGameFactory::class,
             PlaygroundGame\Service\TradingCard::class       => PlaygroundGame\Service\Factory\TradingCardFactory::class,
             PlaygroundGame\Service\Memory::class            => PlaygroundGame\Service\Factory\MemoryFactory::class,
+            PlaygroundGame\Service\TreasureHunt::class      => PlaygroundGame\Service\Factory\TreasureHuntFactory::class,
             PlaygroundGame\Service\Prize::class             => PlaygroundGame\Service\Factory\PrizeFactory::class,
             PlaygroundGame\Service\PrizeCategory::class     => PlaygroundGame\Service\Factory\PrizeCategoryFactory::class,
             PlaygroundGame\Service\PrizeCategoryUser::class => PlaygroundGame\Service\Factory\PrizeCategoryUserFactory::class,
@@ -1864,6 +1873,291 @@ return array(
                             )
                         )
                     ),
+                    'treasurehunt' => array(
+                        'type' => 'Segment',
+                        'options' => array(
+                            'route' => 'treasure-hunt[/:id]',
+                            'defaults' => array(
+                                'controller' => PlaygroundGame\Controller\Frontend\TreasureHunt::class,
+                                'action' => 'home'
+                            )
+                        ),
+                        'may_terminate' => true,
+                        'child_routes' => array(
+                            'index' => array(
+                                'type' => 'Laminas\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/index',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\TreasureHunt::class,
+                                        'action' => 'index'
+                                    )
+                                )
+                            ),
+                            'ajaxforgotpassword' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/ajax-mot-passe-oublie',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\TreasureHunt::class,
+                                        'action'     => 'ajaxforgot',
+                                    ),
+                                ),
+                            ),
+                            'resetpassword' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/reset-password/:userId/:token',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\TreasureHunt::class,
+                                        'action'     => 'userreset',
+                                    ),
+                                    'constraints' => array(
+                                        'userId'  => '[0-9]+',
+                                        'token' => '[A-F0-9]+',
+                                    ),
+                                ),
+                            ),
+                            'login' => array(
+                                'type' => 'Laminas\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/connexion',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\TreasureHunt::class,
+                                        'action' => 'login'
+                                    )
+                                )
+                            ),
+                            'user-register' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/inscription[/:socialnetwork]',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\TreasureHunt::class,
+                                        'action' => 'userregister'
+                                    )
+                                )
+                            ),
+                            'verification' => array(
+                                'type' => 'Laminas\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/verification',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\TreasureHunt::class,
+                                        'action'     => 'check-token',
+                                    ),
+                                ),
+                            ),
+                            'optin' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/optin[/:gameId]',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\TreasureHunt::class,
+                                        'action' => 'optin'
+                                    )
+                                )
+                            ),
+                            'terms-optin' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/terms-optin',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\TreasureHunt::class,
+                                        'action' => 'termsOptin'
+                                    )
+                                )
+                            ),
+                            'play' => array(
+                                'type' => 'Laminas\Router\Http\Segment',
+                                'options' => array(
+                                    'route' => '/jouer[/:x][/:y]',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\TreasureHunt::class,
+                                        'action' => 'play'
+                                    )
+                                )
+                            ),
+                            'result' => array(
+                                'type' => 'Laminas\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/resultat',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\TreasureHunt::class,
+                                        'action' => 'result'
+                                    )
+                                )
+                            ),
+                            'register' => array(
+                                'type' => 'Laminas\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/register',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\TreasureHunt::class,
+                                        'action' => 'register'
+                                    )
+                                )
+                            ),
+                            'fbshare' => array(
+                                'type' => 'Laminas\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/fbshare',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\TreasureHunt::class,
+                                        'action' => 'fbshare'
+                                    )
+                                )
+                            ),
+                            'fbrequest' => array(
+                                'type' => 'Laminas\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/fbrequest',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\TreasureHunt::class,
+                                        'action' => 'fbrequest'
+                                    )
+                                )
+                            ),
+                            'tweet' => array(
+                                'type' => 'Laminas\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/tweet',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\TreasureHunt::class,
+                                        'action' => 'tweet'
+                                    )
+                                )
+                            ),
+                            'google' => array(
+                                'type' => 'Laminas\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/google',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\TreasureHunt::class,
+                                        'action' => 'google'
+                                    )
+                                )
+                            ),
+                            'bounce' => array(
+                                'type' => 'Laminas\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/essayez-aussi',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\TreasureHunt::class,
+                                        'action' => 'bounce'
+                                    )
+                                )
+                            ),
+                            'terms' => array(
+                                'type' => 'Laminas\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/reglement',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\TreasureHunt::class,
+                                        'action' => 'terms'
+                                    )
+                                )
+                            ),
+                            'conditions' => array(
+                                'type' => 'Laminas\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/mentions-legales',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\TreasureHunt::class,
+                                        'action' => 'conditions'
+                                    )
+                                )
+                            ),
+                            'fangate' => array(
+                                'type' => 'Laminas\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/fangate',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\TreasureHunt::class,
+                                        'action' => 'fangate'
+                                    )
+                                )
+                            ),
+                            'prizes' => array(
+                                'type' => 'Laminas\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/lots',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\TreasureHunt::class,
+                                        'action' => 'prizes'
+                                    )
+                                ),
+                                'may_terminate' => true,
+                                'child_routes' => array(
+                                    'prize' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/:prize',
+                                            'defaults' => array(
+                                                'controller' => PlaygroundGame\Controller\Frontend\TreasureHunt::class,
+                                                'action' => 'prize'
+                                            )
+                                        )
+                                    )
+                                )
+                            ),
+                            'share' => array(
+                                'type' => 'Laminas\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/partager',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\TreasureHunt::class,
+                                        'action' => 'share'
+                                    )
+                                )
+                            ),
+                            'create-team' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/creation-team',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\TreasureHunt::class,
+                                        'action' => 'createTeam',
+                                    )
+                                )
+                            ),
+                            'invite-to-team' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/rejoins-ma-team',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\TreasureHunt::class,
+                                        'action' => 'inviteToTeam',
+                                    )
+                                )
+                            ),
+                            'leaderboard' => array(
+                                'type' => 'segment',
+                                'options' => array(
+                                    'route' => '/leaderboard[/:filter][/:p]',
+                                    'constraints' => array(
+                                        'filter' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                    ),
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\TreasureHunt::class,
+                                        'action'     => 'leaderboard'
+                                    ),
+                                ),
+                            ),
+                            'other-routes' => array(
+                                'type' => 'Laminas\Router\Http\Regex',
+                                'priority' => -1000,
+                                'options' => array(
+                                    'regex' => '.*',
+                                    'spec' => '%url%',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\TreasureHunt::class,
+                                        'action' => 'not-found'
+                                    )
+                                )
+                            )
+                        )
+                    ),
                     'instantwin' => array(
                         'type' => 'Segment',
                         'options' => array(
@@ -3021,6 +3315,40 @@ return array(
                             ),
                         )
                     ),
+                    'treasurehunt' => array(
+                        'type' => 'Laminas\Router\Http\Literal',
+                        'priority' => 1000,
+                        'options' => array(
+                            'route' => '/treasurehunt',
+                            'defaults' => array(
+                                'controller' => PlaygroundGame\Controller\Admin\TreasureHunt::class,
+                                'action' => 'index'
+                            )
+                        ),
+                        'child_routes' => array(
+                            'entry' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/entry/:gameId[/:p]',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Admin\TreasureHunt::class,
+                                        'action' => 'entry',
+                                        'gameId' => 0
+                                    )
+                                )
+                            ),
+                            'download' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/download/:gameId',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Admin\TreasureHunt::class,
+                                        'action' => 'download'
+                                    )
+                                )
+                            ),
+                        )
+                    ),
                     'playgroundgame' => array(
                         'type' => 'Laminas\Router\Http\Literal',
                         'priority' => 1000,
@@ -3196,6 +3524,100 @@ return array(
                                         'controller' => PlaygroundGame\Controller\Admin\Lottery::class,
                                         'action' => 'editLottery',
                                         'gameId' => 0
+                                    )
+                                )
+                            ),
+                            'create-treasurehunt' => array(
+                                'type' => 'Laminas\Router\Http\Segment',
+                                'options' => array(
+                                    'route' => '/create-treasurehunt/:treasureHuntId',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Admin\TreasureHunt::class,
+                                        'action' => 'createTreasurehunt',
+                                        'treasureHuntId' => 0
+                                    )
+                                )
+                            ),
+                            'edit-treasurehunt' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/edit-treasurehunt/:gameId',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Admin\TreasureHunt::class,
+                                        'action' => 'editTreasurehunt',
+                                        'gameId' => 0
+                                    )
+                                )
+                            ),
+                            'treasurehunt-puzzle-list' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/treasurehunt-puzzle-list/:gameId[/:filter][/:p]',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Admin\TreasureHunt::class,
+                                        'action' => 'listPuzzle',
+                                        'gameId' => 0,
+                                        'filter' => 'DESC'
+                                    ),
+                                    'constraints' => array(
+                                        'filter' => '[a-zA-Z][a-zA-Z0-9_-]*'
+                                    )
+                                )
+                            ),
+                            'treasurehunt-puzzle-add' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/treasurehunt-puzzle-add/:gameId',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Admin\TreasureHunt::class,
+                                        'action' => 'addPuzzle',
+                                        'gameId' => 0
+                                    )
+                                )
+                            ),
+                            'treasurehunt-puzzle-edit' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/treasurehunt-puzzle-edit/:gameId/:puzzleId',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Admin\TreasureHunt::class,
+                                        'action' => 'editPuzzle',
+                                        'gameId' => 0,
+                                        'puzzleId' => 0
+                                    )
+                                )
+                            ),
+                            'treasurehunt-puzzle-delete-image' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/treasurehunt-puzzle-delete-image/:gameId/:puzzleId/:imageId',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Admin\TreasureHunt::class,
+                                        'action' => 'puzzleDeleteImage',
+                                        'gameId' => 0,
+                                        'puzzleId' => 0,
+                                        'imageId' => 0,
+                                    )
+                                )
+                            ),
+                            'treasurehunt-puzzle-remove' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/treasurehunt-puzzle-remove/:puzzleId',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Admin\TreasureHunt::class,
+                                        'action' => 'removePuzzle',
+                                        'puzzleId' => 0
+                                    )
+                                )
+                            ),
+                            'treasure-hunt-areapicker' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/treasure-hunt-areapicker',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Admin\TreasureHunt::class,
+                                        'action' => 'areapicker'
                                     )
                                 )
                             ),
@@ -3893,6 +4315,13 @@ return array(
                     'create-memory' => array(
                         'label' => 'Add new memory game',
                         'route' => 'admin/playgroundgame/create-memory',
+                        'resource' => 'game',
+                        'privilege' => 'add',
+                        'use_route_match' => true,
+                    ),
+                    'create-treasurehunt' => array(
+                        'label' => 'Add new treasure hunt game',
+                        'route' => 'admin/playgroundgame/create-treasurehunt',
                         'resource' => 'game',
                         'privilege' => 'add',
                         'use_route_match' => true,

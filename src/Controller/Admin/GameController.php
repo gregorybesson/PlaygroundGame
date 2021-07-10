@@ -70,7 +70,7 @@ class GameController extends AbstractActionController
             $data = $this->getRequest()->getPost()->toArray();
             $form = $this->getAdminGameService()->createForm($data, $this->game, $form);
             if ($form) {
-                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The form was created');
+                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The form has been created');
             }
         }
         $formTemplate='';

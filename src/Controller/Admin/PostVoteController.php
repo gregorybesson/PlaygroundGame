@@ -57,7 +57,7 @@ class PostVoteController extends GameController
             }
             $game = $service->createOrUpdate($data, $postVote, 'playgroundgame_postvote_form');
             if ($game) {
-                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The game was created');
+                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The game has been created');
 
                 return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/list'));
             }

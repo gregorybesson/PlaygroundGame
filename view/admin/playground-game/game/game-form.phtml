@@ -391,7 +391,7 @@ $form->prepare();
     }
 </script>
 <script type="text/javascript">
-    jQuery(document).ready(function ($) {
+    document.addEventListener("DOMContentLoaded", function(event) {
         $(document).on('click','#prize_entry button',function(){
         	$(this).parent().empty();
         	return false;
