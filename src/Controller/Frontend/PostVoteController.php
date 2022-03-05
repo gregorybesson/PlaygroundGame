@@ -882,8 +882,30 @@ class PostVoteController extends GameController
         return $response;
     }
 
+    public function unsharePostAction()
+    {
+        $response = $this->getResponse();
+        $postId = $this->getEvent()->getRouteMatch()->getParam('post');
+        $post = $this->getGameService()->getPostVotePostMapper()->findById($postId);
+
+        if ($this->getRequest()->isPost()) {
+            $this->getGameService()->removeShare($post, $this->user);
+        }
+
+        $response->setContent(
+            \Laminas\Json\Json::encode(
+                array(
+                    'success' => 0
+                )
+            )
+        );
+
+        return $response;
+    }
+
     public function sharePostAction()
     {
+        $response = $this->getResponse();
         $statusMail = false;
         $message = '';
 
@@ -926,19 +948,28 @@ class PostVoteController extends GameController
             }
         }
 
-        $viewModel = $this->buildView($this->game);
+        // $viewModel = $this->buildView($this->game);
 
-        $viewModel->setVariables(
-            array(
-                'statusMail'       => $statusMail,
-                'message'          => $message,
-                'form'             => $form,
-                'socialLinkUrl'    => $socialLinkUrl,
-                'post'             => $post
+        // $viewModel->setVariables(
+        //     array(
+        //         'statusMail'       => $statusMail,
+        //         'message'          => $message,
+        //         'form'             => $form,
+        //         'socialLinkUrl'    => $socialLinkUrl,
+        //         'post'             => $post
+        //     )
+        // );
+
+        // return $viewModel;
+        $response->setContent(
+            \Laminas\Json\Json::encode(
+                array(
+                    'success' => 1
+                )
             )
         );
 
-        return $viewModel;
+        return $response;
     }
 
     public function shareCommentAction()
