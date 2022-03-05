@@ -2695,6 +2695,16 @@ return array(
                                     )
                                 )
                             ),
+                            'unsharepost' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/unshare-post/:post',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
+                                        'action' => 'unsharePost'
+                                    )
+                                )
+                            ),
                             'reject-post' => array(
                                 'type' => 'Segment',
                                 'options' => array(

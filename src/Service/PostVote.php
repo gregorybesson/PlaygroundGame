@@ -389,7 +389,9 @@ class PostVote extends Game
 
     public function findArrayOfValidatedPosts($game, $user, $filter, $search = '')
     {
-        $em = $this->serviceLocator->get('doctrine.entitymanager.orm_default');
+        $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
+        $emConfig = $em->getConfiguration();
+        $emConfig->addCustomNumericFunction('RAND', '\PlaygroundCore\Query\Mysql\Rand');
         $qb = $em->createQueryBuilder();
         $and = $qb->expr()->andx();
 
@@ -419,13 +421,20 @@ class PostVote extends Game
             );
         }
 
-        $qb->select('p, SUM(CASE WHEN (e.position = 1) THEN v.note ELSE 0 END) AS votesCount, SUM(CASE WHEN (e.position = 1 AND v.user = :user) THEN v.note ELSE 0 END) AS voted')
+        $qb->select('
+            p,
+            SUM(v.note)/COUNT(distinct(s.id)) AS votesCount,
+            MAX(CASE WHEN (e.position = 1 AND v.user = :user) THEN v.note ELSE 0 END) AS voted,
+            COUNT(distinct(s.id)) AS sharesCount,
+            MAX(CASE WHEN (e.position = 1 AND s.user = :user) THEN 1 ELSE 0 END) AS shared'
+            )
             ->from('PlaygroundGame\Entity\PostVotePost', 'p')
             ->innerJoin('p.postvote', 'g')
             ->leftJoin('p.user', 'u')
             ->innerJoin('p.postElements', 'e')
             ->leftJoin('p.votes', 'v')
             ->leftJoin('p.votes', 'av', 'WITH', 'av.user = :user')
+            ->leftJoin('p.shares', 's')
             ->where($and)
             ->groupBy('p.id');
 
@@ -437,7 +446,7 @@ class PostVote extends Game
 
         switch ($filter) {
             case 'random':
-                $qb->orderBy('e.value', 'ASC');
+                $qb->orderBy('rand()');
                 break;
             case 'vote':
                 $qb->orderBy('votesCount', 'DESC');
@@ -458,6 +467,7 @@ class PostVote extends Game
 
         $query = $qb->getQuery();
         // echo $query->getSql();
+        // die('---');
         $posts = $query->getResult();
         $arrayPosts = array();
         $i=0;
@@ -473,6 +483,8 @@ class PostVote extends Game
                 $arrayPosts[$i]['votes'] = count($post->getVotes());
                 $arrayPosts[$i]['voted'] = $postRaw['voted'];
                 $arrayPosts[$i]['votesCount'] = $postRaw['votesCount'];
+                $arrayPosts[$i]['shared'] = $postRaw['shared'];
+                $arrayPosts[$i]['sharesCount'] = $postRaw['sharesCount'];
                 $arrayPosts[$i]['id']    = $post->getId();
                 $arrayPosts[$i]['user']  = $post->getUser();
                 $arrayPosts[$i]['createdAt']  = $post->getCreatedAt();
@@ -703,6 +715,37 @@ class PostVote extends Game
         );
 
         return true;
+    }
+
+    public function removeShare($post, $user)
+    {
+        $found = false;
+        $postvoteShareMapper = $this->getPostVoteShareMapper();
+        $postId = $post->getId();
+
+        if ($user) {
+            $entryUser = count($postvoteShareMapper->findBy(array('user' => $user, 'post' => $postId)));
+            $share = $postvoteShareMapper->findOneBy(array('user' => $user, 'post' => $postId));
+        } else {
+            $entryUser = count($postvoteShareMapper->findBy(array('ip' => $ipAddress, 'post' => $postId)));
+            $share = $postvoteShareMapper->findOneBy(array('ip' => $ipAddress, 'post' => $postId));
+        }
+
+        if ($entryUser && $entryUser > 0) {
+            $postvoteShareMapper->remove($share);
+
+            $found = true;
+        }
+
+        $this->getEventManager()->trigger(
+            __FUNCTION__ . '.post',
+            $this,
+            array(
+                'post' => $post
+            )
+        );
+
+        return $found;
     }
 
     /**
