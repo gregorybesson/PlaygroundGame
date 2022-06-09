@@ -149,7 +149,7 @@
 					<div class="span2">				    
 				        <div class="nb-votes">
 				        	<div class="already-voted">Vous avez déjà voté!</div>
-				        <?php if(!$this->zfcUserIdentity()): ?>
+				        <?php if(!$this->lmcUserIdentity()): ?>
 				            <a href="<?php echo $this->url('postvote/post', array('id' => $this->game->getIdentifier(), 'post' => $post['id']))?>" class="btn-post-vote"></a>
 				        <?php else:?>
 				            <a href="<?php echo $this->url('postvote/vote', array('id' => $this->game->getIdentifier(), 'post' => $post['id']))?>" class="btn-post-vote logged"></a>

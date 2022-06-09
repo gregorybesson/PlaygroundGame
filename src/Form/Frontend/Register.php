@@ -1,7 +1,7 @@
 <?php
 namespace PlaygroundGame\Form\Frontend;
 
-use ZfcUser\Options\RegistrationOptionsInterface;
+use LmcUser\Options\RegistrationOptionsInterface;
 use Laminas\Mvc\I18n\Translator;
 
 class Register extends \PlaygroundUser\Form\Register

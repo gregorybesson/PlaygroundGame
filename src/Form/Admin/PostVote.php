@@ -50,21 +50,19 @@ class PostVote extends Game
       ],
     ]);
 
-    $this->add(
-      [
-        'type' => 'Laminas\Form\Element\Checkbox',
-        'name' => 'voteActive',
-        'attributes' => [
-          'class' => 'switch-input',
-          'value' => 1,
-        ],
-        'options' => [
-          'label' => $translator->translate('Allow votes on this game', 'playgroundgame'),
-          'checked_value' => 1,
-          'unchecked_value' => 0,
-        ],
-      ]
-    );
+    $this->add([
+      'type' => 'Laminas\Form\Element\Checkbox',
+      'name' => 'voteActive',
+      'attributes' => [
+        'class' => 'switch-input',
+        'value' => 1,
+      ],
+      'options' => [
+        'label' => $translator->translate('Allow votes on this game', 'playgroundgame'),
+        'checked_value' => "1",
+        'unchecked_value' => "0",
+      ],
+    ]);
 
     $this->add([
       'type' => 'Laminas\Form\Element\Checkbox',

@@ -95,7 +95,7 @@ if(isset($children[0])){
 				</a>
 			</div>
 			<div class="right">
-				<div><span class="user"><?php echo $this->zfcUserIdentity()->getFirstname(); ?> <?php echo $this->zfcUserIdentity()->getLastname(); ?></span>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="<?php echo $this->url('frontend/zfcuser/logout') ?>" class="logout">Se déconnecter</a></div>
+				<div><span class="user"><?php echo $this->lmcUserIdentity()->getFirstname(); ?> <?php echo $this->lmcUserIdentity()->getLastname(); ?></span>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="<?php echo $this->url('frontend/lmcuser/logout') ?>" class="logout">Se déconnecter</a></div>
 				<div class="btn-website"><a href="<?php echo $this->url('frontend') ?>" class="home" target="_blank">Accéder au site</a></div>
 			</div>
 		</div>

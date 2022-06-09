@@ -29,7 +29,7 @@ return array(
         'DoctrineDataFixtureModule',
         'PlaygroundCore',
         'PlaygroundDesign',
-        'ZfcUser',
+        'LmcUser',
         'PlaygroundUser',
         'PlaygroundGame',
         'PlaygroundPartnership'

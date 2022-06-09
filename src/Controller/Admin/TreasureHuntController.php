@@ -3,7 +3,7 @@
 namespace PlaygroundGame\Controller\Admin;
 
 use PlaygroundGame\Entity\Game;
-
+use PlaygroundGame\Service\Game as AdminGameService;
 use PlaygroundGame\Entity\TreasureHunt;
 use PlaygroundGame\Entity\TreasureHuntPuzzle;
 

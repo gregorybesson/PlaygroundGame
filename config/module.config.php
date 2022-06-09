@@ -3,9 +3,9 @@ return array(
     'doctrine' => array(
         'driver' => array(
             'playgroundgame_entity' => array(
-                'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
+                'class' => \Doctrine\ORM\Mapping\Driver\AnnotationDriver::class,
                 'cache' => 'array',
-                'paths' => __DIR__ . '/../src/Entity'
+                'paths' => [__DIR__ . '/../src/Entity']
             ),
 
             'orm_default' => array(

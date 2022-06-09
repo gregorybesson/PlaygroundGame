@@ -672,7 +672,7 @@ class PostVoteController extends GameController
             return $response;
         }
 
-        if (!$this->zfcUserAuthentication()->hasIdentity()) {
+        if (!$this->lmcUserAuthentication()->hasIdentity()) {
             $response->setContent(
                 \Laminas\Json\Json::encode(
                     array(
@@ -740,7 +740,7 @@ class PostVoteController extends GameController
         $response = $this->getResponse();
         $post = $this->getGameService()->getPostvotePostMapper()->findById($postId);
 
-        if (!$this->zfcUserAuthentication()->hasIdentity()) {
+        if (!$this->lmcUserAuthentication()->hasIdentity()) {
             $response->setContent(\Laminas\Json\Json::encode(array(
                 'success' => 0
             )));
@@ -832,7 +832,7 @@ class PostVoteController extends GameController
             return $response;
         }
 
-        if (!$this->zfcUserAuthentication()->hasIdentity()) {
+        if (!$this->lmcUserAuthentication()->hasIdentity()) {
             $response->setContent(\Laminas\Json\Json::encode(array(
                 'success' => 0
             )));

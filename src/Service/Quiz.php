@@ -400,7 +400,8 @@ class Quiz extends Game
             )
         );
 
-        $rows = $stmt->fetchAll();
+        $query = $stmt->executeQuery();
+        $rows = $query->fetchAllKeyValue();
         $result = [];
         foreach ($rows as $row) {
             $result[$row['question_id']][] = $row;

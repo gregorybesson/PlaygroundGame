@@ -38,13 +38,13 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue(false));
 
-        $ZfcUserMock = $this->createMock('ZfcUser\Entity\User');
+        $LmcUserMock = $this->createMock('LmcUser\Entity\User');
 
-        $ZfcUserMock->expects($this->any())
+        $LmcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('LmcUser\Controller\Plugin\LmcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -52,9 +52,9 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
 
         $authMock->expects($this->any())
         ->method('getIdentity')
-        ->will($this->returnValue($ZfcUserMock));
+        ->will($this->returnValue($LmcUserMock));
 
-        $pluginManager->setService('zfcUserAuthentication', $authMock);
+        $pluginManager->setService('lmcUserAuthentication', $authMock);
 
         $this->dispatch('/loterie/fake');
         $this->assertResponseStatusCode(404);
@@ -79,13 +79,13 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
 
     //     $serviceManager->setService('playgroundgame_lottery_service', $f);
 
-    //     $ZfcUserMock = $this->createMock('ZfcUser\Entity\User');
+    //     $LmcUserMock = $this->createMock('LmcUser\Entity\User');
 
-    //     $ZfcUserMock->expects($this->any())
+    //     $LmcUserMock->expects($this->any())
     //     ->method('getId')
     //     ->will($this->returnValue('1'));
 
-    //     $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+    //     $authMock = $this->createMock('LmcUser\Controller\Plugin\LmcUserAuthentication');
 
     //     $authMock->expects($this->any())
     //     ->method('hasIdentity')
@@ -93,9 +93,9 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
 
     //     $authMock->expects($this->any())
     //     ->method('getIdentity')
-    //     ->will($this->returnValue($ZfcUserMock));
+    //     ->will($this->returnValue($LmcUserMock));
 
-    //     $pluginManager->setService('zfcUserAuthentication', $authMock);
+    //     $pluginManager->setService('lmcUserAuthentication', $authMock);
 
     //     // I check that the array in findOneBy contains the parameter 'active' = 1
     //     $f->expects($this->exactly(2))
@@ -142,13 +142,13 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
 
         $serviceManager->setService('playgroundgame_lottery_service', $f);
 
-        $ZfcUserMock = $this->createMock('ZfcUser\Entity\User');
+        $LmcUserMock = $this->createMock('LmcUser\Entity\User');
 
-        $ZfcUserMock->expects($this->any())
+        $LmcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('LmcUser\Controller\Plugin\LmcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -156,9 +156,9 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
 
         $authMock->expects($this->any())
         ->method('getIdentity')
-        ->will($this->returnValue($ZfcUserMock));
+        ->will($this->returnValue($LmcUserMock));
 
-        $pluginManager->setService('zfcUserAuthentication', $authMock);
+        $pluginManager->setService('lmcUserAuthentication', $authMock);
 
         // I check that the array in findOneBy contains the parameter 'active' = 1
         $f->expects($this->exactly(2))
@@ -205,13 +205,13 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
 
         $serviceManager->setService('playgroundgame_lottery_service', $f);
 
-        $ZfcUserMock = $this->createMock('ZfcUser\Entity\User');
+        $LmcUserMock = $this->createMock('LmcUser\Entity\User');
 
-        $ZfcUserMock->expects($this->any())
+        $LmcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('LmcUser\Controller\Plugin\LmcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -219,9 +219,9 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
 
         $authMock->expects($this->any())
         ->method('getIdentity')
-        ->will($this->returnValue($ZfcUserMock));
+        ->will($this->returnValue($LmcUserMock));
 
-        $pluginManager->setService('zfcUserAuthentication', $authMock);
+        $pluginManager->setService('lmcUserAuthentication', $authMock);
 
         // I check that the array in findOneBy contains the parameter 'active' = 1
         $f->expects($this->exactly(2))
@@ -266,13 +266,13 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
          ->method('checkGame')
          ->will($this->returnValue(false));
 
-        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
+        $LmcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
-        $ZfcUserMock->expects($this->any())
+        $LmcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('LmcUser\Controller\Plugin\LmcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -280,9 +280,9 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
 
         $authMock->expects($this->any())
         ->method('getIdentity')
-        ->will($this->returnValue($ZfcUserMock));
+        ->will($this->returnValue($LmcUserMock));
 
-        $pluginManager->setService('zfcUserAuthentication', $authMock);
+        $pluginManager->setService('lmcUserAuthentication', $authMock);
 
         $this->dispatch('/loterie/gameid/resultat');
 
@@ -322,9 +322,9 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         ->method('findLastInactiveEntry')
         ->will($this->returnValue(false));
 
-        $ZfcUserMock = $this->createMock('ZfcUser\Entity\User');
+        $LmcUserMock = $this->createMock('LmcUser\Entity\User');
 
-        $ZfcUserMock->expects($this->any())
+        $LmcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
@@ -337,14 +337,14 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         ->method('shortenUrl')
         ->will($this->returnValue('http://shorturl.com/shurl'));
 
-        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('LmcUser\Controller\Plugin\LmcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('getIdentity')
-        ->will($this->returnValue($ZfcUserMock));
+        ->will($this->returnValue($LmcUserMock));
 
 
-        $pluginManager->setService('zfcUserAuthentication', $authMock);
+        $pluginManager->setService('lmcUserAuthentication', $authMock);
         $pluginManager->setService('shortenUrl', $bitlyMock);
 
         $this->dispatch('/loterie/gameid/resultat');
@@ -379,13 +379,13 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
          ->method('checkGame')
          ->will($this->returnValue(false));
 
-        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
+        $LmcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
-        $ZfcUserMock->expects($this->any())
+        $LmcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('LmcUser\Controller\Plugin\LmcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -393,9 +393,9 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
 
         $authMock->expects($this->any())
         ->method('getIdentity')
-        ->will($this->returnValue($ZfcUserMock));
+        ->will($this->returnValue($LmcUserMock));
 
-        $pluginManager->setService('zfcUserAuthentication', $authMock);
+        $pluginManager->setService('lmcUserAuthentication', $authMock);
 
         $this->dispatch('/loterie/gameid/jouer');
 
@@ -426,13 +426,13 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue(false));
 
-        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
+        $LmcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
-        $ZfcUserMock->expects($this->any())
+        $LmcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('LmcUser\Controller\Plugin\LmcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -440,9 +440,9 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
 
         $authMock->expects($this->any())
         ->method('getIdentity')
-        ->will($this->returnValue($ZfcUserMock));
+        ->will($this->returnValue($LmcUserMock));
 
-        $pluginManager->setService('zfcUserAuthentication', $authMock);
+        $pluginManager->setService('lmcUserAuthentication', $authMock);
 
         $this->dispatch('/loterie/gameid/jouer');
 
@@ -479,13 +479,13 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue($game));
 
-        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('LmcUser\Controller\Plugin\LmcUserAuthentication');
 
         $authMock->expects($this->exactly(1))
         ->method('getIdentity')
         ->will($this->returnValue(false));
 
-        $pluginManager->setService('zfcUserAuthentication', $authMock);
+        $pluginManager->setService('lmcUserAuthentication', $authMock);
 
         $this->dispatch('/loterie/gameid/jouer');
 
@@ -527,13 +527,13 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
             ->method('checkGame')
             ->will($this->returnValue($game));
 
-        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
+        $LmcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
-        $ZfcUserMock->expects($this->any())
+        $LmcUserMock->expects($this->any())
             ->method('getId')
             ->will($this->returnValue('1'));
 
-        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('LmcUser\Controller\Plugin\LmcUserAuthentication');
 
         $authMock->expects($this->any())
             ->method('hasIdentity')
@@ -541,9 +541,9 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
 
         $authMock->expects($this->any())
             ->method('getIdentity')
-            ->will($this->returnValue($ZfcUserMock));
+            ->will($this->returnValue($LmcUserMock));
 
-        $pluginManager->setService('zfcUserAuthentication', $authMock);
+        $pluginManager->setService('lmcUserAuthentication', $authMock);
 
         $f->expects($this->once())
             ->method('play')
@@ -589,13 +589,13 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
             ->method('checkGame')
             ->will($this->returnValue($game));
 
-        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
+        $LmcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
-        $ZfcUserMock->expects($this->any())
+        $LmcUserMock->expects($this->any())
             ->method('getId')
             ->will($this->returnValue('1'));
 
-        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('LmcUser\Controller\Plugin\LmcUserAuthentication');
 
         $authMock->expects($this->any())
             ->method('hasIdentity')
@@ -603,9 +603,9 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
 
         $authMock->expects($this->any())
             ->method('getIdentity')
-            ->will($this->returnValue($ZfcUserMock));
+            ->will($this->returnValue($LmcUserMock));
 
-        $pluginManager->setService('zfcUserAuthentication', $authMock);
+        $pluginManager->setService('lmcUserAuthentication', $authMock);
 
         $f->expects($this->once())
             ->method('play')
@@ -668,13 +668,13 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue(false));
 
-        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
+        $LmcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
-        $ZfcUserMock->expects($this->any())
+        $LmcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('LmcUser\Controller\Plugin\LmcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -682,13 +682,13 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
 
         $authMock->expects($this->any())
         ->method('getIdentity')
-        ->will($this->returnValue($ZfcUserMock));
+        ->will($this->returnValue($LmcUserMock));
 
         $f->expects($this->never())
         ->method('postFbWall')
         ->will($this->returnValue(true));
 
-        $pluginManager->setService('zfcUserAuthentication', $authMock);
+        $pluginManager->setService('lmcUserAuthentication', $authMock);
 
         $this->dispatch('/loterie/gameid/fbshare');
 
@@ -737,13 +737,13 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue($game));
 
-        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
+        $LmcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
-        $ZfcUserMock->expects($this->any())
+        $LmcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('LmcUser\Controller\Plugin\LmcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -751,9 +751,9 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
 
         $authMock->expects($this->any())
         ->method('getIdentity')
-        ->will($this->returnValue($ZfcUserMock));
+        ->will($this->returnValue($LmcUserMock));
 
-        $pluginManager->setService('zfcUserAuthentication', $authMock);
+        $pluginManager->setService('lmcUserAuthentication', $authMock);
 
         $f->expects($this->once())
         ->method('checkExistingEntry')
@@ -810,13 +810,13 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue($game));
 
-        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
+        $LmcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
-        $ZfcUserMock->expects($this->any())
+        $LmcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('LmcUser\Controller\Plugin\LmcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -824,9 +824,9 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
 
         $authMock->expects($this->any())
         ->method('getIdentity')
-        ->will($this->returnValue($ZfcUserMock));
+        ->will($this->returnValue($LmcUserMock));
 
-        $pluginManager->setService('zfcUserAuthentication', $authMock);
+        $pluginManager->setService('lmcUserAuthentication', $authMock);
 
         $f->expects($this->once())
         ->method('checkExistingEntry')
@@ -884,13 +884,13 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue($game));
 
-        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
+        $LmcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
-        $ZfcUserMock->expects($this->any())
+        $LmcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('LmcUser\Controller\Plugin\LmcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -898,9 +898,9 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
 
         $authMock->expects($this->any())
         ->method('getIdentity')
-        ->will($this->returnValue($ZfcUserMock));
+        ->will($this->returnValue($LmcUserMock));
 
-        $pluginManager->setService('zfcUserAuthentication', $authMock);
+        $pluginManager->setService('lmcUserAuthentication', $authMock);
 
         $f->expects($this->once())
         ->method('checkExistingEntry')
@@ -962,13 +962,13 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue(false));
 
-        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
+        $LmcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
-        $ZfcUserMock->expects($this->any())
+        $LmcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('LmcUser\Controller\Plugin\LmcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -976,13 +976,13 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
 
         $authMock->expects($this->any())
         ->method('getIdentity')
-        ->will($this->returnValue($ZfcUserMock));
+        ->will($this->returnValue($LmcUserMock));
 
         $f->expects($this->never())
         ->method('postTwitter')
         ->will($this->returnValue(true));
 
-        $pluginManager->setService('zfcUserAuthentication', $authMock);
+        $pluginManager->setService('lmcUserAuthentication', $authMock);
 
         $this->dispatch('/loterie/gameid/tweet');
 
@@ -1031,13 +1031,13 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue($game));
 
-        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
+        $LmcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
-        $ZfcUserMock->expects($this->any())
+        $LmcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('LmcUser\Controller\Plugin\LmcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -1045,9 +1045,9 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
 
         $authMock->expects($this->any())
         ->method('getIdentity')
-        ->will($this->returnValue($ZfcUserMock));
+        ->will($this->returnValue($LmcUserMock));
 
-        $pluginManager->setService('zfcUserAuthentication', $authMock);
+        $pluginManager->setService('lmcUserAuthentication', $authMock);
 
         $f->expects($this->once())
         ->method('checkExistingEntry')
@@ -1104,13 +1104,13 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue($game));
 
-        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
+        $LmcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
-        $ZfcUserMock->expects($this->any())
+        $LmcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('LmcUser\Controller\Plugin\LmcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -1118,9 +1118,9 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
 
         $authMock->expects($this->any())
         ->method('getIdentity')
-        ->will($this->returnValue($ZfcUserMock));
+        ->will($this->returnValue($LmcUserMock));
 
-        $pluginManager->setService('zfcUserAuthentication', $authMock);
+        $pluginManager->setService('lmcUserAuthentication', $authMock);
 
         $f->expects($this->once())
         ->method('checkExistingEntry')
@@ -1178,13 +1178,13 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue($game));
 
-        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
+        $LmcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
-        $ZfcUserMock->expects($this->any())
+        $LmcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('LmcUser\Controller\Plugin\LmcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -1192,9 +1192,9 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
 
         $authMock->expects($this->any())
         ->method('getIdentity')
-        ->will($this->returnValue($ZfcUserMock));
+        ->will($this->returnValue($LmcUserMock));
 
-        $pluginManager->setService('zfcUserAuthentication', $authMock);
+        $pluginManager->setService('lmcUserAuthentication', $authMock);
 
         $f->expects($this->once())
         ->method('checkExistingEntry')
@@ -1256,13 +1256,13 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue(false));
 
-        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
+        $LmcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
-        $ZfcUserMock->expects($this->any())
+        $LmcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('LmcUser\Controller\Plugin\LmcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -1270,13 +1270,13 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
 
         $authMock->expects($this->any())
         ->method('getIdentity')
-        ->will($this->returnValue($ZfcUserMock));
+        ->will($this->returnValue($LmcUserMock));
 
         $f->expects($this->never())
         ->method('postGoogle')
         ->will($this->returnValue(true));
 
-        $pluginManager->setService('zfcUserAuthentication', $authMock);
+        $pluginManager->setService('lmcUserAuthentication', $authMock);
 
         $this->dispatch('/loterie/gameid/google');
 
@@ -1325,13 +1325,13 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue($game));
 
-        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
+        $LmcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
-        $ZfcUserMock->expects($this->any())
+        $LmcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('LmcUser\Controller\Plugin\LmcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -1339,9 +1339,9 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
 
         $authMock->expects($this->any())
         ->method('getIdentity')
-        ->will($this->returnValue($ZfcUserMock));
+        ->will($this->returnValue($LmcUserMock));
 
-        $pluginManager->setService('zfcUserAuthentication', $authMock);
+        $pluginManager->setService('lmcUserAuthentication', $authMock);
 
         $f->expects($this->once())
         ->method('checkExistingEntry')
@@ -1398,13 +1398,13 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue($game));
 
-        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
+        $LmcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
-        $ZfcUserMock->expects($this->any())
+        $LmcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('LmcUser\Controller\Plugin\LmcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -1412,9 +1412,9 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
 
         $authMock->expects($this->any())
         ->method('getIdentity')
-        ->will($this->returnValue($ZfcUserMock));
+        ->will($this->returnValue($LmcUserMock));
 
-        $pluginManager->setService('zfcUserAuthentication', $authMock);
+        $pluginManager->setService('lmcUserAuthentication', $authMock);
 
         $f->expects($this->once())
         ->method('checkExistingEntry')
@@ -1472,13 +1472,13 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue($game));
 
-        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
+        $LmcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
-        $ZfcUserMock->expects($this->any())
+        $LmcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('LmcUser\Controller\Plugin\LmcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -1486,9 +1486,9 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
 
         $authMock->expects($this->any())
         ->method('getIdentity')
-        ->will($this->returnValue($ZfcUserMock));
+        ->will($this->returnValue($LmcUserMock));
 
-        $pluginManager->setService('zfcUserAuthentication', $authMock);
+        $pluginManager->setService('lmcUserAuthentication', $authMock);
 
         $f->expects($this->once())
         ->method('checkExistingEntry')
@@ -1535,13 +1535,13 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue(false));
 
-        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
+        $LmcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
-        $ZfcUserMock->expects($this->any())
+        $LmcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('LmcUser\Controller\Plugin\LmcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -1549,9 +1549,9 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
 
         $authMock->expects($this->any())
         ->method('getIdentity')
-        ->will($this->returnValue($ZfcUserMock));
+        ->will($this->returnValue($LmcUserMock));
 
-        $pluginManager->setService('zfcUserAuthentication', $authMock);
+        $pluginManager->setService('lmcUserAuthentication', $authMock);
 
         $this->dispatch('/loterie/gameid/essayez-aussi');
 
@@ -1582,13 +1582,13 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue(false));
 
-        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
+        $LmcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
-        $ZfcUserMock->expects($this->any())
+        $LmcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('LmcUser\Controller\Plugin\LmcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -1596,9 +1596,9 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
 
         $authMock->expects($this->any())
         ->method('getIdentity')
-        ->will($this->returnValue($ZfcUserMock));
+        ->will($this->returnValue($LmcUserMock));
 
-        $pluginManager->setService('zfcUserAuthentication', $authMock);
+        $pluginManager->setService('lmcUserAuthentication', $authMock);
 
         $this->dispatch('/loterie/gameid/essayez-aussi');
 
@@ -1648,13 +1648,13 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         ->method('getServiceManager')
         ->will($this->returnValue($serviceManager));
 
-        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
+        $LmcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
-        $ZfcUserMock->expects($this->any())
+        $LmcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('LmcUser\Controller\Plugin\LmcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -1662,7 +1662,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
 
         $authMock->expects($this->any())
         ->method('getIdentity')
-        ->will($this->returnValue($ZfcUserMock));
+        ->will($this->returnValue($LmcUserMock));
 
         $partnerMock = $this->createMock('PlaygroundPartnership\View\Helper\PartnerSubscriber');
         $partnerMock->expects($this->any())
@@ -1671,7 +1671,7 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
 
         $viewHelperManager->setService('partnerSubscriber', $partnerMock);
 
-        $pluginManager->setService('zfcUserAuthentication', $authMock);
+        $pluginManager->setService('lmcUserAuthentication', $authMock);
 
         $this->dispatch('/loterie/gameid/essayez-aussi');
 
@@ -1703,13 +1703,13 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue(false));
 
-        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
+        $LmcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
-        $ZfcUserMock->expects($this->any())
+        $LmcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('LmcUser\Controller\Plugin\LmcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -1717,9 +1717,9 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
 
         $authMock->expects($this->any())
         ->method('getIdentity')
-        ->will($this->returnValue($ZfcUserMock));
+        ->will($this->returnValue($LmcUserMock));
 
-        $pluginManager->setService('zfcUserAuthentication', $authMock);
+        $pluginManager->setService('lmcUserAuthentication', $authMock);
 
         $this->dispatch('/loterie/gameid/reglement');
 
@@ -1760,13 +1760,13 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue($game));
 
-        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
+        $LmcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
-        $ZfcUserMock->expects($this->any())
+        $LmcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('LmcUser\Controller\Plugin\LmcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -1774,9 +1774,9 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
 
         $authMock->expects($this->any())
         ->method('getIdentity')
-        ->will($this->returnValue($ZfcUserMock));
+        ->will($this->returnValue($LmcUserMock));
 
-        $pluginManager->setService('zfcUserAuthentication', $authMock);
+        $pluginManager->setService('lmcUserAuthentication', $authMock);
 
         $f->expects($this->any())
         ->method('getServiceManager')
@@ -1812,13 +1812,13 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue(false));
 
-        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
+        $LmcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
-        $ZfcUserMock->expects($this->any())
+        $LmcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('LmcUser\Controller\Plugin\LmcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -1826,9 +1826,9 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
 
         $authMock->expects($this->any())
         ->method('getIdentity')
-        ->will($this->returnValue($ZfcUserMock));
+        ->will($this->returnValue($LmcUserMock));
 
-        $pluginManager->setService('zfcUserAuthentication', $authMock);
+        $pluginManager->setService('lmcUserAuthentication', $authMock);
 
         $this->dispatch('/loterie/gameid/mentions-legales');
 
@@ -1869,13 +1869,13 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue($game));
 
-        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
+        $LmcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
-        $ZfcUserMock->expects($this->any())
+        $LmcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('LmcUser\Controller\Plugin\LmcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -1883,9 +1883,9 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
 
         $authMock->expects($this->any())
         ->method('getIdentity')
-        ->will($this->returnValue($ZfcUserMock));
+        ->will($this->returnValue($LmcUserMock));
 
-        $pluginManager->setService('zfcUserAuthentication', $authMock);
+        $pluginManager->setService('lmcUserAuthentication', $authMock);
 
         $f->expects($this->any())
         ->method('getServiceManager')
@@ -1918,15 +1918,15 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         
     //     $serviceManager->setService('playgroundgame_lottery_service', $f);
 
-    //     $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
+    //     $LmcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
-    //     $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+    //     $authMock = $this->createMock('LmcUser\Controller\Plugin\LmcUserAuthentication');
 
     //     $authMock->expects($this->any())
     //     ->method('getIdentity')
     //     ->will($this->returnValue(false));
 
-    //     $pluginManager->setService('zfcUserAuthentication', $authMock);
+    //     $pluginManager->setService('lmcUserAuthentication', $authMock);
         
     //     // I check that the array in findOneBy contains the parameter 'active' = 1
     //     $f->expects($this->once())
@@ -1967,13 +1967,13 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue(false));
 
-        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
+        $LmcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
-        $ZfcUserMock->expects($this->any())
+        $LmcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('LmcUser\Controller\Plugin\LmcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -1981,9 +1981,9 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
 
         $authMock->expects($this->any())
         ->method('getIdentity')
-        ->will($this->returnValue($ZfcUserMock));
+        ->will($this->returnValue($LmcUserMock));
 
-        $pluginManager->setService('zfcUserAuthentication', $authMock);
+        $pluginManager->setService('lmcUserAuthentication', $authMock);
 
         $this->dispatch('/loterie/gameid/lots');
 
@@ -2019,13 +2019,13 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue($game));
 
-        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
+        $LmcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
-        $ZfcUserMock->expects($this->any())
+        $LmcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('LmcUser\Controller\Plugin\LmcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -2033,9 +2033,9 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
 
         $authMock->expects($this->any())
         ->method('getIdentity')
-        ->will($this->returnValue($ZfcUserMock));
+        ->will($this->returnValue($LmcUserMock));
 
-        $pluginManager->setService('zfcUserAuthentication', $authMock);
+        $pluginManager->setService('lmcUserAuthentication', $authMock);
 
         $f->expects($this->any())
         ->method('getServiceManager')
@@ -2085,13 +2085,13 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue($game));
 
-        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
+        $LmcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
-        $ZfcUserMock->expects($this->any())
+        $LmcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('LmcUser\Controller\Plugin\LmcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -2099,9 +2099,9 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
 
         $authMock->expects($this->any())
         ->method('getIdentity')
-        ->will($this->returnValue($ZfcUserMock));
+        ->will($this->returnValue($LmcUserMock));
 
-        $pluginManager->setService('zfcUserAuthentication', $authMock);
+        $pluginManager->setService('lmcUserAuthentication', $authMock);
 
         $f->expects($this->any())
         ->method('getServiceManager')
@@ -2137,13 +2137,13 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue(false));
 
-        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
+        $LmcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
-        $ZfcUserMock->expects($this->any())
+        $LmcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('LmcUser\Controller\Plugin\LmcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -2151,9 +2151,9 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
 
         $authMock->expects($this->any())
         ->method('getIdentity')
-        ->will($this->returnValue($ZfcUserMock));
+        ->will($this->returnValue($LmcUserMock));
 
-        $pluginManager->setService('zfcUserAuthentication', $authMock);
+        $pluginManager->setService('lmcUserAuthentication', $authMock);
 
         $this->dispatch('/loterie/gameid/lots/prizeid');
 
@@ -2207,13 +2207,13 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue($game));
 
-        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
+        $LmcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
-        $ZfcUserMock->expects($this->any())
+        $LmcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('LmcUser\Controller\Plugin\LmcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -2221,9 +2221,9 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
 
         $authMock->expects($this->any())
         ->method('getIdentity')
-        ->will($this->returnValue($ZfcUserMock));
+        ->will($this->returnValue($LmcUserMock));
 
-        $pluginManager->setService('zfcUserAuthentication', $authMock);
+        $pluginManager->setService('lmcUserAuthentication', $authMock);
 
         $f->expects($this->any())
         ->method('getServiceManager')
@@ -2283,13 +2283,13 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
         ->method('checkGame')
         ->will($this->returnValue($game));
 
-        $ZfcUserMock = $this->createMock('PlaygroundUser\Entity\User');
+        $LmcUserMock = $this->createMock('PlaygroundUser\Entity\User');
 
-        $ZfcUserMock->expects($this->any())
+        $LmcUserMock->expects($this->any())
         ->method('getId')
         ->will($this->returnValue('1'));
 
-        $authMock = $this->createMock('ZfcUser\Controller\Plugin\ZfcUserAuthentication');
+        $authMock = $this->createMock('LmcUser\Controller\Plugin\LmcUserAuthentication');
 
         $authMock->expects($this->any())
         ->method('hasIdentity')
@@ -2297,9 +2297,9 @@ class LotteryControllerTest extends AbstractHttpControllerTestCase
 
         $authMock->expects($this->any())
         ->method('getIdentity')
-        ->will($this->returnValue($ZfcUserMock));
+        ->will($this->returnValue($LmcUserMock));
 
-        $pluginManager->setService('zfcUserAuthentication', $authMock);
+        $pluginManager->setService('lmcUserAuthentication', $authMock);
 
         $f->expects($this->any())
         ->method('getServiceManager')

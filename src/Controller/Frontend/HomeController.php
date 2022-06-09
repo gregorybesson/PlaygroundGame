@@ -103,7 +103,7 @@ class HomeController extends AbstractActionController
             $viewModel = new ViewModel();
         }
 
-        $user = $this->zfcUserAuthentication()->getIdentity();
+        $user = $this->lmcUserAuthentication()->getIdentity();
 
         if ($this->getRequest()->isPost()) {
             $data = $this->getRequest()->getPost()->toArray();
