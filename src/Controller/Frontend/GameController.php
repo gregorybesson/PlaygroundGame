@@ -152,7 +152,7 @@ class GameController extends AbstractActionController
                 $templatePathResolver->addPath($l[0].'custom/'.$controller->game->getIdentifier());
             }
 
-            $controller->user = $controller->zfcUserAuthentication()->getIdentity();
+            $controller->user = $controller->lmcUserAuthentication()->getIdentity();
             if ($controller->game
                 && !$controller->user
                 && !$controller->game->getAnonymousAllowed()
@@ -187,7 +187,7 @@ class GameController extends AbstractActionController
                      ).'?redirect='.$redirect;
                 } else {
                     $urlRegister = $controller->url()->fromRoute(
-                        'frontend/zfcuser/register',
+                        'frontend/lmcuser/register',
                         array(),
                         array('force_canonical' => true)
                     ).'?redirect='.$redirect;
@@ -864,7 +864,7 @@ class GameController extends AbstractActionController
 
     public function optinAction()
     {
-        $userService = $this->getServiceLocator()->get('zfcuser_user_service');
+        $userService = $this->getServiceLocator()->get('lmcuser_user_service');
 
         if ($this->getRequest()->isPost()) {
             $data['optin']        = ($this->params()->fromPost('optin'))?1:0;
@@ -903,7 +903,7 @@ class GameController extends AbstractActionController
         if ($request->getQuery()->get('redirect') != '') {
             $redirect = $request->getQuery()->get('redirect');
         }
-        $form    = $this->getServiceLocator()->get('zfcuser_login_form');
+        $form    = $this->getServiceLocator()->get('lmcuser_login_form');
 
         if ($request->isPost()) {
             $form->setData($request->getPost());
@@ -923,8 +923,8 @@ class GameController extends AbstractActionController
             }
 
             // clear adapters
-            $this->zfcUserAuthentication()->getAuthAdapter()->resetAdapters();
-            $this->zfcUserAuthentication()->getAuthService()->clearIdentity();
+            $this->lmcUserAuthentication()->getAuthAdapter()->resetAdapters();
+            $this->lmcUserAuthentication()->getAuthService()->clearIdentity();
 
             $logged = $this->forward()->dispatch('playgrounduser_user', array('action' => 'ajaxauthenticate'));
 
@@ -990,9 +990,9 @@ class GameController extends AbstractActionController
     public function userregisterAction()
     {
         $pguserOptions = $this->getServiceLocator()->get('playgrounduser_module_options');
-        $userOptions = $this->getServiceLocator()->get('zfcuser_module_options');
+        $userOptions = $this->getServiceLocator()->get('lmcuser_module_options');
 
-        if ($this->zfcUserAuthentication()->hasIdentity()) {
+        if ($this->lmcUserAuthentication()->hasIdentity()) {
             return $this->redirect()->toUrl(
                 $this->frontendUrl()->fromRoute(
                     $this->game->getClassType().'/'.$this->game->nextStep('index'),
@@ -1001,7 +1001,7 @@ class GameController extends AbstractActionController
             );
         }
         $request       = $this->getRequest();
-        $service       = $this->getServiceLocator()->get('zfcuser_user_service');
+        $service       = $this->getServiceLocator()->get('lmcuser_user_service');
         $form          = $this->getServiceLocator()->get('playgroundgame_register_form');
         $socialnetwork = $this->params()->fromRoute('socialnetwork', false);
         $form->setAttribute(
@@ -1207,8 +1207,8 @@ class GameController extends AbstractActionController
             $request->setPost(new Parameters($post));
 
             // clear adapters
-            $this->zfcUserAuthentication()->getAuthAdapter()->resetAdapters();
-            $this->zfcUserAuthentication()->getAuthService()->clearIdentity();
+            $this->lmcUserAuthentication()->getAuthAdapter()->resetAdapters();
+            $this->lmcUserAuthentication()->getAuthService()->clearIdentity();
 
             $logged = $this->forward()->dispatch('playgrounduser_user', array('action' => 'ajaxauthenticate'));
 
@@ -1220,7 +1220,7 @@ class GameController extends AbstractActionController
                     )
                 );
             } else {
-                $this->flashMessenger()->setNamespace('zfcuser-login-form')->addMessage(
+                $this->flashMessenger()->setNamespace('lmcuser-login-form')->addMessage(
                     'Authentication failed. Please try again.'
                 );
                 return $this->redirect()->toUrl(

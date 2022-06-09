@@ -1897,8 +1897,8 @@ class Game
         $total = $game->getWinners();
 
         // I Have to know what is the User Class used
-        $zfcUserOptions = $this->serviceLocator->get('zfcuser_module_options');
-        $userClass = $zfcUserOptions->getUserEntityClass();
+        $lmcUserOptions = $this->serviceLocator->get('lmcuser_module_options');
+        $userClass = $lmcUserOptions->getUserEntityClass();
 
         $result = $this->getEntryMapper()->draw($game, $userClass, $total);
 
@@ -2586,7 +2586,7 @@ class Game
     public function getUserMapper()
     {
         if (null === $this->userMapper) {
-            $this->userMapper = $this->serviceLocator->get('zfcuser_user_mapper');
+            $this->userMapper = $this->serviceLocator->get('lmcuser_user_mapper');
         }
 
         return $this->userMapper;

@@ -137,7 +137,7 @@ class MissionController extends GameController
                         );
                     } else {
                         return $this->redirect()->toUrl(
-                            $this->frontendUrl()->fromRoute('zfcuser/register').'?redirect='.$redirect
+                            $this->frontendUrl()->fromRoute('lmcuser/register').'?redirect='.$redirect
                         );
                     }
                 }
@@ -158,7 +158,7 @@ class MissionController extends GameController
                     );
                 } else {
                     return $this->redirect()->toUrl(
-                        $this->frontendUrl()->fromRoute('zfcuser/register').'?redirect='.$redirect
+                        $this->frontendUrl()->fromRoute('lmcuser/register').'?redirect='.$redirect
                     );
                 }
             }
@@ -217,7 +217,7 @@ class MissionController extends GameController
             );
 
             return $this->redirect()->toUrl(
-                $this->frontendUrl()->fromRoute('zfcuser/register').'?redirect='.$redirect
+                $this->frontendUrl()->fromRoute('lmcuser/register').'?redirect='.$redirect
             );
         }
 
@@ -269,7 +269,7 @@ class MissionController extends GameController
 
         if ($result) {
             $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-            $user       = $this->zfcUserAuthentication()->getIdentity();
+            $user       = $this->lmcUserAuthentication()->getIdentity();
             $game       = $sg->checkGame($identifier);
             $bonusEntry = $sg->addAnotherChance($game, $user, 1);
         }
@@ -291,7 +291,7 @@ class MissionController extends GameController
 
         if ($result) {
             $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-            $user       = $this->zfcUserAuthentication()->getIdentity();
+            $user       = $this->lmcUserAuthentication()->getIdentity();
             $game       = $sg->checkGame($identifier);
             $bonusEntry = $sg->addAnotherChance($game, $user, 1);
         }
@@ -313,7 +313,7 @@ class MissionController extends GameController
 
         if ($result) {
             $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-            $user       = $this->zfcUserAuthentication()->getIdentity();
+            $user       = $this->lmcUserAuthentication()->getIdentity();
             $game       = $sg->checkGame($identifier);
             $bonusEntry = $sg->addAnotherChance($game, $user, 1);
         }
@@ -335,7 +335,7 @@ class MissionController extends GameController
 
         if ($result) {
             $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-            $user       = $this->zfcUserAuthentication()->getIdentity();
+            $user       = $this->lmcUserAuthentication()->getIdentity();
             $game       = $sg->checkGame($identifier);
             $bonusEntry = $sg->addAnotherChance($game, $user, 1);
         }

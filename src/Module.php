@@ -789,18 +789,18 @@ class Module
 
                 'playgroundgame_register_form' => function (\Laminas\ServiceManager\ServiceManager $sm) {
                     $translator = $sm->get('MvcTranslator');
-                    $zfcUserOptions = $sm->get('zfcuser_module_options');
-                    $form = new Form\Frontend\Register(null, $zfcUserOptions, $translator, $sm);
-                    $form->setInputFilter(new \ZfcUser\Form\RegisterFilter(
-                        new \ZfcUser\Validator\NoRecordExists(array(
-                            'mapper' => $sm->get('zfcuser_user_mapper'),
+                    $lmcUserOptions = $sm->get('lmcuser_module_options');
+                    $form = new Form\Frontend\Register(null, $lmcUserOptions, $translator, $sm);
+                    $form->setInputFilter(new \LmcUser\Form\RegisterFilter(
+                        new \LmcUser\Validator\NoRecordExists(array(
+                            'mapper' => $sm->get('lmcuser_user_mapper'),
                             'key'    => 'email',
                         )),
-                        new \ZfcUser\Validator\NoRecordExists(array(
-                            'mapper' => $sm->get('zfcuser_user_mapper'),
+                        new \LmcUser\Validator\NoRecordExists(array(
+                            'mapper' => $sm->get('lmcuser_user_mapper'),
                             'key'    => 'username',
                         )),
-                        $zfcUserOptions
+                        $lmcUserOptions
                     ));
 
                     return $form;

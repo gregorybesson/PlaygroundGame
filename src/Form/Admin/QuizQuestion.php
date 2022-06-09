@@ -3,9 +3,9 @@
 namespace PlaygroundGame\Form\Admin;
 
 use Laminas\Form\Element;
-use ZfcUser\Form\ProvidesEventsForm;
+use LmcUser\Form\ProvidesEventsForm;
 use Laminas\Mvc\I18n\Translator;
-use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
+use Doctrine\Laminas\Hydrator\DoctrineObject as DoctrineHydrator;
 use PlaygroundCore\Stdlib\Hydrator\Strategy\BooleanStrategy;
 use Laminas\ServiceManager\ServiceManager;
 

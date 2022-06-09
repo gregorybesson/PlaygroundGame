@@ -20,7 +20,7 @@ class TreasureHuntController extends GameController
     {
 
         $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-        $user = $this->zfcUserAuthentication()->getIdentity();
+        $user = $this->lmcUserAuthentication()->getIdentity();
         $sg = $this->getGameService();
 
         $game = $sg->checkGame($identifier);
@@ -56,14 +56,14 @@ class TreasureHuntController extends GameController
                 // If the user can not be created/retrieved from Facebook info, redirect to login/register form
                 if (!$user){
                     $redirect = urlencode($this->frontendUrl()->fromRoute('treasurehunt/play', array('id' => $game->getIdentifier()), array('force_canonical' => true)));
-                    return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('zfcuser/register', array('channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))) . '?redirect='.$redirect);
+                    return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('lmcuser/register', array('channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))) . '?redirect='.$redirect);
                 }
 
                 // The game is not played from Facebook : redirect to login/register form
 
             } elseif(!$game->getAnonymousAllowed()) {
                 $redirect = urlencode($this->frontendUrl()->fromRoute('treasurehunt/play', array('id' => $game->getIdentifier()), array('force_canonical' => true)));
-                return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('zfcuser/register', array('channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))) . '?redirect='.$redirect);
+                return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('lmcuser/register', array('channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))) . '?redirect='.$redirect);
             }
 
         }
@@ -132,7 +132,7 @@ class TreasureHuntController extends GameController
 
         if (!$this->user && !$this->game->getAnonymousAllowed()) {
             $redirect = urlencode($this->frontendUrl()->fromRoute('treasurehunt/result', array('id' => $this->game->getIdentifier())));
-            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('zfcuser/register') . '?redirect='.$redirect);
+            return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('lmcuser/register') . '?redirect='.$redirect);
         }
 
         $form = $this->getServiceLocator()->get('playgroundgame_sharemail_form');
@@ -180,7 +180,7 @@ class TreasureHuntController extends GameController
 
          if ($result) {
              $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-             $user = $this->zfcUserAuthentication()->getIdentity();
+             $user = $this->lmcUserAuthentication()->getIdentity();
              $game = $sg->checkGame($identifier);
              $bonusEntry = $sg->addAnotherChance($game, $user, 1);
          }
@@ -202,7 +202,7 @@ class TreasureHuntController extends GameController
 
         if ($result) {
             $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-            $user = $this->zfcUserAuthentication()->getIdentity();
+            $user = $this->lmcUserAuthentication()->getIdentity();
             $game = $sg->checkGame($identifier);
             $bonusEntry = $sg->addAnotherChance($game, $user, 1);
         }
@@ -224,7 +224,7 @@ class TreasureHuntController extends GameController
 
         if ($result) {
             $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-            $user = $this->zfcUserAuthentication()->getIdentity();
+            $user = $this->lmcUserAuthentication()->getIdentity();
             $game = $sg->checkGame($identifier);
             $bonusEntry = $sg->addAnotherChance($game, $user, 1);
         }
@@ -246,7 +246,7 @@ class TreasureHuntController extends GameController
 
         if ($result) {
             $identifier = $this->getEvent()->getRouteMatch()->getParam('id');
-            $user = $this->zfcUserAuthentication()->getIdentity();
+            $user = $this->lmcUserAuthentication()->getIdentity();
             $game = $sg->checkGame($identifier);
             $bonusEntry = $sg->addAnotherChance($game, $user, 1);
         }

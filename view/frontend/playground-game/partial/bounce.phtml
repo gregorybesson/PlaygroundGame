@@ -16,7 +16,7 @@
 		</div>
 		<?php if(!$user->getAvatar() || !$user->getAddress() || !$user->getCity() || !$user->getTelephone() || !$user->getChildren()):?>
 			<div class="span3">
-		    	<a href="<?php echo $this->url('frontend/zfcuser/profile'); ?>">
+		    	<a href="<?php echo $this->url('frontend/lmcuser/profile'); ?>">
 			        <img src="<?php echo $this->frontendAssetPath('images/common/round-pencil.png')?>" border="0" width="70" height="70" />
 	                <div>Remplir mes <br> coordonnées<br><span class="points">et gagnez des points</span></div>
 	           	</a>
@@ -25,7 +25,7 @@
 	    <?php if(!$user->getOptin()):?>
 	    	<div class="span3">
 	    		<div class="bounce-newsform">
-				    <form action="<?php echo $this->url('frontend/zfcuser/ajax_newsletter');?>" method="POST" id="ajax-newsletter">
+				    <form action="<?php echo $this->url('frontend/lmcuser/ajax_newsletter');?>" method="POST" id="ajax-newsletter">
 				        <input type="hidden" value="1" name="optin" />
 				    	<input class="bounce-newssubscribe" type="submit" value="S'inscrire à la newsletter"/>
 				    </form>
