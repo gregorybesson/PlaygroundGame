@@ -401,7 +401,7 @@ class Quiz extends Game
         );
 
         $query = $stmt->executeQuery();
-        $rows = $query->fetchAllKeyValue();
+        $rows = $query->fetchAllAssociative();
         $result = [];
         foreach ($rows as $row) {
             $result[$row['question_id']][] = $row;

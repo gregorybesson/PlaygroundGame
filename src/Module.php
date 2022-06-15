@@ -675,6 +675,26 @@ class Module
                     return $mapper;
                 },
 
+                'playgroundgame_crossword_mapper' => function (\Laminas\ServiceManager\ServiceManager $sm) {
+                    $mapper = new Mapper\Crossword(
+                        $sm->get('doctrine.entitymanager.orm_default'),
+                        $sm->get('playgroundgame_module_options'),
+                        $sm
+                    );
+
+                    return $mapper;
+                },
+
+                'playgroundgame_crossword_word_mapper' => function (\Laminas\ServiceManager\ServiceManager $sm) {
+                    $mapper = new Mapper\CrosswordWord(
+                        $sm->get('doctrine.entitymanager.orm_default'),
+                        $sm->get('playgroundgame_module_options'),
+                        $sm
+                    );
+
+                    return $mapper;
+                },
+
                 'playgroundgame_memory_mapper' => function (\Laminas\ServiceManager\ServiceManager $sm) {
                     $mapper = new Mapper\Memory(
                         $sm->get('doctrine.entitymanager.orm_default'),
@@ -739,6 +759,24 @@ class Module
                     $form = new Form\Admin\TradingCard(null, $sm, $translator);
                     $tradingcard = new Entity\TradingCard();
                     $form->setInputFilter($tradingcard->getInputFilter());
+
+                    return $form;
+                },
+
+                'playgroundgame_crossword_form' => function (\Laminas\ServiceManager\ServiceManager $sm) {
+                    $translator = $sm->get('MvcTranslator');
+                    $form = new Form\Admin\Crossword(null, $sm, $translator);
+                    $crossword = new Entity\Crossword();
+                    $form->setInputFilter($crossword->getInputFilter());
+
+                    return $form;
+                },
+
+                'playgroundgame_crosswordword_form' => function (\Laminas\ServiceManager\ServiceManager $sm) {
+                    $translator = $sm->get('MvcTranslator');
+                    $form = new Form\Admin\CrosswordWord(null, $sm, $translator);
+                    $crosswordCard = new Entity\CrosswordWord();
+                    $form->setInputFilter($crosswordCard->getInputFilter());
 
                     return $form;
                 },

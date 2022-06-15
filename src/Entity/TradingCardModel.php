@@ -496,7 +496,7 @@ class TradingCardModel implements InputFilterAwareInterface, \JsonSerializable
      *
      * @return array
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         $jsonArray = $this->getArrayCopy();
         unset($jsonArray['inputFilter']);
