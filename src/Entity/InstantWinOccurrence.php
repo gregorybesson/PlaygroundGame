@@ -295,7 +295,7 @@ class InstantWinOccurrence implements InputFilterAwareInterface, \JsonSerializab
     *
     * @return array
     */
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return $this->getArrayCopy();
     }

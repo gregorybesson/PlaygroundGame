@@ -529,7 +529,7 @@ class PostVotePost implements InputFilterAwareInterface, Translatable, \JsonSeri
      *
      * @return array
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return $this->getArrayCopy();
     }

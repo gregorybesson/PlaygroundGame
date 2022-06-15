@@ -18,11 +18,11 @@ use Laminas\InputFilter\InputFilterInterface;
 
 /**
  * @ORM\Entity @HasLifecycleCallbacks
- * @ORM\Table(name="game_memory_card")
+ * @ORM\Table(name="game_crossword_word")
  * @Gedmo\TranslationEntity(class="PlaygroundGame\Entity\GameTranslation")
  */
 
-class MemoryCard implements InputFilterAwareInterface, \JsonSerializable
+class CrosswordWord implements InputFilterAwareInterface, \JsonSerializable
 {
     protected $inputFilter;
 
@@ -34,8 +34,8 @@ class MemoryCard implements InputFilterAwareInterface, \JsonSerializable
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Memory", inversedBy="cards")
-     * @ORM\JoinColumn(name="game_id", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\ManyToOne(targetEntity="Crossword", inversedBy="words")
+     * @ORM\JoinColumn(name="crossword_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $game;
 
@@ -43,24 +43,34 @@ class MemoryCard implements InputFilterAwareInterface, \JsonSerializable
      * @Gedmo\Translatable
      * @ORM\Column(type="string", length=255, nullable=false)
      */
-    protected $title;
+    protected $solution;
 
     /**
      * @Gedmo\Translatable
      * @ORM\Column(type="text", nullable=true)
      */
-    protected $description;
+    protected $clue;
 
     /**
-     * @Gedmo\Translatable
-     * @ORM\Column(name="image", type="string", length=255, nullable=true)
+     * @ORM\Column(name="layout_row", type="integer", nullable=false)
      */
-    protected $image;
+    protected $layoutRow;
 
     /**
-     * @ORM\Column(name="json_data", type="text", nullable=true)
+     * @ORM\Column(name="layout_column", type="integer", nullable=false)
      */
-    protected $jsonData;
+    protected $layoutColumn;
+
+    /**
+     * @ORM\Column(type="integer", nullable=false)
+     */
+    protected $position;
+
+    /**
+     * values: accross or down
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $orientation;
 
     /**
      * @ORM\Column(name="created_at", type="datetime")
@@ -119,73 +129,145 @@ class MemoryCard implements InputFilterAwareInterface, \JsonSerializable
     }
 
     /**
-     * Gets the value of title.
+     * Gets the value of solution.
      *
      * @return mixed
      */
-    public function getTitle()
+    public function getSolution()
     {
-        return $this->title;
+        return $this->solution;
     }
 
     /**
-     * Sets the value of title.
+     * Sets the value of solution.
      *
-     * @param mixed $title the title
+     * @param mixed $solution the solution
      *
      * @return self
      */
-    public function setTitle($title)
+    public function setSolution($solution)
     {
-        $this->title = $title;
+        $this->solution = $solution;
 
         return $this;
     }
 
     /**
-     * Gets the value of description.
+     * Gets the value of clue.
      *
      * @return mixed
      */
-    public function getDescription()
+    public function getClue()
     {
-        return $this->description;
+        return $this->clue;
     }
 
     /**
-     * Sets the value of description.
+     * Sets the value of clue.
      *
-     * @param mixed $description the description
+     * @param mixed $clue the clue
      *
      * @return self
      */
-    public function setDescription($description)
+    public function setClue($clue)
     {
-        $this->description = $description;
+        $this->clue = $clue;
 
         return $this;
     }
 
     /**
-     * Gets the value of image.
+     * Gets the value of layoutRow.
      *
      * @return mixed
      */
-    public function getImage()
+    public function getLayoutRow()
     {
-        return $this->image;
+        return $this->layoutRow;
     }
 
     /**
-     * Sets the value of image.
+     * Sets the value of layoutRow.
      *
-     * @param mixed $image the image
+     * @param mixed $layoutRow the layoutRow
      *
      * @return self
      */
-    public function setImage($image)
+    public function setLayoutRow($layoutRow)
     {
-        $this->image = $image;
+        $this->layoutRow = $layoutRow;
+
+        return $this;
+    }
+
+    /**
+     * Gets the value of layoutColumn.
+     *
+     * @return mixed
+     */
+    public function getLayoutColumn()
+    {
+        return $this->layoutColumn;
+    }
+
+    /**
+     * Sets the value of layoutColumn.
+     *
+     * @param mixed $layoutColumn the layoutColumn
+     *
+     * @return self
+     */
+    public function setLayoutColumn($layoutColumn)
+    {
+        $this->layoutColumn = $layoutColumn;
+
+        return $this;
+    }
+
+    /**
+     * Gets the value of position.
+     *
+     * @return mixed
+     */
+    public function getPosition()
+    {
+        return $this->position;
+    }
+
+    /**
+     * Sets the value of position.
+     *
+     * @param mixed $position the position
+     *
+     * @return self
+     */
+    public function setPosition($position)
+    {
+        $this->position = $position;
+
+        return $this;
+    }
+
+    /**
+     * Gets the value of orientation.
+     *
+     * @return mixed
+     */
+    public function getOrientation()
+    {
+        return $this->orientation;
+    }
+
+    /**
+     * Sets the value of orientation.
+     *
+     * @param mixed $orientation the orientation
+     *
+     * @return self
+     */
+    public function setOrientation($orientation)
+    {
+        $this->orientation = $orientation;
 
         return $this;
     }
@@ -210,30 +292,6 @@ class MemoryCard implements InputFilterAwareInterface, \JsonSerializable
     public function setGame($game)
     {
         $this->game = $game;
-
-        return $this;
-    }
-
-    /**
-     * Gets the value of jsonData.
-     *
-     * @return mixed
-     */
-    public function getJsonData()
-    {
-        return $this->jsonData;
-    }
-
-    /**
-     * Sets the value of jsonData.
-     *
-     * @param mixed $jsonData the json data
-     *
-     * @return self
-     */
-    public function setJsonData($jsonData)
-    {
-        $this->jsonData = $jsonData;
 
         return $this;
     }
@@ -324,20 +382,12 @@ class MemoryCard implements InputFilterAwareInterface, \JsonSerializable
      */
     public function populate($data = array())
     {
-        if (isset($data['title']) && $data['title'] !== null) {
-            $this->title = $data['title'];
+        if (isset($data['solution']) && $data['solution'] !== null) {
+            $this->solution = $data['solution'];
         }
 
-        if (isset($data['description']) && $data['description'] !== null) {
-            $this->description = $data['description'];
-        }
-
-        if (isset($data['jsonData']) && $data['jsonData'] !== null) {
-            $this->jsonData = $data['jsonData'];
-        }
-
-        if (!empty($data['image'])) {
-            $this->image = $data['image'];
+        if (isset($data['clue']) && $data['clue'] !== null) {
+            $this->clue = $data['clue'];
         }
     }
 
@@ -350,7 +400,14 @@ class MemoryCard implements InputFilterAwareInterface, \JsonSerializable
     {
         if (!$this->inputFilter) {
             $inputFilter = new InputFilter();
-            $factory     = new InputFactory();
+            $factory = new InputFactory();
+
+            $inputFilter->add(
+                $factory->createInput([
+                    'name' => 'orientation',
+                    'required' => false,
+                ])
+            );
 
             $this->inputFilter = $inputFilter;
         }

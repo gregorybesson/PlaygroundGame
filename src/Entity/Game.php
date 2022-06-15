@@ -21,7 +21,7 @@ use Laminas\InputFilter\InputFilterInterface;
  * @ORM\DiscriminatorColumn(name="type", type="string")
  * @ORM\DiscriminatorMap({"quiz" = "Quiz", "lottery" = "Lottery", "instantwin" =
  * "InstantWin", "postvote" = "PostVote", "mission" = "Mission", "tradingcard" = "TradingCard",
- * "memory" = "Memory", "treasurehunt" = "TreasureHunt"})
+ * "memory" = "Memory", "treasurehunt" = "TreasureHunt", "crossword" = "Crossword"})
  * @ORM\Table(name="game")
  * @Gedmo\TranslationEntity(class="PlaygroundGame\Entity\GameTranslation")
  */
@@ -184,7 +184,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      * @ORM\Column(name="anonymous_allowed",type="boolean", nullable=true)
      */
     protected $anonymousAllowed = 0;
-    
+
     /**
      * This column can be filled in when anonymousAllowed = 1.
      * If you put a value, it has to be a field key from playerdata. This key will
@@ -1777,7 +1777,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
      *
      * @return array
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return $this->getArrayCopy();
     }
@@ -2276,7 +2276,7 @@ abstract class Game implements InputFilterAwareInterface, Translatable, \JsonSer
                     )
                 )
             )));
-            
+
             $inputFilter->add($factory->createInput(array(
                 'name' => 'anonymousIdentifier',
                 'required' => false,

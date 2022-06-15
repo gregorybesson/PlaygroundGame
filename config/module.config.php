@@ -45,6 +45,7 @@ return array(
                 array('controller' => PlaygroundGame\Controller\Frontend\Mission::class,        'roles' => array('guest', 'user')),
                 array('controller' => PlaygroundGame\Controller\Frontend\TradingCard::class,    'roles' => array('guest', 'user')),
                 array('controller' => PlaygroundGame\Controller\Frontend\Memory::class,         'roles' => array('guest', 'user')),
+                array('controller' => PlaygroundGame\Controller\Frontend\Crossword::class,      'roles' => array('guest', 'user')),
                 array('controller' => PlaygroundGame\Controller\Frontend\TreasureHunt::class,   'roles' => array('guest', 'user')),
                 array('controller' => PlaygroundGame\Controller\Frontend\Webhook::class,        'roles' => array('guest', 'user')),
 
@@ -57,6 +58,7 @@ return array(
                 array('controller' => PlaygroundGame\Controller\Admin\Mission::class,           'roles' => array('game-manager','admin')),
                 array('controller' => PlaygroundGame\Controller\Admin\TradingCard::class,       'roles' => array('game-manager','admin')),
                 array('controller' => PlaygroundGame\Controller\Admin\Memory::class,            'roles' => array('game-manager','admin')),
+                array('controller' => PlaygroundGame\Controller\Admin\Crossword::class,         'roles' => array('game-manager','admin')),
                 array('controller' => PlaygroundGame\Controller\Admin\TreasureHunt::class,      'roles' => array('game-manager','admin')),
                 array('controller' => PlaygroundGame\Controller\Admin\PrizeCategory::class,     'roles' => array('game-manager','admin')),
 
@@ -69,6 +71,7 @@ return array(
                 array('controller' => PlaygroundGame\Controller\Admin\Mission::class,           'action' => ['entry', 'download'], 'roles' => array('supervisor')),
                 array('controller' => PlaygroundGame\Controller\Admin\TradingCard::class,       'action' => ['entry', 'download'], 'roles' => array('supervisor')),
                 array('controller' => PlaygroundGame\Controller\Admin\Memory::class,            'action' => ['entry', 'download'], 'roles' => array('supervisor')),
+                array('controller' => PlaygroundGame\Controller\Admin\Crossword::class,         'action' => ['entry', 'download'], 'roles' => array('supervisor')),
                 array('controller' => PlaygroundGame\Controller\Admin\TreasureHunt::class,      'action' => ['entry', 'download'], 'roles' => array('supervisor')),
             ),
         ),
@@ -172,6 +175,7 @@ return array(
             PlaygroundGame\Controller\Frontend\Mission::class => PlaygroundGame\Service\Factory\FrontendMissionControllerFactory::class,
             PlaygroundGame\Controller\Frontend\TradingCard::class => PlaygroundGame\Service\Factory\FrontendTradingCardControllerFactory::class,
             PlaygroundGame\Controller\Frontend\Memory::class => PlaygroundGame\Service\Factory\FrontendMemoryControllerFactory::class,
+            PlaygroundGame\Controller\Frontend\Crossword::class => PlaygroundGame\Service\Factory\FrontendCrosswordControllerFactory::class,
             PlaygroundGame\Controller\Frontend\TreasureHunt::class => PlaygroundGame\Service\Factory\FrontendTreasureHuntControllerFactory::class,
             PlaygroundGame\Controller\Frontend\PrizeCategory::class => PlaygroundGame\Service\Factory\FrontendPrizeCategoryControllerFactory::class,
             PlaygroundGame\Controller\Frontend\Webhook::class => PlaygroundGame\Service\Factory\FrontendWebhookControllerFactory::class,
@@ -184,6 +188,7 @@ return array(
             PlaygroundGame\Controller\Admin\Mission::class => PlaygroundGame\Service\Factory\AdminMissionControllerFactory::class,
             PlaygroundGame\Controller\Admin\TradingCard::class => PlaygroundGame\Service\Factory\AdminTradingCardControllerFactory::class,
             PlaygroundGame\Controller\Admin\Memory::class => PlaygroundGame\Service\Factory\AdminMemoryControllerFactory::class,
+            PlaygroundGame\Controller\Admin\Crossword::class => PlaygroundGame\Service\Factory\AdminCrosswordControllerFactory::class,
             PlaygroundGame\Controller\Admin\TreasureHunt::class => PlaygroundGame\Service\Factory\AdminTreasureHuntControllerFactory::class,
             PlaygroundGame\Controller\Admin\PrizeCategory::class => PlaygroundGame\Service\Factory\AdminPrizeCategoryControllerFactory::class,
         ),
@@ -202,6 +207,7 @@ return array(
             'playgroundgame_mission_game_service'      => PlaygroundGame\Service\MissionGame::class,
             'playgroundgame_tradingcard_service'       => PlaygroundGame\Service\TradingCard::class,
             'playgroundgame_memory_service'            => PlaygroundGame\Service\Memory::class,
+            'playgroundgame_crossword_service'         => PlaygroundGame\Service\Crossword::class,
             'playgroundgame_treasurehunt_service'      => PlaygroundGame\Service\TreasureHunt::class,
             'playgroundgame_prize_service'             => PlaygroundGame\Service\Prize::class,
             'playgroundgame_prizecategory_service'     => PlaygroundGame\Service\PrizeCategory::class,
@@ -217,6 +223,7 @@ return array(
             PlaygroundGame\Service\MissionGame::class       => PlaygroundGame\Service\Factory\MissionGameFactory::class,
             PlaygroundGame\Service\TradingCard::class       => PlaygroundGame\Service\Factory\TradingCardFactory::class,
             PlaygroundGame\Service\Memory::class            => PlaygroundGame\Service\Factory\MemoryFactory::class,
+            PlaygroundGame\Service\Crossword::class         => PlaygroundGame\Service\Factory\CrosswordFactory::class,
             PlaygroundGame\Service\TreasureHunt::class      => PlaygroundGame\Service\Factory\TreasureHuntFactory::class,
             PlaygroundGame\Service\Prize::class             => PlaygroundGame\Service\Factory\PrizeFactory::class,
             PlaygroundGame\Service\PrizeCategory::class     => PlaygroundGame\Service\Factory\PrizeCategoryFactory::class,
@@ -1873,6 +1880,291 @@ return array(
                             )
                         )
                     ),
+                    'crossword' => array(
+                        'type' => 'Segment',
+                        'options' => array(
+                            'route' => 'crossword[/:id]',
+                            'defaults' => array(
+                                'controller' => PlaygroundGame\Controller\Frontend\Crossword::class,
+                                'action' => 'home'
+                            )
+                        ),
+                        'may_terminate' => true,
+                        'child_routes' => array(
+                            'index' => array(
+                                'type' => 'Laminas\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/index',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Crossword::class,
+                                        'action' => 'index'
+                                    )
+                                )
+                            ),
+                            'ajaxforgotpassword' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/ajax-mot-passe-oublie',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Crossword::class,
+                                        'action'     => 'ajaxforgot',
+                                    ),
+                                ),
+                            ),
+                            'resetpassword' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/reset-password/:userId/:token',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Crossword::class,
+                                        'action'     => 'userreset',
+                                    ),
+                                    'constraints' => array(
+                                        'userId'  => '[0-9]+',
+                                        'token' => '[A-F0-9]+',
+                                    ),
+                                ),
+                            ),
+                            'login' => array(
+                                'type' => 'Laminas\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/connexion',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Crossword::class,
+                                        'action' => 'login'
+                                    )
+                                )
+                            ),
+                            'user-register' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/inscription[/:socialnetwork]',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Crossword::class,
+                                        'action' => 'userregister'
+                                    )
+                                )
+                            ),
+                            'verification' => array(
+                                'type' => 'Laminas\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/verification',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Crossword::class,
+                                        'action'     => 'check-token',
+                                    ),
+                                ),
+                            ),
+                            'optin' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/optin[/:gameId]',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Crossword::class,
+                                        'action' => 'optin'
+                                    )
+                                )
+                            ),
+                            'terms-optin' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/terms-optin',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Crossword::class,
+                                        'action' => 'termsOptin'
+                                    )
+                                )
+                            ),
+                            'play' => array(
+                                'type' => 'Laminas\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/jouer',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Crossword::class,
+                                        'action' => 'play'
+                                    )
+                                )
+                            ),
+                            'result' => array(
+                                'type' => 'Laminas\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/resultat',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Crossword::class,
+                                        'action' => 'result'
+                                    )
+                                )
+                            ),
+                            'register' => array(
+                                'type' => 'Laminas\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/register',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Crossword::class,
+                                        'action' => 'register'
+                                    )
+                                )
+                            ),
+                            'fbshare' => array(
+                                'type' => 'Laminas\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/fbshare',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Crossword::class,
+                                        'action' => 'fbshare'
+                                    )
+                                )
+                            ),
+                            'fbrequest' => array(
+                                'type' => 'Laminas\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/fbrequest',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Crossword::class,
+                                        'action' => 'fbrequest'
+                                    )
+                                )
+                            ),
+                            'tweet' => array(
+                                'type' => 'Laminas\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/tweet',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Crossword::class,
+                                        'action' => 'tweet'
+                                    )
+                                )
+                            ),
+                            'google' => array(
+                                'type' => 'Laminas\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/google',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Crossword::class,
+                                        'action' => 'google'
+                                    )
+                                )
+                            ),
+                            'bounce' => array(
+                                'type' => 'Laminas\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/essayez-aussi',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Crossword::class,
+                                        'action' => 'bounce'
+                                    )
+                                )
+                            ),
+                            'terms' => array(
+                                'type' => 'Laminas\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/reglement',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Crossword::class,
+                                        'action' => 'terms'
+                                    )
+                                )
+                            ),
+                            'conditions' => array(
+                                'type' => 'Laminas\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/mentions-legales',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Crossword::class,
+                                        'action' => 'conditions'
+                                    )
+                                )
+                            ),
+                            'fangate' => array(
+                                'type' => 'Laminas\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/fangate',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Crossword::class,
+                                        'action' => 'fangate'
+                                    )
+                                )
+                            ),
+                            'prizes' => array(
+                                'type' => 'Laminas\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/lots',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Crossword::class,
+                                        'action' => 'prizes'
+                                    )
+                                ),
+                                'may_terminate' => true,
+                                'child_routes' => array(
+                                    'prize' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/:prize',
+                                            'defaults' => array(
+                                                'controller' => PlaygroundGame\Controller\Frontend\Crossword::class,
+                                                'action' => 'prize'
+                                            )
+                                        )
+                                    )
+                                )
+                            ),
+                            'share' => array(
+                                'type' => 'Laminas\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/partager',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Crossword::class,
+                                        'action' => 'share'
+                                    )
+                                )
+                            ),
+                            'create-team' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/creation-team',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Crossword::class,
+                                        'action' => 'createTeam',
+                                    )
+                                )
+                            ),
+                            'invite-to-team' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/rejoins-ma-team',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Crossword::class,
+                                        'action' => 'inviteToTeam',
+                                    )
+                                )
+                            ),
+                            'leaderboard' => array(
+                                'type' => 'segment',
+                                'options' => array(
+                                    'route' => '/leaderboard[/:filter][/:p]',
+                                    'constraints' => array(
+                                        'filter' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                    ),
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Crossword::class,
+                                        'action'     => 'leaderboard'
+                                    ),
+                                ),
+                            ),
+                            'other-routes' => array(
+                                'type' => 'Laminas\Router\Http\Regex',
+                                'priority' => -1000,
+                                'options' => array(
+                                    'regex' => '.*',
+                                    'spec' => '%url%',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Crossword::class,
+                                        'action' => 'not-found'
+                                    )
+                                )
+                            )
+                        )
+                    ),
                     'treasurehunt' => array(
                         'type' => 'Segment',
                         'options' => array(
@@ -3325,6 +3617,40 @@ return array(
                             ),
                         )
                     ),
+                    'crossword' => array(
+                        'type' => 'Laminas\Router\Http\Literal',
+                        'priority' => 1000,
+                        'options' => array(
+                            'route' => '/crossword',
+                            'defaults' => array(
+                                'controller' => PlaygroundGame\Controller\Admin\Crossword::class,
+                                'action' => 'index'
+                            )
+                        ),
+                        'child_routes' => array(
+                            'entry' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/entry/:gameId[/:p]',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Admin\Crossword::class,
+                                        'action' => 'entry',
+                                        'gameId' => 0
+                                    )
+                                )
+                            ),
+                            'download' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/download/:gameId',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Admin\Crossword::class,
+                                        'action' => 'download'
+                                    )
+                                )
+                            ),
+                        )
+                    ),
                     'treasurehunt' => array(
                         'type' => 'Laminas\Router\Http\Literal',
                         'priority' => 1000,
@@ -3897,7 +4223,76 @@ return array(
                                     )
                                 )
                             ),
-
+                            'create-crossword' => array(
+                                'type' => 'Laminas\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/create-crossword',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Admin\Crossword::class,
+                                        'action' => 'createCrossword'
+                                    )
+                                )
+                            ),
+                            'edit-crossword' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/edit-crossword/:gameId',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Admin\Crossword::class,
+                                        'action' => 'editCrossword',
+                                        'gameId' => 0
+                                    )
+                                )
+                            ),
+                            'crossword-word-list' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/crossword-word-list/:gameId[/:filter][/:p]',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Admin\Crossword::class,
+                                        'action' => 'listWord',
+                                        'gameId' => 0,
+                                        'filter' => 'DESC'
+                                    ),
+                                    'constraints' => array(
+                                        'filter' => '[a-zA-Z][a-zA-Z0-9_-]*'
+                                    )
+                                )
+                            ),
+                            'crossword-word-add' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/crossword-word-add/:gameId',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Admin\Crossword::class,
+                                        'action' => 'addWord',
+                                        'gameId' => 0
+                                    )
+                                )
+                            ),
+                            'crossword-word-edit' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/crossword-word-edit/:gameId/:wordId',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Admin\Crossword::class,
+                                        'action' => 'editWord',
+                                        'gameId' => 0,
+                                        'wordId' => 0
+                                    )
+                                )
+                            ),
+                            'crossword-word-remove' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/crossword-word-remove/:wordId',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Admin\Crossword::class,
+                                        'action' => 'removeWord',
+                                        'wordId' => 0
+                                    )
+                                )
+                            ),
                             'entry' => array(
                                 'type' => 'Segment',
                                 'options' => array(
@@ -4333,14 +4728,21 @@ return array(
                         'use_route_match' => true,
                     ),
                     'create-memory' => array(
-                        'label' => 'Add new memory game',
+                        'label' => 'Add a new memory game',
                         'route' => 'admin/playgroundgame/create-memory',
                         'resource' => 'game',
                         'privilege' => 'add',
                         'use_route_match' => true,
                     ),
+                    'create-crossword' => array(
+                        'label' => 'Add a new crossword game',
+                        'route' => 'admin/playgroundgame/create-crossword',
+                        'resource' => 'game',
+                        'privilege' => 'add',
+                        'use_route_match' => true,
+                    ),
                     'create-treasurehunt' => array(
-                        'label' => 'Add new treasure hunt game',
+                        'label' => 'Add a new treasure hunt game',
                         'route' => 'admin/playgroundgame/create-treasurehunt',
                         'resource' => 'game',
                         'privilege' => 'add',

@@ -243,7 +243,7 @@ class PostVoteShare implements InputFilterAwareInterface, \JsonSerializable
      *
      * @return array
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return $this->getArrayCopy();
     }
