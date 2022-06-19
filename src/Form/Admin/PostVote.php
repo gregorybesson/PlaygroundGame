@@ -134,7 +134,7 @@ class PostVote extends Game
         'class' => 'switch-input',
       ],
       'options' => [
-        'label' => $translator->translate('Send a mail to the player when the post is validated', 'playgroundgame'),
+        'label' => $translator->translate('Send a mail to the player when the post is rejected', 'playgroundgame'),
       ],
     ]);
 
