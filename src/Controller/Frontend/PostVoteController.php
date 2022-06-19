@@ -136,7 +136,7 @@ class PostVoteController extends GameController
                 $viewModel = $this->buildView($this->game);
                 $viewModel->setVariables(array(
                     'success' => false,
-                    'message' => implode(',', $messages['title']),
+                    'message' => (is_array($messages['title'])) ? implode(',', $messages['title']) : $messages['title'],
                 ));
             }
         }
