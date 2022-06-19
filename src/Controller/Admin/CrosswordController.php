@@ -95,7 +95,7 @@ class CrosswordController extends GameController
             )
         );
         $paginator = new Paginator($adapter);
-        $paginator->setItemCountPerPage(16);
+        $paginator->setItemCountPerPage(100);
         $paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
 
         return new ViewModel(

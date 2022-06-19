@@ -68,7 +68,40 @@ class CrosswordController extends GameController
             );
         }
 
+        $rows = $this->game->getLayoutRows();
+        $columns = $this->game->getLayoutColumns();
+        $acrossClues = [];
+        $downClues = [];
+        $words = $this->getGameService()->getCrosswordWordMapper()->queryByGame($this->game)->getResult();
+
+        foreach ($words as $word) {
+            if ($word->getOrientation() == "across"){
+                $acrossClues[] = [
+                    "x" => $word->getLayoutColumn(),
+                    "y" => $word->getLayoutRow(),
+                    "clue" => $word->getPosition() . '. ' . trim($word->getClue()) . ' (' . strlen($word->getSolution()) . ')',
+                ];
+            } else if ($word->getOrientation() == "down"){
+                $downClues[] = [
+                    "x" => $word->getLayoutColumn(),
+                    "y" => $word->getLayoutRow(),
+                    "clue" => $word->getPosition() . '. ' . trim($word->getClue()) . ' (' .strlen($word->getSolution()) . ')',
+                ];
+            }
+        }
+        $crosswordDefinition = [
+            "width" => $columns,
+            "height" => $rows,
+            "acrossClues" => $acrossClues,
+            "downClues" => $downClues,
+        ];
+
         $viewModel = $this->buildView($this->game);
+        $viewModel->setVariables(array(
+            'crosswordDefinition' => json_encode($crosswordDefinition),
+            'acrossClues' => $acrossClues,
+            'downClues' => $downClues,
+        ));
 
         return $viewModel;
     }
