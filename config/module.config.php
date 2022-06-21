@@ -4624,13 +4624,6 @@ return array(
                         'privilege' => 'list',
                         'use_route_match' => true,
                         'pages' => [
-                            'create-instantwin' => array(
-                                'label' => 'Add new instant win',
-                                'route' => 'admin/playgroundgame/create-instantwin',
-                                'resource' => 'game',
-                                'privilege' => 'add',
-                                'use_route_match' => true,
-                            ),
                             'edit-instantwin' => array(
                                 'label' => 'Editer un instant gagnant',
                                 'route' => 'admin/playgroundgame/edit-instantwin',
@@ -4669,118 +4662,186 @@ return array(
                                             )
                                         )
                                     ),
+                                    'entry-instantwin' => array(
+                                        'label' => 'Participants',
+                                        'route' => 'admin/instantwin/entry',
+                                        'privilege' => 'list',
+                                        'use_route_match' => true,
+                                    ),
                                 ]
-                            ),
-                            'entry-instantwin' => array(
-                                'label' => 'Participants',
-                                'route' => 'admin/instantwin/entry',
-                                'privilege' => 'list',
-                                'use_route_match' => true,
-                            ),
-                            'create-lottery' => array(
-                                'label' => 'Add new lottery',
-                                'route' => 'admin/playgroundgame/create-lottery',
-                                'resource' => 'game',
-                                'privilege' => 'add',
-                                'use_route_match' => true,
                             ),
                             'edit-lottery' => array(
                                 'label' => 'Editer un tirage au sort',
                                 'route' => 'admin/playgroundgame/edit-lottery',
                                 'privilege' => 'edit',
                                 'use_route_match' => true,
-                            ),
-                            'entry-lottery' => array(
-                                'label' => 'Participants',
-                                'route' => 'admin/lottery/entry',
-                                'privilege' => 'list',
-                                'use_route_match' => true,
-                            ),
-                            'create-quiz' => array(
-                                'label' => 'Add new quiz',
-                                'route' => 'admin/playgroundgame/create-quiz',
-                                'resource' => 'game',
-                                'privilege' => 'add',
-                                'use_route_match' => true,
+                                'pages' => [
+                                    'entry-lottery' => array(
+                                        'label' => 'Participants',
+                                        'route' => 'admin/lottery/entry',
+                                        'privilege' => 'list',
+                                        'use_route_match' => true,
+                                    ),
+                                ]
                             ),
                             'edit-quiz' => array(
                                 'label' => 'Editer un quiz',
                                 'route' => 'admin/playgroundgame/edit-quiz',
                                 'privilege' => 'edit',
                                 'use_route_match' => true,
-                            ),
-                            'entry-quiz' => array(
-                                'label' => 'Participants',
-                                'route' => 'admin/quiz/entry',
-                                'privilege' => 'list',
-                                'use_route_match' => true,
-                            ),
-                            'create-postvote' => array(
-                                'label' => 'Add new post & vote',
-                                'route' => 'admin/playgroundgame/create-postvote',
-                                'resource' => 'game',
-                                'privilege' => 'add',
-                                'use_route_match' => true,
+                                'pages' => [
+                                    'quiz-question-list' => array(
+                                        'label' => 'Liste des questions',
+                                        'route' => 'admin/playgroundgame/quiz-question-list',
+                                        'privilege' => 'list',
+                                        'use_route_match' => true,
+                                        'pages' => array(
+                                            'quiz-question-add' => array(
+                                                'label' => 'Ajouter des questions',
+                                                'route' => 'admin/playgroundgame/quiz-question-add',
+                                                'privilege' => 'add',
+                                                'use_route_match' => true,
+                                            ),
+                                            'quiz-question-edit' => array(
+                                                'label' => 'Editer une question',
+                                                'route' => 'admin/playgroundgame/quiz-question-edit',
+                                                'privilege' => 'edit',
+                                                'use_route_match' => true,
+                                            )
+                                        )
+                                    ),
+                                    'entry-quiz' => array(
+                                        'label' => 'Participants',
+                                        'route' => 'admin/quiz/entry',
+                                        'privilege' => 'list',
+                                        'use_route_match' => true,
+                                    ),
+                                ]
                             ),
                             'edit-postvote' => array(
                                 'label' => 'Editer un Post & Vote',
                                 'route' => 'admin/playgroundgame/edit-postvote',
                                 'privilege' => 'edit',
                                 'use_route_match' => true,
-                            ),
-                            'entry-postvote' => array(
-                                'label' => 'Participants',
-                                'route' => 'admin/postvote/entry',
-                                'privilege' => 'list',
-                                'use_route_match' => true,
-                            ),
-                            'quiz-question-list' => array(
-                                'label' => 'Liste des questions',
-                                'route' => 'admin/playgroundgame/quiz-question-list',
-                                'privilege' => 'list',
-                                'use_route_match' => true,
-                                'pages' => array(
-                                    'quiz-question-add' => array(
-                                        'label' => 'Ajouter des questions',
-                                        'route' => 'admin/playgroundgame/quiz-question-add',
-                                        'privilege' => 'add',
+                                'pages' => [
+                                    'postvote-form' => array(
+                                        'label' => 'Formulaire du Post & vote',
+                                        'route' => 'admin/playgroundgame/postvote-form',
+                                        'privilege' => 'list',
                                         'use_route_match' => true,
                                     ),
-                                    'quiz-question-edit' => array(
-                                        'label' => 'Editer une question',
-                                        'route' => 'admin/playgroundgame/quiz-question-edit',
-                                        'privilege' => 'edit',
+                                    'entry-postvote' => array(
+                                        'label' => 'Participants',
+                                        'route' => 'admin/postvote/entry',
+                                        'privilege' => 'list',
                                         'use_route_match' => true,
-                                    )
-                                )
+                                    ),
+                                ]
                             ),
-                            'create-tradingcard' => array(
-                                'label' => 'Add new trading card',
-                                'route' => 'admin/playgroundgame/create-tradingcard',
+                            'edit-tradingcard' => array(
+                                'label' => 'Add a new tradingcard game',
+                                'route' => 'admin/playgroundgame/edit-tradingcard',
                                 'resource' => 'game',
                                 'privilege' => 'add',
                                 'use_route_match' => true,
+                                'pages' => [
+                                    'tradingcard-model-list' => [
+                                        'label' => 'Liste des modèles',
+                                        'route' => 'admin/playgroundgame/tradingcard-model-list',
+                                        'privilege' => 'list',
+                                        'use_route_match' => true,
+                                        'pages' => [
+                                            'tradingcard-model-add' => [
+                                                'label' => 'Ajouter un modèle',
+                                                'route' => 'admin/playgroundgame/tradingcard-model-add',
+                                                'privilege' => 'add',
+                                                'use_route_match' => true,
+                                            ],
+                                            'tradingcard-model-edit' => [
+                                                'label' => 'Editer un modèle',
+                                                'route' => 'admin/playgroundgame/tradingcard-model-edit',
+                                                'privilege' => 'edit',
+                                                'use_route_match' => true,
+                                            ]
+                                        ]
+                                    ],
+                                    'entry-tradingcard' => array(
+                                        'label' => 'Participants',
+                                        'route' => 'admin/tradingcard/entry',
+                                        'privilege' => 'list',
+                                        'use_route_match' => true,
+                                    ),
+                                ]
                             ),
-                            'create-memory' => array(
+                            'edit-memory' => array(
                                 'label' => 'Add a new memory game',
-                                'route' => 'admin/playgroundgame/create-memory',
+                                'route' => 'admin/playgroundgame/edit-memory',
                                 'resource' => 'game',
                                 'privilege' => 'add',
                                 'use_route_match' => true,
+                                'pages' => [
+                                    'memory-card-list' => [
+                                        'label' => 'Liste des cartes',
+                                        'route' => 'admin/playgroundgame/memory-card-list',
+                                        'privilege' => 'list',
+                                        'use_route_match' => true,
+                                        'pages' => [
+                                            'memory-card-add' => [
+                                                'label' => 'Ajouter une carte',
+                                                'route' => 'admin/playgroundgame/memory-card-add',
+                                                'privilege' => 'add',
+                                                'use_route_match' => true,
+                                            ],
+                                            'memory-card-edit' => [
+                                                'label' => 'Editer une carte',
+                                                'route' => 'admin/playgroundgame/memory-card-edit',
+                                                'privilege' => 'edit',
+                                                'use_route_match' => true,
+                                            ]
+                                        ]
+                                    ],
+                                    'entry-memory' => array(
+                                        'label' => 'Participants',
+                                        'route' => 'admin/memory/entry',
+                                        'privilege' => 'list',
+                                        'use_route_match' => true,
+                                    ),
+                                ]
                             ),
-                            'create-crossword' => array(
-                                'label' => 'Add a new crossword game',
-                                'route' => 'admin/playgroundgame/create-crossword',
+                            'edit-crossword' => array(
+                                'label' => 'Edit the crossword',
+                                'route' => 'admin/playgroundgame/edit-crossword',
                                 'resource' => 'game',
-                                'privilege' => 'add',
+                                'privilege' => 'edit',
                                 'use_route_match' => true,
-                            ),
-                            'create-treasurehunt' => array(
-                                'label' => 'Add a new treasure hunt game',
-                                'route' => 'admin/playgroundgame/create-treasurehunt',
-                                'resource' => 'game',
-                                'privilege' => 'add',
-                                'use_route_match' => true,
+                                'pages' => [
+                                    'crossword-word-list' => [
+                                        'label' => 'Liste des mots',
+                                        'route' => 'admin/playgroundgame/crossword-word-list',
+                                        'privilege' => 'list',
+                                        'use_route_match' => true,
+                                        'pages' => [
+                                            'crossword-word-add' => [
+                                                'label' => 'Ajouter un mot',
+                                                'route' => 'admin/playgroundgame/crossword-word-add',
+                                                'privilege' => 'add',
+                                                'use_route_match' => true,
+                                            ],
+                                            'crossword-word-edit' => [
+                                                'label' => 'Editer un mot',
+                                                'route' => 'admin/playgroundgame/crossword-word-edit',
+                                                'privilege' => 'edit',
+                                                'use_route_match' => true,
+                                            ]
+                                        ]
+                                    ],
+                                    'entry-crossword' => array(
+                                        'label' => 'Participants',
+                                        'route' => 'admin/crossword/entry',
+                                        'privilege' => 'list',
+                                        'use_route_match' => true,
+                                    ),
+                                ]
                             ),
                             'edit-treasurehunt' => array(
                                 'label' => 'Add a new treasure hunt game',
@@ -4808,15 +4869,14 @@ return array(
                                                 'use_route_match' => true,
                                             ]
                                         ]
-                                    ]
+                                    ],
+                                    'entry-treasurehunt' => array(
+                                        'label' => 'Participants',
+                                        'route' => 'admin/treasurehunt/entry',
+                                        'privilege' => 'list',
+                                        'use_route_match' => true,
+                                    ),
                                 ]
-                            ),
-                            'create-mission' => array(
-                                'label' => 'Add new mission',
-                                'route' => 'admin/playgroundgame/create-mission',
-                                'resource' => 'game',
-                                'privilege' => 'add',
-                                'use_route_match' => true,
                             ),
                             'edit-mission' => array(
                                 'label' => 'Edit the mission',
@@ -4824,6 +4884,15 @@ return array(
                                 'resource' => 'game',
                                 'privilege' => 'add',
                                 'use_route_match' => true,
+                                'pages' => [
+
+                                    'entry-mission' => array(
+                                        'label' => 'Participants',
+                                        'route' => 'admin/mission/entry',
+                                        'privilege' => 'list',
+                                        'use_route_match' => true,
+                                    ),
+                                ]
                             ),
                             'list-prizecategory' => array(
                                 'label' => 'Manage categories gain',
@@ -4839,13 +4908,70 @@ return array(
                             //     'privilege' => 'moderation',
                             //     'use_route_match' => true,
                             // ),
-                            'postvote-form' => array(
-                                'label' => 'Options du Post & vote',
-                                'route' => 'admin/playgroundgame/postvote-form',
-                                'privilege' => 'list',
-                                'use_route_match' => true,
-                            ),
                         ]
+                    ),
+                    'create-lottery' => array(
+                        'label' => 'Add new lottery',
+                        'route' => 'admin/playgroundgame/create-lottery',
+                        'resource' => 'game',
+                        'privilege' => 'add',
+                        'use_route_match' => true,
+                    ),
+                    'create-instantwin' => array(
+                        'label' => 'Add new instant win',
+                        'route' => 'admin/playgroundgame/create-instantwin',
+                        'resource' => 'game',
+                        'privilege' => 'add',
+                        'use_route_match' => true,
+                    ),
+                    'create-quiz' => array(
+                        'label' => 'Add new quiz',
+                        'route' => 'admin/playgroundgame/create-quiz',
+                        'resource' => 'game',
+                        'privilege' => 'add',
+                        'use_route_match' => true,
+                    ),
+                    'create-postvote' => array(
+                        'label' => 'Add new post & vote',
+                        'route' => 'admin/playgroundgame/create-postvote',
+                        'resource' => 'game',
+                        'privilege' => 'add',
+                        'use_route_match' => true,
+                    ),
+                    'create-tradingcard' => array(
+                        'label' => 'Add new trading card',
+                        'route' => 'admin/playgroundgame/create-tradingcard',
+                        'resource' => 'game',
+                        'privilege' => 'add',
+                        'use_route_match' => true,
+                    ),
+                    'create-treasurehunt' => array(
+                        'label' => 'Add a new treasure hunt game',
+                        'route' => 'admin/playgroundgame/create-treasurehunt',
+                        'resource' => 'game',
+                        'privilege' => 'add',
+                        'use_route_match' => true,
+                    ),
+                    'create-memory' => array(
+                        'label' => 'Add a new memory game',
+                        'route' => 'admin/playgroundgame/create-memory',
+                        'resource' => 'game',
+                        'privilege' => 'add',
+                        'use_route_match' => true,
+                    ),
+                    'create-crossword' => array(
+                        'label' => 'Add a new crossword game',
+                        'route' => 'admin/playgroundgame/create-crossword',
+                        'resource' => 'game',
+                        'privilege' => 'add',
+                        'use_route_match' => true,
+                    ),
+                    'create-mission' => array(
+                        'label' => 'Add new mission',
+                        'route' => 'admin/playgroundgame/create-mission',
+                        'resource' => 'game',
+                        'privilege' => 'add',
+                        'use_route_match' => true,
                     ),
                 )
             )

@@ -70,6 +70,11 @@ class MemoryController extends GameController
     {
         $this->checkGame();
 
+        $navigation = $this->getServiceLocator()->get('ViewHelperManager')->get('navigation');
+        $page = $navigation('admin_navigation')->findOneBy('route', 'admin/playgroundgame/edit-memory');
+        $page->setParams(['gameId' => $this->game->getId()]);
+        $page->setLabel($this->game->getTitle());
+
         return $this->editGame(
             'playground-game/memory/memory',
             'playgroundgame_memory_form'
@@ -79,6 +84,11 @@ class MemoryController extends GameController
     public function listCardAction()
     {
         $this->checkGame();
+
+        $navigation = $this->getServiceLocator()->get('ViewHelperManager')->get('navigation');
+        $page = $navigation('admin_navigation')->findOneBy('route', 'admin/playgroundgame/edit-memory');
+        $page->setParams(['gameId' => $this->game->getId()]);
+        $page->setLabel($this->game->getTitle());
 
         $adapter = new DoctrineAdapter(
             new LargeTablePaginator(
@@ -101,6 +111,11 @@ class MemoryController extends GameController
     public function addCardAction()
     {
         $this->checkGame();
+
+        $navigation = $this->getServiceLocator()->get('ViewHelperManager')->get('navigation');
+        $page = $navigation('admin_navigation')->findOneBy('route', 'admin/playgroundgame/edit-memory');
+        $page->setParams(['gameId' => $this->game->getId()]);
+        $page->setLabel($this->game->getTitle());
 
         $viewModel = new ViewModel();
         $viewModel->setTemplate('playground-game/memory/card');
@@ -148,6 +163,11 @@ class MemoryController extends GameController
     public function editCardAction()
     {
         $this->checkGame();
+
+        $navigation = $this->getServiceLocator()->get('ViewHelperManager')->get('navigation');
+        $page = $navigation('admin_navigation')->findOneBy('route', 'admin/playgroundgame/edit-memory');
+        $page->setParams(['gameId' => $this->game->getId()]);
+        $page->setLabel($this->game->getTitle());
 
         $viewModel = new ViewModel();
         $viewModel->setTemplate('playground-game/memory/card');

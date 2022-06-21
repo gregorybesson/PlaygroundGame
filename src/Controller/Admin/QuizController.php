@@ -29,6 +29,11 @@ class QuizController extends GameController
         $quiz = $service->getGameMapper()->findById($quizId);
         $questions = $service->getQuizQuestionMapper()->findByGameId($quizId);
 
+        $navigation = $this->getServiceLocator()->get('ViewHelperManager')->get('navigation');
+        $page = $navigation('admin_navigation')->findOneBy('route', 'admin/playgroundgame/edit-quiz');
+        $page->setParams(['gameId' => $quiz->getId()]);
+        $page->setLabel($quiz->getTitle());
+
         if (is_array($questions)) {
             $paginator = new \Laminas\Paginator\Paginator(new \Laminas\Paginator\Adapter\ArrayAdapter($questions));
         } else {
@@ -55,6 +60,12 @@ class QuizController extends GameController
         if (!$quizId) {
             return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/list'));
         }
+
+        $game = $service->getGameMapper()->findById($quizId);
+        $navigation = $this->getServiceLocator()->get('ViewHelperManager')->get('navigation');
+        $page = $navigation('admin_navigation')->findOneBy('route', 'admin/playgroundgame/edit-quiz');
+        $page->setParams(['gameId' => $game->getId()]);
+        $page->setLabel($game->getTitle());
 
         $form = $this->getServiceLocator()->get('playgroundgame_quizquestion_form');
         $form->get('submit')->setAttribute('label', 'Ajouter');
@@ -102,6 +113,11 @@ class QuizController extends GameController
         }
         $question   = $service->getQuizQuestionMapper()->findById($questionId);
         $quizId     = $question->getQuiz()->getId();
+
+        $navigation = $this->getServiceLocator()->get('ViewHelperManager')->get('navigation');
+        $page = $navigation('admin_navigation')->findOneBy('route', 'admin/playgroundgame/edit-quiz');
+        $page->setParams(['gameId' => $question->getQuiz()->getId()]);
+        $page->setLabel($question->getQuiz()->getTitle());
 
         $form = $this->getServiceLocator()->get('playgroundgame_quizquestion_form');
         $form->get('submit')->setAttribute('label', 'Mettre à jour');
@@ -209,6 +225,11 @@ class QuizController extends GameController
     public function editQuizAction()
     {
         $this->checkGame();
+
+        $navigation = $this->getServiceLocator()->get('ViewHelperManager')->get('navigation');
+        $page = $navigation('admin_navigation')->findOneBy('route', 'admin/playgroundgame/edit-quiz');
+        $page->setParams(['gameId' => $this->game->getId()]);
+        $page->setLabel($this->game->getTitle());
 
         return $this->editGame(
             'playground-game/quiz/quiz',

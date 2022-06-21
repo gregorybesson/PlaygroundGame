@@ -67,6 +67,11 @@ class TradingCardController extends GameController
     {
         $this->checkGame();
 
+        $navigation = $this->getServiceLocator()->get('ViewHelperManager')->get('navigation');
+        $page = $navigation('admin_navigation')->findOneBy('route', 'admin/playgroundgame/edit-tradingcard');
+        $page->setParams(['gameId' => $this->game->getId()]);
+        $page->setLabel($this->game->getTitle());
+
         return $this->editGame(
             'playground-game/trading-card/tradingcard',
             'playgroundgame_tradingcard_form'
@@ -76,6 +81,11 @@ class TradingCardController extends GameController
     public function listModelAction()
     {
         $this->checkGame();
+
+        $navigation = $this->getServiceLocator()->get('ViewHelperManager')->get('navigation');
+        $page = $navigation('admin_navigation')->findOneBy('route', 'admin/playgroundgame/edit-tradingcard');
+        $page->setParams(['gameId' => $this->game->getId()]);
+        $page->setLabel($this->game->getTitle());
 
         $adapter = new DoctrineAdapter(
             new LargeTablePaginator(
@@ -98,6 +108,11 @@ class TradingCardController extends GameController
     public function addModelAction()
     {
         $this->checkGame();
+
+        $navigation = $this->getServiceLocator()->get('ViewHelperManager')->get('navigation');
+        $page = $navigation('admin_navigation')->findOneBy('route', 'admin/playgroundgame/edit-tradingcard');
+        $page->setParams(['gameId' => $this->game->getId()]);
+        $page->setLabel($this->game->getTitle());
 
         $viewModel = new ViewModel();
         $viewModel->setTemplate('playground-game/trading-card/model');
@@ -149,6 +164,11 @@ class TradingCardController extends GameController
     public function editModelAction()
     {
         $this->checkGame();
+
+        $navigation = $this->getServiceLocator()->get('ViewHelperManager')->get('navigation');
+        $page = $navigation('admin_navigation')->findOneBy('route', 'admin/playgroundgame/edit-tradingcard');
+        $page->setParams(['gameId' => $this->game->getId()]);
+        $page->setLabel($this->game->getTitle());
 
         $viewModel = new ViewModel();
         $viewModel->setTemplate('playground-game/trading-card/model');

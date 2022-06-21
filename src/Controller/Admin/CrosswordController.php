@@ -70,6 +70,11 @@ class CrosswordController extends GameController
     {
         $this->checkGame();
 
+        $navigation = $this->getServiceLocator()->get('ViewHelperManager')->get('navigation');
+        $page = $navigation('admin_navigation')->findOneBy('route', 'admin/playgroundgame/edit-crossword');
+        $page->setParams(['gameId' => $this->game->getId()]);
+        $page->setLabel($this->game->getTitle());
+
         return $this->editGame(
             'playground-game/crossword/crossword',
             'playgroundgame_crossword_form'
@@ -79,6 +84,11 @@ class CrosswordController extends GameController
     public function listWordAction()
     {
         $this->checkGame();
+
+        $navigation = $this->getServiceLocator()->get('ViewHelperManager')->get('navigation');
+        $page = $navigation('admin_navigation')->findOneBy('route', 'admin/playgroundgame/edit-crossword');
+        $page->setParams(['gameId' => $this->game->getId()]);
+        $page->setLabel($this->game->getTitle());
 
         $request = $this->getRequest();
         if ($request->isPost()) {
@@ -110,6 +120,11 @@ class CrosswordController extends GameController
     public function addWordAction()
     {
         $this->checkGame();
+
+        $navigation = $this->getServiceLocator()->get('ViewHelperManager')->get('navigation');
+        $page = $navigation('admin_navigation')->findOneBy('route', 'admin/playgroundgame/edit-crossword');
+        $page->setParams(['gameId' => $this->game->getId()]);
+        $page->setLabel($this->game->getTitle());
 
         $viewModel = new ViewModel();
         $viewModel->setTemplate('playground-game/crossword/word');
@@ -157,6 +172,11 @@ class CrosswordController extends GameController
     public function editWordAction()
     {
         $this->checkGame();
+
+        $navigation = $this->getServiceLocator()->get('ViewHelperManager')->get('navigation');
+        $page = $navigation('admin_navigation')->findOneBy('route', 'admin/playgroundgame/edit-crossword');
+        $page->setParams(['gameId' => $this->game->getId()]);
+        $page->setLabel($this->game->getTitle());
 
         $viewModel = new ViewModel();
         $viewModel->setTemplate('playground-game/crossword/word');
