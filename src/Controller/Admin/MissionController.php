@@ -72,6 +72,10 @@ class MissionController extends GameController
         }
 
         $game = $service->getGameMapper()->findById($gameId);
+        $navigation = $this->getServiceLocator()->get('ViewHelperManager')->get('navigation');
+        $page = $navigation('admin_navigation')->findOneBy('route', 'admin/playgroundgame/edit-mission');
+        $page->setParams(['gameId' => $game->getId()]);
+        $page->setLabel($game->getTitle());
 
         $viewModel = new ViewModel();
         $viewModel->setTemplate('playground-game/mission/mission');
@@ -113,7 +117,7 @@ class MissionController extends GameController
             if (empty($data['prizes'])) {
                 $data['prizes'] = array();
             }
-            
+
             $result = $service->createOrUpdate($data, $game, 'playgroundgame_mission_form');
 
             if ($result) {
