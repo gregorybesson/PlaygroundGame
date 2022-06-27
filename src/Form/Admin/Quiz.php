@@ -22,17 +22,25 @@ class Quiz extends Game
         parent::__construct($name, $sm, $translator);
 
         $this->add(array(
-            'type' => 'Laminas\Form\Element\Select',
+            'type' => 'Laminas\Form\Element\Checkbox',
             'name' => 'drawAuto',
             'attributes' =>  array(
                 'id' => 'drawAuto',
-                'options' => array(
-                    '0' => $translator->translate('No', 'playgroundgame'),
-                    '1' => $translator->translate('Yes', 'playgroundgame'),
-                ),
+                'class' => 'switch-input',
             ),
             'options' => array(
                 'label' => $translator->translate('Automatic drawing out', 'playgroundgame'),
+            ),
+        ));
+
+        $this->add(array(
+            'type' => 'Laminas\Form\Element\Checkbox',
+            'attributes' => array(
+                'class' => 'switch-input',
+            ),
+            'name' => 'useTimeSpent',
+            'options' => array(
+                'label' => $translator->translate('Use the time spent to select the winner', 'playgroundgame'),
             ),
         ));
 

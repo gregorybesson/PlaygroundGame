@@ -61,7 +61,13 @@ class Entry implements \JsonSerializable
      * @ORM\Column(type="integer", nullable=true)
      */
     protected $points;
-    
+
+    /**
+     * Time spent during the entry in seconds
+     * @ORM\Column(name="time_spent", type="integer", nullable=true)
+     */
+    protected $timeSpent;
+
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
@@ -71,12 +77,12 @@ class Entry implements \JsonSerializable
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $geoloc;
-    
+
     /**
      * @ORM\Column(name="anonymous_id", type="string", length=255, nullable=true)
      */
     protected $anonymousId;
-    
+
     /**
      * This column hosts an id chosen by the admin in case of a game with "anonymous" participation :
      * This is a value chosen from the playerData (generally "email").
@@ -84,7 +90,7 @@ class Entry implements \JsonSerializable
      * @ORM\Column(name="anonymous_identifier", type="string", length=255, nullable=true)
      */
     protected $anonymousIdentifier;
-    
+
     /**
      * @ORM\Column(name="player_data", type="text", nullable=true)
      */
@@ -94,19 +100,19 @@ class Entry implements \JsonSerializable
      * @ORM\Column(name="social_shares", type="text", nullable=true)
      */
     protected $socialShares;
-    
+
     /**
      * Is this entry a winning one ?
      * @ORM\Column(type="boolean", nullable=true)
      */
     protected $winner = 0;
-    
+
     /**
      * Is there a termsOptin on this entry ?
      * @ORM\Column(name="terms_optin", type="boolean", nullable=true)
      */
     protected $termsOptin;
-    
+
     /**
      * Is this entry eligible to draw ?
      * @ORM\Column(type="boolean", nullable=true)
@@ -117,7 +123,7 @@ class Entry implements \JsonSerializable
      * @ORM\Column(type="datetime")
      */
     protected $created_at;
-    
+
     /**
      * The step in the play (in a quiz for example : the nth question)
      * @ORM\Column(type="integer", nullable=true)
@@ -144,6 +150,7 @@ class Entry implements \JsonSerializable
     public function updateChrono()
     {
         $this->updated_at = new \DateTime("now");
+        $this->timeSpent = $this->updated_at->getTimestamp() - $this->created_at->getTimestamp();
     }
 
     /**
@@ -162,7 +169,7 @@ class Entry implements \JsonSerializable
     public function setId($id)
     {
         $this->id = $id;
-        
+
         return $this;
     }
 
@@ -180,7 +187,7 @@ class Entry implements \JsonSerializable
     public function setGame($game)
     {
         $this->game = $game;
-        
+
         return $this;
     }
 
@@ -198,7 +205,7 @@ class Entry implements \JsonSerializable
     public function setUser($user)
     {
         $this->user = $user;
-        
+
         return $this;
     }
 
@@ -216,7 +223,25 @@ class Entry implements \JsonSerializable
     public function setPoints($points)
     {
         $this->points = $points;
-        
+
+        return $this;
+    }
+
+    /**
+     * @return integer $timeSPent
+     */
+    public function getTimeSpent()
+    {
+        return $this->timeSPent;
+    }
+
+    /**
+     * @param integer $timeSPent
+     */
+    public function setTimeSpent($timeSPent)
+    {
+        $this->timeSPent = $timeSPent;
+
         return $this;
     }
 
@@ -234,7 +259,7 @@ class Entry implements \JsonSerializable
     public function setIp($ip)
     {
         $this->ip = $ip;
-        
+
         return $this;
     }
 
@@ -252,7 +277,7 @@ class Entry implements \JsonSerializable
     public function setGeoloc($geoloc)
     {
         $this->geoloc = $geoloc;
-        
+
         return $this;
     }
 
@@ -270,7 +295,7 @@ class Entry implements \JsonSerializable
     public function setAnonymousId($anonymousId)
     {
         $this->anonymousId = $anonymousId;
-        
+
         return $this;
     }
 
@@ -304,7 +329,7 @@ class Entry implements \JsonSerializable
     public function setPlayerData($playerData)
     {
         $this->playerData = $playerData;
-        
+
         return $this;
     }
 
@@ -338,7 +363,7 @@ class Entry implements \JsonSerializable
     public function setActive($active)
     {
         $this->active = $active;
-        
+
         return $this;
     }
 
@@ -356,7 +381,7 @@ class Entry implements \JsonSerializable
     public function setPaid($paid)
     {
         $this->paid = $paid;
-        
+
         return $this;
     }
 
@@ -374,7 +399,7 @@ class Entry implements \JsonSerializable
     public function setPaidAmount($paidAmount)
     {
         $this->paidAmount = $paidAmount;
-        
+
         return $this;
     }
 
@@ -408,7 +433,7 @@ class Entry implements \JsonSerializable
     public function setBonus($bonus)
     {
         $this->bonus = $bonus;
-        
+
         return $this;
     }
 
@@ -426,10 +451,10 @@ class Entry implements \JsonSerializable
     public function setWinner($winner)
     {
         $this->winner = $winner;
-        
+
         return $this;
     }
-    
+
     /**
      * @return integer $drawable
      */
@@ -444,7 +469,7 @@ class Entry implements \JsonSerializable
     public function setDrawable($drawable)
     {
         $this->drawable = $drawable;
-        
+
         return $this;
     }
 
@@ -455,14 +480,14 @@ class Entry implements \JsonSerializable
     {
         return $this->termsOptin;
     }
-    
+
     /**
      * @param field_type $termsOptin
      */
     public function setTermsOptin($termsOptin)
     {
         $this->termsOptin = $termsOptin;
-        
+
         return $this;
     }
 
@@ -480,7 +505,7 @@ class Entry implements \JsonSerializable
     public function setCreatedAt($created_at)
     {
         $this->created_at = $created_at;
-        
+
         return $this;
     }
 
@@ -498,7 +523,7 @@ class Entry implements \JsonSerializable
     public function setUpdatedAt($updated_at)
     {
         $this->updated_at = $updated_at;
-        
+
         return $this;
     }
 
