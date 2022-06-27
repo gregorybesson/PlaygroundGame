@@ -47,7 +47,7 @@ class GameController extends AbstractActionController
         if (!$gameId) {
             return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/list'));
         }
-        
+
         $game = $this->getAdminGameService()->getGameMapper()->findById($gameId);
         if (!$game) {
             return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/list'));
@@ -97,7 +97,7 @@ class GameController extends AbstractActionController
         $config = $this->getServiceLocator()->get('config');
         $appsArray = [];
         $platformFbAppId = '';
-        
+
         if (isset($config['facebook'])) {
             $platformFbAppId     = $config['facebook']['fb_appid'];
             $platformFbAppSecret = $config['facebook']['fb_secret'];
@@ -290,7 +290,7 @@ class GameController extends AbstractActionController
                                 //     ),
                                 //     $page['access_token']
                                 // );
-    
+
                                 /**
                                  * Post a photo
                                  */
@@ -302,7 +302,7 @@ class GameController extends AbstractActionController
                                 //     ),
                                 //     $page['access_token']
                                 // );
-    
+
                                 /**
                                  * Upload an unpublished photo and include it in a post
                                  */
@@ -315,7 +315,7 @@ class GameController extends AbstractActionController
                                     $page['access_token']
                                 );
                                 $img = $img->getGraphNode()->asArray();
-                                
+
                                 if ($game->getFbPostId() != '') {
                                     $post = $fb->post(
                                         '/' . $game->getFbPostId(),
@@ -335,7 +335,7 @@ class GameController extends AbstractActionController
                                         $page['access_token']
                                     );
                                 }
-    
+
                                 /**
                                  * Upload an unpublished photo and include it in a scheduled post
                                  */
@@ -361,7 +361,7 @@ class GameController extends AbstractActionController
                                 //     ),
                                 //     $page['access_token']
                                 // );
-    
+
                                 /**
                                  * publish multiple photos then associate these photos to a post
                                  */
@@ -378,13 +378,13 @@ class GameController extends AbstractActionController
                                 // endforeach;
                                 // $uploaded_photos = $fb->sendBatchRequest($photos, $page['access_token']);
                                 // $uploaded_photos = $uploaded_photos->getGraphNode()->asArray();
-                                
+
                                 // foreach ($uploaded_photos as $photo):
                                 //     $photo = json_decode($photo['body']);
                                 //     array_push($data_post['attached_media'], '{"media_fbid":"'.$photo->id.'"}');
                                 // endforeach;
                                 // $post = $fb->sendRequest('POST', "/".$page['id']."/feed", $data_post, $page['access_token']);
-    
+
                                 /**
                                  * publish a carrousel to a post
                                  */
@@ -395,7 +395,7 @@ class GameController extends AbstractActionController
                                 //     'multi_share_end_card' => false,
                                 //     'published' => true,
                                 // ];
-                                
+
                                 // $multiple_photos = [
                                 //     'https://images.unsplash.com/photo-1538239010247-383da61e35db?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=22e9de10cd7e4d8e32d698099dc6d23c&auto=format&fit=crop&w=3289&q=80',
                                 //     'https://images.unsplash.com/photo-1538218952949-2f5dda4a9156?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=b79a9c7314dd5ca8eac2f187902ceca2&auto=format&fit=crop&w=2704&q=80',
@@ -405,7 +405,7 @@ class GameController extends AbstractActionController
                                 //     array_push($data_post['child_attachments'], '{"link":"'.$photo.'", "name": "message_'.$k.'"}');
                                 // endforeach;
                                 // $post = $fb->sendRequest('POST', "/".$page['id']."/feed", $data_post, $page['access_token']);
-    
+
                                 /** Texte avec lien vers une page
                                  *
                                  */
@@ -521,7 +521,7 @@ class GameController extends AbstractActionController
         // We try to get FB pages from the logged in user
         $session = new Container('facebook');
         $config = $this->getServiceLocator()->get('config');
-        
+
         if (isset($config['facebook'])) {
             $platformFbAppId     = $config['facebook']['fb_appid'];
             $platformFbAppSecret = $config['facebook']['fb_secret'];
@@ -580,9 +580,14 @@ class GameController extends AbstractActionController
     {
         $this->checkGame();
 
+        $navigation = $this->getServiceLocator()->get('ViewHelperManager')->get('navigation');
+        $page = $navigation('admin_navigation')->findOneBy('route', 'admin/playgroundgame/edit-' . $this->game->getClassType());
+        $page->setParams(['gameId' => $this->game->getId()]);
+        $page->setLabel($this->game->getTitle());
+
         $grid = $this->getAdminGameService()->getGrid($this->game);
         $grid->render();
-        
+
         return $grid->getResponse();
     }
 
@@ -621,7 +626,7 @@ class GameController extends AbstractActionController
 
         return $this->redirect()->toUrl($this->adminUrl()->fromRoute($this->game->getClassType() .'/invitation', array('gameId'=>$this->game->getId())));
     }
-    
+
     public function downloadAction()
     {
         $this->checkGame();
@@ -685,7 +690,7 @@ class GameController extends AbstractActionController
 
         return $response;
     }
-    
+
     /**
      * This method serialize a game an export it as a txt file
      * @return \Laminas\Stdlib\ResponseInterface
@@ -705,12 +710,12 @@ class GameController extends AbstractActionController
         );
         $headers->addHeaderLine('Accept-Ranges', 'bytes');
         $headers->addHeaderLine('Content-Length', strlen($content));
-    
+
         $response->setContent($content);
-    
+
         return $response;
     }
-    
+
     /**
      * This method take an uploaded txt file containing a serialized game
      * and persist it in the database
@@ -721,13 +726,13 @@ class GameController extends AbstractActionController
         $form = $this->getServiceLocator()->get('playgroundgame_import_form');
         $form->setAttribute('action', $this->adminUrl()->fromRoute('playgroundgame/import'));
         $form->setAttribute('method', 'post');
-        
+
         if ($this->getRequest()->isPost()) {
             $data = array_replace_recursive(
                 $this->getRequest()->getPost()->toArray(),
                 $this->getRequest()->getFiles()->toArray()
             );
-            
+
             if (! empty($data['import_file']['tmp_name'])) {
                 ErrorHandler::start();
                 $game = unserialize(file_get_contents($data['import_file']['tmp_name']));
@@ -742,10 +747,10 @@ class GameController extends AbstractActionController
 
                 ErrorHandler::stop(true);
             }
-            
+
             return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/list'));
         }
-        
+
         return array(
             'form' => $form,
         );
@@ -780,7 +785,7 @@ class GameController extends AbstractActionController
     public function formAction()
     {
         $this->checkGame();
-        
+
         $form = $this->game->getPlayerForm();
 
         return $this->createForm($form);

@@ -66,6 +66,11 @@ class LotteryController extends GameController
     {
         $this->checkGame();
 
+        $navigation = $this->getServiceLocator()->get('ViewHelperManager')->get('navigation');
+        $page = $navigation('admin_navigation')->findOneBy('route', 'admin/playgroundgame/edit-lottery');
+        $page->setParams(['gameId' => $this->game->getId()]);
+        $page->setLabel($this->game->getTitle());
+
         return $this->editGame(
             'playground-game/lottery/lottery',
             'playgroundgame_lottery_form'

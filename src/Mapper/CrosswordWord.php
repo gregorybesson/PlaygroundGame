@@ -13,6 +13,7 @@ class CrosswordWord extends AbstractMapper
                 ORDER BY mc.id ASC'
         );
         $query->setParameter('game', $word);
+
         return $query;
     }
 

@@ -78,6 +78,11 @@ class InstantWinController extends GameController
     {
         $this->checkGame();
 
+        $navigation = $this->getServiceLocator()->get('ViewHelperManager')->get('navigation');
+        $page = $navigation('admin_navigation')->findOneBy('route', 'admin/playgroundgame/edit-instantwin');
+        $page->setParams(['gameId' => $this->game->getId()]);
+        $page->setLabel($this->game->getTitle());
+
         return $this->editGame(
             'playground-game/instant-win/instantwin',
             'playgroundgame_instantwin_form'
@@ -88,9 +93,14 @@ class InstantWinController extends GameController
     {
         $this->checkGame();
 
+        $navigation = $this->getServiceLocator()->get('ViewHelperManager')->get('navigation');
+        $page = $navigation('admin_navigation')->findOneBy('route', 'admin/playgroundgame/edit-instantwin');
+        $page->setParams(['gameId' => $this->game->getId()]);
+        $page->setLabel($this->game->getTitle());
+
         $grid = $this->getAdminGameService()->getOccurrencesGrid($this->game);
         $grid->render();
-        
+
         return $grid->getResponse();
 
         // $adapter = new DoctrineAdapter(
@@ -142,7 +152,7 @@ class InstantWinController extends GameController
             // Change the format of the date
             $value = \DateTime::createFromFormat('d/m/Y H:i:s', $data['value']. ':00');
             $data['value'] = $value->format('Y-m-d H:i:s');
-            
+
             $occurrence = $this->getAdminGameService()->updateOccurrence($data, $occurrence->getId());
             if ($occurrence) {
                 // Redirect to list of games

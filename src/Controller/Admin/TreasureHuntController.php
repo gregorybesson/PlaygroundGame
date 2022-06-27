@@ -63,6 +63,11 @@ class TreasureHuntController extends GameController
     {
         $this->checkGame();
 
+				$navigation = $this->getServiceLocator()->get('ViewHelperManager')->get('navigation');
+        $page = $navigation('admin_navigation')->findOneBy('route', 'admin/playgroundgame/edit-treasurehunt');
+        $page->setParams(['gameId' => $this->game->getId()]);
+        $page->setLabel($this->game->getTitle());
+
         return $this->editGame(
             'playground-game/treasure-hunt/treasurehunt',
             'playgroundgame_treasurehunt_form'
@@ -120,6 +125,11 @@ class TreasureHuntController extends GameController
     	$puzzles = $service->getTreasureHuntPuzzleMapper()->findByGameId($gameId);
     	$game = $service->getGameMapper()->findById($gameId);
 
+			$navigation = $this->getServiceLocator()->get('ViewHelperManager')->get('navigation');
+			$page = $navigation('admin_navigation')->findOneBy('route', 'admin/playgroundgame/edit-treasurehunt');
+			$page->setParams(['gameId' => $game->getId()]);
+			$page->setLabel($game->getTitle());
+
     	if (is_array($puzzles)) {
     		$paginator = new \Laminas\Paginator\Paginator(new \Laminas\Paginator\Adapter\ArrayAdapter($puzzles));
     		$paginator->setItemCountPerPage(50);
@@ -147,6 +157,12 @@ class TreasureHuntController extends GameController
     	if (!$gameId) {
     		return $this->redirect()->toRoute('admin/playgroundgame/list');
     	}
+
+			$game = $service->getGameMapper()->findById($gameId);
+			$navigation = $this->getServiceLocator()->get('ViewHelperManager')->get('navigation');
+			$page = $navigation('admin_navigation')->findOneBy('route', 'admin/playgroundgame/edit-treasurehunt');
+			$page->setParams(['gameId' => $game->getId()]);
+			$page->setLabel($game->getTitle());
 
     	$form = $this->getServiceLocator()->get('playgroundgame_treasurehuntpuzzle_form');
     	$form->get('submit')->setAttribute('label', 'Add');
@@ -198,6 +214,11 @@ class TreasureHuntController extends GameController
     	}
     	$puzzle   = $service->getTreasureHuntPuzzleMapper()->findById($puzzleId);
     	$treasurehuntId     = $puzzle->getTreasureHunt()->getId();
+
+			$navigation = $this->getServiceLocator()->get('ViewHelperManager')->get('navigation');
+			$page = $navigation('admin_navigation')->findOneBy('route', 'admin/playgroundgame/edit-treasurehunt');
+			$page->setParams(['gameId' => $puzzle->getTreasureHunt()->getId()]);
+			$page->setLabel($puzzle->getTreasureHunt()->getTitle());
 
     	$form = $this->getServiceLocator()->get('playgroundgame_treasurehuntpuzzle_form');
     	$form->get('submit')->setAttribute('label', 'Add');
