@@ -269,6 +269,14 @@ class QuizAnswer implements InputFilterAwareInterface
     /**
      * @return integer unknown_type
      */
+    public function isCorrect()
+    {
+        return $this->correct;
+    }
+
+    /**
+     * @return integer unknown_type
+     */
     public function getCorrect()
     {
         return $this->correct;
