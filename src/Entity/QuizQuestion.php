@@ -44,7 +44,9 @@ class QuizQuestion implements InputFilterAwareInterface
      * values :
      *          0 : closed (you can select only one answer)
      *          1 : opened (you can select many answers),
-     *          2: No answer to select. You write a text in a textarea
+     *          2 : No answer to select. You write a text in a textarea
+     *          3 : Drag & Drop. We display all the answers on the left, and n empty cells on the right (n being the number of correct answers)
+     *              The user then tries to drag and drop the correct answers to the right
      *
      * @ORM\Column(type="integer", nullable=false)
      */
@@ -367,7 +369,7 @@ class QuizQuestion implements InputFilterAwareInterface
 
         return $this;
     }
-    
+
     /**
      * @return boolean unknown_type
      */
@@ -713,7 +715,7 @@ class QuizQuestion implements InputFilterAwareInterface
                         'name'    => 'Between',
                         'options' => array(
                             'min'      => 0,
-                            'max'      => 2,
+                            'max'      => 3,
                         ),
                     ),
                 ),

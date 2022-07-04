@@ -153,7 +153,7 @@ class QuizController extends GameController
                 $element->setValueOptions($valuesSortedByPosition);
                 $element->setLabelOptions(array("disable_html_escape"=>true));
                 $elementData[$q->getId()] = new Element\Hidden($name.'-data');
-            } elseif ($q->getType() === 1) {
+            } elseif ($q->getType() === 1 || $q->getType() === 3) {
                 $element = new Element\MultiCheckbox($name);
                 $values = array();
                 $valuesSortedByPosition = array();

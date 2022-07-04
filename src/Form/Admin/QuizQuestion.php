@@ -25,7 +25,7 @@ class QuizQuestion extends ProvidesEventsForm
         $hydrator->addStrategy('autoplay', new BooleanStrategy());
         $hydrator->addStrategy('timer', new BooleanStrategy());
         $this->setHydrator($hydrator);
-        
+
 
         $this->setAttribute('method', 'post');
         $this->setAttribute('enctype', 'multipart/form-data');
@@ -139,6 +139,7 @@ class QuizQuestion extends ProvidesEventsForm
                     '0' => $translator->translate('Single response', 'playgroundgame'),
                     '1' => $translator->translate('Multiple choice', 'playgroundgame'),
                     '2' => $translator->translate('Input field', 'playgroundgame'),
+                    '3' => $translator->translate('Drag & Drop', 'playgroundgame'),
                 ),
             ),
         ));
@@ -173,7 +174,7 @@ class QuizQuestion extends ProvidesEventsForm
                 ),
             ),
         ));
-        
+
         $this->add(array(
             'name' => 'audio',
             'type' => 'Laminas\Form\Element\Hidden',
@@ -181,7 +182,7 @@ class QuizQuestion extends ProvidesEventsForm
                 'value' => 0,
             ),
         ));
-        
+
         $this->add(array(
             'name' => 'autoplay',
             'type' => 'Laminas\Form\Element\Hidden',

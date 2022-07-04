@@ -456,7 +456,7 @@ class Quiz extends Game
             //     return false;
             // }
             // Closed question : Many answers allowed
-        } elseif ($question->getType() == 1) {
+        } elseif ($question->getType() == 1 || $question->getType() == 3) {
             foreach ($question->getAnswers() as $answer) {
                 $question_max_points += $answer->getPoints();
 
