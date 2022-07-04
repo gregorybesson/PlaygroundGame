@@ -4885,7 +4885,6 @@ return array(
                                 'privilege' => 'add',
                                 'use_route_match' => true,
                                 'pages' => [
-
                                     'entry-mission' => array(
                                         'label' => 'Participants',
                                         'route' => 'admin/mission/entry',

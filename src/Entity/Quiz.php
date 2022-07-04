@@ -34,6 +34,12 @@ class Quiz extends Game implements InputFilterAwareInterface
     protected $substitutes = 0;
 
     /**
+     * Do we use the time spent on the game to calculate the winner ?
+     * @ORM\Column(name="use_time_spent", type="boolean", nullable=false)
+     */
+    protected $useTimeSpent = 0;
+
+    /**
      * display the stats about the quiz (how many entries + distribution of each answer
      * )
      * entry : After each entry
@@ -57,11 +63,13 @@ class Quiz extends Game implements InputFilterAwareInterface
     protected $displayGoodAnswers = 'never';
 
     /**
+     * Do we limit the time on this game ?
      * @ORM\Column(type="boolean", nullable=false)
      */
     protected $timer = 0;
 
     /**
+     * What's the time limitation in seconds if $timer is set to true ?
      * @ORM\Column(name="timer_duration", type="integer", nullable=false)
      */
     protected $timerDuration = 0;
@@ -185,6 +193,24 @@ class Quiz extends Game implements InputFilterAwareInterface
     public function setSubstitutes($substitutes)
     {
         $this->substitutes = $substitutes;
+
+        return $this;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getUseTimeSpent()
+    {
+        return $this->useTimeSpent;
+    }
+
+    /**
+     * @param integer $useTimeSpent
+     */
+    public function setUseTimeSpent($useTimeSpent)
+    {
+        $this->useTimeSpent = $useTimeSpent;
 
         return $this;
     }

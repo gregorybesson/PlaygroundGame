@@ -26,6 +26,7 @@ class QuizController extends GameController
         $firstTime = true;
         $playError = null;
         $entry = $this->getGameService()->play($this->game, $this->user, $playError);
+
         if (!$entry) {
             $reason = "";
             if ($playError === -1) {
@@ -109,7 +110,7 @@ class QuizController extends GameController
                 $jsonData = json_decode($q->getJsonData(), true);
                 // décalage de 2h avec  UTC
                 $date = (isset($jsonData['stopdate'])) ? strtotime($jsonData['stopdate']) : false;
- 
+
                 if ($date) {
                     $now = time();
                     if ($now > $date) {
@@ -121,7 +122,7 @@ class QuizController extends GameController
 
             $name = 'q' . $q->getId();
             $fieldsetFilter = new \Laminas\InputFilter\InputFilter();
-            
+
             if ($q->getType() === 0) {
                 $element = new Element\Radio($name);
                 $values = array();
@@ -152,7 +153,7 @@ class QuizController extends GameController
                 $element->setValueOptions($valuesSortedByPosition);
                 $element->setLabelOptions(array("disable_html_escape"=>true));
                 $elementData[$q->getId()] = new Element\Hidden($name.'-data');
-            } elseif ($q->getType() === 1) {
+            } elseif ($q->getType() === 1 || $q->getType() === 3) {
                 $element = new Element\MultiCheckbox($name);
                 $values = array();
                 $valuesSortedByPosition = array();
@@ -194,20 +195,29 @@ class QuizController extends GameController
                 $factory->createInput(
                     [
                         'name'     => $name,
-                        'required' => true,
-                        'validators' => [
-                            [
-                                'name' =>'NotEmpty',
-                                'options' => [
-                                    'messages' => [
-                                        'isEmpty' => 'Merci de répondre à la question.',
-                                    ],
-                                ],
-                            ],
-                        ]
+                        'required' => false,
                     ]
                 )
             );
+            // TODO: Add this filter when the option "is mandatory" is checked on the question in the BO
+            // $fieldsetFilter->add(
+            //     $factory->createInput(
+            //         [
+            //             'name'     => $name,
+            //             'required' => true,
+            //             'validators' => [
+            //                 [
+            //                     'name' =>'NotEmpty',
+            //                     'options' => [
+            //                         'messages' => [
+            //                             'isEmpty' => 'Merci de répondre à la question.',
+            //                         ],
+            //                     ],
+            //                 ],
+            //             ]
+            //         ]
+            //     )
+            // );
 
             $i ++;
             if (($this->game->getQuestionGrouping() > 0 && $i % $this->game->getQuestionGrouping() == 0 && $i > 0)
@@ -235,7 +245,7 @@ class QuizController extends GameController
                 }
             }
             $action = $this->params('action');
-    
+
             // On POST, if the anonymousUser has not been created yet, I try to create it now
             // Maybe is there only one form for the quiz and the player data... I try...
             // And if the formPlayer data was included in the form, I remove it
@@ -304,7 +314,7 @@ class QuizController extends GameController
                 unset($data['submitForm']);
                 $entry = $this->getGameService()->createQuizReply($data, $this->game, $this->user);
             }
-            
+
             return $this->redirect()->toUrl(
                 $this->frontendUrl()->fromRoute(
                     $this->game->getClassType() . '/'. $this->game->nextStep($action),
@@ -316,6 +326,7 @@ class QuizController extends GameController
         $viewModel = $this->buildView($this->game);
         $viewModel->setVariables(
             [
+                'entry' => $entry,
                 'firstTime' => $firstTime,
                 'questions' => $questions,
                 'form'      => $form,
@@ -407,7 +418,7 @@ class QuizController extends GameController
                     } else {
                         $ga[$q->getId()]['answers'][$a->getId()]['found'] = false;
                     }
-                    
+
                     if (isset($userAnswers[$q->getId()]) && isset($userAnswers[$q->getId()][$a->getId()])) {
                         $ga[$q->getId()]['answers'][$a->getId()]['yourChoice'] = true;
                     } else {
@@ -423,7 +434,7 @@ class QuizController extends GameController
                     $ga[$q->getId()]['answers'][$a->getId()]['userAnswer'] = isset($userAnswers[$q->getId()]) ?
                         $userAnswers[$q->getId()]['answer'] :
                         false;
-                    
+
                     if (isset($userAnswers[$q->getId()]) && isset($userAnswers[$q->getId()][$a->getId()])) {
                         $ga[$q->getId()]['answers'][$a->getId()]['yourChoice'] = true;
                     } else {
@@ -441,7 +452,7 @@ class QuizController extends GameController
         $form->setAttribute('method', 'post');
 
         $viewModel = $this->buildView($this->game);
-        
+
         // TODO: Change the way we know if the play step has been rejected
         $messages = $this->flashMessenger()->getMessages();
         if (!isset($messages[0]) || substr($messages[0], 0, 9) != 'Vous avez') {
