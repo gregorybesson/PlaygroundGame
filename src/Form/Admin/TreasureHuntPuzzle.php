@@ -110,6 +110,24 @@ class TreasureHuntPuzzle extends ProvidesEventsForm
         ));
 
         $this->add(array(
+            'name' => 'uploadReferenceImage[]',
+            'attributes' => array(
+                'type'  => 'file',
+            ),
+            'options' => array(
+                'label' => $translator->translate('Reference Image(s)', 'playgroundgame'),
+            ),
+        ));
+
+        $this->add(array(
+            'name' => 'referenceImage',
+            'type'  => 'Laminas\Form\Element\Hidden',
+            'attributes' => array(
+                'value' => '',
+            ),
+        ));
+
+        $this->add(array(
             'type' => 'Laminas\Form\Element\Select',
             'name' => 'timer',
             'options' => array(

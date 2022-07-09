@@ -23,6 +23,22 @@ class TreasureHunt extends Game
 
         parent::__construct($name, $sm, $translator);
 
+				$this->add(array(
+					'type' => 'Laminas\Form\Element\Select',
+					'name' => 'gameType',
+					'attributes' =>  array(
+						'id' => 'gameType',
+						'options' => array(
+							'waldo' => $translator->translate("A where's Waldo type", 'playgroundgame'),
+							'7_differences' => $translator->translate("A 7 differences type", 'playgroundgame'),
+						),
+					),
+					'options' => array(
+						'label' => $translator->translate('Type d\'instant gagnant', 'playgroundgame'),
+						// 'empty_option' => $translator->translate('Type d\'instant gagnant', 'playgroundgame'),
+					),
+				));
+
         $this->add(array(
         		'name' => 'winners',
         		'options' => array(
@@ -34,16 +50,26 @@ class TreasureHunt extends Game
         		)
         ));
 
+				$this->add(array(
+					'type' => 'Laminas\Form\Element\Checkbox',
+					'attributes' => array(
+						'class' => 'switch-input',
+					),
+					'name' => 'limitErrorsAllowed',
+					'options' => array(
+						'label' => $translator->translate('Do you want to limit the numbers of tries ?', 'playgroundgame'),
+					),
+				));
+
         $this->add(array(
-            'type' => 'Laminas\Form\Element\Select',
-            'name' => 'replayPuzzle',
-            'options' => array(
-                'value_options' => array(
-                    '0' => $translator->translate('No', 'playgroundgame'),
-                    '1' => $translator->translate('Yes', 'playgroundgame')
-                ),
-                'label' => $translator->translate('Go to the next puzzle only when the previous is won', 'playgroundgame')
-            )
+					'name' => 'errorsAllowed',
+					'options' => array(
+						'label' => $translator->translate('How many errors are allowed ?', 'playgroundgame')
+					),
+					'attributes' => array(
+						'type' => 'text',
+						'placeholder' => $translator->translate('Errors allowed', 'playgroundgame')
+					)
         ));
 
         $this->add(array(

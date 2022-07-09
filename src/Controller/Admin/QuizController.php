@@ -139,7 +139,7 @@ class QuizController extends GameController
             $question = $service->updateQuestion($data, $question);
             if ($question) {
                 // Redirect to list of games
-                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The question was updated');
+                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The question has been updated');
 
                 return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/quiz-question-list', array('quizId'=>$quizId)));
             } else {
