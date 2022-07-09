@@ -15,9 +15,9 @@ use Laminas\InputFilter\InputFilterInterface;
 
 /**
  * @ORM\Entity @HasLifecycleCallbacks
- * @ORM\Table(name="game_treasurehunt_puzzle")
+ * @ORM\Table(name="game_treasurehunt_puzzle_piece")
  */
-class TreasureHuntPuzzle implements InputFilterAwareInterface
+class TreasureHuntPuzzlePiece implements InputFilterAwareInterface
 {
     protected $inputFilter;
 
@@ -29,15 +29,10 @@ class TreasureHuntPuzzle implements InputFilterAwareInterface
     protected $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="TreasureHuntPuzzlePiece", mappedBy="puzzle", cascade={"persist", "remove"})
-     **/
-    protected $pieces;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="TreasureHunt", inversedBy="puzzles")
-	 * @ORM\JoinColumn(name="treasurehunt_id", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\ManyToOne(targetEntity="TreasureHuntPuzzle", inversedBy="pieces")
+	 * @ORM\JoinColumn(name="puzzle_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $treasurehunt;
+    protected $puzzle;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=false)
@@ -45,24 +40,9 @@ class TreasureHuntPuzzle implements InputFilterAwareInterface
     protected $title;
 
     /**
-     * @ORM\Column(type="string", length=255, unique=true, nullable=false)
-     */
-    protected $identifier;
-
-    /**
      * @ORM\Column(type="integer", nullable=false)
      */
     protected $position=0;
-
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
-    protected $url;
-
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
-    protected $domain;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -73,18 +53,6 @@ class TreasureHuntPuzzle implements InputFilterAwareInterface
      * @ORM\Column(type="text", nullable=true)
      */
     protected $area;
-
-    /**
-     * This is the puzzle image in the case of a playground game
-     * @ORM\Column(name="image", type="string", nullable=true)
-     */
-    protected $image = '';
-
-    /**
-     * In case of a "7 errors" type of puzzle, this is reference image the player compares to
-     * @ORM\Column(name="reference_image", type="string", nullable=true)
-     */
-    protected $referenceImage = '';
 
     /**
      * @ORM\Column(type="boolean", nullable=false)
@@ -108,48 +76,25 @@ class TreasureHuntPuzzle implements InputFilterAwareInterface
 
     public function __construct()
     {
-        $this->pieces = new \Doctrine\Common\Collections\ArrayCollection();
+
     }
 
     /**
-     * @param unknown_type $pieces
+     * @return $puzzle
      */
-    public function setPieces($pieces)
+    public function getPuzzle()
     {
-    	$this->pieces = $pieces;
-
-    	return $this;
+        return $this->puzzle;
     }
 
     /**
-     * Get pieces.
-     *
-     * @return \Doctrine\Common\Collections\Collection
+     * @param unknown_type $puzzle
      */
-    public function getPieces()
+    public function setPuzzle($puzzle)
     {
-    	return $this->pieces;
-    }
+        $this->puzzle = $puzzle;
 
-    /**
-     * Get piece.
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getPiece($id)
-    {
-        return $this->pieces[$id];
-    }
-
-    /**
-     * Add a puzzle to the hunt.
-     *
-     *
-     * @return void
-     */
-    public function addPiece($puzzle)
-    {
-    	$this->pieces[] = $puzzle;
+        return $this;
     }
 
     /**
@@ -169,22 +114,6 @@ class TreasureHuntPuzzle implements InputFilterAwareInterface
     }
 
 	/**
-     * @return the $identifier
-     */
-    public function getIdentifier()
-    {
-        return $this->identifier;
-    }
-
-	/**
-     * @param field_type $identifier
-     */
-    public function setIdentifier($identifier)
-    {
-        $this->identifier = $identifier;
-    }
-
-	/**
 	 * @return the $position
 	 */
 	public function getPosition()
@@ -198,42 +127,6 @@ class TreasureHuntPuzzle implements InputFilterAwareInterface
 	public function setPosition($position)
 	{
 		$this->position = $position;
-
-		return $this;
-	}
-
-	/**
-	 * @return the $url
-	 */
-	public function getUrl()
-	{
-		return $this->url;
-	}
-
-	/**
-	 * @param field_type $url
-	 */
-	public function setUrl($url)
-	{
-		$this->url = $url;
-
-		return $this;
-	}
-
-	/**
-	 * @return the $domain
-	 */
-	public function getDomain()
-	{
-		return $this->domain;
-	}
-
-	/**
-	 * @param field_type $domain
-	 */
-	public function setDomain($domain)
-	{
-		$this->domain = $domain;
 
 		return $this;
 	}
@@ -273,38 +166,6 @@ class TreasureHuntPuzzle implements InputFilterAwareInterface
 
 		return $this;
 	}
-
-	/**
-     * @return the $image
-     */
-    public function getImage()
-    {
-        return $this->image;
-    }
-
-	/**
-     * @param string $image
-     */
-    public function setImage($image)
-    {
-        $this->image = $image;
-    }
-
-    /**
-     * @return the $referenceImage
-     */
-    public function getReferenceImage()
-    {
-        return $this->referenceImage;
-    }
-
-	/**
-     * @param string $referenceImage
-     */
-    public function setReferenceImage($referenceImage)
-    {
-        $this->referenceImage = $referenceImage;
-    }
 
 	/**
 	 * @return the $timer
@@ -466,14 +327,6 @@ class TreasureHuntPuzzle implements InputFilterAwareInterface
     		$this->position = $data['position'];
     	}
 
-    	if (isset($data['url']) && $data['url'] != null) {
-    		$this->url = $data['url'];
-    	}
-
-    	if (isset($data['domain']) && $data['domain'] != null) {
-    		$this->domain = $data['domain'];
-    	}
-
     	if (isset($data['timer']) && $data['timer'] != null) {
     		$this->timer = $data['timer'];
     	}
@@ -520,32 +373,6 @@ class TreasureHuntPuzzle implements InputFilterAwareInterface
                         'options' => array(
                             'encoding' => 'UTF-8',
                             'min' => 5,
-                            'max' => 255
-                        )
-                    )
-                )
-            )));
-
-            $inputFilter->add($factory->createInput(array(
-                'name' => 'identifier',
-                'required' => true,
-                'filters' => array(
-                    array(
-                        'name' => 'StripTags'
-                    ),
-                    array(
-                        'name' => 'StringTrim'
-                    ),
-                    array(
-                        'name' => 'PlaygroundCore\Filter\Slugify'
-                    )
-                ),
-                'validators' => array(
-                    array(
-                        'name' => 'StringLength',
-                        'options' => array(
-                            'encoding' => 'UTF-8',
-                            'min' => 3,
                             'max' => 255
                         )
                     )

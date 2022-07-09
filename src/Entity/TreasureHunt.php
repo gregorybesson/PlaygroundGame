@@ -23,6 +23,14 @@ class TreasureHunt extends Game implements InputFilterAwareInterface
     protected $winners = 0;
 
     /**
+     * values : waldo - type "where's Waldo
+     *          7_differences - The player compares 2 images and find the 7 differences
+     *
+     * @ORM\Column(name="game_type", type="string", nullable=false)
+     */
+    protected $gameType = 'waldo';
+
+    /**
      * @ORM\Column(type="boolean", nullable=false)
      */
     protected $timer = 0;
@@ -33,12 +41,17 @@ class TreasureHunt extends Game implements InputFilterAwareInterface
     protected $timerDuration = 0;
 
     /**
-     * if 0 You can't replay when you loose the puzzle. you go to the next one directly
-     * if 1 Go to the next puzzle only when the actual one is won
      *
-     * @ORM\Column(name="replay_puzzle", type="integer", nullable=false)
+     *
+     * @ORM\Column(name="limit_errors_allowed", type="boolean", nullable=false)
      */
-    protected $replayPuzzle = 1;
+    protected $limitErrorsAllowed = false;
+
+    /**
+     *
+     * @ORM\Column(name="errors_allowed", type="integer", nullable=false)
+     */
+    protected $errorsAllowed = 0;
 
     /**
      * @ORM\OneToMany(targetEntity="TreasureHuntPuzzle", mappedBy="treasurehunt")
@@ -77,9 +90,9 @@ class TreasureHunt extends Game implements InputFilterAwareInterface
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getPuzzle($id)
+    public function getPuzzle($index)
     {
-        return $this->puzzles[$id];
+        return $this->puzzles[$index];
     }
 
     /**
@@ -91,6 +104,18 @@ class TreasureHunt extends Game implements InputFilterAwareInterface
     public function addPuzzle($puzzle)
     {
     	$this->puzzles[] = $puzzle;
+    }
+
+    public function getGameType()
+    {
+        return $this->gameType;
+    }
+
+    public function setGameType($gameType)
+    {
+        $this->gameType = $gameType;
+
+        return $this;
     }
 
 	/**
@@ -148,19 +173,39 @@ class TreasureHunt extends Game implements InputFilterAwareInterface
 	}
 
 	/**
-     * @return the $replayPuzzle
+     * @return the $errorsAllowed
      */
-    public function getReplayPuzzle()
+    public function getErrorsAllowed()
     {
-        return $this->replayPuzzle;
+        return $this->errorsAllowed;
     }
 
 	/**
-     * @param number $replayPuzzle
+     * @param number $errorsAllowed
      */
-    public function setReplayPuzzle($replayPuzzle)
+    public function setErrorsAllowed($errorsAllowed)
     {
-        $this->replayPuzzle = $replayPuzzle;
+        $this->errorsAllowed = $errorsAllowed;
+
+        return $this;
+    }
+
+    /**
+     * @return the $limitErrorsAllowed
+     */
+    public function getLimitErrorsAllowed()
+    {
+        return $this->limitLimitErrorsAllowed;
+    }
+
+	/**
+     * @param number $limitErrorsAllowed
+     */
+    public function setLimitErrorsAllowed($limitErrorsAllowed)
+    {
+        $this->limitErrorsAllowed = $limitErrorsAllowed;
+
+        return $this;
     }
 
 	/**

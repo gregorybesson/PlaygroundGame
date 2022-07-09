@@ -3946,6 +3946,19 @@ return array(
                                     )
                                 )
                             ),
+                            'treasurehunt-puzzle-delete-refimage' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/treasurehunt-puzzle-delete-refimage/:gameId/:puzzleId/:imageId',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Admin\TreasureHunt::class,
+                                        'action' => 'puzzleDeleteRefImage',
+                                        'gameId' => 0,
+                                        'puzzleId' => 0,
+                                        'imageId' => 0,
+                                    )
+                                )
+                            ),
                             'treasurehunt-puzzle-remove' => array(
                                 'type' => 'Segment',
                                 'options' => array(
@@ -3954,6 +3967,55 @@ return array(
                                         'controller' => PlaygroundGame\Controller\Admin\TreasureHunt::class,
                                         'action' => 'removePuzzle',
                                         'puzzleId' => 0
+                                    )
+                                )
+                            ),
+                            'treasurehunt-piece-list' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/treasurehunt-piece-list/:puzzleId[/:filter][/:p]',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Admin\TreasureHunt::class,
+                                        'action' => 'listPieces',
+                                        'puzzleId' => 0,
+                                        'filter' => 'DESC'
+                                    ),
+                                    'constraints' => array(
+                                        'filter' => '[a-zA-Z][a-zA-Z0-9_-]*'
+                                    )
+                                )
+                            ),
+                            'treasurehunt-piece-add' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/treasurehunt-piece-add/:puzzleId',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Admin\TreasureHunt::class,
+                                        'action' => 'addPiece',
+                                        'puzzleId' => 0
+                                    )
+                                )
+                            ),
+                            'treasurehunt-piece-edit' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/treasurehunt-piece-edit/:puzzleId/:pieceId',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Admin\TreasureHunt::class,
+                                        'action' => 'editPiece',
+                                        'puzzleId' => 0,
+                                        'pieceId' => 0
+                                    )
+                                )
+                            ),
+                            'treasurehunt-piece-remove' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/treasurehunt-puzzle-remove/:pieceId',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Admin\TreasureHunt::class,
+                                        'action' => 'removePiece',
+                                        'pieceId' => 0
                                     )
                                 )
                             ),
@@ -4851,19 +4913,19 @@ return array(
                                 'use_route_match' => true,
                                 'pages' => [
                                     'treasurehunt-puzzle-list' => [
-                                        'label' => 'Liste des étapes',
+                                        'label' => 'Liste des puzzles',
                                         'route' => 'admin/playgroundgame/treasurehunt-puzzle-list',
                                         'privilege' => 'list',
                                         'use_route_match' => true,
                                         'pages' => [
                                             'treasurehunt-puzzle-add' => [
-                                                'label' => 'Ajouter une étape',
+                                                'label' => 'Ajouter un puzzle',
                                                 'route' => 'admin/playgroundgame/treasurehunt-puzzle-add',
                                                 'privilege' => 'add',
                                                 'use_route_match' => true,
                                             ],
                                             'treasurehunt-puzzle-edit' => [
-                                                'label' => 'Editer une étape',
+                                                'label' => 'Editer un puzzle',
                                                 'route' => 'admin/playgroundgame/treasurehunt-puzzle-edit',
                                                 'privilege' => 'edit',
                                                 'use_route_match' => true,

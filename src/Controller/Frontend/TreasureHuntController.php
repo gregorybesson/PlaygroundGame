@@ -85,16 +85,33 @@ class TreasureHuntController extends GameController
             $response = $this->getResponse();
             $data = $this->getRequest()->getPost()->toArray();
 
-            $entry = $this->getGameService()->analyzeClue($game, $data, $user);
+            $result = $this->getGameService()->analyzeClue($game, $data, $user);
+            $entry = $result['entry'];
+            $success = $result['success'];
+            $nextPuzzle = $result['nextPuzzle'];
 
+            // Game is not finished
             if($entry->getActive()){
-            $response->setContent(\Laminas\Json\Json::encode(array(
-                'success' => $entry->getWinner(),
-                'url' => $this->frontendUrl()->fromRoute('' . $game->getClassType().'/play', array('id' => $game->getIdentifier()), array('force_canonical' => true))
-            )));
+                // Go to the next puzzle
+                if ($nextPuzzle) {
+                    $response->setContent(\Laminas\Json\Json::encode(array(
+                        'winner' => $entry->getWinner(),
+                        'success' => $success,
+                        'url' => $this->frontendUrl()->fromRoute('' . $game->getClassType().'/play', array('id' => $game->getIdentifier()), array('force_canonical' => true))
+                    )));
+                // Stay on the same puzzle
+                } else {
+                    $response->setContent(\Laminas\Json\Json::encode(array(
+                        'winner' => $entry->getWinner(),
+                        'success' => $success,
+                        'url' => ''
+                    )));
+                }
+            // The game is finished
             } else{
                 $response->setContent(\Laminas\Json\Json::encode(array(
-                    'success' => $entry->getWinner(),
+                    'winner' => $entry->getWinner(),
+                    'success' => $success,
                     'url' => $this->frontendUrl()->fromRoute('' . $game->getClassType().'/'.$game->nextStep($this->params('action')), array('id' => $game->getIdentifier()), array('force_canonical' => true))
                 )));
             }

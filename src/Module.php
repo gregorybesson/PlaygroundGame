@@ -745,6 +745,26 @@ class Module
                 	return $mapper;
                 },
 
+                'playgroundgame_treasurehuntpuzzle_piece_mapper' => function (\Laminas\ServiceManager\ServiceManager $sm) {
+                	$mapper = new Mapper\TreasureHuntPuzzlePiece(
+                        $sm->get('doctrine.entitymanager.orm_default'),
+                        $sm->get('playgroundgame_module_options'),
+                        $sm
+                	);
+
+                	return $mapper;
+                },
+
+                'playgroundgame_treasurehunt_score_mapper' => function (\Laminas\ServiceManager\ServiceManager $sm) {
+                    $mapper = new Mapper\TreasureHuntScore(
+                        $sm->get('doctrine.entitymanager.orm_default'),
+                        $sm->get('playgroundgame_module_options'),
+                        $sm
+                    );
+
+                    return $mapper;
+                },
+
                 'playgroundgame_tradingcardmodel_form' => function (\Laminas\ServiceManager\ServiceManager $sm) {
                     $translator = $sm->get('MvcTranslator');
                     $form = new Form\Admin\TradingCardModel(null, $sm, $translator);
@@ -964,6 +984,15 @@ class Module
                 	$form = new Form\Admin\TreasureHuntPuzzle(null, $sm, $translator);
                 	$treasurehuntPuzzle = new Entity\TreasureHuntPuzzle();
                 	$form->setInputFilter($treasurehuntPuzzle->getInputFilter());
+
+                	return $form;
+                },
+
+                'playgroundgame_treasurehuntpuzzle_piece_form' => function(\Laminas\ServiceManager\ServiceManager $sm) {
+                	$translator = $sm->get('translator');
+                	$form = new Form\Admin\TreasureHuntPuzzlePiece(null, $sm, $translator);
+                	$treasurehuntPuzzlePiece = new Entity\TreasureHuntPuzzlePiece();
+                	$form->setInputFilter($treasurehuntPuzzlePiece->getInputFilter());
 
                 	return $form;
                 },

@@ -6,6 +6,7 @@ use PlaygroundGame\Entity\Game;
 use PlaygroundGame\Service\Game as AdminGameService;
 use PlaygroundGame\Entity\TreasureHunt;
 use PlaygroundGame\Entity\TreasureHuntPuzzle;
+use PlaygroundGame\Entity\TreasureHuntPuzzlePiece;
 
 use PlaygroundGame\Controller\Admin\GameController;
 use Laminas\View\Model\ViewModel;
@@ -112,6 +113,28 @@ class TreasureHuntController extends GameController
         return $this->redirect()->toRoute('admin/playgroundgame/treasurehunt-puzzle-edit', array('gameId'=>$gameId, 'puzzleId'=>$puzzleId));
     }
 
+		public function puzzleDeleteRefImageAction()
+    {
+        $service = $this->getAdminGameService();
+        $gameId = $this->getEvent()->getRouteMatch()->getParam('gameId');
+        $puzzleId = $this->getEvent()->getRouteMatch()->getParam('puzzleId');
+        $imageId = $this->getEvent()->getRouteMatch()->getParam('imageId');
+
+        if (!$puzzleId) {
+            return $this->redirect()->toRoute('admin/playgroundgame/list');
+        }
+        $puzzle   = $service->getTreasureHuntPuzzleMapper()->findById($puzzleId);
+
+        $images = json_decode($puzzle->getReferenceImage(), true);
+
+        unset($images[$imageId]);
+
+        $puzzle->setReferenceImage(json_encode($images));
+        $service->getTreasureHuntPuzzleMapper()->update($puzzle);
+
+        return $this->redirect()->toRoute('admin/playgroundgame/treasurehunt-puzzle-edit', array('gameId'=>$gameId, 'puzzleId'=>$puzzleId));
+    }
+
     public function listPuzzleAction()
     {
     	$service 	= $this->getAdminGameService();
@@ -195,7 +218,7 @@ class TreasureHuntController extends GameController
    				'gameId'     => $gameId,
    				'puzzle_id'  => 0,
    				'title'      => 'Add puzzle',
-    		    'puzzle'     => $puzzle
+    		  'puzzle'     => $puzzle
     		)
     	);
     }
@@ -235,7 +258,7 @@ class TreasureHuntController extends GameController
     		if ($puzzle) {
     		    $service->uploadImages($puzzle, $data);
     			// Redirect to list of games
-    			$this->flashMessenger()->setNamespace('treasurehunt')->addMessage('The puzzle was updated');
+    			$this->flashMessenger()->setNamespace('treasurehunt')->addMessage('The puzzle has been updated');
 
     			return $this->redirect()->toRoute('admin/playgroundgame/treasurehunt-puzzle-list', array('gameId'=>$treasurehuntId));
     		}
@@ -247,7 +270,7 @@ class TreasureHuntController extends GameController
     			'gameId'     => $treasurehuntId,
    				'puzzle_id'  => $puzzleId,
    				'title'      => 'Edit puzzle',
-    		    'puzzle'     => $puzzle
+    		  'puzzle'     => $puzzle
    			)
     	);
     }
@@ -263,10 +286,136 @@ class TreasureHuntController extends GameController
     	$treasurehuntId = $puzzle->getTreasureHunt()->getId();
 
     	$service->getTreasureHuntPuzzleMapper()->remove($puzzle);
-    	$this->flashMessenger()->setNamespace('treasurehunt')->addMessage('The puzzle was deleted');
+    	$this->flashMessenger()->setNamespace('treasurehunt')->addMessage('The puzzle has been deleted');
 
     	return $this->redirect()->toRoute('admin/treasurehuntadmin/treasurehunt-puzzle-list', array('gameId'=>$treasurehuntId));
     }
+
+		public function listPiecesAction()
+		{
+			$service = $this->getAdminGameService();
+			$puzzleId = $this->getEvent()->getRouteMatch()->getParam('puzzleId');
+			$pieces = $service->getTreasureHuntPuzzlePieceMapper()->findBy(array('puzzle' => $puzzleId));
+			$treasurehuntPuzzle = $service->getTreasureHuntMapper()->findById($puzzleId);
+			if (is_array($pieces)) {
+    		$paginator = new \Laminas\Paginator\Paginator(new \Laminas\Paginator\Adapter\ArrayAdapter($pieces));
+    		$paginator->setItemCountPerPage(50);
+    		$paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
+    	} else {
+    		$paginator = $pieces;
+    	}
+			$viewModel = new ViewModel();
+			$viewModel->setTemplate('playground-game/treasure-hunt/list-piece');
+			$viewModel->setVariables(
+				array(
+					'pieces' => $paginator,
+					'treasurehuntPuzzle' => $treasurehuntPuzzle,
+					'puzzleId' => $puzzleId,
+				)
+			);
+
+			return $viewModel;
+		}
+
+		public function addPieceAction()
+		{
+			$service = $this->getAdminGameService();
+			$viewModel = new ViewModel();
+			$viewModel->setTemplate('playground-game/treasure-hunt/piece');
+			$puzzleId = $this->getEvent()->getRouteMatch()->getParam('puzzleId');
+			if (!$puzzleId) {
+				return $this->redirect()->toRoute('admin/playgroundgame/list');
+			}
+			$treasurehuntPuzzle = $service->getTreasureHuntPuzzleMapper()->findById($puzzleId);
+
+			$form = $this->getServiceLocator()->get('playgroundgame_treasurehuntpuzzle_piece_form');
+			$form->get('submit')->setAttribute('label', 'Add');
+			$form->get('puzzle_id')->setAttribute('value', $puzzleId);
+
+			$piece = new TreasureHuntPuzzlePiece();
+    	$form->bind($piece);
+
+			if ($this->getRequest()->isPost()) {
+				$data = array_merge(
+						$this->getRequest()->getPost()->toArray(),
+						$this->getRequest()->getFiles()->toArray()
+				);
+				$piece = $service->createPiece($data);
+				if ($piece) {
+					// Redirect to list of games
+					$this->flashMessenger()->setNamespace('treasurehunt')->addMessage('The piece has been updated');
+
+					return $this->redirect()->toRoute('admin/playgroundgame/treasurehunt-piece-list', array('puzzleId'=>$puzzleId));
+				}
+			}
+
+			return $viewModel->setVariables(
+				array(
+					'form'       => $form,
+					'piece_id'   => 0,
+					'title'      => 'Add a piece',
+					'piece'      => $piece,
+					'puzzle'		 => $treasurehuntPuzzle,
+				)
+			);
+		}
+
+		public function editPieceAction()
+		{
+			$service = $this->getAdminGameService();
+			$viewModel = new ViewModel();
+			$viewModel->setTemplate('playground-game/treasure-hunt/piece');
+			$pieceId = $this->getEvent()->getRouteMatch()->getParam('pieceId');
+			$puzzleId = $this->getEvent()->getRouteMatch()->getParam('puzzleId');
+			if (!$pieceId) {
+				return $this->redirect()->toRoute('admin/playgroundgame/list');
+			}
+			$piece   = $service->getTreasureHuntPuzzlePieceMapper()->findById($pieceId);
+			$treasurehuntPuzzle = $service->getTreasureHuntPuzzleMapper()->findById($puzzleId);
+
+			$form = $this->getServiceLocator()->get('playgroundgame_treasurehuntpuzzle_piece_form');
+			$form->get('submit')->setAttribute('label', 'Add');
+			$form->get('puzzle_id')->setAttribute('value', $puzzleId);
+			$form->bind($piece);
+			if ($this->getRequest()->isPost()) {
+				$data = array_merge(
+						$this->getRequest()->getPost()->toArray(),
+						$this->getRequest()->getFiles()->toArray()
+				);
+				$piece = $service->updatePiece($data, $piece);
+				if ($piece) {
+					// Redirect to list of games
+					$this->flashMessenger()->setNamespace('treasurehunt')->addMessage('The piece has been updated');
+					return $this->redirect()->toRoute('admin/playgroundgame/treasurehunt-piece-list', array('puzzleId'=>$puzzleId));
+				}
+			}
+
+			return $viewModel->setVariables(
+				array(
+					'form'       => $form,
+					'puzzleId'   => $puzzleId,
+					'piece_id'   => $pieceId,
+					'title'      => 'Edit piece',
+					'piece'      => $piece,
+					'puzzle'		 => $treasurehuntPuzzle,
+				)
+			);
+		}
+
+		public function removePieceAction()
+		{
+			$service = $this->getAdminGameService();
+			$pieceId = $this->getEvent()->getRouteMatch()->getParam('pieceId');
+			if (!$pieceId) {
+				return $this->redirect()->toRoute('admin/playgroundgame/list');
+			}
+			$piece   = $service->getTreasureHuntPieceMapper()->findById($pieceId);
+			$treasurehuntId = $piece->getTreasureHunt()->getId();
+			$service->getTreasureHuntPieceMapper()->remove($piece);
+			$this->flashMessenger()->setNamespace('treasurehunt')->addMessage('The piece has been deleted');
+
+			return $this->redirect()->toRoute('admin/playgroundgame/treasurehunt-piece-list', array('gameId'=>$treasurehuntId));
+		}
 
     public function getAdminGameService()
     {

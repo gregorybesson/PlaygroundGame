@@ -16,9 +16,19 @@ class TreasureHunt extends Game
     protected $treasurehuntMapper;
 
     /**
+     * @var TreasurehuntScoreMapper
+     */
+    protected $treasurehuntScoreMapper;
+
+    /**
      * @var TreasurehuntPuzzleMapper
      */
     protected $treasureHuntPuzzleMapper;
+
+    /**
+     * @var TreasurehuntPuzzlePieceMapper
+     */
+    protected $treasureHuntPuzzlePieceMapper;
 
     protected $options;
 
@@ -43,30 +53,136 @@ class TreasureHunt extends Game
 
     public function analyzeClue($game, $data, $user)
     {
-        $entryMapper = $this->getEntryMapper();
-        $entry = $this->findLastActiveEntry($game, $user);
+      $entryMapper = $this->getEntryMapper();
+      $entry = $this->findLastActiveEntry($game, $user);
+      $success = false;
+      $nextPuzzle = false;
 
-        if (!$entry) {
-            return false;
-        }
+      if (!$entry) {
+        return false;
+      }
 
-        // TODO : Replace with stepWinner
-        $winner = $this->isWinner($game, $entry, $data);
-        $entry->setWinner($winner);
-        $entry->setDrawable($winner);
+      // I get the score or create a new one if it's the first try
+      $score = $this->getTreasureHuntScoreMapper()->findOneBy(array('entry' => $entry));
+      $puzzles = $game->getPuzzles();
 
-        if(($game->getReplayPuzzle() && $winner) || !$game->getReplayPuzzle()){
-            if(count($game->getPuzzles()) > $entry->getStep()+1){
-                $entry->setStep($entry->getStep()+1);
-            } else {
-                $entry->setActive(false);
+      if (! $score) {
+          $score = new \PlaygroundGame\Entity\TreasureHuntScore();
+          $score->setEntry($entry);
+          $jsonPuzzles = array();
+          foreach ($puzzles as $puzzle) {
+            $jsonPuzzles[$puzzle->getId()] = array(
+              'id' => $puzzle->getId(),
+              'solved' => false,
+              'mistakes' => 0,
+              'pieces' => array()
+            );
+            $pieces = $puzzle->getPieces();
+            foreach ($pieces as $piece) {
+              $jsonPuzzles[$puzzle->getId()]['pieces'][$piece->getId()] = array(
+                'id' => $piece->getId(),
+                'found' => false
+              );
             }
-        }
+          }
+          $score->setJsonPuzzles(json_encode($jsonPuzzles));
+          $score = $this->getTreasureHuntScoreMapper()->insert($score);
+      } else {
+        $jsonPuzzles = json_decode($score->getJsonPuzzles(), true);
+      }
 
+      $puzzle = $puzzles[$entry->getStep()];
+      $puzzleId = $puzzle->getId();
+
+      // We check that the player is allowed to play this puzzle
+      if (
+        $game->getLimitErrorsAllowed() &&
+          $jsonPuzzles[$puzzleId]['mistakes'] >= $game->getErrorsAllowed()
+      ) {
+        $entry->setWinner(false);
+        $entry->setDrawable(false);
+        $entry->setActive(false);
         $entry = $entryMapper->update($entry);
-        $this->getEventManager()->trigger('analyze_clue.post', $this, array('user' => $user, 'entry' => $entry, 'game' => $game));
 
-        return $entry;
+        return ['success' => $success, 'entry' => $entry, 'nextPuzzle' => $nextPuzzle ];
+      } else if ($jsonPuzzles[$puzzleId]['solved']) {
+        if(count($puzzles) > $entry->getStep()+1){
+          $nextPuzzle = true;
+          $entry->setStep($entry->getStep()+1);
+        } else {
+          $entry->setActive(false);
+        }
+        $entry = $entryMapper->update($entry);
+
+        return ['success' => $success, 'entry' => $entry, 'nextPuzzle' => $nextPuzzle ];
+      }
+
+      // We check if the player has found the piece
+      $result = $this->isWinner($puzzle, $data, $jsonPuzzles[$puzzleId]);
+      if ($result['winner']) {
+        $success = true;
+        $jsonPuzzles[$puzzleId]['pieces'][$result['pieceId']]['found'] = true;
+        // If all pieces are found, then the puzzle is solved
+        $allPiecesFound = true;
+        foreach ($jsonPuzzles[$puzzleId]['pieces'] as $piece) {
+          if (!$piece['found']) {
+            $allPiecesFound = false;
+            break;
+          }
+        }
+        if ($allPiecesFound) {
+          $jsonPuzzles[$puzzleId]['solved'] = true;
+          if(count($puzzles) > $entry->getStep()+1){
+            $nextPuzzle = true;
+            $entry->setStep($entry->getStep()+1);
+          } else {
+            $allSolved = $this->isAllPuzzleSolved($jsonPuzzles);
+            $entry->setWinner($allSolved);
+            $entry->setDrawable($allSolved);
+            $entry->setActive(false);
+          }
+        }
+      } else {
+        $jsonPuzzles[$puzzleId]['mistakes']++;
+        if (
+          $game->getLimitErrorsAllowed() &&
+          $jsonPuzzles[$puzzleId]['mistakes'] >= $game->getErrorsAllowed()
+        ) {
+          $entry->setWinner(false);
+          $entry->setDrawable(false);
+          $entry->setActive(false);
+        }
+      }
+
+      // I update the score
+      $score->setJsonPuzzles(json_encode($jsonPuzzles));
+      $this->getTreasureHuntScoreMapper()->update($score);
+      $entry = $entryMapper->update($entry);
+
+      $this->getEventManager()->trigger(
+        'analyze_clue.post',
+        $this,
+        array(
+          'user' => $user,
+          'entry' => $entry,
+          'score' => $score,
+          'success' => $success,
+          'game' => $game
+        )
+      );
+
+      return [ 'success' => $success, 'entry' => $entry, 'nextPuzzle' => $nextPuzzle];
+    }
+
+    public function isAllPuzzleSolved($jsonPuzzles)
+    {
+      foreach ($jsonPuzzles as $puzzle) {
+        if (!$puzzle['solved']) {
+          return false;
+        }
+      }
+
+      return true;
     }
 
     /**
@@ -75,7 +191,39 @@ class TreasureHunt extends Game
      * @param unknown $data
      * @return boolean
      */
-    public function isWinner($game, $entry, $data=array())
+    public function isWinner($puzzle, $data=array(), $jsonPuzzle)
+    {
+      $winner = false;
+      $pieceId = null;
+      foreach ($puzzle->getPieces() as $piece) {
+        if ($jsonPuzzle['pieces'][$piece->getId()]['found'] == true) {
+          continue;
+        }
+        $json = json_decode($piece->getArea(), true);
+        if(isset($json['area'])) {
+          $area = $json['area'];
+          if ($data['x'] >= $area['x'] &&
+            $data['x'] <= ($area['x'] + $area['width']) &&
+            $data['y'] >= $area['y'] &&
+            $data['y'] <= ($area['y'] + $area['height'])
+          ) {
+            $winner = true;
+            $pieceId = $piece->getId();
+            break;
+          }
+        }
+      }
+
+      return ['winner' => $winner, 'pieceId' => $pieceId];
+    }
+
+    /**
+     *
+     * @param unknown $game
+     * @param unknown $data
+     * @return boolean
+     */
+    public function isWinnerOld($game, $entry, $data=array())
     {
         $winner = false;
         $json = json_decode($game->getPuzzle($entry->getStep())->getArea(), true);
@@ -124,6 +272,31 @@ class TreasureHunt extends Game
             }
         }
 
+        foreach ($data['uploadReferenceImage'] as $uploadImage) {
+          if (!empty($uploadImage['tmp_name'])) {
+            ErrorHandler::start();
+            if (!is_dir($path)) {
+              mkdir($path,0777, true);
+            }
+            $uploadImage['name'] = $this->fileNewname(
+              $path,
+              $puzzle->getTreasurehunt()->getId()."-".$puzzle->getId()."-ref-".$uploadImage['name']
+            );
+            move_uploaded_file($uploadImage['tmp_name'], $path.$uploadImage['name']);
+            $images = $puzzle->getReferenceImage();
+            if (!empty($images)) {
+              $images = (array) json_decode($images);
+            } else {
+              $images = [];
+            }
+            $images[] = $media_url.$uploadImage['name'];
+
+            $puzzle->setReferenceImage(json_encode($images));
+            $this->getTreasureHuntMapper()->update($puzzle);
+            ErrorHandler::stop(true);
+          }
+        }
+
         return $puzzle;
     }
 
@@ -137,18 +310,17 @@ class TreasureHunt extends Game
      */
     public function createPuzzle(array $data)
     {
-
     	$puzzle  = new \PlaygroundGame\Entity\TreasureHuntPuzzle();
     	$form  = $this->serviceLocator->get('playgroundgame_treasurehuntpuzzle_form');
     	$entityManager = $this->serviceLocator->get('doctrine.entitymanager.orm_default');
 
     	$identifierInput = $form->getInputFilter()->get('identifier');
     	$noObjectExistsValidator = new NoObjectExistsValidator(array(
-    	    'object_repository' => $entityManager->getRepository('PlaygroundGame\Entity\TreasureHunt'),
-    	    'fields' => 'identifier',
-    	    'messages' => array(
-    	        'objectFound' => 'This url already exists !'
-    	    )
+        'object_repository' => $entityManager->getRepository('PlaygroundGame\Entity\TreasureHunt'),
+        'fields' => 'identifier',
+        'messages' => array(
+          'objectFound' => 'This url already exists !'
+        )
     	));
 
     	$identifierInput->getValidatorChain()->addValidator($noObjectExistsValidator);
@@ -196,11 +368,11 @@ class TreasureHunt extends Game
 
     	$identifierInput = $form->getInputFilter()->get('identifier');
     	$noObjectExistsValidator = new NoObjectExistsValidator(array(
-    	    'object_repository' => $entityManager->getRepository('PlaygroundGame\Entity\TreasureHunt'),
-    	    'fields' => 'identifier',
-    	    'messages' => array(
-    	        'objectFound' => 'This url already exists !'
-    	    )
+        'object_repository' => $entityManager->getRepository('PlaygroundGame\Entity\TreasureHunt'),
+        'fields' => 'identifier',
+        'messages' => array(
+          'objectFound' => 'This url already exists !'
+        )
     	));
 
     	if ($puzzle->getIdentifier() != $data['identifier']) {
@@ -218,13 +390,65 @@ class TreasureHunt extends Game
     		return false;
     	}
 
-    	$treasurehunt = $puzzle->getTreasurehunt();
-
     	$this->getEventManager()->trigger(__FUNCTION__, $this, array('puzzle' => $puzzle, 'data' => $data));
     	$this->getTreasureHuntPuzzleMapper()->update($puzzle);
     	$this->getEventManager()->trigger(__FUNCTION__.'.post', $this, array('puzzle' => $puzzle, 'data' => $data));
 
     	return $puzzle;
+    }
+
+    public function createPiece(array $data)
+    {
+
+    	$piece  = new \PlaygroundGame\Entity\TreasureHuntPuzzlePiece();
+    	$form  = $this->serviceLocator->get('playgroundgame_treasurehuntpuzzle_piece_form');
+    	$entityManager = $this->serviceLocator->get('doctrine.entitymanager.orm_default');
+    	$form->bind($piece);
+    	$form->setData($data);
+
+    	$treasurehuntPuzzle = $this->getTreasureHuntPuzzleMapper()->findById($data['puzzle_id']);
+
+    	if (!$form->isValid()) {
+            // foreach ($form->getMessages() as $el => $errors) {
+            //     foreach ($errors as $key => $message) {
+            //         echo $el . " - " . $key . " : " . $this->serviceLocator->get('MvcTranslator')->translate($message);
+            //     }
+            // }
+    		return false;
+    	}
+
+    	$piece->setPuzzle($treasurehuntPuzzle);
+
+    	$this->getEventManager()->trigger(__FUNCTION__, $this, array('puzzle' => $treasurehuntPuzzle, 'data' => $data));
+    	$this->getTreasureHuntPuzzlePieceMapper()->insert($piece);
+    	$this->getEventManager()->trigger(__FUNCTION__.'.post', $this, array('puzzle' => $treasurehuntPuzzle, 'data' => $data));
+
+    	return $piece;
+    }
+
+    /**
+     * @param  array                  $data
+     * @param  string                 $entityClass
+     * @param  string                 $formClass
+     * @return \PlaygroundGame\Entity\Game
+     */
+    public function updatePiece(array $data, $piece)
+    {
+    	$form  = $this->serviceLocator->get('playgroundgame_treasurehuntpuzzle_piece_form');
+    	$entityManager = $this->serviceLocator->get('doctrine.entitymanager.orm_default');
+
+    	$form->bind($piece);
+    	$form->setData($data);
+
+    	if (!$form->isValid()) {
+    		return false;
+    	}
+
+    	$this->getEventManager()->trigger(__FUNCTION__, $this, array('piece' => $piece, 'data' => $data));
+    	$this->getTreasureHuntPuzzlePieceMapper()->update($piece);
+    	$this->getEventManager()->trigger(__FUNCTION__.'.post', $this, array('piece' => $piece, 'data' => $data));
+
+    	return $piece;
     }
 
     /**
@@ -279,5 +503,30 @@ class TreasureHunt extends Game
     	$this->treasureHuntPuzzleMapper = $treasureHuntPuzzleMapper;
 
     	return $this;
+    }
+
+    public function getTreasureHuntPuzzlePieceMapper()
+    {
+    	if (null === $this->treasureHuntPuzzlePieceMapper) {
+    		$this->treasureHuntPuzzlePieceMapper = $this->serviceLocator->get('playgroundgame_treasurehuntpuzzle_piece_mapper');
+    	}
+
+    	return $this->treasureHuntPuzzlePieceMapper;
+    }
+
+    public function setTreasureHuntPuzzlePieceMapper($treasureHuntPuzzlePieceMapper)
+    {
+    	$this->treasureHuntPuzzlePieceMapper = $treasureHuntPuzzlePieceMapper;
+
+    	return $this;
+    }
+
+    public function getTreasureHuntScoreMapper()
+    {
+        if (null === $this->treasurehuntScoreMapper) {
+            $this->treasurehuntScoreMapper = $this->serviceLocator->get('playgroundgame_treasurehunt_score_mapper');
+        }
+
+        return $this->treasurehuntScoreMapper;
     }
 }
