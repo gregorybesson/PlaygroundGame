@@ -62,6 +62,38 @@ class Crossword extends Game
         return true;
     }
 
+    public function crosswordScore($game, $entry, $data)
+    {
+        $crosswordResult = json_decode($data['crossword'], true);
+        $words = $game->getWords();
+        $points = 0;
+        $solved = false;
+        $wordsFound = 0;
+        $wordsToFind = count($words);
+
+        foreach($crosswordResult as $wordResult) {
+            $id = $wordResult['id'];
+            foreach($words as $word) {
+                if ($word->getPosition() == $id) {
+                    if ($word->getSolution() == $wordResult['answer']) {
+                        $wordsFound++;
+                        $points++;
+                    }
+                }
+            }
+        }
+        if ($wordsFound == $wordsToFind) {
+            $solved = true;
+        }
+        $entry->setPoints($points);
+        $entry->setWinner($solved);
+        $entry->setDrawable($solved);
+        $entry->setActive(false);
+
+        $entry = $this->getEntryMapper()->update($entry);
+
+        return $entry;
+    }
 
     /**
      * return entry after checking victory conditions.

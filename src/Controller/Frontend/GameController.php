@@ -611,7 +611,7 @@ class GameController extends AbstractActionController
 
         $layoutViewModel->addChild($slider, 'slider');
 
-        $games = $this->getGameService()->getActiveGames(false, '', 'endDate');
+        $games = $this->getGameService()->getActiveGames(false, '', 'endDate', 'ASC');
         if (is_array($games)) {
             $paginator = new \Laminas\Paginator\Paginator(new \Laminas\Paginator\Adapter\ArrayAdapter($games));
         } else {
