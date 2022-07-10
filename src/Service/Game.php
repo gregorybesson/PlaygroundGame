@@ -760,35 +760,35 @@ class Game
      */
     public function getActiveSliderGames()
     {
-        $em = $this->serviceLocator->get('doctrine.entitymanager.orm_default');
-        $today = new \DateTime("now");
-        $today = $today->format('Y-m-d H:i:s');
+      $em = $this->serviceLocator->get('doctrine.entitymanager.orm_default');
+      $today = new \DateTime("now");
+      $today = $today->format('Y-m-d H:i:s');
 
-        // Game active with a start_date before today (or without start_date)
-        // and end_date after today (or without end-date)
-        $query = $em->createQuery('SELECT g FROM PlaygroundGame\Entity\Game g
-            WHERE (g.publicationDate <= :date OR g.publicationDate IS NULL)
-            AND (g.closeDate >= :date OR g.closeDate IS NULL)
-            AND g.active = true AND g.broadcastPlatform = 1 AND g.pushHome = true');
-        $query->setParameter('date', $today);
-        $games = $query->getResult();
+      // Game active with a start_date before today (or without start_date)
+      // and end_date after today (or without end-date)
+      $query = $em->createQuery('SELECT g FROM PlaygroundGame\Entity\Game g
+          WHERE (g.publicationDate <= :date OR g.publicationDate IS NULL)
+          AND (g.closeDate >= :date OR g.closeDate IS NULL)
+          AND g.active = true AND g.broadcastPlatform = 1 AND g.pushHome = true');
+      $query->setParameter('date', $today);
+      $games = $query->getResult();
 
-        // je les classe par date de publication (date comme clé dans le tableau afin de pouvoir merger les objets
-        // de type article avec le même procédé en les classant naturellement par date asc ou desc
-        $arrayGames = array();
-        foreach ($games as $game) {
-            if ($game->getPublicationDate()) {
-                $key = $game->getPublicationDate()->format('Ymd');
-            } elseif ($game->getStartDate()) {
-                $key = $game->getStartDate()->format('Ymd');
-            } else {
-                $key = $game->getUpdatedAt()->format('Ymd');
-            }
-            $key .= $game->getUpdatedAt()->format('Ymd') . '-' . $game->getId();
-            $arrayGames[$key] = $game;
-        }
+      // je les classe par date de publication (date comme clé dans le tableau afin de pouvoir merger les objets
+      // de type article avec le même procédé en les classant naturellement par date asc ou desc
+      $arrayGames = array();
+      foreach ($games as $game) {
+          if ($game->getPublicationDate()) {
+              $key = $game->getPublicationDate()->format('Ymd');
+          } elseif ($game->getStartDate()) {
+              $key = $game->getStartDate()->format('Ymd');
+          } else {
+              $key = $game->getUpdatedAt()->format('Ymd');
+          }
+          $key .= $game->getUpdatedAt()->format('Ymd') . '-' . $game->getId();
+          $arrayGames[$key] = $game;
+      }
 
-        return $arrayGames;
+      return $arrayGames;
     }
 
     /**

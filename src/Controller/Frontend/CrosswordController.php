@@ -58,7 +58,7 @@ class CrosswordController extends GameController
 
         if ($this->getRequest()->isPost()) {
             $data = $this->getRequest()->getPost()->toArray();
-            $this->getGameService()->crosswordScore($this->game, $this->user, $data);
+            $entry = $this->getGameService()->crosswordScore($this->game, $entry, $data);
 
             return $this->redirect()->toUrl(
                 $this->frontendUrl()->fromRoute(
@@ -102,6 +102,57 @@ class CrosswordController extends GameController
             'acrossClues' => $acrossClues,
             'downClues' => $downClues,
         ));
+
+        return $viewModel;
+    }
+
+    public function resultAction()
+    {
+        $statusMail = null;
+        $playLimitReached = false;
+        if ($this->getRequest()->getQuery()->get('playLimitReached')) {
+            $playLimitReached = true;
+        }
+
+        $lastEntry = $this->getGameService()->findLastInactiveEntry($this->game, $this->user);
+        if (!$lastEntry) {
+            return $this->redirect()->toUrl(
+                $this->frontendUrl()->fromRoute(
+                    'lottery',
+                    array('id' => $this->game->getIdentifier()),
+                    array('force_canonical' => true)
+                )
+            );
+        }
+
+        $form = $this->getServiceLocator()->get('playgroundgame_sharemail_form');
+        $form->setAttribute('method', 'post');
+
+        if ($this->getRequest()->isPost()) {
+            $data = $this->getRequest()->getPost()->toArray();
+            $form->setData($data);
+            if ($form->isValid()) {
+                $result = $this->getGameService()->sendShareMail($data, $this->game, $this->user, $lastEntry);
+                if ($result) {
+                    $statusMail = true;
+                    $this->getGameService()->addAnotherChance($this->game, $this->user, 1);
+                }
+            }
+        }
+
+        // buildView must be before sendMail because it adds the game template path to the templateStack
+        $viewModel = $this->buildView($this->game);
+
+        if (!$playLimitReached) {
+            $this->getGameService()->sendMail($this->game, $this->user, $lastEntry);
+        }
+
+        $viewModel->setVariables(array(
+                'statusMail'    => $statusMail,
+                'form'          => $form,
+                'playLimitReached' => $playLimitReached,
+                'entry' => $lastEntry
+            ));
 
         return $viewModel;
     }
