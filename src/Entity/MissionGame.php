@@ -18,7 +18,7 @@ use Laminas\InputFilter\Factory as InputFactory;
 class MissionGame implements InputFilterAwareInterface
 {
     protected $inputFilter;
-    
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer");
@@ -38,7 +38,7 @@ class MissionGame implements InputFilterAwareInterface
      *
      **/
     protected $mission;
-    
+
     /**
      * @ORM\OneToMany(targetEntity="MissionGameCondition", mappedBy="missionGame", cascade={"persist","remove"})
      */
@@ -159,7 +159,7 @@ class MissionGame implements InputFilterAwareInterface
 
         return $this;
     }
-  
+
     /**
      * @return the $conditions
      */
@@ -174,10 +174,10 @@ class MissionGame implements InputFilterAwareInterface
     public function setConditions($conditions)
     {
         $this->conditions = $conditions;
-        
+
         return $this;
     }
-    
+
     public function addConditions(ArrayCollection $conditions)
     {
         foreach ($conditions as $condition) {
@@ -185,14 +185,14 @@ class MissionGame implements InputFilterAwareInterface
             $this->conditions->add($condition);
         }
     }
-    
+
     public function removeConditions(ArrayCollection $conditions)
     {
         foreach ($conditions as $condition) {
             $this->conditions->removeElement($condition);
         }
     }
-    
+
     /**
      * Add a condition to the mission game.
      *
@@ -221,7 +221,7 @@ class MissionGame implements InputFilterAwareInterface
     public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
-        
+
         return $this;
     }
 
@@ -241,7 +241,7 @@ class MissionGame implements InputFilterAwareInterface
     public function setUpdatedAt($updatedAt)
     {
         $this->updatedAt = $updatedAt;
-        
+
         return $this;
     }
 
@@ -252,32 +252,34 @@ class MissionGame implements InputFilterAwareInterface
      */
     public function fulfillConditions($entry = null)
     {
+        $conditions = $this->getConditions();
+        $nbConditions = count($conditions);
         foreach ($this->getConditions() as $condition) {
             if ($condition->getAttribute() == MissionGameCondition::NONE) {
                 continue;
             }
-    
+
             // On passe au suivant si on a gagné
             if ($condition->getAttribute() == MissionGameCondition::VICTORY) {
                 if (!$entry || !$entry->getWinner()) {
                     return false;
                 }
             }
-    
+
             // On passe au suivant si on a perdu
             if ($condition->getAttribute() == MissionGameCondition::DEFEAT) {
                 if (!$entry || $entry->getWinner()) {
                     return false;
                 }
             }
-    
+
             // On passe au suivant si on a plus de n points
             if ($condition->getAttribute() == MissionGameCondition::GREATER) {
                 if (!$entry || !($entry->getPoints() >= $condition->getValue())) {
                     return false;
                 }
             }
-    
+
             // On passe au suivant si on a moins de n points
             if ($condition->getAttribute() == MissionGameCondition::LESS) {
                 if (!$entry || !($entry->getPoints() < $condition->getValue())) {
@@ -285,6 +287,12 @@ class MissionGame implements InputFilterAwareInterface
                 }
             }
         }
+
+        // if ($nbConditions == 0) {
+        //     if ($entry->getGame()->getId() == $this->getGame()->getId()) {
+        //         return false;
+        //     }
+        // }
 
         return true;
     }
@@ -306,7 +314,7 @@ class MissionGame implements InputFilterAwareInterface
             )));
             $this->inputFilter = $inputFilter;
         }
-    
+
         return $this->inputFilter;
     }
 }

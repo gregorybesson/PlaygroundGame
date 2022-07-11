@@ -509,15 +509,15 @@ class Game
         // de type article avec le même procédé en les classant naturellement par date asc ou desc
         $arrayGames = array();
         foreach ($games as $game) {
-            if ($game->getPublicationDate()) {
-                $key = $game->getPublicationDate()->format('Ymd');
-            } elseif ($game->getStartDate()) {
-                $key = $game->getStartDate()->format('Ymd');
-            } else {
-                $key = $game->getUpdatedAt()->format('Ymd');
-            }
-            $key .= $game->getUpdatedAt()->format('Ymd') . '-' . $game->getId();
-            $arrayGames[$key] = $game;
+          if ($game->getPublicationDate()) {
+              $key = $game->getPublicationDate()->format('Ymd');
+          } elseif ($game->getStartDate()) {
+              $key = $game->getStartDate()->format('Ymd');
+          } else {
+              $key = $game->getUpdatedAt()->format('Ymd');
+          }
+          $key .= $game->getUpdatedAt()->format('Ymd') . '-' . $game->getId();
+          $arrayGames[$key] = $game;
         }
 
         return $arrayGames;
