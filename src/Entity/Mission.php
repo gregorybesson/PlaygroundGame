@@ -16,7 +16,7 @@ use Laminas\InputFilter\InputFilterAwareInterface;
 class Mission extends Game implements InputFilterAwareInterface
 {
     const CLASSTYPE = 'mission';
-    
+
     /**
      * @ORM\OneToMany(targetEntity="MissionGame", mappedBy="mission", cascade={"persist","remove"}, orphanRemoval=true)
      */
@@ -43,10 +43,10 @@ class Mission extends Game implements InputFilterAwareInterface
     public function setMissionGames($missionGames)
     {
         $this->missionGames = $missionGames;
-        
+
         return $this;
     }
-    
+
     public function addMissionGames(ArrayCollection $missionGames)
     {
         foreach ($missionGames as $missionGame) {
@@ -54,7 +54,7 @@ class Mission extends Game implements InputFilterAwareInterface
             $this->missionGames->add($missionGame);
         }
     }
-    
+
     public function removeMissionGames(ArrayCollection $missionGames)
     {
         foreach ($missionGames as $missionGame) {
@@ -62,7 +62,7 @@ class Mission extends Game implements InputFilterAwareInterface
             $this->missionGames->removeElement($missionGame);
         }
     }
-    
+
     /**
      * Add a game to the mission.
      *
@@ -85,8 +85,8 @@ class Mission extends Game implements InputFilterAwareInterface
         $sortedPlayableGames = array();
         foreach ($this->missionGames as $missionGame) {
             $g = $missionGame->getGame();
-            
-            if ($g->isStarted() && $g->getActive()) {
+
+            if ($g->isStarted() && $g->getActive() && $g->getId() != $entry->getGame()->getId()) {
                 if (!$missionGame->getConditions() || $missionGame->fulfillConditions($entry)) {
                     $sortedPlayableGames[$missionGame->getPosition()] = $missionGame;
                 }
@@ -139,7 +139,7 @@ class Mission extends Game implements InputFilterAwareInterface
         if (!$subGame) {
             return false;
         }
-        
+
         $sortedPlayableGames = $this->getPlayableGames($entry);
         foreach ($sortedPlayableGames as $pgame) {
             if ($subGame->getIdentifier() === $pgame->getGame()->getIdentifier()) {
@@ -176,17 +176,17 @@ class Mission extends Game implements InputFilterAwareInterface
             $factory = new InputFactory();
 
             $inputFilter = parent::getInputFilter();
-            
+
             // This definition is mandatory for the hydration to work in a form !!!!
             $inputFilter->add($factory->createInput(array(
                 'name' => 'missionGames',
                 'required' => false,
             )));
-            
+
 
             $this->inputFilter = $inputFilter;
         }
-    
+
         return $this->inputFilter;
     }
 }
