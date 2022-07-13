@@ -15,26 +15,36 @@ class Crossword extends Game
      */
     public function updateWord(array $data, $word)
     {
-        $form        = $this->serviceLocator->get('playgroundgame_crosswordword_form');
-        $crossword = $this->getGameMapper()->findById($data['crossword_id']);
-        $word->setGame($crossword);
+      $form = $this->serviceLocator->get('playgroundgame_crosswordword_form');
+      $crossword = $this->getGameMapper()->findById($data['crossword_id']);
+      $word->setGame($crossword);
 
-        $form->bind($word);
-        $form->setData($data);
+      $form->bind($word);
+      $form->setData($data);
 
-        if (!$form->isValid()) {
-            return false;
-        }
+      if (!$form->isValid()) {
+          return false;
+      }
 
-        // TODO: Solve the error on binding. The following properties are not binded thru the form
+      // TODO: Solve the error on binding. The following properties are not binded thru the form
+      if ($crossword->getGameType() == "crossword") {
         $word->setLayoutColumn($data['layoutColumn']);
         $word->setLayoutRow($data['layoutRow']);
         $word->setPosition($data['position']);
         $word->setOrientation($data['orientation']);
+      }
 
-        $this->getCrosswordWordMapper()->update($word);
+      $this->getCrosswordWordMapper()->update($word);
 
-        return $word;
+      if ($crossword->getGameType() == "word_search") {
+        $maxSize = max($crossword->getLayoutRows(), strlen($word->getSolution()) + 2);
+        $crossword->setLayoutRows($maxSize);
+        $crossword->setLayoutColumns($maxSize);
+
+        $this->getGameMapper()->update($crossword);
+      }
+
+      return $word;
     }
 
     /**

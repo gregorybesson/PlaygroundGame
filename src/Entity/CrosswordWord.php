@@ -52,17 +52,17 @@ class CrosswordWord implements InputFilterAwareInterface, \JsonSerializable
     protected $clue;
 
     /**
-     * @ORM\Column(name="layout_row", type="integer", nullable=false)
+     * @ORM\Column(name="layout_row", type="integer", nullable=true)
      */
     protected $layoutRow;
 
     /**
-     * @ORM\Column(name="layout_column", type="integer", nullable=false)
+     * @ORM\Column(name="layout_column", type="integer", nullable=true)
      */
     protected $layoutColumn;
 
     /**
-     * @ORM\Column(type="integer", nullable=false)
+     * @ORM\Column(type="integer", nullable=true)
      */
     protected $position;
 

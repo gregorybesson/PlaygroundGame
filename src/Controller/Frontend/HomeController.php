@@ -13,7 +13,7 @@ class HomeController extends AbstractActionController
      * @var \PlaygroundGame\Service\GameService
      */
     protected $gameService;
-    
+
     /**
      * @var \PlaygroundCms\Service\Page
      */
@@ -25,7 +25,7 @@ class HomeController extends AbstractActionController
     protected $settingsService;
 
     protected $options;
-    
+
     /**
      *
      * @var ServiceManager
@@ -41,7 +41,7 @@ class HomeController extends AbstractActionController
     {
         return $this->serviceLocator;
     }
-    
+
     public function indexAction()
     {
         $paginationSettings = $this->getSettingsService()->getSettingsMapper()->findById(1);
@@ -145,29 +145,29 @@ class HomeController extends AbstractActionController
 
         return $this;
     }
-    
+
     public function getGameService()
     {
         if (!$this->gameService) {
             $this->gameService = $this->getServiceLocator()->get('playgroundgame_game_service');
         }
-    
+
         return $this->gameService;
     }
-    
+
     public function setGameService(\PlaygroundGame\Service\Game $gameService)
     {
         $this->gameService = $gameService;
-    
+
         return $this;
     }
-    
+
     public function getPageService()
     {
         if (!$this->pageService) {
             $this->pageService = $this->getServiceLocator()->get('playgroundcms_page_service');
         }
-    
+
         return $this->pageService;
     }
 
@@ -176,14 +176,14 @@ class HomeController extends AbstractActionController
         if (!$this->settingsService) {
             $this->settingsService = $this->getServiceLocator()->get('playgrounddesign_settings_service');
         }
-    
+
         return $this->settingsService;
     }
-    
+
     public function setPageService(\PlaygroundCms\Service\Page $pageService)
     {
         $this->pageService = $pageService;
-    
+
         return $this;
     }
 }

@@ -35,6 +35,14 @@ class Crossword extends Game implements InputFilterAwareInterface
     protected $victoryConditions = 0;
 
     /**
+     * values : crossword - A regular crossword
+     *          word_search - A wordsearch puzzle
+     *
+     * @ORM\Column(name="game_type", type="string", nullable=false)
+     */
+    protected $gameType = 'crossword';
+
+    /**
      * @ORM\Column(name="layout_rows", type="integer", nullable=true)
      */
     protected $layoutRows;
@@ -96,6 +104,18 @@ class Crossword extends Game implements InputFilterAwareInterface
     public function setVictoryConditions($victoryConditions)
     {
         $this->victoryConditions = $victoryConditions;
+
+        return $this;
+    }
+
+    public function getGameType()
+    {
+        return $this->gameType;
+    }
+
+    public function setGameType($gameType)
+    {
+        $this->gameType = $gameType;
 
         return $this;
     }
