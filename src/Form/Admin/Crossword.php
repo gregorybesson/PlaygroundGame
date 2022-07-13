@@ -21,6 +21,22 @@ class Crossword extends Game
         parent::__construct($name, $sm, $translator);
 
         $this->add(array(
+            'type' => 'Laminas\Form\Element\Select',
+            'name' => 'gameType',
+            'attributes' =>  array(
+                'id' => 'gameType',
+                'options' => array(
+                    'crossword' => $translator->translate("A regular crossword", 'playgroundgame'),
+                    'word_search' => $translator->translate("A wordsearch puzzle", 'playgroundgame'),
+                ),
+            ),
+            'options' => array(
+                'label' => $translator->translate('Type d\'instant gagnant', 'playgroundgame'),
+                // 'empty_option' => $translator->translate('Type d\'instant gagnant', 'playgroundgame'),
+            ),
+        ));
+
+        $this->add(array(
             'name' => 'victoryConditions',
             'type' => 'Laminas\Form\Element\Text',
             'attributes' => array(
