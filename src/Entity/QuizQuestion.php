@@ -37,6 +37,7 @@ class QuizQuestion implements InputFilterAwareInterface
 
     /**
      * @ORM\OneToMany(targetEntity="QuizAnswer", mappedBy="question", cascade={"persist","remove"})
+     * @ORM\OrderBy({"position" = "ASC"})
      */
     private $answers;
 
@@ -218,9 +219,14 @@ class QuizQuestion implements InputFilterAwareInterface
 
     public function addAnswers(ArrayCollection $answers)
     {
+        $i = 0;
         foreach ($answers as $answer) {
             $answer->setQuestion($this);
+            if ($answer->getPosition() == null) {
+                $answer->setPosition($i);
+            }
             $this->answers->add($answer);
+            $i++;
         }
     }
 

@@ -109,7 +109,7 @@ class QuizController extends GameController
 
         $questionId = $this->getEvent()->getRouteMatch()->getParam('questionId');
         if (!$questionId) {
-            return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/list'));
+          return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/list'));
         }
         $question   = $service->getQuizQuestionMapper()->findById($questionId);
         $quizId     = $question->getQuiz()->getId();
@@ -123,30 +123,29 @@ class QuizController extends GameController
         $form->get('submit')->setAttribute('label', 'Mettre à jour');
         $form->get('quiz_id')->setAttribute('value', $quizId);
         $form->setAttribute(
-            'action',
-            $this->adminUrl()->fromRoute('playgroundgame/quiz-question-edit', array('questionId' => $questionId))
+          'action',
+          $this->adminUrl()->fromRoute('playgroundgame/quiz-question-edit', array('questionId' => $questionId))
         );
         $form->setAttribute('method', 'post');
-
         $form->bind($question);
 
         if ($this->getRequest()->isPost()) {
-            $data = array_replace_recursive(
-                $this->getRequest()->getPost()->toArray(),
-                $this->getRequest()->getFiles()->toArray()
+          $data = array_replace_recursive(
+            $this->getRequest()->getPost()->toArray(),
+            $this->getRequest()->getFiles()->toArray()
+          );
+
+          $question = $service->updateQuestion($data, $question);
+          if ($question) {
+            // Redirect to list of games
+            $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The question has been updated');
+
+            return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/quiz-question-list', array('quizId'=>$quizId)));
+          } else {
+            $this->flashMessenger()->setNamespace('playgroundgame')->addMessage(
+              'The question was not updated - create at least one good answer'
             );
-
-            $question = $service->updateQuestion($data, $question);
-            if ($question) {
-                // Redirect to list of games
-                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage('The question has been updated');
-
-                return $this->redirect()->toUrl($this->adminUrl()->fromRoute('playgroundgame/quiz-question-list', array('quizId'=>$quizId)));
-            } else {
-                $this->flashMessenger()->setNamespace('playgroundgame')->addMessage(
-                    'The question was not updated - create at least one good answer'
-                );
-            }
+          }
         }
 
         return $viewModel->setVariables(array('form' => $form, 'quiz_id' => $quizId, 'question_id' => $questionId));
@@ -171,6 +170,15 @@ class QuizController extends GameController
     public function sortQuestionAction()
     {
         $result = $this->getAdminGameService()->sortQuestion($this->params()->fromQuery('order'));
+        $model = new JsonModel(array(
+            'success' => $result,
+        ));
+        return $model->setTerminal(true);
+    }
+
+    public function sortAnswerAction()
+    {
+        $result = $this->getAdminGameService()->sortAnswer($this->params()->fromQuery('order'));
         $model = new JsonModel(array(
             'success' => $result,
         ));
