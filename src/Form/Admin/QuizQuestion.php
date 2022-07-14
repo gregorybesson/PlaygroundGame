@@ -193,46 +193,46 @@ class QuizQuestion extends ProvidesEventsForm
 
         // Adding an empty upload field to be able to correctly handle this on the service side.
         $this->add(array(
-            'name' => 'upload_image',
-            'attributes' => array(
-                'type'  => 'file',
+          'name' => 'upload_image',
+          'attributes' => array(
+            'type'  => 'file',
+          ),
+          'options' => array(
+            'label' => $translator->translate('Image', 'playgroundgame'),
+            'label_attributes' => array(
+              'class' => 'control-label',
             ),
-            'options' => array(
-                'label' => $translator->translate('Image', 'playgroundgame'),
-                'label_attributes' => array(
-                    'class' => 'control-label',
-                ),
-            ),
+          ),
         ));
         $this->add(array(
-            'name' => 'image',
-            'type'  => 'Laminas\Form\Element\Hidden',
-            'attributes' => array(
-                'value' => '',
-            ),
+          'name' => 'image',
+          'type'  => 'Laminas\Form\Element\Hidden',
+          'attributes' => array(
+            'value' => '',
+          ),
         ));
         $this->add(array(
-                'name' => 'delete_image',
-                'type' => 'Laminas\Form\Element\Hidden',
-                'attributes' => array(
-                    'value' => '',
-                    'class' => 'delete_image',
-                ),
+          'name' => 'delete_image',
+          'type' => 'Laminas\Form\Element\Hidden',
+          'attributes' => array(
+            'value' => '',
+            'class' => 'delete_image',
+          ),
         ));
 
         $quizAnswerFieldset = new QuizAnswerFieldset(null, $serviceManager, $translator);
         $this->add(array(
-            'type'    => 'Laminas\Form\Element\Collection',
-            'name'    => 'answers',
-            'options' => array(
-                'id'    => 'answers',
-                'label' => $translator->translate('List of answers', 'playgroundgame'),
-                'count' => 0,
-                'should_create_template' => true,
-                'allow_add' => true,
-                'allow_remove' => true,
-                'target_element' => $quizAnswerFieldset,
-            ),
+          'type'    => 'Laminas\Form\Element\Collection',
+          'name'    => 'answers',
+          'options' => array(
+            'id'    => 'answers',
+            'label' => $translator->translate('List of answers', 'playgroundgame'),
+            'count' => 0,
+            'should_create_template' => true,
+            'allow_add' => true,
+            'allow_remove' => true,
+            'target_element' => $quizAnswerFieldset,
+          ),
         ));
 
         $submitElement = new Element\Button('submit');

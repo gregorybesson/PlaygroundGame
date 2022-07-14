@@ -3423,6 +3423,16 @@ return array(
                                         'action' => 'sortQuestion'
                                     )
                                 )
+                            ),
+                            'sortanswer' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/sortanswer/:gameId/:questionId',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Admin\Quiz::class,
+                                        'action' => 'sortAnswer'
+                                    )
+                                )
                             )
                         )
                     ),
@@ -4404,11 +4414,12 @@ return array(
                             'quiz-question-edit' => array(
                                 'type' => 'Segment',
                                 'options' => array(
-                                    'route' => '/quiz-question-edit/:questionId',
+                                    'route' => '/quiz-question-edit/:quizId/:questionId',
                                     'defaults' => array(
                                         'controller' => PlaygroundGame\Controller\Admin\Quiz::class,
                                         'action' => 'editQuestion',
-                                        'questionId' => 0
+                                        'questionId' => 0,
+                                        'quizId' => 0
                                     )
                                 )
                             ),

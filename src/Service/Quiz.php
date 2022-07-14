@@ -436,6 +436,25 @@ class Quiz extends Game
     }
 
     /**
+     * This function update the sort order of the answers in a Quiz
+     *
+     * @param  string $data
+     * @return boolean
+     */
+    public function sortAnswer($data)
+    {
+        $arr = explode(",", $data);
+
+        foreach ($arr as $k => $v) {
+            $answer = $this->getQuizAnswerMapper()->findById($v);
+            $answer->setPosition($k);
+            $this->getQuizAnswerMapper()->update($answer);
+        }
+
+        return true;
+    }
+
+    /**
      * @return string
      */
     public function calculateMaxAnswersQuestion($question)
