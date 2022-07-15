@@ -31,7 +31,7 @@ class Crossword extends Game
                 ),
             ),
             'options' => array(
-                'label' => $translator->translate('Type d\'instant gagnant', 'playgroundgame'),
+                'label' => $translator->translate('Crossword type', 'playgroundgame'),
                 // 'empty_option' => $translator->translate('Type d\'instant gagnant', 'playgroundgame'),
             ),
         ));

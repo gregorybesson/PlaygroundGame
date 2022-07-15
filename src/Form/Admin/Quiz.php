@@ -22,6 +22,21 @@ class Quiz extends Game
         parent::__construct($name, $sm, $translator);
 
         $this->add(array(
+            'type' => 'Laminas\Form\Element\Select',
+            'name' => 'gameType',
+            'attributes' =>  array(
+                'id' => 'gameType',
+                'options' => array(
+                    'quiz' => $translator->translate("A regular quiz", 'playgroundgame'),
+                    'links' => $translator->translate("The player links the right answer with the right question", 'playgroundgame'),
+                ),
+            ),
+            'options' => array(
+                'label' => $translator->translate('Quiz type', 'playgroundgame'),
+            ),
+        ));
+
+        $this->add(array(
             'type' => 'Laminas\Form\Element\Checkbox',
             'name' => 'drawAuto',
             'attributes' =>  array(

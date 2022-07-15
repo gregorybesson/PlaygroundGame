@@ -18,6 +18,19 @@ class Quiz extends Game implements InputFilterAwareInterface
     const CLASSTYPE = 'quiz';
 
     /**
+     * values : quiz - A regular quiz containing questions with
+     *                  - one answer only
+     *                  - multiple answers
+     *                  - pronostics
+     *                  - drag & drop answers
+     *          links - questions are randomized and answers also. The player
+     *          has to find the good answers linked to the questions
+     *
+     * @ORM\Column(name="game_type", type="string", nullable=false)
+     */
+    protected $gameType = 'quiz';
+
+    /**
      * Automatic Draw
      * @ORM\Column(name="draw_auto", type="boolean", nullable=false)
      */
@@ -105,6 +118,19 @@ class Quiz extends Game implements InputFilterAwareInterface
         parent::__construct();
         $this->setClassType(self::CLASSTYPE);
         $this->questions = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+
+    public function getGameType()
+    {
+        return $this->gameType;
+    }
+
+    public function setGameType($gameType)
+    {
+        $this->gameType = $gameType;
+
+        return $this;
     }
 
     /**
