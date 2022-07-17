@@ -26,6 +26,7 @@ class Crossword extends Game implements InputFilterAwareInterface
     /**
      * the words associated with the game
      * @ORM\OneToMany(targetEntity="CrosswordWord", mappedBy="game")
+     * @ORM\OrderBy({"position"="ASC"})
      */
     protected $words;
 

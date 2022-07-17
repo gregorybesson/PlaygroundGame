@@ -75,6 +75,7 @@ class Crossword extends Game
     public function crosswordScore($game, $entry, $data)
     {
         $crosswordResult = json_decode($data['crossword'], true);
+
         $words = $game->getWords();
         $points = 0;
         $solved = false;
@@ -82,19 +83,22 @@ class Crossword extends Game
         $wordsToFind = count($words);
 
         foreach($crosswordResult as $wordResult) {
-            $id = $wordResult['id'];
-            foreach($words as $word) {
-                if ($word->getPosition() == $id) {
-                    if ($word->getSolution() == $wordResult['answer']) {
-                        $wordsFound++;
-                        $points++;
-                    }
-                }
+          $id = $wordResult['id'];
+          foreach($words as $word) {
+            if ($word->getPosition() == $id && $word->getSolution() == $wordResult['answer']) {
+              $wordsFound++;
+              $points++;
             }
+          }
         }
-        if ($wordsFound == $wordsToFind) {
-            $solved = true;
+
+        $victoryCondition = $game->getVictoryConditions()/100;
+        $scoreRatio = $wordsFound / $wordsToFind;
+
+        if ($scoreRatio >= $victoryCondition) {
+          $solved = true;
         }
+
         $entry->setPoints($points);
         $entry->setWinner($solved);
         $entry->setDrawable($solved);
@@ -103,6 +107,35 @@ class Crossword extends Game
         $entry = $this->getEntryMapper()->update($entry);
 
         return $entry;
+    }
+
+    public function crosswordHint($game, $data)
+    {
+      $crosswordResult = json_decode($data, true);
+      $words = $game->getWords();
+      $points = 0;
+      $solved = false;
+      $wordsFound = 0;
+      $wordsToFind = count($words);
+      $arWordsFound = [];
+
+      foreach($crosswordResult as $wordResult) {
+        $id = $wordResult['id'];
+        foreach($words as $word) {
+          if ($word->getPosition() == $id) {
+            if ($word->getSolution() == $wordResult['answer']) {
+              $wordsFound++;
+              $points++;
+              $arWordsFound[] = ["position" => ($wordResult['clue_type'] == "across") ? "a".$id : "d".$id, "solution" => $word->getSolution()];
+            }
+          }
+        }
+      }
+      if ($wordsFound == $wordsToFind) {
+        $solved = true;
+      }
+
+      return $arWordsFound;
     }
 
     /**
