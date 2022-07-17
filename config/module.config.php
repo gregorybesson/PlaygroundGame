@@ -1985,6 +1985,16 @@ return array(
                                     )
                                 )
                             ),
+                            'hint' => array(
+                                'type' => 'Laminas\Router\Http\Literal',
+                                'options' => array(
+                                    'route' => '/hint',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Crossword::class,
+                                        'action' => 'hint'
+                                    )
+                                )
+                            ),
                             'result' => array(
                                 'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(
