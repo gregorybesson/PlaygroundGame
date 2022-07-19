@@ -68,8 +68,8 @@ class CrosswordController extends GameController
                 array('id' => $this->game->getIdentifier())
               )
             );
-          } else if ($this->game->getGameType() == "wordle") {
-            $entry = $this->getGameService()->wordleScore($this->game, $entry, $data);
+          } else if ($this->game->getGameType() == "wordle" || $this->game->getGameType() == "hangman") {
+            $entry = $this->getGameService()->wordScore($this->game, $entry, $data);
             if (! $entry->getActive()) {
               return $this->redirect()->toUrl(
                 $this->frontendUrl()->fromRoute(
@@ -86,7 +86,7 @@ class CrosswordController extends GameController
         $viewModel = $this->buildView($this->game);
         $words = $this->game->getWords();
 
-        if($this->game->getGameType() != "wordle") {
+        if($this->game->getGameType() != "wordle" && $this->game->getGameType() != "hangman") {
           $rows = $this->game->getLayoutRows();
           $columns = $this->game->getLayoutColumns();
           $acrossClues = [];

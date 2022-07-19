@@ -112,10 +112,10 @@ class Crossword extends Game
     return $entry;
   }
 
-  public function wordleScore($game, $entry, $data)
+  public function wordScore($game, $entry, $data)
   {
     $words = $game->getWords();
-    $hasWon = $data['wordle'];
+    $hasWon = $data['word'];
     $entry->setStep($entry->getStep()+1);
     $activeStep = $entry->getStep();
 

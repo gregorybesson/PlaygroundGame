@@ -29,6 +29,7 @@ class Crossword extends Game
                     'crossword' => $translator->translate("A regular crossword", 'playgroundgame'),
                     'word_search' => $translator->translate("A wordsearch puzzle", 'playgroundgame'),
                     'wordle' => $translator->translate("A wordle puzzle", 'playgroundgame'),
+                    'hangman' => $translator->translate("A hangman puzzle", 'playgroundgame'),
                 ),
             ),
             'options' => array(
