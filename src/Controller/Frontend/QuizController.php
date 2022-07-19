@@ -104,6 +104,7 @@ class QuizController extends GameController
             ) {
                 $fieldsetName = 'questionGroup' . ++ $j;
                 $fieldset = new Fieldset($fieldsetName);
+                $fieldsetFilter = new \Laminas\InputFilter\InputFilter();
             }
 
             if ($this->getRequest()->isPost()) {
@@ -121,7 +122,6 @@ class QuizController extends GameController
             }
 
             $name = 'q' . $q->getId();
-            $fieldsetFilter = new \Laminas\InputFilter\InputFilter();
 
             if ($q->getType() === 0) {
                 $element = new Element\Radio($name);
@@ -196,9 +196,11 @@ class QuizController extends GameController
                     [
                         'name'     => $name,
                         'required' => false,
+                        'allowEmpty' => true,
                     ]
                 )
             );
+
             // TODO: Add this filter when the option "is mandatory" is checked on the question in the BO
             // $fieldsetFilter->add(
             //     $factory->createInput(
@@ -313,6 +315,9 @@ class QuizController extends GameController
             if ($this->game->getTimer() || $form->isValid()) {
                 unset($data['submitForm']);
                 $entry = $this->getGameService()->createQuizReply($data, $this->game, $this->user);
+            } else {
+                // print_r($form->getMessages());
+                // die();
             }
 
             return $this->redirect()->toUrl(

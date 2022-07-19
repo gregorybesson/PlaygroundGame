@@ -19,6 +19,7 @@ class CrosswordController extends GameController
     public function playAction()
     {
         $playError = null;
+        $locale = $this->getServiceLocator()->get('MvcTranslator')->getLocale();
         $entry = $this->getGameService()->play($this->game, $this->user, $playError);
         if (!$entry) {
           $reason = "";
@@ -59,51 +60,75 @@ class CrosswordController extends GameController
 
         if ($this->getRequest()->isPost()) {
           $data = $this->getRequest()->getPost()->toArray();
-          $entry = $this->getGameService()->crosswordScore($this->game, $entry, $data);
-
-          return $this->redirect()->toUrl(
-            $this->frontendUrl()->fromRoute(
-              'crossword/result',
-              array('id' => $this->game->getIdentifier())
-            )
-          );
-        }
-
-        $rows = $this->game->getLayoutRows();
-        $columns = $this->game->getLayoutColumns();
-        $acrossClues = [];
-        $downClues = [];
-        $words = $this->game->getWords();
-
-        foreach ($words as $word) {
-          if ($word->getOrientation() == "across"){
-            $acrossClues[] = [
-              "x" => $word->getLayoutColumn(),
-              "y" => $word->getLayoutRow(),
-              "clue" => $word->getPosition() . '. ' . trim($word->getClue()) . ' (' . strlen($word->getSolution()) . ')',
-            ];
-          } else if ($word->getOrientation() == "down"){
-            $downClues[] = [
-              "x" => $word->getLayoutColumn(),
-              "y" => $word->getLayoutRow(),
-              "clue" => $word->getPosition() . '. ' . trim($word->getClue()) . ' (' .strlen($word->getSolution()) . ')',
-            ];
+          if ($this->game->getGameType() == "crossword") {
+            $entry = $this->getGameService()->crosswordScore($this->game, $entry, $data);
+            return $this->redirect()->toUrl(
+              $this->frontendUrl()->fromRoute(
+                'crossword/result',
+                array('id' => $this->game->getIdentifier())
+              )
+            );
+          } else if ($this->game->getGameType() == "wordle") {
+            $entry = $this->getGameService()->wordleScore($this->game, $entry, $data);
+            if (! $entry->getActive()) {
+              return $this->redirect()->toUrl(
+                $this->frontendUrl()->fromRoute(
+                  'crossword/result',
+                  array('id' => $this->game->getIdentifier())
+                )
+              );
+            }
+          } else if ($this->game->getGameType() == "word_search") {
+            die('word_search');
           }
         }
 
-        $crosswordDefinition = [
-          "width" => $columns,
-          "height" => $rows,
-          "acrossClues" => $acrossClues,
-          "downClues" => $downClues,
-        ];
-
         $viewModel = $this->buildView($this->game);
-        $viewModel->setVariables(array(
-          'crosswordDefinition' => json_encode($crosswordDefinition),
-          'acrossClues' => $acrossClues,
-          'downClues' => $downClues,
-        ));
+        $words = $this->game->getWords();
+
+        if($this->game->getGameType() != "wordle") {
+          $rows = $this->game->getLayoutRows();
+          $columns = $this->game->getLayoutColumns();
+          $acrossClues = [];
+          $downClues = [];
+
+          foreach ($words as $word) {
+            if ($word->getOrientation() == "across"){
+              $acrossClues[] = [
+                "x" => $word->getLayoutColumn(),
+                "y" => $word->getLayoutRow(),
+                "clue" => $word->getPosition() . '. ' . trim($word->getClue()) . ' (' . strlen($word->getSolution()) . ')',
+              ];
+            } else if ($word->getOrientation() == "down"){
+              $downClues[] = [
+                "x" => $word->getLayoutColumn(),
+                "y" => $word->getLayoutRow(),
+                "clue" => $word->getPosition() . '. ' . trim($word->getClue()) . ' (' .strlen($word->getSolution()) . ')',
+              ];
+            }
+          }
+
+          $crosswordDefinition = [
+            "width" => $columns,
+            "height" => $rows,
+            "acrossClues" => $acrossClues,
+            "downClues" => $downClues,
+          ];
+
+
+          $viewModel->setVariables(array(
+            'crosswordDefinition' => json_encode($crosswordDefinition),
+            'acrossClues' => $acrossClues,
+            'downClues' => $downClues,
+          ));
+        } else {
+          $index = $entry->getStep();
+          $word = $words[$index]->getSolution();
+          $viewModel->setVariables([
+            'word' => $word,
+            'locale' => $locale,
+          ]);
+        }
 
         return $viewModel;
     }
@@ -173,6 +198,19 @@ class CrosswordController extends GameController
       ));
 
       return $viewModel;
+    }
+
+    public function getAllWordsAction()
+    {
+      $length = $this->getEvent()->getRouteMatch()->getParam('length');
+      $locale = $this->getServiceLocator()->get('MvcTranslator')->getLocale();
+      $arWordsFound = $this->getGameService()->getAllWords($locale, $length);
+      $model = new JsonModel(array(
+        'success' => false,
+        'words' => $arWordsFound,
+      ));
+
+      return $model->setTerminal(true);
     }
 
     public function getGameService()
