@@ -1995,6 +1995,20 @@ return array(
                                     )
                                 )
                             ),
+                            'words' => array(
+                                'type' => 'Laminas\Router\Http\Segment',
+                                'options' => array(
+                                    'route' => '/words/:length',
+                                    'defaults' => array(
+                                        'controller' => PlaygroundGame\Controller\Frontend\Crossword::class,
+                                        'action' => 'getAllWords'
+                                    ),
+                                    'constraints' => array(
+                                        'locale'  => '[a-zA-Z]+',
+                                        'length' => '[0-9]+',
+                                    ),
+                                )
+                            ),
                             'result' => array(
                                 'type' => 'Laminas\Router\Http\Literal',
                                 'options' => array(

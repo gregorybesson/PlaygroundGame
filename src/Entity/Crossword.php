@@ -38,6 +38,7 @@ class Crossword extends Game implements InputFilterAwareInterface
     /**
      * values : crossword - A regular crossword
      *          word_search - A wordsearch puzzle
+     *          wordle - A wordle puzzle
      *
      * @ORM\Column(name="game_type", type="string", nullable=false)
      */
