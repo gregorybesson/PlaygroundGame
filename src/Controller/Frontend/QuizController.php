@@ -371,11 +371,19 @@ class QuizController extends GameController
         $userCorrectAnswers = 0;
         $correctAnswers = array();
         $userAnswers = array();
+        $nbQuestions = count($this->game->getQuestions());
+        $nbCorrectQuestions = 0;
+        $arCorrectQuestions = [];
 
         if ($reply !== null) {
             foreach ($reply->getAnswers() as $answer) {
+                $q = $this->getGameService()->getQuizQuestionMapper()->findById($answer->getQuestionId());
                 if ($answer->getCorrect()) {
                     $correctAnswers[$answer->getQuestionId()][$answer->getAnswerId()] = true;
+                    $arCorrectQuestions[$answer->getQuestionId()] += 1;
+                    if ($q->getMaxCorrectAnswers() == $arCorrectQuestions[$answer->getQuestionId()]) {
+                        ++$nbCorrectQuestions;
+                    }
                     ++$userCorrectAnswers;
                 }
                 $userAnswers[$answer->getQuestionId()][$answer->getAnswerId()] = true;
@@ -480,6 +488,8 @@ class QuizController extends GameController
                 'flashMessages'       => $this->flashMessenger()->getMessages(),
                 'playLimitReached'    => $playLimitReached,
                 'distribution'        => $distribution,
+                'nbQuestions'         => $nbQuestions,
+                'nbCorrectQuestions'  => $nbCorrectQuestions,
             ]
         );
 
