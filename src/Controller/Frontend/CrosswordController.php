@@ -123,7 +123,12 @@ class CrosswordController extends GameController
           ));
         } else {
           $index = $entry->getStep();
-          $word = $words[$index]->getSolution();
+          if (!isset($words[$index])) {
+            $word = $words[0]->getSolution();
+          } else {
+            $word = $words[$index]->getSolution();
+          }
+
           $viewModel->setVariables([
             'word' => $word,
             'locale' => $locale,
