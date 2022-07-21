@@ -124,12 +124,15 @@ class CrosswordController extends GameController
           $index = $entry->getStep();
           if (!isset($words[$index])) {
             $word = $words[0]->getSolution();
+            $clue = $words[0]->getClue();
           } else {
             $word = $words[$index]->getSolution();
+            $clue = $words[$index]->getClue();
           }
 
           $viewModel->setVariables([
             'word' => $word,
+            'clue' => $clue,
             'locale' => $locale,
           ]);
         }
