@@ -115,7 +115,6 @@ class CrosswordController extends GameController
             "downClues" => $downClues,
           ];
 
-
           $viewModel->setVariables(array(
             'crosswordDefinition' => json_encode($crosswordDefinition),
             'acrossClues' => $acrossClues,
