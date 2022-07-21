@@ -420,7 +420,8 @@ class QuizController extends GameController
             foreach ($q->getAnswers() as $a) {
                 if ($a->getCorrect()) {
                     $ga[$q->getId()]['question'] = $q;
-                    $ga[$q->getId()]['answers'][$a->getId()]['answer'] = $a->getAnswer();
+                    $ga[$q->getId()]['answers'][$a->getId()]['answer'] = $a;
+                    $ga[$q->getId()]['answers'][$a->getId()]['answerText'] = $a->getAnswer();
                     $ga[$q->getId()]['answers'][$a->getId()]['explanation'] = $a->getExplanation();
                     $ga[$q->getId()]['answers'][$a->getId()]['userAnswer'] = isset($userAnswers[$q->getId()]) ?
                         $userAnswers[$q->getId()]['answer'] :
@@ -441,7 +442,8 @@ class QuizController extends GameController
                     $ga[$q->getId()]['answers'][$a->getId()]['correctAnswers'] = true;
                 } else {
                     $ga[$q->getId()]['question'] = $q;
-                    $ga[$q->getId()]['answers'][$a->getId()]['answer'] = $a->getAnswer();
+                    $ga[$q->getId()]['answers'][$a->getId()]['answer'] = $a;
+                    $ga[$q->getId()]['answers'][$a->getId()]['answerText'] = $a->getAnswer();
                     $ga[$q->getId()]['answers'][$a->getId()]['explanation'] = $a->getExplanation();
                     $ga[$q->getId()]['answers'][$a->getId()]['correctAnswers'] = false;
                     $ga[$q->getId()]['answers'][$a->getId()]['userAnswer'] = isset($userAnswers[$q->getId()]) ?
