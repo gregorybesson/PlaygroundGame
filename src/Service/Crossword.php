@@ -138,6 +138,25 @@ class Crossword extends Game
     return $entry;
   }
 
+  public function wordsearchScore($game, $entry, $data)
+  {
+    $words = $game->getWords();
+    $nbFound = $data['word'];
+    $entry->setActive(false);
+
+    if (count($words) == $nbFound) {
+      $entry->setWinner(true);
+      $entry->setDrawable(true);
+    } else {
+      $entry->setWinner(false);
+      $entry->setDrawable(false);
+    }
+
+    $entry = $this->getEntryMapper()->update($entry);
+
+    return $entry;
+  }
+
   public function crosswordHint($game, $data)
   {
     $crosswordResult = json_decode($data, true);
