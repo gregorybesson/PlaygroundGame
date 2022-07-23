@@ -79,62 +79,123 @@ class CrosswordController extends GameController
               );
             }
           } else if ($this->game->getGameType() == "word_search") {
-            die('word_search');
+            $entry = $this->getGameService()->wordsearchScore($this->game, $entry, $data);
+            if (! $entry->getActive()) {
+              return $this->redirect()->toUrl(
+                $this->frontendUrl()->fromRoute(
+                  'crossword/result',
+                  array('id' => $this->game->getIdentifier())
+                )
+              );
+            }
           }
         }
 
         $viewModel = $this->buildView($this->game);
         $words = $this->game->getWords();
+        switch ($this->game->getGameType()) {
+          case "crowssword":
+            $rows = $this->game->getLayoutRows();
+            $columns = $this->game->getLayoutColumns();
+            $acrossClues = [];
+            $downClues = [];
 
-        if($this->game->getGameType() != "wordle" && $this->game->getGameType() != "hangman") {
-          $rows = $this->game->getLayoutRows();
-          $columns = $this->game->getLayoutColumns();
-          $acrossClues = [];
-          $downClues = [];
-
-          foreach ($words as $word) {
-            if ($word->getOrientation() == "across"){
-              $acrossClues[] = [
-                "x" => $word->getLayoutColumn(),
-                "y" => $word->getLayoutRow(),
-                "clue" => $word->getPosition() . '. ' . trim($word->getClue()) . ' (' . strlen($word->getSolution()) . ')',
-              ];
-            } else if ($word->getOrientation() == "down"){
-              $downClues[] = [
-                "x" => $word->getLayoutColumn(),
-                "y" => $word->getLayoutRow(),
-                "clue" => $word->getPosition() . '. ' . trim($word->getClue()) . ' (' .strlen($word->getSolution()) . ')',
-              ];
+            foreach ($words as $word) {
+              if ($word->getOrientation() == "across"){
+                $acrossClues[] = [
+                  "x" => $word->getLayoutColumn(),
+                  "y" => $word->getLayoutRow(),
+                  "clue" => $word->getPosition() . '. ' . trim($word->getClue()) . ' (' . strlen($word->getSolution()) . ')',
+                ];
+              } else if ($word->getOrientation() == "down"){
+                $downClues[] = [
+                  "x" => $word->getLayoutColumn(),
+                  "y" => $word->getLayoutRow(),
+                  "clue" => $word->getPosition() . '. ' . trim($word->getClue()) . ' (' .strlen($word->getSolution()) . ')',
+                ];
+              }
             }
-          }
 
-          $crosswordDefinition = [
-            "width" => $columns,
-            "height" => $rows,
-            "acrossClues" => $acrossClues,
-            "downClues" => $downClues,
-          ];
+            $crosswordDefinition = [
+              "width" => $columns,
+              "height" => $rows,
+              "acrossClues" => $acrossClues,
+              "downClues" => $downClues,
+            ];
 
-          $viewModel->setVariables(array(
-            'crosswordDefinition' => json_encode($crosswordDefinition),
-            'acrossClues' => $acrossClues,
-            'downClues' => $downClues,
-          ));
-        } else {
-          $index = $entry->getStep();
-          if (!isset($words[$index])) {
-            $word = $words[0]->getSolution();
-            $clue = $words[0]->getClue();
-          } else {
-            $word = $words[$index]->getSolution();
-            $clue = $words[$index]->getClue();
-          }
+            $viewModel->setVariables(array(
+              'crosswordDefinition' => json_encode($crosswordDefinition),
+              'acrossClues' => $acrossClues,
+              'downClues' => $downClues,
+            ));
+            break;
+          case "word_search":
+            $wordsAr = [];
+            $grid = [];
+            $rows = $this->game->getLayoutRows();
+            $columns = $this->game->getLayoutColumns();
 
-          $viewModel->setVariables([
-            'word' => $word,
-            'clue' => $clue,
-            'locale' => $locale,
-          ]);
+            for ($i = 0; $i <= $rows + 1; $i++) {
+              $grid[$i] = [];
+              for ($j = 0; $j <= $columns + 1; $j++) {
+                if ($i > 0 && $i < $rows + 1 && $j > 0 && $j < $columns + 1) {
+                  $grid[$i][] = chr(rand(65,90));
+                } else {
+                  $grid[$i][] = "-";
+                }
+              }
+            }
+
+            foreach ($words as $word) {
+              $wordAr = [
+                "word" => strtoupper($word->getSolution()),
+                "rowi" => $word->getLayoutRow() - 1,
+                "coli" => $word->getLayoutColumn() - 1,
+                "colf" => ($word->getOrientation() == "across") ? $word->getLayoutColumn() + strlen($word->getSolution()) - 2 : $word->getLayoutColumn() - 1,
+                "rowf" => ($word->getOrientation() == "down") ? $word->getLayoutRow() + strlen($word->getSolution()) - 2 : $word->getLayoutRow() - 1,
+                "found" => false,
+              ];
+              $wordsAr[] = $wordAr;
+              $position = 0;
+              $letters = str_split($word->getSolution());
+              foreach($letters as $letter) {
+                if ($word->getOrientation() == "across") {
+                  $grid[$word->getLayoutRow()][$word->getLayoutColumn() + $position] = strtolower($letter);
+                } else {
+                  $grid[$word->getLayoutRow() + $position][$word->getLayoutColumn()] = strtolower($letter);
+                }
+                $position++;
+              }
+            }
+
+            $crosswordDefinition = [
+              "COLS" => $columns,
+              "ROWS" => $rows,
+              "grid" => $grid,
+              "words" => $wordsAr,
+            ];
+
+            $viewModel->setVariables(array(
+              'puzzle' => json_encode($crosswordDefinition),
+            ));
+            break;
+          case "hangman":
+          case "wordle":
+            $index = $entry->getStep();
+            if (!isset($words[$index])) {
+              $word = $words[0]->getSolution();
+              $clue = $words[0]->getClue();
+            } else {
+              $word = $words[$index]->getSolution();
+              $clue = $words[$index]->getClue();
+            }
+
+            $viewModel->setVariables([
+              'word' => $word,
+              'clue' => $clue,
+              'locale' => $locale,
+            ]);
+            break;
         }
 
         return $viewModel;
