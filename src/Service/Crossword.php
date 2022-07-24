@@ -125,10 +125,6 @@ class Crossword extends Game
     $entry->setStep($entry->getStep()+1);
     $activeStep = $entry->getStep();
 
-    if (count($words) == $activeStep) {
-      $entry->setActive(false);
-    }
-
     if ($hasWon) {
       if ($entry->getStep() == 1 || $entry->getWinner()) {
         $entry->setWinner(true);
@@ -139,13 +135,25 @@ class Crossword extends Game
       $entry->setDrawable(false);
     }
 
+    if (count($words) == $activeStep) {
+      $entry->setActive(false);
+    }
+
     $entry = $this->getEntryMapper()->update($entry);
 
-    $this->getEventManager()->trigger(
-      __FUNCTION__ .'.post',
-      $this,
-      array('user' => $user, 'entry' => $entry, 'game' => $game)
-    );
+    if (! $entry->getActive()) {
+      $this->getEventManager()->trigger(
+        __FUNCTION__ .'.post',
+        $this,
+        array('user' => $user, 'entry' => $entry, 'game' => $game)
+      );
+    } else {
+      $this->getEventManager()->trigger(
+        __FUNCTION__ .'.step',
+        $this,
+        array('user' => $user, 'entry' => $entry, 'game' => $game)
+      );
+    }
 
     return $entry;
   }
