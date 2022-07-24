@@ -75,7 +75,7 @@ class Crossword extends Game
     return true;
   }
 
-  public function crosswordScore($game, $entry, $data)
+  public function crosswordScore($game, $user, $entry, $data)
   {
     $crosswordResult = json_decode($data['crossword'], true);
 
@@ -109,10 +109,16 @@ class Crossword extends Game
 
     $entry = $this->getEntryMapper()->update($entry);
 
+    $this->getEventManager()->trigger(
+      __FUNCTION__ .'.post',
+      $this,
+      array('user' => $user, 'entry' => $entry, 'game' => $game)
+    );
+
     return $entry;
   }
 
-  public function wordScore($game, $entry, $data)
+  public function wordScore($game, $user, $entry, $data)
   {
     $words = $game->getWords();
     $hasWon = $data['word'];
@@ -135,10 +141,16 @@ class Crossword extends Game
 
     $entry = $this->getEntryMapper()->update($entry);
 
+    $this->getEventManager()->trigger(
+      __FUNCTION__ .'.post',
+      $this,
+      array('user' => $user, 'entry' => $entry, 'game' => $game)
+    );
+
     return $entry;
   }
 
-  public function wordsearchScore($game, $entry, $data)
+  public function wordsearchScore($game, $user, $entry, $data)
   {
     $words = $game->getWords();
     $nbFound = $data['word'];
@@ -153,6 +165,12 @@ class Crossword extends Game
     }
 
     $entry = $this->getEntryMapper()->update($entry);
+
+    $this->getEventManager()->trigger(
+      __FUNCTION__ .'.post',
+      $this,
+      array('user' => $user, 'entry' => $entry, 'game' => $game)
+    );
 
     return $entry;
   }
