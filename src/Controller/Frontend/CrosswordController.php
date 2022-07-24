@@ -94,7 +94,7 @@ class CrosswordController extends GameController
         $viewModel = $this->buildView($this->game);
         $words = $this->game->getWords();
         switch ($this->game->getGameType()) {
-          case "crowssword":
+          case "crossword":
             $rows = $this->game->getLayoutRows();
             $columns = $this->game->getLayoutColumns();
             $acrossClues = [];
