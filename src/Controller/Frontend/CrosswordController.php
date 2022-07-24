@@ -61,7 +61,7 @@ class CrosswordController extends GameController
         if ($this->getRequest()->isPost()) {
           $data = $this->getRequest()->getPost()->toArray();
           if ($this->game->getGameType() == "crossword") {
-            $entry = $this->getGameService()->crosswordScore($this->game, $entry, $data);
+            $entry = $this->getGameService()->crosswordScore($this->game, $this->user, $entry, $data);
             return $this->redirect()->toUrl(
               $this->frontendUrl()->fromRoute(
                 'crossword/result',
@@ -69,7 +69,7 @@ class CrosswordController extends GameController
               )
             );
           } else if ($this->game->getGameType() == "wordle" || $this->game->getGameType() == "hangman") {
-            $entry = $this->getGameService()->wordScore($this->game, $entry, $data);
+            $entry = $this->getGameService()->wordScore($this->game, $this->user, $entry, $data);
             if (! $entry->getActive()) {
               return $this->redirect()->toUrl(
                 $this->frontendUrl()->fromRoute(
@@ -79,7 +79,7 @@ class CrosswordController extends GameController
               );
             }
           } else if ($this->game->getGameType() == "word_search") {
-            $entry = $this->getGameService()->wordsearchScore($this->game, $entry, $data);
+            $entry = $this->getGameService()->wordsearchScore($this->game, $this->user, $entry, $data);
             if (! $entry->getActive()) {
               return $this->redirect()->toUrl(
                 $this->frontendUrl()->fromRoute(
