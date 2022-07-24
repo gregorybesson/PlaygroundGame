@@ -57,7 +57,7 @@ class HomeController extends AbstractActionController
         // And as their key is some sort of... date !, It means I sort it in date reverse order ;)
         $sliderItems = array_merge($sliderGames, $sliderPages);
 
-        krsort($sliderItems);
+        ksort($sliderItems);
 
         $slider->setVariables(array('sliderItems' => $sliderItems));
 
@@ -67,10 +67,10 @@ class HomeController extends AbstractActionController
 
         $pages = $this->getPageService()->getActivePages();
 
-        // I merge both types of articles and sort them in reverse order of their key
-        // And as their key is some sort of... date !, It means I sort it in date reverse order ;)
+        // I merge both types of articles and sort them in order of their key
+        // And as their key is some sort of... date !, It means I sort it in date order ;)
         $items = array_merge($games, $pages);
-        krsort($items);
+        ksort($items);
 
         if (is_array($items)
             && $paginationSettings
