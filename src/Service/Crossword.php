@@ -30,7 +30,7 @@ class Crossword extends Game
     }
 
     // TODO: Solve the error on binding. The following properties are not binded thru the form
-    if ($crossword->getGameType() == "crossword") {
+    if ($crossword->getGameType() == "crossword" || $crossword->getGameType() == "word_search") {
       $word->setLayoutColumn($data['layoutColumn']);
       $word->setLayoutRow($data['layoutRow']);
       $word->setPosition($data['position']);
