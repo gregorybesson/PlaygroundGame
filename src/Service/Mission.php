@@ -13,14 +13,14 @@ class Mission extends Game
      * @var MissionMapperInterface
      */
     protected $missionMapper;
-    
+
     /**
      * @var MissionGameMapperInterface
      */
     protected $missionGameMapper;
 
     protected $options;
-    
+
     /**
      * Find games associated to a mission and add the last entry of the user if it exists
      * @param unknown $mission
@@ -35,10 +35,10 @@ class Mission extends Game
             $games[$missionGame->getGame()->getIdentifier()]['game'] = $missionGame;
             $games[$missionGame->getGame()->getIdentifier()]['entry'] = $entry;
         }
-    
+
         return $games;
     }
-    
+
     /**
      * findMissionGameByMission : find associated games to a mission
      * @param Mission $mission
@@ -49,52 +49,52 @@ class Mission extends Game
     {
         return $this->getMissionGameMapper()->findBy(array('mission'=>$mission));
     }
-    
+
     public function checkMissionCondition($game, $winner, $prediction, $entry)
     {
         $missionGame = $this->findMissionGameByGame($game);
         if (empty($missionGame)) {
             return false;
         }
-    
+
         if ($missionGame->getMission()->getActive() === false) {
             return false;
         }
-    
+
         $nextMissionGame = $this->getMissionGameMapper()->getNextGame(
             $missionGame->getMission(),
             $missionGame->getPosition()
         );
-    
+
         if (empty($nextMissionGame)) {
             return false;
         }
-    
+
         $missionGameConditions = $this->findMissionGameConditionByMissionGame($nextMissionGame);
-    
+
         if (empty($missionGameConditions)) {
             return false;
         }
-    
+
         foreach ($missionGameConditions as $missionGameCondition) {
             if ($missionGameCondition->getAttribute() == MissionGameConditionEntity::NONE) {
                 continue;
             }
-    
+
             // On passe au suivant si on a gagné
             if ($missionGameCondition->getAttribute() == MissionGameConditionEntity::VICTORY) {
                 if (!($winner || $prediction)) {
                     return false;
                 }
             }
-    
+
             // On passe au suivant si on a perdu
             if ($missionGameCondition->getAttribute() == MissionGameConditionEntity::DEFEAT) {
                 if ($winner || $prediction) {
                     return false;
                 }
             }
-    
+
             // On passe au suivant si on a perdu
             if ($missionGameCondition->getAttribute() == MissionGameConditionEntity::GREATER) {
                 if (!$entry) {
@@ -104,7 +104,7 @@ class Mission extends Game
                     return false;
                 }
             }
-    
+
             // On passe au suivant si on a perdu
             if ($missionGameCondition->getAttribute() == MissionGameConditionEntity::LESS) {
                 if (!$entry) {
@@ -115,8 +115,46 @@ class Mission extends Game
                 }
             }
         }
-    
+
         return $nextMissionGame->getGame();
+    }
+
+    public function missionWinner($game, $user, $entry, $subGame)
+    {
+        $entry->setStep($entry->getStep() + 1);
+        $lastEntry = $this->findLastInactiveEntry($subGame, $user);
+        $entry->setPoints($entry->getPoints() + $lastEntry->getPoints());
+
+        if (
+            $lastEntry->getWinner() &&
+            (
+                $entry->getWinner() !== false ||
+                $entry->getStep() <= 1
+            )
+        ) {
+            $entry->setWinner(true);
+        }
+
+        if ($entry->getStep() == count($game->getMissionGames())) {
+            $entry->setActive(false);
+        }
+        $entry = $this->getEntryMapper()->update($entry);
+
+        if (!$entry->getActive()) {
+            $this->getEventManager()->trigger(
+                __FUNCTION__ .'.post',
+                $this,
+                array('user' => $user, 'entry' => $entry, 'game' => $game)
+            );
+        } else {
+            $this->getEventManager()->trigger(
+                __FUNCTION__ .'.step',
+                $this,
+                array('user' => $user, 'entry' => $entry, 'game' => $game, 'subGame' => $subGame)
+            );
+        }
+
+        return $entry;
     }
 
     public function getGameEntity()
@@ -150,7 +188,7 @@ class Mission extends Game
 
         return $this;
     }
-    
+
     /**
      * getMissionGameMapper
      *
@@ -161,10 +199,10 @@ class Mission extends Game
         if (null === $this->missionGameMapper) {
             $this->missionGameMapper = $this->serviceLocator->get('playgroundgame_mission_game_mapper');
         }
-    
+
         return $this->missionGameMapper;
     }
-    
+
     /**
      * setMissionMapper
      *
@@ -174,7 +212,7 @@ class Mission extends Game
     public function setMissionGameMapper($missionGameMapper)
     {
         $this->missionGameMapper = $missionGameMapper;
-    
+
         return $this;
     }
 }
