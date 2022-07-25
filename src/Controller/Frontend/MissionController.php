@@ -170,19 +170,23 @@ class MissionController extends GameController
         $subViewModel = $this->forward()->dispatch(
             $classGame,
             array(
-            'controller' => $classGame,
-            'action'     => 'home',
-            'id'         => $subGame->getIdentifier()
+                'controller' => $classGame,
+                'action'     => 'home',
+                'id'         => $subGame->getIdentifier()
             )
         );
 
+        // If the subgame redirect to the result page
         if ($this->getResponse()->getStatusCode() == 302) {
+
+            $entry = $this->getGameService()->missionWinner($this->game, $this->user, $entry, $subGame);
             return $this->redirect()->toUrl(
                 $this->frontendUrl()->fromRoute(
                     'mission/result',
                     array(
-                    'id'     => $this->game->getIdentifier(),
-                    'gameId' => $subGame->getIdentifier()
+                        'id'     => $this->game->getIdentifier(),
+                        'gameId' => $subGame->getIdentifier(),
+                        'missionEntry' => $entry,
                     ),
                     array('force_canonical' => true)
                 )

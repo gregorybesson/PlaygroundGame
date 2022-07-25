@@ -160,9 +160,9 @@ class CrosswordController extends GameController
               $letters = str_split($word->getSolution());
               foreach($letters as $letter) {
                 if ($word->getOrientation() == "across") {
-                  $grid[$word->getLayoutRow()][$word->getLayoutColumn() + $position] = strtolower($letter);
+                  $grid[$word->getLayoutRow()][$word->getLayoutColumn() + $position] = strtoupper($letter);
                 } else {
-                  $grid[$word->getLayoutRow() + $position][$word->getLayoutColumn()] = strtolower($letter);
+                  $grid[$word->getLayoutRow() + $position][$word->getLayoutColumn()] = strtoupper($letter);
                 }
                 $position++;
               }
