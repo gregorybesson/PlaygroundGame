@@ -262,6 +262,7 @@ class MissionController extends GameController
         $templatePathResolver->addPath($l[1].'custom/'.$this->game->getIdentifier());
 
         $subViewModel->mission = $this->game;
+        $subViewModel->subGames = $this->getGameService()->getMissionGames($this->game, $this->user);
         return $subViewModel;
     }
 
