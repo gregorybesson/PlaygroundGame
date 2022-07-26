@@ -262,7 +262,8 @@ class CrosswordController extends GameController
         'statusMail'    => $statusMail,
         'form'          => $form,
         'playLimitReached' => $playLimitReached,
-        'entry' => $lastEntry
+        'entry' => $lastEntry,
+        'flashMessages' => $this->flashMessenger()->getMessages(),
       ));
 
       return $viewModel;
