@@ -106,6 +106,13 @@ class CrosswordWord extends ProvidesEventsForm
             ),
         ));
 
+        $this->add(array(
+            'name' => 'points',
+            'options' => array(
+                'label' => 'Points',
+            ),
+        ));
+
         $submitElement = new Element\Button('submit');
         $submitElement->setAttributes(array(
             'type'  => 'submit',
