@@ -84,14 +84,19 @@ class Crossword extends Game
     $points = 0;
     $solved = false;
     $wordsFound = 0;
-    $wordsToFind = count($words);
+    $wordsToFind = 0;
+    foreach($words as $word) {
+      if ($word->getOrientation()) {
+        ++$wordsToFind;
+      }
+    }
 
     foreach($crosswordResult as $wordResult) {
       $id = $wordResult['id'];
       foreach($words as $word) {
         if ($word->getPosition() == $id && $word->getSolution() == $wordResult['answer']) {
           $wordsFound++;
-          $points++;
+          $points += $word->getPoints();
         }
       }
     }
@@ -123,6 +128,7 @@ class Crossword extends Game
   {
     $words = $game->getWords();
     $hasWon = $data['word'];
+    $word = $words[$entry->getStep()];
     $entry->setStep($entry->getStep()+1);
     $activeStep = $entry->getStep();
 
@@ -130,6 +136,7 @@ class Crossword extends Game
       if ($entry->getStep() == 1 || $entry->getWinner()) {
         $entry->setWinner(true);
         $entry->setDrawable(true);
+        $entry->setPoints($entry->getPoints() + $word->getPoints());
       }
     } else {
       $entry->setWinner(false);
@@ -161,9 +168,16 @@ class Crossword extends Game
 
   public function wordsearchScore($game, $user, $entry, $data)
   {
+    $wordsFound = json_decode($data['word'], true);
     $words = $game->getWords();
-    $nbFound = $data['word'];
+    $nbFound = count($wordsFound);
     $entry->setActive(false);
+
+    foreach($words as $word) {
+      if (in_array(strtoupper($word->getSolution()), $wordsFound)) {
+        $entry->setPoints($entry->getPoints() + $word->getPoints());
+      }
+    }
 
     if (count($words) == $nbFound) {
       $entry->setWinner(true);
