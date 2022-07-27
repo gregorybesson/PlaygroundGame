@@ -36,6 +36,7 @@ class Crossword extends Game
       $word->setPosition($data['position']);
       $word->setOrientation($data['orientation']);
     }
+    $word->setPoints($data['points']);
 
     $this->getCrosswordWordMapper()->update($word);
 

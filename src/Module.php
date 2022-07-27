@@ -795,8 +795,8 @@ class Module
                 'playgroundgame_crosswordword_form' => function (\Laminas\ServiceManager\ServiceManager $sm) {
                     $translator = $sm->get('MvcTranslator');
                     $form = new Form\Admin\CrosswordWord(null, $sm, $translator);
-                    $crosswordCard = new Entity\CrosswordWord();
-                    $form->setInputFilter($crosswordCard->getInputFilter());
+                    $crosswordWord = new Entity\CrosswordWord();
+                    $form->setInputFilter($crosswordWord->getInputFilter());
 
                     return $form;
                 },
