@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping\PrePersist;
 use Doctrine\ORM\Mapping\PreUpdate;
 
 use PlaygroundGame\Entity\Game;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 use Laminas\InputFilter\Factory as InputFactory;
 use Laminas\InputFilter\InputFilter;
@@ -46,11 +47,13 @@ class Crossword extends Game implements InputFilterAwareInterface
     protected $gameType = 'crossword';
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(name="layout_rows", type="integer", nullable=true)
      */
     protected $layoutRows;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(name="layout_columns", type="integer", nullable=true)
      */
     protected $layoutColumns;
