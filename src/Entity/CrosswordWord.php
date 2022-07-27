@@ -52,25 +52,35 @@ class CrosswordWord implements InputFilterAwareInterface, \JsonSerializable
     protected $clue;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(name="layout_row", type="integer", nullable=true)
      */
     protected $layoutRow;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(name="layout_column", type="integer", nullable=true)
      */
     protected $layoutColumn;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(type="integer", nullable=true)
      */
     protected $position;
 
     /**
+     * @Gedmo\Translatable
      * values: accross or down
      * @ORM\Column(type="string", nullable=true)
      */
     protected $orientation;
+
+    /**
+     * The word score in the game
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $points = 0;
 
     /**
      * @ORM\Column(name="created_at", type="datetime")
@@ -268,6 +278,24 @@ class CrosswordWord implements InputFilterAwareInterface, \JsonSerializable
     public function setOrientation($orientation)
     {
         $this->orientation = $orientation;
+
+        return $this;
+    }
+
+    /**
+     * @return integer $points
+     */
+    public function getPoints()
+    {
+        return $this->points;
+    }
+
+    /**
+     * @param int $points
+     */
+    public function setPoints($points)
+    {
+        $this->points = $points;
 
         return $this;
     }
