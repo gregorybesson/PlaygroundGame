@@ -67,12 +67,19 @@ class Crossword extends Game implements InputFilterAwareInterface
 
     /**
      * Gets the the words associated with the game.
+     * We need this trick instead of the orderBy annotation to handle
+     * multiple locales (Gedmo seems to not handle the orderBy statement)
      *
      * @return mixed
      */
     public function getWords()
     {
-        return $this->words;
+        $iterator = $this->words->getIterator();
+        $iterator->uasort(function (CrosswordWord $a, CrosswordWord $b) {
+            return $a->getPosition() <=> $b->getPosition();
+        });
+
+        return new ArrayCollection(iterator_to_array($iterator));
     }
 
     /**
