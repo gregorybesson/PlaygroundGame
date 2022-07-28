@@ -51,7 +51,7 @@ class MissionController extends GameController
             $reason = "";
             if ($playError === -1) {
                 // the user has already taken part to this game and the participation limit has been reached
-                $this->flashMessenger()->addMessage('Vous avez déjà participé');
+                $this->flashMessenger()->addMessage($this->getServiceLocator()->get('MvcTranslator')->translate("You have already played", "playgroundgame"));
                 $reason = '?playLimitReached=1';
                 $noEntryRedirect = $this->frontendUrl()->fromRoute(
                     $this->game->getClassType().'/result',
