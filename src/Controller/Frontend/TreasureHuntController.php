@@ -72,7 +72,7 @@ class TreasureHuntController extends GameController
         $entry = $sg->play($game, $user);
         if (!$entry) {
             // the user has already taken part of this game and the participation limit has been reached
-            $this->flashMessenger()->addMessage('Vous avez déjà participé');
+            $this->flashMessenger()->addMessage($this->getServiceLocator()->get('MvcTranslator')->translate("You have already played", "playgroundgame"));
 
             return $this->redirect()->toUrl($this->frontendUrl()->fromRoute('treasurehunt/result',array('id' => $identifier, 'channel' => $this->getEvent()->getRouteMatch()->getParam('channel'))));
         }
