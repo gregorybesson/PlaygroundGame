@@ -648,34 +648,33 @@ class GameController extends AbstractActionController
 
     public function shareAction()
     {
-        $statusMail = null;
-        $lastEntry = $this->getGameService()->findLastInactiveEntry($this->game, $this->user);
+      $viewModel = new JsonModel();
+      $viewModel->setTerminal(true);
+      $statusMail = null;
+      $lastEntry = $this->getGameService()->findLastInactiveEntry($this->game, $this->user);
 
-        $form = $this->getServiceLocator()->get('playgroundgame_sharemail_form');
-        $form->setAttribute('method', 'post');
+      $form = $this->getServiceLocator()->get('playgroundgame_sharemail_form');
+      $form->setAttribute('method', 'post');
 
-        // buildView must be before sendMail because it adds the game template path to the templateStack
-        $viewModel = $this->buildView($this->game);
+      // buildView must be before sendMail because it adds the game template path to the templateStack
+      //$viewModel = $this->buildView($this->game);
 
-        if ($this->getRequest()->isPost()) {
-            $data = $this->getRequest()->getPost()->toArray();
-            $form->setData($data);
-            if ($form->isValid()) {
-                $result = $this->getGameService()->sendShareMail($data, $this->game, $this->user, $lastEntry);
-                if ($result) {
-                    $statusMail = true;
-                }
-            }
+      if ($this->getRequest()->isPost()) {
+        $data = $this->getRequest()->getPost()->toArray();
+        $form->setData($data);
+        if ($form->isValid()) {
+          $result = $this->getGameService()->sendShareMail($data, $this->game, $this->user, $lastEntry);
+          if ($result) {
+            $statusMail = true;
+          }
         }
+      }
 
-        $viewModel->setVariables(
-            [
-                'statusMail' => $statusMail,
-                'form'       => $form,
-            ]
-        );
+      $viewModel->setVariables([
+        'statusMail' => $statusMail,
+      ]);
 
-        return $viewModel;
+      return $viewModel;
     }
 
     public function inviteToTeamAction()
