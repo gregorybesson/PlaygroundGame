@@ -1407,6 +1407,7 @@ class Game
 
         if (empty($subject) && $game) {
             $subject = $game->getEmailShareSubject();
+            $subject = str_replace("{{firstname}}", $user->getFirstname(), $subject);
         }
 
         $message = '';
@@ -1427,45 +1428,52 @@ class Game
         }
 
         foreach ($data['email'] as $to) {
-          $mailSent = true;
           if (!empty($to)) {
-            $message = $mailService->createHtmlMessage(
-              $from,
-              $to,
-              $subject,
-              'playground-game/email/' . $template,
-              array(
-                'game' => $game,
-                'data' => $data,
-                'from' => $from,
-                'to' => $to,
-                'secretKey' => $secretKey,
-                'skinUrl' => $skinUrl,
-                'message' => $message,
-              )
-            );
-            try {
-              $mailService->send($message);
-            } catch (\Laminas\Mail\Protocol\Exception\RuntimeException $e) {
-            }
+            // SPECIFIC SUMMER GAME
+            $player = $this->getUserMapper()->findByEmail($to);
+            if  (!empty($player)) {
+              $data["player"] = $player;
+              $data["user"] = $user;
+              $message = $mailService->createHtmlMessage(
+                $from,
+                $to,
+                $subject,
+                'playground-game/email/' . $template,
+                array(
+                  'game' => $game,
+                  'data' => $data,
+                  'from' => $from,
+                  'to' => $to,
+                  'secretKey' => $secretKey,
+                  'skinUrl' => $skinUrl,
+                  'message' => $message,
+                )
+              );
+              try {
+                $mailService->send($message);
+                $mailSent = true;
+              } catch (\Laminas\Mail\Protocol\Exception\RuntimeException $e) {
+              }
 
-            if ($entry) {
-              $shares = json_decode($entry->getSocialShares(), true);
-              (!isset($shares['mail']))? $shares['mail'] = 1:$shares['mail'] += 1;
+              if ($entry) {
+                $shares = json_decode($entry->getSocialShares(), true);
+                (!isset($shares['mail']))? $shares['mail'] = 1:$shares['mail'] += 1;
+              }
+
+              $this->getEventManager()->trigger(
+                __FUNCTION__ . '.post',
+                $this,
+                array(
+                  'user' => $user,
+                  'secretKey' => $secretKey,
+                  'data' => $data,
+                  'game' => $game,
+                  'entry' => $entry,
+                  'message' => $message,
+                  'to' => $to,
+                )
+              );
             }
-            $this->getEventManager()->trigger(
-              __FUNCTION__ . '.post',
-              $this,
-              array(
-                'user' => $user,
-                'secretKey' => $secretKey,
-                'data' => $data,
-                'game' => $game,
-                'entry' => $entry,
-                'message' => $message,
-                'to' => $to,
-              )
-            );
           }
         }
 

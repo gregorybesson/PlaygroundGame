@@ -600,50 +600,50 @@ class GameController extends AbstractActionController
 
     public function gameslistAction()
     {
-        $layoutViewModel = $this->layout();
+      $layoutViewModel = $this->layout();
 
-        $slider = new ViewModel();
-        $slider->setTemplate('playground-game/common/top_promo');
+      $slider = new ViewModel();
+      $slider->setTemplate('playground-game/common/top_promo');
 
-        $sliderItems = $this->getGameService()->getActiveSliderGames();
+      $sliderItems = $this->getGameService()->getActiveSliderGames();
 
-        $slider->setVariables(array('sliderItems' => $sliderItems));
+      $slider->setVariables(array('sliderItems' => $sliderItems));
 
-        $layoutViewModel->addChild($slider, 'slider');
+      $layoutViewModel->addChild($slider, 'slider');
 
-        $games = $this->getGameService()->getActiveGames(false, '', 'endDate', 'ASC');
-        if (is_array($games)) {
-            $paginator = new \Laminas\Paginator\Paginator(new \Laminas\Paginator\Adapter\ArrayAdapter($games));
-        } else {
-            $paginator = $games;
-        }
+      $games = $this->getGameService()->getActiveGames(false, '', 'endDate', 'ASC');
+      if (is_array($games)) {
+        $paginator = new \Laminas\Paginator\Paginator(new \Laminas\Paginator\Adapter\ArrayAdapter($games));
+      } else {
+        $paginator = $games;
+      }
 
-        $paginator->setItemCountPerPage(7);
-        $paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
+      $paginator->setItemCountPerPage(7);
+      $paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
 
-        $bitlyclient = $this->getOptions()->getBitlyUrl();
-        $bitlyuser   = $this->getOptions()->getBitlyUsername();
-        $bitlykey    = $this->getOptions()->getBitlyApiKey();
+      $bitlyclient = $this->getOptions()->getBitlyUrl();
+      $bitlyuser   = $this->getOptions()->getBitlyUsername();
+      $bitlykey    = $this->getOptions()->getBitlyApiKey();
 
-        $this->getViewHelper('HeadMeta')->setProperty('bt:client', $bitlyclient);
-        $this->getViewHelper('HeadMeta')->setProperty('bt:user', $bitlyuser);
-        $this->getViewHelper('HeadMeta')->setProperty('bt:key', $bitlykey);
+      $this->getViewHelper('HeadMeta')->setProperty('bt:client', $bitlyclient);
+      $this->getViewHelper('HeadMeta')->setProperty('bt:user', $bitlyuser);
+      $this->getViewHelper('HeadMeta')->setProperty('bt:key', $bitlykey);
 
-        $this->layout()->setVariables(
-            array(
-                'sliderItems'  => $sliderItems,
-                'currentPage'  => array(
-                    'pageGames'   => 'games',
-                    'pageWinners' => '',
-                ),
-            )
-        );
+      $this->layout()->setVariables(
+        array(
+          'sliderItems'  => $sliderItems,
+          'currentPage'  => array(
+            'pageGames'   => 'games',
+            'pageWinners' => '',
+          ),
+        )
+      );
 
-        return new ViewModel(
-            array(
-                'games' => $paginator,
-            )
-        );
+      return new ViewModel(
+        array(
+          'games' => $paginator,
+        )
+      );
     }
 
     public function shareAction()

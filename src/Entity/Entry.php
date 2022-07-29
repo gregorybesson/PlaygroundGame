@@ -354,7 +354,7 @@ class Entry implements \JsonSerializable
      */
     public function getActive()
     {
-        return var_export($this->active);
+        return $this->active ? 'true' : 'false';
     }
 
     /**
