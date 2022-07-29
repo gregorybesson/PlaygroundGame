@@ -35,7 +35,7 @@ class Entry implements \JsonSerializable
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
-    protected $active = 1;
+    protected $active = true;
 
     /**
      * Has this entry been paid
@@ -105,7 +105,7 @@ class Entry implements \JsonSerializable
      * Is this entry a winning one ?
      * @ORM\Column(type="boolean", nullable=true)
      */
-    protected $winner = 0;
+    protected $winner = false;
 
     /**
      * Is there a termsOptin on this entry ?
@@ -117,7 +117,7 @@ class Entry implements \JsonSerializable
      * Is this entry eligible to draw ?
      * @ORM\Column(type="boolean", nullable=true)
      */
-    protected $drawable = 0;
+    protected $drawable = false;
 
     /**
      * @ORM\Column(type="datetime")
@@ -354,7 +354,7 @@ class Entry implements \JsonSerializable
      */
     public function getActive()
     {
-        return $this->active;
+        return $this->active ? 'true' : 'false';
     }
 
     /**

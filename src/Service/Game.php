@@ -460,6 +460,11 @@ class Game
      */
     public function getActiveGames($displayHome = null, $classType = '', $order = '', $dir = 'DESC')
     {
+        $keepClosedGamePosition = false;
+        $settings = $this->getServiceManager()->get('playgrounddesign_settings_service')->getSettingsMapper()->findById(1);
+        if ($settings && $settings->getHomeKeepClosedGamePosition()) {
+            $keepClosedGamePosition = true;
+        }
         $em = $this->serviceLocator->get('doctrine.entitymanager.orm_default');
         $today = new \DateTime("now");
         $today = $today->format('Y-m-d H:i:s');
@@ -509,7 +514,7 @@ class Game
         // de type article avec le même procédé en les classant naturellement par date asc ou desc
         $arrayGames = array();
         foreach ($games as $game) {
-          if ($game->isFinished()) {
+          if ($game->isFinished() && !$keepClosedGamePosition) {
             $key = "Z" . $game->getEndDate()->format('Ymd');
           } elseif ($game->getStartDate()) {
             $key = $game->getStartDate()->format('Ymd');
@@ -1402,6 +1407,7 @@ class Game
 
         if (empty($subject) && $game) {
             $subject = $game->getEmailShareSubject();
+            $subject = str_replace("{{firstname}}", $user->getFirstname(), $subject);
         }
 
         $message = '';
@@ -1422,59 +1428,66 @@ class Game
         }
 
         foreach ($data['email'] as $to) {
-            $mailSent = true;
-            if (!empty($to)) {
-                $message = $mailService->createHtmlMessage(
-                    $from,
-                    $to,
-                    $subject,
-                    'playground-game/email/' . $template,
-                    array(
-                        'game' => $game,
-                        'data' => $data,
-                        'from' => $from,
-                        'to' => $to,
-                        'secretKey' => $secretKey,
-                        'skinUrl' => $skinUrl,
-                        'message' => $message,
-                    )
-                );
-                try {
-                    $mailService->send($message);
-                } catch (\Laminas\Mail\Protocol\Exception\RuntimeException $e) {
-                }
+          if (!empty($to)) {
+            // SPECIFIC SUMMER GAME
+            $player = $this->getUserMapper()->findByEmail($to);
+            if  (!empty($player)) {
+              $data["player"] = $player;
+              $data["user"] = $user;
+              $message = $mailService->createHtmlMessage(
+                $from,
+                $to,
+                $subject,
+                'playground-game/email/' . $template,
+                array(
+                  'game' => $game,
+                  'data' => $data,
+                  'from' => $from,
+                  'to' => $to,
+                  'secretKey' => $secretKey,
+                  'skinUrl' => $skinUrl,
+                  'message' => $message,
+                )
+              );
+              try {
+                $mailService->send($message);
+                $mailSent = true;
+              } catch (\Laminas\Mail\Protocol\Exception\RuntimeException $e) {
+              }
 
-                if ($entry) {
-                    $shares = json_decode($entry->getSocialShares(), true);
-                    (!isset($shares['mail']))? $shares['mail'] = 1:$shares['mail'] += 1;
-                }
-                $this->getEventManager()->trigger(
-                    __FUNCTION__ . '.post',
-                    $this,
-                    array(
-                        'user' => $user,
-                        'secretKey' => $secretKey,
-                        'data' => $data,
-                        'game' => $game,
-                        'entry' => $entry,
-                        'message' => $message,
-                        'to' => $to,
-                    )
-                );
+              if ($entry) {
+                $shares = json_decode($entry->getSocialShares(), true);
+                (!isset($shares['mail']))? $shares['mail'] = 1:$shares['mail'] += 1;
+              }
+
+              $this->getEventManager()->trigger(
+                __FUNCTION__ . '.post',
+                $this,
+                array(
+                  'user' => $user,
+                  'secretKey' => $secretKey,
+                  'data' => $data,
+                  'game' => $game,
+                  'entry' => $entry,
+                  'message' => $message,
+                  'to' => $to,
+                )
+              );
             }
+          }
         }
 
         if ($mailSent) {
-            if ($entry) {
-                $sharesJson = json_encode($shares);
-                $entry->setSocialShares($sharesJson);
-                $entry = $this->getEntryMapper()->update($entry);
-            }
+          if ($entry) {
+            $sharesJson = json_encode($shares);
+            $entry->setSocialShares($sharesJson);
+            $entry = $this->getEntryMapper()->update($entry);
+          }
 
-            return true;
+          return true;
         }
 
-        return false;
+      return false;
     }
 
     /**
