@@ -687,6 +687,7 @@ class GameController extends AbstractActionController
   {
     $result = false;
     $team = null;
+    $invitations = null;
 
     // If user has been invited to a team, I add this user to the team
     if ($this->lmcUserAuthentication()->hasIdentity()) {
@@ -707,6 +708,7 @@ class GameController extends AbstractActionController
           $team->addUser($user);
           $teamMapper->update($team);
         }
+        $invitations = $invitationMapper->findBy(array('host' => $invitation->getHost(), 'game' => $this->game));
 
         $result = true;
       }
@@ -716,6 +718,7 @@ class GameController extends AbstractActionController
     $viewModel->setVariables([
       'team'       => $team,
       'result'     => $result,
+      'invitations' => $invitations,
     ]);
 
     return $viewModel;
