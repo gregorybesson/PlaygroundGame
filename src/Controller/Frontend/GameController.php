@@ -726,7 +726,6 @@ class GameController extends AbstractActionController
 
   public function inviteToTeamAction()
   {
-
     if (count($this->user->getTeams()) == 0) {
       return $this->redirect()->toUrl(
         $this->frontendUrl()->fromRoute(
@@ -771,6 +770,23 @@ class GameController extends AbstractActionController
     ));
 
     return $viewModel;
+  }
+
+  public function deleteInvitationToTeamAction()
+  {
+    $email = urldecode($this->getEvent()->getRouteMatch()->getParam('email'));
+    $invitationMapper = $this->getServiceLocator()->get('playgroundgame_invitation_mapper');
+    $invitation = $invitationMapper->findOneBy(array('requestKey' => $email));
+    if ($invitation) {
+      $invitationMapper->remove($invitation);
+    }
+
+    return $this->redirect()->toUrl(
+      $this->frontendUrl()->fromRoute(
+        $this->game->getClassType() . '/invite-to-team',
+        array('id' => $this->game->getIdentifier())
+      )
+    );
   }
 
   public function createTeamAction()

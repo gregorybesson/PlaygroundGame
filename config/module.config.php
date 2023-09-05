@@ -568,6 +568,16 @@ return array(
                   )
                 )
               ),
+              'delete-invitation-to-team' => array(
+                'type' => 'Segment',
+                'options' => array(
+                  'route' => '/delete-invitation[/:email]',
+                  'defaults' => array(
+                    'controller' => PlaygroundGame\Controller\Frontend\TradingCard::class,
+                    'action' => 'deleteInvitationToTeam',
+                  )
+                )
+              ),
               'invite-to-team' => array(
                 'type' => 'Segment',
                 'options' => array(
@@ -920,6 +930,16 @@ return array(
                   'defaults' => array(
                     'controller' => PlaygroundGame\Controller\Frontend\Mission::class,
                     'action' => 'createTeam',
+                  )
+                )
+              ),
+              'delete-invitation-to-team' => array(
+                'type' => 'Segment',
+                'options' => array(
+                  'route' => '/delete-invitation[/:email]',
+                  'defaults' => array(
+                    'controller' => PlaygroundGame\Controller\Frontend\Mission::class,
+                    'action' => 'deleteInvitationToTeam',
                   )
                 )
               ),
@@ -1303,6 +1323,16 @@ return array(
                   )
                 )
               ),
+              'delete-invitation-to-team' => array(
+                'type' => 'Segment',
+                'options' => array(
+                  'route' => '/delete-invitation[/:email]',
+                  'defaults' => array(
+                    'controller' => PlaygroundGame\Controller\Frontend\Quiz::class,
+                    'action' => 'deleteInvitationToTeam',
+                  )
+                )
+              ),
               'invite-to-team' => array(
                 'type' => 'Segment',
                 'options' => array(
@@ -1598,6 +1628,16 @@ return array(
                   )
                 )
               ),
+              'delete-invitation-to-team' => array(
+                'type' => 'Segment',
+                'options' => array(
+                  'route' => '/delete-invitation[/:email]',
+                  'defaults' => array(
+                    'controller' => PlaygroundGame\Controller\Frontend\Lottery::class,
+                    'action' => 'deleteInvitationToTeam',
+                  )
+                )
+              ),
               'invite-to-team' => array(
                 'type' => 'Segment',
                 'options' => array(
@@ -1890,6 +1930,16 @@ return array(
                   'defaults' => array(
                     'controller' => PlaygroundGame\Controller\Frontend\Memory::class,
                     'action' => 'createTeam',
+                  )
+                )
+              ),
+              'delete-invitation-to-team' => array(
+                'type' => 'Segment',
+                'options' => array(
+                  'route' => '/delete-invitation[/:email]',
+                  'defaults' => array(
+                    'controller' => PlaygroundGame\Controller\Frontend\Memory::class,
+                    'action' => 'deleteInvitationToTeam',
                   )
                 )
               ),
@@ -2212,6 +2262,16 @@ return array(
                   )
                 )
               ),
+              'delete-invitation-to-team' => array(
+                'type' => 'Segment',
+                'options' => array(
+                  'route' => '/delete-invitation[/:email]',
+                  'defaults' => array(
+                    'controller' => PlaygroundGame\Controller\Frontend\Crossword::class,
+                    'action' => 'deleteInvitationToTeam',
+                  )
+                )
+              ),
               'invite-to-team' => array(
                 'type' => 'Segment',
                 'options' => array(
@@ -2507,6 +2567,16 @@ return array(
                   )
                 )
               ),
+              'delete-invitation-to-team' => array(
+                'type' => 'Segment',
+                'options' => array(
+                  'route' => '/delete-invitation[/:email]',
+                  'defaults' => array(
+                    'controller' => PlaygroundGame\Controller\Frontend\TreasureHunt::class,
+                    'action' => 'deleteInvitationToTeam',
+                  )
+                )
+              ),
               'invite-to-team' => array(
                 'type' => 'Segment',
                 'options' => array(
@@ -2789,6 +2859,16 @@ return array(
                   'defaults' => array(
                     'controller' => PlaygroundGame\Controller\Frontend\InstantWin::class,
                     'action' => 'createTeam',
+                  )
+                )
+              ),
+              'delete-invitation-to-team' => array(
+                'type' => 'Segment',
+                'options' => array(
+                  'route' => '/delete-invitation[/:email]',
+                  'defaults' => array(
+                    'controller' => PlaygroundGame\Controller\Frontend\InstantWin::class,
+                    'action' => 'deleteInvitationToTeam',
                   )
                 )
               ),
@@ -3261,6 +3341,16 @@ return array(
                   'defaults' => array(
                     'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
                     'action' => 'createTeam',
+                  )
+                )
+              ),
+              'delete-invitation-to-team' => array(
+                'type' => 'Segment',
+                'options' => array(
+                  'route' => '/delete-invitation[/:email]',
+                  'defaults' => array(
+                    'controller' => PlaygroundGame\Controller\Frontend\PostVote::class,
+                    'action' => 'deleteInvitationToTeam',
                   )
                 )
               ),
