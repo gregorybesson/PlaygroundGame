@@ -738,7 +738,6 @@ class GameController extends AbstractActionController
 
     $team = $this->user->getTeams()->first();
     $invitationMapper = $this->getServiceLocator()->get('playgroundgame_invitation_mapper');
-    $invitations = $invitationMapper->findBy(array('host' => $this->user, 'game' => $this->game));
     $statusMail = null;
     $message = '';
     $isHost = ($this->user->getId() === $team->getHost()->getId()) ? true : false;
@@ -760,6 +759,7 @@ class GameController extends AbstractActionController
       }
     }
 
+    $invitations = $invitationMapper->findBy(array('host' => $this->user, 'game' => $this->game));
     $viewModel = $this->buildView($this->game);
     $viewModel->setVariables(array(
       'team'       => $team,
